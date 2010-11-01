@@ -29,34 +29,34 @@ namespace PSDImporter
 
 		public override Texture2DContent Import(string filename, ContentImporterContext context)
 		{
-			PsdFile psdFile = new PsdFile();
-			psdFile.Load(filename);
+            //PsdFile psdFile = new PsdFile();
+            //psdFile.Load(filename);
 
 			Texture2DContent content = new Texture2DContent();
-            PixelBitmapContent<Byte4> bitmap = new PixelBitmapContent<Byte4>(psdFile.Columns, psdFile.Rows);
+            PixelBitmapContent<Color> bitmap = new PixelBitmapContent<Color>(4, 4);
 
-			byte[] pixelData = new byte[bitmap.Width * bitmap.Height * 4];
-			List<Color[]> layers = new List<Color[]>();
+            //byte[] pixelData = new byte[bitmap.Width * bitmap.Height * 4];
+            //List<Color[]> layers = new List<Color[]>();
 
-			//Debugger.Launch();
+            ////Debugger.Launch();
 
-			// Extract all the layers
-			foreach (Layer layer in psdFile.Layers)
-			{
-				Color[] layerData = new Color[psdFile.Columns * psdFile.Rows];
-				ExtractLayer(layer, layerData);
-				layers.Add(layerData);
-			}
+            //// Extract all the layers
+            //foreach (Layer layer in psdFile.Layers)
+            //{
+            //    Color[] layerData = new Color[psdFile.Columns * psdFile.Rows];
+            //    ExtractLayer(layer, layerData);
+            //    layers.Add(layerData);
+            //}
 
-			// Flatten the layers
-			for (int i = layers.Count - 1; i > 0; i--)
-				FlattenLayers(psdFile.Layers[i], psdFile.Layers[i - 1], layers[i], layers[i - 1]);
+            //// Flatten the layers
+            //for (int i = layers.Count - 1; i > 0; i--)
+            //    FlattenLayers(psdFile.Layers[i], psdFile.Layers[i - 1], layers[i], layers[i - 1]);
 
-			ColorToByte(layers[0], pixelData);
+            //ColorToByte(layers[0], pixelData);
 
-			bitmap.SetPixelData(pixelData);
+            //bitmap.SetPixelData(pixelData);
 
-			content.Mipmaps.Add(bitmap);
+            content.Mipmaps.Add(bitmap);
 
 			return content;
 		}

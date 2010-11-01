@@ -42,13 +42,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Levels\Models\block_generic_filler01.FBX">
-      <Name>block_generic_filler01</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Levels\Maps\block_brown_desat.png">
       <Name>block_brown_desat</Name>
       <Importer>TextureImporter</Importer>
@@ -56,17 +49,24 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Levels\Models\block_purple.psd">
-      <Name>block_purple</Name>
-      <Processor>PassThroughProcessor</Processor>
-      <Importer>PSDImporter</Importer>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\Users\Thomas Gravgaard\Documents\Visual Studio 2010\Projects\PressPlay\Tentacles\XNA\PSDImporter\PSDImporter.csproj">
       <Project>{9E817F72-028F-4796-AD8B-85F31E14E4D7}</Project>
       <Name>PSDImporter</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Levels\Models\levelEntrance_edited_noMaterial.FBX">
+      <Name>levelEntrance_edited_noMaterial</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="TestFont.spritefont">
+      <Name>TestFont</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <!--  To modify your build process, add your task inside one of the targets below and uncomment it. 
