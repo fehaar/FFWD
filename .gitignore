@@ -20,4 +20,4 @@
 *.user
 *.bak
 *.db
-/QuestWorld.Web/Pictures
+*.cachefile
