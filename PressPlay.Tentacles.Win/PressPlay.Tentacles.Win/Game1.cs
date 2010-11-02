@@ -58,7 +58,8 @@ namespace PressPlay.Tentacles.Win
 
             // TODO: use this.Content to load your game content here
             //model = Content.Load<Model>("Levels/Models/levelEntrance_edited_noMaterial");
-            model = Content.Load<Model>("xna_hierarchy_test_02");
+            //model = Content.Load<Model>("xna_hierarchy_test_02");
+            model = Content.Load<Model>("super_lemmy_parts_anim_cooked");
             boneTransforms = new Matrix[model.Bones.Count];
 
             font = Content.Load<SpriteFont>("TestFont");
@@ -209,6 +210,7 @@ namespace PressPlay.Tentacles.Win
                         sEffect.SpecularColor = new Vector3(0.25f);
                         sEffect.SpecularPower = 16;
                         sEffect.Texture = tex;
+                        //sEffect.DiffuseColor = new Vector3(255, 0, 0);
                     }
                     mesh.Draw();
                 }
