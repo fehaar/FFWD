@@ -49,9 +49,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\Users\Thomas Gravgaard\Documents\Visual Studio 2010\Projects\PressPlay\Tentacles\XNA\PSDImporter\PSDImporter.csproj">
-      <Project>{9E817F72-028F-4796-AD8B-85F31E14E4D7}</Project>
-      <Name>PSDImporter</Name>
+    <ProjectReference Include="..\..\SkinnedModelPipeline\SkinnedModelPipeline.csproj">
+      <Project>{4636C7E1-B845-4B83-B96D-64A11B8A4515}</Project>
+      <Name>SkinnedModelPipeline</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -59,6 +59,7 @@
       <Name>levelEntrance_edited_noMaterial</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -66,6 +67,14 @@
       <Name>TestFont</Name>
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="xna_hierarchy_test_02.FBX">
+      <Name>xna_hierarchy_test_02</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>SkinnedModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.1</ProcessorParameters_Scale>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />

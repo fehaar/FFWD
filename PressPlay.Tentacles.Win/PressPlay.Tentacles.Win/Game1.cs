@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using SkinnedModel;
 
 namespace PressPlay.Tentacles.Win
 {
@@ -24,6 +25,8 @@ namespace PressPlay.Tentacles.Win
         Texture2D tex;
         Vector3 camPos;
         SpriteFont font;
+        bool rotate = false;
+        AnimationPlayer animationPlayer;
 
         public Game1()
         {
@@ -54,13 +57,24 @@ namespace PressPlay.Tentacles.Win
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            model = Content.Load<Model>("Levels/Models/levelEntrance_edited_noMaterial");
+            //model = Content.Load<Model>("Levels/Models/levelEntrance_edited_noMaterial");
+            model = Content.Load<Model>("xna_hierarchy_test_02");
             boneTransforms = new Matrix[model.Bones.Count];
 
             font = Content.Load<SpriteFont>("TestFont");
 
             tex = Content.Load<Texture2D>("Levels/Maps/block_brown_desat");
-            camPos = new Vector3(0, 0, 2000);
+            camPos = new Vector3(0, 0, 50);
+
+            // Look up our custom skinning information.
+            SkinningData skinningData = model.Tag as SkinningData;
+            if (skinningData != null)
+            {
+                // Create an animation player, and start decoding an animation clip.
+                animationPlayer = new AnimationPlayer(skinningData);
+                AnimationClip clip = skinningData.AnimationClips["Take 001"];
+                animationPlayer.StartClip(clip);
+            }
         }
 
         /// <summary>
@@ -71,6 +85,8 @@ namespace PressPlay.Tentacles.Win
         {
             // TODO: Unload any non ContentManager content here
         }
+
+        KeyboardState oldState;
 
         /// <summary>
         /// Allows the game to run logic such as updating the world,
@@ -113,7 +129,15 @@ namespace PressPlay.Tentacles.Win
             {
                 dir *= 10;
             }
-            camPos += dir * 10;
+            camPos += dir;
+
+            if (oldState.IsKeyUp(Keys.R) && key.IsKeyDown(Keys.R))
+            {
+                rotate = !rotate;
+            }
+            oldState = key;
+
+            animationPlayer.Update(gameTime.ElapsedGameTime, true, Matrix.Identity);
 
             base.Update(gameTime);
         }
@@ -124,7 +148,7 @@ namespace PressPlay.Tentacles.Win
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.Clear(Color.CornflowerBlue);
 
             //// TODO: Add your drawing code here
             // Set the world matrix as the root transform of the model.
@@ -133,37 +157,70 @@ namespace PressPlay.Tentacles.Win
             // Look up combined bone matrices for the entire model.
             model.CopyAbsoluteBoneTransformsTo(boneTransforms);
 
-            float time = (float)gameTime.TotalGameTime.TotalSeconds;
-            float yaw = time * 0.4f;
-            float pitch = time * 0.7f;
-            float roll = time * 1.1f;
+            Matrix world;
+            if (rotate)
+            {
+                float time = (float)gameTime.TotalGameTime.TotalSeconds;
+                float yaw = time * 0.4f;
+                float pitch = time * 0.7f;
+                float roll = time * 1.1f;
+                world = Matrix.CreateFromYawPitchRoll(yaw, pitch, roll);
+            }
+            else
+            {
+                world = Matrix.CreateWorld(Vector3.Zero, Vector3.Forward, Vector3.Up);
+            }
 
             float aspect = GraphicsDevice.Viewport.AspectRatio;
+            Matrix projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(60), aspect, 1, 20000);
 
-            Matrix world = Matrix.CreateFromYawPitchRoll(yaw, pitch, roll);
+            Matrix[] bones = new Matrix[0];
+            if (animationPlayer != null)
+            {
+                bones = animationPlayer.GetSkinTransforms();
+            }
+
+            //GraphicsDevice.RasterizerState = new RasterizerState() { FillMode = FillMode.WireFrame };
 
             // Draw the model.
-            foreach (ModelMesh mesh in model.Meshes)
+            for (int i = 0; i < model.Meshes.Count; i++)
             {
-                foreach (BasicEffect effect in mesh.Effects)
+                ModelMesh mesh = model.Meshes[i];
+                for (int e = 0; e < mesh.Effects.Count; e++)
                 {
-                    effect.World = Matrix.CreateWorld(Vector3.Zero, Vector3.Forward, Vector3.Up) * Matrix.CreateRotationZ(yaw);
-                    //effect.World = world;
-                    effect.View = GetViewMatrix();
-                    effect.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(60), GraphicsDevice.Viewport.AspectRatio, 10, 20000);
-                    effect.EnableDefaultLighting();
-                    effect.Texture = tex;
-                    effect.TextureEnabled = true;
+                    if (mesh.Effects[e] is BasicEffect)
+                    {
+                        BasicEffect effect = mesh.Effects[e] as BasicEffect;
+                        effect.World = world;
+                        effect.View = GetViewMatrix();
+                        effect.Projection = projection;
+                        effect.LightingEnabled = false;
+                        effect.Texture = tex;
+                        effect.TextureEnabled = true;
+                    }
+                    if (mesh.Effects[e] is SkinnedEffect)
+                    {
+                        SkinnedEffect sEffect = mesh.Effects[e] as SkinnedEffect;
+                        sEffect.SetBoneTransforms(bones);
+                        sEffect.World = world;
+                        sEffect.View = GetViewMatrix();
+                        sEffect.Projection = projection;
+                        sEffect.EnableDefaultLighting();
+                        sEffect.SpecularColor = new Vector3(0.25f);
+                        sEffect.SpecularPower = 16;
+                        sEffect.Texture = tex;
+                    }
+                    mesh.Draw();
                 }
-                mesh.Draw();
             }
 
             spriteBatch.Begin();
-            spriteBatch.DrawString(font, camPos.ToString(), new Vector2(10, 10), Color.White);
+            spriteBatch.DrawString(font, "Camera: " + camPos, new Vector2(10, 10), Color.White);
             spriteBatch.End();
 
             base.Draw(gameTime);
         }
+
 
         /// <summary>
         /// Gets spaceship view matrix
