@@ -116,14 +116,14 @@
     <Content Include="GameThumbnail.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\U2X\PressPlay.U2X.Xna\PressPlay.U2X.Xna.csproj">
+      <Project>{A02BD389-79AE-4975-9A5E-DEDC66B8A0CB}</Project>
+      <Name>PressPlay.U2X.Xna</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\PressPlay.Tentacles.XmlContent\PressPlay.Tentacles.XmlContent.contentproj">
       <Project>{4C58C1EE-5091-42D3-A9DF-F274A942D800}</Project>
       <Name>PressPlay.Tentacles.XmlContent</Name>
       <XnaReferenceType>Content</XnaReferenceType>
-    </ProjectReference>
-    <ProjectReference Include="..\..\SkinnedModel\SkinnedModelWindows.csproj">
-      <Project>{0D41E29B-829F-4255-BCA5-64DC2677DA6D}</Project>
-      <Name>SkinnedModelWindows</Name>
     </ProjectReference>
     <ProjectReference Include="..\PressPlay.Tentacles.WinContent\PressPlay.Tentacles.WinContent.contentproj">
       <Name>PressPlay.Tentacles.WinContent %28Content%29</Name>

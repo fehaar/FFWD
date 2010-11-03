@@ -53,9 +53,9 @@
     <Compile Include="SkinnedModelProcessor.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SkinnedModel\SkinnedModelWindows.csproj">
-      <Project>{0D41E29B-829F-4255-BCA5-64DC2677DA6D}</Project>
-      <Name>SkinnedModelWindows</Name>
+    <ProjectReference Include="..\..\..\U2X\PressPlay.U2X.Xna\PressPlay.U2X.Xna.csproj">
+      <Project>{A02BD389-79AE-4975-9A5E-DEDC66B8A0CB}</Project>
+      <Name>PressPlay.U2X.Xna</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
