@@ -65,7 +65,7 @@ namespace PressPlay.Tentacles.Win
             font = Content.Load<SpriteFont>("TestFont");
 
             tex = Content.Load<Texture2D>("Levels/Maps/block_brown_desat");
-            camPos = new Vector3(0, 0, 50);
+            camPos = new Vector3(0, 0, 300);
 
             // Look up our custom skinning information.
             SkinningData skinningData = model.Tag as SkinningData;

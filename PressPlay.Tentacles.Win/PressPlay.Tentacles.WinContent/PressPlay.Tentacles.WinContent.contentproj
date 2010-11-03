@@ -84,6 +84,78 @@
       <Processor>SkinnedModelProcessor</Processor>
     </Compile>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Levels\Models\block_brain_challenge_bridge_01.FBX">
+      <Name>block_brain_challenge_bridge_01</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Levels\Models\block_island_medium_01.FBX">
+      <Name>block_island_medium_01</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Levels\Models\block_island_small_01.FBX">
+      <Name>block_island_small_01</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Levels\Models\block_wall_concave_01.FBX">
+      <Name>block_wall_concave_01</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Levels\Models\block_wall_concave_03.FBX">
+      <Name>block_wall_concave_03</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Levels\Models\block_wall_convex_01.FBX">
+      <Name>block_wall_convex_01</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Levels\Models\block_wall_convex_02.FBX">
+      <Name>block_wall_convex_02</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Levels\Models\block_wall_detail_01.FBX">
+      <Name>block_wall_detail_01</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Levels\Models\block_wall_detail_02.FBX">
+      <Name>block_wall_detail_02</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Levels\Models\block_wall_nub_01.FBX">
+      <Name>block_wall_nub_01</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Levels\Models\block_wall_nub_02.FBX">
+      <Name>block_wall_nub_02</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Levels\Models\block_wall_nub_03.FBX">
+      <Name>block_wall_nub_03</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Levels\Models\block_wall_straight_01.FBX">
+      <Name>block_wall_straight_01</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Levels\Models\level_entrance.FBX">
+      <Name>level_entrance</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <!--  To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
