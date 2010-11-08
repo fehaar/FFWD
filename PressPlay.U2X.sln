@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PressPlay.U2X.Test", "Press
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A596AFB3-E255-4738-AEB6-35D786063026}"
 	ProjectSection(SolutionItems) = preProject
-		..\Tentacles\Unity\Assets\Editor\U2X\ExportSceneWizard.cs = ..\Tentacles\Unity\Assets\Editor\U2X\ExportSceneWizard.cs
+		..\..\..\..\..\Downloads\ExportAll.cs = ..\..\..\..\..\Downloads\ExportAll.cs
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PressPlay.U2X.Unity", "PressPlay.U2X.Unity\PressPlay.U2X.Unity.csproj", "{8CD56DE8-14AF-4EE3-844C-FFFD39E7F207}"

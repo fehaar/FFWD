@@ -3,6 +3,7 @@ using UnityEditor;
 using System.Xml;
 using System.IO;
 using System.Collections;
+using System.Collections.Generic;
 using PressPlay.U2X;
 
 public class ExportSceneWizard : ScriptableWizard {
@@ -14,8 +15,11 @@ public class ExportSceneWizard : ScriptableWizard {
     }
 
     public string exportDir = @"C:\Projects\PressPlay\Tentacles\XNA\PressPlay.Tentacles.XmlContent\Scenes";
+    public string textureDir = @"C:\Projects\PressPlay\Tentacles\XNA\PressPlay.Tentacles.Win\PressPlay.Tentacles.WinContent\Textures";
     public string configSource = @"C:\Projects\PressPlay\Tentacles\Unity\Assets\Editor\U2X\PressPlay.U2X.dll.config";
+
     private TypeResolver resolver;
+    private List<string> exportedTextures = new List<string>();
 
     public void OnWizardCreate()  
     {
@@ -48,6 +52,7 @@ public class ExportSceneWizard : ScriptableWizard {
     private void WriteGOs(XmlWriter writer)
     {
         UnityEngine.Object[] objs = FindObjectsOfType(typeof(GameObject));
+
         for (int i = 0; i < objs.Length; i++)
         {
             GameObject go = objs[i] as GameObject;
@@ -129,6 +134,7 @@ public class ExportSceneWizard : ScriptableWizard {
             if (mr.sharedMaterials.Length > 0 && mr.sharedMaterials[0].mainTexture != null)
             {
                 writer.WriteElementString("Texture", mr.sharedMaterials[0].mainTexture.name);
+                ExportTexture(mr.sharedMaterials[0].mainTexture as Texture2D);
             }
             MeshFilter filter = component.GetComponent<MeshFilter>();
             if (filter.sharedMesh != null)
@@ -138,6 +144,31 @@ public class ExportSceneWizard : ScriptableWizard {
         }
 
         writer.WriteEndElement();
+    }
+
+    void ExportTexture(Texture2D tex)
+    {
+        if (tex == null) return;
+        if (exportedTextures.Contains(tex.name)) return;
+
+        string path = Path.Combine(textureDir, tex.name + ".png");
+        try
+        {
+            Color[] texPixels = tex.GetPixels();
+            Texture2D tex2 = new Texture2D(tex.width, tex.height, TextureFormat.ARGB32, false);
+            tex2.SetPixels(texPixels);
+            byte[] texBytes = tex2.EncodeToPNG();
+            FileStream writeStream;
+            writeStream = new FileStream(path, FileMode.Create);
+            BinaryWriter writeBinay = new BinaryWriter(writeStream);
+            for (int i = 0; i < texBytes.Length; i++) writeBinay.Write(texBytes[i]);
+            writeBinay.Close();
+            exportedTextures.Add(tex.name);
+        }
+        catch (UnityException ue)
+        {
+            Debug.Log(ue.ToString());
+        }
     }
 
     #region ToString methods

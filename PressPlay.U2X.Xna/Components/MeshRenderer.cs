@@ -80,7 +80,7 @@ namespace PressPlay.U2X.Xna.Components
             Matrix world = transform.world; 
 
             // Set the world matrix as the root transform of the model.
-            model.Root.Transform = world;
+            //model.Root.Transform = world;
             if (animationPlayer != null)
             {
                 model.CopyAbsoluteBoneTransformsTo(boneTransforms);

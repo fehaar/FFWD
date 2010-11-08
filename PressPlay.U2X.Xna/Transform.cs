@@ -28,7 +28,7 @@ namespace PressPlay.U2X.Xna
         {
             get
             {                
-                return Matrix.CreateScale(localScale) *
+                return Matrix.CreateScale(localScale * 2) *
                        // TODO: Find out why we need to rotate around X
                        Matrix.CreateRotationX(MathHelper.PiOver2) * 
                        Matrix.CreateFromQuaternion(localRotation) *

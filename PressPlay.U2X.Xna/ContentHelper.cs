@@ -21,6 +21,7 @@ namespace PressPlay.U2X
         public static GameServiceContainer Services { get; set; }
         public static ContentManager Content;
         public static ContentManager StaticContent;
+        public static HashSet<string> MissingAssets = new HashSet<string>();
 
         private struct TextureToColor
         {
@@ -126,11 +127,20 @@ namespace PressPlay.U2X
             }
             catch
             {
-                PressPlay.U2X.Xna.Debug.Log("Missing texture: " + name);
+                MissingAsset("Texture", name);
                 if (!IgnoreMissingAssets)
                 {
                     throw;
                 }
+            }
+        }
+
+        private static void MissingAsset(string type, string name)
+        {
+            string key = type + ": " + name;
+            if (!MissingAssets.Contains(key))
+            {
+                MissingAssets.Add(key);
             }
         }
 
@@ -170,7 +180,7 @@ namespace PressPlay.U2X
             }
             catch
             {
-                PressPlay.U2X.Xna.Debug.Log("Missing model: " + name);
+                MissingAsset("Model", name);
                 if (!IgnoreMissingAssets)
                 {
                     throw;
@@ -215,7 +225,7 @@ namespace PressPlay.U2X
             }
             catch
             {
-                Console.WriteLine("Missing sound: " + name);
+                MissingAsset("Sound", name);
             }
             if (sound != null)
             {
