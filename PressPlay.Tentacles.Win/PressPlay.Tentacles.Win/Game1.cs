@@ -45,7 +45,7 @@ namespace PressPlay.Tentacles.Win
             ContentHelper.Content = new ContentManager(Services, Content.RootDirectory);
             ContentHelper.IgnoreMissingAssets = true;
 
-            Camera.main.projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(60), graphics.GraphicsDevice.Viewport.AspectRatio, 1, 20000);
+            Camera.main.projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(60), graphics.GraphicsDevice.Viewport.AspectRatio, 0.3f, 1000);
 
             base.Initialize();
         }
@@ -61,12 +61,6 @@ namespace PressPlay.Tentacles.Win
 
             scene = Content.Load<Scene>("Scenes/Level1");
             scene.AfterLoad();
-            //model = Content.Load<Model>("Levels/Models/levelEntrance_edited_noMaterial");
-            //model = Content.Load<Model>("xna_hierarchy_test_02");
-            //renderer.model = Content.Load<Model>("xna_hierarchy_test_02");
-            //renderer.model = Content.Load<Model>("Levels/Models/block_island_small_01");
-            //renderer.texture = Content.Load<Texture2D>("Levels/Maps/block_brown_desat");
-            //renderer.Start();
 
             font = Content.Load<SpriteFont>("TestFont");
 
@@ -96,8 +90,6 @@ namespace PressPlay.Tentacles.Win
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            //Quaternion rotation = Quaternion.CreateFromYawPitchRoll(MathHelper.ToRadians(0), MathHelper.ToRadians(0), MathHelper.ToRadians(1));
-            //Camera.main.transform.localRotation *= rotation;
 
             KeyboardState key = Keyboard.GetState();
             Vector3 dir = Vector3.Zero;
@@ -143,11 +135,11 @@ namespace PressPlay.Tentacles.Win
                 // Translate camera
                 if (key.IsKeyDown(Keys.A))
                 {
-                    dir.X += 1;
+                    dir.X -= 1;
                 }
                 if (key.IsKeyDown(Keys.D))
                 {
-                    dir.X -= 1;
+                    dir.X += 1;
                 }
                 if (key.IsKeyDown(Keys.W))
                 {
@@ -181,6 +173,11 @@ namespace PressPlay.Tentacles.Win
             oldState = key;
 
             Component.AwakeNewComponents();
+            foreach (String asset in ContentHelper.MissingAssets)
+            {
+                Debug.Log("Missing " + asset);
+            }
+            ContentHelper.MissingAssets.Clear();
             scene.FixedUpdate();
 
             base.Update(gameTime);
@@ -192,10 +189,14 @@ namespace PressPlay.Tentacles.Win
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(new Color(78, 115, 74));
             //GraphicsDevice.RasterizerState = new RasterizerState() { FillMode = FillMode.WireFrame };
 
             scene.Update();
+
+            GraphicsDevice.BlendState = BlendState.Opaque;
+            GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+            GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
             scene.Draw(spriteBatch);
 
             spriteBatch.Begin();

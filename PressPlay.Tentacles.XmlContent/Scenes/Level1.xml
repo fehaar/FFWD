@@ -159,7 +159,7 @@
       <id>12268</id>
       <name>level_entrance</name>
       <transform>
-        <localPosition>-8.9436 0 -13.20133</localPosition>
+        <localPosition>-8.88231 0.00037 -13.37634</localPosition>
         <localScale>1 1 1</localScale>
         <localRotation>-0.00007 0.81563 0.00164 -0.57857</localRotation>
         <children>
