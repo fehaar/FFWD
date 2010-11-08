@@ -9,6 +9,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using PressPlay.U2X.Xna.Components;
+using PressPlay.U2X.Xna;
+using PressPlay.U2X;
 
 namespace PressPlay.Tentacles.Win
 {
@@ -21,9 +23,8 @@ namespace PressPlay.Tentacles.Win
         SpriteBatch spriteBatch;
 
         SpriteFont font;
-        bool rotate = false;
 
-        MeshRenderer renderer = new MeshRenderer();
+        Scene scene = null; 
 
         public Game1()
         {
@@ -39,9 +40,13 @@ namespace PressPlay.Tentacles.Win
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            ContentHelper.Services = Services;
+            ContentHelper.StaticContent = new ContentManager(Services, Content.RootDirectory);
+            ContentHelper.Content = new ContentManager(Services, Content.RootDirectory);
+            ContentHelper.IgnoreMissingAssets = true;
+
             Camera.main.projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(60), graphics.GraphicsDevice.Viewport.AspectRatio, 1, 20000);
-            
+
             base.Initialize();
         }
 
@@ -54,16 +59,19 @@ namespace PressPlay.Tentacles.Win
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            scene = Content.Load<Scene>("Scenes/Level1");
+            scene.AfterLoad();
             //model = Content.Load<Model>("Levels/Models/levelEntrance_edited_noMaterial");
             //model = Content.Load<Model>("xna_hierarchy_test_02");
-            renderer.model = Content.Load<Model>("Levels/Models/level_entrance");
-            renderer.texture = Content.Load<Texture2D>("Levels/Maps/block_brown_desat");
-            renderer.Start();
+            //renderer.model = Content.Load<Model>("xna_hierarchy_test_02");
+            //renderer.model = Content.Load<Model>("Levels/Models/block_island_small_01");
+            //renderer.texture = Content.Load<Texture2D>("Levels/Maps/block_brown_desat");
+            //renderer.Start();
 
             font = Content.Load<SpriteFont>("TestFont");
 
-            Camera.main.transform.localPosition = new Vector3(0, 0, 300);
+            Camera.main.transform.localPosition = new Vector3(-50, -100, 0);
+            Camera.main.transform.localRotation = Quaternion.CreateFromRotationMatrix(Matrix.CreateRotationX(MathHelper.ToRadians(90)));
         }
 
         /// <summary>
@@ -88,45 +96,92 @@ namespace PressPlay.Tentacles.Win
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
+            //Quaternion rotation = Quaternion.CreateFromYawPitchRoll(MathHelper.ToRadians(0), MathHelper.ToRadians(0), MathHelper.ToRadians(1));
+            //Camera.main.transform.localRotation *= rotation;
+
             KeyboardState key = Keyboard.GetState();
             Vector3 dir = Vector3.Zero;
-            if (key.IsKeyDown(Keys.A))
+            if (key.IsKeyDown(Keys.RightControl))            
             {
-                dir.X += 1;
+                // Rotate camera
+                if (key.IsKeyDown(Keys.A))
+                {
+                    dir.X += 1;
+                }
+                if (key.IsKeyDown(Keys.D))
+                {
+                    dir.X -= 1;
+                }
+                if (key.IsKeyDown(Keys.W))
+                {
+                    dir.Y += 1;
+                }
+                if (key.IsKeyDown(Keys.X))
+                {
+                    dir.Y -= 1;
+                }
+                if (key.IsKeyDown(Keys.E))
+                {
+                    dir.Z += 1;
+                }
+                if (key.IsKeyDown(Keys.Z))
+                {
+                    dir.Z -= 1;
+                }
+                if (key.IsKeyDown(Keys.RightShift))
+                {
+                    dir *= 10;
+                }
+                if (dir.LengthSquared() > 0)
+                {
+                    Quaternion rotate = Quaternion.CreateFromYawPitchRoll(MathHelper.ToRadians(dir.X), MathHelper.ToRadians(dir.Y), MathHelper.ToRadians(dir.Z));
+                    Camera.main.transform.localRotation *= rotate;
+                }
             }
-            if (key.IsKeyDown(Keys.D))
+            else
             {
-                dir.X -= 1;
+                // Translate camera
+                if (key.IsKeyDown(Keys.A))
+                {
+                    dir.X += 1;
+                }
+                if (key.IsKeyDown(Keys.D))
+                {
+                    dir.X -= 1;
+                }
+                if (key.IsKeyDown(Keys.W))
+                {
+                    dir.Z += 1;
+                }
+                if (key.IsKeyDown(Keys.X))
+                {
+                    dir.Z -= 1;
+                }
+                if (key.IsKeyDown(Keys.E))
+                {
+                    dir.Y += 1;
+                }
+                if (key.IsKeyDown(Keys.Z))
+                {
+                    dir.Y -= 1;
+                }
+                if (key.IsKeyDown(Keys.RightShift))
+                {
+                    dir *= 10;
+                }
+                Camera.main.transform.localPosition += dir;
             }
-            if (key.IsKeyDown(Keys.W))
-            {
-                dir.Y += 1;
-            }
-            if (key.IsKeyDown(Keys.X))
-            {
-                dir.Y -= 1;
-            }
-            if (key.IsKeyDown(Keys.E))
-            {
-                dir.Z += 1;
-            }
-            if (key.IsKeyDown(Keys.Z))
-            {
-                dir.Z -= 1;
-            }
-            if (key.IsKeyDown(Keys.RightShift))
-            {
-                dir *= 10;
-            }
-            Camera.main.transform.localPosition += dir;
+
 
             if (oldState.IsKeyUp(Keys.R) && key.IsKeyDown(Keys.R))
             {
-                rotate = !rotate;
+                Camera.main.transform.localPosition = new Vector3(-50, -100, 0);
+                Camera.main.transform.localRotation = Quaternion.CreateFromRotationMatrix(Matrix.CreateRotationX(MathHelper.ToRadians(90)));
             }
             oldState = key;
 
-            renderer.Update(gameTime);
+            Component.AwakeNewComponents();
+            scene.FixedUpdate();
 
             base.Update(gameTime);
         }
@@ -140,14 +195,13 @@ namespace PressPlay.Tentacles.Win
             GraphicsDevice.Clear(Color.CornflowerBlue);
             //GraphicsDevice.RasterizerState = new RasterizerState() { FillMode = FillMode.WireFrame };
 
-            //// TODO: Add your drawing code here
-            // Set the world matrix as the root transform of the model.
-            //model.Root.Transform = Matrix.CreateWorld(Vector3.Zero, Vector3.Forward, Vector3.Up);
-
-            renderer.Draw(spriteBatch);
+            scene.Update();
+            scene.Draw(spriteBatch);
 
             spriteBatch.Begin();
-            spriteBatch.DrawString(font, "Camera: " + Camera.main.transform.localPosition, new Vector2(10, 10), Color.White);
+            spriteBatch.DrawString(font, "Camera pos: " + Camera.main.transform.localPosition, new Vector2(10, 10), Color.White);
+            spriteBatch.DrawString(font, "Camera rot: " + Camera.main.transform.localRotation, new Vector2(10, 22), Color.White);
+            spriteBatch.DrawString(font, "Camera fwd: " + Camera.main.Forward, new Vector2(10, 34), Color.White);
             spriteBatch.End();
 
             base.Draw(gameTime);

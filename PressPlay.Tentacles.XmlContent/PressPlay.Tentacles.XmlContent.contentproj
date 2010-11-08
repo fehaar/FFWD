@@ -10,6 +10,7 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <XnaFrameworkVersion>v4.0</XnaFrameworkVersion>
     <OutputPath>bin\$(Platform)\$(Configuration)</OutputPath>
+    <ContentRootDirectory>Content</ContentRootDirectory>
   </PropertyGroup>
   <PropertyGroup>
     <RootNamespace>PressPlay.Tentacles.XmlContent</RootNamespace>
@@ -35,18 +36,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Level1.xml">
+    <ProjectReference Include="..\..\..\U2X\PressPlay.U2X.Xna\PressPlay.U2X.Xna.csproj">
+      <Project>{A02BD389-79AE-4975-9A5E-DEDC66B8A0CB}</Project>
+      <Name>PressPlay.U2X.Xna</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Scenes\Level1.xml">
       <Name>Level1</Name>
       <Importer>XmlImporter</Importer>
       <Processor>PassThroughProcessor</Processor>
       <SubType>Designer</SubType>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\U2X\PressPlay.U2X.Xna\PressPlay.U2X.Xna.csproj">
-      <Project>{A02BD389-79AE-4975-9A5E-DEDC66B8A0CB}</Project>
-      <Name>PressPlay.U2X.Xna</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
