@@ -9,12 +9,12 @@ using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework;
 using PressPlay.U2X.Xna.Components;
+using PressPlay.U2X.Xna;
 #if WINDOWS
 using System.Diagnostics;
-using PressPlay.U2X.Xna;
 #endif
 
-namespace PressPlay.Max.WP7.Core
+namespace PressPlay.U2X
 {
     public static class ContentHelper
     {
@@ -28,19 +28,23 @@ namespace PressPlay.Max.WP7.Core
             public string textureName;
         }
 
+        public static bool IgnoreMissingAssets { get; set; }
+
         private static Dictionary<string, Texture2D> StaticTextures = new Dictionary<string, Texture2D>();
+        private static Dictionary<string, Model> StaticModels = new Dictionary<string, Model>();
         private static Dictionary<string, SoundEffect> StaticSounds = new Dictionary<string, SoundEffect>();
-        //        private static Dictionary<string, float> StaticSoundDurations = new Dictionary<string, float>();
 
         private static Dictionary<string, Texture2D> Textures = new Dictionary<string, Texture2D>();
+        private static Dictionary<string, Model> Models = new Dictionary<string, Model>();
         private static Dictionary<TextureToColor, Texture2D> coloredTextures = new Dictionary<TextureToColor, Texture2D>();
         public static Dictionary<string, SoundEffect> Sounds = new Dictionary<string, SoundEffect>();
-        //        private static Dictionary<string, float> SoundDurations = new Dictionary<string, float>();
         private static Dictionary<string, Song> Songs = new Dictionary<string, Song>();
 
         private static bool DeferredLoading = false;
         private static Queue<string> DeferredTextureQueue = new Queue<string>();
         private static Queue<string> DeferredStaticTextureQueue = new Queue<string>();
+        private static Queue<string> DeferredModelQueue = new Queue<string>();
+        private static Queue<string> DeferredStaticModelQueue = new Queue<string>();
         private static Queue<TextureToColor> DeferredTextureColoringQueue = new Queue<TextureToColor>();
         private static Queue<string> DeferredSoundQueue = new Queue<string>();
         private static Queue<string> DeferredStaticSoundQueue = new Queue<string>();
@@ -116,7 +120,62 @@ namespace PressPlay.Max.WP7.Core
                 fileName = Path.GetFileNameWithoutExtension(fileName);
             }
 
-            Textures.Add(name, Content.Load<Texture2D>("Textures\\" + fileName));
+            try
+            {
+                Textures.Add(name, Content.Load<Texture2D>("Textures\\" + fileName));
+            }
+            catch
+            {
+                PressPlay.U2X.Xna.Debug.Log("Missing texture: " + name);
+                if (!IgnoreMissingAssets)
+                {
+                    throw;
+                }
+            }
+        }
+
+        public static void LoadModel(string name)
+        {
+            if (String.IsNullOrEmpty(name))
+                return;
+
+            if (DeferredLoading)
+            {
+                if (!DeferredModelQueue.Contains(name) && !DeferredModelQueue.Contains(name))
+                {
+                    DeferredTextureQueue.Enqueue(name);
+                }
+                return;
+            }
+
+            if (Models.ContainsKey(name))
+            {
+                return;
+            }
+            // Don't load textures that are to be loaded as a static texture.
+            if (StaticModels.ContainsKey(name))
+            {
+                return;
+            }
+
+            string fileName = name.Replace("-", "");
+            if (fileName.Contains("."))
+            {
+                fileName = Path.GetFileNameWithoutExtension(fileName);
+            }
+
+            try
+            {
+                Models.Add(name, Content.Load<Model>("Models\\" + fileName));
+            }
+            catch
+            {
+                PressPlay.U2X.Xna.Debug.Log("Missing model: " + name);
+                if (!IgnoreMissingAssets)
+                {
+                    throw;
+                }
+            }
         }
 
         public static SpriteFont LoadFont(string name)
@@ -291,6 +350,20 @@ namespace PressPlay.Max.WP7.Core
                 StaticTextures.TryGetValue(name, out texture);
             }
             return texture;
+        }
+
+        public static Model GetModel(string name)
+        {
+            if (String.IsNullOrEmpty(name))
+                return null;
+
+            Model model;
+            Models.TryGetValue(name, out model);
+            if (model == null)
+            {
+                StaticModels.TryGetValue(name, out model);
+            }
+            return model;
         }
 
         public static SoundEffect GetSound(string name)

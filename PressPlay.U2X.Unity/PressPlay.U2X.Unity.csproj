@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{3A0EF547-8728-4800-B436-F8E4C100F920}</ProjectGuid>
+    <ProjectGuid>{8CD56DE8-14AF-4EE3-844C-FFFD39E7F207}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PressPlay.U2X</RootNamespace>
-    <AssemblyName>PressPlay.U2X</AssemblyName>
+    <RootNamespace>PressPlay.U2X.Unity</RootNamespace>
+    <AssemblyName>PressPlay.U2X.Unity</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -33,7 +33,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="UnityEditor">
@@ -44,21 +47,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configuration\TypeResolverSection.cs" />
-    <Compile Include="NamespaceRule.cs" />
-    <Compile Include="TypeResolver.cs" />
+    <Compile Include="ExportSceneWizard.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Configuration\ConfigurationSectionHandler.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
+    <ProjectReference Include="..\PressPlay.U2X\PressPlay.U2X.csproj">
+      <Project>{3A0EF547-8728-4800-B436-F8E4C100F920}</Project>
+      <Name>PressPlay.U2X</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetPath)" "$(SolutionDir)\..\Tentacles\Unity\Assets\Editor\U2X\"
-copy "$(TargetPath).config" "$(SolutionDir)\..\Tentacles\Unity\Assets\Editor\U2X\"</PostBuildEvent>
+    <PostBuildEvent>copy "$(ProjectDir)\*.cs" "$(SolutionDir)\..\Tentacles\Unity\Assets\Editor\U2X\"
+</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

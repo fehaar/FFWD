@@ -21,8 +21,16 @@ namespace PressPlay.U2X.Xna.Components
         {
             return Matrix.CreateLookAt(
                 transform.localPosition,
-                transform.localPosition + Vector3.Transform(Vector3.Forward, transform.localRotation),
-                Vector3.Up);            
+                transform.localPosition + Vector3.Up,
+                Vector3.Backward);                        
+        }
+
+        public Vector3 Forward
+        {
+            get
+            {
+                return Vector3.Transform(Vector3.Forward, transform.localRotation);
+            }
         }
 
         public Matrix projectionMatrix { get; set; }
