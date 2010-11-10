@@ -14,7 +14,7 @@ using PressPlay.U2X.Xna;
 using System.Diagnostics;
 #endif
 
-namespace PressPlay.U2X
+namespace PressPlay.U2X.Xna
 {
     public static class ContentHelper
     {
