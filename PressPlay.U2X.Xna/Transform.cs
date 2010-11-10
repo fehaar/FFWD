@@ -12,27 +12,181 @@ namespace PressPlay.U2X.Xna
         public Transform()
         {
             localRotation = Quaternion.Identity;
+            localScale = Vector3.One;
         }
 
-        public Vector3 localPosition { get; set; }
-        public Vector3 localScale { get; set; }
-        public Quaternion localRotation { get; set; }
-        [ContentSerializer(Optional = true, CollectionItemName = "child")]
-        public List<GameObject> children { get; set; }
+        private Vector3 _localPosition;
+        public Vector3 localPosition
+        { 
+            get
+            {
+                return _localPosition;
+            }
+            set
+            {
+                _localPosition = value;
+                _hasDirtyWorld = true;
+            }
+        }
 
+        private Vector3 _localScale;
+        public Vector3 localScale 
+        {
+            get
+            {
+                return _localScale;
+            }
+            set
+            {
+                _localScale = value;
+                _hasDirtyWorld = true;
+            }
+        }
+
+        private Quaternion _localRotation;
+        public Quaternion localRotation 
+        {
+            get
+            {
+                return _localRotation;
+            }
+            set
+            {
+                _localRotation = value;
+                _hasDirtyWorld = true;
+            }
+        }
+
+
+        [ContentSerializer(Optional = true, CollectionItemName = "child")]
+        internal List<GameObject> children { get; set; }
+
+        internal GameObject gameObject;
+
+        internal Transform _parent;
         [ContentSerializerIgnore]
-        public Transform parent;
+        public Transform parent {
+            get
+            {
+                return _parent;
+            }
+            set 
+            {
+                if (_parent == value)
+                {
+                    return;
+                }
+                if (_parent != null)
+                {
+                    _parent.children.Remove(gameObject);
+                }
+                _parent = value;
+                if (_parent == null)
+                {
+                    return;
+                }
+                if (_parent.children == null)
+                {
+                    _parent.children = new List<GameObject>();
+                }
+                if (gameObject == null)
+                {
+                    gameObject = new GameObject() { transform = this };
+                }
+                _parent.children.Add(gameObject);
+                _hasDirtyWorld = true;
+            }
+        }
+
+        private Matrix _world = Matrix.Identity;
+
+        private bool _hasDirtyWorld = true;
+        internal bool hasDirtyWorld
+        {
+            get
+            {
+                if (_parent == null)
+                {
+                    return _hasDirtyWorld;
+                }
+                else
+                {
+                    return _hasDirtyWorld || _parent.hasDirtyWorld;
+                }
+            }
+        }
 
         [ContentSerializerIgnore]
         internal Matrix world
         {
             get
-            {                
-                return Matrix.CreateScale(localScale * 2.5f) *
-                       // TODO: Find out why we need to rotate around X
-                       Matrix.CreateRotationX(MathHelper.PiOver2) * 
-                       Matrix.CreateFromQuaternion(localRotation) *
-                       Matrix.CreateTranslation(localPosition);
+            {
+                if (hasDirtyWorld)
+                {
+                    calculateWorld();
+                }
+                return _world;
+            }
+        }
+
+        private void calculateWorld()
+        {
+            _hasDirtyWorld = false;
+            _world = Matrix.CreateScale(localScale) *
+                   Matrix.CreateFromQuaternion(localRotation) *
+                   Matrix.CreateTranslation(localPosition);
+            if (_parent != null)
+            {
+                _world = _world * _parent.world;
+            }
+        }
+
+        [ContentSerializerIgnore]
+        public Vector3 position
+        {
+            get
+            {
+                return world.Translation;
+            }
+        }
+
+        [ContentSerializerIgnore]
+        public Vector3 lossyScale 
+        { 
+            get
+            {
+                if (parent == null)
+                {
+                    return localScale;
+                }
+                else
+                {
+                    Vector3 scale;
+                    Quaternion rot;
+                    Vector3 pos;
+                    world.Decompose(out scale, out rot, out pos);
+                    return scale;
+                }
+            }
+        }
+
+        [ContentSerializerIgnore]
+        public Quaternion rotation 
+        { 
+            get
+            {
+                if (parent == null)
+                {
+                    return localRotation;
+                }
+                else
+                {
+                    Vector3 scale;
+                    Quaternion rot;
+                    Vector3 pos;
+                    world.Decompose(out scale, out rot, out pos);
+                    return rot;
+                }
             }
         }
     }

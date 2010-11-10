@@ -17,7 +17,21 @@ namespace PressPlay.U2X.Xna
 
         public int id { get; set; }
         public string name { get; set; }
-        public Transform transform { get; set; }
+
+        private Transform _transform;
+        public Transform transform 
+        { 
+            get
+            {
+                return _transform;
+            }
+            set
+            {
+                _transform = value;
+                _transform.gameObject = this;
+            }
+        }
+
         public String prefab { get; set; }
         [ContentSerializer(CollectionItemName = "component")]
         public List<Component> components { get; set; }
@@ -36,6 +50,13 @@ namespace PressPlay.U2X.Xna
                     (components[i] as IFixedUpdateable).FixedUpdate();
                 }
             }
+            if (transform != null && transform.children != null)
+            {
+                for (int i = 0; i < transform.children.Count; i++)
+                {
+                    transform.children[i].FixedUpdate();
+                }
+            }
         }
 
         internal void Update()
@@ -51,7 +72,14 @@ namespace PressPlay.U2X.Xna
                 {
                     (components[i] as IUpdateable).Update(null);
                 }
-            }            
+            }
+            if (transform != null && transform.children != null)
+            {
+                for (int i = 0; i < transform.children.Count; i++)
+                {
+                    transform.children[i].Update();
+                }
+            }
         }
 
         internal void Draw(SpriteBatch spriteBatch)
@@ -62,7 +90,14 @@ namespace PressPlay.U2X.Xna
                 {
                     (components[i] as IRenderable).Draw(spriteBatch);
                 }
-            }            
+            }
+            if (transform != null && transform.children != null)
+            {
+                for (int i = 0; i < transform.children.Count; i++)
+                {
+                    transform.children[i].Draw(spriteBatch);
+                }
+            }
         }
     }
 }

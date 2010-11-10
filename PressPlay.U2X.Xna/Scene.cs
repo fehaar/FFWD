@@ -45,9 +45,22 @@ namespace PressPlay.U2X.Xna
         {
             for (int i = 0; i < gameObjects.Count; i++)
             {
-                for (int j = 0; j < gameObjects[i].components.Count; j++)
+                AfterLoad(gameObjects[i]);
+            }
+        }
+
+        private void AfterLoad(GameObject gameObject)
+        {
+            for (int j = 0; j < gameObject.components.Count; j++)
+            {
+                gameObject.components[j].gameObject = gameObject;
+            }
+            if (gameObject.transform != null && gameObject.transform.children != null)
+            {
+                for (int i = 0; i < gameObject.transform.children.Count; i++)
                 {
-                    gameObjects[i].components[j].gameObject = gameObjects[i];
+                    gameObject.transform.children[i].transform._parent = gameObject.transform;
+                    AfterLoad(gameObject.transform.children[i]);
                 }
             }
         }

@@ -79,13 +79,6 @@ namespace PressPlay.U2X.Xna.Components
 
             Matrix world = transform.world; 
 
-            // Set the world matrix as the root transform of the model.
-            //model.Root.Transform = world;
-            if (animationPlayer != null)
-            {
-                model.CopyAbsoluteBoneTransformsTo(boneTransforms);
-            }
-
             // Draw the model.
             for (int i = 0; i < model.Meshes.Count; i++)
             {
@@ -99,7 +92,7 @@ namespace PressPlay.U2X.Xna.Components
                     if (mesh.Effects[e] is BasicEffect)
                     {
                         BasicEffect effect = mesh.Effects[e] as BasicEffect;
-                        effect.World = world;
+                        effect.World = Matrix.CreateRotationX(MathHelper.PiOver2) * world;
                         effect.View = Camera.main.View();
                         effect.Projection = Camera.main.projectionMatrix;
                         effect.LightingEnabled = false;
@@ -112,6 +105,7 @@ namespace PressPlay.U2X.Xna.Components
                         if (animationPlayer != null)
                         {
                             bones = animationPlayer.GetSkinTransforms();
+                            model.CopyAbsoluteBoneTransformsTo(boneTransforms);
                         }
 
                         SkinnedEffect sEffect = mesh.Effects[e] as SkinnedEffect;
