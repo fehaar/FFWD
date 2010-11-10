@@ -53,6 +53,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core framework\TestComponent.cs" />
+    <Compile Include="Core framework\Transforms\WhenGettingThePositionOfATransform.cs" />
+    <Compile Include="Core framework\Transforms\WhenManipulatingTheTransformHierarchy.cs" />
     <Compile Include="Core framework\WhenCreatingANewComponent.cs" />
     <Compile Include="Core framework\WhenLoadingAScene.cs" />
     <Compile Include="Core framework\WhenRunningTheGameLoop.cs" />
