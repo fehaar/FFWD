@@ -60,7 +60,7 @@ namespace PressPlay.U2X.Xna.Test.Core_framework
         }
 
         [Test]
-        public void UpdateWillCallFixedUpdateOnComponentsOnTheScene()
+        public void UpdateWillCallUpdateOnComponentsOnTheScene()
         {
             bool updateCalled = false;
             component.onUpdate = () => { updateCalled = true; };

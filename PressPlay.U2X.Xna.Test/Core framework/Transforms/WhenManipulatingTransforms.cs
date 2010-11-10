@@ -13,12 +13,13 @@ namespace PressPlay.U2X.Xna.Test.Core_framework.Transforms
         [Test]
         public void AChildWillBePositionedRelativeToItsParent()
         {
-            Transform trans = new Transform() { localPosition = Vector3.One };
-            Transform child = new Transform() { localPosition = Vector3.Up };
+            Transform trans = new Transform() { localPosition = new Vector3(2, 2, 2) };
+            Transform child = new Transform() { localPosition = new Vector3(3, 2, 1) };
 
-            Assert.That(child.position, Is.EqualTo(Vector3.Up));
+            Assert.That(trans.position, Is.EqualTo(new Vector3(2, 2, 2)));
+            Assert.That(child.position, Is.EqualTo(new Vector3(3, 2, 1)));
             child.parent = trans;
-            Assert.That(child.position, Is.EqualTo(Vector3.One + Vector3.Up));
+            Assert.That(child.position, Is.EqualTo(new Vector3(2, 2, 2) + new Vector3(3, 2, 1)));
         }
 
         [Test]

@@ -59,7 +59,7 @@ namespace PressPlay.Tentacles.Win
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            scene = Content.Load<Scene>("Scenes/Level1");
+            scene = Content.Load<Scene>("Scenes/XNA export");
             scene.AfterLoad();
 
             font = Content.Load<SpriteFont>("TestFont");
