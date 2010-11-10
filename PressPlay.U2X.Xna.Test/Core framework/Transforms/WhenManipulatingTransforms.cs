@@ -11,6 +11,14 @@ namespace PressPlay.U2X.Xna.Test.Core_framework.Transforms
     public class WhenManipulatingTransforms
     {
         [Test]
+        public void WeWillSetTheGameObjectOnANewTransform()
+        {
+            GameObject go = new GameObject();
+            go.transform = new Transform();
+            Assert.That(go.transform.gameObject, Is.EqualTo(go));
+        }
+
+        [Test]
         public void AChildWillBePositionedRelativeToItsParent()
         {
             Transform trans = new Transform() { localPosition = new Vector3(2, 2, 2) };
