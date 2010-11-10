@@ -66,6 +66,7 @@ namespace PressPlay.Tentacles.Win
 
             Camera.main.transform.localPosition = new Vector3(-50, -100, 0);
             Camera.main.transform.localRotation = Quaternion.CreateFromRotationMatrix(Matrix.CreateRotationX(MathHelper.ToRadians(90)));
+            Camera.main.up = Vector3.Backward; // Vector3.Left;
         }
 
         /// <summary>
@@ -93,7 +94,7 @@ namespace PressPlay.Tentacles.Win
 
             KeyboardState key = Keyboard.GetState();
             Vector3 dir = Vector3.Zero;
-            if (key.IsKeyDown(Keys.RightControl))            
+            if (key.IsKeyDown(Keys.RightAlt))            
             {
                 // Rotate camera
                 if (key.IsKeyDown(Keys.A))
@@ -167,8 +168,8 @@ namespace PressPlay.Tentacles.Win
 
             if (oldState.IsKeyUp(Keys.R) && key.IsKeyDown(Keys.R))
             {
-                Camera.main.transform.localPosition = new Vector3(-50, -100, 0);
-                Camera.main.transform.localRotation = Quaternion.CreateFromRotationMatrix(Matrix.CreateRotationX(MathHelper.ToRadians(90)));
+                Camera.main.transform.localPosition = new Vector3(-50, 100, 0);
+                Camera.main.transform.localRotation = Quaternion.CreateFromRotationMatrix(Matrix.CreateRotationX(MathHelper.ToRadians(-90)));
             }
             oldState = key;
 
@@ -189,7 +190,9 @@ namespace PressPlay.Tentacles.Win
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(new Color(78, 115, 74));
+            Color bg = Color.Black;
+            //Color bg = new Color(78, 115, 74);
+            GraphicsDevice.Clear(bg);
             //GraphicsDevice.RasterizerState = new RasterizerState() { FillMode = FillMode.WireFrame };
 
             scene.Update();

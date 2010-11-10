@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent>
+  <Asset Type="PressPlay.U2X.Xna.Scene">
+    <gameObject ID="#go-40876">
+      <id>-40876</id>
+      <name>block_wall_concave_01</name>
+      <transform>
+        <localPosition>0.13961 -0.00699 0</localPosition>
+        <localScale>5.3875 1 1</localScale>
+        <localRotation>0 0.93969 0 -0.34202</localRotation>
+        <children>
+          <child>
+            <id>-40880</id>
+            <name>block_wall_concave_01_collider</name>
+            <transform>
+              <localPosition>-0.01744 0 0.34471</localPosition>
+              <localScale>1 1 1</localScale>
+              <localRotation>0 0 0 1</localRotation>
+            </transform>
+            <prefab>block_wall_concave_01_collider</prefab>
+            <components>
+              <component Type="PressPlay.U2X.Xna.Components.MeshRenderer">
+                <Mesh>block_wall_concave_01_collider</Mesh>
+              </component>
+            </components>
+          </child>
+        </children>
+      </transform>
+      <prefab>block_wall_concave_01</prefab>
+      <components>
+        <component Type="PressPlay.U2X.Xna.Components.MeshRenderer">
+          <Texture>block_purple</Texture>
+          <Mesh>block_wall_concave_01</Mesh>
+        </component>
+      </components>
+    </gameObject>
+    <gameObject ID="#go-40690">
+      <id>-40690</id>
+      <name>Main Camera</name>
+      <transform>
+        <localPosition>0 1 -10</localPosition>
+        <localScale>1 1 1</localScale>
+        <localRotation>0 0 0 1</localRotation>
+      </transform>
+      <prefab Null="true" />
+      <components />
+    </gameObject>
+  </Asset>
+</XnaContent>

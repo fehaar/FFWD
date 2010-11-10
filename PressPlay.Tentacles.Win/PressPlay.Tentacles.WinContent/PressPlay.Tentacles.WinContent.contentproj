@@ -55,14 +55,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\levelEntrance_edited_noMaterial.FBX">
-      <Name>levelEntrance_edited_noMaterial</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="TestFont.spritefont">
       <Name>TestFont</Name>
       <Importer>FontDescriptionImporter</Importer>
@@ -163,12 +155,6 @@
       <Processor>ModelProcessor</Processor>
       <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
     </Compile>
-    <Compile Include="Models\level_entrance.FBX">
-      <Name>level_entrance</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Textures\block_brown_desat_challenge.png">
@@ -200,6 +186,25 @@
       <Name>texture_package_01</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\block_wall_concave_02.FBX">
+      <Name>block_wall_concave_02</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\brain_challenge_01.FBX">
+      <Name>brain_challenge_01</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\level_entrance.FBX">
+      <Name>level_entrance</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
