@@ -40,7 +40,56 @@ namespace PressPlay.U2X.Xna.Test.Core_framework.Transforms
             trans.localPosition = new Vector3(2, 2, 2);
             Assert.That(child.position, Is.EqualTo(new Vector3(2, 2, 2) + Vector3.Up));
         }
+
+        [Test]
+        public void AChildWillBeScaledRelativielyToItsParent()
+        {
+            Transform trans = new Transform() { localScale = new Vector3(2, 2, 2) };
+            Transform child = new Transform() { localScale = new Vector3(3, 2, 1) };
+
+            Assert.That(trans.lossyScale, Is.EqualTo(new Vector3(2, 2, 2)));
+            Assert.That(child.lossyScale, Is.EqualTo(new Vector3(3, 2, 1)));
+            child.parent = trans;
+            Assert.That(child.lossyScale, Is.EqualTo(new Vector3(2, 2, 2) * new Vector3(3, 2, 1)));
+        }
+
+        [Test]
+        public void ScalingAParentWillScaleTheChild()
+        {
+            Transform trans = new Transform() { localScale = Vector3.One };
+            Transform child = new Transform() { localScale = new Vector3(3, 2, 1) };
+            child.parent = trans;
+            Assert.That(child.lossyScale, Is.EqualTo(new Vector3(3, 2, 1)));
+            trans.localScale = new Vector3(2, 2, 2);
+            Assert.That(child.lossyScale, Is.EqualTo(new Vector3(2, 2, 2) * new Vector3(3, 2, 1)));
+        }
+
+        [Test]
+        public void RotatingAParentWillRotateTheChild()
+        {
+            Transform trans = new Transform() { localRotation = Quaternion.Identity };
+            Transform child = new Transform() { localRotation = Quaternion.Identity };
+
+            Assert.That(trans.rotation, Is.EqualTo(Quaternion.Identity));
+            Assert.That(child.rotation, Is.EqualTo(Quaternion.Identity));
+            child.parent = trans;
+            trans.localRotation = Quaternion.CreateFromYawPitchRoll(MathHelper.PiOver2, 0.0f, 0.0f);
+            Assert.That(child.rotation, Is.Not.EqualTo(Quaternion.Identity));
+        }
+
+        [Test]
+        public void RotatingAParentWillMoveATranslatedChild()
+        {
+            Transform trans = new Transform() { localPosition = new Vector3(2, 2, 2) };
+            Transform child = new Transform() { localPosition = new Vector3(3, 2, 1) };
+            Assert.That(trans.rotation, Is.EqualTo(Quaternion.Identity));
+            Assert.That(child.rotation, Is.EqualTo(Quaternion.Identity));
+            Vector3 beforeRotate = child.position;
+            child.parent = trans;
+            trans.localRotation = Quaternion.CreateFromYawPitchRoll(MathHelper.PiOver2, 0.0f, 0.0f);
+            Assert.That(child.position, Is.Not.EqualTo(beforeRotate));
+        }
 	
-	
+
     }
 }
