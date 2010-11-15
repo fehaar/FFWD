@@ -62,6 +62,8 @@ namespace PressPlay.Tentacles.Win
             scene = Content.Load<Scene>("Scenes/Level1");
             scene.AfterLoad();
 
+            Physics.Initialize();
+
             font = Content.Load<SpriteFont>("TestFont");
 
             Camera.main.transform.localPosition = new Vector3(-50, -100, 0);
@@ -179,7 +181,9 @@ namespace PressPlay.Tentacles.Win
                 Debug.Log("Missing " + asset);
             }
             ContentHelper.MissingAssets.Clear();
+
             scene.FixedUpdate();
+            Physics.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
 
             base.Update(gameTime);
         }
