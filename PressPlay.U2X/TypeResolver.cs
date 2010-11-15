@@ -7,6 +7,8 @@ using System.Reflection;
 using PressPlay.U2X.Configuration;
 using System.Xml;
 using System.IO;
+using PressPlay.U2X.Interfaces;
+using PressPlay.U2X.Writers;
 
 namespace PressPlay.U2X
 {
@@ -33,6 +35,23 @@ namespace PressPlay.U2X
 		[XmlArray]
 		[XmlArrayItem("Convert", typeof(NamespaceRule))]
 		public List<NamespaceRule> NamespaceRules { get; set; }
+
+        public static TypeResolver ReadConfiguration(string location)
+        {
+            XmlDocument doc = new XmlDocument();
+            if (!File.Exists(location))
+            {
+                throw new FileNotFoundException("The configuration file does not exist", location);
+            }
+            doc.Load(location);
+            XmlNode node = doc.SelectSingleNode("configuration/PressPlay/U2X");
+            if (node == null)
+            {
+                throw new Exception("The configuration needs a node at the path configuration/PressPlay/U2X to read from.");
+            }
+            ConfigurationSectionHandler handler = new ConfigurationSectionHandler();
+            return (TypeResolver)handler.Create(null, null, node);
+        }
 
 		public bool SkipComponent(Object component)
 		{
@@ -62,21 +81,13 @@ namespace PressPlay.U2X
 			return result;
 		}	
 
-		public static TypeResolver ReadConfiguration(string location)
-		{
-			XmlDocument doc = new XmlDocument();
-			if (!File.Exists(location))
-			{
-				throw new FileNotFoundException("The configuration file does not exist", location);
-			}
-			doc.Load(location);
-			XmlNode node = doc.SelectSingleNode("configuration/PressPlay/U2X");
-			if (node == null)
-			{
-				throw new Exception("The configuration needs a node at the path configuration/PressPlay/U2X to read from.");
-			}
-			ConfigurationSectionHandler handler = new ConfigurationSectionHandler();
-			return (TypeResolver)handler.Create(null, null, node);
-		}
-	}
+        internal IComponentWriter GetComponentWriter(Type type)
+        {
+            if (type == typeof(UnityEngine.MeshRenderer))
+            {
+                return new MeshRendererComponentWriter();
+            }
+            return null;
+        }
+    }
 }

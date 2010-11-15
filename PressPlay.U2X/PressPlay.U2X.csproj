@@ -45,10 +45,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\TypeResolverSection.cs" />
+    <Compile Include="Interfaces\IComponentWriter.cs" />
     <Compile Include="NamespaceRule.cs" />
     <Compile Include="TypeResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Configuration\ConfigurationSectionHandler.cs" />
+    <Compile Include="Writers\MeshRendererComponentWriter.cs" />
     <Compile Include="Writers\SceneWriter.cs" />
   </ItemGroup>
   <ItemGroup>
