@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Box2D.XNA;
 using Microsoft.Xna.Framework;
+using PressPlay.U2X.Xna.Interfaces;
 
 namespace PressPlay.U2X.Xna
 {
@@ -11,11 +12,15 @@ namespace PressPlay.U2X.Xna
     {
         internal static World world;
         private static bool isPaused = false;
+        private static IContactProcessor contactProcessor;
+        public static int velocityIterations = 6;
+        public static int positionIterations = 4;
 
-        public static void Initialize(Vector2 gravity = new Vector2())
+        public static void Initialize(Vector2 gravity = new Vector2(), IContactProcessor contactProcessor = null)
         {
             world = new World(gravity, true);
-            world.ContactListener = new PhysicsContactListener();
+            Physics.contactProcessor = contactProcessor ?? new GameObjectContactProcessor();
+            world.ContactListener = Physics.contactProcessor;
             world.ContinuousPhysics = true;
         }
 
@@ -24,13 +29,10 @@ namespace PressPlay.U2X.Xna
             isPaused = !isPaused;
         }
 
-        public static void Update()
+        public static void Update(float elapsedTime)
         {
-            //if (!isPaused)
-            //    world.Step((float)Time.deltaTime, 6, 4); // was world.Step((float)Time.deltaTime,6, 3); before precert..
-
-            //// process Contacts
-            //ProcessContacts();
+            world.Step(elapsedTime, velocityIterations, positionIterations);
+            contactProcessor.Update();
         }
     }
 }

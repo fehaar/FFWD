@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework.Content;
 using PressPlay.U2X.Xna.Interfaces;
 using Microsoft.Xna.Framework.Graphics;
+using Box2D.XNA;
 
 namespace PressPlay.U2X.Xna
 {
@@ -96,6 +97,114 @@ namespace PressPlay.U2X.Xna
                 for (int i = 0; i < transform.children.Count; i++)
                 {
                     transform.children[i].Draw(spriteBatch);
+                }
+            }
+        }
+
+        internal void OnTriggerEnter(Contact contact)
+        {
+            for (int i = 0; i < components.Count; i++)
+            {
+                if (Component.IsAwake(components[i]) && components[i] is ICollidable)
+                {
+                    (components[i] as ICollidable).OnTriggerEnter(contact);
+                }
+            }
+            if (transform != null && transform.children != null)
+            {
+                for (int i = 0; i < transform.children.Count; i++)
+                {
+                    transform.children[i].OnTriggerEnter(contact);
+                }
+            }
+        }
+
+        internal void OnTriggerExit(Contact contact)
+        {
+            for (int i = 0; i < components.Count; i++)
+            {
+                if (Component.IsAwake(components[i]) && components[i] is ICollidable)
+                {
+                    (components[i] as ICollidable).OnTriggerExit(contact);
+                }
+            }
+            if (transform != null && transform.children != null)
+            {
+                for (int i = 0; i < transform.children.Count; i++)
+                {
+                    transform.children[i].OnTriggerExit(contact);
+                }
+            }
+        }
+
+        internal void OnCollisionEnter(Contact contact)
+        {
+            for (int i = 0; i < components.Count; i++)
+            {
+                if (Component.IsAwake(components[i]) && components[i] is ICollidable)
+                {
+                    (components[i] as ICollidable).OnCollisionEnter(contact);
+                }
+            }
+            if (transform != null && transform.children != null)
+            {
+                for (int i = 0; i < transform.children.Count; i++)
+                {
+                    transform.children[i].OnCollisionEnter(contact);
+                }
+            }
+        }
+
+        internal void OnCollisionExit(Contact contact)
+        {
+            for (int i = 0; i < components.Count; i++)
+            {
+                if (Component.IsAwake(components[i]) && components[i] is ICollidable)
+                {
+                    (components[i] as ICollidable).OnCollisionExit(contact);
+                }
+            }
+            if (transform != null && transform.children != null)
+            {
+                for (int i = 0; i < transform.children.Count; i++)
+                {
+                    transform.children[i].OnCollisionExit(contact);
+                }
+            }
+        }
+
+        internal void OnPreSolve(Contact contact, Manifold manifold)
+        {
+            for (int i = 0; i < components.Count; i++)
+            {
+                if (Component.IsAwake(components[i]) && components[i] is ICollidable)
+                {
+                    (components[i] as ICollidable).OnPreSolve(contact, manifold);
+                }
+            }
+            if (transform != null && transform.children != null)
+            {
+                for (int i = 0; i < transform.children.Count; i++)
+                {
+                    transform.children[i].OnPreSolve(contact, manifold);
+                }
+            }
+        }
+
+        internal void OnPostSolve(Contact contact, ContactImpulse contactImpulse)
+        {
+            for (int i = 0; i < components.Count; i++)
+            {
+                if (Component.IsAwake(components[i]) && components[i] is ICollidable)
+                {
+                    (components[i] as ICollidable).OnPostSolve(contact, contactImpulse);
+                }
+            }
+            if (transform != null && transform.children != null)
+            {
+                for (int i = 0; i < transform.children.Count; i++)
+                {
+                    transform.children[i].OnPostSolve(contact, contactImpulse);
                 }
             }
         }

@@ -60,6 +60,7 @@
     <Compile Include="Core framework\WhenRunningTheGameLoop.cs" />
     <Compile Include="NUnitSampleTests.cs" />
     <Compile Include="Physics\WhenInitializingPhysics.cs" />
+    <Compile Include="Physics\WhenReactingToPhysics.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
