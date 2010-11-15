@@ -8,6 +8,6 @@ namespace PressPlay.U2X.Interfaces
 {
     public interface IComponentWriter
     {
-        void Write(SceneWriter scene, UnityEngine.Component component);
+        void Write(SceneWriter scene, object component);
     }
 }

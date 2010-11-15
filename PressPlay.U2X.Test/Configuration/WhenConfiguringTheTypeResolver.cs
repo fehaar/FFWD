@@ -6,6 +6,7 @@ using NUnit.Framework;
 using System.Configuration;
 using PressPlay.U2X.Configuration;
 using System.Reflection;
+using PressPlay.U2X.Writers;
 
 namespace PressPlay.U2X.Test.Configuration
 {
@@ -31,6 +32,12 @@ namespace PressPlay.U2X.Test.Configuration
             Assert.That(obj.NamespaceRules, Is.Not.Empty);
             Assert.That(obj.NamespaceRules[0].Namespace, Is.EqualTo("System"));
             Assert.That(obj.NamespaceRules[0].To, Is.EqualTo("Testing"));
+
+            Assert.That(obj.ComponentWriters, Is.Not.Null);
+            Assert.That(obj.ComponentWriters, Is.Not.Empty);
+            ComponentMap map = obj.ComponentWriters.Find(m => m.Type == "UnityEngine.MeshRenderer");
+            Assert.That(map, Is.Not.Null);
+            Assert.That(map.To, Is.StringStarting(typeof(MeshRendererComponentWriter).FullName));
         }
 	}
 }

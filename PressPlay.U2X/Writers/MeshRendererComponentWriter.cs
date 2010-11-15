@@ -11,7 +11,7 @@ namespace PressPlay.U2X.Writers
     internal class MeshRendererComponentWriter : IComponentWriter
     {
         #region IComponentWriter Members
-        public void Write(SceneWriter writer, UnityEngine.Component component)
+        public void Write(SceneWriter writer, object component)
         {
             MeshRenderer mr = component as MeshRenderer;
             if (mr == null)
@@ -22,7 +22,7 @@ namespace PressPlay.U2X.Writers
             {
                 writer.WriteTexture(mr.sharedMaterials[0].mainTexture);
             }
-            MeshFilter filter = component.GetComponent<MeshFilter>();
+            MeshFilter filter = (component as Component).GetComponent<MeshFilter>();
             if (filter.sharedMesh != null)
             {
                 writer.WriteElement("Mesh", filter.sharedMesh.name);

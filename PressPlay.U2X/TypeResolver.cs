@@ -20,6 +20,7 @@ namespace PressPlay.U2X
 			IncludeTypes = new List<string>();
 			NamespaceRules = new List<NamespaceRule>();
 			DefaultNamespace = "PressPlay.U2X.Xna";
+            ComponentWriters = new List<ComponentMap>();
 		}
 
 		[XmlAttribute]
@@ -35,6 +36,9 @@ namespace PressPlay.U2X
 		[XmlArray]
 		[XmlArrayItem("Convert", typeof(NamespaceRule))]
 		public List<NamespaceRule> NamespaceRules { get; set; }
+        [XmlArray]
+        [XmlArrayItem("Map", typeof(ComponentMap))]
+        public List<ComponentMap> ComponentWriters { get; set; }
 
         public static TypeResolver ReadConfiguration(string location)
         {
@@ -81,11 +85,16 @@ namespace PressPlay.U2X
 			return result;
 		}	
 
-        internal IComponentWriter GetComponentWriter(Type type)
+        public IComponentWriter GetComponentWriter(Type type)
         {
-            if (type == typeof(UnityEngine.MeshRenderer))
+            string result = type.FullName;
+            foreach (ComponentMap map in ComponentWriters)
             {
-                return new MeshRendererComponentWriter();
+                if (map.Type == result)
+                {
+                    Type tp = Type.GetType(map.To);
+                    return (IComponentWriter)Activator.CreateInstance(tp);
+                }
             }
             return null;
         }

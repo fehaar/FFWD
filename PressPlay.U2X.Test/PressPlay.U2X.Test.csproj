@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="Configuration\WhenConfiguringTheTypeResolver.cs" />
     <Compile Include="Configuration\WhenCheckingIfAComponentShouldBeExported.cs" />
+    <Compile Include="Configuration\WhenGettingAComponentWriter.cs" />
     <Compile Include="Configuration\WhenResolvingATypeName.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
