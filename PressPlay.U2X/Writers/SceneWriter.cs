@@ -144,6 +144,7 @@ namespace PressPlay.U2X.Writers
             if (obj is Boolean)
             {
                 writer.WriteElementString(name, ToString((Boolean)obj));
+                return;
             }
             writer.WriteElementString(name, obj.ToString());
         }

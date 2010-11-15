@@ -17,7 +17,7 @@ namespace PressPlay.U2X.Writers
             {
                 throw new Exception(GetType() + " cannot export components of type " + component.GetType());
             }
-            scene.WriteElement("Material", collider.material);
+            scene.WriteElement("Material", collider.material.name.Replace(" (Instance)", ""));
             scene.WriteElement("IsTrigger", collider.isTrigger);
             scene.WriteElement("Mesh", collider.sharedMesh.name);
         }

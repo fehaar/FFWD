@@ -130,6 +130,7 @@
     <Compile Include="Box2D\Dynamics\WorldCallbacks.cs" />
     <Compile Include="Component.cs" />
     <Compile Include="Components\Camera.cs" />
+    <Compile Include="Components\Colliders\MeshCollider.cs" />
     <Compile Include="Components\Renderers\MeshRenderer.cs" />
     <Compile Include="ContentHelper.cs" />
     <Compile Include="Debug.cs" />
