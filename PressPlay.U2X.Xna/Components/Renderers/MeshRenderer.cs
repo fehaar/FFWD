@@ -76,7 +76,7 @@ namespace PressPlay.U2X.Xna.Components
             {
                 return;
             }
-
+            
             Matrix world = transform.world; 
 
             // Draw the model.
