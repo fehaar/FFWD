@@ -23,31 +23,46 @@ namespace PressPlay.U2X.Xna.Components
         private BasicEffect effect;
         private VertexPositionColor[] pointList;
         private VertexPositionColor[] collisionLine;
-        private VertexPositionColor[] normalLines;
+        private VertexPositionColor[] collTriangles;
         #endregion
 
         public override void Awake()
         {
+            // For drawing the original mesh
             pointList = new VertexPositionColor[Vertices.Length];
             for (int i = 0; i < Vertices.Length; i++)
             {
                 pointList[i] = new VertexPositionColor(Vertices[i], Color.White);
             }
+
             List<Vector3> chosenVerts = new List<Vector3>();
-            for (int i = 0; i < Triangles.Length; i++)
+            for (int i = 0; i < Triangles.Length; i += 3)
             {
-                if (Vertices[Triangles[i]].Y < 0)
+                Vector3 v1 = Vertices[Triangles[i]];
+                Vector3 v2 = Vertices[Triangles[i + 1]];
+                Vector3 v3 = Vertices[Triangles[i + 2]];
+
+                if (v1.Y < 0 && v2.Y < 0)
                 {
-                    if (!chosenVerts.Contains(Vertices[Triangles[i]]))
-                    {
-                        chosenVerts.Add(Vertices[Triangles[i]]);
-                    }
+                    chosenVerts.Add(v1);
+                    chosenVerts.Add(v2);
+                }
+                if (v2.Y < 0 && v3.Y < 0)
+                {
+                    chosenVerts.Add(v2);
+                    chosenVerts.Add(v3);
+                }
+                if (v3.Y < 0 && v1.Y < 0)
+                {
+                    chosenVerts.Add(v3);
+                    chosenVerts.Add(v1);
                 }
             }
             collisionLine = new VertexPositionColor[chosenVerts.Count];
             for (int i = 0; i < chosenVerts.Count; i++)
             {
-                collisionLine[i] = new VertexPositionColor(chosenVerts[i], Color.Red);
+                float progress = (float)i / (float)(chosenVerts.Count - 1);
+                collisionLine[i] = new VertexPositionColor(new Vector3(chosenVerts[i].X, chosenVerts[i].Y, chosenVerts[i].Z), new Color(progress, 1.0f - progress, 0.0f));
             }
         }
 
@@ -99,10 +114,10 @@ namespace PressPlay.U2X.Xna.Components
                 if (collisionLine.Length > 0)
                 {
                     batch.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(
-                        PrimitiveType.LineStrip,
+                        PrimitiveType.LineList,
                         collisionLine,
                         0,
-                        collisionLine.Length - 1
+                        collisionLine.Length / 2
                     );
                 }
             }
