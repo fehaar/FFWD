@@ -21,6 +21,7 @@ namespace PressPlay.U2X.Xna.Components
         #region Debug drawing
         private BasicEffect effect;
         private VertexPositionColor[] pointList;
+        private VertexPositionColor[] collisionLine;
         #endregion
 
         public override void Awake()
@@ -29,6 +30,23 @@ namespace PressPlay.U2X.Xna.Components
             for (int i = 0; i < Vertices.Length; i++)
             {
                 pointList[i] = new VertexPositionColor(Vertices[i], Color.White);
+            }
+            List<VertexPositionColor> colVerts = new List<VertexPositionColor>();
+            for (int i = 0; i < Triangles.Length; i += 3)
+            {
+                TestVerts(colVerts, Triangles[i], Triangles[i + 1]);
+                TestVerts(colVerts, Triangles[i + 1], Triangles[i + 2]);
+                TestVerts(colVerts, Triangles[i + 2], Triangles[i]);
+            }
+            collisionLine = colVerts.ToArray();
+        }
+
+        private void TestVerts(List<VertexPositionColor> colVerts, int vert1, int vert2)
+        {
+            Vector3 dir = Vertices[vert2] - Vertices[vert1];
+            if (dir.Y > 0.01)
+            {
+                colVerts.Add(new VertexPositionColor(Vertices[vert1] + (dir / 2), Color.Red));
             }
         }
 
@@ -68,6 +86,15 @@ namespace PressPlay.U2X.Xna.Components
                     0,   // first index element to read
                     Triangles.Length / 3    // number of primitives to draw
                 );
+                if (collisionLine.Length > 0)
+                {
+                    batch.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(
+                        PrimitiveType.LineStrip,
+                        collisionLine,
+                        0,
+                        collisionLine.Length - 1
+                    );
+                }
             }
 
             batch.GraphicsDevice.RasterizerState = oldrasterizerState;
