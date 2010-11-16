@@ -123,7 +123,7 @@
     </ProjectReference>
     <ProjectReference Include="..\..\PressPlay.Tentacles.XmlContent\PressPlay.Tentacles.XmlContent.contentproj">
       <Project>{4C58C1EE-5091-42D3-A9DF-F274A942D800}</Project>
-      <Name>PressPlay.Tentacles.XmlContent</Name>
+      <Name>PressPlay.Tentacles.XmlContent %28Content%29</Name>
       <XnaReferenceType>Content</XnaReferenceType>
     </ProjectReference>
     <ProjectReference Include="..\PressPlay.Tentacles.WinContent\PressPlay.Tentacles.WinContent.contentproj">

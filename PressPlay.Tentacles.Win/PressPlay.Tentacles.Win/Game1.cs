@@ -180,11 +180,14 @@ namespace PressPlay.Tentacles.Win
             oldState = key;
 
             Component.AwakeNewComponents();
+
+#if WINDOWS
             foreach (String asset in ContentHelper.MissingAssets)
             {
                 Debug.Log("Missing " + asset);
             }
             ContentHelper.MissingAssets.Clear();
+#endif
 
             scene.FixedUpdate();
             Physics.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
