@@ -47,6 +47,10 @@ namespace PressPlay.Tentacles.Win
 
             Camera.main.projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(60), graphics.GraphicsDevice.Viewport.AspectRatio, 0.3f, 1000);
 
+            FrameRateCounter counter = new FrameRateCounter(this, Content.RootDirectory + "/TestFont");
+            counter.Position = new Vector2(10, 46);
+            Components.Add(counter);
+
             base.Initialize();
         }
 
