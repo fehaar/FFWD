@@ -14,7 +14,7 @@ namespace PressPlay.U2X.Xna.Components
         #region ContentProperties
         public string Material { get; set; }
         public bool IsTrigger { get; set; }
-        public int[] Triangles { get; set; }
+        public short[] Triangles { get; set; }
         public Vector3[] Vertices { get; set; }
         public Vector3[] Normals { get; set; }
         #endregion

@@ -16,7 +16,12 @@ namespace PressPlay.U2X.Xna
         public static int velocityIterations = 6;
         public static int positionIterations = 4;
 
-        public static void Initialize(Vector2 gravity = new Vector2(), IContactProcessor contactProcessor = null)
+        public static void Initialize()
+        {
+            Initialize(Vector2.Zero, null);
+        }
+
+        public static void Initialize(Vector2 gravity, IContactProcessor contactProcessor)
         {
             world = new World(gravity, true);
             Physics.contactProcessor = contactProcessor ?? new GameObjectContactProcessor();

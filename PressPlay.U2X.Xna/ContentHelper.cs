@@ -21,7 +21,9 @@ namespace PressPlay.U2X.Xna
         public static GameServiceContainer Services { get; set; }
         public static ContentManager Content;
         public static ContentManager StaticContent;
+#if WINDOWS
         public static HashSet<string> MissingAssets = new HashSet<string>();
+#endif
 
         private struct TextureToColor
         {
@@ -137,11 +139,15 @@ namespace PressPlay.U2X.Xna
 
         private static void MissingAsset(string type, string name)
         {
+#if WINDOWS
             string key = type + ": " + name;
             if (!MissingAssets.Contains(key))
             {
                 MissingAssets.Add(key);
             }
+#else
+            return;
+#endif
         }
 
         public static void LoadModel(string name)
@@ -517,24 +523,6 @@ namespace PressPlay.U2X.Xna
             Content.Dispose();
             Content = new ContentManager(Services, "Content");
         }
-
-#if WINDOWS
-        public static PerformanceCounter cpuCounter = new PerformanceCounter();
-        public static PerformanceCounter ramCounter;
-        public static Process process;
-        public static string getAvailableRAM()
-        {
-            //return ramCounter.NextValue() + "MB"; 
-            return ((int)(process.PrivateMemorySize64 / 1024 / 1024)).ToString();
-        }
-
-        public static string getCurrentCpuUsage()
-        {
-            return cpuCounter.NextValue() + "%";
-        }
-
-#endif
-
 
         #region Static Textures
         private static string[] StaticTextureNames = new string[]
