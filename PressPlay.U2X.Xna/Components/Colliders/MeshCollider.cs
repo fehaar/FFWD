@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using PressPlay.U2X.Xna.Interfaces;
+using Box2D.XNA;
 
 namespace PressPlay.U2X.Xna.Components
 {
@@ -22,6 +23,7 @@ namespace PressPlay.U2X.Xna.Components
         private BasicEffect effect;
         private VertexPositionColor[] pointList;
         private VertexPositionColor[] collisionLine;
+        private VertexPositionColor[] normalLines;
         #endregion
 
         public override void Awake()
@@ -31,23 +33,22 @@ namespace PressPlay.U2X.Xna.Components
             {
                 pointList[i] = new VertexPositionColor(Vertices[i], Color.White);
             }
-            List<VertexPositionColor> colVerts = new List<VertexPositionColor>();
+            List<Vector3> chosenVerts = new List<Vector3>();
             for (int i = 0; i < Triangles.Length; i++)
             {
                 if (Vertices[Triangles[i]].Y < 0)
                 {
-                    if (colVerts.Count > 0)
+                    if (!chosenVerts.Contains(Vertices[Triangles[i]]))
                     {
-                        Vector3 dist = colVerts[colVerts.Count - 1].Position - Vertices[Triangles[i]];
-                        if (dist.LengthSquared() < 0.001)
-                        {
-                            continue;
-                        }
+                        chosenVerts.Add(Vertices[Triangles[i]]);
                     }
-                    colVerts.Add(new VertexPositionColor(Vertices[Triangles[i]], Color.Red));
                 }
             }
-            collisionLine = colVerts.ToArray();
+            collisionLine = new VertexPositionColor[chosenVerts.Count];
+            for (int i = 0; i < chosenVerts.Count; i++)
+            {
+                collisionLine[i] = new VertexPositionColor(chosenVerts[i], Color.Red);
+            }
         }
 
         private void TestVerts(List<VertexPositionColor> colVerts, int vert1, int vert2)
