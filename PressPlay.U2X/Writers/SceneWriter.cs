@@ -146,6 +146,16 @@ namespace PressPlay.U2X.Writers
                 writer.WriteElementString(name, ToString((Boolean)obj));
                 return;
             }
+            if (obj is int[])
+            {
+                writer.WriteElementString(name, ToString(obj as int[]));
+                return;
+            }
+            if (obj is Vector3[])
+            {
+                writer.WriteElementString(name, ToString(obj as Vector3[]));
+                return;
+            }
             writer.WriteElementString(name, obj.ToString());
         }
 
@@ -175,6 +185,28 @@ namespace PressPlay.U2X.Writers
         }
 
         #region ToString methods
+        private string ToString(int[] array)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (int item in array)
+            {
+                sb.Append(item);
+                sb.Append(" ");
+            }
+            return sb.ToString();
+        }
+
+        private string ToString(Vector3[] array)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (Vector3 item in array)
+            {
+                sb.Append(ToString(item));
+                sb.Append(" ");
+            }
+            return sb.ToString();
+        }
+
         private string ToString(Vector3 vector3)
         {
             return vector3.x.ToString("0.#####") + " " + vector3.y.ToString("0.#####") + " " + vector3.z.ToString("0.#####");

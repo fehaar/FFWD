@@ -37,6 +37,7 @@ namespace PressPlay.U2X.Xna
         [ContentSerializer(CollectionItemName = "component")]
         public List<Component> components { get; set; }
 
+        #region Update and event methods
         internal void FixedUpdate()
         {
             for (int i = 0; i < components.Count; i++)
@@ -208,5 +209,39 @@ namespace PressPlay.U2X.Xna
                 }
             }
         }
+        #endregion
+
+        #region Component locator methods
+        public T[] GetComponents<T>() where T : Component
+        {
+            List<T> list = new List<T>();
+            for (int i = 0; i < components.Count; i++)
+            {
+                if (components[i] is T)
+                {
+                    list.Add(components[i] as T);
+                }
+            }
+            return list.ToArray();
+        }
+
+        public T[] GetComponentsInParents<T>() where T : Component
+        {
+            List<T> list = new List<T>();
+            GameObject go = GetParent();
+            while (go != null)
+            {
+                list.AddRange(go.GetComponents<T>());
+                go = go.GetParent();
+            }
+            return list.ToArray();
+        }
+
+        private GameObject GetParent()
+        {
+            return (transform != null && transform.parent != null) ? transform.parent.gameObject : null;
+        }
+        #endregion
+
     }
 }

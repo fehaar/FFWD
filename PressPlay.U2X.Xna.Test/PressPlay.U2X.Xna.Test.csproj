@@ -57,6 +57,7 @@
     <Compile Include="Core framework\Transforms\WhenManipulatingTheTransformHierarchy.cs" />
     <Compile Include="Core framework\WhenCreatingANewComponent.cs" />
     <Compile Include="Core framework\WhenLoadingAScene.cs" />
+    <Compile Include="Core framework\WhenLocatingAComponent.cs" />
     <Compile Include="Core framework\WhenRunningTheGameLoop.cs" />
     <Compile Include="NUnitSampleTests.cs" />
     <Compile Include="Physics\WhenInitializingPhysics.cs" />

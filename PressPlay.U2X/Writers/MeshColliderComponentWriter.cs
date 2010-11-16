@@ -19,7 +19,9 @@ namespace PressPlay.U2X.Writers
             }
             scene.WriteElement("Material", collider.material.name.Replace(" (Instance)", ""));
             scene.WriteElement("IsTrigger", collider.isTrigger);
-            scene.WriteElement("Mesh", collider.sharedMesh.name);
+            scene.WriteElement("Triangles", collider.sharedMesh.triangles);
+            scene.WriteElement("Vertices", collider.sharedMesh.vertices);
+            scene.WriteElement("Normals", collider.sharedMesh.normals);
         }
         #endregion
     }
