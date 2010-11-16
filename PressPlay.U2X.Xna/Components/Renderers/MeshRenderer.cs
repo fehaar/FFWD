@@ -78,7 +78,7 @@ namespace PressPlay.U2X.Xna.Components
             }
             
             Matrix world = transform.world;
-            return;
+//            return;
             // Draw the model.
             for (int i = 0; i < model.Meshes.Count; i++)
             {

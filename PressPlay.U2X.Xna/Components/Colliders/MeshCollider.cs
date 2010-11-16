@@ -32,11 +32,20 @@ namespace PressPlay.U2X.Xna.Components
                 pointList[i] = new VertexPositionColor(Vertices[i], Color.White);
             }
             List<VertexPositionColor> colVerts = new List<VertexPositionColor>();
-            for (int i = 0; i < Triangles.Length; i += 3)
+            for (int i = 0; i < Triangles.Length; i++)
             {
-                TestVerts(colVerts, Triangles[i], Triangles[i + 1]);
-                TestVerts(colVerts, Triangles[i + 1], Triangles[i + 2]);
-                TestVerts(colVerts, Triangles[i + 2], Triangles[i]);
+                if (Vertices[Triangles[i]].Y < 0)
+                {
+                    if (colVerts.Count > 0)
+                    {
+                        Vector3 dist = colVerts[colVerts.Count - 1].Position - Vertices[Triangles[i]];
+                        if (dist.LengthSquared() < 0.001)
+                        {
+                            continue;
+                        }
+                    }
+                    colVerts.Add(new VertexPositionColor(Vertices[Triangles[i]], Color.Red));
+                }
             }
             collisionLine = colVerts.ToArray();
         }
@@ -44,10 +53,10 @@ namespace PressPlay.U2X.Xna.Components
         private void TestVerts(List<VertexPositionColor> colVerts, int vert1, int vert2)
         {
             Vector3 dir = Vertices[vert2] - Vertices[vert1];
-            if (dir.Y > 0.01)
-            {
+            //if (dir.Y > 0.01)
+            //{
                 colVerts.Add(new VertexPositionColor(Vertices[vert1] + (dir / 2), Color.Red));
-            }
+            //}
         }
 
         public override void Start()
