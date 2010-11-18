@@ -11,6 +11,8 @@ namespace PressPlay.U2X
         [XmlAttribute]
         public string Namespace { get; set; }
         [XmlAttribute]
+        public string Type { get; set; }
+        [XmlAttribute]
         public string To { get; set; }
     }
 }

@@ -16,7 +16,7 @@ namespace PressPlay.U2X.Xna.Components
         public bool IsTrigger { get; set; }
         public int[] Triangles { get; set; }
         public Vector3[] Vertices { get; set; }
-        public Vector3[] Normals { get; set; }
+//        public Vector3[] Normals { get; set; }
         #endregion
 
         #region Debug drawing
@@ -32,7 +32,7 @@ namespace PressPlay.U2X.Xna.Components
             pointList = new VertexPositionColor[Vertices.Length];
             for (int i = 0; i < Vertices.Length; i++)
             {
-                pointList[i] = new VertexPositionColor(Vertices[i], Color.White);
+                pointList[i] = new VertexPositionColor(Vertices[i], Color.Green);
             }
 
             List<Vector3> chosenVerts = new List<Vector3>();

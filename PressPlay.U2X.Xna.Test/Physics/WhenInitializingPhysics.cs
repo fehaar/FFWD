@@ -21,7 +21,7 @@ namespace PressPlay.U2X.Xna.Test.Physics
         [Test]
         public void WeCanSetTheInitialGravity()
         {
-            Xna.Physics.Initialize(Vector2.One);
+            Xna.Physics.Initialize(Vector2.One, null);
             Assert.That(Xna.Physics.world.Gravity, Is.EqualTo(Vector2.One));
         }
     }

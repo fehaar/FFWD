@@ -77,9 +77,13 @@ namespace PressPlay.U2X
             string result = type.FullName;
             foreach (NamespaceRule rule in NamespaceRules)
             {
-                if (rule.Namespace == type.Namespace && !String.IsNullOrEmpty(rule.To))
+                if (!String.IsNullOrEmpty(rule.Namespace) && rule.Namespace == type.Namespace && !String.IsNullOrEmpty(rule.To))
                 {
                     result = result.Replace(rule.Namespace, rule.To);
+                }
+                if (!String.IsNullOrEmpty(rule.Type) && rule.Type == result && !String.IsNullOrEmpty(rule.To))
+                {
+                    result = rule.To;
                 }
             }
 			return result;
