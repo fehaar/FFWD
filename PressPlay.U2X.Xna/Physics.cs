@@ -62,9 +62,26 @@ namespace PressPlay.U2X.Xna
             return body;
         }
 
-        public static Body AddTriangle(Vector2[] vertices, float density)
+        public static Body AddCircle(float radius, Vector2 position, float angle, float density)
         {
-            return AddTriangle(vertices, density, new BodyDef());
+            return AddCircle(radius, angle, density, new BodyDef() { position = position });
+        }
+
+        public static Body AddCircle(float radius, float angle, float density, BodyDef definition)
+        {
+            if (world == null)
+            {
+                throw new InvalidOperationException("You have to Initialize the Physics system before adding bodies");
+            }
+            Body body = world.CreateBody(definition);
+            CircleShape shp = new CircleShape() { _radius = radius };
+            body.CreateFixture(shp, density);
+            return body;
+        }
+
+        public static Body AddTriangle(Vector2[] vertices, float angle, float density)
+        {
+            return AddTriangle(vertices, density, new BodyDef() { angle = angle });
         }
 
         public static Body AddTriangle(Vector2[] vertices, float density, BodyDef definition)

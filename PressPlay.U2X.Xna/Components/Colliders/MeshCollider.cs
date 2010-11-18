@@ -30,7 +30,7 @@ namespace PressPlay.U2X.Xna.Components
             pointList = new VertexPositionColor[Vertices.Length];
             for (int i = 0; i < Vertices.Length; i++)
             {
-                pointList[i] = new VertexPositionColor(Vertices[i], Color.Green);
+                pointList[i] = new VertexPositionColor(Vertices[i], Color.Red);
             }
 
             List<Vector2[]> tris = new List<Vector2[]>();
@@ -43,7 +43,7 @@ namespace PressPlay.U2X.Xna.Components
                 };
                 tris.Add(tri);
             }
-            BodyDef def = new BodyDef() { position = new Vector2(transform.position.X, transform.position.Z), angle = transform.angle };
+            BodyDef def = new BodyDef() { position = new Vector2(transform.position.X, transform.position.Z), angle = transform.angleY };
             Body bd = Physics.AddMesh(tris, 1, def);
 
             bd.SetUserData(this);

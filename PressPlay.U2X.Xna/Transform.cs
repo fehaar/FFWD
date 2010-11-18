@@ -191,7 +191,7 @@ namespace PressPlay.U2X.Xna
         }
 
         [ContentSerializerIgnore]
-        public float angle
+        public float angleY
         {
             get
             {
