@@ -20,7 +20,14 @@ namespace PressPlay.U2X.Test.Configuration
     [TestFixture]
     public class WhenGettingAComponentWriter
     {
-        TypeResolver resolver = new TypeResolver();
+        TypeResolver resolver;
+
+        [SetUp]
+        public void Setup( )
+        {
+            resolver = new TypeResolver();
+        }
+	
 
         [Test]
         public void WeWillGetAnInstanceOfTheWriterIfItIsConfigured()

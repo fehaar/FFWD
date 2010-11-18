@@ -189,5 +189,22 @@ namespace PressPlay.U2X.Xna
                 }
             }
         }
+
+        [ContentSerializerIgnore]
+        public float angleY
+        {
+            get
+            {
+                float dot = Vector3.Dot(world.Forward, Vector3.Forward);
+                if (world.Forward.X > 0)
+                {
+                    return (float)Math.Acos(dot);
+                }
+                else
+                {
+                    return (float)((Math.PI * 2) - Math.Acos(dot));
+                }
+            }
+        }
     }
 }
