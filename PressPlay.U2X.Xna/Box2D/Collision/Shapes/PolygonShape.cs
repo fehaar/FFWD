@@ -22,6 +22,7 @@
 
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
+using System;
 
 namespace Box2D.XNA
 {
@@ -153,6 +154,7 @@ namespace Box2D.XNA
 	        }
 
 	        // Centroid
+            area = Math.Abs(area);
 	        Debug.Assert(area > Settings.b2_epsilon);
 	        c *= 1.0f / area;
 	        return c;
