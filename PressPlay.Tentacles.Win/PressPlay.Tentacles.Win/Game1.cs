@@ -24,6 +24,8 @@ namespace PressPlay.Tentacles.Win
 
         SpriteFont font;
 
+        bool renderWireframe = true;
+
         Scene scene = null; 
 
         public Game1()
@@ -173,6 +175,10 @@ namespace PressPlay.Tentacles.Win
                 Camera.main.transform.localPosition = new Vector3(-50, 100, 0);
                 Camera.main.transform.localRotation = Quaternion.CreateFromRotationMatrix(Matrix.CreateRotationX(MathHelper.ToRadians(-90)));
             }
+            if (oldState.IsKeyUp(Keys.M) && key.IsKeyDown(Keys.M))
+            {
+                renderWireframe = !renderWireframe;
+            }
             oldState = key;
 
             Component.AwakeNewComponents();
@@ -197,7 +203,10 @@ namespace PressPlay.Tentacles.Win
             Color bg = Color.Black;
             //Color bg = new Color(78, 115, 74);
             GraphicsDevice.Clear(bg);
-            //GraphicsDevice.RasterizerState = new RasterizerState() { FillMode = FillMode.WireFrame };
+            if (renderWireframe)
+            {
+                GraphicsDevice.RasterizerState = new RasterizerState() { FillMode = FillMode.WireFrame };
+            }
 
             scene.Update();
 
