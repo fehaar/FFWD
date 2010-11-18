@@ -24,7 +24,7 @@
             <id>12254</id>
             <name>collider_xna</name>
             <transform>
-              <localPosition>0 -0.05 0</localPosition>
+              <localPosition>0 0 0</localPosition>
               <localScale>1 1 1</localScale>
               <localRotation>0 0 0 1</localRotation>
             </transform>
@@ -361,7 +361,7 @@
             <id>12300</id>
             <name>collider_xna</name>
             <transform>
-              <localPosition>0 -0.05 0</localPosition>
+              <localPosition>0 0 0</localPosition>
               <localScale>1 1 1</localScale>
               <localRotation>0 0 0 1</localRotation>
             </transform>
@@ -1256,7 +1256,7 @@
             <id>12416</id>
             <name>collider_xna</name>
             <transform>
-              <localPosition>0 -0.05 0</localPosition>
+              <localPosition>0 0 0</localPosition>
               <localScale>1 1 1</localScale>
               <localRotation>0 0 0 1</localRotation>
             </transform>
@@ -1796,7 +1796,7 @@
             <id>12488</id>
             <name>collider_xna</name>
             <transform>
-              <localPosition>0 -0.05 0</localPosition>
+              <localPosition>0 0 0</localPosition>
               <localScale>1 1 1</localScale>
               <localRotation>0 0 0 1</localRotation>
             </transform>
@@ -2017,7 +2017,7 @@
             <id>12514</id>
             <name>collider_xna</name>
             <transform>
-              <localPosition>0 -0.05 0</localPosition>
+              <localPosition>0 0 0</localPosition>
               <localScale>1 1 1</localScale>
               <localRotation>0 0 0 1</localRotation>
             </transform>
@@ -2093,7 +2093,7 @@
             <id>12524</id>
             <name>collider_xna</name>
             <transform>
-              <localPosition>0 -0.05 0</localPosition>
+              <localPosition>0 0 0</localPosition>
               <localScale>1 1 1</localScale>
               <localRotation>0 0 0 1</localRotation>
             </transform>
@@ -2140,7 +2140,7 @@
             <id>-25058</id>
             <name>collider_xna</name>
             <transform>
-              <localPosition>0 -0.05 0</localPosition>
+              <localPosition>0 0 0</localPosition>
               <localScale>1 1 1</localScale>
               <localRotation>0 0 0 1</localRotation>
             </transform>
@@ -2216,7 +2216,7 @@
             <id>12536</id>
             <name>collider_xna</name>
             <transform>
-              <localPosition>0 -0.05 0</localPosition>
+              <localPosition>0 0 0</localPosition>
               <localScale>1 1 1</localScale>
               <localRotation>0 0 0 1</localRotation>
             </transform>
@@ -2292,7 +2292,7 @@
             <id>12544</id>
             <name>collider_xna</name>
             <transform>
-              <localPosition>0 -0.05 0</localPosition>
+              <localPosition>0 0 0</localPosition>
               <localScale>1 1 1</localScale>
               <localRotation>0 0 0 1</localRotation>
             </transform>
@@ -2384,7 +2384,7 @@
             <id>12554</id>
             <name>collider_xna</name>
             <transform>
-              <localPosition>0 -0.05 0</localPosition>
+              <localPosition>0 0 0</localPosition>
               <localScale>1 1 1</localScale>
               <localRotation>0 0 0 1</localRotation>
             </transform>
@@ -2782,7 +2782,7 @@
             <id>12604</id>
             <name>collider_xna</name>
             <transform>
-              <localPosition>0 -0.05 0</localPosition>
+              <localPosition>0 0 0</localPosition>
               <localScale>1 1 1</localScale>
               <localRotation>0 0 0 1</localRotation>
             </transform>
@@ -2945,7 +2945,7 @@
             <id>12624</id>
             <name>collider_xna</name>
             <transform>
-              <localPosition>0 -0.05 0</localPosition>
+              <localPosition>0 0 0</localPosition>
               <localScale>1 1 1</localScale>
               <localRotation>0 0 0 1</localRotation>
             </transform>
@@ -3079,7 +3079,7 @@
             <id>12642</id>
             <name>collider_xna</name>
             <transform>
-              <localPosition>0 -0.05 0</localPosition>
+              <localPosition>0 0 0</localPosition>
               <localScale>1 1 1</localScale>
               <localRotation>0 0 0 1</localRotation>
             </transform>
@@ -3136,9 +3136,9 @@
       <id>12648</id>
       <name>block_wall_concave_01</name>
       <transform>
-        <localPosition>-21.50904 0 23.76562</localPosition>
-        <localScale>2.5 2.5 2.5</localScale>
-        <localRotation>-0.67612 0.20703 0.20703 0.67612</localRotation>
+        <localPosition>-21.46871 0 23.73837</localPosition>
+        <localScale>1 1 1</localScale>
+        <localRotation>0 0.95938 0 -0.28211</localRotation>
         <children>
           <child>
             <id>12650</id>
@@ -3242,7 +3242,7 @@
             <id>12662</id>
             <name>collider_xna</name>
             <transform>
-              <localPosition>0 -0.05 0</localPosition>
+              <localPosition>0 0 0</localPosition>
               <localScale>1 1 1</localScale>
               <localRotation>0 0 0 1</localRotation>
             </transform>
@@ -3347,7 +3347,7 @@
             <id>12674</id>
             <name>collider_xna</name>
             <transform>
-              <localPosition>0 -0.05 0</localPosition>
+              <localPosition>0 0 0</localPosition>
               <localScale>1 1 1</localScale>
               <localRotation>0 0 0 1</localRotation>
             </transform>
@@ -3394,7 +3394,7 @@
             <id>12676</id>
             <name>collider_xna</name>
             <transform>
-              <localPosition>0 -0.05 0</localPosition>
+              <localPosition>0 0 0</localPosition>
               <localScale>1 1 1</localScale>
               <localRotation>0 0 0 1</localRotation>
             </transform>
@@ -3470,7 +3470,7 @@
             <id>12686</id>
             <name>collider_xna</name>
             <transform>
-              <localPosition>0 -0.05 0</localPosition>
+              <localPosition>0 0 0</localPosition>
               <localScale>1 1 1</localScale>
               <localRotation>0 0 0 1</localRotation>
             </transform>
@@ -10683,7 +10683,7 @@
             <id>13758</id>
             <name>collider_xna</name>
             <transform>
-              <localPosition>0 -0.05 0</localPosition>
+              <localPosition>0 0 0</localPosition>
               <localScale>1 1 1</localScale>
               <localRotation>0 0 0 1</localRotation>
             </transform>
@@ -10759,7 +10759,7 @@
             <id>13766</id>
             <name>collider_xna</name>
             <transform>
-              <localPosition>0 -0.05 0</localPosition>
+              <localPosition>0 0 0</localPosition>
               <localScale>1 1 1</localScale>
               <localRotation>0 0 0 1</localRotation>
             </transform>
@@ -10806,7 +10806,7 @@
             <id>13770</id>
             <name>collider_xna</name>
             <transform>
-              <localPosition>0 -0.05 0</localPosition>
+              <localPosition>0 0 0</localPosition>
               <localScale>1 1 1</localScale>
               <localRotation>0 0 0 1</localRotation>
             </transform>

@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework.Media;
 using PressPlay.U2X.Xna.Components;
 using PressPlay.U2X.Xna;
 using PressPlay.U2X;
+using Box2D.XNA;
 
 namespace PressPlay.Tentacles.Win
 {
@@ -23,6 +24,9 @@ namespace PressPlay.Tentacles.Win
         SpriteBatch spriteBatch;
 
         SpriteFont font;
+
+        Box2DDebugDraw physicsDebugDraw;
+        Body ball;
 
         bool renderWireframe = true;
 
@@ -71,6 +75,12 @@ namespace PressPlay.Tentacles.Win
             Camera.main.transform.localPosition = new Vector3(-50, -100, 0);
             Camera.main.transform.localRotation = Quaternion.CreateFromRotationMatrix(Matrix.CreateRotationX(MathHelper.ToRadians(90)));
             Camera.main.up = Vector3.Backward; // Vector3.Left;
+
+            physicsDebugDraw = new Box2DDebugDraw() { Flags = DebugDrawFlags.Shape, worldView = Matrix.CreateRotationX(MathHelper.PiOver2) };
+            Physics.AddDebugDraw(physicsDebugDraw);
+
+            ball = Physics.AddCircle(0.5f, new Vector2(-10, -15.2f), 0, 1);
+            ball.SetType(BodyType.Dynamic);
         }
 
         /// <summary>
@@ -179,6 +189,21 @@ namespace PressPlay.Tentacles.Win
             {
                 renderWireframe = !renderWireframe;
             }
+
+            if (oldState.IsKeyUp(Keys.Up) && key.IsKeyDown(Keys.Up))
+            {
+                Vector2 vel = ball.GetLinearVelocity();
+                if (vel == Vector2.Zero)
+                {
+                    vel = new Vector2(0, 500);
+                }
+                else
+                {
+                    vel.Normalize();
+                    vel = vel * 500;
+                }
+                ball.ApplyForce(vel, Vector2.Zero);
+            }
             oldState = key;
 
             Component.AwakeNewComponents();
@@ -215,10 +240,13 @@ namespace PressPlay.Tentacles.Win
             GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
             scene.Draw(spriteBatch);
 
+            physicsDebugDraw.FinishDrawShapes(GraphicsDevice);
+
             spriteBatch.Begin();
             spriteBatch.DrawString(font, "Camera pos: " + Camera.main.transform.localPosition, new Vector2(10, 10), Color.White);
             spriteBatch.DrawString(font, "Camera rot: " + Camera.main.transform.localRotation, new Vector2(10, 22), Color.White);
             spriteBatch.DrawString(font, "Camera fwd: " + Camera.main.Forward, new Vector2(10, 34), Color.White);
+            physicsDebugDraw.FinishDrawString(spriteBatch, font);
             spriteBatch.End();
 
             base.Draw(gameTime);
