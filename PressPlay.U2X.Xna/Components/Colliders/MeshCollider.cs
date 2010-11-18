@@ -38,8 +38,8 @@ namespace PressPlay.U2X.Xna.Components
             {
                 Vector2[] tri = new Vector2[] { 
                     new Vector2(Vertices[Triangles[i]].X, Vertices[Triangles[i]].Z),
-                    new Vector2(Vertices[Triangles[i + 1]].X, Vertices[Triangles[i + 1]].Z),
-                    new Vector2(Vertices[Triangles[i + 2]].X, Vertices[Triangles[i + 2]].Z)
+                    new Vector2(Vertices[Triangles[i + 2]].X, Vertices[Triangles[i + 2]].Z),
+                    new Vector2(Vertices[Triangles[i + 1]].X, Vertices[Triangles[i + 1]].Z)
                 };
                 tris.Add(tri);
             }
