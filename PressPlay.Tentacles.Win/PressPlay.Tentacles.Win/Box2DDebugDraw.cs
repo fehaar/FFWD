@@ -27,7 +27,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Box2D.XNA;
 using PressPlay.U2X.Xna.Components;
 
-namespace PressPlay.Tentacles.Win
+namespace PressPlay.Tentacles
 {
     public class Box2DDebugDraw : DebugDraw
     {
@@ -188,6 +188,12 @@ namespace PressPlay.Tentacles.Win
 
         public void FinishDrawShapes(GraphicsDevice _device)
         {
+            if (_device == null)
+            {
+                _lineCount = _fillCount = 0;
+                return;
+            }
+
             if (effect == null)
             {
                 effect = new BasicEffect(_device);

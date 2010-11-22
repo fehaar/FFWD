@@ -12,8 +12,9 @@ using PressPlay.U2X.Xna.Components;
 using PressPlay.U2X.Xna;
 using PressPlay.U2X;
 using Box2D.XNA;
+using PressPlay.Tentacles.Debugging;
 
-namespace PressPlay.Tentacles.Win
+namespace PressPlay.Tentacles
 {
     /// <summary>
     /// This is the main type for your game
@@ -21,14 +22,10 @@ namespace PressPlay.Tentacles.Win
     public class Game1 : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
 
-        SpriteFont font;
+        SceneRenderer renderer;
 
-        Box2DDebugDraw physicsDebugDraw;
         Body ball;
-
-        bool renderWireframe = true;
 
         Scene scene = null; 
 
@@ -37,7 +34,7 @@ namespace PressPlay.Tentacles.Win
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
         }
-
+        
         /// <summary>
         /// Allows the game to perform any initialization it needs to before starting to run.
         /// This is where it can query for any required services and load any non-graphic
@@ -46,6 +43,18 @@ namespace PressPlay.Tentacles.Win
         /// </summary>
         protected override void Initialize()
         {
+    #if WINDOWS
+            graphics.PreferredBackBufferWidth = 800;
+            graphics.PreferredBackBufferHeight = 480;
+            graphics.IsFullScreen = false;
+            graphics.ApplyChanges();
+#else
+            graphics.PreferredBackBufferWidth = 800;
+            graphics.PreferredBackBufferHeight = 480;
+            graphics.IsFullScreen = true;
+            graphics.ApplyChanges();
+#endif
+
             ContentHelper.Services = Services;
             ContentHelper.StaticContent = new ContentManager(Services, Content.RootDirectory);
             ContentHelper.Content = new ContentManager(Services, Content.RootDirectory);
@@ -53,9 +62,23 @@ namespace PressPlay.Tentacles.Win
 
             Camera.main.projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(60), graphics.GraphicsDevice.Viewport.AspectRatio, 0.3f, 1000);
 
+#if DEBUG
             FrameRateCounter counter = new FrameRateCounter(this, Content.RootDirectory + "/TestFont");
-            counter.Position = new Vector2(10, 46);
+            counter.Position = new Vector2(32, 46);
+            counter.DrawOrder = 2;
             Components.Add(counter);
+
+            Components.Add(new TouchHandler(this));
+
+#if !WINDOWS
+            PanCamera cam = new PanCamera(this);
+            Components.Add(cam);
+#endif
+#endif
+
+            Physics.Initialize();
+            renderer = new SceneRenderer(this);
+            Components.Add(renderer);
 
             base.Initialize();
         }
@@ -66,22 +89,13 @@ namespace PressPlay.Tentacles.Win
         /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-
             scene = Content.Load<Scene>("Scenes/Level1");
             scene.AfterLoad();
+            renderer.currentScene = scene;
 
-            Physics.Initialize();
-
-            font = Content.Load<SpriteFont>("TestFont");
-
-            Camera.main.transform.localPosition = new Vector3(-50, -100, 0);
+            Camera.main.transform.localPosition = new Vector3(-13, -9, 7);
             Camera.main.transform.localRotation = Quaternion.CreateFromRotationMatrix(Matrix.CreateRotationX(MathHelper.ToRadians(90)));
             Camera.main.up = Vector3.Backward; // Vector3.Left;
-
-            physicsDebugDraw = new Box2DDebugDraw() { Flags = DebugDrawFlags.Shape, worldView = Matrix.CreateRotationX(MathHelper.PiOver2) };
-            Physics.AddDebugDraw(physicsDebugDraw);
 
             ball = Physics.AddCircle(0.5f, new Vector2(-10, -15.2f), 0, 1);
             ball.SetType(BodyType.Dynamic);
@@ -191,7 +205,7 @@ namespace PressPlay.Tentacles.Win
             }
             if (oldState.IsKeyUp(Keys.M) && key.IsKeyDown(Keys.M))
             {
-                renderWireframe = !renderWireframe;
+                renderer.NextMode();
             }
 
             if (oldState.IsKeyUp(Keys.Up) && key.IsKeyDown(Keys.Up))
@@ -220,9 +234,6 @@ namespace PressPlay.Tentacles.Win
             ContentHelper.MissingAssets.Clear();
 #endif
 
-            scene.FixedUpdate();
-            Physics.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
-
             base.Update(gameTime);
         }
 
@@ -232,30 +243,7 @@ namespace PressPlay.Tentacles.Win
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            Color bg = Color.Black;
-            //Color bg = new Color(78, 115, 74);
-            GraphicsDevice.Clear(bg);
-            if (renderWireframe)
-            {
-                GraphicsDevice.RasterizerState = new RasterizerState() { FillMode = FillMode.WireFrame };
-            }
-
-            scene.Update();
-
-            GraphicsDevice.BlendState = BlendState.Opaque;
-            GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-            GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
-            scene.Draw(spriteBatch);
-
-            physicsDebugDraw.FinishDrawShapes(GraphicsDevice);
-
-            spriteBatch.Begin();
-            spriteBatch.DrawString(font, "Camera pos: " + Camera.main.transform.localPosition, new Vector2(10, 10), Color.White);
-            spriteBatch.DrawString(font, "Camera rot: " + Camera.main.transform.localRotation, new Vector2(10, 22), Color.White);
-            spriteBatch.DrawString(font, "Camera fwd: " + Camera.main.Forward, new Vector2(10, 34), Color.White);
-            physicsDebugDraw.FinishDrawString(spriteBatch, font);
-            spriteBatch.End();
-
+            //Color bg = Color.Black;
             base.Draw(gameTime);
         }
 

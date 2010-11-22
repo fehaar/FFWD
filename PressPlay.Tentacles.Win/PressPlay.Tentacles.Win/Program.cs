@@ -1,6 +1,6 @@
 using System;
 
-namespace PressPlay.Tentacles.Win
+namespace PressPlay.Tentacles
 {
 #if WINDOWS || XBOX
     static class Program

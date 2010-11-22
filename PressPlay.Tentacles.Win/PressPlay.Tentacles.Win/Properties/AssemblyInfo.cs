@@ -5,8 +5,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("PressPlay.Tentacles.Win")]
-[assembly: AssemblyProduct("PressPlay.Tentacles.Win")]
+[assembly: AssemblyTitle("PressPlay.Tentacles")]
+[assembly: AssemblyProduct("PressPlay.Tentacles")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyCompany("Microsoft")]
 [assembly: AssemblyCopyright("Copyright © Microsoft 2010")]
