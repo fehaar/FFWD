@@ -71,6 +71,7 @@ namespace PressPlay.Tentacles
             Components.Add(new TouchHandler(this));
 
 #if !WINDOWS
+            Accelerometer.Initialize();
             PanCamera cam = new PanCamera(this);
             Components.Add(cam);
 #endif
@@ -89,7 +90,7 @@ namespace PressPlay.Tentacles
         /// </summary>
         protected override void LoadContent()
         {
-            scene = Content.Load<Scene>("Scenes/Level1");
+            scene = Content.Load<Scene>("Scenes/XNA test level1");
             scene.AfterLoad();
             renderer.currentScene = scene;
 
@@ -197,12 +198,6 @@ namespace PressPlay.Tentacles
                 Camera.main.transform.localPosition += dir;
             }
 
-
-            if (oldState.IsKeyUp(Keys.R) && key.IsKeyDown(Keys.R))
-            {
-                Camera.main.transform.localPosition = new Vector3(-50, 100, 0);
-                Camera.main.transform.localRotation = Quaternion.CreateFromRotationMatrix(Matrix.CreateRotationX(MathHelper.ToRadians(-90)));
-            }
             if (oldState.IsKeyUp(Keys.M) && key.IsKeyDown(Keys.M))
             {
                 renderer.NextMode();
@@ -243,7 +238,10 @@ namespace PressPlay.Tentacles
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            //Color bg = Color.Black;
+#if WINDOWS_PHONE
+            AccelerometerState state = Accelerometer.GetState();
+            Vector2 pos = new Vector2(Camera.main.transform.position.X, Camera.main.transform.position.Z);
+#endif
             base.Draw(gameTime);
         }
 

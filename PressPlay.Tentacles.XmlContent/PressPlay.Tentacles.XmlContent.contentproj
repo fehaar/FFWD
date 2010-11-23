@@ -42,16 +42,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Scenes\Level1.xml">
-      <Name>Level1</Name>
-      <Importer>XmlImporter</Importer>
-      <Processor>PassThroughProcessor</Processor>
-      <SubType>Designer</SubType>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Scenes\XNA export.xml">
-      <Name>XNA export</Name>
+    <Compile Include="Scenes\XNA test level1.xml">
+      <Name>XNA test level1</Name>
       <Importer>XmlImporter</Importer>
       <Processor>PassThroughProcessor</Processor>
     </Compile>

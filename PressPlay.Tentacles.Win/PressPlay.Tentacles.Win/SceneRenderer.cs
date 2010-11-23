@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Input.Touch;
 using Box2D.XNA;
 using Microsoft.Xna.Framework.Graphics;
 using PressPlay.U2X.Xna.Components;
+using PressPlay.Tentacles.Debugging;
 
 namespace PressPlay.Tentacles
 {

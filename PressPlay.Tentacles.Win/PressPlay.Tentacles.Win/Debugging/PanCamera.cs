@@ -19,7 +19,7 @@ namespace PressPlay.Tentacles.Debugging
         public override void Initialize()
         {
             base.Initialize();
-#if !WINDOWS            
+#if WINDOWS_PHONE
             TouchPanel.EnabledGestures = TouchPanel.EnabledGestures | 
                                          GestureType.FreeDrag |
                                          GestureType.Pinch;
@@ -29,7 +29,7 @@ namespace PressPlay.Tentacles.Debugging
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-#if !WINDOWS            
+#if WINDOWS_PHONE
             foreach (GestureSample gesture in TouchHandler.GetSample(GestureType.FreeDrag |
                                          GestureType.Pinch))
             {
