@@ -116,10 +116,17 @@ namespace PressPlay.U2X.Xna
             Body body = world.CreateBody(definition);
             for (int i = 0; i < tris.Count(); i++)
             {
-                PolygonShape shp = new PolygonShape();
                 Vector2[] tri = tris.ElementAt(i);
-                shp.Set(tri, tri.Length);                
-                body.CreateFixture(shp, density);
+                try
+                {
+                    PolygonShape shp = new PolygonShape();
+                    shp.Set(tri, tri.Length);
+                    body.CreateFixture(shp, density);
+                }
+                catch (Exception ex)
+                {
+                    Debug.Log(body._userData + ". Collider triangle is broken: " + tri[0] + "; " + tri[1] + "; " + tri[2] + ": " + ex.Message);
+                }
             }
             return body;
         }
@@ -127,6 +134,14 @@ namespace PressPlay.U2X.Xna
         public static void AddDebugDraw(DebugDraw debugDraw)
         {
             world.DebugDraw = debugDraw;
+        }
+
+        public static DebugDraw DebugDraw
+        {
+            get
+            {
+                return world.DebugDraw;
+            }
         }
 
     }

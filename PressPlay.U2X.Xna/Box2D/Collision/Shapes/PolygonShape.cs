@@ -69,7 +69,10 @@ namespace Box2D.XNA
 	            int i1 = i;
 	            int i2 = i + 1 < _vertexCount ? i + 1 : 0;
 	            Vector2 edge = _vertices[i2] - _vertices[i1];
-	            Debug.Assert(edge.LengthSquared() > Settings.b2_epsilon * Settings.b2_epsilon);
+                if (edge.LengthSquared() < Settings.b2_epsilon * Settings.b2_epsilon)
+                {
+                    throw new Exception("Edge length too small. Vertices " + i2 + " (" + _vertices[i2] + ") and " + i1 + " (" + _vertices[i1] + ") = " + edge.LengthSquared());
+                }
                 
                 var temp = MathUtils.Cross(edge, 1.0f);
                 temp.Normalize();
@@ -154,6 +157,7 @@ namespace Box2D.XNA
 	        }
 
 	        // Centroid
+            area = Math.Abs(area);
 	        Debug.Assert(area > Settings.b2_epsilon);
 	        c *= 1.0f / area;
 	        return c;

@@ -51,5 +51,10 @@ namespace PressPlay.U2X.Xna
         {
             // NOTE: Do not do anything here as the convention in Unity is not to call base as it is not a virtual method
         }
+
+        public override string ToString()
+        {
+            return GetType().Name + " on " + gameObject.name + " (" + gameObject.id + ")";
+        }
     }
 }

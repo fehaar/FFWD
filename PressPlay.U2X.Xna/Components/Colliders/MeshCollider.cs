@@ -36,6 +36,10 @@ namespace PressPlay.U2X.Xna.Components
             List<Vector2[]> tris = new List<Vector2[]>();
             for (int i = 0; i < Triangles.Length; i+=3)
             {
+                if (Vertices[Triangles[i]].Y + Vertices[Triangles[i + 1]].Y + Vertices[Triangles[i + 2]].Y > 1)
+                {
+                    Debug.Log(" Warning: " + ToString() + " has non zero Y in collider");
+                }
                 Vector2[] tri = new Vector2[] { 
                     new Vector2(Vertices[Triangles[i]].X, Vertices[Triangles[i]].Z),
                     new Vector2(Vertices[Triangles[i + 2]].X, Vertices[Triangles[i + 2]].Z),
@@ -43,7 +47,7 @@ namespace PressPlay.U2X.Xna.Components
                 };
                 tris.Add(tri);
             }
-            BodyDef def = new BodyDef() { position = new Vector2(transform.position.X, transform.position.Z), angle = transform.angleY };
+            BodyDef def = new BodyDef() { position = new Vector2(transform.position.X, transform.position.Z), angle = transform.angleY, userData = this };
             Body bd = Physics.AddMesh(tris, 1, def);
 
             bd.SetUserData(this);
