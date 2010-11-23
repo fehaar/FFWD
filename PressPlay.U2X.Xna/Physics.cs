@@ -5,17 +5,36 @@ using System.Text;
 using Box2D.XNA;
 using Microsoft.Xna.Framework;
 using PressPlay.U2X.Xna.Interfaces;
+using PressPlay.U2X.Xna.Extensions;
 
 namespace PressPlay.U2X.Xna
 {
     public static class Physics
     {
-        internal static World world;
+        private static World _world;
+        internal static World world
+        {
+            get
+            {
+                if (_world == null)
+                {
+                    Initialize();
+                }
+                return _world;
+            }
+            set
+            {
+                // TODO: If we have an old world we must dispose it properly
+                _world = value;
+            }
+        }
+
         private static bool isPaused = false;
         private static IContactProcessor contactProcessor;
         public static int velocityIterations = 6;
         public static int positionIterations = 4;
 
+        #region FFWD specific methods
         public static void Initialize()
         {
             Initialize(Vector2.Zero, null);
@@ -44,6 +63,20 @@ namespace PressPlay.U2X.Xna
             }
         }
 
+        public static DebugDraw DebugDraw
+        {
+            get
+            {
+                return world.DebugDraw;
+            }
+            set
+            {
+                world.DebugDraw = value;
+            }
+        }
+        #endregion
+
+        #region Helper methods to create physics objects
         public static Body AddBody(BodyDef definition)
         {
             return world.CreateBody(definition);
@@ -130,19 +163,59 @@ namespace PressPlay.U2X.Xna
             }
             return body;
         }
+        #endregion
 
-        public static void AddDebugDraw(DebugDraw debugDraw)
+        #region Unity methods
+        public static bool Raycast(Vector2 origin, Vector2 direction, float distance, int layerMask)
         {
-            world.DebugDraw = debugDraw;
+            RaycastHelper helper = new RaycastHelper(distance);
+            Vector2 pt2 = origin + (direction * distance);
+            world.RayCast(helper.rayCastCallback, origin, pt2);
+            return (helper.HitCount > 0);
         }
 
-        public static DebugDraw DebugDraw
+        public static bool Raycast(Vector3 origin, Vector3 direction, float distance, int layerMask)
         {
-            get
-            {
-                return world.DebugDraw;
-            }
+            return Raycast(origin.To2d(), direction.To2d(), distance, layerMask);
         }
 
+        public static bool Raycast(Vector2 origin, Vector2 direction, out RaycastHit hitInfo, float distance, int layerMask)
+        {
+            RaycastHelper helper = new RaycastHelper(distance);
+            Vector2 pt2 = origin + (direction * distance);
+            world.RayCast(helper.rayCastCallback, origin, pt2);
+            hitInfo = helper.ClosestHit();
+            return (helper.HitCount > 0);
+        }
+
+        public static bool Raycast(Vector3 origin, Vector3 direction, out RaycastHit hitInfo, float distance, int layerMask)
+        {
+            // TODO : Add implementation of method
+            throw new NotImplementedException("Method not implemented.");
+        }
+
+        public static bool Raycast(Ray ray, float distance, int layerMask)
+        {
+            return Raycast(ray.Position, ray.Direction, distance, layerMask);
+        }
+
+        public static bool Raycast(Ray ray, out RaycastHit hitInfo, float distance, int layerMask)
+        {
+            // TODO : Add implementation of method
+            throw new NotImplementedException("Method not implemented.");
+        }
+
+        public static RaycastHit[] RaycastAll(Vector3 origin, Vector3 direction, float distance, int layerMask)
+        {
+            // TODO : Add implementation of method
+            throw new NotImplementedException("Method not implemented.");
+        }
+
+        public static RaycastHit[] RaycastAll(Ray ray, float distance, int layerMask)
+        {
+            // TODO : Add implementation of method
+            throw new NotImplementedException("Method not implemented.");
+        }
+        #endregion
     }
 }

@@ -100,6 +100,7 @@
     <Compile Include="Components\Renderers\MeshRenderer.cs" />
     <Compile Include="ContentHelper.cs" />
     <Compile Include="Debug.cs" />
+    <Compile Include="Extensions\VectorExtensions.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="Interfaces\ICollidable.cs" />
     <Compile Include="Interfaces\IContactProcessor.cs" />
@@ -108,6 +109,8 @@
     <Compile Include="Interfaces\IUpdateable.cs" />
     <Compile Include="Physics.cs" />
     <Compile Include="GameObjectContactProcessor.cs" />
+    <Compile Include="RaycastHelper.cs" />
+    <Compile Include="RaycastHit.cs" />
     <Compile Include="Scene.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Transform.cs" />

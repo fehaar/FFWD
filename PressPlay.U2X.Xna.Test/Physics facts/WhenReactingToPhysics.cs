@@ -6,7 +6,7 @@ using NUnit.Framework;
 using PressPlay.U2X.Xna.Test.Core_framework;
 using Box2D.XNA;
 
-namespace PressPlay.U2X.Xna.Test.Physics
+namespace PressPlay.U2X.Xna.Test.Physics_facts
 {
     [TestFixture]
     public class WhenReactingToPhysics
