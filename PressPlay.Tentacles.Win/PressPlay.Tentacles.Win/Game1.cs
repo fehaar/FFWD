@@ -124,6 +124,7 @@ namespace PressPlay.Tentacles
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
+            Component.AwakeNewComponents();
 
             KeyboardState key = Keyboard.GetState();
             Vector3 dir = Vector3.Zero;
@@ -203,9 +204,9 @@ namespace PressPlay.Tentacles
                 renderer.NextMode();
             }
 
+            Vector2 vel = ball.GetLinearVelocity();
             if (oldState.IsKeyUp(Keys.Up) && key.IsKeyDown(Keys.Up))
             {
-                Vector2 vel = ball.GetLinearVelocity();
                 if (vel == Vector2.Zero)
                 {
                     vel = new Vector2(0, 500);
@@ -219,7 +220,13 @@ namespace PressPlay.Tentacles
             }
             oldState = key;
 
-            Component.AwakeNewComponents();
+            // Find meshes that are in los of the ball and select them
+            RaycastHit hit;
+            Physics.Raycast(ball.Position, vel, out hit, 100, 0);
+            if (hit.collider != null)
+            {
+                hit.collider.Select();
+            }
 
 #if WINDOWS
             foreach (String asset in ContentHelper.MissingAssets)
