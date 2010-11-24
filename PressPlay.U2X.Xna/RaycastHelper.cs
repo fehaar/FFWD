@@ -9,29 +9,31 @@ namespace PressPlay.U2X.Xna
 {
     internal class RaycastHelper
     {
-        public RaycastHelper(float distance)
+        public RaycastHelper(float distance, bool findClosest)
         {
             this.distance = distance;
+            this.findClosest = findClosest;
         }
 
+        private bool findClosest = false;
         private float distance;
         private List<RaycastHit> _hits = new List<RaycastHit>();
+
 
         internal float rayCastCallback(Fixture fixture, Vector2 point, Vector2 normal, float fraction)
         {
             float dist = distance * fraction;
-            //int index = 0;
-            //while (index < _hits.Count)
-            //{
-            //    if (_hits[index].distance > dist)
-            //    {
-            //        break;
-            //    }
-            //    index++;
-            //}
-            //_hits.Insert(index, new RaycastHit() { body = fixture._body, point = point, normal = normal, distance = dist });
-            _hits.Add(new RaycastHit() { body = fixture._body, point = point, normal = normal, distance = dist });
-            return fraction;
+            if (findClosest)
+            {
+                _hits.Clear();
+                _hits.Add(new RaycastHit() { body = fixture._body, point = point, normal = normal, distance = dist });
+                return fraction;
+            }
+            else
+            {
+                _hits.Add(new RaycastHit() { body = fixture._body, point = point, normal = normal, distance = dist });
+                return 1;
+            }
         }   
 
         internal int HitCount

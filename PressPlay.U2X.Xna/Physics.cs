@@ -168,7 +168,7 @@ namespace PressPlay.U2X.Xna
         #region Unity methods
         public static bool Raycast(Vector2 origin, Vector2 direction, float distance, int layerMask)
         {
-            RaycastHelper helper = new RaycastHelper(distance);
+            RaycastHelper helper = new RaycastHelper(distance, true);
             Vector2 pt2 = origin + (direction * distance);
             world.RayCast(helper.rayCastCallback, origin, pt2);
             return (helper.HitCount > 0);
@@ -181,7 +181,7 @@ namespace PressPlay.U2X.Xna
 
         public static bool Raycast(Vector2 origin, Vector2 direction, out RaycastHit hitInfo, float distance, int layerMask)
         {
-            RaycastHelper helper = new RaycastHelper(distance);
+            RaycastHelper helper = new RaycastHelper(distance, true);
             Vector2 pt2 = origin + (direction * distance);
             world.RayCast(helper.rayCastCallback, origin, pt2);
             hitInfo = helper.ClosestHit();
@@ -190,8 +190,7 @@ namespace PressPlay.U2X.Xna
 
         public static bool Raycast(Vector3 origin, Vector3 direction, out RaycastHit hitInfo, float distance, int layerMask)
         {
-            // TODO : Add implementation of method
-            throw new NotImplementedException("Method not implemented.");
+            return Raycast(origin.To2d(), direction.To2d(), out hitInfo, distance, layerMask);
         }
 
         public static bool Raycast(Ray ray, float distance, int layerMask)
@@ -201,13 +200,12 @@ namespace PressPlay.U2X.Xna
 
         public static bool Raycast(Ray ray, out RaycastHit hitInfo, float distance, int layerMask)
         {
-            // TODO : Add implementation of method
-            throw new NotImplementedException("Method not implemented.");
+            return Raycast(ray.Position, ray.Direction, out hitInfo, distance, layerMask);
         }
 
         public static RaycastHit[] RaycastAll(Vector2 origin, Vector2 direction, float distance, int layerMask)
         {
-            RaycastHelper helper = new RaycastHelper(distance);
+            RaycastHelper helper = new RaycastHelper(distance, false);
             Vector2 pt2 = origin + (direction * distance);
             world.RayCast(helper.rayCastCallback, origin, pt2);
             return helper.Hits;
@@ -215,14 +213,12 @@ namespace PressPlay.U2X.Xna
 
         public static RaycastHit[] RaycastAll(Vector3 origin, Vector3 direction, float distance, int layerMask)
         {
-            // TODO : Add implementation of method
-            throw new NotImplementedException("Method not implemented.");
+            return RaycastAll(origin.To2d(), direction.To2d(), distance, layerMask);
         }
 
         public static RaycastHit[] RaycastAll(Ray ray, float distance, int layerMask)
         {
-            // TODO : Add implementation of method
-            throw new NotImplementedException("Method not implemented.");
+            return RaycastAll(ray.Position.To2d(), ray.Direction.To2d(), distance, layerMask);
         }
         #endregion
     }

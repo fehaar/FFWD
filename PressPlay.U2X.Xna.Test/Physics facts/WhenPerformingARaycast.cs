@@ -102,8 +102,8 @@ namespace PressPlay.U2X.Xna.Test.Physics_facts
         [Test]
         public void WeWillGetHitsOnAllObjectsOnTheRay()
         {
-            Body body = Physics.AddBox(10, 10, new Vector2(0, 20), 0, 1);
             Body body1 = Physics.AddBox(10, 10, new Vector2(0, 50), 0, 1);
+            Body body = Physics.AddBox(10, 10, new Vector2(0, 20), 0, 1);
             RaycastHit[] hits = Physics.RaycastAll(Vector2.Zero, Vector2.UnitY, 100, 0);
             Assert.That(hits.Length, Is.EqualTo(2));
         }
