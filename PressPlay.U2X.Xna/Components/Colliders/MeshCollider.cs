@@ -30,7 +30,7 @@ namespace PressPlay.U2X.Xna.Components
             pointList = new VertexPositionColor[Vertices.Length];
             for (int i = 0; i < Vertices.Length; i++)
             {
-                pointList[i] = new VertexPositionColor(Vertices[i], Color.Red);
+                pointList[i] = new VertexPositionColor(Vertices[i], Color.LawnGreen);
             }
 
             List<Vector2[]> tris = new List<Vector2[]>();
@@ -53,9 +53,18 @@ namespace PressPlay.U2X.Xna.Components
             bd.SetUserData(this);
         }
 
+        public void Select()
+        {
+            for (int i = 0; i < pointList.Length; i++)
+            {
+                pointList[i].Color = Color.Red;
+            }
+        }
+
         public override void Start()
         {
         }
+
 
         #region IRenderable Members
         public void Draw(SpriteBatch batch)

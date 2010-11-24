@@ -170,6 +170,10 @@ namespace PressPlay.U2X.Xna
         {
             RaycastHelper helper = new RaycastHelper(distance, true);
             Vector2 pt2 = origin + (direction * distance);
+            if (pt2 == origin)
+            {
+                return false;
+            }
             world.RayCast(helper.rayCastCallback, origin, pt2);
             return (helper.HitCount > 0);
         }
@@ -183,6 +187,11 @@ namespace PressPlay.U2X.Xna
         {
             RaycastHelper helper = new RaycastHelper(distance, true);
             Vector2 pt2 = origin + (direction * distance);
+            if (pt2 == origin)
+            {
+                hitInfo = new RaycastHit();
+                return false;
+            }
             world.RayCast(helper.rayCastCallback, origin, pt2);
             hitInfo = helper.ClosestHit();
             return (helper.HitCount > 0);
@@ -207,6 +216,10 @@ namespace PressPlay.U2X.Xna
         {
             RaycastHelper helper = new RaycastHelper(distance, false);
             Vector2 pt2 = origin + (direction * distance);
+            if (pt2 == origin)
+            {
+                return new RaycastHit[0];
+            }
             world.RayCast(helper.rayCastCallback, origin, pt2);
             return helper.Hits;
         }

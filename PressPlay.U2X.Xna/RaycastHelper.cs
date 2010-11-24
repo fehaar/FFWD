@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Box2D.XNA;
 using Microsoft.Xna.Framework;
+using PressPlay.U2X.Xna.Components;
 
 namespace PressPlay.U2X.Xna
 {
@@ -26,12 +27,12 @@ namespace PressPlay.U2X.Xna
             if (findClosest)
             {
                 _hits.Clear();
-                _hits.Add(new RaycastHit() { body = fixture._body, point = point, normal = normal, distance = dist });
+                _hits.Add(new RaycastHit() { body = fixture.GetBody(), point = point, normal = normal, distance = dist, collider = fixture.GetBody().GetUserData() as MeshCollider });
                 return fraction;
             }
             else
             {
-                _hits.Add(new RaycastHit() { body = fixture._body, point = point, normal = normal, distance = dist });
+                _hits.Add(new RaycastHit() { body = fixture.GetBody(), point = point, normal = normal, distance = dist, collider = fixture.GetBody().GetUserData() as MeshCollider });
                 return 1;
             }
         }   

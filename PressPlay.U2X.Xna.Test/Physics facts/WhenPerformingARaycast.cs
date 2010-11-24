@@ -107,6 +107,16 @@ namespace PressPlay.U2X.Xna.Test.Physics_facts
             RaycastHit[] hits = Physics.RaycastAll(Vector2.Zero, Vector2.UnitY, 100, 0);
             Assert.That(hits.Length, Is.EqualTo(2));
         }
-	
+
+        [Test]
+        public void DoingARaycastWithZeroDistanceWillReturnFalse()
+        {
+            Assert.That(Physics.Raycast(Vector2.Zero, Vector2.Zero, 0, 0), Is.False);
+            Assert.That(Physics.RaycastAll(Vector2.Zero, Vector2.Zero, 0, 0), Is.Empty);
+
+            RaycastHit hit;
+            Physics.Raycast(Vector2.Zero, Vector2.Zero, out hit, 0, 0);
+            Assert.That(hit.body, Is.Null);
+        }
     }
 }

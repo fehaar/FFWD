@@ -36,6 +36,9 @@ namespace PressPlay.U2X.Xna
         public String prefab { get; set; }
         [ContentSerializer(CollectionItemName = "component")]
         public List<Component> components { get; set; }
+        // TODO: We must export this as well
+        [ContentSerializerIgnore]
+        public bool active { get; set; }
 
         #region Update and event methods
         internal void FixedUpdate()
