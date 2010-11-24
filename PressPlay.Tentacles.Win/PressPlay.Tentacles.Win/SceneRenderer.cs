@@ -43,7 +43,7 @@ namespace PressPlay.Tentacles
                                          GestureType.Hold;
 #endif
             physicsDebugDraw = new Box2DDebugDraw() { Flags = DebugDrawFlags.Shape, worldView = Matrix.CreateRotationX(MathHelper.PiOver2) };
-            Physics.AddDebugDraw(physicsDebugDraw);
+            Physics.DebugDraw = physicsDebugDraw;
         }
 
         protected override void LoadContent()
