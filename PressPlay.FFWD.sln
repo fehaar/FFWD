@@ -1,20 +1,20 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PressPlay.U2X", "PressPlay.U2X\PressPlay.U2X.csproj", "{3A0EF547-8728-4800-B436-F8E4C100F920}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PressPlay.FFWD", "PressPlay.FFWD\PressPlay.FFWD.csproj", "{3A0EF547-8728-4800-B436-F8E4C100F920}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PressPlay.U2X.Test", "PressPlay.U2X.Test\PressPlay.U2X.Test.csproj", "{FA3A7EBF-C99B-4C7D-BF11-2C4FCFF4EDC8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PressPlay.FFWD.Test", "PressPlay.FFWD.Test\PressPlay.FFWD.Test.csproj", "{FA3A7EBF-C99B-4C7D-BF11-2C4FCFF4EDC8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A596AFB3-E255-4738-AEB6-35D786063026}"
 	ProjectSection(SolutionItems) = preProject
 		..\..\..\..\..\Downloads\ExportAll.cs = ..\..\..\..\..\Downloads\ExportAll.cs
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PressPlay.U2X.Unity", "PressPlay.U2X.Unity\PressPlay.U2X.Unity.csproj", "{8CD56DE8-14AF-4EE3-844C-FFFD39E7F207}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PressPlay.FFWD.Unity", "PressPlay.FFWD.Unity\PressPlay.FFWD.Unity.csproj", "{8CD56DE8-14AF-4EE3-844C-FFFD39E7F207}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PressPlay.U2X.Xna", "PressPlay.U2X.Xna\PressPlay.U2X.Xna.csproj", "{A02BD389-79AE-4975-9A5E-DEDC66B8A0CB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PressPlay.FFWD.Xna", "PressPlay.FFWD.Xna\PressPlay.FFWD.Xna.csproj", "{A02BD389-79AE-4975-9A5E-DEDC66B8A0CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PressPlay.U2X.Xna.Test", "PressPlay.U2X.Xna.Test\PressPlay.U2X.Xna.Test.csproj", "{3EF6CEED-AFCF-449D-BD9D-7A9B08A44C9A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PressPlay.FFWD.Xna.Test", "PressPlay.FFWD.Xna.Test\PressPlay.FFWD.Xna.Test.csproj", "{3EF6CEED-AFCF-449D-BD9D-7A9B08A44C9A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
