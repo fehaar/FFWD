@@ -94,8 +94,15 @@ namespace PressPlay.Tentacles
             GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
             currentScene.Draw(spriteBatch);
 
-            Physics.DoDebugDraw();
-            physicsDebugDraw.FinishDrawShapes((PhysicsDebug) ? GraphicsDevice : null);
+            if (PhysicsDebug)
+            {
+                Physics.DoDebugDraw();
+            }
+            else
+            {
+                currentScene.DebugDraw(physicsDebugDraw);
+            }
+            physicsDebugDraw.FinishDrawShapes(GraphicsDevice);
 
             spriteBatch.Begin();
 

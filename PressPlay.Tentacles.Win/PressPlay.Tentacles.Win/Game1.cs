@@ -24,7 +24,7 @@ namespace PressPlay.Tentacles
 
         SceneRenderer renderer;
 
-        Body ball;
+        //Body ball;
 
         Scene scene = null; 
 
@@ -97,8 +97,8 @@ namespace PressPlay.Tentacles
             Camera.main.transform.localRotation = Quaternion.CreateFromRotationMatrix(Matrix.CreateRotationX(MathHelper.ToRadians(90)));
             Camera.main.up = Vector3.Backward; // Vector3.Left;
 
-            ball = Physics.AddCircle(0.5f, new Vector2(-10, -15.2f), 0, 1);
-            ball.SetType(BodyType.Dynamic);
+            //ball = Physics.AddCircle(0.5f, new Vector2(-10, -15.2f), 0, 1);
+            //ball.SetType(BodyType.Dynamic);
         }
 
         /// <summary>
@@ -203,29 +203,29 @@ namespace PressPlay.Tentacles
                 renderer.NextMode();
             }
 
-            Vector2 vel = ball.GetLinearVelocity();
-            if (oldState.IsKeyUp(Keys.Up) && key.IsKeyDown(Keys.Up))
-            {
-                if (vel == Vector2.Zero)
-                {
-                    vel = new Vector2(0, 500);
-                }
-                else
-                {
-                    vel.Normalize();
-                    vel = vel * 500;
-                }
-                ball.ApplyForce(vel, Vector2.Zero);
-            }
-            oldState = key;
+            //Vector2 vel = ball.GetLinearVelocity();
+            //if (oldState.IsKeyUp(Keys.Up) && key.IsKeyDown(Keys.Up))
+            //{
+            //    if (vel == Vector2.Zero)
+            //    {
+            //        vel = new Vector2(0, 500);
+            //    }
+            //    else
+            //    {
+            //        vel.Normalize();
+            //        vel = vel * 500;
+            //    }
+            //    ball.ApplyForce(vel, Vector2.Zero);
+            //}
+            //oldState = key;
 
-            // Find meshes that are in los of the ball and select them
-            RaycastHit hit;
-            Physics.Raycast(ball.Position, vel, out hit, 100, 0);
-            if (hit.collider != null)
-            {
-                hit.collider.Select();
-            }
+            //// Find meshes that are in los of the ball and select them
+            //RaycastHit hit;
+            //Physics.Raycast(ball.Position, vel, out hit, 100, 0);
+            //if (hit.collider != null)
+            //{
+            //    hit.collider.Select();
+            //}
 
 #if WINDOWS
             foreach (String asset in ContentHelper.MissingAssets)
