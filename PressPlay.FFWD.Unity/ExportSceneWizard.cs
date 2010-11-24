@@ -4,12 +4,12 @@ using System.Xml;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
-using PressPlay.U2X;
-using PressPlay.U2X.Writers;
+using PressPlay.FFWD.Exporter;
+using PressPlay.FFWD.Exporter.Writers;
 
 public class ExportSceneWizard : ScriptableWizard {
     
-    [MenuItem("Press Play/U2X/Export Scene")]
+    [MenuItem("Press Play/FFWD/Export Scene")]
     static void CreateWizard()
     {
         ScriptableWizard.DisplayWizard("Export Scene to XNA", typeof(ExportSceneWizard), "Execute");
@@ -17,7 +17,7 @@ public class ExportSceneWizard : ScriptableWizard {
 
     public string exportDir = @"C:\Projects\PressPlay\Tentacles\XNA\PressPlay.Tentacles.XmlContent\Scenes";
     public string textureDir = @"C:\Projects\PressPlay\Tentacles\XNA\PressPlay.Tentacles.Win\PressPlay.Tentacles.WinContent\Textures";
-    public string configSource = @"C:\Projects\PressPlay\Tentacles\Unity\Assets\Editor\U2X\PressPlay.U2X.dll.config";
+    public string configSource = @"C:\Projects\PressPlay\Tentacles\Unity\Assets\Editor\FFWD\PressPlay.FFWD.dll.config";
 
     private TypeResolver resolver;
 

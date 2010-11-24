@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using Box2D.XNA;
 using Microsoft.Xna.Framework;
-using PressPlay.U2X.Xna.Components;
+using PressPlay.FFWD.Components;
 
-namespace PressPlay.U2X.Xna
+namespace PressPlay.FFWD
 {
     public struct RaycastHit
     {

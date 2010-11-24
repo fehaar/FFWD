@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 
-namespace PressPlay.U2X.Xna.Test.Core_framework
+namespace PressPlay.FFWD.Test.Core_framework
 {
     [TestFixture]
     public class WhenLocatingAComponent

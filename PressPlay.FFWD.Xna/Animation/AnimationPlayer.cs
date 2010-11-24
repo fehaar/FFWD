@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 #endregion
 
-namespace PressPlay.U2X.Xna.Animation
+namespace PressPlay.FFWD.Animation
 {
     /// <summary>
     /// The animation player is in charge of decoding bone position

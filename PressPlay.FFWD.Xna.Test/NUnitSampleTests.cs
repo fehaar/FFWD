@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-namespace PressPlay.U2X.Xna.Test {
+namespace PressPlay.FFWD.Test {
     [TestFixture]
     public class NUnitSampleTests {
         [Test]

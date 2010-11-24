@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace PressPlay.U2X.Xna.Interfaces
+namespace PressPlay.FFWD.Interfaces
 {
     public interface IFixedUpdateable
     {

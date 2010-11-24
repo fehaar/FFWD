@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using PressPlay.U2X.Interfaces;
+using PressPlay.FFWD.Exporter.Interfaces;
 using UnityEngine;
 using System.Xml;
 
-namespace PressPlay.U2X.Writers
+namespace PressPlay.FFWD.Exporter.Writers
 {
     internal class MeshRendererComponentWriter : IComponentWriter
     {

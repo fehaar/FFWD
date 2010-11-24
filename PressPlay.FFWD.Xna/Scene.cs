@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace PressPlay.U2X.Xna
+namespace PressPlay.FFWD
 {
     public class Scene
     {

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
-using PressPlay.U2X.Xna.Interfaces;
+using PressPlay.FFWD.Interfaces;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 
-namespace PressPlay.U2X.Xna.Test.Core_framework
+namespace PressPlay.FFWD.Test.Core_framework
 {
     [TestFixture]
     public class WhenRunningTheGameLoop

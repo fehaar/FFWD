@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Box2D.XNA;
-using PressPlay.U2X.Xna.Interfaces;
+using PressPlay.FFWD.Interfaces;
 
-namespace PressPlay.U2X.Xna
+namespace PressPlay.FFWD
 {
     internal class GameObjectContactProcessor : IContactProcessor
     {

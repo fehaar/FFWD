@@ -50,14 +50,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PressPlay.U2X\PressPlay.U2X.csproj">
+    <ProjectReference Include="..\PressPlay.FFWD\PressPlay.FFWD.Exporter.csproj">
       <Project>{3A0EF547-8728-4800-B436-F8E4C100F920}</Project>
-      <Name>PressPlay.U2X</Name>
+      <Name>PressPlay.FFWD.Exporter</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(ProjectDir)\*.cs" "$(SolutionDir)\..\Tentacles\Unity\Assets\Editor\U2X\"
+    <PostBuildEvent>copy "$(ProjectDir)\*.cs" "$(SolutionDir)\..\..\Unity\Assets\Editor\FFWD\"
 </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

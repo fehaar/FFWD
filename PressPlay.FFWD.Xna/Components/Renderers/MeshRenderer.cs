@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using PressPlay.U2X.Xna.Animation;
-using PressPlay.U2X.Xna.Interfaces;
+using PressPlay.FFWD.Animation;
+using PressPlay.FFWD.Interfaces;
 using Microsoft.Xna.Framework.Content;
 
-namespace PressPlay.U2X.Xna.Components
+namespace PressPlay.FFWD.Components
 {
     public class MeshRenderer : Component, IRenderable, Interfaces.IUpdateable
     {

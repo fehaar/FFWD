@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 
-namespace PressPlay.U2X.Xna.Extensions
+namespace PressPlay.FFWD.Extensions
 {
     public static class VectorExtensions
     {

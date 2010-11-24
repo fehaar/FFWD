@@ -8,8 +8,8 @@
     <ProjectGuid>{3EF6CEED-AFCF-449D-BD9D-7A9B08A44C9A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PressPlay.U2X.Xna.Test</RootNamespace>
-    <AssemblyName>PressPlay.U2X.Xna.Test</AssemblyName>
+    <RootNamespace>PressPlay.FFWD.Test</RootNamespace>
+    <AssemblyName>PressPlay.FFWD.Test</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -69,9 +69,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\..\..\Projects\PressPlay\U2X\PressPlay.U2X.Xna\PressPlay.U2X.Xna.csproj">
+    <ProjectReference Include="..\PressPlay.FFWD.Xna\PressPlay.FFWD.csproj">
       <Project>{A02BD389-79AE-4975-9A5E-DEDC66B8A0CB}</Project>
-      <Name>PressPlay.U2X.Xna</Name>
+      <Name>PressPlay.FFWD</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

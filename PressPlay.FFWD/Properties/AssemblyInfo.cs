@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("PressPlay.U2X")]
+[assembly: AssemblyTitle("PressPlay.FFWD")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Microsoft")]
-[assembly: AssemblyProduct("PressPlay.U2X")]
+[assembly: AssemblyProduct("PressPlay.FFWD")]
 [assembly: AssemblyCopyright("Copyright © Microsoft 2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -21,7 +21,7 @@ using System.Runtime.InteropServices;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("c800450e-1974-43d0-a77c-630f5b3fc4e9")]
-[assembly: InternalsVisibleTo("PressPlay.U2X.Test")]
+[assembly: InternalsVisibleTo("PressPlay.FFWD.Exporter.Test")]
 // Version information for an assembly consists of the following four values:
 //
 //      Major Version

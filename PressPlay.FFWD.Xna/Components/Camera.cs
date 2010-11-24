@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 
-namespace PressPlay.U2X.Xna.Components
+namespace PressPlay.FFWD.Components
 {
     public class Camera
     {

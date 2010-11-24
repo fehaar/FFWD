@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace PressPlay.U2X
+namespace PressPlay.FFWD.Exporter
 {
     public class NamespaceRule
     {

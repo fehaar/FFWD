@@ -8,13 +8,13 @@ using System.IO;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework;
-using PressPlay.U2X.Xna.Components;
-using PressPlay.U2X.Xna;
+using PressPlay.FFWD.Components;
+using PressPlay.FFWD;
 #if WINDOWS
 using System.Diagnostics;
 #endif
 
-namespace PressPlay.U2X.Xna
+namespace PressPlay.FFWD
 {
     public static class ContentHelper
     {

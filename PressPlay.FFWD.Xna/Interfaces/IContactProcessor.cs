@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Box2D.XNA;
 
-namespace PressPlay.U2X.Xna.Interfaces
+namespace PressPlay.FFWD.Interfaces
 {
     /// <summary>
     /// This interface denotes a class that will process contactes that have been collected in the world

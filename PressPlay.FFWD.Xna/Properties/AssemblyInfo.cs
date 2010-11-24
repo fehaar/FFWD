@@ -5,8 +5,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("PressPlay.U2X")]
-[assembly: AssemblyProduct("PressPlay.U2X")]
+[assembly: AssemblyTitle("PressPlay.FFWD")]
+[assembly: AssemblyProduct("PressPlay.FFWD")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyCompany("Microsoft")]
 [assembly: AssemblyCopyright("Copyright © Microsoft 2010")]
@@ -23,7 +23,7 @@ using System.Runtime.InteropServices;
 // project is exposed to COM. On other platforms, it unique identifies the
 // title storage container when deploying this assembly to the device.
 [assembly: Guid("6f826f77-77da-43ef-83d9-410818ae4a51")]
-[assembly: InternalsVisibleTo("PressPlay.U2X.Xna.Test")]
+[assembly: InternalsVisibleTo("PressPlay.FFWD.Test")]
 // Version information for an assembly consists of the following four values:
 //
 //      Major Version

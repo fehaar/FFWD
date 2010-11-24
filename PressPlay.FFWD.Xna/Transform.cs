@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 
-namespace PressPlay.U2X.Xna
+namespace PressPlay.FFWD
 {
     public class Transform
     {

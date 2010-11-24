@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
-using PressPlay.U2X.Xna.Interfaces;
+using PressPlay.FFWD.Interfaces;
 using Box2D.XNA;
 
-namespace PressPlay.U2X.Xna.Test.Core_framework
+namespace PressPlay.FFWD.Test.Core_framework
 {
     internal class TestComponent : Component, IFixedUpdateable, IUpdateable, IRenderable, ICollidable
     {

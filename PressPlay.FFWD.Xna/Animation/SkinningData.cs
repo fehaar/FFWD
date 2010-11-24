@@ -13,7 +13,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 #endregion
 
-namespace PressPlay.U2X.Xna.Animation
+namespace PressPlay.FFWD.Animation
 {
     /// <summary>
     /// Combines all the data needed to render and animate a skinned object.

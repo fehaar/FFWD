@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using PressPlay.U2X.Interfaces;
+using PressPlay.FFWD.Exporter.Interfaces;
 using UnityEngine;
 
-namespace PressPlay.U2X.Writers
+namespace PressPlay.FFWD.Exporter.Writers
 {
     public class XNAMeshColliderComponentWriter : IComponentWriter
     {

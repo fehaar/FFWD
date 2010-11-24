@@ -5,14 +5,13 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{3A0EF547-8728-4800-B436-F8E4C100F920}</ProjectGuid>
+    <ProjectGuid>{FA3A7EBF-C99B-4C7D-BF11-2C4FCFF4EDC8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PressPlay.U2X</RootNamespace>
-    <AssemblyName>PressPlay.U2X</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <RootNamespace>PressPlay.FFWD.Exporter.Test</RootNamespace>
+    <AssemblyName>PressPlay.FFWD.Exporter.Test</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,38 +31,46 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="nunit.framework">
+      <HintPath>..\packages\NUnit.2.5.7.10213\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.mocks">
+      <HintPath>..\packages\NUnit.2.5.7.10213\lib\nunit.mocks.dll</HintPath>
+    </Reference>
+    <Reference Include="pnunit.framework">
+      <HintPath>..\packages\NUnit.2.5.7.10213\lib\pnunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="UnityEditor">
-      <HintPath>..\references\UnityEditor.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine">
-      <HintPath>..\references\UnityEngine.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ComponentMap.cs" />
-    <Compile Include="Configuration\TypeResolverSection.cs" />
-    <Compile Include="Interfaces\IComponentWriter.cs" />
-    <Compile Include="NamespaceRule.cs" />
-    <Compile Include="TypeResolver.cs" />
+    <Compile Include="Configuration\WhenConfiguringTheTypeResolver.cs" />
+    <Compile Include="Configuration\WhenCheckingIfAComponentShouldBeExported.cs" />
+    <Compile Include="Configuration\WhenGettingAComponentWriter.cs" />
+    <Compile Include="Configuration\WhenResolvingATypeName.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Configuration\ConfigurationSectionHandler.cs" />
-    <Compile Include="Writers\XNAMeshColliderComponentWriter.cs" />
-    <Compile Include="Writers\MeshRendererComponentWriter.cs" />
-    <Compile Include="Writers\SceneWriter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PressPlay.FFWD\PressPlay.FFWD.Exporter.csproj">
+      <Project>{3A0EF547-8728-4800-B436-F8E4C100F920}</Project>
+      <Name>PressPlay.FFWD.Exporter</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetPath)" "$(SolutionDir)\..\Tentacles\Unity\Assets\Editor\U2X\"
-copy "$(TargetPath).config" "$(SolutionDir)\..\Tentacles\Unity\Assets\Editor\U2X\"</PostBuildEvent>
+    <PostBuildEvent>copy "$(SolutionDir)\PressPlay.FFWD.Exporter\$(OutDir)\PressPlay.FFWD.Exporter.dll.config" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

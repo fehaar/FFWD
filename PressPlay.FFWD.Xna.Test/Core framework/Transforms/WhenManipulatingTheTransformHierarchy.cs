@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 
-namespace PressPlay.U2X.Xna.Test.Core_framework.Transforms
+namespace PressPlay.FFWD.Test.Core_framework.Transforms
 {
     [TestFixture]
     public class WhenManipulatingTheTransformHierarchy

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace PressPlay.U2X.Xna
+namespace PressPlay.FFWD
 {
     public class Debug
     {

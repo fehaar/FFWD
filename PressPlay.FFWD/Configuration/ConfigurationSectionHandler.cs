@@ -6,7 +6,7 @@ using System.Configuration;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace PressPlay.U2X.Configuration
+namespace PressPlay.FFWD.Exporter.Configuration
 {
     public class ConfigurationSectionHandler : IConfigurationSectionHandler
     {

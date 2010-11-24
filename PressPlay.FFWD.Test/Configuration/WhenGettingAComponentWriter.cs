@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
-using PressPlay.U2X.Interfaces;
+using PressPlay.FFWD.Exporter.Interfaces;
+using PressPlay.FFWD.Exporter.Writers;
 
-namespace PressPlay.U2X.Test.Configuration
+namespace PressPlay.FFWD.Exporter.Test.Configuration
 {
     public class TestComponentWriter : IComponentWriter
     {
         #region IComponentWriter Members
-        public void Write(Writers.SceneWriter scene, object component)
+        public void Write(SceneWriter scene, object component)
         {
             throw new NotImplementedException();
         }

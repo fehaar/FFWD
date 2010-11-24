@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using PressPlay.U2X.Xna.Interfaces;
+using PressPlay.FFWD.Interfaces;
 using Box2D.XNA;
 
-namespace PressPlay.U2X.Xna.Components
+namespace PressPlay.FFWD.Components
 {
     public class MeshCollider : Component, IRenderable
     {

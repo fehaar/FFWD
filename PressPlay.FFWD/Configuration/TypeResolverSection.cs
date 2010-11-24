@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Configuration;
 
-namespace PressPlay.U2X.Configuration
+namespace PressPlay.FFWD.Exporter.Configuration
 {
     public class TypeResolverSection : ConfigurationSection
     {

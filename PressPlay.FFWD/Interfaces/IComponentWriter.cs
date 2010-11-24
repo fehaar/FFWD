@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using PressPlay.U2X.Writers;
+using PressPlay.FFWD.Exporter.Writers;
 
-namespace PressPlay.U2X.Interfaces
+namespace PressPlay.FFWD.Exporter.Interfaces
 {
     public interface IComponentWriter
     {

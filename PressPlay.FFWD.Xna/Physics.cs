@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using Box2D.XNA;
 using Microsoft.Xna.Framework;
-using PressPlay.U2X.Xna.Interfaces;
-using PressPlay.U2X.Xna.Extensions;
+using PressPlay.FFWD.Interfaces;
+using PressPlay.FFWD.Extensions;
 
-namespace PressPlay.U2X.Xna
+namespace PressPlay.FFWD
 {
     public static class Physics
     {

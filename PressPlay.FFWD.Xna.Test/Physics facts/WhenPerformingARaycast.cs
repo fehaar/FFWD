@@ -6,7 +6,7 @@ using NUnit.Framework;
 using Microsoft.Xna.Framework;
 using Box2D.XNA;
 
-namespace PressPlay.U2X.Xna.Test.Physics_facts
+namespace PressPlay.FFWD.Test.Physics_facts
 {
     [TestFixture]
     public class WhenPerformingARaycast

@@ -5,7 +5,7 @@ using System.Text;
 using NUnit.Framework;
 using Microsoft.Xna.Framework;
 
-namespace PressPlay.U2X.Xna.Test.Physics_facts
+namespace PressPlay.FFWD.Test.Physics_facts
 {
     [TestFixture]
     public class WhenInitializingPhysics

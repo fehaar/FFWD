@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
 #endregion
 
-namespace PressPlay.U2X.Xna.Animation
+namespace PressPlay.FFWD.Animation
 {
     /// <summary>
     /// An animation clip is the runtime equivalent of the

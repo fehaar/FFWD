@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 
-namespace PressPlay.U2X.Xna.Interfaces
+namespace PressPlay.FFWD.Interfaces
 {
     public interface IUpdateable
     {

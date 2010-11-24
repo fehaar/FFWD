@@ -6,9 +6,9 @@ using System.Xml;
 using UnityEngine;
 using UnityEditor;
 using System.IO;
-using PressPlay.U2X.Interfaces;
+using PressPlay.FFWD.Exporter.Interfaces;
 
-namespace PressPlay.U2X.Writers
+namespace PressPlay.FFWD.Exporter.Writers
 {
     public class SceneWriter
     {

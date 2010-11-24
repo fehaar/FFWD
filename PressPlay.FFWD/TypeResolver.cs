@@ -4,13 +4,13 @@ using System.Text;
 using System.Xml.Serialization;
 using System.Configuration;
 using System.Reflection;
-using PressPlay.U2X.Configuration;
+using PressPlay.FFWD.Exporter.Configuration;
 using System.Xml;
 using System.IO;
-using PressPlay.U2X.Interfaces;
-using PressPlay.U2X.Writers;
+using PressPlay.FFWD.Exporter.Interfaces;
+using PressPlay.FFWD.Exporter.Writers;
 
-namespace PressPlay.U2X
+namespace PressPlay.FFWD.Exporter
 {
 	public class TypeResolver
 	{
@@ -19,7 +19,7 @@ namespace PressPlay.U2X
 			ExcludeTypes = new List<string>();
 			IncludeTypes = new List<string>();
 			NamespaceRules = new List<NamespaceRule>();
-			DefaultNamespace = "PressPlay.U2X.Xna";
+			DefaultNamespace = "PressPlay.FFWD.Xna";
             ComponentWriters = new List<ComponentMap>();
 		}
 
@@ -48,10 +48,10 @@ namespace PressPlay.U2X
                 throw new FileNotFoundException("The configuration file does not exist", location);
             }
             doc.Load(location);
-            XmlNode node = doc.SelectSingleNode("configuration/PressPlay/U2X");
+            XmlNode node = doc.SelectSingleNode("configuration/PressPlay/FFWD");
             if (node == null)
             {
-                throw new Exception("The configuration needs a node at the path configuration/PressPlay/U2X to read from.");
+                throw new Exception("The configuration needs a node at the path configuration/PressPlay/FFWD to read from.");
             }
             ConfigurationSectionHandler handler = new ConfigurationSectionHandler();
             return (TypeResolver)handler.Create(null, null, node);

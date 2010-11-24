@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
-using PressPlay.U2X.Xna.Test.Core_framework;
+using PressPlay.FFWD.Test.Core_framework;
 using Box2D.XNA;
 
-namespace PressPlay.U2X.Xna.Test.Physics_facts
+namespace PressPlay.FFWD.Test.Physics_facts
 {
     [TestFixture]
     public class WhenReactingToPhysics

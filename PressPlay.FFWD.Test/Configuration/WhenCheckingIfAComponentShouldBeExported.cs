@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 
-namespace PressPlay.U2X.Test.Configuration
+namespace PressPlay.FFWD.Exporter.Test.Configuration
 {
     [TestFixture]
     public class WhenCheckingIfAComponentShouldBeExported

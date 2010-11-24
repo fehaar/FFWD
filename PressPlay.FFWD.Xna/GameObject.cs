@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Content;
-using PressPlay.U2X.Xna.Interfaces;
+using PressPlay.FFWD.Interfaces;
 using Microsoft.Xna.Framework.Graphics;
 using Box2D.XNA;
 
-namespace PressPlay.U2X.Xna
+namespace PressPlay.FFWD
 {
     public class GameObject
     {
