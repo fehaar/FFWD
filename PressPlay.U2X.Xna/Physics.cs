@@ -205,6 +205,14 @@ namespace PressPlay.U2X.Xna
             throw new NotImplementedException("Method not implemented.");
         }
 
+        public static RaycastHit[] RaycastAll(Vector2 origin, Vector2 direction, float distance, int layerMask)
+        {
+            RaycastHelper helper = new RaycastHelper(distance);
+            Vector2 pt2 = origin + (direction * distance);
+            world.RayCast(helper.rayCastCallback, origin, pt2);
+            return helper.Hits;
+        }
+
         public static RaycastHit[] RaycastAll(Vector3 origin, Vector3 direction, float distance, int layerMask)
         {
             // TODO : Add implementation of method

@@ -87,6 +87,26 @@ namespace PressPlay.U2X.Xna.Test.Physics_facts
             Assert.That(hit.normal, Is.EqualTo(new Vector2(0, -1)));
             Assert.That(hit.distance, Is.EqualTo(45));
         }
+
+        [Test]
+        public void WeWillGetInfOnTheClosestObjectHit()
+        {
+            Body body = Physics.AddBox(10, 10, new Vector2(0, 20), 0, 1);
+            Body body1 = Physics.AddBox(10, 10, new Vector2(0, 50), 0, 1);
+            RaycastHit hit = new RaycastHit();
+            bool hasHit = Physics.Raycast(Vector2.Zero, Vector2.UnitY, out hit, 100, 0);
+            Assert.That(hasHit, Is.True);
+            Assert.That(hit.body, Is.SameAs(body));
+        }
+
+        [Test]
+        public void WeWillGetHitsOnAllObjectsOnTheRay()
+        {
+            Body body = Physics.AddBox(10, 10, new Vector2(0, 20), 0, 1);
+            Body body1 = Physics.AddBox(10, 10, new Vector2(0, 50), 0, 1);
+            RaycastHit[] hits = Physics.RaycastAll(Vector2.Zero, Vector2.UnitY, 100, 0);
+            Assert.That(hits.Length, Is.EqualTo(2));
+        }
 	
     }
 }

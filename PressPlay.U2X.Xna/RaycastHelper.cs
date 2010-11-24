@@ -19,9 +19,20 @@ namespace PressPlay.U2X.Xna
 
         internal float rayCastCallback(Fixture fixture, Vector2 point, Vector2 normal, float fraction)
         {
-            _hits.Add(new RaycastHit() { body = fixture._body, point = point, normal = normal, distance = distance * fraction });
-            return 0;
-        }
+            float dist = distance * fraction;
+            //int index = 0;
+            //while (index < _hits.Count)
+            //{
+            //    if (_hits[index].distance > dist)
+            //    {
+            //        break;
+            //    }
+            //    index++;
+            //}
+            //_hits.Insert(index, new RaycastHit() { body = fixture._body, point = point, normal = normal, distance = dist });
+            _hits.Add(new RaycastHit() { body = fixture._body, point = point, normal = normal, distance = dist });
+            return fraction;
+        }   
 
         internal int HitCount
         {
@@ -31,9 +42,17 @@ namespace PressPlay.U2X.Xna
             }
         }
 
+        internal RaycastHit[] Hits
+        {
+            get
+            {
+                return _hits.ToArray();
+            }
+        }
+
         internal RaycastHit ClosestHit()
         {
-            return _hits.ElementAtOrDefault(0);
+            return _hits.LastOrDefault();
         }
     }
 }
