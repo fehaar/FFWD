@@ -9,9 +9,7 @@ namespace PressPlay.FFWD
     {
         public static void Log(string message)
         {
-#if WINDOWS
-            Console.WriteLine(message);
-#endif
+            System.Diagnostics.Debug.WriteLine(message);
         }
     }
 }

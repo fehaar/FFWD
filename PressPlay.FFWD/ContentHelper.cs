@@ -271,7 +271,7 @@ namespace PressPlay.FFWD
             }
             catch
             {
-                Console.WriteLine("Missing song : " + name);
+                Debug.Log("Missing song : " + name);
             }
             if (song != null)
                 ContentHelper.Songs.Add(name, song);
@@ -305,7 +305,7 @@ namespace PressPlay.FFWD
             }
             catch
             {
-                Console.WriteLine("Missing sound: " + name);
+                Debug.Log("Missing sound: " + name);
             }
             if (sound != null)
             {
@@ -488,7 +488,7 @@ namespace PressPlay.FFWD
                 return colorMultipliedTexture;
 
             //if (!preColoring && Time.timeSinceLevelLoad > 10)
-            //    Console.WriteLine("Texture " + key.textureName + " with color: " + "new Color(" + key.color.R + ","+ key.color.G + "," + key.color.B + "," + key.color.A + ")");
+            //    Debug.Log("Texture " + key.textureName + " with color: " + "new Color(" + key.color.R + ","+ key.color.G + "," + key.color.B + "," + key.color.A + ")");
 
             Texture2D originalTex = GetTexture(name);
             colorMultipliedTexture = new Texture2D(originalTex.GraphicsDevice, originalTex.Width, originalTex.Height);
