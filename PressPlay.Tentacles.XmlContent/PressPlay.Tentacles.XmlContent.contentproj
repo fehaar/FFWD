@@ -42,8 +42,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Scenes\XNA test level1.xml">
-      <Name>XNA test level1</Name>
+    <Compile Include="Scenes\DesatGreen_intro.xml">
+      <Name>DesatGreen_intro</Name>
       <Importer>XmlImporter</Importer>
       <Processor>PassThroughProcessor</Processor>
     </Compile>

@@ -90,7 +90,7 @@ namespace PressPlay.Tentacles
         /// </summary>
         protected override void LoadContent()
         {
-            scene = Content.Load<Scene>("Scenes/XNA test level1");
+            scene = Content.Load<Scene>("Scenes/DesatGreen_intro");
             scene.AfterLoad();
             renderer.currentScene = scene;
 

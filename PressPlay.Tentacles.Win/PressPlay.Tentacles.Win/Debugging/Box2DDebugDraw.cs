@@ -38,25 +38,26 @@ namespace PressPlay.Tentacles.Debugging
 
         public override void DrawPolygon(ref FixedArray8<Vector2> vertices, int count, Color color)
         {
-            if (_lineCount * 2 > _vertsLines.Length - 1)
+            try
             {
-                return;
-            }
+                for (int i = 0; i < count - 1; i++)
+                {
+                    _vertsLines[_lineCount * 2].Position = new Vector3(vertices[i], 0.0f);
+                    _vertsLines[_lineCount * 2].Color = color;
+                    _vertsLines[_lineCount * 2 + 1].Position = new Vector3(vertices[i + 1], 0.0f);
+                    _vertsLines[_lineCount * 2 + 1].Color = color;
+                    _lineCount++;
+                }
 
-            for (int i = 0; i < count - 1; i ++)
-            {
-                _vertsLines[_lineCount * 2].Position = new Vector3(vertices[i], 0.0f);
+                _vertsLines[_lineCount * 2].Position = new Vector3(vertices[count - 1], 0.0f);
                 _vertsLines[_lineCount * 2].Color = color;
-                _vertsLines[_lineCount * 2 + 1].Position = new Vector3(vertices[i + 1], 0.0f);
+                _vertsLines[_lineCount * 2 + 1].Position = new Vector3(vertices[0], 0.0f);
                 _vertsLines[_lineCount * 2 + 1].Color = color;
                 _lineCount++;
             }
-
-            _vertsLines[_lineCount * 2].Position = new Vector3(vertices[count - 1], 0.0f);
-            _vertsLines[_lineCount * 2].Color = color;
-            _vertsLines[_lineCount * 2 + 1].Position = new Vector3(vertices[0], 0.0f);
-            _vertsLines[_lineCount * 2 + 1].Color = color;
-            _lineCount++;
+            catch
+            {
+            }
         }
 
         public override void DrawSolidPolygon(ref FixedArray8<Vector2> vertices, int count, Color color)
@@ -100,18 +101,24 @@ namespace PressPlay.Tentacles.Debugging
             double increment = Math.PI * 2.0 / (double)segments;
             double theta = 0.0;
 
-            for (int i = 0; i < segments; i++)
+            try
             {
-                Vector2 v1 = center + radius * new Vector2((float)Math.Cos(theta), (float)Math.Sin(theta));
-                Vector2 v2 = center + radius * new Vector2((float)Math.Cos(theta + increment), (float)Math.Sin(theta + increment));
+                for (int i = 0; i < segments; i++)
+                {
+                    Vector2 v1 = center + radius * new Vector2((float)Math.Cos(theta), (float)Math.Sin(theta));
+                    Vector2 v2 = center + radius * new Vector2((float)Math.Cos(theta + increment), (float)Math.Sin(theta + increment));
 
-                _vertsLines[_lineCount * 2].Position = new Vector3(v1, 0.0f);
-                _vertsLines[_lineCount * 2].Color = color;
-                _vertsLines[_lineCount * 2 + 1].Position = new Vector3(v2, 0.0f);
-                _vertsLines[_lineCount * 2 + 1].Color = color;
-                _lineCount++;
+                    _vertsLines[_lineCount * 2].Position = new Vector3(v1, 0.0f);
+                    _vertsLines[_lineCount * 2].Color = color;
+                    _vertsLines[_lineCount * 2 + 1].Position = new Vector3(v2, 0.0f);
+                    _vertsLines[_lineCount * 2 + 1].Color = color;
+                    _lineCount++;
 
-                theta += increment;
+                    theta += increment;
+                }
+            }
+            catch
+            {
             }
         }
 
@@ -151,10 +158,16 @@ namespace PressPlay.Tentacles.Debugging
 
         public override void DrawSegment(Vector2 p1, Vector2 p2, Color color)
         {
-            _vertsLines[_lineCount * 2].Position = new Vector3(p1, 0.0f);
-            _vertsLines[_lineCount * 2 + 1].Position = new Vector3(p2, 0.0f);
-            _vertsLines[_lineCount * 2].Color = _vertsLines[_lineCount * 2 + 1].Color = color;
-            _lineCount++;
+            try
+            {
+                _vertsLines[_lineCount * 2].Position = new Vector3(p1, 0.0f);
+                _vertsLines[_lineCount * 2 + 1].Position = new Vector3(p2, 0.0f);
+                _vertsLines[_lineCount * 2].Color = _vertsLines[_lineCount * 2 + 1].Color = color;
+                _lineCount++;
+            }
+            catch
+            {
+            }
         }
 
         public override void DrawTransform(ref Transform xf)
@@ -191,11 +204,15 @@ namespace PressPlay.Tentacles.Debugging
             _stringData.Add(new StringData(x, y, s, args));
         }
 
+        public override void Reset()
+        {
+            _lineCount = _fillCount = 0;
+        }
+
         public void FinishDrawShapes(GraphicsDevice _device)
         {
             if (_device == null)
             {
-                _lineCount = _fillCount = 0;
                 return;
             }
 
@@ -223,7 +240,7 @@ namespace PressPlay.Tentacles.Debugging
                     _device.DrawUserPrimitives<VertexPositionColor>(PrimitiveType.LineList, _vertsLines, 0, _lineCount);
             }
 
-            _lineCount = _fillCount = 0;
+            Reset();
             _device.RasterizerState = oldrasterizerState;
         }
 
@@ -249,8 +266,8 @@ namespace PressPlay.Tentacles.Debugging
             DrawPolygon(ref verts, 4, color);
         }
 
-        private VertexPositionColor[] _vertsLines = new VertexPositionColor[200000];
-        private VertexPositionColor[] _vertsFill = new VertexPositionColor[200000];
+        private VertexPositionColor[] _vertsLines = new VertexPositionColor[500000];
+        private VertexPositionColor[] _vertsFill = new VertexPositionColor[500000];
         private int _lineCount;
         private int _fillCount;
         public Matrix worldView = Matrix.Identity;
