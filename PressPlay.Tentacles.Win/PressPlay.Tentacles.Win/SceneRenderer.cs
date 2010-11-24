@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
-using PressPlay.U2X.Xna;
+using PressPlay.FFWD;
 #if !WINDOWS
 using Microsoft.Xna.Framework.Input.Touch;
 #endif
 using Box2D.XNA;
 using Microsoft.Xna.Framework.Graphics;
-using PressPlay.U2X.Xna.Components;
+using PressPlay.FFWD.Components;
 using PressPlay.Tentacles.Debugging;
 
 namespace PressPlay.Tentacles

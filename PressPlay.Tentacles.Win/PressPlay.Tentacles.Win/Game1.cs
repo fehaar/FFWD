@@ -8,9 +8,8 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
-using PressPlay.U2X.Xna.Components;
-using PressPlay.U2X.Xna;
-using PressPlay.U2X;
+using PressPlay.FFWD.Components;
+using PressPlay.FFWD;
 using Box2D.XNA;
 using PressPlay.Tentacles.Debugging;
 

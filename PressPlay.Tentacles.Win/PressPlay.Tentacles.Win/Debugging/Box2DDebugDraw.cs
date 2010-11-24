@@ -25,7 +25,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Box2D.XNA;
-using PressPlay.U2X.Xna.Components;
+using PressPlay.FFWD.Components;
 
 namespace PressPlay.Tentacles.Debugging
 {
