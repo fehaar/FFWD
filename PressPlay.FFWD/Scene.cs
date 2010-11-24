@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Box2D.XNA;
 
 namespace PressPlay.FFWD
 {
@@ -38,6 +39,14 @@ namespace PressPlay.FFWD
             for (int i = 0; i < gameObjects.Count; i++)
             {
                 gameObjects[i].Draw(spriteBatch);
+            }
+        }
+
+        public void DebugDraw(DebugDraw drawer)
+        {
+            for (int i = 0; i < gameObjects.Count; i++)
+            {
+                gameObjects[i].OnDebugDraw(drawer);
             }
         }
 

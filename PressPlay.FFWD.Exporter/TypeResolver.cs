@@ -9,6 +9,7 @@ using System.Xml;
 using System.IO;
 using PressPlay.FFWD.Exporter.Interfaces;
 using PressPlay.FFWD.Exporter.Writers;
+using UnityEngine;
 
 namespace PressPlay.FFWD.Exporter
 {
@@ -19,7 +20,7 @@ namespace PressPlay.FFWD.Exporter
 			ExcludeTypes = new List<string>();
 			IncludeTypes = new List<string>();
 			NamespaceRules = new List<NamespaceRule>();
-			DefaultNamespace = "PressPlay.FFWD.Xna";
+			DefaultNamespace = "PressPlay.FFWD";
             ComponentWriters = new List<ComponentMap>();
 		}
 
@@ -57,7 +58,7 @@ namespace PressPlay.FFWD.Exporter
             return (TypeResolver)handler.Create(null, null, node);
         }
 
-		public bool SkipComponent(Object component)
+		public bool SkipComponent(object component)
 		{
 			String type = component.GetType().FullName;
 			if (IncludeTypes.Contains(type))
@@ -94,10 +95,17 @@ namespace PressPlay.FFWD.Exporter
             string result = type.FullName;
             foreach (ComponentMap map in ComponentWriters)
             {
-                if (map.Type == result)
+                try
                 {
-                    Type tp = Type.GetType(map.To);
-                    return (IComponentWriter)Activator.CreateInstance(tp);
+                    if (map.Type == result)
+                    {
+                        Type tp = Type.GetType(map.To);
+                        return (IComponentWriter)Activator.CreateInstance(tp);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.Log("Could create writer using map from " + map.Type + " to " + map.To);
                 }
             }
             return null;

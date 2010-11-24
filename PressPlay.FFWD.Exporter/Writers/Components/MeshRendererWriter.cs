@@ -6,9 +6,9 @@ using PressPlay.FFWD.Exporter.Interfaces;
 using UnityEngine;
 using System.Xml;
 
-namespace PressPlay.FFWD.Exporter.Writers
+namespace PressPlay.FFWD.Exporter.Writers.Components
 {
-    internal class MeshRendererComponentWriter : IComponentWriter
+    internal class MeshRendererWriter : IComponentWriter
     {
         #region IComponentWriter Members
         public void Write(SceneWriter writer, object component)

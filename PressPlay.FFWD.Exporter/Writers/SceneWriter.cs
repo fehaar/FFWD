@@ -54,7 +54,6 @@ namespace PressPlay.FFWD.Exporter.Writers
                     continue;
                 }
                 writer.WriteStartElement("gameObject");
-                writer.WriteAttributeString("ID", "#go" + go.GetInstanceID());
                 WriteGameObject(go);
                 writer.WriteEndElement();
             }
@@ -117,16 +116,15 @@ namespace PressPlay.FFWD.Exporter.Writers
                 return;
             }
 
-            writer.WriteStartElement("component");
-            writer.WriteAttributeString("Type", resolver.ResolveTypeName(component));
-
             System.Type type = component.GetType();
             IComponentWriter componentWriter = resolver.GetComponentWriter(type);
             if (componentWriter != null)
             {
+                writer.WriteStartElement("component");
+                writer.WriteAttributeString("Type", resolver.ResolveTypeName(component));
                 componentWriter.Write(this, component);
+                writer.WriteEndElement();
             }
-            writer.WriteEndElement();
         }
 
         internal void WriteTexture(Texture texture)
@@ -149,6 +147,11 @@ namespace PressPlay.FFWD.Exporter.Writers
             if (obj is int[])
             {
                 writer.WriteElementString(name, ToString(obj as int[]));
+                return;
+            }
+            if (obj is Vector3)
+            {
+                writer.WriteElementString(name, ToString((Vector3)obj));
                 return;
             }
             if (obj is Vector3[])

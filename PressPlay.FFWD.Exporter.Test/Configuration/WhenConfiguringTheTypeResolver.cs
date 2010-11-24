@@ -6,7 +6,7 @@ using NUnit.Framework;
 using System.Configuration;
 using PressPlay.FFWD.Exporter.Configuration;
 using System.Reflection;
-using PressPlay.FFWD.Exporter.Writers;
+using PressPlay.FFWD.Exporter.Writers.Components;
 
 namespace PressPlay.FFWD.Exporter.Test.Configuration
 {
@@ -37,7 +37,7 @@ namespace PressPlay.FFWD.Exporter.Test.Configuration
             Assert.That(obj.ComponentWriters, Is.Not.Empty);
             ComponentMap map = obj.ComponentWriters.Find(m => m.Type == "UnityEngine.MeshRenderer");
             Assert.That(map, Is.Not.Null);
-            Assert.That(map.To, Is.StringStarting(typeof(MeshRendererComponentWriter).FullName));
+            Assert.That(map.To, Is.StringStarting(typeof(MeshRendererWriter).FullName));
         }
 	}
 }

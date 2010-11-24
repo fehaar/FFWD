@@ -17,7 +17,7 @@ public class ExportSceneWizard : ScriptableWizard {
 
     public string exportDir = @"C:\Projects\PressPlay\Tentacles\XNA\PressPlay.Tentacles.XmlContent\Scenes";
     public string textureDir = @"C:\Projects\PressPlay\Tentacles\XNA\PressPlay.Tentacles.Win\PressPlay.Tentacles.WinContent\Textures";
-    public string configSource = @"C:\Projects\PressPlay\Tentacles\Unity\Assets\Editor\FFWD\PressPlay.FFWD.dll.config";
+    public string configSource = @"C:\Projects\PressPlay\Tentacles\Unity\Assets\Editor\FFWD\PressPlay.FFWD.Exporter.dll.config";
 
     private TypeResolver resolver;
 
@@ -33,7 +33,9 @@ public class ExportSceneWizard : ScriptableWizard {
         scene.ExportDir = exportDir;
         scene.TextureDir = textureDir;
 
+        Debug.Log("Start scene export of " + Path.GetFileName(EditorApplication.currentScene));
         scene.Write(Path.Combine(exportDir, Path.ChangeExtension(Path.GetFileName(EditorApplication.currentScene), "xml")));
+        Debug.Log("End scene export of " + Path.GetFileName(EditorApplication.currentScene));
     }
 }
 

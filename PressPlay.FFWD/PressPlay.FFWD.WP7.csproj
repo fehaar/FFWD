@@ -96,6 +96,8 @@
     <Compile Include="Box2D\Dynamics\WorldCallbacks.cs" />
     <Compile Include="Component.cs" />
     <Compile Include="Components\Camera.cs" />
+    <Compile Include="Components\Colliders\BoxCollider.cs" />
+    <Compile Include="Components\Colliders\Collider.cs" />
     <Compile Include="Components\Colliders\MeshCollider.cs" />
     <Compile Include="Components\Renderers\MeshRenderer.cs" />
     <Compile Include="ContentHelper.cs" />
@@ -104,6 +106,7 @@
     <Compile Include="GameObject.cs" />
     <Compile Include="Interfaces\ICollidable.cs" />
     <Compile Include="Interfaces\IContactProcessor.cs" />
+    <Compile Include="Interfaces\IDebugRenderable.cs" />
     <Compile Include="Interfaces\IFixedUpdateable.cs" />
     <Compile Include="Interfaces\IRenderable.cs" />
     <Compile Include="Interfaces\IUpdateable.cs" />
