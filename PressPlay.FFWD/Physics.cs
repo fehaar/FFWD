@@ -57,10 +57,6 @@ namespace PressPlay.FFWD
         {
             world.Step(elapsedTime, velocityIterations, positionIterations);
             contactProcessor.Update();
-            if (world.DebugDraw != null)
-            {
-                world.DrawDebugData();
-            }
         }
 
         public static DebugDraw DebugDraw
@@ -72,6 +68,15 @@ namespace PressPlay.FFWD
             set
             {
                 world.DebugDraw = value;
+            }
+        }
+
+        public static void DoDebugDraw()
+        {
+            if (world.DebugDraw != null)
+            {
+                DebugDraw.Reset();
+                world.DrawDebugData();
             }
         }
         #endregion
