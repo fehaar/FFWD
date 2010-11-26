@@ -47,6 +47,10 @@ namespace PressPlay.FFWD.Components
             }
             BodyDef def = new BodyDef() { position = transform.position.To2d(), angle = transform.angleY, userData = this };
             Body bd = Physics.AddMesh(tris, 1, def);
+            if (isTrigger)
+            {
+                bd.SetType(BodyType.Kinematic);
+            }
         }
 
         public void Select()

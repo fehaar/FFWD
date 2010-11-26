@@ -18,8 +18,9 @@ namespace PressPlay.FFWD.Components
 
         public override void Awake()
         {
-            Vector2 sz = size.To2d() / 2;
-            Body bd = Physics.AddBox(sz.X, sz.Y, transform.position.To2d(), transform.angleY, 1);
+            Vector2 sz = (size * gameObject.transform.lossyScale).To2d();
+            Vector3 transCenter = Vector3.Transform(center, transform.world);
+            Body bd = Physics.AddBox(sz.X, sz.Y, transCenter.To2d(), transform.angleY, 1);
             if (isTrigger)
             {
                 bd.SetType(BodyType.Kinematic);
@@ -44,12 +45,12 @@ namespace PressPlay.FFWD.Components
                 pointList = new VertexPositionColor[6];
                 Vector2 sz = size.To2d() / 2;
                 Color cl = Color.Purple;
-                pointList[0] = new VertexPositionColor(new Vector3(center.X - sz.X, 0, center.Y - sz.Y), cl);
-                pointList[1] = new VertexPositionColor(new Vector3(center.X + sz.X, 0, center.Y + sz.Y), cl);
-                pointList[2] = new VertexPositionColor(new Vector3(center.X - sz.X, 0, center.Y + sz.Y), cl);
-                pointList[3] = new VertexPositionColor(new Vector3(center.X - sz.X, 0, center.Y - sz.Y), cl);
-                pointList[4] = new VertexPositionColor(new Vector3(center.X + sz.X, 0, center.Y - sz.Y), cl);
-                pointList[5] = new VertexPositionColor(new Vector3(center.X + sz.X, 0, center.Y + sz.Y), cl);
+                pointList[0] = new VertexPositionColor(new Vector3(center.X - sz.X, 0, center.Z - sz.Y), cl);
+                pointList[1] = new VertexPositionColor(new Vector3(center.X + sz.X, 0, center.Z + sz.Y), cl);
+                pointList[2] = new VertexPositionColor(new Vector3(center.X - sz.X, 0, center.Z + sz.Y), cl);
+                pointList[3] = new VertexPositionColor(new Vector3(center.X - sz.X, 0, center.Z - sz.Y), cl);
+                pointList[4] = new VertexPositionColor(new Vector3(center.X + sz.X, 0, center.Z - sz.Y), cl);
+                pointList[5] = new VertexPositionColor(new Vector3(center.X + sz.X, 0, center.Z + sz.Y), cl);
             }
 
             effect.World = transform.world;

@@ -195,7 +195,8 @@ namespace PressPlay.FFWD
         {
             get
             {
-                float dot = Vector3.Dot(world.Forward, Vector3.Forward);
+                Vector3 normFwd = Vector3.Normalize(world.Forward);
+                float dot = Vector3.Dot(normFwd, Vector3.Forward);
                 if (world.Forward.X > 0)
                 {
                     return (float)Math.Acos(dot);
