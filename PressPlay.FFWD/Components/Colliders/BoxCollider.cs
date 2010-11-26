@@ -2,12 +2,13 @@
 using Microsoft.Xna.Framework;
 using PressPlay.FFWD.Interfaces;
 using PressPlay.FFWD.Extensions;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace PressPlay.FFWD.Components
 {
     public class BoxCollider : Collider
 #if DEBUG
-                , IDebugRenderable
+                , IRenderable
 #endif
     {
         #region Content properties
@@ -27,18 +28,52 @@ namespace PressPlay.FFWD.Components
         }
 
 #if DEBUG
-        #region IDebugRenderable Members
-        public void DebugRender(DebugDraw drawer)
+        #region IRenderable Members
+        private BasicEffect effect;
+        private VertexPositionColor[] pointList;
+        public void Draw(SpriteBatch batch)
         {
-            FixedArray8<Vector2> fa = new FixedArray8<Vector2>();
-            Vector2 pos = transform.position.To2d();
-            Vector2 cen = center.To2d();
-            Vector2 sz = size.To2d() / 2;
-            fa[0] = pos + cen + new Vector2(-sz.X, -sz.Y);
-            fa[1] = pos + cen + new Vector2(sz.X, -sz.Y);
-            fa[2] = pos + cen + new Vector2(sz.X, sz.Y);
-            fa[3] = pos + cen + new Vector2(-sz.X, sz.Y);
-            drawer.DrawPolygon(ref fa, 4, (isTrigger) ? Color.HotPink : Color.Green);
+            if (effect == null)
+            {
+                effect = new BasicEffect(batch.GraphicsDevice);
+                effect.VertexColorEnabled = true;
+            }
+            if (pointList == null)
+            {
+                // For drawing the original mesh
+                pointList = new VertexPositionColor[6];
+                Vector2 sz = size.To2d() / 2;
+                Color cl = Color.Purple;
+                pointList[0] = new VertexPositionColor(new Vector3(center.X - sz.X, 0, center.Y - sz.Y), cl);
+                pointList[1] = new VertexPositionColor(new Vector3(center.X + sz.X, 0, center.Y + sz.Y), cl);
+                pointList[2] = new VertexPositionColor(new Vector3(center.X - sz.X, 0, center.Y + sz.Y), cl);
+                pointList[3] = new VertexPositionColor(new Vector3(center.X - sz.X, 0, center.Y - sz.Y), cl);
+                pointList[4] = new VertexPositionColor(new Vector3(center.X + sz.X, 0, center.Y - sz.Y), cl);
+                pointList[5] = new VertexPositionColor(new Vector3(center.X + sz.X, 0, center.Y + sz.Y), cl);
+            }
+
+            effect.World = transform.world;
+            effect.View = Camera.main.View();
+            effect.Projection = Camera.main.projectionMatrix;
+
+            RasterizerState oldrasterizerState = batch.GraphicsDevice.RasterizerState;
+            RasterizerState rasterizerState = new RasterizerState();
+            rasterizerState.FillMode = FillMode.WireFrame;
+            rasterizerState.CullMode = CullMode.None;
+            batch.GraphicsDevice.RasterizerState = rasterizerState;
+
+            foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+                batch.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(
+                    PrimitiveType.TriangleList,
+                    pointList,
+                    0,   // vertex buffer offset to add to each element of the index buffer
+                    2    // number of triangles to draw
+                );
+            }
+
+            batch.GraphicsDevice.RasterizerState = oldrasterizerState;
         }
         #endregion
 #endif

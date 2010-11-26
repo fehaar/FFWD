@@ -42,14 +42,6 @@ namespace PressPlay.FFWD
             }
         }
 
-        public void DebugDraw(DebugDraw drawer)
-        {
-            for (int i = 0; i < gameObjects.Count; i++)
-            {
-                gameObjects[i].OnDebugDraw(drawer);
-            }
-        }
-
         public void AfterLoad()
         {
             for (int i = 0; i < gameObjects.Count; i++)

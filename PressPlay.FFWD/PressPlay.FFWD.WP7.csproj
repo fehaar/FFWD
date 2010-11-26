@@ -106,7 +106,6 @@
     <Compile Include="GameObject.cs" />
     <Compile Include="Interfaces\ICollidable.cs" />
     <Compile Include="Interfaces\IContactProcessor.cs" />
-    <Compile Include="Interfaces\IDebugRenderable.cs" />
     <Compile Include="Interfaces\IFixedUpdateable.cs" />
     <Compile Include="Interfaces\IRenderable.cs" />
     <Compile Include="Interfaces\IUpdateable.cs" />

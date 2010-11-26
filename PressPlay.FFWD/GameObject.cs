@@ -212,24 +212,6 @@ namespace PressPlay.FFWD
                 }
             }
         }
-
-        internal void OnDebugDraw(DebugDraw drawer)
-        {
-            for (int i = 0; i < components.Count; i++)
-            {
-                if (Component.IsAwake(components[i]) && components[i] is IDebugRenderable)
-                {
-                    (components[i] as IDebugRenderable).DebugRender(drawer);
-                }
-            }
-            if (transform != null && transform.children != null)
-            {
-                for (int i = 0; i < transform.children.Count; i++)
-                {
-                    transform.children[i].OnDebugDraw(drawer);
-                }
-            }
-        }
         #endregion
 
         #region Component locator methods
