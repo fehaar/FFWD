@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 using PressPlay.FFWD.Exporter.Interfaces;
 using UnityEngine;
 using System.Xml;
+using UnityEditor;
 
 namespace PressPlay.FFWD.Exporter.Writers.Components
 {
@@ -25,7 +27,9 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
             MeshFilter filter = (component as Component).GetComponent<MeshFilter>();
             if (filter.sharedMesh != null)
             {
-                writer.WriteElement("Mesh", filter.sharedMesh.name);
+                string asset = Path.GetFileNameWithoutExtension(AssetDatabase.GetAssetPath(filter.sharedMesh.GetInstanceID()));
+                writer.WriteElement("asset", asset);
+                writer.WriteElement("mesh", filter.sharedMesh.name);
             }
         }
         #endregion
