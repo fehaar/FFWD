@@ -94,10 +94,6 @@ namespace PressPlay.FFWD.Components
             ModelMesh mesh = model.Meshes[meshIndex];
             for (int e = 0; e < mesh.Effects.Count; e++)
             {
-                if (mesh.Name.Contains("_collider"))
-                {
-                    continue;
-                }
                 if (mesh.Effects[e] is BasicEffect)
                 {
                     BasicEffect effect = mesh.Effects[e] as BasicEffect;

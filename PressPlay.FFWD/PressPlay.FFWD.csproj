@@ -96,6 +96,8 @@
     <Compile Include="Animation\AnimationPlayer.cs" />
     <Compile Include="Animation\Keyframe.cs" />
     <Compile Include="Animation\SkinningData.cs" />
+    <Compile Include="Application.cs" />
+    <Compile Include="Behaviour.cs" />
     <Compile Include="Box2D\Collision\BroadPhase.cs" />
     <Compile Include="Box2D\Collision\Collision.cs" />
     <Compile Include="Box2D\Collision\Distance.cs" />
@@ -134,6 +136,7 @@
     <Compile Include="Components\Colliders\Collider.cs" />
     <Compile Include="Components\Colliders\MeshCollider.cs" />
     <Compile Include="Components\Colliders\SphereCollider.cs" />
+    <Compile Include="MonoBehaviour.cs" />
     <Compile Include="Components\Renderers\MeshRenderer.cs" />
     <Compile Include="ContentHelper.cs" />
     <Compile Include="Debug.cs" />
