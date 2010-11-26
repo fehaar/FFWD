@@ -114,7 +114,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
-    <Compile Include="SceneRenderer.cs" />
+    <Compile Include="DebugRenderer.cs" />
     <Compile Include="TouchHandler.cs" />
   </ItemGroup>
   <ItemGroup>

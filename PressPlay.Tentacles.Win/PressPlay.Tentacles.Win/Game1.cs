@@ -21,12 +21,7 @@ namespace PressPlay.Tentacles
     public class Game1 : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
-
-        SceneRenderer renderer;
-
-        //Body ball;
-
-        Scene scene = null; 
+        DebugRenderer debug;
 
         public Game1()
         {
@@ -53,13 +48,9 @@ namespace PressPlay.Tentacles
             graphics.IsFullScreen = true;
             graphics.ApplyChanges();
 #endif
-
-            ContentHelper.Services = Services;
-            ContentHelper.StaticContent = new ContentManager(Services, Content.RootDirectory);
-            ContentHelper.Content = new ContentManager(Services, Content.RootDirectory);
-            ContentHelper.IgnoreMissingAssets = true;
-
-            Camera.main.projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(60), graphics.GraphicsDevice.Viewport.AspectRatio, 0.3f, 1000);
+            Components.Add(new Application(this));
+            debug = new DebugRenderer(this);
+            Components.Add(debug);
 
 #if DEBUG
             FrameRateCounter counter = new FrameRateCounter(this, Content.RootDirectory + "/TestFont");
@@ -75,11 +66,6 @@ namespace PressPlay.Tentacles
             Components.Add(cam);
 #endif
 #endif
-
-            Physics.Initialize();
-            renderer = new SceneRenderer(this);
-            Components.Add(renderer);
-
             base.Initialize();
         }
 
@@ -89,16 +75,11 @@ namespace PressPlay.Tentacles
         /// </summary>
         protected override void LoadContent()
         {
-            scene = Content.Load<Scene>("Scenes/DesatGreen_intro");
-            scene.AfterLoad();
-            renderer.currentScene = scene;
+            Application.LoadScene("Scenes/DesatGreen_intro");
 
             Camera.main.transform.localPosition = new Vector3(-13, -9, 7);
             Camera.main.transform.localRotation = Quaternion.CreateFromRotationMatrix(Matrix.CreateRotationX(MathHelper.ToRadians(90)));
             Camera.main.up = Vector3.Backward; // Vector3.Left;
-
-            //ball = Physics.AddCircle(0.5f, new Vector2(-10, -15.2f), 0, 1);
-            //ball.SetType(BodyType.Dynamic);
         }
 
         /// <summary>
@@ -122,8 +103,6 @@ namespace PressPlay.Tentacles
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
-
-            Component.AwakeNewComponents();
 
             KeyboardState key = Keyboard.GetState();
             Vector3 dir = Vector3.Zero;
@@ -200,32 +179,9 @@ namespace PressPlay.Tentacles
 
             if (oldState.IsKeyUp(Keys.M) && key.IsKeyDown(Keys.M))
             {
-                renderer.NextMode();
+                debug.NextMode();
             }
-
-            //Vector2 vel = ball.GetLinearVelocity();
-            //if (oldState.IsKeyUp(Keys.Up) && key.IsKeyDown(Keys.Up))
-            //{
-            //    if (vel == Vector2.Zero)
-            //    {
-            //        vel = new Vector2(0, 500);
-            //    }
-            //    else
-            //    {
-            //        vel.Normalize();
-            //        vel = vel * 500;
-            //    }
-            //    ball.ApplyForce(vel, Vector2.Zero);
-            //}
             oldState = key;
-
-            //// Find meshes that are in los of the ball and select them
-            //RaycastHit hit;
-            //Physics.Raycast(ball.Position, vel, out hit, 100, 0);
-            //if (hit.collider != null)
-            //{
-            //    hit.collider.Select();
-            //}
 
 #if WINDOWS
             foreach (String asset in ContentHelper.MissingAssets)
@@ -248,9 +204,12 @@ namespace PressPlay.Tentacles
             AccelerometerState state = Accelerometer.GetState();
             Vector2 pos = new Vector2(Camera.main.transform.position.X, Camera.main.transform.position.Z);
 #endif
+            if (debug.Wireframe)
+            {
+                GraphicsDevice.RasterizerState = new RasterizerState() { FillMode = FillMode.WireFrame };
+            }
             base.Draw(gameTime);
         }
-
 
         /// <summary>
         /// Gets spaceship view matrix

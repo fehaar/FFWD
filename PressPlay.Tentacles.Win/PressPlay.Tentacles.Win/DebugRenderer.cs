@@ -14,9 +14,10 @@ using PressPlay.Tentacles.Debugging;
 
 namespace PressPlay.Tentacles
 {
-    public class SceneRenderer : DrawableGameComponent
+    public class DebugRenderer : DrawableGameComponent
     {
-        public SceneRenderer(Game game) : base(game)
+        public DebugRenderer(Game game)
+            : base(game)
         {
         }
 
@@ -26,12 +27,6 @@ namespace PressPlay.Tentacles
         private SpriteBatch spriteBatch;
         private SpriteFont font;
         public Vector2 Position = new Vector2(32, 32);
-
-        public Scene currentScene
-        {
-            get;
-            set;
-        }
 
         public override void Initialize()
         {
@@ -74,25 +69,13 @@ namespace PressPlay.Tentacles
                 }
             }
 #endif
-            currentScene.FixedUpdate();
-            Physics.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
         }
 
         public override void Draw(GameTime gameTime)
         {
-            Color bg = new Color(78, 115, 74);
-            GraphicsDevice.Clear(bg);
-            if (Wireframe)
-            {
-                GraphicsDevice.RasterizerState = new RasterizerState() { FillMode = FillMode.WireFrame };
-            }
-
-            currentScene.Update();
-
             GraphicsDevice.BlendState = BlendState.Opaque;
             GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
-            currentScene.Draw(spriteBatch);
 
             if (PhysicsDebug)
             {
