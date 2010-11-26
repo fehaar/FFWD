@@ -98,10 +98,6 @@ namespace PressPlay.Tentacles
             {
                 Physics.DoDebugDraw();
             }
-            else
-            {
-                currentScene.DebugDraw(physicsDebugDraw);
-            }
             physicsDebugDraw.FinishDrawShapes(GraphicsDevice);
 
             spriteBatch.Begin();

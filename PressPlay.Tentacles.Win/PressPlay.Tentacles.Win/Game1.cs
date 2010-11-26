@@ -217,7 +217,7 @@ namespace PressPlay.Tentacles
             //    }
             //    ball.ApplyForce(vel, Vector2.Zero);
             //}
-            //oldState = key;
+            oldState = key;
 
             //// Find meshes that are in los of the ball and select them
             //RaycastHit hit;
