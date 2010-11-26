@@ -61,11 +61,11 @@ namespace PressPlay.FFWD.Exporter
 		public bool SkipComponent(object component)
 		{
 			String type = component.GetType().FullName;
-			if (IncludeTypes.Contains(type))
+			if (IncludeTypes != null && IncludeTypes.Contains(type))
 			{
 				return false;
 			}
-			if (ExcludeTypes.Contains(type))
+			if (ExcludeTypes != null && ExcludeTypes.Contains(type))
 			{
 				return true;
 			}

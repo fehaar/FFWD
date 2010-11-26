@@ -53,6 +53,7 @@
     <Compile Include="Configuration\ConfigurationSectionHandler.cs" />
     <Compile Include="Writers\Components\BoxColliderWriter.cs" />
     <Compile Include="Writers\Components\ColliderWriter.cs" />
+    <Compile Include="Writers\Components\SphereColliderWriter.cs" />
     <Compile Include="Writers\Components\XNAMeshColliderWriter.cs" />
     <Compile Include="Writers\Components\MeshRendererWriter.cs" />
     <Compile Include="Writers\SceneWriter.cs" />

@@ -111,6 +111,10 @@ namespace PressPlay.FFWD.Exporter.Writers
             {
                 return;
             }
+            if (component == null)
+            {
+                return;
+            }
             if (resolver.SkipComponent(component))
             {
                 return;

@@ -99,6 +99,7 @@
     <Compile Include="Components\Colliders\BoxCollider.cs" />
     <Compile Include="Components\Colliders\Collider.cs" />
     <Compile Include="Components\Colliders\MeshCollider.cs" />
+    <Compile Include="Components\Colliders\SphereCollider.cs" />
     <Compile Include="Components\Renderers\MeshRenderer.cs" />
     <Compile Include="ContentHelper.cs" />
     <Compile Include="Debug.cs" />
