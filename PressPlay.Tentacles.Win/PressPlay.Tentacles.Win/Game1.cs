@@ -79,7 +79,7 @@ namespace PressPlay.Tentacles
 
             Camera.main.transform.localPosition = new Vector3(-13, -9, 7);
             Camera.main.transform.localRotation = Quaternion.CreateFromRotationMatrix(Matrix.CreateRotationX(MathHelper.ToRadians(90)));
-            Camera.main.up = Vector3.Backward; // Vector3.Left;
+            Camera.main.up = Vector3.Backward;
         }
 
         /// <summary>

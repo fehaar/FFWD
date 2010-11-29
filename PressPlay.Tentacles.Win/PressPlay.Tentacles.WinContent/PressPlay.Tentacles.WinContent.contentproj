@@ -42,6 +42,158 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\block_brain_challenge_bridge_01.FBX">
+      <Name>block_brain_challenge_bridge_01</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
+      <ProcessorParameters_RotationX>90</ProcessorParameters_RotationX>
+      <ProcessorParameters_RotationY>180</ProcessorParameters_RotationY>
+    </Compile>
+    <Compile Include="Models\block_filler01.FBX">
+      <Name>block_filler01</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
+      <ProcessorParameters_RotationX>90</ProcessorParameters_RotationX>
+      <ProcessorParameters_RotationY>180</ProcessorParameters_RotationY>
+    </Compile>
+    <Compile Include="Models\block_island_medium_01.FBX">
+      <Name>block_island_medium_01</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
+      <ProcessorParameters_RotationX>90</ProcessorParameters_RotationX>
+      <ProcessorParameters_RotationY>180</ProcessorParameters_RotationY>
+    </Compile>
+    <Compile Include="Models\block_island_small_01.FBX">
+      <Name>block_island_small_01</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
+      <ProcessorParameters_RotationX>90</ProcessorParameters_RotationX>
+      <ProcessorParameters_RotationY>180</ProcessorParameters_RotationY>
+    </Compile>
+    <Compile Include="Models\block_wall_challenge_01.FBX">
+      <Name>block_wall_challenge_01</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
+      <ProcessorParameters_RotationX>90</ProcessorParameters_RotationX>
+      <ProcessorParameters_RotationY>180</ProcessorParameters_RotationY>
+    </Compile>
+    <Compile Include="Models\block_wall_concave_01.FBX">
+      <Name>block_wall_concave_01</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
+      <ProcessorParameters_RotationX>90</ProcessorParameters_RotationX>
+      <ProcessorParameters_RotationY>180</ProcessorParameters_RotationY>
+    </Compile>
+    <Compile Include="Models\block_wall_concave_02.FBX">
+      <Name>block_wall_concave_02</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
+      <ProcessorParameters_RotationX>90</ProcessorParameters_RotationX>
+      <ProcessorParameters_RotationY>180</ProcessorParameters_RotationY>
+    </Compile>
+    <Compile Include="Models\block_wall_concave_03.FBX">
+      <Name>block_wall_concave_03</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
+      <ProcessorParameters_RotationX>90</ProcessorParameters_RotationX>
+      <ProcessorParameters_RotationY>180</ProcessorParameters_RotationY>
+    </Compile>
+    <Compile Include="Models\block_wall_convex_01.FBX">
+      <Name>block_wall_convex_01</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
+      <ProcessorParameters_RotationX>90</ProcessorParameters_RotationX>
+      <ProcessorParameters_RotationY>180</ProcessorParameters_RotationY>
+    </Compile>
+    <Compile Include="Models\block_wall_convex_02.FBX">
+      <Name>block_wall_convex_02</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
+      <ProcessorParameters_RotationX>90</ProcessorParameters_RotationX>
+      <ProcessorParameters_RotationY>180</ProcessorParameters_RotationY>
+    </Compile>
+    <Compile Include="Models\block_wall_detail_01.FBX">
+      <Name>block_wall_detail_01</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
+      <ProcessorParameters_RotationX>90</ProcessorParameters_RotationX>
+      <ProcessorParameters_RotationY>180</ProcessorParameters_RotationY>
+    </Compile>
+    <Compile Include="Models\block_wall_detail_02.FBX">
+      <Name>block_wall_detail_02</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
+      <ProcessorParameters_RotationX>90</ProcessorParameters_RotationX>
+      <ProcessorParameters_RotationY>180</ProcessorParameters_RotationY>
+    </Compile>
+    <Compile Include="Models\block_wall_nub_01.FBX">
+      <Name>block_wall_nub_01</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
+      <ProcessorParameters_RotationX>90</ProcessorParameters_RotationX>
+      <ProcessorParameters_RotationY>180</ProcessorParameters_RotationY>
+    </Compile>
+    <Compile Include="Models\block_wall_nub_02.FBX">
+      <Name>block_wall_nub_02</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
+      <ProcessorParameters_RotationX>90</ProcessorParameters_RotationX>
+      <ProcessorParameters_RotationY>180</ProcessorParameters_RotationY>
+    </Compile>
+    <Compile Include="Models\block_wall_nub_03.FBX">
+      <Name>block_wall_nub_03</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
+      <ProcessorParameters_RotationX>90</ProcessorParameters_RotationX>
+      <ProcessorParameters_RotationY>180</ProcessorParameters_RotationY>
+    </Compile>
+    <Compile Include="Models\block_wall_straight_01.FBX">
+      <Name>block_wall_straight_01</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
+      <ProcessorParameters_RotationX>90</ProcessorParameters_RotationX>
+      <ProcessorParameters_RotationY>180</ProcessorParameters_RotationY>
+    </Compile>
+    <Compile Include="Models\brain_challenge_01.FBX">
+      <Name>brain_challenge_01</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
+      <ProcessorParameters_RotationX>90</ProcessorParameters_RotationX>
+      <ProcessorParameters_RotationY>180</ProcessorParameters_RotationY>
+    </Compile>
+    <Compile Include="Models\level_entrance.FBX">
+      <Name>level_entrance</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
+      <ProcessorParameters_RotationX>90</ProcessorParameters_RotationX>
+      <ProcessorParameters_RotationY>180</ProcessorParameters_RotationY>
+    </Compile>
+    <Compile Include="Models\spike_big.FBX">
+      <Name>spike_big</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
+      <ProcessorParameters_RotationX>90</ProcessorParameters_RotationX>
+      <ProcessorParameters_RotationY>180</ProcessorParameters_RotationY>
+    </Compile>
     <Compile Include="Textures\block_brown_desat.png">
       <Name>block_brown_desat</Name>
       <Importer>TextureImporter</Importer>
@@ -77,86 +229,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\block_brain_challenge_bridge_01.FBX">
-      <Name>block_brain_challenge_bridge_01</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
-    </Compile>
-    <Compile Include="Models\block_island_medium_01.FBX">
-      <Name>block_island_medium_01</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
-    </Compile>
-    <Compile Include="Models\block_island_small_01.FBX">
-      <Name>block_island_small_01</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
-    </Compile>
-    <Compile Include="Models\block_wall_concave_01.FBX">
-      <Name>block_wall_concave_01</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
-    </Compile>
-    <Compile Include="Models\block_wall_concave_03.FBX">
-      <Name>block_wall_concave_03</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
-    </Compile>
-    <Compile Include="Models\block_wall_convex_01.FBX">
-      <Name>block_wall_convex_01</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
-    </Compile>
-    <Compile Include="Models\block_wall_convex_02.FBX">
-      <Name>block_wall_convex_02</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
-    </Compile>
-    <Compile Include="Models\block_wall_detail_01.FBX">
-      <Name>block_wall_detail_01</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
-    </Compile>
-    <Compile Include="Models\block_wall_detail_02.FBX">
-      <Name>block_wall_detail_02</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
-    </Compile>
-    <Compile Include="Models\block_wall_nub_01.FBX">
-      <Name>block_wall_nub_01</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
-    </Compile>
-    <Compile Include="Models\block_wall_nub_02.FBX">
-      <Name>block_wall_nub_02</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
-    </Compile>
-    <Compile Include="Models\block_wall_nub_03.FBX">
-      <Name>block_wall_nub_03</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
-    </Compile>
-    <Compile Include="Models\block_wall_straight_01.FBX">
-      <Name>block_wall_straight_01</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Textures\block_brown_desat_challenge.png">
       <Name>block_brown_desat_challenge</Name>
       <Importer>TextureImporter</Importer>
@@ -189,23 +261,45 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\block_wall_concave_02.FBX">
-      <Name>block_wall_concave_02</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-    <Compile Include="Models\brain_challenge_01.FBX">
-      <Name>brain_challenge_01</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\level_entrance.FBX">
-      <Name>level_entrance</Name>
+    <Compile Include="Models\block_island_moving_01.FBX">
+      <Name>block_island_moving_01</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
       <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
+      <ProcessorParameters_RotationX>90</ProcessorParameters_RotationX>
+      <ProcessorParameters_RotationY>180</ProcessorParameters_RotationY>
+    </Compile>
+    <Compile Include="Models\block_island_tiny_01.FBX">
+      <Name>block_island_tiny_01</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
+      <ProcessorParameters_RotationX>90</ProcessorParameters_RotationX>
+      <ProcessorParameters_RotationY>180</ProcessorParameters_RotationY>
+    </Compile>
+    <Compile Include="Models\block_spikeIsland01.FBX">
+      <Name>block_spikeIsland01</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
+      <ProcessorParameters_RotationX>90</ProcessorParameters_RotationX>
+      <ProcessorParameters_RotationY>180</ProcessorParameters_RotationY>
+    </Compile>
+    <Compile Include="Models\block_wall_concave_04.FBX">
+      <Name>block_wall_concave_04</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
+      <ProcessorParameters_RotationX>90</ProcessorParameters_RotationX>
+      <ProcessorParameters_RotationY>180</ProcessorParameters_RotationY>
+    </Compile>
+    <Compile Include="Models\block_wall_convex_03.FBX">
+      <Name>block_wall_convex_03</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
+      <ProcessorParameters_RotationX>90</ProcessorParameters_RotationX>
+      <ProcessorParameters_RotationY>180</ProcessorParameters_RotationY>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
