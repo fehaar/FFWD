@@ -109,7 +109,7 @@ namespace PressPlay.FFWD.Exporter
                 }
                 catch (Exception ex)
                 {
-                    Debug.Log("Could create writer using map from " + map.Type + " to " + map.To);
+                    Debug.Log("Could create writer using map from " + map.Type + " to " + map.To + ". " + ex.Message);
                 }
             }
             return null;

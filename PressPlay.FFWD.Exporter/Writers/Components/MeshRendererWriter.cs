@@ -27,9 +27,7 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
             MeshFilter filter = (component as Component).GetComponent<MeshFilter>();
             if (filter.sharedMesh != null)
             {
-                string asset = Path.GetFileNameWithoutExtension(AssetDatabase.GetAssetPath(filter.sharedMesh.GetInstanceID()));
-                writer.WriteElement("asset", asset);
-                writer.WriteElement("mesh", filter.sharedMesh.name);
+                writer.WriteMesh(filter.sharedMesh);
             }
         }
         #endregion

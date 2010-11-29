@@ -12,12 +12,14 @@ namespace PressPlay.FFWD.Exporter.Writers
 {
     public class SceneWriter
     {
-        public SceneWriter(TypeResolver resolver)
+        public SceneWriter(TypeResolver resolver, AssetHelper assets)
         {
             this.resolver = resolver;
+            assetHelper = assets;
         }
 
         private TypeResolver resolver;
+        private AssetHelper assetHelper;
 
         public string ExportDir { get; set; }
 
@@ -132,12 +134,20 @@ namespace PressPlay.FFWD.Exporter.Writers
         internal void WriteTexture(Texture texture)
         {
             writer.WriteElementString("Texture", texture.name);
-            AssetHelper.ExportTexture(texture as Texture2D);
+            assetHelper.ExportTexture(texture as Texture2D);
         }
 
         internal void WriteScript(MonoBehaviour component)
         {
-            AssetHelper.ExportScript(component);
+            assetHelper.ExportScript(component);
+        }
+
+        internal void WriteMesh(Mesh mesh)
+        {
+            string asset = Path.GetFileNameWithoutExtension(AssetDatabase.GetAssetPath(mesh.GetInstanceID()));
+            WriteElement("asset", asset);
+            WriteElement("mesh", mesh.name);
+            assetHelper.ExportMesh(mesh);
         }
 
         internal void WriteElement(string name, object obj)

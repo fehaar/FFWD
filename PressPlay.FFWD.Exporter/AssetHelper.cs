@@ -4,18 +4,21 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using System.IO;
+using UnityEditor;
 
 namespace PressPlay.FFWD.Exporter
 {
-    public static class AssetHelper
+    public class AssetHelper
     {
-        public static string TextureDir { get; set; }
-        public static string ScriptDir { get; set; }
+        public string TextureDir { get; set; }
+        public string MeshDir { get; set; }
+        public string ScriptDir { get; set; }
         
-        private static HashSet<string> exportedTextures = new HashSet<string>();
-        private static HashSet<string> exportedScripts = new HashSet<string>();
-        private static Dictionary<string, string> _scripts;
-        private static Dictionary<string, string> scripts  
+        private HashSet<string> exportedTextures = new HashSet<string>();
+        private HashSet<string> exportedScripts = new HashSet<string>();
+        private HashSet<string> exportedMeshes = new HashSet<string>();
+        private Dictionary<string, string> _scripts;
+        private Dictionary<string, string> scripts  
         {
             get
             {
@@ -31,7 +34,7 @@ namespace PressPlay.FFWD.Exporter
             }
         }
 
-        public static void ExportTexture(Texture2D tex)
+        public void ExportTexture(Texture2D tex)
         {
             if (tex == null) return;
             if (exportedTextures.Contains(tex.name)) return;
@@ -56,7 +59,7 @@ namespace PressPlay.FFWD.Exporter
             }
         }
 
-        public static void ExportScript(MonoBehaviour component)
+        public void ExportScript(MonoBehaviour component)
         {
             if (component == null) return;
             if (exportedScripts.Contains(component.name)) return;
@@ -77,5 +80,25 @@ namespace PressPlay.FFWD.Exporter
             }
         }
 
+        public void ExportMesh(Mesh mesh)
+        {
+            if (mesh == null) return;
+            string path = AssetDatabase.GetAssetPath(mesh.GetInstanceID());
+            if (String.IsNullOrEmpty(path)) return;
+            if (exportedMeshes.Contains(path)) return;
+
+            exportedMeshes.Add(path);
+            path = Path.Combine(@"C:\Projects\PressPlay\Tentacles\Unity\Assets\Level Building Blocks\Worlds\_worlds_imports\XNA", Path.GetFileName(path));
+            string dest = Path.Combine(MeshDir, Path.GetFileName(path));
+
+            try
+            {
+                File.Copy(path, dest, true);
+            }
+            catch (Exception ex)
+            {
+                Debug.Log("Could not copy mesh '" + path + "' for " + mesh.name + ". " + ex.Message, mesh);
+            }
+        }
     }
 }
