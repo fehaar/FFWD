@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework.Content;
 using PressPlay.FFWD.Interfaces;
 using Microsoft.Xna.Framework.Graphics;
+using PressPlay.FFWD.Components.Renderers;
 using Box2D.XNA;
 
 namespace PressPlay.FFWD
@@ -45,6 +46,21 @@ namespace PressPlay.FFWD
         // TODO: We must export this as well
         [ContentSerializerIgnore]
         public bool active { get; set; }
+
+        protected Renderer _renderer;
+
+        public Renderer renderer
+        {
+            get
+            {
+                if (_renderer == null)
+                {
+                    _renderer = GetComponent<Renderer>();
+                }
+
+                return _renderer;
+            }
+        }
 
         #region Update and event methods
         internal void FixedUpdate()
@@ -224,10 +240,26 @@ namespace PressPlay.FFWD
         {
             component.gameObject = this;
             components.Add(component);
+
             return component;
         }
 
         #region Component locator methods
+
+        public T GetComponent<T>() where T : Component
+        {
+            List<T> list = new List<T>();
+            for (int i = 0; i < components.Count; i++)
+            {
+                if (components[i] is T)
+                {
+                    return components[i] as T;
+                }
+            }
+
+            return null;
+        }
+
         public T[] GetComponents<T>() where T : Component
         {
             List<T> list = new List<T>();

@@ -6,11 +6,12 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using PressPlay.FFWD.Animation;
 using PressPlay.FFWD.Interfaces;
+using PressPlay.FFWD.Components.Renderers;
 using Microsoft.Xna.Framework.Content;
 
 namespace PressPlay.FFWD.Components
 {
-    public class SpriteRenderer : Component, IRenderable, Interfaces.IUpdateable
+    public class SpriteRenderer : Renderer, IRenderable, Interfaces.IUpdateable
     {
         #region Content properties
         [ContentSerializer(Optional=true)]
@@ -18,10 +19,27 @@ namespace PressPlay.FFWD.Components
         #endregion
 
         [ContentSerializerIgnore]
-        public Texture2D texture;
+        private Texture2D _texture;
+
+        public Texture2D texture
+        {
+            get
+            {
+                return _texture;
+            }
+            set
+            {
+                _texture = value;
+
+                if (_texture != null)
+                {
+                    bounds = _texture.Bounds;
+                }
+            }
+        }
 
         public Vector2 Position = Vector2.Zero;
-        public Rectangle? SourceRect = null;
+        public Rectangle bounds = Rectangle.Empty;
         public Color Color = Color.White;
         public Vector2 Origin = Vector2.Zero;
         public float Scale = 1f;
@@ -30,7 +48,6 @@ namespace PressPlay.FFWD.Components
 
         public SpriteRenderer()
         {
-
         }
 
         public SpriteRenderer(string texture)
@@ -47,10 +64,13 @@ namespace PressPlay.FFWD.Components
         public override void Start()
         {
             base.Start();
-            texture = ContentHelper.GetTexture(Texture);
+            if (texture == null)
+            {
+                texture = ContentHelper.GetTexture(Texture);
+            }
 
             if(texture != null){
-                SourceRect = texture.Bounds;
+                bounds = texture.Bounds;
             }
         }
 
@@ -74,7 +94,7 @@ namespace PressPlay.FFWD.Components
             }
 
             batch.Begin();
-            batch.Draw(texture, Position, SourceRect, Color, transform.angleY, Origin, Scale, Effects, LayerDepth);
+            batch.Draw(texture, Position, bounds, Color, transform.angleY, Origin, Scale, Effects, LayerDepth);
             batch.End();
         }
         #endregion

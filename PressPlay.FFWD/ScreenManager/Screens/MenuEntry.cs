@@ -48,7 +48,6 @@ namespace PressPlay.FFWD.ScreenManager
 
         #region Properties
 
-
         /// <summary>
         /// Gets or sets the text of this menu entry.
         /// </summary>
@@ -58,7 +57,6 @@ namespace PressPlay.FFWD.ScreenManager
             set { text = value; }
         }
 
-
         /// <summary>
         /// Gets or sets the position at which to draw this menu entry.
         /// </summary>
@@ -67,7 +65,6 @@ namespace PressPlay.FFWD.ScreenManager
             get { return position; }
             set { position = value; }
         }
-
 
         #endregion
 
@@ -89,7 +86,6 @@ namespace PressPlay.FFWD.ScreenManager
                 Selected(this, new PlayerIndexEventArgs(playerIndex));
         }
 
-
         #endregion
 
         #region Initialization
@@ -103,11 +99,9 @@ namespace PressPlay.FFWD.ScreenManager
             this.text = text;
         }
 
-
         #endregion
 
         #region Update and Draw
-
 
         /// <summary>
         /// Updates the menu entry.

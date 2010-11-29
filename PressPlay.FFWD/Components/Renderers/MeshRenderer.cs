@@ -6,11 +6,12 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using PressPlay.FFWD.Animation;
 using PressPlay.FFWD.Interfaces;
+using PressPlay.FFWD.Components.Renderers;
 using Microsoft.Xna.Framework.Content;
 
 namespace PressPlay.FFWD.Components
 {
-    public class MeshRenderer : Component, IRenderable, Interfaces.IUpdateable
+    public class MeshRenderer : Renderer, IRenderable, Interfaces.IUpdateable
     {
         #region Content properties
         [ContentSerializer(Optional=true)]

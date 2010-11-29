@@ -79,11 +79,7 @@ namespace PressPlay.FFWD.ScreenManager
         {
             // the hit bounds are the entire width of the screen, and the height of the entry
             // with some additional padding above and below.
-            return new Rectangle(
-                0,
-                (int)entry.Position.Y - menuEntryPadding,
-                ScreenManager.GraphicsDevice.Viewport.Width,
-                entry.GetHeight(this) + (menuEntryPadding * 2));
+            return new Rectangle(0,(int)entry.Position.Y - menuEntryPadding,ScreenManager.GraphicsDevice.Viewport.Width,entry.GetHeight(this) + (menuEntryPadding * 2));
         }
 
         /// <summary>
