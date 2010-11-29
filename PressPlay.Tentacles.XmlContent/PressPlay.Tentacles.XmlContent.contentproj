@@ -48,6 +48,10 @@
       <Project>{A02BD389-79AE-4975-9A5E-DEDC66B8A0CB}</Project>
       <Name>PressPlay.FFWD</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PressPlay.Tentacles.Scripts\PressPlay.Tentacles.Scripts.csproj">
+      <Project>{C7620F77-0746-417F-B44F-C44527E0CE46}</Project>
+      <Name>PressPlay.Tentacles.Scripts</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

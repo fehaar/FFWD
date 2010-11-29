@@ -2199,6 +2199,10 @@
                 <asset>spike01</asset>
                 <mesh>Cylinder13</mesh>
               </component>
+              <component Type="PressPlay.Tentacles.Scripts.SimpleRotate">
+                <rotationSpeed>80</rotationSpeed>
+                <switchDirection>true</switchDirection>
+              </component>
             </components>
           </child>
         </children>
@@ -2246,6 +2250,10 @@
                 <Texture>spike02</Texture>
                 <asset>spike01</asset>
                 <mesh>Cylinder13</mesh>
+              </component>
+              <component Type="PressPlay.Tentacles.Scripts.SimpleRotate">
+                <rotationSpeed>80</rotationSpeed>
+                <switchDirection>true</switchDirection>
               </component>
             </components>
           </child>
@@ -10036,6 +10044,10 @@
                 <asset>spike01</asset>
                 <mesh>Cylinder13</mesh>
               </component>
+              <component Type="PressPlay.Tentacles.Scripts.SimpleRotate">
+                <rotationSpeed>80</rotationSpeed>
+                <switchDirection>true</switchDirection>
+              </component>
             </components>
           </child>
         </children>
@@ -10083,6 +10095,10 @@
                 <Texture>spike02</Texture>
                 <asset>spike01</asset>
                 <mesh>Cylinder13</mesh>
+              </component>
+              <component Type="PressPlay.Tentacles.Scripts.SimpleRotate">
+                <rotationSpeed>80</rotationSpeed>
+                <switchDirection>true</switchDirection>
               </component>
             </components>
           </child>
@@ -10132,6 +10148,10 @@
                 <asset>spike01</asset>
                 <mesh>Cylinder13</mesh>
               </component>
+              <component Type="PressPlay.Tentacles.Scripts.SimpleRotate">
+                <rotationSpeed>80</rotationSpeed>
+                <switchDirection>true</switchDirection>
+              </component>
             </components>
           </child>
         </children>
@@ -10180,6 +10200,10 @@
                 <asset>spike01</asset>
                 <mesh>Cylinder13</mesh>
               </component>
+              <component Type="PressPlay.Tentacles.Scripts.SimpleRotate">
+                <rotationSpeed>80</rotationSpeed>
+                <switchDirection>true</switchDirection>
+              </component>
             </components>
           </child>
         </children>
@@ -10227,6 +10251,10 @@
                 <Texture>spike02</Texture>
                 <asset>spike01</asset>
                 <mesh>Cylinder13</mesh>
+              </component>
+              <component Type="PressPlay.Tentacles.Scripts.SimpleRotate">
+                <rotationSpeed>80</rotationSpeed>
+                <switchDirection>true</switchDirection>
               </component>
             </components>
           </child>
