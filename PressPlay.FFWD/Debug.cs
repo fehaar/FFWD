@@ -11,6 +11,8 @@ namespace PressPlay.FFWD
         {
 #if WINDOWS
             Console.WriteLine(message);
+#else
+            System.Diagnostics.Debug.WriteLine(message);
 #endif
         }
     }

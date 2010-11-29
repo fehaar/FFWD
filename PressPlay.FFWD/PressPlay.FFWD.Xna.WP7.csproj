@@ -97,6 +97,7 @@
     <Compile Include="Component.cs" />
     <Compile Include="Components\Camera.cs" />
     <Compile Include="Components\Colliders\MeshCollider.cs" />
+    <Compile Include="Components\Renderers\SpriteRenderer.cs" />
     <Compile Include="Components\Renderers\MeshRenderer.cs" />
     <Compile Include="ContentHelper.cs" />
     <Compile Include="Debug.cs" />
@@ -109,6 +110,12 @@
     <Compile Include="Interfaces\IUpdateable.cs" />
     <Compile Include="Physics.cs" />
     <Compile Include="GameObjectContactProcessor.cs" />
+    <Compile Include="ScreenManager\GameScreen.cs" />
+    <Compile Include="ScreenManager\InputState.cs" />
+    <Compile Include="ScreenManager\ScreenManager.cs" />
+    <Compile Include="ScreenManager\Screens\MenuEntry.cs" />
+    <Compile Include="ScreenManager\Screens\MenuScreen.cs" />
+    <Compile Include="ScreenManager\Screens\PlayerIndexEventArgs.cs" />
     <Compile Include="RaycastHelper.cs" />
     <Compile Include="RaycastHit.cs" />
     <Compile Include="Scene.cs" />
@@ -129,6 +136,7 @@
     <Reference Include="Microsoft.Xna.Framework.Graphics">
       <Private>False</Private>
     </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Input.Touch, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
     <Reference Include="mscorlib">
       <Private>False</Private>
     </Reference>

@@ -16,6 +16,12 @@ namespace PressPlay.FFWD
             components = new List<Component>();
         }
 
+        public GameObject(string name) : this()
+        {
+            transform = new Transform();
+            this.name = name;
+        }
+
         public int id { get; set; }
         public string name { get; set; }
 
@@ -213,6 +219,13 @@ namespace PressPlay.FFWD
             }
         }
         #endregion
+
+        public Component AddComponent(Component component)
+        {
+            component.gameObject = this;
+            components.Add(component);
+            return component;
+        }
 
         #region Component locator methods
         public T[] GetComponents<T>() where T : Component
