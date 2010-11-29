@@ -7,9 +7,9 @@ namespace PressPlay.FFWD
 {
     public class Debug
     {
-        public static void Log(string message)
+        public static void Log(object message)
         {
-            System.Diagnostics.Debug.WriteLine(message);
+            System.Diagnostics.Debug.WriteLine(message.ToString());
         }
     }
 }
