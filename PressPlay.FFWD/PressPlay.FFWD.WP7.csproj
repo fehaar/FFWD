@@ -119,6 +119,7 @@
     <Compile Include="RaycastHit.cs" />
     <Compile Include="Scene.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Time.cs" />
     <Compile Include="Transform.cs" />
   </ItemGroup>
   <ItemGroup />

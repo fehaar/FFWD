@@ -87,7 +87,11 @@ namespace PressPlay.FFWD.Exporter
                     result = rule.To;
                 }
             }
-			return result;
+            if (component is MonoBehaviour && !result.Contains("."))
+            {
+                result = ScriptTranslator.ScriptNamespace + "." + result;
+            }
+            return result;
 		}	
 
         public IComponentWriter GetComponentWriter(Type type)

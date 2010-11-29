@@ -18,10 +18,8 @@ namespace PressPlay.FFWD.Exporter.Writers
         }
 
         private TypeResolver resolver;
-        private List<string> exportedTextures = new List<string>();
 
         public string ExportDir { get; set; }
-        public string TextureDir { get; set; }
 
         private XmlWriter writer = null;
 
@@ -134,7 +132,12 @@ namespace PressPlay.FFWD.Exporter.Writers
         internal void WriteTexture(Texture texture)
         {
             writer.WriteElementString("Texture", texture.name);
-            ExportTexture(texture as Texture2D);
+            AssetHelper.ExportTexture(texture as Texture2D);
+        }
+
+        internal void WriteScript(MonoBehaviour component)
+        {
+            AssetHelper.ExportScript(component);
         }
 
         internal void WriteElement(string name, object obj)
@@ -166,30 +169,6 @@ namespace PressPlay.FFWD.Exporter.Writers
             writer.WriteElementString(name, obj.ToString());
         }
 
-        private void ExportTexture(Texture2D tex)
-        {
-            if (tex == null) return;
-            if (exportedTextures.Contains(tex.name)) return;
-
-            string path = Path.Combine(TextureDir, tex.name + ".png");
-            try
-            {
-                Color[] texPixels = tex.GetPixels();
-                Texture2D tex2 = new Texture2D(tex.width, tex.height, TextureFormat.ARGB32, false);
-                tex2.SetPixels(texPixels);
-                byte[] texBytes = tex2.EncodeToPNG();
-                FileStream writeStream;
-                writeStream = new FileStream(path, FileMode.Create);
-                BinaryWriter writeBinay = new BinaryWriter(writeStream);
-                for (int i = 0; i < texBytes.Length; i++) writeBinay.Write(texBytes[i]);
-                writeBinay.Close();
-                exportedTextures.Add(tex.name);
-            }
-            catch (UnityException ue)
-            {
-                Debug.Log(ue.ToString());
-            }
-        }
 
         #region ToString methods
         private string ToString(int[] array)
@@ -229,5 +208,6 @@ namespace PressPlay.FFWD.Exporter.Writers
             return b.ToString().ToLower();
         }
         #endregion
+
     }
 }

@@ -15,7 +15,9 @@ public class ExportSceneWizard : ScriptableWizard {
         ScriptableWizard.DisplayWizard("Export Scene to XNA", typeof(ExportSceneWizard), "Execute");
     }
 
+    public string scriptNamespace = @"PressPlay.Tentacles.Scripts";
     public string exportDir = @"C:\Projects\PressPlay\Tentacles\XNA\PressPlay.Tentacles.XmlContent\Scenes";
+    public string scriptDir = @"C:\Projects\PressPlay\Tentacles\XNA\PressPlay.Tentacles.Scripts";
     public string textureDir = @"C:\Projects\PressPlay\Tentacles\XNA\PressPlay.Tentacles.Win\PressPlay.Tentacles.WinContent\Textures";
     public string configSource = @"C:\Projects\PressPlay\Tentacles\Unity\Assets\Editor\FFWD\PressPlay.FFWD.Exporter.dll.config";
 
@@ -31,7 +33,9 @@ public class ExportSceneWizard : ScriptableWizard {
 
         SceneWriter scene = new SceneWriter(resolver);
         scene.ExportDir = exportDir;
-        scene.TextureDir = textureDir;
+        AssetHelper.TextureDir = textureDir;
+        AssetHelper.ScriptDir = scriptDir;
+        ScriptTranslator.ScriptNamespace = scriptNamespace;
 
         Debug.Log("Start scene export of " + Path.GetFileName(EditorApplication.currentScene));
         scene.Write(Path.Combine(exportDir, Path.ChangeExtension(Path.GetFileName(EditorApplication.currentScene), "xml")));

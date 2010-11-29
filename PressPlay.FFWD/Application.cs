@@ -19,6 +19,7 @@ namespace PressPlay.FFWD
                 throw new InvalidOperationException("You cannot have two FFWD applications running at a time");
             }
             Instance = this;
+            Game.Components.Add(new Time(game));
         }
 
         public static Application Instance { get; private set; }

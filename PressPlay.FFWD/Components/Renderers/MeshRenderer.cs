@@ -70,11 +70,11 @@ namespace PressPlay.FFWD.Components
 
         #region IUpdateable Members
 
-        public void Update(GameTime gameTime)
+        public void Update()
         {
             if (animationPlayer != null)
             {
-                animationPlayer.Update(gameTime.ElapsedGameTime, true, Matrix.Identity);
+                animationPlayer.Update(Time.deltaTime, true, Matrix.Identity);
             }
         }
 

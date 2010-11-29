@@ -42,7 +42,6 @@ namespace PressPlay.FFWD.Animation
 
         #endregion
 
-
         /// <summary>
         /// Constructs a new animation player.
         /// </summary>
@@ -79,10 +78,10 @@ namespace PressPlay.FFWD.Animation
         /// <summary>
         /// Advances the current animation position.
         /// </summary>
-        public void Update(TimeSpan time, bool relativeToCurrentTime,
+        public void Update(float elapsedtime, bool relativeToCurrentTime,
                            Matrix rootTransform)
         {
-            UpdateBoneTransforms(time, relativeToCurrentTime);
+            UpdateBoneTransforms(elapsedtime, relativeToCurrentTime);
             UpdateWorldTransforms(rootTransform);
             UpdateSkinTransforms();
         }
@@ -91,12 +90,13 @@ namespace PressPlay.FFWD.Animation
         /// <summary>
         /// Helper used by the Update method to refresh the BoneTransforms data.
         /// </summary>
-        public void UpdateBoneTransforms(TimeSpan time, bool relativeToCurrentTime)
+        public void UpdateBoneTransforms(float elapsedtime, bool relativeToCurrentTime)
         {
             if (currentClipValue == null)
                 throw new InvalidOperationException(
                             "AnimationPlayer.Update was called before StartClip");
 
+            TimeSpan time = new TimeSpan((long)(elapsedtime * TimeSpan.TicksPerSecond));
             // Update the animation position.
             if (relativeToCurrentTime)
             {

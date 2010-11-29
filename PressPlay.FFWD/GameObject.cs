@@ -75,7 +75,7 @@ namespace PressPlay.FFWD
                 }
                 if (Component.IsAwake(components[i]) && components[i] is IUpdateable)
                 {
-                    (components[i] as IUpdateable).Update(null);
+                    (components[i] as IUpdateable).Update();
                 }
             }
             if (transform != null && transform.children != null)

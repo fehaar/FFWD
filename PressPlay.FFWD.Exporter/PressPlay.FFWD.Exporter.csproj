@@ -44,15 +44,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssetHelper.cs" />
     <Compile Include="ComponentMap.cs" />
     <Compile Include="Configuration\TypeResolverSection.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Interfaces\IComponentWriter.cs" />
     <Compile Include="NamespaceRule.cs" />
+    <Compile Include="ScriptTranslator.cs" />
     <Compile Include="TypeResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Configuration\ConfigurationSectionHandler.cs" />
     <Compile Include="Writers\Components\BoxColliderWriter.cs" />
     <Compile Include="Writers\Components\ColliderWriter.cs" />
+    <Compile Include="Writers\Components\MonoBehaviourWriter.cs" />
     <Compile Include="Writers\Components\SphereColliderWriter.cs" />
     <Compile Include="Writers\Components\XNAMeshColliderWriter.cs" />
     <Compile Include="Writers\Components\MeshRendererWriter.cs" />
@@ -63,6 +67,7 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetPath)" "$(SolutionDir)\..\..\Unity\Assets\Editor\FFWD\"
