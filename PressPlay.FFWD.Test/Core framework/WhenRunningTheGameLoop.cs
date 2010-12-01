@@ -172,6 +172,20 @@ namespace PressPlay.FFWD.Test.Core_framework
 
         #region Start calls
         [Test]
+        public void StartWillNotBeCalledIfTheComponentIsNotAwoken()
+        {
+            int startCalledCount = 0;
+            component.onStart = () => { startCalledCount++; };
+
+            Assert.That(startCalledCount, Is.EqualTo(0));
+            scene.FixedUpdate();
+            Assert.That(startCalledCount, Is.EqualTo(0));
+            scene.Update();
+            Assert.That(startCalledCount, Is.EqualTo(0));
+        }
+	
+
+        [Test]
         public void StartIsCalledTheFirstTimeFixedUpdateIsCalled()
         {
             int startCalledCount = 0;
