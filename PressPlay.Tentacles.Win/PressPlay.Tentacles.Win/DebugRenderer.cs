@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using PressPlay.FFWD;
-#if !WINDOWS
+#if WINDOWS_PHONE
 using Microsoft.Xna.Framework.Input.Touch;
 #endif
 using Box2D.XNA;
@@ -31,7 +31,7 @@ namespace PressPlay.Tentacles
         public override void Initialize()
         {
             base.Initialize();
-#if !WINDOWS            
+#if WINDOWS_PHONE            
             TouchPanel.EnabledGestures = TouchPanel.EnabledGestures | 
                                          GestureType.Tap |
                                          GestureType.DoubleTap |
@@ -51,7 +51,7 @@ namespace PressPlay.Tentacles
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-#if !WINDOWS
+#if WINDOWS_PHONE
             foreach (GestureSample gesture in TouchHandler.GetSample(GestureType.Tap |
                                          GestureType.DoubleTap |
                                          GestureType.Hold))
@@ -85,10 +85,16 @@ namespace PressPlay.Tentacles
 
             spriteBatch.Begin();
 
-            spriteBatch.DrawString(font, ToString(), Position + Vector2.One, Color.Black);
-            spriteBatch.DrawString(font, ToString(), Position, Color.White);
+            KeyValuePair<string, string>[] displayStrings = Debug.DisplayStrings.ToArray();
+            Vector2 offset = Vector2.Zero;
+            for (int i = 0; i < displayStrings.Length; i++)
+            {
+                string text = displayStrings[i].Key + ": " + displayStrings[i].Value;
+                spriteBatch.DrawString(font, text, Position + Vector2.One + offset, Color.Black);
+                spriteBatch.DrawString(font, text, Position + offset, Color.White);
+                offset.Y += font.MeasureString(text).Y;
+            }
 
-            physicsDebugDraw.FinishDrawString(spriteBatch, font);
             spriteBatch.End();
 
             base.Draw(gameTime);
@@ -124,11 +130,6 @@ namespace PressPlay.Tentacles
                     Wireframe = true;
                 }
             }
-        }
-
-        public override string ToString()
-        {
-            return "Cam :" + Camera.main.transform.position;
         }
 
     }

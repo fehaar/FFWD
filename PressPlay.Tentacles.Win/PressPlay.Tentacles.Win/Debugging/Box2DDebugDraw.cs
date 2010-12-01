@@ -31,11 +31,6 @@ namespace PressPlay.Tentacles.Debugging
 {
     public class Box2DDebugDraw : DebugDraw
     {
-        public Box2DDebugDraw()
-        {
-            _stringData = new List<StringData>();
-        }
-
         public override void DrawPolygon(ref FixedArray8<Vector2> vertices, int count, Color color)
         {
             try
@@ -194,16 +189,6 @@ namespace PressPlay.Tentacles.Debugging
             DrawSolidPolygon(ref verts, 4, color, true);
         }
 
-        public void DrawString(int x, int y, string s)
-        {
-            _stringData.Add(new StringData(x, y, s, null));
-        }
-
-        public void DrawString(int x, int y, string s, params object[] args)
-        {
-            _stringData.Add(new StringData(x, y, s, args));
-        }
-
         public override void Reset()
         {
             _lineCount = _fillCount = 0;
@@ -244,17 +229,6 @@ namespace PressPlay.Tentacles.Debugging
             _device.RasterizerState = oldrasterizerState;
         }
 
-        public void FinishDrawString(SpriteBatch _batch, SpriteFont _font)
-        {
-            for (int i = 0; i < _stringData.Count; i++)
-            {
-                var text = _stringData[i].args == null ? _stringData[i].s : string.Format(_stringData[i].s, _stringData[i].args);
-                _batch.DrawString(_font, text, new Vector2(_stringData[i].x, _stringData[i].y), new Color(0.9f, 0.6f, 0.6f));
-            }
-
-            _stringData.Clear();
-        }
-
         public void DrawAABB(ref AABB aabb, Color color)
         {
             FixedArray8<Vector2> verts = new FixedArray8<Vector2>();
@@ -272,21 +246,5 @@ namespace PressPlay.Tentacles.Debugging
         private int _fillCount;
         public Matrix worldView = Matrix.Identity;
         private BasicEffect effect; 
-
-        private List<StringData> _stringData;
-        struct StringData
-        {
-            public StringData(int x, int y, string s, object[] args)
-            {
-                this.x = x;
-                this.y = y;
-                this.s = s;
-                this.args = args;
-            }
-
-            public int x, y;
-            public string s;
-            public object[] args;
-        }
     }
 }

@@ -12,6 +12,7 @@ using PressPlay.FFWD.Components;
 using PressPlay.FFWD;
 using Box2D.XNA;
 using PressPlay.Tentacles.Debugging;
+using PressPlay.Tentacles.Scripts;
 
 namespace PressPlay.Tentacles
 {
@@ -22,6 +23,7 @@ namespace PressPlay.Tentacles
     {
         GraphicsDeviceManager graphics;
         DebugRenderer debug;
+        Vector3 camStart;
 
         public Game1()
         {
@@ -37,7 +39,7 @@ namespace PressPlay.Tentacles
         /// </summary>
         protected override void Initialize()
         {
-    #if WINDOWS
+#if WINDOWS
             graphics.PreferredBackBufferWidth = 800;
             graphics.PreferredBackBufferHeight = 480;
             graphics.IsFullScreen = false;
@@ -54,17 +56,13 @@ namespace PressPlay.Tentacles
 
 #if DEBUG
             FrameRateCounter counter = new FrameRateCounter(this, Content.RootDirectory + "/TestFont");
-            counter.Position = new Vector2(32, 46);
+            counter.Position = new Vector2(32, 18);
             counter.DrawOrder = 2;
             Components.Add(counter);
 
             Components.Add(new TouchHandler(this));
-
-#if !WINDOWS
-            Accelerometer.Initialize();
             PanCamera cam = new PanCamera(this);
             Components.Add(cam);
-#endif
 #endif
             base.Initialize();
         }
@@ -75,11 +73,16 @@ namespace PressPlay.Tentacles
         /// </summary>
         protected override void LoadContent()
         {
+#if WINDOWS_PHONE
+            // HACK: Force Phone to include Scripts DLL
+            SimpleRotate rotate = new SimpleRotate();
+#endif
             Application.LoadScene("Scenes/DesatGreen_intro");
 
-            Camera.main.transform.localPosition = new Vector3(-13, -9, 7);
-            Camera.main.transform.localRotation = Quaternion.CreateFromRotationMatrix(Matrix.CreateRotationX(MathHelper.ToRadians(90)));
-            Camera.main.up = Vector3.Backward;
+            Camera.main.transform.localPosition = camStart = new Vector3(-7, -7, -17);
+            Camera.main.transform.localRotation = Quaternion.CreateFromAxisAngle(Vector3.UnitY, MathHelper.ToRadians(-110));
+            Camera.main.up = Vector3.Backward;            
+            Camera.main.forward = Vector3.UnitY;
         }
 
         /// <summary>
@@ -105,81 +108,13 @@ namespace PressPlay.Tentacles
                 this.Exit();
 
             KeyboardState key = Keyboard.GetState();
-            Vector3 dir = Vector3.Zero;
-            if (key.IsKeyDown(Keys.RightAlt))            
-            {
-                // Rotate camera
-                if (key.IsKeyDown(Keys.A))
-                {
-                    dir.X += 1;
-                }
-                if (key.IsKeyDown(Keys.D))
-                {
-                    dir.X -= 1;
-                }
-                if (key.IsKeyDown(Keys.W))
-                {
-                    dir.Y += 1;
-                }
-                if (key.IsKeyDown(Keys.X))
-                {
-                    dir.Y -= 1;
-                }
-                if (key.IsKeyDown(Keys.E))
-                {
-                    dir.Z += 1;
-                }
-                if (key.IsKeyDown(Keys.Z))
-                {
-                    dir.Z -= 1;
-                }
-                if (key.IsKeyDown(Keys.RightShift))
-                {
-                    dir *= 10;
-                }
-                if (dir.LengthSquared() > 0)
-                {
-                    Quaternion rotate = Quaternion.CreateFromYawPitchRoll(MathHelper.ToRadians(dir.X), MathHelper.ToRadians(dir.Y), MathHelper.ToRadians(dir.Z));
-                    Camera.main.transform.localRotation *= rotate;
-                }
-            }
-            else
-            {
-                // Translate camera
-                if (key.IsKeyDown(Keys.A))
-                {
-                    dir.X -= 1;
-                }
-                if (key.IsKeyDown(Keys.D))
-                {
-                    dir.X += 1;
-                }
-                if (key.IsKeyDown(Keys.W))
-                {
-                    dir.Z += 1;
-                }
-                if (key.IsKeyDown(Keys.X))
-                {
-                    dir.Z -= 1;
-                }
-                if (key.IsKeyDown(Keys.E))
-                {
-                    dir.Y += 1;
-                }
-                if (key.IsKeyDown(Keys.Z))
-                {
-                    dir.Y -= 1;
-                }
-                if (key.IsKeyDown(Keys.RightShift))
-                {
-                    dir *= 10;
-                }
-                Camera.main.transform.localPosition += dir;
-            }
-
             if (oldState.IsKeyUp(Keys.M) && key.IsKeyDown(Keys.M))
             {
                 debug.NextMode();
+            }
+            if (oldState.IsKeyUp(Keys.S) && key.IsKeyDown(Keys.S))
+            {
+                Camera.main.transform.localPosition = camStart;
             }
             oldState = key;
 
@@ -190,7 +125,6 @@ namespace PressPlay.Tentacles
             }
             ContentHelper.MissingAssets.Clear();
 #endif
-
             base.Update(gameTime);
         }
 
@@ -200,10 +134,7 @@ namespace PressPlay.Tentacles
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-#if WINDOWS_PHONE
-            AccelerometerState state = Accelerometer.GetState();
-            Vector2 pos = new Vector2(Camera.main.transform.position.X, Camera.main.transform.position.Z);
-#endif
+            Debug.Display("Cam", Camera.main.transform.position);
             if (debug.Wireframe)
             {
                 GraphicsDevice.RasterizerState = new RasterizerState() { FillMode = FillMode.WireFrame };

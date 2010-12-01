@@ -55,12 +55,12 @@ namespace PressPlay.Tentacles.Debugging
                 }
             }
             else
+#endif
             {
                 // we always return isActive on emulator because we use the arrow
                 // keys for simulation which is always available.
                 isActive = true;
             }
-#endif
 
             // remember that we are initialized
             isInitialized = true;

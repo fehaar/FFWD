@@ -1,45 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <ProjectGuid>{C2A86C36-A404-478D-BC45-209D37A249F0}</ProjectGuid>
+    <ProjectGuid>{8CBD500E-5C97-4C06-8D1F-C75362284BB5}</ProjectGuid>
     <ProjectTypeGuids>{6D335F3A-9D43-41b4-9D22-F6F17C4BE596};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">Windows Phone</Platform>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PressPlay.Tentacles</RootNamespace>
-    <AssemblyName>PressPlay.Tentacles</AssemblyName>
+    <RootNamespace>PressPlay.Tentacles.Scripts</RootNamespace>
+    <AssemblyName>PressPlay.Tentacles.Scripts</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <XnaFrameworkVersion>v4.0</XnaFrameworkVersion>
     <XnaPlatform>Windows Phone</XnaPlatform>
     <XnaProfile>Reach</XnaProfile>
-    <XnaCrossPlatformGroupID>b5be366c-1c70-4647-a511-caeb699c6078</XnaCrossPlatformGroupID>
-    <XnaOutputType>Game</XnaOutputType>
-    <ApplicationIcon>Game.ico</ApplicationIcon>
-    <Thumbnail>GameThumbnail.png</Thumbnail>
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <XnaCrossPlatformGroupID>23cfc566-1f22-435e-b9d0-5c775a96542a</XnaCrossPlatformGroupID>
+    <XnaOutputType>Library</XnaOutputType>
     <XapFilename Condition="$(XnaOutputType)=='Game'">$(AssemblyName).xap</XapFilename>
     <SilverlightManifestTemplate Condition="$(XnaOutputType)=='Game'">Properties\AppManifest.xml</SilverlightManifestTemplate>
     <XnaWindowsPhoneManifestTemplate Condition="$(XnaOutputType)=='Game'">Properties\WMAppManifest.xml</XnaWindowsPhoneManifestTemplate>
     <TileImage Condition="$(XnaOutputType)=='Game'">Background.png</TileImage>
-    <TileTitle Condition="$(XnaOutputType)=='Game'">Tentacles</TileTitle>
+    <TileTitle Condition="$(XnaOutputType)=='Game'">$(AssemblyName)</TileTitle>
     <SupportedCultures />
-    <GameStartupType>PressPlay.Tentacles.Game1</GameStartupType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|Windows Phone' ">
     <OutputPath>bin\Windows Phone\Debug</OutputPath>
@@ -65,39 +47,14 @@
     <XnaCompressContent>false</XnaCompressContent>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\FFWD\PressPlay.FFWD\PressPlay.FFWD.WP7.csproj">
+    <ProjectReference Include="..\FFWD\PressPlay.FFWD\PressPlay.FFWD.WP7.csproj">
       <Project>{A1F641A6-432F-4764-BE17-A808700925E7}</Project>
       <Name>PressPlay.FFWD.WP7</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PressPlay.Tentacles.Scripts\PressPlay.Tentacles.Scripts.WP7.csproj">
-      <Project>{8CBD500E-5C97-4C06-8D1F-C75362284BB5}</Project>
-      <Name>PressPlay.Tentacles.Scripts.WP7</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PressPlay.Tentacles.XmlContent\PressPlay.Tentacles.XmlContent.contentproj">
-      <Project>{4C58C1EE-5091-42D3-A9DF-F274A942D800}</Project>
-      <Name>PressPlay.Tentacles.XmlContent %28Content%29</Name>
-      <XnaReferenceType>Content</XnaReferenceType>
-    </ProjectReference>
-    <ProjectReference Include="..\PressPlay.Tentacles.WinContent\PressPlay.Tentacles.WinContent.contentproj">
-      <Name>PressPlay.Tentacles.WinContent %28Content%29</Name>
-      <XnaReferenceType>Content</XnaReferenceType>
-      <Project>{035BC7A0-D8B5-4AF9-A083-BF403CC2F2A3}</Project>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Debugging\Accelerometer.cs" />
-    <Compile Include="Debugging\FrameRateCounter.cs" />
-    <Compile Include="Debugging\Box2DDebugDraw.cs" />
-    <Compile Include="Debugging\PanCamera.cs" />
-    <Compile Include="DebugRenderer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Program.cs" />
-    <Compile Include="Game1.cs" />
-    <Compile Include="TouchHandler.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Game.ico" />
-    <Content Include="GameThumbnail.png" />
+    <Compile Include="SimpleRotate.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Background.png">
@@ -111,35 +68,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
-      <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4 Client Profile %28x86 and x64%29</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
-      <Visible>False</Visible>
-      <ProductName>Windows Installer 3.1</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Xna.Framework.4.0">
-      <Visible>False</Visible>
-      <ProductName>Microsoft XNA Framework Redistributable 4.0</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Microsoft.Devices.Sensors, Version=7.0.0.0, Culture=neutral, PublicKeyToken=24eec0d8c86cda1e, processorArchitecture=MSIL" />
-    <Reference Include="Microsoft.Phone, Version=7.0.0.0, Culture=neutral, PublicKeyToken=24eec0d8c86cda1e, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Xna.Framework">
       <Private>False</Private>
     </Reference>
@@ -152,7 +80,6 @@
     <Reference Include="Microsoft.Xna.Framework.Graphics">
       <Private>False</Private>
     </Reference>
-    <Reference Include="Microsoft.Xna.Framework.Input.Touch, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
     <Reference Include="mscorlib">
       <Private>False</Private>
     </Reference>
