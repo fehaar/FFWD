@@ -98,7 +98,7 @@ namespace PressPlay.FFWD.Components
                 if (mesh.Effects[e] is BasicEffect)
                 {
                     BasicEffect effect = mesh.Effects[e] as BasicEffect;
-                    effect.World = Matrix.CreateRotationX(MathHelper.PiOver2) * world;
+                    effect.World = world;
                     effect.View = Camera.main.View();
                     effect.Projection = Camera.main.projectionMatrix;
                     effect.LightingEnabled = false;

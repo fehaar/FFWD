@@ -67,12 +67,16 @@ namespace PressPlay.FFWD
         {
             for (int i = 0; i < components.Count; i++)
             {
+                if (!Component.IsAwake(components[i]))
+                {
+                    continue;
+                }
                 if (!components[i].isStarted)
                 {
                     components[i].Start();
                     components[i].isStarted = true;
                 }
-                if (Component.IsAwake(components[i]) && components[i] is IFixedUpdateable)
+                if (components[i] is IFixedUpdateable)
                 {
                     (components[i] as IFixedUpdateable).FixedUpdate();
                 }
@@ -90,12 +94,16 @@ namespace PressPlay.FFWD
         {
             for (int i = 0; i < components.Count; i++)
             {
+                if (!Component.IsAwake(components[i]))
+                {
+                    continue;
+                }
                 if (!components[i].isStarted)
                 {
                     components[i].Start();
                     components[i].isStarted = true;
                 }
-                if (Component.IsAwake(components[i]) && components[i] is IUpdateable)
+                if (components[i] is IUpdateable)
                 {
                     (components[i] as IUpdateable).Update();
                 }

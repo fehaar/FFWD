@@ -212,9 +212,20 @@ namespace PressPlay.FFWD
 
         public void Rotate(Vector3 axis, float angle, Space relativeTo)
         {
-            Matrix rot;
-            Matrix.CreateFromAxisAngle(ref axis, angle, out rot);
-            Matrix.Multiply(ref _world, ref rot, out _world);
+            angle = MathHelper.ToRadians(angle);
+            if (relativeTo == Space.World)
+            {
+                Matrix rot;
+                Matrix.CreateFromAxisAngle(ref axis, angle, out rot);
+                Matrix.Multiply(ref _world, ref rot, out _world);
+            }
+            else
+            {
+                Quaternion q;
+                Quaternion.CreateFromAxisAngle(ref axis, angle, out q);
+                Quaternion.Multiply(ref _localRotation, ref q, out _localRotation);
+                _hasDirtyWorld = true;
+            }
             WorldChanged();
         }
 
