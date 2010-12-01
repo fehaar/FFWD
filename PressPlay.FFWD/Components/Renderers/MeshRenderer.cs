@@ -90,6 +90,13 @@ namespace PressPlay.FFWD.Components
             
             Matrix world = transform.world;
             
+            // Do we have negative scale - if so, switch culling
+            RasterizerState oldState = batch.GraphicsDevice.RasterizerState;
+            if (transform.lossyScale.X < 0 || transform.lossyScale.Y < 0 || transform.lossyScale.Z < 0)
+            {
+                batch.GraphicsDevice.RasterizerState = new RasterizerState() { FillMode = oldState.FillMode, CullMode = CullMode.CullClockwiseFace };
+            }
+
             // Draw the model.
             ModelMesh mesh = model.Meshes[meshIndex];
             for (int e = 0; e < mesh.Effects.Count; e++)
@@ -124,6 +131,11 @@ namespace PressPlay.FFWD.Components
                     sEffect.Texture = texture;
                 }
                 mesh.Draw();
+            }
+
+            if (transform.lossyScale.X < 0 || transform.lossyScale.Y < 0 || transform.lossyScale.Z < 0)
+            {
+                batch.GraphicsDevice.RasterizerState = oldState;
             }
             
         }
