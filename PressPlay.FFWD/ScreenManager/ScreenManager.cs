@@ -231,13 +231,20 @@ namespace PressPlay.FFWD.ScreenManager
         /// </summary>
         public override void Draw(GameTime gameTime)
         {
-            foreach (GameScreen screen in screens)
+
+            for (int i = 0; i < screens.Count; i++)
             {
-                if (screen.ScreenState == ScreenState.Hidden)
+                if (screens[i].ScreenState == ScreenState.Hidden)
                     continue;
 
-                screen.Draw(gameTime);
+                screens[i].Draw(gameTime);
             }
+            
+            /*
+            foreach (GameScreen screen in screens)
+            {
+
+            }*/
         }
 
 
@@ -292,7 +299,6 @@ namespace PressPlay.FFWD.ScreenManager
                 TouchPanel.EnabledGestures = screens[screens.Count - 1].EnabledGestures;
             }
         }
-
 
         /// <summary>
         /// Expose an array holding all the screens. We return a copy rather

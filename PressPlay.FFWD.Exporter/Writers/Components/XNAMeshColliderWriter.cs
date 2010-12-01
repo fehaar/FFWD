@@ -5,9 +5,9 @@ using System.Text;
 using PressPlay.FFWD.Exporter.Interfaces;
 using UnityEngine;
 
-namespace PressPlay.FFWD.Exporter.Writers
+namespace PressPlay.FFWD.Exporter.Writers.Components
 {
-    public class XNAMeshColliderComponentWriter : IComponentWriter
+    public class XNAMeshColliderWriter : IComponentWriter
     {
         #region IComponentWriter Members
         public void Write(SceneWriter scene, object component)
@@ -22,10 +22,10 @@ namespace PressPlay.FFWD.Exporter.Writers
             {
                 throw new Exception("XNAMeshCollider needs a MeshCollider on the same object");
             }
-            scene.WriteElement("Material", collider.material.name.Replace(" (Instance)", ""));
-            scene.WriteElement("IsTrigger", collider.isTrigger);
-            scene.WriteElement("Triangles", collider.sharedMesh.triangles);
-            scene.WriteElement("Vertices", collider.sharedMesh.vertices);
+            ColliderWriter writer = new ColliderWriter();
+            writer.Write(scene, collider);
+            scene.WriteElement("triangles", collider.sharedMesh.triangles);
+            scene.WriteElement("vertices", collider.sharedMesh.vertices);
         }
         #endregion
     }

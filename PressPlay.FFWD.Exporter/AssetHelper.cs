@@ -1,0 +1,104 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using UnityEngine;
+using System.IO;
+using UnityEditor;
+
+namespace PressPlay.FFWD.Exporter
+{
+    public class AssetHelper
+    {
+        public string TextureDir { get; set; }
+        public string MeshDir { get; set; }
+        public string ScriptDir { get; set; }
+        
+        private HashSet<string> exportedTextures = new HashSet<string>();
+        private HashSet<string> exportedScripts = new HashSet<string>();
+        private HashSet<string> exportedMeshes = new HashSet<string>();
+        private Dictionary<string, string> _scripts;
+        private Dictionary<string, string> scripts  
+        {
+            get
+            {
+                if (_scripts == null)
+	            {
+                    _scripts = new Dictionary<string, string>();
+                    foreach (string file in Directory.GetFiles(Application.dataPath, "*.cs", SearchOption.AllDirectories))
+                    {
+                        _scripts[Path.GetFileNameWithoutExtension(file)] = file;
+                    }
+	            }
+                return _scripts;
+            }
+        }
+
+        public void ExportTexture(Texture2D tex)
+        {
+            if (tex == null) return;
+            if (exportedTextures.Contains(tex.name)) return;
+
+            string path = Path.Combine(TextureDir, tex.name + ".png");
+            try
+            {
+                Color[] texPixels = tex.GetPixels();
+                Texture2D tex2 = new Texture2D(tex.width, tex.height, TextureFormat.ARGB32, false);
+                tex2.SetPixels(texPixels);
+                byte[] texBytes = tex2.EncodeToPNG();
+                FileStream writeStream;
+                writeStream = new FileStream(path, FileMode.Create);
+                BinaryWriter writeBinay = new BinaryWriter(writeStream);
+                for (int i = 0; i < texBytes.Length; i++) writeBinay.Write(texBytes[i]);
+                writeBinay.Close();
+                exportedTextures.Add(tex.name);
+            }
+            catch (UnityException ue)
+            {
+                Debug.Log(ue.ToString());
+            }
+        }
+
+        public void ExportScript(MonoBehaviour component)
+        {
+            if (component == null) return;
+            if (exportedScripts.Contains(component.name)) return;
+            try
+            {
+                string key = component.GetType().Name;
+                if (scripts.ContainsKey(key))
+                {
+                    ScriptTranslator translator = new ScriptTranslator(File.ReadAllLines(scripts[key]));
+                    translator.Translate();
+                    File.WriteAllText(Path.Combine(ScriptDir, key + ".cs"), translator.ToString());
+                }
+                exportedScripts.Add(component.name);
+            }
+            catch (Exception ex)
+            {
+                Debug.Log(ex.Message);
+            }
+        }
+
+        public void ExportMesh(Mesh mesh)
+        {
+            if (mesh == null) return;
+            string path = AssetDatabase.GetAssetPath(mesh.GetInstanceID());
+            if (String.IsNullOrEmpty(path)) return;
+            if (exportedMeshes.Contains(path)) return;
+
+            exportedMeshes.Add(path);
+            path = Path.Combine(@"C:\Projects\PressPlay\Tentacles\Unity\Assets\Level Building Blocks\Worlds\_worlds_imports\XNA", Path.GetFileName(path));
+            string dest = Path.Combine(MeshDir, Path.GetFileName(path));
+
+            try
+            {
+                File.Copy(path, dest, true);
+            }
+            catch (Exception ex)
+            {
+                Debug.Log("Could not copy mesh '" + path + "' for " + mesh.name + ". " + ex.Message, mesh);
+            }
+        }
+    }
+}

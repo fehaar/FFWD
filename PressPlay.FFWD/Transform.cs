@@ -7,6 +7,8 @@ using Microsoft.Xna.Framework.Content;
 
 namespace PressPlay.FFWD
 {
+    public enum Space { World, Self }
+
     public class Transform
     {
         public Transform()
@@ -195,7 +197,8 @@ namespace PressPlay.FFWD
         {
             get
             {
-                float dot = Vector3.Dot(world.Forward, Vector3.Forward);
+                Vector3 normFwd = Vector3.Normalize(world.Forward);
+                float dot = Vector3.Dot(normFwd, Vector3.Forward);
                 if (world.Forward.X > 0)
                 {
                     return (float)Math.Acos(dot);
@@ -205,6 +208,19 @@ namespace PressPlay.FFWD
                     return (float)((Math.PI * 2) - Math.Acos(dot));
                 }
             }
+        }
+
+        public void Rotate(Vector3 axis, float angle, Space relativeTo)
+        {
+            Matrix rot;
+            Matrix.CreateFromAxisAngle(ref axis, angle, out rot);
+            Matrix.Multiply(ref _world, ref rot, out _world);
+            WorldChanged();
+        }
+
+        // TODO: Calculate new local values
+        private void WorldChanged()
+        {            
         }
     }
 }

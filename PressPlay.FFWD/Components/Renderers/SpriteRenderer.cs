@@ -76,7 +76,7 @@ namespace PressPlay.FFWD.Components
 
         #region IUpdateable Members
 
-        public void Update(GameTime gameTime)
+        public void Update()
         {
             Position.X = transform.localPosition.X;
             Position.Y = transform.localPosition.Y;

@@ -9,7 +9,7 @@ using PressPlay.FFWD.Components;
 
 namespace PressPlay.FFWD.ScreenManager
 {
-    public class ButtonComponent : Component
+    public class ButtonComponent : Component, Interfaces.IUpdateable
     {
 
         #region Content properties
@@ -26,7 +26,7 @@ namespace PressPlay.FFWD.ScreenManager
 
         public float delayBeforeActivation = 0.1f;
         private float onSelectTime;
-
+        private bool isTapped = false;
         #endregion
 
         #region properties
@@ -34,7 +34,7 @@ namespace PressPlay.FFWD.ScreenManager
         {
             get
             {
-                return _bounds;
+                return new Rectangle((int)transform.position.X, (int)transform.position.Y, _bounds.Width, _bounds.Height);
             }
         }
         #endregion
@@ -49,20 +49,20 @@ namespace PressPlay.FFWD.ScreenManager
         /// </summary>
         protected internal virtual void OnSelectEntry(PlayerIndex playerIndex)
         {
-            if (Selected != null)
-                Selected(this, new PlayerIndexEventArgs(playerIndex));
-
-            //onSelectTime = 
-
-            //((SpriteRenderer)gameObject.renderer).texture = activeTexture;
+            if (!isTapped)
+            {
+                onSelectTime = Time.time;
+                isTapped = true;
+            }
+            ((SpriteRenderer)gameObject.renderer).texture = activeTexture;
         }
 
-        public ButtonComponent()
+        public ButtonComponent() : base()
         {
 
         }
 
-        public ButtonComponent(string normalTextureSrc, string activeTextureSrc)
+        public ButtonComponent(string normalTextureSrc, string activeTextureSrc) : this()
         {
             OnNormalTexture = normalTextureSrc;
             OnActiveTexture = activeTextureSrc;
@@ -73,6 +73,8 @@ namespace PressPlay.FFWD.ScreenManager
             base.Awake();
             ContentHelper.LoadTexture(OnNormalTexture);
             ContentHelper.LoadTexture(OnActiveTexture);
+
+            Debug.Log("ButtonComponent AWAKE");
 
             if (gameObject.renderer == null)
             {
@@ -86,12 +88,38 @@ namespace PressPlay.FFWD.ScreenManager
             normalTexture = ContentHelper.GetTexture(OnNormalTexture);
             activeTexture = ContentHelper.GetTexture(OnActiveTexture);
 
+            Debug.Log("ButtonComponent START");
+
             if (normalTexture != null)
             {
                 _bounds = normalTexture.Bounds;
             }
 
+            if (gameObject.renderer == null)
+            {
+                gameObject.AddComponent(new SpriteRenderer());
+            }
+
             ((SpriteRenderer)gameObject.renderer).texture = normalTexture;
         }
+
+        #region IUpdateable Members
+
+        public void Update()
+        {
+
+            if (isTapped && Time.time > onSelectTime + delayBeforeActivation)
+            {
+                Debug.Log("Updating Button Component");
+                if (Selected != null)
+                {
+                    Selected(this, new PlayerIndexEventArgs(PlayerIndex.One));
+                }
+
+                isTapped = false;
+            }
+        }
+
+        #endregion
     }
 }

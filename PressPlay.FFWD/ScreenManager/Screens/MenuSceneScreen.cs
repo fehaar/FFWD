@@ -113,7 +113,6 @@ namespace PressPlay.FFWD.ScreenManager
             ExitScreen();
         }
 
-
         /// <summary>
         /// Helper overload makes it easy to use OnCancel as a MenuEntry event handler.
         /// </summary>
@@ -129,8 +128,6 @@ namespace PressPlay.FFWD.ScreenManager
         public override void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)
         {
             base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
-
-            Component.AwakeNewComponents();
             scene.FixedUpdate();
         }
 
@@ -139,6 +136,13 @@ namespace PressPlay.FFWD.ScreenManager
             GraphicsDevice graphics = ScreenManager.GraphicsDevice;
             SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
             SpriteFont font = ScreenManager.Font;
+
+            foreach (ButtonComponent button in menuEntries)
+            {
+                if(button.gameObject.renderer != null){
+                    ((SpriteRenderer)button.gameObject.renderer).Color = Color.FromNonPremultiplied(255, 255, 255, (int)(255*(TransitionAlpha)));
+                }
+            }
 
             scene.Update();
             scene.Draw(ScreenManager.SpriteBatch);
@@ -149,12 +153,14 @@ namespace PressPlay.FFWD.ScreenManager
 
         #endregion
 
-        protected void AddButton(ButtonComponent button)
+        protected GameObject AddButton(ButtonComponent button)
         {
             GameObject go = new GameObject("MenuEntry");
             go.AddComponent(button);
             scene.gameObjects.Add(go);
             menuEntries.Add(button);
+
+            return go;
         }
     }
 }

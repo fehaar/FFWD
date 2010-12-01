@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 using PressPlay.FFWD.Exporter.Interfaces;
 using UnityEngine;
 using System.Xml;
+using UnityEditor;
 
-namespace PressPlay.FFWD.Exporter.Writers
+namespace PressPlay.FFWD.Exporter.Writers.Components
 {
-    internal class MeshRendererComponentWriter : IComponentWriter
+    internal class MeshRendererWriter : IComponentWriter
     {
         #region IComponentWriter Members
         public void Write(SceneWriter writer, object component)
@@ -25,7 +27,7 @@ namespace PressPlay.FFWD.Exporter.Writers
             MeshFilter filter = (component as Component).GetComponent<MeshFilter>();
             if (filter.sharedMesh != null)
             {
-                writer.WriteElement("Mesh", filter.sharedMesh.name);
+                writer.WriteMesh(filter.sharedMesh);
             }
         }
         #endregion

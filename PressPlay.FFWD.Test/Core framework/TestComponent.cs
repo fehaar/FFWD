@@ -49,7 +49,7 @@ namespace PressPlay.FFWD.Test.Core_framework
         #endregion
 
         #region IUpdateable Members
-        public void Update(Microsoft.Xna.Framework.GameTime gameTime)
+        public void Update()
         {
             if (onUpdate != null)
             {

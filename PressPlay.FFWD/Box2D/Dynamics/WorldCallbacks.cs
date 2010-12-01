@@ -151,5 +151,10 @@ namespace Box2D.XNA
 	    /// Draw a transform. Choose your own length scale.
 	    /// @param xf a transform.
         public abstract void DrawTransform(ref Transform xf);
+
+        /// <summary>
+        /// REset debug drawing
+        /// </summary>
+        public abstract void Reset();
     }
 }

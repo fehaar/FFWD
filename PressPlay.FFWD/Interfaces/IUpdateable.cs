@@ -8,6 +8,6 @@ namespace PressPlay.FFWD.Interfaces
 {
     public interface IUpdateable
     {
-        void Update(GameTime gameTime);
+        void Update();
     }
 }
