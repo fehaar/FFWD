@@ -11,5 +11,20 @@ namespace PressPlay.FFWD
         {
             System.Diagnostics.Debug.WriteLine(message.ToString());
         }
+
+        private static Dictionary<string, string> _debugDisplay = new Dictionary<string, string>();
+
+        public static void Display(string key, object value)
+        {
+            _debugDisplay[key] = value.ToString();
+        }
+
+        public static IEnumerable<KeyValuePair<string, string>> DisplayStrings
+        {
+            get
+            {
+                return _debugDisplay;
+            }
+        }
     }
 }

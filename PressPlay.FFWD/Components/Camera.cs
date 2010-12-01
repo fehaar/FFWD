@@ -11,28 +11,22 @@ namespace PressPlay.FFWD.Components
         public Camera()
         {
             transform = new Transform();
-            up = Vector3.Up;
         }
         
         public static Camera main = new Camera();
 
         public Transform transform { get; set; }
+        public Vector3 forward { get; set; }
         public Vector3 up { get; set; }
+        private Matrix _view;
 
         public Matrix View()
         {
-            return Matrix.CreateLookAt(
+            _view = Matrix.CreateLookAt(
                 transform.localPosition,
-                transform.localPosition + Vector3.Up,
-                up);                        
-        }
-
-        public Vector3 Forward
-        {
-            get
-            {
-                return Vector3.Transform(Vector3.Forward, transform.localRotation);
-            }
+                transform.localPosition + forward,
+                Vector3.Transform(up, transform.localRotation));
+            return _view;            
         }
 
         public Matrix projectionMatrix { get; set; }
