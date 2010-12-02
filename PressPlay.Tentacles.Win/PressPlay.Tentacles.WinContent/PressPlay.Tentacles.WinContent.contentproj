@@ -151,6 +151,13 @@
       <ProcessorParameters_RotationY>180</ProcessorParameters_RotationY>
     </Compile>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Textures\simple_round_flat_enemy.png">
+      <Name>simple_round_flat_enemy</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <!--  To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

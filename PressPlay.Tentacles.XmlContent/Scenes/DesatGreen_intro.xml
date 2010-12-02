@@ -10358,7 +10358,14 @@
                     <localRotation>-0.70711 0 0 0.70711</localRotation>
                   </transform>
                   <prefab>simple_round_enemy</prefab>
-                  <components />
+                  <components>
+                    <component Type="PressPlay.FFWD.Components.SkinnedMeshRenderer">
+                      <texture>simple_round_flat_enemy</texture>
+                      <shader>TransperantNoLight</shader>
+                      <asset>simple_round_flat_enemy</asset>
+                      <mesh>simple_round_enemy</mesh>
+                    </component>
+                  </components>
                 </child>
               </children>
             </transform>
@@ -10565,7 +10572,14 @@
                     <localRotation>-0.70711 0 0 0.70711</localRotation>
                   </transform>
                   <prefab>simple_round_enemy</prefab>
-                  <components />
+                  <components>
+                    <component Type="PressPlay.FFWD.Components.SkinnedMeshRenderer">
+                      <texture>simple_round_flat_enemy</texture>
+                      <shader>TransperantNoLight</shader>
+                      <asset>simple_round_flat_enemy</asset>
+                      <mesh>simple_round_enemy</mesh>
+                    </component>
+                  </components>
                 </child>
               </children>
             </transform>
@@ -10772,7 +10786,14 @@
                     <localRotation>-0.70711 0 0 0.70711</localRotation>
                   </transform>
                   <prefab>simple_round_enemy</prefab>
-                  <components />
+                  <components>
+                    <component Type="PressPlay.FFWD.Components.SkinnedMeshRenderer">
+                      <texture>simple_round_flat_enemy</texture>
+                      <shader>TransperantNoLight</shader>
+                      <asset>simple_round_flat_enemy</asset>
+                      <mesh>simple_round_enemy</mesh>
+                    </component>
+                  </components>
                 </child>
               </children>
             </transform>
@@ -10979,7 +11000,14 @@
                     <localRotation>-0.70711 0 0 0.70711</localRotation>
                   </transform>
                   <prefab>simple_round_enemy</prefab>
-                  <components />
+                  <components>
+                    <component Type="PressPlay.FFWD.Components.SkinnedMeshRenderer">
+                      <texture>simple_round_flat_enemy</texture>
+                      <shader>TransperantNoLight</shader>
+                      <asset>simple_round_flat_enemy</asset>
+                      <mesh>simple_round_enemy</mesh>
+                    </component>
+                  </components>
                 </child>
               </children>
             </transform>
@@ -11186,7 +11214,14 @@
                     <localRotation>-0.70711 0 0 0.70711</localRotation>
                   </transform>
                   <prefab>simple_round_enemy</prefab>
-                  <components />
+                  <components>
+                    <component Type="PressPlay.FFWD.Components.SkinnedMeshRenderer">
+                      <texture>simple_round_flat_enemy</texture>
+                      <shader>TransperantNoLight</shader>
+                      <asset>simple_round_flat_enemy</asset>
+                      <mesh>simple_round_enemy</mesh>
+                    </component>
+                  </components>
                 </child>
               </children>
             </transform>
