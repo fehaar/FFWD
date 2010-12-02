@@ -14,7 +14,9 @@ namespace PressPlay.FFWD.Components
     {
         #region Content properties
         [ContentSerializer(Optional=true)]
-        public string Texture;
+        public string texture;
+        [ContentSerializer(Optional = true)]
+        public string shader;
         [ContentSerializer(Optional = true)]
         public string asset;
         [ContentSerializer(Optional = true)]
@@ -24,7 +26,7 @@ namespace PressPlay.FFWD.Components
         [ContentSerializerIgnore]
         public Model model;
         [ContentSerializerIgnore]
-        public Texture2D texture;
+        public Texture2D tex;
 
         private Matrix[] boneTransforms;
         private AnimationPlayer animationPlayer;
@@ -34,14 +36,14 @@ namespace PressPlay.FFWD.Components
         {
             base.Awake();
             ContentHelper.LoadModel(asset);
-            ContentHelper.LoadTexture(Texture);
+            ContentHelper.LoadTexture(texture);
         }
 
         public override void Start()
         {
             base.Start();
             model = ContentHelper.GetModel(asset);
-            texture = ContentHelper.GetTexture(Texture);
+            tex = ContentHelper.GetTexture(texture);
 
             if (model == null)
             {
@@ -91,10 +93,17 @@ namespace PressPlay.FFWD.Components
             Matrix world = transform.world;
             
             // Do we have negative scale - if so, switch culling
-            RasterizerState oldState = batch.GraphicsDevice.RasterizerState;
+            RasterizerState oldRaster = batch.GraphicsDevice.RasterizerState;
+            BlendState oldBlend = batch.GraphicsDevice.BlendState;
+            SamplerState oldSample = batch.GraphicsDevice.SamplerStates[0];
             if (transform.lossyScale.X < 0 || transform.lossyScale.Y < 0 || transform.lossyScale.Z < 0)
             {
-                batch.GraphicsDevice.RasterizerState = new RasterizerState() { FillMode = oldState.FillMode, CullMode = CullMode.CullClockwiseFace };
+                batch.GraphicsDevice.RasterizerState = new RasterizerState() { FillMode = oldRaster.FillMode, CullMode = CullMode.CullClockwiseFace };
+            }
+            if (shader == "iPhone/Particles/Additive Culled")
+            {
+                batch.GraphicsDevice.BlendState = BlendState.Additive;
+                batch.GraphicsDevice.SamplerStates[0] = SamplerState.LinearClamp;
             }
 
             // Draw the model.
@@ -108,7 +117,7 @@ namespace PressPlay.FFWD.Components
                     effect.View = Camera.main.View();
                     effect.Projection = Camera.main.projectionMatrix;
                     effect.LightingEnabled = false;
-                    effect.Texture = texture;
+                    effect.Texture = tex;
                     effect.TextureEnabled = true;
                 }
                 if (mesh.Effects[e] is SkinnedEffect)
@@ -128,16 +137,20 @@ namespace PressPlay.FFWD.Components
                     sEffect.EnableDefaultLighting();
                     sEffect.SpecularColor = new Vector3(0.25f);
                     sEffect.SpecularPower = 16;
-                    sEffect.Texture = texture;
+                    sEffect.Texture = tex;
                 }
                 mesh.Draw();
             }
 
             if (transform.lossyScale.X < 0 || transform.lossyScale.Y < 0 || transform.lossyScale.Z < 0)
             {
-                batch.GraphicsDevice.RasterizerState = oldState;
+                batch.GraphicsDevice.RasterizerState = oldRaster;
             }
-            
+            if (shader == "iPhone/Particles/Additive Culled")
+            {
+                batch.GraphicsDevice.BlendState = oldBlend;
+                batch.GraphicsDevice.SamplerStates[0] = oldSample;
+            }
         }
         #endregion
     }

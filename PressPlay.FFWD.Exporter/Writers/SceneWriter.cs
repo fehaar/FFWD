@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEditor;
 using System.IO;
 using PressPlay.FFWD.Exporter.Interfaces;
+using System.Globalization;
 
 namespace PressPlay.FFWD.Exporter.Writers
 {
@@ -21,6 +22,7 @@ namespace PressPlay.FFWD.Exporter.Writers
         private AssetHelper assetHelper;
 
         public string ExportDir { get; set; }
+        public bool FlipYInTransforms { get; set; }
 
         private XmlWriter writer = null;
 
@@ -87,7 +89,12 @@ namespace PressPlay.FFWD.Exporter.Writers
 
         private void WriteTransform(Transform transform)
         {
-            writer.WriteElementString("localPosition", ToString(transform.localPosition));
+            Vector3 pos = transform.localPosition;
+            if (FlipYInTransforms)
+            {
+                pos.y = -pos.y;
+            }
+            writer.WriteElementString("localPosition", ToString(pos));
             writer.WriteElementString("localScale", ToString(transform.localScale));
             writer.WriteElementString("localRotation", ToString(transform.localRotation));
             if (transform.childCount > 0)
@@ -132,7 +139,7 @@ namespace PressPlay.FFWD.Exporter.Writers
 
         internal void WriteTexture(Texture texture)
         {
-            writer.WriteElementString("Texture", texture.name);
+            writer.WriteElementString("texture", texture.name);
             assetHelper.ExportTexture(texture as Texture2D);
         }
 
@@ -153,6 +160,11 @@ namespace PressPlay.FFWD.Exporter.Writers
         {
             if (obj == null)
             {
+                return;
+            }
+            if (obj is float)
+            {
+                writer.WriteElementString(name, ToString((float)obj));
                 return;
             }
             if (obj is Boolean)
@@ -204,17 +216,22 @@ namespace PressPlay.FFWD.Exporter.Writers
 
         private string ToString(Vector3 vector3)
         {
-            return vector3.x.ToString("0.#####") + " " + vector3.y.ToString("0.#####") + " " + vector3.z.ToString("0.#####");
+            return vector3.x.ToString("0.#####", CultureInfo.InvariantCulture) + " " + vector3.y.ToString("0.#####", CultureInfo.InvariantCulture) + " " + vector3.z.ToString("0.#####", CultureInfo.InvariantCulture);
         }
 
         private string ToString(Quaternion quaternion)
         {
-            return quaternion.x.ToString("0.#####") + " " + quaternion.y.ToString("0.#####") + " " + quaternion.z.ToString("0.#####") + " " + quaternion.w.ToString("0.#####");
+            return quaternion.x.ToString("0.#####", CultureInfo.InvariantCulture) + " " + quaternion.y.ToString("0.#####", CultureInfo.InvariantCulture) + " " + quaternion.z.ToString("0.#####", CultureInfo.InvariantCulture) + " " + quaternion.w.ToString("0.#####", CultureInfo.InvariantCulture);
         }
 
         private string ToString(bool b)
         {
             return b.ToString().ToLower();
+        }
+
+        private string ToString(float f)
+        {
+            return f.ToString("0.#####", CultureInfo.InvariantCulture);
         }
         #endregion
 
