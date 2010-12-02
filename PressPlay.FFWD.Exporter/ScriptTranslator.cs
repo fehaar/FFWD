@@ -24,7 +24,8 @@ namespace PressPlay.FFWD.Exporter
             // Replace usings
             scriptLines.RemoveAll(s => s.StartsWith("using"));
             //scriptLines.InsertRange(0, DefaultUsings.Select(s => "using " + s + ";"));
-            DefaultUsings.ForEach(s => scriptLines.Insert(0, "using " + s + ";"));
+            int line = 0;
+            DefaultUsings.ForEach(s => scriptLines.Insert(line++, "using " + s + ";"));
 
             // Insert namespace
             if (!String.IsNullOrEmpty(ScriptNamespace))
