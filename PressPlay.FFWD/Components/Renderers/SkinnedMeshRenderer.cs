@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace PressPlay.FFWD.Components
 {
-    public class MeshRenderer : Component, IRenderable
+    public class SkinnedMeshRenderer : Component, IRenderable, Interfaces.IUpdateable
     {
         #region Content properties
         [ContentSerializer(Optional=true)]
@@ -28,6 +28,8 @@ namespace PressPlay.FFWD.Components
         [ContentSerializerIgnore]
         public Texture2D tex;
 
+        private Matrix[] boneTransforms;
+        private AnimationPlayer animationPlayer;
         private int meshIndex = 0;
 
         public override void Awake()
@@ -55,7 +57,30 @@ namespace PressPlay.FFWD.Components
                     break;
                 }
             }
+
+            boneTransforms = new Matrix[model.Bones.Count];
+            // Look up our custom skinning information.
+            SkinningData skinningData = model.Tag as SkinningData;
+            if (skinningData != null)
+            {
+                // Create an animation player, and start decoding an animation clip.
+                animationPlayer = new AnimationPlayer(skinningData);
+                AnimationClip clip = skinningData.AnimationClips["Take 001"];
+                animationPlayer.StartClip(clip);
+            }
         }
+
+        #region IUpdateable Members
+
+        public void Update()
+        {
+            if (animationPlayer != null)
+            {
+                animationPlayer.Update(Time.deltaTime, true, Matrix.Identity);
+            }
+        }
+
+        #endregion
 
         #region IRenderable Members
         public void Draw(SpriteBatch batch)
@@ -85,13 +110,22 @@ namespace PressPlay.FFWD.Components
             ModelMesh mesh = model.Meshes[meshIndex];
             for (int e = 0; e < mesh.Effects.Count; e++)
             {
-                BasicEffect effect = mesh.Effects[e] as BasicEffect;
-                effect.World = world;
-                effect.View = Camera.main.View();
-                effect.Projection = Camera.main.projectionMatrix;
-                effect.LightingEnabled = false;
-                effect.Texture = tex;
-                effect.TextureEnabled = true;
+                Matrix[] bones = new Matrix[0];
+                if (animationPlayer != null)
+                {
+                    bones = animationPlayer.GetSkinTransforms();
+                    model.CopyAbsoluteBoneTransformsTo(boneTransforms);
+                }
+
+                SkinnedEffect sEffect = mesh.Effects[e] as SkinnedEffect;
+                sEffect.SetBoneTransforms(bones);
+                sEffect.World = world;
+                sEffect.View = Camera.main.View();
+                sEffect.Projection = Camera.main.projectionMatrix;
+                sEffect.EnableDefaultLighting();
+                sEffect.SpecularColor = new Vector3(0.25f);
+                sEffect.SpecularPower = 16;
+                sEffect.Texture = tex;
                 mesh.Draw();
             }
 

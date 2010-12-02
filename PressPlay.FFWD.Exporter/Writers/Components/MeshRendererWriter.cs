@@ -14,7 +14,7 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
         #region IComponentWriter Members
         public void Write(SceneWriter writer, object component)
         {
-            MeshRenderer mr = component as MeshRenderer;
+            Renderer mr = component as Renderer;
             if (mr == null)
             {
                 throw new Exception(GetType() + " cannot export components of type " + component.GetType());
@@ -24,10 +24,18 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
                 writer.WriteTexture(mr.sharedMaterial.mainTexture);
                 writer.WriteElement("shader", mr.sharedMaterial.shader.name);
             }
-            MeshFilter filter = (component as Component).GetComponent<MeshFilter>();
-            if (filter.sharedMesh != null)
+
+            if (component is SkinnedMeshRenderer)
             {
-                writer.WriteMesh(filter.sharedMesh);
+                writer.WriteMesh((component as SkinnedMeshRenderer).sharedMesh);
+            }
+            else
+            {
+                MeshFilter filter = (component as Component).GetComponent<MeshFilter>();
+                if (filter != null && filter.sharedMesh != null)
+                {
+                    writer.WriteMesh(filter.sharedMesh);
+                }
             }
         }
         #endregion
