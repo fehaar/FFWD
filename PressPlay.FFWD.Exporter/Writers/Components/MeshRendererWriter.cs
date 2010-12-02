@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.IO;
 using PressPlay.FFWD.Exporter.Interfaces;
@@ -20,9 +19,10 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
             {
                 throw new Exception(GetType() + " cannot export components of type " + component.GetType());
             }
-            if (mr.sharedMaterials.Length > 0 && mr.sharedMaterials[0].mainTexture != null)
+            if (mr.sharedMaterial != null && mr.sharedMaterial.mainTexture != null)
             {
-                writer.WriteTexture(mr.sharedMaterials[0].mainTexture);
+                writer.WriteTexture(mr.sharedMaterial.mainTexture);
+                writer.WriteElement("shader", mr.sharedMaterial.shader.name);
             }
             MeshFilter filter = (component as Component).GetComponent<MeshFilter>();
             if (filter.sharedMesh != null)

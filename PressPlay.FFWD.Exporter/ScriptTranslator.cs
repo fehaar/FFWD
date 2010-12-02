@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Reflection;
@@ -24,7 +23,8 @@ namespace PressPlay.FFWD.Exporter
         {
             // Replace usings
             scriptLines.RemoveAll(s => s.StartsWith("using"));
-            scriptLines.InsertRange(0, DefaultUsings.Select(s => "using " + s + ";"));
+            //scriptLines.InsertRange(0, DefaultUsings.Select(s => "using " + s + ";"));
+            DefaultUsings.ForEach(s => scriptLines.Insert(0, "using " + s + ";"));
 
             // Insert namespace
             if (!String.IsNullOrEmpty(ScriptNamespace))
@@ -55,7 +55,7 @@ namespace PressPlay.FFWD.Exporter
                 {
                     if (scriptLines[i].Contains("Vector3." + prop.Name))
                     {
-                        scriptLines[i] = scriptLines[i].Replace("Vector3." + prop.Name, "Vector3." + prop.Name.Capitalize());
+                        scriptLines[i] = scriptLines[i].Replace("Vector3." + prop.Name, "Vector3." + StringExtensions.Capitalize(prop.Name));
                     }
                 }
             }
