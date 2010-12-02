@@ -12,6 +12,16 @@ namespace PressPlay.FFWD
             System.Diagnostics.Debug.WriteLine(message.ToString());
         }
 
+        public static void LogError(string message)
+        {
+            System.Diagnostics.Debug.WriteLine("ERROR: " + message.ToString());
+        }
+
+        public static void LogWarning(string message)
+        {
+            System.Diagnostics.Debug.WriteLine("Warning: " + message.ToString());
+        }
+
         private static Dictionary<string, string> _debugDisplay = new Dictionary<string, string>();
 
         public static void Display(string key, object value)
@@ -26,5 +36,6 @@ namespace PressPlay.FFWD
                 return _debugDisplay;
             }
         }
+
     }
 }

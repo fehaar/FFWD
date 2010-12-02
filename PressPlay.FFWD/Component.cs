@@ -56,5 +56,25 @@ namespace PressPlay.FFWD
         {
             return GetType().Name + " on " + gameObject.name + " (" + gameObject.id + ")";
         }
+
+        public void Destroy(Component component)
+        {
+            // TODO: Objects should be destroyed after Update but before Rendering
+        }
+
+        public void Destroy(GameObject go)
+        {
+            // TODO: Objects should be destroyed after Update but before Rendering
+        }
+
+        public void Instantiate(Component component)
+        {
+            // TODO : Add implementation of method
+        }
+
+        public void Instantiate(GameObject go)
+        {
+            // TODO : Add implementation of method
+        }
     }
 }

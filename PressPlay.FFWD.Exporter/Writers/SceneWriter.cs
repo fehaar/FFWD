@@ -145,7 +145,12 @@ namespace PressPlay.FFWD.Exporter.Writers
 
         internal void WriteScript(MonoBehaviour component)
         {
-            assetHelper.ExportScript(component);
+            assetHelper.ExportScript(component, false);
+        }
+
+        internal void WriteScriptStub(MonoBehaviour component)
+        {
+            assetHelper.ExportScript(component, true);
         }
 
         internal void WriteMesh(Mesh mesh)

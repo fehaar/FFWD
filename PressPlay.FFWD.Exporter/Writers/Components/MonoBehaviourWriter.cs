@@ -9,8 +9,12 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
 {
     public class MonoBehaviourWriter : IComponentWriter
     {
+        public List<string> memberFilter = new List<string>();
+        public bool filterIsExclude = true;
+        public bool exportScript = true;
+
         #region IComponentWriter Members
-        public void Write(SceneWriter scene, object component)
+        public virtual void Write(SceneWriter scene, object component)
         {
             MonoBehaviour beh = component as MonoBehaviour;
             if (beh == null)
@@ -18,13 +22,29 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
                 throw new Exception(GetType() + " cannot export components of type " + component.GetType());
             }
             Type t = component.GetType();
-            FieldInfo[] memInfo = t.GetFields(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance);
+            FieldInfo[] memInfo = t.GetFields(BindingFlags.Public | BindingFlags.Instance);
             for (int m = 0; m < memInfo.Length; m++)
             {
-                scene.WriteElement(memInfo[m].Name, memInfo[m].GetValue(component));
+                if (filterIsExclude && memberFilter.Contains(memInfo[m].Name))
+                {
+                    continue;
+                }
+                if (!filterIsExclude && !memberFilter.Contains(memInfo[m].Name))
+                {
+                    continue;
+                }
+                WriteElement(scene, memInfo[m].Name, memInfo[m].GetValue(component));
             }
-            scene.WriteScript(beh);
+            if (exportScript)
+            {
+                scene.WriteScript(beh);
+            }
         }
         #endregion
+
+        protected virtual void WriteElement(SceneWriter scene, string name, object value)
+        {
+            scene.WriteElement(name, value);
+        }
     }
 }

@@ -21,23 +21,9 @@ namespace PressPlay.FFWD.Exporter
 
         public void Translate()
         {
-            // Replace usings
-            scriptLines.RemoveAll(s => s.StartsWith("using"));
-            //scriptLines.InsertRange(0, DefaultUsings.Select(s => "using " + s + ";"));
-            int line = 0;
-            DefaultUsings.ForEach(s => scriptLines.Insert(line++, "using " + s + ";"));
+            ReplaceUsings();
 
-            // Insert namespace
-            if (!String.IsNullOrEmpty(ScriptNamespace))
-            {
-                int classDef = scriptLines.FindIndex(s => s.Contains(" class "));
-                scriptLines.Insert(classDef, "namespace " + ScriptNamespace + " {");
-                for (int i = classDef + 1; i < scriptLines.Count; i++)
-                {
-                    scriptLines[i] = "\t" + scriptLines[i];
-                }
-                scriptLines.Add("}");
-            }
+            InsertNameSpace();
 
             // Override methods
             string[] methods = new string[] { "Start", "Update" };
@@ -62,10 +48,43 @@ namespace PressPlay.FFWD.Exporter
             }
         }
 
+        public void CreateStub()
+        {
+            ReplaceUsings();
+            int classDef = scriptLines.FindIndex(s => s.Contains(" class "));
+            scriptLines.RemoveRange(classDef + 1, scriptLines.Count - classDef - 1);
+            scriptLines.Add("}");
+            InsertNameSpace();
+        }
+
+        private void InsertNameSpace()
+        {
+            // Insert namespace
+            if (!String.IsNullOrEmpty(ScriptNamespace))
+            {
+                int classDef = scriptLines.FindIndex(s => s.Contains(" class "));
+                scriptLines.Insert(classDef, "namespace " + ScriptNamespace + " {");
+                for (int i = classDef + 1; i < scriptLines.Count; i++)
+                {
+                    scriptLines[i] = "\t" + scriptLines[i];
+                }
+                scriptLines.Add("}");
+            }
+        }
+
+        private void ReplaceUsings()
+        {
+            // Replace usings
+            scriptLines.RemoveAll(s => s.StartsWith("using"));
+            //scriptLines.InsertRange(0, DefaultUsings.Select(s => "using " + s + ";"));
+            int line = 0;
+            DefaultUsings.ForEach(s => scriptLines.Insert(line++, "using " + s + ";"));
+        }
+
         public override string ToString()
         {
             return String.Join(Environment.NewLine, scriptLines.ToArray());
         }
-   
+
     }
 }

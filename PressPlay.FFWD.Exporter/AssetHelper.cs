@@ -62,24 +62,39 @@ namespace PressPlay.FFWD.Exporter
             }
         }
 
-        public void ExportScript(MonoBehaviour component)
+        public void ExportScript(MonoBehaviour component, bool stubOnly)
         {
             if (component == null) return;
             if (exportedScripts.Contains(component.name)) return;
             try
             {
                 string key = component.GetType().Name;
+                string scriptPath = Path.Combine(ScriptDir, key + ".cs");
+                if (stubOnly && File.Exists(scriptPath))
+                {
+                    return;
+                }
                 if (scripts.ContainsKey(key))
                 {
                     ScriptTranslator translator = new ScriptTranslator(File.ReadAllLines(scripts[key]));
-                    translator.Translate();
-                    File.WriteAllText(Path.Combine(ScriptDir, key + ".cs"), translator.ToString());
+                    if (stubOnly)
+                    {
+                        translator.CreateStub();
+                    }
+                    else
+                    {
+                        translator.Translate();
+                    }
+                    File.WriteAllText(scriptPath, translator.ToString());
                 }
-                exportedScripts.Add(component.name);
             }
             catch (Exception ex)
             {
                 Debug.Log(ex.Message);
+            }
+            finally
+            {
+                exportedScripts.Add(component.name);
             }
         }
 

@@ -55,6 +55,7 @@
     <Compile Include="Configuration\WhenGettingAComponentWriter.cs" />
     <Compile Include="Configuration\WhenResolvingATypeName.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WhenCreatingAScriptStub.cs" />
     <Compile Include="WhenTranslatingAScript.cs" />
   </ItemGroup>
   <ItemGroup>

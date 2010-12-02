@@ -56,9 +56,11 @@
     <Compile Include="Configuration\ConfigurationSectionHandler.cs" />
     <Compile Include="Writers\Components\BoxColliderWriter.cs" />
     <Compile Include="Writers\Components\ColliderWriter.cs" />
+    <Compile Include="Writers\Components\ManualScriptWriter.cs" />
+    <Compile Include="Writers\Components\Extensions\PackedSpriteWriter.cs" />
     <Compile Include="Writers\Components\MonoBehaviourWriter.cs" />
     <Compile Include="Writers\Components\SphereColliderWriter.cs" />
-    <Compile Include="Writers\Components\XNAMeshColliderWriter.cs" />
+    <Compile Include="Writers\Components\Extensions\XNAMeshColliderWriter.cs" />
     <Compile Include="Writers\Components\MeshRendererWriter.cs" />
     <Compile Include="Writers\SceneWriter.cs" />
   </ItemGroup>
