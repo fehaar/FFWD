@@ -76,5 +76,13 @@ namespace PressPlay.FFWD
         {
             // TODO : Add implementation of method
         }
+
+        public string name
+        {
+            get
+            {
+                return (gameObject == null) ? GetType().Name : gameObject.name;
+            }
+        }
     }
 }

@@ -65,10 +65,10 @@ namespace PressPlay.FFWD.Exporter
         public void ExportScript(MonoBehaviour component, bool stubOnly)
         {
             if (component == null) return;
-            if (exportedScripts.Contains(component.name)) return;
+            string key = component.GetType().Name;
+            if (exportedScripts.Contains(key)) return;
             try
             {
-                string key = component.GetType().Name;
                 string scriptPath = Path.Combine(ScriptDir, key + ".cs");
                 if (stubOnly && File.Exists(scriptPath))
                 {
@@ -94,7 +94,7 @@ namespace PressPlay.FFWD.Exporter
             }
             finally
             {
-                exportedScripts.Add(component.name);
+                exportedScripts.Add(key);
             }
         }
 

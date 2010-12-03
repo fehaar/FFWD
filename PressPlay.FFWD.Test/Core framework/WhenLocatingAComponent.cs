@@ -35,7 +35,7 @@ namespace PressPlay.FFWD.Test.Core_framework
         public void WeCanFindAComponentInTheSameObject()
         {
             TestComponent comp = new TestComponent();
-            root.components.Add(comp);
+            root.AddComponent(comp);
             TestComponent[] components = root.GetComponents<TestComponent>();
             Assert.That(components, Is.Not.Null);
             Assert.That(components, Contains.Item(comp));
@@ -45,7 +45,7 @@ namespace PressPlay.FFWD.Test.Core_framework
         public void WeCanFindAComponentInTheParentObject()
         {
             TestComponent comp = new TestComponent();
-            root.components.Add(comp);
+            root.AddComponent(comp);
             TestComponent[] components = child.GetComponentsInParents<TestComponent>();
             Assert.That(components, Is.Not.Null);
             Assert.That(components, Contains.Item(comp));
@@ -57,9 +57,9 @@ namespace PressPlay.FFWD.Test.Core_framework
             TestComponent comp = new TestComponent();
             TestComponent comp1 = new TestComponent();
             TestComponent comp2 = new TestComponent();
-            root.components.Add(comp);
-            child.components.Add(comp1);
-            child.components.Add(comp2);
+            root.AddComponent(comp);
+            child.AddComponent(comp1);
+            child.AddComponent(comp2);
             TestComponent[] components = childOfChild.GetComponentsInParents<TestComponent>();
             Assert.That(components, Is.Not.Null);
             Assert.That(components, Contains.Item(comp));
@@ -71,7 +71,7 @@ namespace PressPlay.FFWD.Test.Core_framework
         public void WhenGettingObjectsInParentWeWillNotGetInOurOwnObject()
         {
             TestComponent comp = new TestComponent();
-            child.components.Add(comp);
+            child.AddComponent(comp);
             TestComponent[] components = child.GetComponentsInParents<TestComponent>();
             Assert.That(components, Is.Not.Null);
             Assert.That(components, Is.Empty);

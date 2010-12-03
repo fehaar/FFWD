@@ -35,10 +35,33 @@ namespace PressPlay.FFWD
 
         public String prefab { get; set; }
         [ContentSerializer(CollectionItemName = "component")]
-        public List<Component> components { get; set; }
+        private List<Component> components { get; set; }
+
         // TODO: We must export this as well
         [ContentSerializerIgnore]
         public bool active { get; set; }
+
+        internal void AfterLoad()
+        {
+            for (int j = 0; j < components.Count; j++)
+            {
+                components[j].gameObject = this;
+            }
+            if (transform != null && transform.children != null)
+            {
+                for (int i = 0; i < transform.children.Count; i++)
+                {
+                    transform.children[i].transform._parent = transform;
+                    transform.children[i].AfterLoad();
+                }
+            }
+        }
+
+        public void AddComponent(Component component)
+        {
+            components.Add(component);
+            component.gameObject = this;
+        }
 
         #region Update and event methods
         internal void FixedUpdate()

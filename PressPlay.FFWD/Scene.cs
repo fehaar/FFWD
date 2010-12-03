@@ -56,23 +56,7 @@ namespace PressPlay.FFWD
         {
             for (int i = 0; i < gameObjects.Count; i++)
             {
-                AfterLoad(gameObjects[i]);
-            }
-        }
-
-        private void AfterLoad(GameObject gameObject)
-        {
-            for (int j = 0; j < gameObject.components.Count; j++)
-            {
-                gameObject.components[j].gameObject = gameObject;
-            }
-            if (gameObject.transform != null && gameObject.transform.children != null)
-            {
-                for (int i = 0; i < gameObject.transform.children.Count; i++)
-                {
-                    gameObject.transform.children[i].transform._parent = gameObject.transform;
-                    AfterLoad(gameObject.transform.children[i]);
-                }
+                gameObjects[i].AfterLoad();
             }
         }
     }

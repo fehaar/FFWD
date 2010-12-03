@@ -146,11 +146,23 @@ namespace PressPlay.FFWD.Exporter.Writers
         internal void WriteScript(MonoBehaviour component)
         {
             assetHelper.ExportScript(component, false);
+            // Check for base classes
+            Type tp = component.GetType().BaseType;
+            if (tp != typeof(MonoBehaviour))
+            {
+                WriteScript(component.gameObject.AddComponent(tp) as MonoBehaviour);
+            }
         }
 
         internal void WriteScriptStub(MonoBehaviour component)
         {
             assetHelper.ExportScript(component, true);
+            // Check for base classes
+            Type tp = component.GetType().BaseType;
+            if (tp != typeof(MonoBehaviour))
+            {
+                WriteScriptStub(component.gameObject.AddComponent(tp) as MonoBehaviour);
+            }
         }
 
         internal void WriteMesh(Mesh mesh)
