@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework;
 
 namespace PressPlay.FFWD
 {
@@ -67,14 +68,34 @@ namespace PressPlay.FFWD
             // TODO: Objects should be destroyed after Update but before Rendering
         }
 
-        public void Instantiate(Component component)
+        public GameObject Instantiate(Component component)
         {
             // TODO : Add implementation of method
+            return null;
         }
 
-        public void Instantiate(GameObject go)
+        public GameObject Instantiate(GameObject go)
         {
             // TODO : Add implementation of method
+            return null;
+        }
+
+        public Component Instantiate(Component comp, Vector3 position, Quaternion rotation)
+        {
+            // TODO : Add implementation of method
+            return null;
+        }
+
+        public static Component FindObjectOfType(Type type)
+        {
+            // TODO : Add implementation of method
+            return null;
+        }
+
+        public static Component[] FindObjectsOfType(Type type)
+        {
+            // TODO : Add implementation of method
+            return new Component[0];
         }
 
         public string name

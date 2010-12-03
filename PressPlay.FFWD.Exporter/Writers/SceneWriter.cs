@@ -177,6 +177,9 @@ namespace PressPlay.FFWD.Exporter.Writers
         {
             if (obj == null)
             {
+                writer.WriteStartElement(name);
+                writer.WriteAttributeString("Null", ToString(true));
+                writer.WriteEndElement();
                 return;
             }
             if (obj is float)

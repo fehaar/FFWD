@@ -113,6 +113,7 @@
     <Compile Include="Interfaces\IFixedUpdateable.cs" />
     <Compile Include="Interfaces\IRenderable.cs" />
     <Compile Include="Interfaces\IUpdateable.cs" />
+    <Compile Include="Mathf.cs" />
     <Compile Include="MonoBehaviour.cs" />
     <Compile Include="Physics.cs" />
     <Compile Include="GameObjectContactProcessor.cs" />

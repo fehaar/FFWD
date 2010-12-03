@@ -18,7 +18,7 @@ namespace PressPlay.FFWD.Components
         #endregion
 
         #region Debug drawing
-        private BasicEffect effect;
+        //private BasicEffect effect;
         private VertexPositionColor[] pointList;
         #endregion
 

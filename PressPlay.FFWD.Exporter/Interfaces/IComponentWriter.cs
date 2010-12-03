@@ -9,4 +9,9 @@ namespace PressPlay.FFWD.Exporter.Interfaces
     {
         void Write(SceneWriter scene, object component);
     }
+
+    public interface IFilteredComponentWriter : IComponentWriter
+    {
+        Filter filter { get;  set; }
+    }
 }

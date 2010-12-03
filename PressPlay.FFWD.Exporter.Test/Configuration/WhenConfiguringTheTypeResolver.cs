@@ -38,6 +38,12 @@ namespace PressPlay.FFWD.Exporter.Test.Configuration
             ComponentMap map = obj.ComponentWriters.Find(m => m.Type == "UnityEngine.MeshRenderer");
             Assert.That(map, Is.Not.Null);
             Assert.That(map.To, Is.StringStarting(typeof(MeshRendererWriter).FullName));
+            Assert.That(map.FilterType, Is.EqualTo(Filter.FilterType.ExcludeAll));
+
+            map = obj.ComponentWriters.Find(m => m.Type == "AnimatedCheckPoint");
+            Assert.That(map, Is.Not.Null);
+            Assert.That(map.FilterType, Is.EqualTo(Filter.FilterType.Exclude));
+            Assert.That(map.FilterItems, Is.EqualTo("sndActivate,challenge"));
         }
 	}
 }

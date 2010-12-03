@@ -269,5 +269,10 @@ namespace PressPlay.FFWD
         }
         #endregion
 
+
+        public static Component FindObjectsOfType(Type type)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

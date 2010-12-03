@@ -48,6 +48,7 @@
     <Compile Include="ComponentMap.cs" />
     <Compile Include="Configuration\TypeResolverSection.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Filter.cs" />
     <Compile Include="Interfaces\IComponentWriter.cs" />
     <Compile Include="NamespaceRule.cs" />
     <Compile Include="ScriptTranslator.cs" />
