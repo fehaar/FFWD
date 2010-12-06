@@ -79,11 +79,11 @@ namespace PressPlay.FFWD
             Instance.currentScene.AfterLoad();
             for (int i = 0; i < Instance.currentScene.gameObjects.Count; i++)
             {
-                Instance.gameObjects.Add(Instance.currentScene.gameObjects[i].id, Instance.currentScene.gameObjects[i]);
+                Instance.gameObjects.Add(Instance.currentScene.gameObjects[i].GetInstanceID(), Instance.currentScene.gameObjects[i]);
             }
             for (int i = 0; i < Instance.currentScene.prefabs.Count; i++)
             {
-                Instance.prefabs.Add(Instance.currentScene.prefabs[i].id, Instance.currentScene.prefabs[i]);
+                Instance.prefabs.Add(Instance.currentScene.prefabs[i].GetInstanceID(), Instance.currentScene.prefabs[i]);
             }
         }
 

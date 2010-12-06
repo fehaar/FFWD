@@ -145,6 +145,7 @@ namespace PressPlay.FFWD.Exporter.Writers
             {
                 writer.WriteStartElement("component");
                 writer.WriteAttributeString("Type", resolver.ResolveTypeName(component));
+                writer.WriteElementString("id", component.GetInstanceID().ToString());
                 componentWriter.Write(this, component);
                 writer.WriteEndElement();
             }
@@ -246,7 +247,8 @@ namespace PressPlay.FFWD.Exporter.Writers
             else if (theObject is Component)
             {
                 Prefabs.Add((theObject as Component).gameObject);
-                return (theObject as Component).gameObject.GetInstanceID().ToString();
+                return theObject.GetInstanceID().ToString();
+//                return (theObject as Component).gameObject.GetInstanceID().ToString();
             }
             return theObject.GetType().FullName;
         }

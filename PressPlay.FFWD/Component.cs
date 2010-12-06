@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace PressPlay.FFWD
 {
-    public abstract class Component
+    public abstract class Component : UnityObject
     {
         public Component()
         {
@@ -55,7 +55,7 @@ namespace PressPlay.FFWD
 
         public override string ToString()
         {
-            return GetType().Name + " on " + gameObject.name + " (" + gameObject.id + ")";
+            return GetType().Name + " on " + gameObject.name + " (" + gameObject.GetInstanceID() + ")";
         }
 
         public void Destroy(Component component)
@@ -66,38 +66,6 @@ namespace PressPlay.FFWD
         public void Destroy(GameObject go)
         {
             // TODO: Objects should be destroyed after Update but before Rendering
-        }
-
-        public GameObject Instantiate(Component component)
-        {
-            return Instantiate(component.gameObject);
-        }
-
-        public GameObject Instantiate(GameObject go)
-        {
-            // TODO : Add implementation of method
-            return null;
-        }
-
-        public Component Instantiate(Component comp, Vector3 position, Quaternion rotation)
-        {
-            return Instantiate(comp.gameObject, position, rotation);
-        }
-
-        public Component Instantiate(GameObject comp, Vector3 position, Quaternion rotation)
-        {
-            // TODO : Add implementation of method
-            return null;
-        }
-
-        public static Component FindObjectOfType(Type type)
-        {
-            return GameObject.FindObjectOfType(type);
-        }
-
-        public static Component[] FindObjectsOfType(Type type)
-        {
-            return GameObject.FindObjectsOfType(type);
         }
 
         public string name

@@ -9,14 +9,13 @@ using Box2D.XNA;
 
 namespace PressPlay.FFWD
 {
-    public class GameObject
+    public class GameObject : UnityObject
     {
         public GameObject()
         {
             components = new List<Component>();
         }
 
-        public int id { get; set; }
         public string name { get; set; }
 
         private Transform _transform;
@@ -322,36 +321,6 @@ namespace PressPlay.FFWD
         private GameObject GetParent()
         {
             return (transform != null && transform.parent != null) ? transform.parent.gameObject : null;
-        }
-
-        public static Component[] FindObjectsOfType(Type type)
-        {
-            List<Component> list = new List<Component>();
-            if (Application.Instance.currentScene != null)
-            {
-                foreach (GameObject go in Application.Instance.currentScene.gameObjects)
-                {
-                    list.AddRange(go.GetComponentsInChildren(type));
-                }
-            }
-            return list.ToArray();
-        }
-
-        public static Component FindObjectOfType(Type type)
-        {
-            Component cmp = null;
-            if (Application.Instance.currentScene != null)
-            {
-                foreach (GameObject go in Application.Instance.currentScene.gameObjects)
-                {
-                    cmp = go.GetComponentInChildren(type);
-                    if (cmp != null)
-                    {
-                        return cmp;
-                    }
-                }
-            }
-            return null;
         }
         #endregion
 

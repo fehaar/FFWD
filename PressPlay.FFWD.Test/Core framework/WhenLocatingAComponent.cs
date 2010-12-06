@@ -106,7 +106,7 @@ namespace PressPlay.FFWD.Test.Core_framework
             root.AddComponent(comp);
             child.AddComponent(comp1);
             childOfChild.AddComponent(comp2);
-            Component[] components = Component.FindObjectsOfType(typeof(TestComponent));
+            UnityObject[] components = UnityObject.FindObjectsOfType(typeof(TestComponent));
             Assert.That(components, Is.Not.Null);
             Assert.That(components.Length, Is.EqualTo(3));
             Assert.That(components, Contains.Item(comp));
@@ -121,7 +121,7 @@ namespace PressPlay.FFWD.Test.Core_framework
             mainScene.gameObjects.Add(root);
             TestComponent comp = new TestComponent();
             child.AddComponent(comp);
-            Component cmp = Component.FindObjectOfType(typeof(TestComponent));
+            UnityObject cmp = UnityObject.FindObjectOfType(typeof(TestComponent));
             Assert.That(cmp, Is.Not.Null);
             Assert.That(cmp, Is.EqualTo(comp));
         }
@@ -138,7 +138,7 @@ namespace PressPlay.FFWD.Test.Core_framework
             root.AddComponent(comp);
             child.AddComponent(comp1);
             childOfChild.AddComponent(comp2);
-            Component cmp = Component.FindObjectOfType(typeof(TestComponent));
+            UnityObject cmp = UnityObject.FindObjectOfType(typeof(TestComponent));
             Assert.That(cmp, Is.Not.Null);
             Assert.That(cmp, Is.EqualTo(comp2));
         }
