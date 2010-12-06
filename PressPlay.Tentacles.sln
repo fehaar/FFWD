@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PressPlay.Tentacles.Scripts
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PressPlay.Tentacles.Scripts.WP7", "PressPlay.Tentacles.Scripts\PressPlay.Tentacles.Scripts.WP7.csproj", "{8CBD500E-5C97-4C06-8D1F-C75362284BB5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PressPlay.FFWD.Import", "FFWD\PressPlay.FFWD.Import\PressPlay.FFWD.Import.csproj", "{2B962BD4-23CF-4151-8A3F-DF40C4BCC75D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -202,6 +204,22 @@ Global
 		{8CBD500E-5C97-4C06-8D1F-C75362284BB5}.Release|x86.ActiveCfg = Release|Windows Phone
 		{8CBD500E-5C97-4C06-8D1F-C75362284BB5}.Release|Xbox 360.ActiveCfg = Release|Windows Phone
 		{8CBD500E-5C97-4C06-8D1F-C75362284BB5}.Release|Zune.ActiveCfg = Release|Windows Phone
+		{2B962BD4-23CF-4151-8A3F-DF40C4BCC75D}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{2B962BD4-23CF-4151-8A3F-DF40C4BCC75D}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{2B962BD4-23CF-4151-8A3F-DF40C4BCC75D}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{2B962BD4-23CF-4151-8A3F-DF40C4BCC75D}.Debug|Windows Phone.ActiveCfg = Debug|x86
+		{2B962BD4-23CF-4151-8A3F-DF40C4BCC75D}.Debug|x86.ActiveCfg = Debug|x86
+		{2B962BD4-23CF-4151-8A3F-DF40C4BCC75D}.Debug|x86.Build.0 = Debug|x86
+		{2B962BD4-23CF-4151-8A3F-DF40C4BCC75D}.Debug|Xbox 360.ActiveCfg = Debug|x86
+		{2B962BD4-23CF-4151-8A3F-DF40C4BCC75D}.Debug|Zune.ActiveCfg = Debug|x86
+		{2B962BD4-23CF-4151-8A3F-DF40C4BCC75D}.Release|Any CPU.ActiveCfg = Release|x86
+		{2B962BD4-23CF-4151-8A3F-DF40C4BCC75D}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{2B962BD4-23CF-4151-8A3F-DF40C4BCC75D}.Release|Mixed Platforms.Build.0 = Release|x86
+		{2B962BD4-23CF-4151-8A3F-DF40C4BCC75D}.Release|Windows Phone.ActiveCfg = Release|x86
+		{2B962BD4-23CF-4151-8A3F-DF40C4BCC75D}.Release|x86.ActiveCfg = Release|x86
+		{2B962BD4-23CF-4151-8A3F-DF40C4BCC75D}.Release|x86.Build.0 = Release|x86
+		{2B962BD4-23CF-4151-8A3F-DF40C4BCC75D}.Release|Xbox 360.ActiveCfg = Release|x86
+		{2B962BD4-23CF-4151-8A3F-DF40C4BCC75D}.Release|Zune.ActiveCfg = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -44,6 +44,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FFWD\PressPlay.FFWD.Import\PressPlay.FFWD.Import.csproj">
+      <Project>{2B962BD4-23CF-4151-8A3F-DF40C4BCC75D}</Project>
+      <Name>PressPlay.FFWD.Import</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FFWD\PressPlay.FFWD\PressPlay.FFWD.csproj">
       <Project>{A02BD389-79AE-4975-9A5E-DEDC66B8A0CB}</Project>
       <Name>PressPlay.FFWD</Name>

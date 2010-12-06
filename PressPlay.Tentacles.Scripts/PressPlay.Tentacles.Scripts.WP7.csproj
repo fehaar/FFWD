@@ -53,8 +53,19 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnimatedCheckPoint.cs" />
+    <Compile Include="CheckPoint.cs" />
+    <Compile Include="Equations.cs" />
+    <Compile Include="Lemmy.cs" />
+    <Compile Include="Level.cs" />
+    <Compile Include="LevelHandler.cs" />
+    <Compile Include="LevelImportDataStructure.cs" />
+    <Compile Include="LevelStartCheckpoint.cs" />
+    <Compile Include="LevelTypeSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimpleRotate.cs" />
+    <Compile Include="TriggeredByLemmy.cs" />
+    <Compile Include="TurnOffAtDistanceHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Background.png">
