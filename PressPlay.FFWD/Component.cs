@@ -32,7 +32,7 @@ namespace PressPlay.FFWD
 
         internal bool isStarted = false;
 
-        public GameObject gameObject { get; internal set; }
+        public virtual GameObject gameObject { get; internal set; }
 
         [ContentSerializerIgnore]
         public Transform transform
@@ -70,8 +70,7 @@ namespace PressPlay.FFWD
 
         public GameObject Instantiate(Component component)
         {
-            // TODO : Add implementation of method
-            return null;
+            return Instantiate(component.gameObject);
         }
 
         public GameObject Instantiate(GameObject go)
@@ -82,20 +81,23 @@ namespace PressPlay.FFWD
 
         public Component Instantiate(Component comp, Vector3 position, Quaternion rotation)
         {
+            return Instantiate(comp.gameObject, position, rotation);
+        }
+
+        public Component Instantiate(GameObject comp, Vector3 position, Quaternion rotation)
+        {
             // TODO : Add implementation of method
             return null;
         }
 
         public static Component FindObjectOfType(Type type)
         {
-            // TODO : Add implementation of method
-            return null;
+            return GameObject.FindObjectOfType(type);
         }
 
         public static Component[] FindObjectsOfType(Type type)
         {
-            // TODO : Add implementation of method
-            return new Component[0];
+            return GameObject.FindObjectsOfType(type);
         }
 
         public string name

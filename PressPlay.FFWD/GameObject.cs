@@ -33,7 +33,7 @@ namespace PressPlay.FFWD
             }
         }
 
-        public String prefab { get; set; }
+        //public String prefab { get; set; }
         [ContentSerializer(CollectionItemName = "component")]
         private List<Component> components { get; set; }
 
@@ -251,6 +251,62 @@ namespace PressPlay.FFWD
             return list.ToArray();
         }
 
+        public Component[] GetComponents(Type type)
+        {
+            List<Component> list = new List<Component>();
+            for (int i = 0; i < components.Count; i++)
+            {
+                if (components[i].GetType().IsAssignableFrom(type))
+                {
+                    list.Add(components[i]);
+                }
+            }
+            return list.ToArray();
+        }
+
+        public Component[] GetComponentsInChildren(Type type)
+        {
+            List<Component> list = new List<Component>();
+            for (int i = 0; i < components.Count; i++)
+            {
+                if (components[i].GetType().IsAssignableFrom(type))
+                {
+                    list.Add(components[i]);
+                }
+            }
+            if (transform.children != null)
+            {
+                for (int childIndex = 0; childIndex < transform.children.Count; childIndex++)
+                {
+                    list.AddRange(transform.children[childIndex].GetComponentsInChildren(type));
+                }
+            }
+            return list.ToArray();
+        }
+
+        public Component GetComponentInChildren(Type type)
+        {
+            if (transform.children != null)
+            {
+                for (int childIndex = 0; childIndex < transform.children.Count; childIndex++)
+                {
+                    Component cmp = transform.children[childIndex].GetComponentInChildren(type);
+                    if (cmp != null)
+                    {
+                        return cmp;
+                    }
+                }
+            }
+            for (int i = 0; i < components.Count; i++)
+            {
+                if (components[i].GetType().IsAssignableFrom(type))
+                {
+                    return components[i];
+                }
+            }
+            return null;
+        }
+
         public T[] GetComponentsInParents<T>() where T : Component
         {
             List<T> list = new List<T>();
@@ -267,12 +323,37 @@ namespace PressPlay.FFWD
         {
             return (transform != null && transform.parent != null) ? transform.parent.gameObject : null;
         }
+
+        public static Component[] FindObjectsOfType(Type type)
+        {
+            List<Component> list = new List<Component>();
+            if (Application.Instance.currentScene != null)
+            {
+                foreach (GameObject go in Application.Instance.currentScene.gameObjects)
+                {
+                    list.AddRange(go.GetComponentsInChildren(type));
+                }
+            }
+            return list.ToArray();
+        }
+
+        public static Component FindObjectOfType(Type type)
+        {
+            Component cmp = null;
+            if (Application.Instance.currentScene != null)
+            {
+                foreach (GameObject go in Application.Instance.currentScene.gameObjects)
+                {
+                    cmp = go.GetComponentInChildren(type);
+                    if (cmp != null)
+                    {
+                        return cmp;
+                    }
+                }
+            }
+            return null;
+        }
         #endregion
 
-
-        public static Component FindObjectsOfType(Type type)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

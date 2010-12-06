@@ -17,6 +17,8 @@ namespace PressPlay.FFWD
 
         [ContentSerializer(FlattenContent = true, CollectionItemName = "gameObject")]
         public List<GameObject> gameObjects { get; set; }
+        [ContentSerializer(FlattenContent = true, CollectionItemName = "prefab")]
+        public List<GameObject> prefabs { get; set; }
 
         /// <summary>
         /// This should be called on every Update in the game

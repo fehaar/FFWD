@@ -25,6 +25,9 @@ namespace PressPlay.FFWD
         public static Application Instance { get; private set; }
         private SpriteBatch spriteBatch;
 
+        private Dictionary<int, GameObject> gameObjects = new Dictionary<int, GameObject>();
+        private Dictionary<int, GameObject> prefabs = new Dictionary<int, GameObject>();
+
         public Scene currentScene
         {
             get;
@@ -74,6 +77,27 @@ namespace PressPlay.FFWD
         {
             Instance.currentScene = ContentHelper.Content.Load<Scene>(name);
             Instance.currentScene.AfterLoad();
+            for (int i = 0; i < Instance.currentScene.gameObjects.Count; i++)
+            {
+                Instance.gameObjects.Add(Instance.currentScene.gameObjects[i].id, Instance.currentScene.gameObjects[i]);
+            }
+            for (int i = 0; i < Instance.currentScene.prefabs.Count; i++)
+            {
+                Instance.prefabs.Add(Instance.currentScene.prefabs[i].id, Instance.currentScene.prefabs[i]);
+            }
+        }
+
+        public GameObject Find(int id)
+        {
+            if (gameObjects.ContainsKey(id))
+            {
+                return gameObjects[id];
+            }
+            if (prefabs.ContainsKey(id))
+            {
+                return prefabs[id];
+            }
+            return null;
         }
     }
 }

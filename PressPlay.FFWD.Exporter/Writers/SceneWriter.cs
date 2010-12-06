@@ -26,6 +26,8 @@ namespace PressPlay.FFWD.Exporter.Writers
 
         private XmlWriter writer = null;
 
+        private List<GameObject> Prefabs = new List<GameObject>();
+
         public void Write(string path)
         {
             XmlWriterSettings settings = new XmlWriterSettings();
@@ -38,6 +40,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                 writer.WriteStartElement("Asset");
                 writer.WriteAttributeString("Type", resolver.DefaultNamespace + ".Scene");
                 WriteGOs();
+                WritePrefabs();
                 writer.WriteEndElement();
                 writer.WriteEndElement();
             }
@@ -60,6 +63,16 @@ namespace PressPlay.FFWD.Exporter.Writers
             }
         }
 
+        private void WritePrefabs()
+        {
+            foreach (GameObject prefab in Prefabs)
+            {
+                writer.WriteStartElement("prefab");
+                WriteGameObject(prefab);
+                writer.WriteEndElement();
+            }
+        }
+
         private void WriteGameObject(GameObject go)
         {
             writer.WriteElementString("id", go.GetInstanceID().ToString());
@@ -67,17 +80,17 @@ namespace PressPlay.FFWD.Exporter.Writers
             writer.WriteStartElement("transform");
             WriteTransform(go.transform);
             writer.WriteEndElement();
-            UnityEngine.Object prefab = EditorUtility.GetPrefabParent(go);
-            if (prefab != null)
-            {
-                writer.WriteElementString("prefab", prefab.name);
-            }
-            else
-            {
-                writer.WriteStartElement("prefab");
-                writer.WriteAttributeString("Null", ToString(true));
-                writer.WriteEndElement();
-            }
+            //UnityEngine.Object prefab = EditorUtility.GetPrefabParent(go);
+            //if (prefab != null)
+            //{
+            //    writer.WriteElementString("prefab", prefab.name);
+            //}
+            //else
+            //{
+            //    writer.WriteStartElement("prefab");
+            //    writer.WriteAttributeString("Null", ToString(true));
+            //    writer.WriteEndElement();
+            //}
             writer.WriteStartElement("components");
             Component[] comps = go.GetComponents(typeof(Component));
             for (int i = 0; i < comps.Length; i++)
@@ -207,9 +220,36 @@ namespace PressPlay.FFWD.Exporter.Writers
                 writer.WriteElementString(name, ToString(obj as Vector3[]));
                 return;
             }
+            if (obj is UnityEngine.Object)
+            {
+                UnityEngine.Object theObject = (obj as UnityEngine.Object);
+                if (EditorUtility.GetPrefabType(theObject) == PrefabType.Prefab)
+                {
+                    writer.WriteElementString(name, AddPrefab(theObject));
+                }
+                else
+                {
+                    writer.WriteElementString(name, theObject.GetInstanceID().ToString());
+                }
+                return;
+            }
             writer.WriteElementString(name, obj.ToString());
         }
 
+        private string AddPrefab(UnityEngine.Object theObject)
+        {
+            if (theObject is GameObject)
+            {
+                Prefabs.Add(theObject as GameObject);
+                return theObject.GetInstanceID().ToString();
+            }
+            else if (theObject is Component)
+            {
+                Prefabs.Add((theObject as Component).gameObject);
+                return (theObject as Component).gameObject.GetInstanceID().ToString();
+            }
+            return theObject.GetType().FullName;
+        }
 
         #region ToString methods
         private string ToString(int[] array)
