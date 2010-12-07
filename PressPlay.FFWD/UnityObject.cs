@@ -9,12 +9,31 @@ namespace PressPlay.FFWD
 {
     public class UnityObject
     {
+        public UnityObject()
+        {
+            _id = nextId++;
+            isPrefab = false;
+        }
+
+        private static int nextId = 1;
+
         [ContentSerializer(ElementName="id")]
         private int _id;
 
         public int GetInstanceID()
         {
             return _id;
+        }
+
+        [ContentSerializerIgnore]
+        public bool isPrefab { get; set; }
+
+        internal virtual void AfterLoad()
+        {
+            if (_id > nextId)
+            {
+                nextId = _id + 1;
+            }
         }
 
         /// <summary>
@@ -60,32 +79,12 @@ namespace PressPlay.FFWD
 
         public static UnityObject[] FindObjectsOfType(Type type)
         {
-            List<UnityObject> list = new List<UnityObject>();
-            if (Application.Instance.currentScene != null)
-            {
-                foreach (GameObject go in Application.Instance.currentScene.gameObjects)
-                {
-                    list.AddRange(go.GetComponentsInChildren(type));
-                }
-            }
-            return list.ToArray();
+            return Application.FindObjectsOfType(type);
         }
 
         public static UnityObject FindObjectOfType(Type type)
         {
-            Component cmp = null;
-            if (Application.Instance.currentScene != null)
-            {
-                foreach (GameObject go in Application.Instance.currentScene.gameObjects)
-                {
-                    cmp = go.GetComponentInChildren(type);
-                    if (cmp != null)
-                    {
-                        return cmp;
-                    }
-                }
-            }
-            return null;
+            return Application.FindObjectOfType(type);
         }
     }
 }

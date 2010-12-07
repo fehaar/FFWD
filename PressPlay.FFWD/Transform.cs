@@ -9,7 +9,7 @@ namespace PressPlay.FFWD
 {
     public enum Space { World, Self }
 
-    public class Transform
+    public class Transform : Component
     {
         public Transform()
         {
@@ -63,8 +63,6 @@ namespace PressPlay.FFWD
         [ContentSerializer(Optional = true, CollectionItemName = "child")]
         internal List<GameObject> children { get; set; }
 
-        internal GameObject gameObject;
-
         internal Transform _parent;
         [ContentSerializerIgnore]
         public Transform parent {
@@ -90,10 +88,6 @@ namespace PressPlay.FFWD
                 if (_parent.children == null)
                 {
                     _parent.children = new List<GameObject>();
-                }
-                if (gameObject == null)
-                {
-                    gameObject = new GameObject() { transform = this };
                 }
                 _parent.children.Add(gameObject);
                 _hasDirtyWorld = true;
@@ -276,6 +270,5 @@ namespace PressPlay.FFWD
                 _hasDirtyWorld = false;
             }
         }
-
     }
 }

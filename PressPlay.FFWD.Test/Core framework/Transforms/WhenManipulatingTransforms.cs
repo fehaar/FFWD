@@ -14,7 +14,7 @@ namespace PressPlay.FFWD.Test.Core_framework.Transforms
         public void WeWillSetTheGameObjectOnANewTransform()
         {
             GameObject go = new GameObject();
-            go.transform = new Transform();
+            go.AddComponent(new Transform());
             Assert.That(go.transform.gameObject, Is.EqualTo(go));
         }
 

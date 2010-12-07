@@ -10,13 +10,14 @@ namespace PressPlay.FFWD
     public abstract class Component : UnityObject
     {
         public Component()
+            : base()
         {
             NewComponents.Add(this);
         }
 
-        private static List<Component> NewComponents = new List<Component>();
+        internal static List<Component> NewComponents = new List<Component>();
 
-        public static void AwakeNewComponents()
+        internal static void AwakeNewComponents()
         {
             for (int i = 0; i < NewComponents.Count; i++)
             {

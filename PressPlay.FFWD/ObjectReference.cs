@@ -15,7 +15,8 @@ namespace PressPlay.FFWD
             {
                 if (base.gameObject == null)
                 {
-                    base.gameObject = Application.Instance.Find(Id);
+                    UnityObject obj = Application.Instance.Find(Id);
+                    base.gameObject = (obj is GameObject) ? (obj as GameObject) : (obj as Component).gameObject;
                 }
                 return base.gameObject;
             }

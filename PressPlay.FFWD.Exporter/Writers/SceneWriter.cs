@@ -76,21 +76,10 @@ namespace PressPlay.FFWD.Exporter.Writers
         private void WriteGameObject(GameObject go)
         {
             writer.WriteElementString("id", go.GetInstanceID().ToString());
-            writer.WriteElementString("name", go.name);
-            writer.WriteStartElement("transform");
-            WriteTransform(go.transform);
-            writer.WriteEndElement();
-            //UnityEngine.Object prefab = EditorUtility.GetPrefabParent(go);
-            //if (prefab != null)
-            //{
-            //    writer.WriteElementString("prefab", prefab.name);
-            //}
-            //else
-            //{
-            //    writer.WriteStartElement("prefab");
-            //    writer.WriteAttributeString("Null", ToString(true));
-            //    writer.WriteEndElement();
-            //}
+            writer.WriteElementString("name", go.name);            
+            writer.WriteElementString("layer", ToString(go.layer));
+            writer.WriteElementString("active", ToString(go.active));
+            writer.WriteElementString("tag", go.tag);
             writer.WriteStartElement("components");
             Component[] comps = go.GetComponents(typeof(Component));
             for (int i = 0; i < comps.Length; i++)
@@ -107,6 +96,9 @@ namespace PressPlay.FFWD.Exporter.Writers
             {
                 pos.y = -pos.y;
             }
+            writer.WriteStartElement("component");
+            writer.WriteAttributeString("Type", "PressPlay.FFWD.Transform");
+            writer.WriteElementString("id", transform.GetInstanceID().ToString());
             writer.WriteElementString("localPosition", ToString(pos));
             writer.WriteElementString("localScale", ToString(transform.localScale));
             writer.WriteElementString("localRotation", ToString(transform.localRotation));
@@ -121,7 +113,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                 }
                 writer.WriteEndElement();
             }
-
+            writer.WriteEndElement();
         }
 
         private void WriteComponent(Component component)
@@ -132,6 +124,11 @@ namespace PressPlay.FFWD.Exporter.Writers
             }
             if (component == null)
             {
+                return;
+            }
+            if (component is Transform)
+            {
+                WriteTransform(component as Transform);
                 return;
             }
             if (resolver.SkipComponent(component))

@@ -12,23 +12,27 @@ namespace PressPlay.FFWD
     public class GameObject : UnityObject
     {
         public GameObject()
+            : base()
         {
             components = new List<Component>();
         }
 
         public string name { get; set; }
+        public int layer { get; set; }
+        public bool active { get; set; }
+        public string tag { get; set; }
 
         private Transform _transform;
+        [ContentSerializerIgnore]
         public Transform transform 
         { 
             get
             {
+                if (_transform == null)
+                {
+                    _transform = GetComponent<Transform>();
+                }
                 return _transform;
-            }
-            set
-            {
-                _transform = value;
-                _transform.gameObject = this;
             }
         }
 
@@ -36,20 +40,20 @@ namespace PressPlay.FFWD
         [ContentSerializer(CollectionItemName = "component")]
         private List<Component> components { get; set; }
 
-        // TODO: We must export this as well
-        [ContentSerializerIgnore]
-        public bool active { get; set; }
-
-        internal void AfterLoad()
+        internal override void AfterLoad()
         {
+            base.AfterLoad();
             for (int j = 0; j < components.Count; j++)
             {
+                components[j].isPrefab = isPrefab;
+                components[j].AfterLoad();
                 components[j].gameObject = this;
             }
             if (transform != null && transform.children != null)
             {
                 for (int i = 0; i < transform.children.Count; i++)
                 {
+                    transform.children[i].isPrefab = isPrefab;
                     transform.children[i].transform._parent = transform;
                     transform.children[i].AfterLoad();
                 }
@@ -237,6 +241,30 @@ namespace PressPlay.FFWD
         #endregion
 
         #region Component locator methods
+        public T GetComponent<T>() where T : Component
+        {
+            for (int i = 0; i < components.Count; i++)
+            {
+                if (components[i] is T)
+                {
+                    return components[i] as T;
+                }
+            }
+            return default(T);
+        }
+
+        public Component GetComponent(Type type)
+        {
+            for (int i = 0; i < components.Count; i++)
+            {
+                if (components[i].GetType().IsAssignableFrom(type))
+                {
+                    return components[i];
+                }
+            }
+            return null;
+        }
+
         public T[] GetComponents<T>() where T : Component
         {
             List<T> list = new List<T>();

@@ -16,9 +16,12 @@ namespace PressPlay.FFWD.Test.Core_framework
         [SetUp]
         public void Setup()
         {
-            root = new GameObject() { transform = new Transform() };
-            child = new GameObject() { transform = new Transform() };
-            childOfChild = new GameObject() { transform = new Transform() };
+            root = new GameObject();
+            root.AddComponent(new Transform());
+            child = new GameObject();
+            child.AddComponent(new Transform());
+            childOfChild = new GameObject();
+            childOfChild.AddComponent(new Transform());
             childOfChild.transform.parent = child.transform;
             child.transform.parent = root.transform;
         }
@@ -106,6 +109,8 @@ namespace PressPlay.FFWD.Test.Core_framework
             root.AddComponent(comp);
             child.AddComponent(comp1);
             childOfChild.AddComponent(comp2);
+            Application.LoadScene(mainScene);
+
             UnityObject[] components = UnityObject.FindObjectsOfType(typeof(TestComponent));
             Assert.That(components, Is.Not.Null);
             Assert.That(components.Length, Is.EqualTo(3));
@@ -121,6 +126,8 @@ namespace PressPlay.FFWD.Test.Core_framework
             mainScene.gameObjects.Add(root);
             TestComponent comp = new TestComponent();
             child.AddComponent(comp);
+            Application.LoadScene(mainScene);
+
             UnityObject cmp = UnityObject.FindObjectOfType(typeof(TestComponent));
             Assert.That(cmp, Is.Not.Null);
             Assert.That(cmp, Is.EqualTo(comp));
@@ -138,6 +145,8 @@ namespace PressPlay.FFWD.Test.Core_framework
             root.AddComponent(comp);
             child.AddComponent(comp1);
             childOfChild.AddComponent(comp2);
+            Application.LoadScene(mainScene);
+
             UnityObject cmp = UnityObject.FindObjectOfType(typeof(TestComponent));
             Assert.That(cmp, Is.Not.Null);
             Assert.That(cmp, Is.EqualTo(comp2));

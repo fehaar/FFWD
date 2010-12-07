@@ -25,14 +25,8 @@ namespace PressPlay.FFWD
         public static Application Instance { get; private set; }
         private SpriteBatch spriteBatch;
 
-        private Dictionary<int, GameObject> gameObjects = new Dictionary<int, GameObject>();
-        private Dictionary<int, GameObject> prefabs = new Dictionary<int, GameObject>();
-
-        public Scene currentScene
-        {
-            get;
-            private set;
-        }
+        private static Dictionary<int, UnityObject> objects = new Dictionary<int, UnityObject>();
+        private static Dictionary<int, UnityObject> prefabObjects = new Dictionary<int, UnityObject>();
 
         public override void Initialize()
         {
@@ -50,9 +44,13 @@ namespace PressPlay.FFWD
         {
             base.Update(gameTime);
             Component.AwakeNewComponents();
-            if (currentScene != null)
+            // TODO: Drop Update on GOs
+            foreach (UnityObject obj in objects.Values)
             {
-                currentScene.FixedUpdate();
+                if (obj is GameObject)
+                {
+                    (obj as GameObject).FixedUpdate();
+                }
             }
             Physics.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
         }
@@ -61,43 +59,94 @@ namespace PressPlay.FFWD
         {
             base.Draw(gameTime);
 
-            if (currentScene != null)
+            Color bg = new Color(78, 115, 74);
+            // TODO: Drop Update on GOs
+            foreach (UnityObject obj in objects.Values)
             {
-                Color bg = new Color(78, 115, 74);
+                if (obj is GameObject)
+                {
+                    (obj as GameObject).Update();
+                }
+            }
+            // TODO: This is not very cool. Needed to avoid test failures... But cameras should handle this
+            if (gameTime.ElapsedGameTime.TotalMilliseconds > 0)
+            {
                 GraphicsDevice.Clear(bg);
-                currentScene.Update();
                 GraphicsDevice.BlendState = BlendState.Opaque;
                 GraphicsDevice.DepthStencilState = DepthStencilState.Default;
                 GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
-                currentScene.Draw(spriteBatch);
+            }
+            // TODO: Drop Draw on GOs
+            foreach (UnityObject obj in objects.Values)
+            {
+                if (obj is GameObject)
+                {
+                    (obj as GameObject).Draw(spriteBatch);
+                }
             }
         }
 
         public static void LoadScene(string name)
         {
-            Instance.currentScene = ContentHelper.Content.Load<Scene>(name);
-            Instance.currentScene.AfterLoad();
-            for (int i = 0; i < Instance.currentScene.gameObjects.Count; i++)
+            Scene scene = ContentHelper.Content.Load<Scene>(name);
+            LoadScene(scene);
+        }
+
+        public static void LoadScene(Scene scene)
+        {
+            scene.AfterLoad();
+            for (int i = 0; i < scene.gameObjects.Count; i++)
             {
-                Instance.gameObjects.Add(Instance.currentScene.gameObjects[i].GetInstanceID(), Instance.currentScene.gameObjects[i]);
+                objects.Add(scene.gameObjects[i].GetInstanceID(), scene.gameObjects[i]);
             }
-            for (int i = 0; i < Instance.currentScene.prefabs.Count; i++)
+            for (int i = 0; i < Component.NewComponents.Count; i++)
             {
-                Instance.prefabs.Add(Instance.currentScene.prefabs[i].GetInstanceID(), Instance.currentScene.prefabs[i]);
+                objects.Add(Component.NewComponents[i].GetInstanceID(), Component.NewComponents[i]);
+            }
+            for (int i = 0; i < scene.prefabs.Count; i++)
+            {
+                prefabObjects.Add(scene.prefabs[i].GetInstanceID(), scene.prefabs[i]);
             }
         }
 
-        public GameObject Find(int id)
+        public UnityObject Find(int id)
         {
-            if (gameObjects.ContainsKey(id))
+            if (objects.ContainsKey(id))
             {
-                return gameObjects[id];
+                return objects[id];
             }
-            if (prefabs.ContainsKey(id))
+            if (prefabObjects.ContainsKey(id))
             {
-                return prefabs[id];
+                return prefabObjects[id];
             }
             return null;
         }
+
+        internal static UnityObject[] FindObjectsOfType(Type type)
+        {
+            List<UnityObject> list = new List<UnityObject>();
+            foreach (UnityObject obj in objects.Values)
+            {
+                if (obj.GetType().IsAssignableFrom(type))
+                {
+                    list.Add(obj);
+                }
+            }
+            return list.ToArray();
+        }
+
+        internal static UnityObject FindObjectOfType(Type type)
+        {
+            foreach (UnityObject obj in objects.Values)
+            {
+                if (obj.GetType().IsAssignableFrom(type))
+                {
+                    return obj;
+                }
+            }
+            return null;
+        }
+
+
     }
 }

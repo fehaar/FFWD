@@ -10,7 +10,7 @@ namespace PressPlay.FFWD.Test.Core_framework
     public class WhenLoadingAScene
     {
         Scene scene;
-        GameObject go;
+        GameObject root;
         GameObject child;
         GameObject childOfChild;
         TestComponent component;
@@ -21,19 +21,22 @@ namespace PressPlay.FFWD.Test.Core_framework
         public void Setup()
         {
             scene = new Scene();
-            go = new GameObject() { transform = new Transform() };
+            root = new GameObject();
+            root.AddComponent(new Transform());
             component = new TestComponent();
 
-            go.AddComponent(component);
-            scene.gameObjects.Add(go);
+            root.AddComponent(component);
+            scene.gameObjects.Add(root);
 
-            child = new GameObject() { transform = new Transform() };
+            child = new GameObject();
+            child.AddComponent(new Transform());
             childComponent = new TestComponent();
             child.AddComponent(childComponent);
-            go.transform.children = new List<GameObject>();
-            go.transform.children.Add(child);
+            root.transform.children = new List<GameObject>();
+            root.transform.children.Add(child);
 
-            childOfChild = new GameObject() { transform = new Transform() };
+            childOfChild = new GameObject();
+            childOfChild.AddComponent(new Transform());
             childOfChildComponent = new TestComponent();
             childOfChild.AddComponent(childOfChildComponent);
             child.transform.children = new List<GameObject>();
@@ -47,7 +50,7 @@ namespace PressPlay.FFWD.Test.Core_framework
             Assert.That(component.gameObject, Is.Null);
             scene.AfterLoad();
             Assert.That(component.gameObject, Is.Not.Null);
-            Assert.That(component.gameObject, Is.EqualTo(go));
+            Assert.That(component.gameObject, Is.EqualTo(root));
         }
 
         [Test]
@@ -69,9 +72,8 @@ namespace PressPlay.FFWD.Test.Core_framework
             Assert.That(child.transform.parent, Is.Null);
             scene.AfterLoad();
             Assert.That(child.transform.parent, Is.Not.Null);
-            Assert.That(child.transform.parent, Is.SameAs(go.transform));
+            Assert.That(child.transform.parent, Is.SameAs(root.transform));
         }
-
 
         [Test]
         public void AfterLoadWillEnsureThatAllTransformParentReferencesAreSetAllTheWayThroughTheHierachy()
@@ -82,5 +84,78 @@ namespace PressPlay.FFWD.Test.Core_framework
             Assert.That(childOfChild.transform.parent, Is.SameAs(child.transform));
         }
 
+        [Test]
+        public void AfterLoadWillEnsureThatAllTransformParentReferencesAreSetOnPrefabs()
+        {
+            scene.prefabs.AddRange(scene.gameObjects);
+            scene.gameObjects.Clear();
+            Assert.That(child.transform.parent, Is.Null);
+            scene.AfterLoad();
+            Assert.That(child.transform.parent, Is.Not.Null);
+            Assert.That(child.transform.parent, Is.SameAs(root.transform));
+        }
+
+        [Test]
+        public void AfterLoadWillEnsureThatAllTransformParentReferencesAreSetAllTheWayThroughTheHierachyOnPrefabs()
+        {
+            scene.prefabs.AddRange(scene.gameObjects);
+            scene.gameObjects.Clear();
+            Assert.That(childOfChild.transform.parent, Is.Null);
+            scene.AfterLoad();
+            Assert.That(childOfChild.transform.parent, Is.Not.Null);
+            Assert.That(childOfChild.transform.parent, Is.SameAs(child.transform));
+        }
+
+        [Test]
+        public void GameObjectsWillNotBeSetAsPrefabs()
+        {
+            Assert.That(root.isPrefab, Is.False);
+            Assert.That(child.isPrefab, Is.False);
+            Assert.That(childOfChild.isPrefab, Is.False);
+            scene.AfterLoad();
+            Assert.That(root.isPrefab, Is.False);
+            Assert.That(child.isPrefab, Is.False);
+            Assert.That(childOfChild.isPrefab, Is.False);
+        }
+
+        [Test]
+        public void ComponentsWillNotBeSetAsPrefabs()
+        {
+            Assert.That(component.isPrefab, Is.False);
+            Assert.That(childComponent.isPrefab, Is.False);
+            Assert.That(childOfChildComponent.isPrefab, Is.False);
+            scene.AfterLoad();
+            Assert.That(component.isPrefab, Is.False);
+            Assert.That(childComponent.isPrefab, Is.False);
+            Assert.That(childOfChildComponent.isPrefab, Is.False);
+        }
+
+        [Test]
+        public void AllPrefabGameObjectsWillBeSetAsPrefabs()
+        {
+            scene.prefabs.AddRange(scene.gameObjects);
+            scene.gameObjects.Clear();
+            Assert.That(root.isPrefab, Is.False);
+            Assert.That(child.isPrefab, Is.False);
+            Assert.That(childOfChild.isPrefab, Is.False);
+            scene.AfterLoad();
+            Assert.That(root.isPrefab, Is.True);
+            Assert.That(child.isPrefab, Is.True);
+            Assert.That(childOfChild.isPrefab, Is.True);
+        }
+
+        [Test]
+        public void AllPrefabComponentsWillBeSetAsPrefabs()
+        {
+            scene.prefabs.AddRange(scene.gameObjects);
+            scene.gameObjects.Clear();
+            Assert.That(component.isPrefab, Is.False);
+            Assert.That(childComponent.isPrefab, Is.False);
+            Assert.That(childOfChildComponent.isPrefab, Is.False);
+            scene.AfterLoad();
+            Assert.That(component.isPrefab, Is.True);
+            Assert.That(childComponent.isPrefab, Is.True);
+            Assert.That(childOfChildComponent.isPrefab, Is.True);
+        }
     }
 }

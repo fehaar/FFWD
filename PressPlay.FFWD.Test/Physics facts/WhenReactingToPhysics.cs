@@ -18,11 +18,13 @@ namespace PressPlay.FFWD.Test.Physics_facts
         [SetUp]
         public void Setup()
         {
-            go = new GameObject() { transform = new Transform() };
+            go = new GameObject();
+            go.AddComponent(new Transform());
             component = new TestComponent();
             go.AddComponent(component);
 
-            GameObject child = new GameObject() { transform = new Transform() };
+            GameObject child = new GameObject();
+            child.AddComponent(new Transform());
             childComponent = new TestComponent();
             child.AddComponent(childComponent);
             child.transform.parent = go.transform;
