@@ -16,7 +16,7 @@ namespace PressPlay.FFWD.Test.Core_framework
             TestComponent comp = new TestComponent();
             comp.onAwake = () => isAwoken = true;
             Assert.That(isAwoken, Is.False);
-            Component.AwakeNewComponents();
+            Application.AwakeNewComponents();
             Assert.That(isAwoken, Is.True);
         }
 
@@ -27,9 +27,9 @@ namespace PressPlay.FFWD.Test.Core_framework
             TestComponent comp = new TestComponent();
             comp.onAwake = () => awakeCount++;
             Assert.That(awakeCount, Is.EqualTo(0));
-            Component.AwakeNewComponents();
+            Application.AwakeNewComponents();
             Assert.That(awakeCount, Is.EqualTo(1));
-            Component.AwakeNewComponents();
+            Application.AwakeNewComponents();
             Assert.That(awakeCount, Is.EqualTo(1));
         }
     }

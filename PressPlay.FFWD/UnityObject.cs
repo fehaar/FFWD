@@ -25,8 +25,7 @@ namespace PressPlay.FFWD
             return _id;
         }
 
-        [ContentSerializerIgnore]
-        public bool isPrefab { get; set; }
+        internal bool isPrefab { get; set; }
 
         internal virtual void AfterLoad()
         {
@@ -60,8 +59,13 @@ namespace PressPlay.FFWD
         /// <param name="rotation"></param>
         public static UnityObject Instantiate(UnityObject original, Vector3 position, Quaternion rotation)
         {
-            // TODO : Add implementation of method
-            throw new NotImplementedException("Method not implemented.");
+            UnityObject obj = Instantiate(original);
+            if (obj is GameObject)
+            {
+                (obj as GameObject).transform.localPosition = position;
+                (obj as GameObject).transform.localRotation = rotation;
+            }
+            return obj;
         }
 
         /// <summary>
@@ -73,8 +77,27 @@ namespace PressPlay.FFWD
         /// <param name="original"></param>
         public static UnityObject Instantiate(UnityObject original)
         {
-            // TODO : Add implementation of method
-            throw new NotImplementedException("Method not implemented.");
+            if (original == null)
+            {
+                return null;
+            }
+            if (original is Component)
+            {
+                GameObject obj = (original as Component).gameObject.Clone() as GameObject;
+                // TODO: There is a problem here if we have more than one object of the same type...
+                return obj.GetComponentInChildren(original.GetType());
+            }
+            else
+            {
+                return original.Clone();
+            }
+        }
+
+        internal virtual UnityObject Clone()
+        {
+            UnityObject obj = MemberwiseClone() as UnityObject;
+            obj._id = nextId++;
+            return obj;
         }
 
         public static UnityObject[] FindObjectsOfType(Type type)

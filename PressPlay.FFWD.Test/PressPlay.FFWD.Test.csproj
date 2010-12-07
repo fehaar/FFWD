@@ -58,6 +58,7 @@
     <Compile Include="Core framework\WhenAddingAComponentToAGameObject.cs" />
     <Compile Include="Core framework\WhenCreatingANewComponent.cs" />
     <Compile Include="Core framework\WhenGettingTheComponentName.cs" />
+    <Compile Include="Core framework\WhenInstantiatingANewObject.cs" />
     <Compile Include="Core framework\WhenLoadingAScene.cs" />
     <Compile Include="Core framework\WhenLocatingAComponent.cs" />
     <Compile Include="Core framework\WhenRunningTheGameLoop.cs" />

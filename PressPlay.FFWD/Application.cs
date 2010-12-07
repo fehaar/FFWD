@@ -14,15 +14,9 @@ namespace PressPlay.FFWD
         public Application(Game game)
             : base(game)
         {
-            if (Instance != null)
-            {
-                throw new InvalidOperationException("You cannot have two FFWD applications running at a time");
-            }
-            Instance = this;
             Game.Components.Add(new Time(game));
         }
 
-        public static Application Instance { get; private set; }
         private SpriteBatch spriteBatch;
 
         private static Dictionary<int, UnityObject> objects = new Dictionary<int, UnityObject>();
@@ -43,7 +37,7 @@ namespace PressPlay.FFWD
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            Component.AwakeNewComponents();
+            AwakeNewComponents();
             // TODO: Drop Update on GOs
             foreach (UnityObject obj in objects.Values)
             {
@@ -89,27 +83,27 @@ namespace PressPlay.FFWD
         public static void LoadScene(string name)
         {
             Scene scene = ContentHelper.Content.Load<Scene>(name);
-            LoadScene(scene);
+            LoadLevel(scene);
         }
 
-        public static void LoadScene(Scene scene)
+        public static void LoadLevel(Scene scene)
         {
+            objects.Clear();
+            prefabObjects.Clear();
+
             scene.AfterLoad();
             for (int i = 0; i < scene.gameObjects.Count; i++)
             {
                 objects.Add(scene.gameObjects[i].GetInstanceID(), scene.gameObjects[i]);
             }
-            for (int i = 0; i < Component.NewComponents.Count; i++)
-            {
-                objects.Add(Component.NewComponents[i].GetInstanceID(), Component.NewComponents[i]);
-            }
             for (int i = 0; i < scene.prefabs.Count; i++)
             {
                 prefabObjects.Add(scene.prefabs[i].GetInstanceID(), scene.prefabs[i]);
             }
+            AwakeNewComponents();
         }
 
-        public UnityObject Find(int id)
+        public static UnityObject Find(int id)
         {
             if (objects.ContainsKey(id))
             {
@@ -148,5 +142,26 @@ namespace PressPlay.FFWD
         }
 
 
+        internal static List<Component> NewComponents = new List<Component>();
+
+        internal static void AwakeNewComponents()
+        {
+            for (int i = 0; i < NewComponents.Count; i++)
+            {
+                objects.Add(NewComponents[i].GetInstanceID(), NewComponents[i]);
+                NewComponents[i].Awake();
+            }
+            NewComponents.Clear();
+        }
+
+        internal static bool IsAwake(Component component)
+        {
+            return !NewComponents.Contains(component);
+        }
+
+        internal static void AddNewComponent(Component component)
+        {
+            NewComponents.Add(component);
+        }
     }
 }

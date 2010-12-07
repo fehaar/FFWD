@@ -12,23 +12,7 @@ namespace PressPlay.FFWD
         public Component()
             : base()
         {
-            NewComponents.Add(this);
-        }
-
-        internal static List<Component> NewComponents = new List<Component>();
-
-        internal static void AwakeNewComponents()
-        {
-            for (int i = 0; i < NewComponents.Count; i++)
-            {
-                NewComponents[i].Awake();
-            }
-            NewComponents.Clear();
-        }
-
-        internal static bool IsAwake(Component component)
-        {
-            return !NewComponents.Contains(component);
+            Application.AddNewComponent(this);
         }
 
         internal bool isStarted = false;

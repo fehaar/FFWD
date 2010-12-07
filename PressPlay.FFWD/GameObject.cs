@@ -66,6 +66,36 @@ namespace PressPlay.FFWD
             component.gameObject = this;
         }
 
+        internal override UnityObject Clone()
+        {
+            GameObject obj = base.Clone() as GameObject;
+            obj.name = name + "(Clone)";
+            obj.active = true;
+            obj.components = new List<Component>();
+            for (int i = 0; i < components.Count; i++)
+            {
+                obj.AddComponent(components[i].Clone() as Component);
+            }
+            if (transform != null)
+            {
+                if (transform.children != null && transform.children.Count > 0)
+                {
+                    obj.transform.children = new List<GameObject>();
+                    for (int i = 0; i < transform.children.Count; i++)
+                    {
+                        GameObject child = transform.children[i].Clone() as GameObject;
+                        child.transform.parent = obj.transform;
+                    }
+                }
+                if (transform.parent != null)
+                {
+                    GameObject parentClone = transform.parent.gameObject.Clone() as GameObject;
+                    obj.transform.parent = parentClone.transform;
+                }
+            }
+            return obj;
+        }
+
         #region Update and event methods
         internal void FixedUpdate()
         {
@@ -76,7 +106,7 @@ namespace PressPlay.FFWD
                     components[i].Start();
                     components[i].isStarted = true;
                 }
-                if (Component.IsAwake(components[i]) && components[i] is IFixedUpdateable)
+                if (Application.IsAwake(components[i]) && components[i] is IFixedUpdateable)
                 {
                     (components[i] as IFixedUpdateable).FixedUpdate();
                 }
@@ -99,7 +129,7 @@ namespace PressPlay.FFWD
                     components[i].Start();
                     components[i].isStarted = true;
                 }
-                if (Component.IsAwake(components[i]) && components[i] is IUpdateable)
+                if (Application.IsAwake(components[i]) && components[i] is IUpdateable)
                 {
                     (components[i] as IUpdateable).Update();
                 }
@@ -117,7 +147,7 @@ namespace PressPlay.FFWD
         {
             for (int i = 0; i < components.Count; i++)
             {
-                if (Component.IsAwake(components[i]) && components[i] is IRenderable)
+                if (Application.IsAwake(components[i]) && components[i] is IRenderable)
                 {
                     (components[i] as IRenderable).Draw(spriteBatch);
                 }
@@ -135,7 +165,7 @@ namespace PressPlay.FFWD
         {
             for (int i = 0; i < components.Count; i++)
             {
-                if (Component.IsAwake(components[i]) && components[i] is ICollidable)
+                if (Application.IsAwake(components[i]) && components[i] is ICollidable)
                 {
                     (components[i] as ICollidable).OnTriggerEnter(contact);
                 }
@@ -153,7 +183,7 @@ namespace PressPlay.FFWD
         {
             for (int i = 0; i < components.Count; i++)
             {
-                if (Component.IsAwake(components[i]) && components[i] is ICollidable)
+                if (Application.IsAwake(components[i]) && components[i] is ICollidable)
                 {
                     (components[i] as ICollidable).OnTriggerExit(contact);
                 }
@@ -171,7 +201,7 @@ namespace PressPlay.FFWD
         {
             for (int i = 0; i < components.Count; i++)
             {
-                if (Component.IsAwake(components[i]) && components[i] is ICollidable)
+                if (Application.IsAwake(components[i]) && components[i] is ICollidable)
                 {
                     (components[i] as ICollidable).OnCollisionEnter(contact);
                 }
@@ -189,7 +219,7 @@ namespace PressPlay.FFWD
         {
             for (int i = 0; i < components.Count; i++)
             {
-                if (Component.IsAwake(components[i]) && components[i] is ICollidable)
+                if (Application.IsAwake(components[i]) && components[i] is ICollidable)
                 {
                     (components[i] as ICollidable).OnCollisionExit(contact);
                 }
@@ -207,7 +237,7 @@ namespace PressPlay.FFWD
         {
             for (int i = 0; i < components.Count; i++)
             {
-                if (Component.IsAwake(components[i]) && components[i] is ICollidable)
+                if (Application.IsAwake(components[i]) && components[i] is ICollidable)
                 {
                     (components[i] as ICollidable).OnPreSolve(contact, manifold);
                 }
@@ -225,7 +255,7 @@ namespace PressPlay.FFWD
         {
             for (int i = 0; i < components.Count; i++)
             {
-                if (Component.IsAwake(components[i]) && components[i] is ICollidable)
+                if (Application.IsAwake(components[i]) && components[i] is ICollidable)
                 {
                     (components[i] as ICollidable).OnPostSolve(contact, contactImpulse);
                 }
@@ -313,7 +343,7 @@ namespace PressPlay.FFWD
 
         public Component GetComponentInChildren(Type type)
         {
-            if (transform.children != null)
+            if (transform != null && transform.children != null)
             {
                 for (int childIndex = 0; childIndex < transform.children.Count; childIndex++)
                 {

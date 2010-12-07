@@ -45,7 +45,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
         {
             bool componentCalled = false;
             component.onTriggerEnter = () => componentCalled = true;
-            Component.AwakeNewComponents();
+            Application.AwakeNewComponents();
             go.OnTriggerEnter(null);
             Assert.That(componentCalled, Is.True);
         }
@@ -55,7 +55,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
         {
             bool componentCalled = false;
             childComponent.onTriggerEnter = () => componentCalled = true;
-            Component.AwakeNewComponents();
+            Application.AwakeNewComponents();
             go.OnTriggerEnter(null);
             Assert.That(componentCalled, Is.True);
         }
@@ -76,7 +76,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
         {
             bool componentCalled = false;
             component.onTriggerExit = () => componentCalled = true;
-            Component.AwakeNewComponents();
+            Application.AwakeNewComponents();
             go.OnTriggerExit(null);
             Assert.That(componentCalled, Is.True);
         }
@@ -86,7 +86,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
         {
             bool componentCalled = false;
             childComponent.onTriggerExit = () => componentCalled = true;
-            Component.AwakeNewComponents();
+            Application.AwakeNewComponents();
             go.OnTriggerExit(null);
             Assert.That(componentCalled, Is.True);
         }
@@ -107,7 +107,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
         {
             bool componentCalled = false;
             component.onCollisionEnter = () => componentCalled = true;
-            Component.AwakeNewComponents();
+            Application.AwakeNewComponents();
             go.OnCollisionEnter(null);
             Assert.That(componentCalled, Is.True);
         }
@@ -117,7 +117,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
         {
             bool componentCalled = false;
             childComponent.onCollisionEnter = () => componentCalled = true;
-            Component.AwakeNewComponents();
+            Application.AwakeNewComponents();
             go.OnCollisionEnter(null);
             Assert.That(componentCalled, Is.True);
         }
@@ -138,7 +138,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
         {
             bool componentCalled = false;
             component.onCollisionExit = () => componentCalled = true;
-            Component.AwakeNewComponents();
+            Application.AwakeNewComponents();
             go.OnCollisionExit(null);
             Assert.That(componentCalled, Is.True);
         }
@@ -148,7 +148,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
         {
             bool componentCalled = false;
             childComponent.onCollisionExit = () => componentCalled = true;
-            Component.AwakeNewComponents();
+            Application.AwakeNewComponents();
             go.OnCollisionExit(null);
             Assert.That(componentCalled, Is.True);
         }
@@ -169,7 +169,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
         {
             bool componentCalled = false;
             component.onPreSolve = () => componentCalled = true;
-            Component.AwakeNewComponents();
+            Application.AwakeNewComponents();
             go.OnPreSolve(null, new Manifold());
             Assert.That(componentCalled, Is.True);
         }
@@ -179,7 +179,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
         {
             bool componentCalled = false;
             childComponent.onPreSolve = () => componentCalled = true;
-            Component.AwakeNewComponents();
+            Application.AwakeNewComponents();
             go.OnPreSolve(null, new Manifold());
             Assert.That(componentCalled, Is.True);
         }
@@ -200,7 +200,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
         {
             bool componentCalled = false;
             component.onPostSolve = () => componentCalled = true;
-            Component.AwakeNewComponents();
+            Application.AwakeNewComponents();
             go.OnPostSolve(null, new ContactImpulse());
             Assert.That(componentCalled, Is.True);
         }
@@ -210,7 +210,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
         {
             bool componentCalled = false;
             childComponent.onPostSolve = () => componentCalled = true;
-            Component.AwakeNewComponents();
+            Application.AwakeNewComponents();
             go.OnPostSolve(null, new ContactImpulse());
             Assert.That(componentCalled, Is.True);
         }
