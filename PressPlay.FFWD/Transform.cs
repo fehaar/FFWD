@@ -144,6 +144,10 @@ namespace PressPlay.FFWD
             {
                 return world.Translation;
             }
+            set
+            {
+                _world.Translation = value;
+            }
         }
 
         [ContentSerializerIgnore]

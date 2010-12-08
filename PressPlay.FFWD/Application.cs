@@ -156,14 +156,16 @@ namespace PressPlay.FFWD
                     }
                 }
             }
-            for (int i = 0; i < NewComponents.Count; i++)
+            // All components will exist to be found before awaking - otherwise we can get issues with instantiating on awake.
+            Component[] componentsToAwake = NewComponents.ToArray();
+            NewComponents.Clear();
+            for (int i = 0; i < componentsToAwake.Length; i++)
             {
-                if (!NewComponents[i].isPrefab)
+                if (!componentsToAwake[i].isPrefab)
                 {
-                    NewComponents[i].Awake();
+                    componentsToAwake[i].Awake();
                 }
             }
-            NewComponents.Clear();
         }
 
         internal static bool IsAwake(Component component)

@@ -65,6 +65,11 @@ namespace PressPlay.FFWD
                 (obj as GameObject).transform.localPosition = position;
                 (obj as GameObject).transform.localRotation = rotation;
             }
+            else if (obj is Component)
+            {
+                (obj as Component).transform.localPosition = position;
+                (obj as Component).transform.localRotation = rotation;
+            }
             return obj;
         }
 

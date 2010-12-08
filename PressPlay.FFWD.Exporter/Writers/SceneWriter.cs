@@ -27,6 +27,7 @@ namespace PressPlay.FFWD.Exporter.Writers
         private XmlWriter writer = null;
 
         private List<GameObject> Prefabs = new List<GameObject>();
+        private List<int> writtenIds = new List<int>();
 
         public void Write(string path)
         {
@@ -57,6 +58,10 @@ namespace PressPlay.FFWD.Exporter.Writers
                 {
                     continue;
                 }
+                if (writtenIds.Contains(go.GetInstanceID()))
+                {
+                    continue;
+                }
                 writer.WriteStartElement("gameObject");
                 WriteGameObject(go);
                 writer.WriteEndElement();
@@ -65,16 +70,22 @@ namespace PressPlay.FFWD.Exporter.Writers
 
         private void WritePrefabs()
         {
-            foreach (GameObject prefab in Prefabs)
+            for (int i = 0; i < Prefabs.Count; i++)
             {
+                if (writtenIds.Contains(Prefabs[i].GetInstanceID()))
+                {
+                    continue;
+                }
+                writtenIds.Add(Prefabs[i].GetInstanceID());
                 writer.WriteStartElement("prefab");
-                WriteGameObject(prefab);
+                WriteGameObject(Prefabs[i]);
                 writer.WriteEndElement();
             }
         }
 
         private void WriteGameObject(GameObject go)
         {
+            writtenIds.Add(go.GetInstanceID());
             writer.WriteElementString("id", go.GetInstanceID().ToString());
             writer.WriteElementString("name", go.name);            
             writer.WriteElementString("layer", ToString(go.layer));
@@ -140,6 +151,7 @@ namespace PressPlay.FFWD.Exporter.Writers
             IComponentWriter componentWriter = resolver.GetComponentWriter(type);
             if (componentWriter != null)
             {
+                writtenIds.Add(component.GetInstanceID());
                 writer.WriteStartElement("component");
                 writer.WriteAttributeString("Type", resolver.ResolveTypeName(component));
                 writer.WriteElementString("id", component.GetInstanceID().ToString());

@@ -59,20 +59,6 @@ namespace PressPlay.FFWD.Test.Core_framework
         }
 
         [Test]
-        public void WeCanPlaceTheNewComponent()
-        {
-            GameObject obj = new GameObject();
-            Transform trans = new Transform();
-            obj.AddComponent(trans);
-            Vector3 pos = Vector3.UnitZ;
-            Quaternion rot = Quaternion.CreateFromAxisAngle(Vector3.UnitY, 10);
-            GameObject instance = GameObject.Instantiate(obj, pos, rot) as GameObject;
-            Assert.That(instance, Is.Not.Null);
-            Assert.That(instance.transform.localPosition, Is.EqualTo(pos));
-            Assert.That(instance.transform.localRotation, Is.EqualTo(rot));
-        }
-
-        [Test]
         public void WeCanInstantiateAComponent()
         {
             GameObject obj = new GameObject();
@@ -297,7 +283,7 @@ namespace PressPlay.FFWD.Test.Core_framework
         }
 
         [Test]
-        public void InstantiatingAComponentInAwakeWillAwakeThem()
+        public void InstantiatingAComponentInAwakeWillAwakeThemOnNextCall()
         {
             int awakeCalls = 0;
             GameObject objPrefab = new GameObject() { isPrefab = true };
@@ -312,9 +298,38 @@ namespace PressPlay.FFWD.Test.Core_framework
             Application.AwakeNewComponents();
 
             Assert.That(inst, Is.Not.Null);
+            Assert.That(awakeCalls, Is.EqualTo(1));
+            Application.AwakeNewComponents();
             Assert.That(awakeCalls, Is.EqualTo(2));
         }
-	
-	
+
+        [Test]
+        public void WeCanPlaceTheNewGameObject()
+        {
+            GameObject obj = new GameObject();
+            Transform trans = new Transform();
+            obj.AddComponent(trans);
+            Vector3 pos = Vector3.UnitZ;
+            Quaternion rot = Quaternion.CreateFromAxisAngle(Vector3.UnitY, 10);
+            GameObject instance = GameObject.Instantiate(obj, pos, rot) as GameObject;
+            Assert.That(instance, Is.Not.Null);
+            Assert.That(instance.transform.localPosition, Is.EqualTo(pos));
+            Assert.That(instance.transform.localRotation, Is.EqualTo(rot));
+        }
+
+
+        [Test]
+        public void WeCanPlaceTheNewGameObjectWhenCloningByComponent()
+        {
+            GameObject obj = new GameObject();
+            Transform trans = new Transform();
+            obj.AddComponent(trans);
+            Vector3 pos = Vector3.UnitZ;
+            Quaternion rot = Quaternion.CreateFromAxisAngle(Vector3.UnitY, 10);
+            Transform instance = GameObject.Instantiate(trans, pos, rot) as Transform;
+            Assert.That(instance, Is.Not.Null);
+            Assert.That(instance.gameObject.transform.localPosition, Is.EqualTo(pos));
+            Assert.That(instance.gameObject.transform.localRotation, Is.EqualTo(rot));
+        }
     }
 }

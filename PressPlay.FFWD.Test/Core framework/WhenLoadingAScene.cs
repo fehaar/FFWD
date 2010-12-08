@@ -24,6 +24,7 @@ namespace PressPlay.FFWD.Test.Core_framework
             Application.Reset();
 
             scene = new Scene();
+
             root = new GameObject();
             root.AddComponent(new Transform());
             rootComponent = new TestComponent();
@@ -257,7 +258,7 @@ namespace PressPlay.FFWD.Test.Core_framework
         }
 
         [Test]
-        public void IfAComponentIsCreatedDuringAwakeItWillBeAwoken()
+        public void IfAComponentIsCreatedDuringAwakeItWillBeAwokenOneNextCall()
         {
             bool awakeCalled = false;
             TestComponent newComponent = null;
@@ -266,6 +267,9 @@ namespace PressPlay.FFWD.Test.Core_framework
             Assert.That(awakeCalled, Is.False);
             Application.LoadLevel(scene);
             Assert.That(newComponent, Is.Not.Null);
+            Assert.That(awakeCalled, Is.False);
+
+            Application.AwakeNewComponents();
             Assert.That(awakeCalled, Is.True);
         }
 	

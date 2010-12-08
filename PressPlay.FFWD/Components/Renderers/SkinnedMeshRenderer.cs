@@ -43,12 +43,12 @@ namespace PressPlay.FFWD.Components
         {
             base.Start();
             model = ContentHelper.GetModel(asset);
-            tex = ContentHelper.GetTexture(texture);
-
             if (model == null)
             {
                 return;
             }
+            tex = ContentHelper.GetTexture(texture);
+
             for (int i = 0; i < model.Meshes.Count; i++)
             {
                 if (model.Meshes[i].Name == mesh)
@@ -67,6 +67,9 @@ namespace PressPlay.FFWD.Components
                 animationPlayer = new AnimationPlayer(skinningData);
                 AnimationClip clip = skinningData.AnimationClips["Take 001"];
                 animationPlayer.StartClip(clip);
+                // NOTE: I am trying to use scale to make the model smaller... 
+                // The reasoning is that in some way the model is drawn larger than it is due to the scale - but I am grabbing at straws.
+                animationPlayer.Update(0.0f, true, Matrix.Invert(Matrix.CreateScale(transform.lossyScale)));
             }
         }
 
@@ -76,7 +79,7 @@ namespace PressPlay.FFWD.Components
         {
             if (animationPlayer != null)
             {
-                animationPlayer.Update(Time.deltaTime, true, Matrix.Identity);
+                //animationPlayer.Update(Time.deltaTime, true, Matrix.Identity);
             }
         }
 
