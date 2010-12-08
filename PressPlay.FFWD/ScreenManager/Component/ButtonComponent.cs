@@ -74,8 +74,6 @@ namespace PressPlay.FFWD.ScreenManager
             ContentHelper.LoadTexture(OnNormalTexture);
             ContentHelper.LoadTexture(OnActiveTexture);
 
-            Debug.Log("ButtonComponent AWAKE");
-
             if (gameObject.renderer == null)
             {
                 gameObject.AddComponent(new SpriteRenderer());
@@ -87,8 +85,6 @@ namespace PressPlay.FFWD.ScreenManager
             base.Start();
             normalTexture = ContentHelper.GetTexture(OnNormalTexture);
             activeTexture = ContentHelper.GetTexture(OnActiveTexture);
-
-            Debug.Log("ButtonComponent START");
 
             if (normalTexture != null)
             {
@@ -110,7 +106,6 @@ namespace PressPlay.FFWD.ScreenManager
 
             if (isTapped && Time.time > onSelectTime + delayBeforeActivation)
             {
-                Debug.Log("Updating Button Component");
                 if (Selected != null)
                 {
                     Selected(this, new PlayerIndexEventArgs(PlayerIndex.One));
