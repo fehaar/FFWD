@@ -485,6 +485,7 @@ namespace PressPlay.Tentacles.Scripts
 
         public override void Update()
         {
+            return;
             //if (!GlobalManager.isLoaded) return;
 
             //if (isCommunicatingWithServer && www.isDone)

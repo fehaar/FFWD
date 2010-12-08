@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using PressPlay.FFWD.Components;
 using PressPlay.FFWD;
+using Microsoft.Xna.Framework.Content;
 
 namespace PressPlay.Tentacles.Scripts
 {
@@ -86,6 +87,7 @@ namespace PressPlay.Tentacles.Scripts
 
 
         private bool _isInputLocked = false;
+        [ContentSerializerIgnore]
         public bool isInputLocked
         {
             get
