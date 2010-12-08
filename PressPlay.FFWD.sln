@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A596AFB3-E255-4738-AEB6-35D786063026}"
 	ProjectSection(SolutionItems) = preProject
-		..\..\..\..\..\Users\Thomas Gravgaard\Downloads\ExportAll.cs = ..\..\..\..\..\Users\Thomas Gravgaard\Downloads\ExportAll.cs
+		..\..\..\..\..\..\..\Downloads\ExportAll.cs = ..\..\..\..\..\..\..\Downloads\ExportAll.cs
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PressPlay.FFWD.Unity", "PressPlay.FFWD.Unity\PressPlay.FFWD.Unity.csproj", "{8CD56DE8-14AF-4EE3-844C-FFFD39E7F207}"

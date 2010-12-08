@@ -42,6 +42,29 @@ namespace PressPlay.FFWD.Animation
 
         #endregion
 
+        private int _startFrame;
+        public int StartFrame 
+        { 
+            get
+            {
+                return _startFrame;
+            }
+            set
+            {
+                _startFrame = value;
+                if (currentClipValue != null)
+                {
+                    currentKeyframe = _startFrame;
+                    currentTimeValue = currentClipValue.Keyframes[_startFrame].Time;
+                }
+            }
+        }
+        public int EndFrame 
+        { 
+            get; 
+            set; 
+        }
+
         /// <summary>
         /// Constructs a new animation player.
         /// </summary>
@@ -69,11 +92,14 @@ namespace PressPlay.FFWD.Animation
             currentClipValue = clip;
             currentTimeValue = TimeSpan.Zero;
             currentKeyframe = 0;
+            if (EndFrame == 0)
+            {
+                EndFrame = currentClipValue.Keyframes.Count;
+            }
 
             // Initialize bone transforms to the bind pose.
             skinningDataValue.BindPose.CopyTo(boneTransforms, 0);
         }
-
 
         /// <summary>
         /// Advances the current animation position.
@@ -125,7 +151,7 @@ namespace PressPlay.FFWD.Animation
             while (currentKeyframe < keyframes.Count)
             {
                 Keyframe keyframe = keyframes[currentKeyframe];
-
+                Debug.Log("Play keyframe " + currentKeyframe);
                 // Stop when we've read up to the current time position.
                 if (keyframe.Time > currentTimeValue)
                     break;
@@ -134,6 +160,11 @@ namespace PressPlay.FFWD.Animation
                 boneTransforms[keyframe.Bone] = keyframe.Transform;
 
                 currentKeyframe++;
+                if (currentKeyframe > EndFrame)
+                {
+                    currentKeyframe = StartFrame;
+                    break;
+                }
             }
         }
 

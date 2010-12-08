@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PressPlay.FFWD.Exporter</RootNamespace>
     <AssemblyName>PressPlay.FFWD.Exporter</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -48,6 +48,7 @@
     <Compile Include="ComponentMap.cs" />
     <Compile Include="Configuration\TypeResolverSection.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Filter.cs" />
     <Compile Include="Interfaces\IComponentWriter.cs" />
     <Compile Include="NamespaceRule.cs" />
     <Compile Include="ScriptTranslator.cs" />
@@ -56,9 +57,13 @@
     <Compile Include="Configuration\ConfigurationSectionHandler.cs" />
     <Compile Include="Writers\Components\BoxColliderWriter.cs" />
     <Compile Include="Writers\Components\ColliderWriter.cs" />
+    <Compile Include="Writers\Components\GenericComponentWriter.cs" />
+    <Compile Include="Writers\Components\ManualScriptWriter.cs" />
+    <Compile Include="Writers\Components\Extensions\PackedSpriteWriter.cs" />
     <Compile Include="Writers\Components\MonoBehaviourWriter.cs" />
+    <Compile Include="Writers\Components\RigidbodyWriter.cs" />
     <Compile Include="Writers\Components\SphereColliderWriter.cs" />
-    <Compile Include="Writers\Components\XNAMeshColliderWriter.cs" />
+    <Compile Include="Writers\Components\Extensions\XNAMeshColliderWriter.cs" />
     <Compile Include="Writers\Components\MeshRendererWriter.cs" />
     <Compile Include="Writers\SceneWriter.cs" />
   </ItemGroup>

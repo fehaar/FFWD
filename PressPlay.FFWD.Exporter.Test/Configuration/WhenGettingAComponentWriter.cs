@@ -18,6 +18,11 @@ namespace PressPlay.FFWD.Exporter.Test.Configuration
         #endregion
     }
 
+    public class TestFilteredComponentWriter : TestComponentWriter, IFilteredComponentWriter
+    {
+        public Filter filter { get; set; }
+    }
+
     [TestFixture]
     public class WhenGettingAComponentWriter
     {
@@ -44,6 +49,28 @@ namespace PressPlay.FFWD.Exporter.Test.Configuration
         {
             IComponentWriter writer = resolver.GetComponentWriter("Hello".GetType());
             Assert.That(writer, Is.Null);
+        }
+
+        [Test]
+        public void WeWillNotHaveAFilterIfOneIsNotConfigured()
+        {
+            resolver.ComponentWriters.Add(new ComponentMap() { Type = "System.String", To = typeof(TestFilteredComponentWriter).AssemblyQualifiedName });
+            IFilteredComponentWriter writer = (IFilteredComponentWriter)resolver.GetComponentWriter("Hello".GetType());
+            Assert.That(writer, Is.Not.Null);
+            Assert.That(writer, Is.InstanceOf<TestFilteredComponentWriter>());
+            Assert.That(writer.filter, Is.Null);
+        }
+
+        [Test]
+        public void WeWillHaveAFilterIfOneIsConfigured()
+        {
+            resolver.ComponentWriters.Add(new ComponentMap() { Type = "System.String", To = typeof(TestFilteredComponentWriter).AssemblyQualifiedName, FilterType = Filter.FilterType.Exclude, FilterItems = "filter" });
+            IFilteredComponentWriter writer = (IFilteredComponentWriter)resolver.GetComponentWriter("Hello".GetType());
+            Assert.That(writer, Is.Not.Null);
+            Assert.That(writer, Is.InstanceOf<TestFilteredComponentWriter>());
+            Assert.That(writer.filter, Is.Not.Null);
+            Assert.That(writer.filter.filterType, Is.EqualTo(Filter.FilterType.Exclude));
+            Assert.That(writer.filter.items, Contains.Item("filter"));
         }
 	
     }

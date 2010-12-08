@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Xml;
 using UnityEngine;
 using UnityEditor;
 using System.IO;
 using PressPlay.FFWD.Exporter.Interfaces;
+using System.Globalization;
 
 namespace PressPlay.FFWD.Exporter.Writers
 {
@@ -22,8 +22,12 @@ namespace PressPlay.FFWD.Exporter.Writers
         private AssetHelper assetHelper;
 
         public string ExportDir { get; set; }
+        public bool FlipYInTransforms { get; set; }
 
         private XmlWriter writer = null;
+
+        private List<GameObject> Prefabs = new List<GameObject>();
+        private List<int> writtenIds = new List<int>();
 
         public void Write(string path)
         {
@@ -37,6 +41,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                 writer.WriteStartElement("Asset");
                 writer.WriteAttributeString("Type", resolver.DefaultNamespace + ".Scene");
                 WriteGOs();
+                WritePrefabs();
                 writer.WriteEndElement();
                 writer.WriteEndElement();
             }
@@ -53,30 +58,39 @@ namespace PressPlay.FFWD.Exporter.Writers
                 {
                     continue;
                 }
+                if (writtenIds.Contains(go.GetInstanceID()))
+                {
+                    continue;
+                }
                 writer.WriteStartElement("gameObject");
                 WriteGameObject(go);
                 writer.WriteEndElement();
             }
         }
 
-        private void WriteGameObject(GameObject go)
+        private void WritePrefabs()
         {
-            writer.WriteElementString("id", go.GetInstanceID().ToString());
-            writer.WriteElementString("name", go.name);
-            writer.WriteStartElement("transform");
-            WriteTransform(go.transform);
-            writer.WriteEndElement();
-            UnityEngine.Object prefab = EditorUtility.GetPrefabParent(go);
-            if (prefab != null)
+            for (int i = 0; i < Prefabs.Count; i++)
             {
-                writer.WriteElementString("prefab", prefab.name);
-            }
-            else
-            {
+                if (writtenIds.Contains(Prefabs[i].GetInstanceID()))
+                {
+                    continue;
+                }
+                writtenIds.Add(Prefabs[i].GetInstanceID());
                 writer.WriteStartElement("prefab");
-                writer.WriteAttributeString("Null", ToString(true));
+                WriteGameObject(Prefabs[i]);
                 writer.WriteEndElement();
             }
+        }
+
+        private void WriteGameObject(GameObject go)
+        {
+            writtenIds.Add(go.GetInstanceID());
+            writer.WriteElementString("id", go.GetInstanceID().ToString());
+            writer.WriteElementString("name", go.name);            
+            writer.WriteElementString("layer", ToString(go.layer));
+            writer.WriteElementString("active", ToString(go.active));
+            writer.WriteElementString("tag", go.tag);
             writer.WriteStartElement("components");
             Component[] comps = go.GetComponents(typeof(Component));
             for (int i = 0; i < comps.Length; i++)
@@ -88,7 +102,15 @@ namespace PressPlay.FFWD.Exporter.Writers
 
         private void WriteTransform(Transform transform)
         {
-            writer.WriteElementString("localPosition", ToString(transform.localPosition));
+            Vector3 pos = transform.localPosition;
+            if (FlipYInTransforms)
+            {
+                pos.y = -pos.y;
+            }
+            writer.WriteStartElement("component");
+            writer.WriteAttributeString("Type", "PressPlay.FFWD.Transform");
+            writer.WriteElementString("id", transform.GetInstanceID().ToString());
+            writer.WriteElementString("localPosition", ToString(pos));
             writer.WriteElementString("localScale", ToString(transform.localScale));
             writer.WriteElementString("localRotation", ToString(transform.localRotation));
             if (transform.childCount > 0)
@@ -102,7 +124,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                 }
                 writer.WriteEndElement();
             }
-
+            writer.WriteEndElement();
         }
 
         private void WriteComponent(Component component)
@@ -115,6 +137,11 @@ namespace PressPlay.FFWD.Exporter.Writers
             {
                 return;
             }
+            if (component is Transform)
+            {
+                WriteTransform(component as Transform);
+                return;
+            }
             if (resolver.SkipComponent(component))
             {
                 return;
@@ -124,8 +151,10 @@ namespace PressPlay.FFWD.Exporter.Writers
             IComponentWriter componentWriter = resolver.GetComponentWriter(type);
             if (componentWriter != null)
             {
+                writtenIds.Add(component.GetInstanceID());
                 writer.WriteStartElement("component");
                 writer.WriteAttributeString("Type", resolver.ResolveTypeName(component));
+                writer.WriteElementString("id", component.GetInstanceID().ToString());
                 componentWriter.Write(this, component);
                 writer.WriteEndElement();
             }
@@ -133,13 +162,30 @@ namespace PressPlay.FFWD.Exporter.Writers
 
         internal void WriteTexture(Texture texture)
         {
-            writer.WriteElementString("Texture", texture.name);
+            writer.WriteElementString("texture", texture.name);
             assetHelper.ExportTexture(texture as Texture2D);
         }
 
         internal void WriteScript(MonoBehaviour component)
         {
-            assetHelper.ExportScript(component);
+            assetHelper.ExportScript(component, false);
+            // Check for base classes
+            Type tp = component.GetType().BaseType;
+            if (tp != typeof(MonoBehaviour))
+            {
+                WriteScript(component.gameObject.AddComponent(tp) as MonoBehaviour);
+            }
+        }
+
+        internal void WriteScriptStub(MonoBehaviour component)
+        {
+            assetHelper.ExportScript(component, true);
+            // Check for base classes
+            Type tp = component.GetType().BaseType;
+            if (tp != typeof(MonoBehaviour))
+            {
+                WriteScriptStub(component.gameObject.AddComponent(tp) as MonoBehaviour);
+            }
         }
 
         internal void WriteMesh(Mesh mesh)
@@ -154,6 +200,14 @@ namespace PressPlay.FFWD.Exporter.Writers
         {
             if (obj == null)
             {
+                writer.WriteStartElement(name);
+                writer.WriteAttributeString("Null", ToString(true));
+                writer.WriteEndElement();
+                return;
+            }
+            if (obj is float)
+            {
+                writer.WriteElementString(name, ToString((float)obj));
                 return;
             }
             if (obj is Boolean)
@@ -176,9 +230,37 @@ namespace PressPlay.FFWD.Exporter.Writers
                 writer.WriteElementString(name, ToString(obj as Vector3[]));
                 return;
             }
+            if (obj is UnityEngine.Object)
+            {
+                UnityEngine.Object theObject = (obj as UnityEngine.Object);
+                if (EditorUtility.GetPrefabType(theObject) == PrefabType.Prefab)
+                {
+                    writer.WriteElementString(name, AddPrefab(theObject));
+                }
+                else
+                {
+                    writer.WriteElementString(name, theObject.GetInstanceID().ToString());
+                }
+                return;
+            }
             writer.WriteElementString(name, obj.ToString());
         }
 
+        private string AddPrefab(UnityEngine.Object theObject)
+        {
+            if (theObject is GameObject)
+            {
+                Prefabs.Add(theObject as GameObject);
+                return theObject.GetInstanceID().ToString();
+            }
+            else if (theObject is Component)
+            {
+                Prefabs.Add((theObject as Component).gameObject);
+                return theObject.GetInstanceID().ToString();
+//                return (theObject as Component).gameObject.GetInstanceID().ToString();
+            }
+            return theObject.GetType().FullName;
+        }
 
         #region ToString methods
         private string ToString(int[] array)
@@ -205,17 +287,22 @@ namespace PressPlay.FFWD.Exporter.Writers
 
         private string ToString(Vector3 vector3)
         {
-            return vector3.x.ToString("0.#####") + " " + vector3.y.ToString("0.#####") + " " + vector3.z.ToString("0.#####");
+            return vector3.x.ToString("0.#####", CultureInfo.InvariantCulture) + " " + vector3.y.ToString("0.#####", CultureInfo.InvariantCulture) + " " + vector3.z.ToString("0.#####", CultureInfo.InvariantCulture);
         }
 
         private string ToString(Quaternion quaternion)
         {
-            return quaternion.x.ToString("0.#####") + " " + quaternion.y.ToString("0.#####") + " " + quaternion.z.ToString("0.#####") + " " + quaternion.w.ToString("0.#####");
+            return quaternion.x.ToString("0.#####", CultureInfo.InvariantCulture) + " " + quaternion.y.ToString("0.#####", CultureInfo.InvariantCulture) + " " + quaternion.z.ToString("0.#####", CultureInfo.InvariantCulture) + " " + quaternion.w.ToString("0.#####", CultureInfo.InvariantCulture);
         }
 
         private string ToString(bool b)
         {
             return b.ToString().ToLower();
+        }
+
+        private string ToString(float f)
+        {
+            return f.ToString("0.#####", CultureInfo.InvariantCulture);
         }
         #endregion
 

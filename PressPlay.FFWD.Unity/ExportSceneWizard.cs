@@ -21,6 +21,7 @@ public class ExportSceneWizard : ScriptableWizard {
     public string textureDir = @"C:\Projects\PressPlay\Tentacles\XNA\PressPlay.Tentacles.Win\PressPlay.Tentacles.WinContent\Textures";
     public string meshDir = @"C:\Projects\PressPlay\Tentacles\XNA\PressPlay.Tentacles.Win\PressPlay.Tentacles.WinContent\Models";
     public string configSource = @"C:\Projects\PressPlay\Tentacles\Unity\Assets\Editor\FFWD\PressPlay.FFWD.Exporter.dll.config";
+    public bool flipYInTransforms = true;
 
     private TypeResolver resolver;
 
@@ -39,6 +40,7 @@ public class ExportSceneWizard : ScriptableWizard {
 
         SceneWriter scene = new SceneWriter(resolver, assets);
         scene.ExportDir = exportDir;
+        scene.FlipYInTransforms = flipYInTransforms;
         ScriptTranslator.ScriptNamespace = scriptNamespace;
 
         Debug.Log("Start scene export of " + Path.GetFileName(EditorApplication.currentScene));

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using UnityEngine;
 using System.IO;
@@ -13,10 +12,14 @@ namespace PressPlay.FFWD.Exporter
         public string TextureDir { get; set; }
         public string MeshDir { get; set; }
         public string ScriptDir { get; set; }
-        
-        private HashSet<string> exportedTextures = new HashSet<string>();
-        private HashSet<string> exportedScripts = new HashSet<string>();
-        private HashSet<string> exportedMeshes = new HashSet<string>();
+
+        //private HashSet<string> exportedTextures = new HashSet<string>();
+        //private HashSet<string> exportedScripts = new HashSet<string>();
+        //private HashSet<string> exportedMeshes = new HashSet<string>();
+        private List<string> exportedTextures = new List<string>();
+        private List<string> exportedScripts = new List<string>();
+        private List<string> exportedMeshes = new List<string>();
+
         private Dictionary<string, string> _scripts;
         private Dictionary<string, string> scripts  
         {
@@ -59,24 +62,39 @@ namespace PressPlay.FFWD.Exporter
             }
         }
 
-        public void ExportScript(MonoBehaviour component)
+        public void ExportScript(MonoBehaviour component, bool stubOnly)
         {
             if (component == null) return;
-            if (exportedScripts.Contains(component.name)) return;
+            string key = component.GetType().Name;
+            if (exportedScripts.Contains(key)) return;
             try
             {
-                string key = component.GetType().Name;
+                string scriptPath = Path.Combine(ScriptDir, key + ".cs");
+                if (stubOnly && File.Exists(scriptPath))
+                {
+                    return;
+                }
                 if (scripts.ContainsKey(key))
                 {
                     ScriptTranslator translator = new ScriptTranslator(File.ReadAllLines(scripts[key]));
-                    translator.Translate();
-                    File.WriteAllText(Path.Combine(ScriptDir, key + ".cs"), translator.ToString());
+                    if (stubOnly)
+                    {
+                        translator.CreateStub();
+                    }
+                    else
+                    {
+                        translator.Translate();
+                    }
+                    File.WriteAllText(scriptPath, translator.ToString());
                 }
-                exportedScripts.Add(component.name);
             }
             catch (Exception ex)
             {
                 Debug.Log(ex.Message);
+            }
+            finally
+            {
+                exportedScripts.Add(key);
             }
         }
 
@@ -88,7 +106,7 @@ namespace PressPlay.FFWD.Exporter
             if (exportedMeshes.Contains(path)) return;
 
             exportedMeshes.Add(path);
-            path = Path.Combine(@"C:\Projects\PressPlay\Tentacles\Unity\Assets\Level Building Blocks\Worlds\_worlds_imports\XNA", Path.GetFileName(path));
+            //path = Path.Combine(@"C:\Projects\PressPlay\Tentacles\Unity\Assets\Level Building Blocks\Worlds\_worlds_imports\XNA", Path.GetFileName(path));
             string dest = Path.Combine(MeshDir, Path.GetFileName(path));
 
             try

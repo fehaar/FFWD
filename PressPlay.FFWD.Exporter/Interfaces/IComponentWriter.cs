@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using PressPlay.FFWD.Exporter.Writers;
 
@@ -9,5 +8,10 @@ namespace PressPlay.FFWD.Exporter.Interfaces
     public interface IComponentWriter
     {
         void Write(SceneWriter scene, object component);
+    }
+
+    public interface IFilteredComponentWriter : IComponentWriter
+    {
+        Filter filter { get;  set; }
     }
 }

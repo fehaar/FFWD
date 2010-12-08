@@ -10,9 +10,10 @@ using Box2D.XNA;
 
 namespace PressPlay.FFWD
 {
-    public class GameObject
+    public class GameObject : UnityObject
     {
         public GameObject()
+            : base()
         {
             components = new List<Component>();
         }
@@ -25,27 +26,54 @@ namespace PressPlay.FFWD
 
         public int id { get; set; }
         public string name { get; set; }
+        public int layer { get; set; }
+        public bool active { get; set; }
+        public string tag { get; set; }
 
         private Transform _transform;
+        [ContentSerializerIgnore]
         public Transform transform 
         { 
             get
             {
+                if (_transform == null)
+                {
+                    _transform = GetComponent<Transform>();
+                }
                 return _transform;
-            }
-            set
-            {
-                _transform = value;
-                _transform.gameObject = this;
             }
         }
 
-        public String prefab { get; set; }
+        //public String prefab { get; set; }
         [ContentSerializer(CollectionItemName = "component")]
-        public List<Component> components { get; set; }
-        // TODO: We must export this as well
-        [ContentSerializerIgnore]
-        public bool active { get; set; }
+        private List<Component> components { get; set; }
+
+        internal override void AfterLoad()
+        {
+            base.AfterLoad();
+            for (int j = 0; j < components.Count; j++)
+            {
+                components[j].isPrefab = isPrefab;
+                components[j].AfterLoad();
+                components[j].gameObject = this;
+            }
+            if (transform != null && transform.children != null)
+            {
+                for (int i = 0; i < transform.children.Count; i++)
+                {
+                    transform.children[i].isPrefab = isPrefab;
+                    transform.children[i].transform._parent = transform;
+                    transform.children[i].AfterLoad();
+                }
+            }
+        }
+
+        public void AddComponent(Component component)
+        {
+            components.Add(component);
+            component.gameObject = this;
+            component.isPrefab = isPrefab;
+        }
 
         protected Renderer _renderer;
 
@@ -62,21 +90,78 @@ namespace PressPlay.FFWD
             }
         }
 
+        internal override UnityObject Clone()
+        {
+            GameObject obj = base.Clone() as GameObject;
+            obj.name = name + "(Clone)";
+            obj.active = true;
+            obj.isPrefab = false;
+            obj._transform = null;
+            obj.components = new List<Component>();
+            for (int i = 0; i < components.Count; i++)
+            {
+                obj.AddComponent(components[i].Clone() as Component);
+            }
+            if (transform != null)
+            {
+                if (transform.children != null && transform.children.Count > 0)
+                {
+                    obj.transform.children = new List<GameObject>();
+                    for (int i = 0; i < transform.children.Count; i++)
+                    {
+                        GameObject child = transform.children[i].Clone() as GameObject;
+                        child.transform.parent = obj.transform;
+                    }
+                }
+            }
+            return obj;
+        }
+
+        internal override void SetNewId()
+        {
+            if (this.transform != null && this.transform.parent != null)
+            {
+                this.transform.parent.gameObject.SetNewId();
+            }
+            else
+            {
+                // We are at root
+                SetIdOfChildren();
+            }
+        }
+
+        private void SetIdOfChildren()
+        {
+            base.SetNewId();
+            SetIdOfComponents();
+            if (transform != null && transform.children != null)
+            {
+                for (int i = 0; i < transform.children.Count; i++)
+                {
+                    transform.children[i].SetIdOfChildren();
+                }
+            }
+        }
+
+        private void SetIdOfComponents()
+        {
+            for (int i = 0; i < components.Count; i++)
+            {
+                components[i].SetNewId();
+            }
+        }
+
         #region Update and event methods
         internal void FixedUpdate()
         {
             for (int i = 0; i < components.Count; i++)
             {
-                if (!Component.IsAwake(components[i]))
-                {
-                    continue;
-                }
                 if (!components[i].isStarted)
                 {
                     components[i].Start();
                     components[i].isStarted = true;
                 }
-                if (components[i] is IFixedUpdateable)
+                if (Application.IsAwake(components[i]) && components[i] is IFixedUpdateable)
                 {
                     (components[i] as IFixedUpdateable).FixedUpdate();
                 }
@@ -94,16 +179,12 @@ namespace PressPlay.FFWD
         {
             for (int i = 0; i < components.Count; i++)
             {
-                if (!Component.IsAwake(components[i]))
-                {
-                    continue;
-                }
                 if (!components[i].isStarted)
                 {
                     components[i].Start();
                     components[i].isStarted = true;
                 }
-                if (components[i] is IUpdateable)
+                if (Application.IsAwake(components[i]) && components[i] is IUpdateable)
                 {
                     (components[i] as IUpdateable).Update();
                 }
@@ -121,7 +202,7 @@ namespace PressPlay.FFWD
         {
             for (int i = 0; i < components.Count; i++)
             {
-                if (Component.IsAwake(components[i]) && components[i] is IRenderable)
+                if (Application.IsAwake(components[i]) && components[i] is IRenderable)
                 {
                     (components[i] as IRenderable).Draw(spriteBatch);
                 }
@@ -139,7 +220,7 @@ namespace PressPlay.FFWD
         {
             for (int i = 0; i < components.Count; i++)
             {
-                if (Component.IsAwake(components[i]) && components[i] is ICollidable)
+                if (Application.IsAwake(components[i]) && components[i] is ICollidable)
                 {
                     (components[i] as ICollidable).OnTriggerEnter(contact);
                 }
@@ -157,7 +238,7 @@ namespace PressPlay.FFWD
         {
             for (int i = 0; i < components.Count; i++)
             {
-                if (Component.IsAwake(components[i]) && components[i] is ICollidable)
+                if (Application.IsAwake(components[i]) && components[i] is ICollidable)
                 {
                     (components[i] as ICollidable).OnTriggerExit(contact);
                 }
@@ -175,7 +256,7 @@ namespace PressPlay.FFWD
         {
             for (int i = 0; i < components.Count; i++)
             {
-                if (Component.IsAwake(components[i]) && components[i] is ICollidable)
+                if (Application.IsAwake(components[i]) && components[i] is ICollidable)
                 {
                     (components[i] as ICollidable).OnCollisionEnter(contact);
                 }
@@ -193,7 +274,7 @@ namespace PressPlay.FFWD
         {
             for (int i = 0; i < components.Count; i++)
             {
-                if (Component.IsAwake(components[i]) && components[i] is ICollidable)
+                if (Application.IsAwake(components[i]) && components[i] is ICollidable)
                 {
                     (components[i] as ICollidable).OnCollisionExit(contact);
                 }
@@ -211,7 +292,7 @@ namespace PressPlay.FFWD
         {
             for (int i = 0; i < components.Count; i++)
             {
-                if (Component.IsAwake(components[i]) && components[i] is ICollidable)
+                if (Application.IsAwake(components[i]) && components[i] is ICollidable)
                 {
                     (components[i] as ICollidable).OnPreSolve(contact, manifold);
                 }
@@ -229,7 +310,7 @@ namespace PressPlay.FFWD
         {
             for (int i = 0; i < components.Count; i++)
             {
-                if (Component.IsAwake(components[i]) && components[i] is ICollidable)
+                if (Application.IsAwake(components[i]) && components[i] is ICollidable)
                 {
                     (components[i] as ICollidable).OnPostSolve(contact, contactImpulse);
                 }
@@ -253,10 +334,8 @@ namespace PressPlay.FFWD
         }
 
         #region Component locator methods
-
         public T GetComponent<T>() where T : Component
         {
-            List<T> list = new List<T>();
             for (int i = 0; i < components.Count; i++)
             {
                 if (components[i] is T)
@@ -264,7 +343,18 @@ namespace PressPlay.FFWD
                     return components[i] as T;
                 }
             }
+            return default(T);
+        }
 
+        public Component GetComponent(Type type)
+        {
+            for (int i = 0; i < components.Count; i++)
+            {
+                if (components[i].GetType().IsAssignableFrom(type))
+                {
+                    return components[i];
+                }
+            }
             return null;
         }
 
@@ -279,6 +369,62 @@ namespace PressPlay.FFWD
                 }
             }
             return list.ToArray();
+        }
+
+        public Component[] GetComponents(Type type)
+        {
+            List<Component> list = new List<Component>();
+            for (int i = 0; i < components.Count; i++)
+            {
+                if (components[i].GetType().IsAssignableFrom(type))
+                {
+                    list.Add(components[i]);
+                }
+            }
+            return list.ToArray();
+        }
+
+        public Component[] GetComponentsInChildren(Type type)
+        {
+            List<Component> list = new List<Component>();
+            for (int i = 0; i < components.Count; i++)
+            {
+                if (components[i].GetType().IsAssignableFrom(type))
+                {
+                    list.Add(components[i]);
+                }
+            }
+            if (transform.children != null)
+            {
+                for (int childIndex = 0; childIndex < transform.children.Count; childIndex++)
+                {
+                    list.AddRange(transform.children[childIndex].GetComponentsInChildren(type));
+                }
+            }
+            return list.ToArray();
+        }
+
+        public Component GetComponentInChildren(Type type)
+        {
+            if (transform != null && transform.children != null)
+            {
+                for (int childIndex = 0; childIndex < transform.children.Count; childIndex++)
+                {
+                    Component cmp = transform.children[childIndex].GetComponentInChildren(type);
+                    if (cmp != null)
+                    {
+                        return cmp;
+                    }
+                }
+            }
+            for (int i = 0; i < components.Count; i++)
+            {
+                if (components[i].GetType().IsAssignableFrom(type))
+                {
+                    return components[i];
+                }
+            }
+            return null;
         }
 
         public T[] GetComponentsInParents<T>() where T : Component
@@ -297,7 +443,39 @@ namespace PressPlay.FFWD
         {
             return (transform != null && transform.parent != null) ? transform.parent.gameObject : null;
         }
+
+        internal override UnityObject GetObjectById(int id)
+        {
+            UnityObject ret = base.GetObjectById(id);
+            if (ret == null)
+            {
+                for (int i = 0; i < components.Count; i++)
+                {
+                    if (components[i].GetInstanceID() == id)
+                    {
+                        return components[i];
+                    }
+                }
+                if (transform != null && transform.children != null)
+                {
+                    for (int i = 0; i < transform.children.Count; i++)
+                    {
+                        ret = transform.children[i].GetObjectById(id);
+                        if (ret != null)
+                        {
+                            return ret;
+                        }
+                    }
+                }
+            }
+            return ret;
+        }
         #endregion
+
+        public override string ToString()
+        {
+            return name + "(" + GetInstanceID() + ")";
+        }
 
     }
 }

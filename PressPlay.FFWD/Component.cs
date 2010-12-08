@@ -3,35 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework;
 
 namespace PressPlay.FFWD
 {
-    public abstract class Component
+    public abstract class Component : UnityObject
     {
         public Component()
+            : base()
         {
-            NewComponents.Add(this);
-        }
-
-        private static List<Component> NewComponents = new List<Component>();
-
-        public static void AwakeNewComponents()
-        {
-            for (int i = 0; i < NewComponents.Count; i++)
-            {
-                NewComponents[i].Awake();
-            }
-            NewComponents.Clear();
-        }
-
-        internal static bool IsAwake(Component component)
-        {
-            return !NewComponents.Contains(component);
+            Application.AddNewComponent(this);
         }
 
         internal bool isStarted = false;
 
-        public GameObject gameObject { get; internal set; }
+        public virtual GameObject gameObject { get; internal set; }
 
         [ContentSerializerIgnore]
         public Transform transform
@@ -54,7 +40,33 @@ namespace PressPlay.FFWD
 
         public override string ToString()
         {
-            return GetType().Name + " on " + gameObject.name + " (" + gameObject.id + ")";
+            return GetType().Name + " on " + gameObject.name + " (" + gameObject.GetInstanceID() + ")";
+        }
+
+        public void Destroy(Component component)
+        {
+            // TODO: Objects should be destroyed after Update but before Rendering
+        }
+
+        public void Destroy(GameObject go)
+        {
+            // TODO: Objects should be destroyed after Update but before Rendering
+        }
+
+        internal override UnityObject Clone()
+        {
+            UnityObject obj = base.Clone();
+            obj.isPrefab = false;
+            Application.AddNewComponent(obj as Component);
+            return obj;
+        }
+
+        public string name
+        {
+            get
+            {
+                return (gameObject == null) ? GetType().Name : gameObject.name;
+            }
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Reflection;
@@ -22,21 +21,9 @@ namespace PressPlay.FFWD.Exporter
 
         public void Translate()
         {
-            // Replace usings
-            scriptLines.RemoveAll(s => s.StartsWith("using"));
-            scriptLines.InsertRange(0, DefaultUsings.Select(s => "using " + s + ";"));
+            ReplaceUsings();
 
-            // Insert namespace
-            if (!String.IsNullOrEmpty(ScriptNamespace))
-            {
-                int classDef = scriptLines.FindIndex(s => s.Contains(" class "));
-                scriptLines.Insert(classDef, "namespace " + ScriptNamespace + " {");
-                for (int i = classDef + 1; i < scriptLines.Count; i++)
-                {
-                    scriptLines[i] = "\t" + scriptLines[i];
-                }
-                scriptLines.Add("}");
-            }
+            InsertNameSpace();
 
             // Override methods
             string[] methods = new string[] { "Start", "Update" };
@@ -55,16 +42,49 @@ namespace PressPlay.FFWD.Exporter
                 {
                     if (scriptLines[i].Contains("Vector3." + prop.Name))
                     {
-                        scriptLines[i] = scriptLines[i].Replace("Vector3." + prop.Name, "Vector3." + prop.Name.Capitalize());
+                        scriptLines[i] = scriptLines[i].Replace("Vector3." + prop.Name, "Vector3." + StringExtensions.Capitalize(prop.Name));
                     }
                 }
             }
+        }
+
+        public void CreateStub()
+        {
+            ReplaceUsings();
+            int classDef = scriptLines.FindIndex(s => s.Contains(" class "));
+            scriptLines.RemoveRange(classDef + 1, scriptLines.Count - classDef - 1);
+            scriptLines.Add("}");
+            InsertNameSpace();
+        }
+
+        private void InsertNameSpace()
+        {
+            // Insert namespace
+            if (!String.IsNullOrEmpty(ScriptNamespace))
+            {
+                int classDef = scriptLines.FindIndex(s => s.Contains(" class "));
+                scriptLines.Insert(classDef, "namespace " + ScriptNamespace + " {");
+                for (int i = classDef + 1; i < scriptLines.Count; i++)
+                {
+                    scriptLines[i] = "\t" + scriptLines[i];
+                }
+                scriptLines.Add("}");
+            }
+        }
+
+        private void ReplaceUsings()
+        {
+            // Replace usings
+            scriptLines.RemoveAll(s => s.StartsWith("using"));
+            //scriptLines.InsertRange(0, DefaultUsings.Select(s => "using " + s + ";"));
+            int line = 0;
+            DefaultUsings.ForEach(s => scriptLines.Insert(line++, "using " + s + ";"));
         }
 
         public override string ToString()
         {
             return String.Join(Environment.NewLine, scriptLines.ToArray());
         }
-   
+
     }
 }

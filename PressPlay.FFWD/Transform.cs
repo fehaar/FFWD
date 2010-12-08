@@ -9,7 +9,7 @@ namespace PressPlay.FFWD
 {
     public enum Space { World, Self }
 
-    public class Transform
+    public class Transform : Component
     {
         public Transform()
         {
@@ -63,8 +63,6 @@ namespace PressPlay.FFWD
         [ContentSerializer(Optional = true, CollectionItemName = "child")]
         internal List<GameObject> children { get; set; }
 
-        internal GameObject gameObject;
-
         internal Transform _parent;
         [ContentSerializerIgnore]
         public Transform parent {
@@ -90,10 +88,6 @@ namespace PressPlay.FFWD
                 if (_parent.children == null)
                 {
                     _parent.children = new List<GameObject>();
-                }
-                if (gameObject == null)
-                {
-                    gameObject = new GameObject() { transform = this };
                 }
                 _parent.children.Add(gameObject);
                 _hasDirtyWorld = true;
@@ -149,6 +143,10 @@ namespace PressPlay.FFWD
             get
             {
                 return world.Translation;
+            }
+            set
+            {
+                _world.Translation = value;
             }
         }
 
@@ -210,6 +208,34 @@ namespace PressPlay.FFWD
             }
         }
 
+        //[ContentSerializerIgnore]
+        //public Vector3 up
+        //{
+        //    get
+        //    {
+        //        return world.Up;
+        //    }
+        //    set
+        //    {
+        //        _world.Up = value;
+        //        WorldChanged();
+        //    }
+        //}
+
+        //[ContentSerializerIgnore]
+        //public Vector3 forward
+        //{
+        //    get
+        //    {
+        //        return world.Forward;
+        //    }
+        //    set
+        //    {
+        //        _world.Forward = value;
+        //        WorldChanged();
+        //    }
+        //}
+
         public void Rotate(Vector3 axis, float angle, Space relativeTo)
         {
             angle = MathHelper.ToRadians(angle);
@@ -218,6 +244,7 @@ namespace PressPlay.FFWD
                 Matrix rot;
                 Matrix.CreateFromAxisAngle(ref axis, angle, out rot);
                 Matrix.Multiply(ref _world, ref rot, out _world);
+                WorldChanged();
             }
             else
             {
@@ -226,12 +253,26 @@ namespace PressPlay.FFWD
                 Quaternion.Multiply(ref _localRotation, ref q, out _localRotation);
                 _hasDirtyWorld = true;
             }
-            WorldChanged();
         }
 
-        // TODO: Calculate new local values
+        //public void LookAt(Vector3 worldPosition, Vector3 worldUp)
+        //{
+        //    _world = Matrix.CreateLookAt(localPosition, worldPosition, worldUp);
+        //    WorldChanged();
+        //}
+
         private void WorldChanged()
-        {            
+        {
+            Vector3 scale;
+            Quaternion rot;
+            Vector3 pos;
+            if (_world.Decompose(out scale, out rot, out pos))
+            {
+                _localScale = scale;
+                _localRotation = rot;
+                _localPosition = pos;
+                _hasDirtyWorld = false;
+            }
         }
     }
 }

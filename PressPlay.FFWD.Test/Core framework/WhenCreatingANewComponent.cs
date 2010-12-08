@@ -16,8 +16,15 @@ namespace PressPlay.FFWD.Test.Core_framework
             TestComponent comp = new TestComponent();
             comp.onAwake = () => isAwoken = true;
             Assert.That(isAwoken, Is.False);
-            Component.AwakeNewComponents();
+            Application.AwakeNewComponents();
             Assert.That(isAwoken, Is.True);
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            Application.AwakeNewComponents();
+            Application.Reset();
         }
 
         [Test]
@@ -27,10 +34,33 @@ namespace PressPlay.FFWD.Test.Core_framework
             TestComponent comp = new TestComponent();
             comp.onAwake = () => awakeCount++;
             Assert.That(awakeCount, Is.EqualTo(0));
-            Component.AwakeNewComponents();
+            Application.AwakeNewComponents();
             Assert.That(awakeCount, Is.EqualTo(1));
-            Component.AwakeNewComponents();
+            Application.AwakeNewComponents();
             Assert.That(awakeCount, Is.EqualTo(1));
         }
+
+        [Test]
+        public void WeCanFindTheNewComponentByIdAfterItHasBeenAwoken()
+        {
+            TestComponent comp = new TestComponent();
+
+            Assert.That(Application.Find(comp.GetInstanceID()), Is.Null);
+            Application.AwakeNewComponents();
+            Assert.That(Application.Find(comp.GetInstanceID()), Is.Not.Null);
+            Assert.That(Application.Find(comp.GetInstanceID()), Is.SameAs(comp));
+        }
+
+        [Test]
+        public void WeCanRemoveComponentsByResettingTheApplication()
+        {
+            TestComponent comp = new TestComponent();
+
+            Application.AwakeNewComponents();
+            Assert.That(Application.Find(comp.GetInstanceID()), Is.Not.Null);
+            Application.Reset();
+            Assert.That(Application.Find(comp.GetInstanceID()), Is.Null);
+        }
+	
     }
 }

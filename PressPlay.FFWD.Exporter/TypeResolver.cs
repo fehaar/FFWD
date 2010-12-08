@@ -104,7 +104,13 @@ namespace PressPlay.FFWD.Exporter
                     if (map.Type == result)
                     {
                         Type tp = Type.GetType(map.To);
-                        return (IComponentWriter)Activator.CreateInstance(tp);
+                        IComponentWriter writer = (IComponentWriter)Activator.CreateInstance(tp);
+                        if (writer is IFilteredComponentWriter)
+                        {
+                            (writer as IFilteredComponentWriter).filter = new Filter() { filterType = map.FilterType, items = map.FilterItems.Split(',') };
+                        }
+
+                        return writer;
                     }
                 }
                 catch (Exception ex)

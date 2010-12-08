@@ -8,7 +8,6 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PressPlay.FFWD</RootNamespace>
-    <AssemblyName>PressPlay.FFWD.WP7</AssemblyName>
     <AssemblyName>PressPlay.FFWD</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
@@ -102,9 +101,11 @@
     <Compile Include="Components\Colliders\Collider.cs" />
     <Compile Include="Components\Colliders\MeshCollider.cs" />
     <Compile Include="Components\Renderers\Renderer.cs" />
+    <Compile Include="Components\Colliders\Rigidbody.cs" />
     <Compile Include="Components\Colliders\SphereCollider.cs" />
     <Compile Include="Components\Renderers\SpriteRenderer.cs" />
     <Compile Include="Components\Renderers\MeshRenderer.cs" />
+    <Compile Include="Components\Renderers\SkinnedMeshRenderer.cs" />
     <Compile Include="ContentHelper.cs" />
     <Compile Include="Debug.cs" />
     <Compile Include="Extensions\VectorExtensions.cs" />
@@ -115,7 +116,9 @@
     <Compile Include="Interfaces\IFixedUpdateable.cs" />
     <Compile Include="Interfaces\IRenderable.cs" />
     <Compile Include="Interfaces\IUpdateable.cs" />
+    <Compile Include="Mathf.cs" />
     <Compile Include="MonoBehaviour.cs" />
+    <Compile Include="ObjectReference.cs" />
     <Compile Include="Physics.cs" />
     <Compile Include="GameObjectContactProcessor.cs" />
     <Compile Include="ScreenManager\Component\ButtonComponent.cs" />
