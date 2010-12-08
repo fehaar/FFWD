@@ -10,8 +10,8 @@ namespace PressPlay.Tentacles.Scripts
 {
     public class Lemmy : MonoBehaviour
     {
-        //public bool aimAtFingerPosition = false;
-        //public bool useControllerInput = false;
+        public bool aimAtFingerPosition = false;
+        public bool useControllerInput = false;
 
         //private RigidbodyAffectedByCurrents currentEffectScript;
 
@@ -40,7 +40,7 @@ namespace PressPlay.Tentacles.Scripts
 
         //public Tentacle tentaclePrefab;
         //public TentacleTip tentacleTipPrefab;
-        //public MainBody mainBodyPrefab;
+        public ObjectReference mainBodyPrefab;
         //public Claw clawPrefab;
 
         //public ParticleEmitter bubbleTrailPrefab;
@@ -55,7 +55,7 @@ namespace PressPlay.Tentacles.Scripts
         //private TentacleJoint[] tentacleRoots;
         //private Tentacle[] tentacles;
         //private TentacleTip[] tentacleTips;
-        //public MainBody mainBody;
+        public MainBody mainBody;
         //private Tentacle clawTentacle;
         //private Claw _claw;
         //public Claw claw
@@ -100,21 +100,19 @@ namespace PressPlay.Tentacles.Scripts
             }
         }
 
-        //private bool _isGrabbed = false;
-        //public bool isGrabbed
-        //{
-        //    get
-        //    {
-        //        return _isGrabbed;
-        //    }
-        //    set
-        //    {
-        //        _isGrabbed = value;
-        //    }
-        //}
-
-
-
+        private bool _isGrabbed = false;
+        [ContentSerializerIgnore]
+        public bool isGrabbed
+        {
+            get
+            {
+                return _isGrabbed;
+            }
+            set
+            {
+                _isGrabbed = value;
+            }
+        }
 
         //// Have we set the number of lives for Lemmy
         //private bool isBroughtToLife = false;
@@ -154,13 +152,12 @@ namespace PressPlay.Tentacles.Scripts
         //// Use this for initialization
         public void Initialize()
         {
-
             //currentEffectScript = GetComponent<RigidbodyAffectedByCurrents>();
 
             ////create main body
-            //mainBody = (MainBody)Instantiate(mainBodyPrefab);
-            //mainBody.transform.position = transform.position;
-            //mainBody.transform.parent = transform;
+            mainBody = (MainBody)Instantiate(mainBodyPrefab);
+            mainBody.transform.position = transform.position;
+            mainBody.transform.parent = transform;
 
             //TentacleJoint bodyJoint = (TentacleJoint)GetComponent(typeof(TentacleJoint));
 
