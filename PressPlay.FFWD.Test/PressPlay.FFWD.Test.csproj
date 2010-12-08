@@ -53,15 +53,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core framework\TestComponent.cs" />
+    <Compile Include="Core framework\TestHierarchy.cs" />
     <Compile Include="Core framework\Transforms\WhenManipulatingTransforms.cs" />
     <Compile Include="Core framework\Transforms\WhenManipulatingTheTransformHierarchy.cs" />
     <Compile Include="Core framework\WhenAddingAComponentToAGameObject.cs" />
     <Compile Include="Core framework\WhenCreatingANewComponent.cs" />
+    <Compile Include="Core framework\WhenFindingAnObjectById.cs" />
     <Compile Include="Core framework\WhenGettingTheComponentName.cs" />
     <Compile Include="Core framework\WhenInstantiatingANewObject.cs" />
     <Compile Include="Core framework\WhenLoadingAScene.cs" />
     <Compile Include="Core framework\WhenLocatingAComponent.cs" />
     <Compile Include="Core framework\WhenRunningTheGameLoop.cs" />
+    <Compile Include="Core framework\WhenSettingNewIds.cs" />
     <Compile Include="Physics facts\WhenInitializingPhysics.cs" />
     <Compile Include="Physics facts\WhenPerformingARaycast.cs" />
     <Compile Include="Physics facts\WhenReactingToPhysics.cs" />

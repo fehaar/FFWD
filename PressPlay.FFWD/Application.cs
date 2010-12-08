@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using PressPlay.FFWD.Components;
 using Microsoft.Xna.Framework.Graphics;
+using PressPlay.FFWD.Interfaces;
 
 namespace PressPlay.FFWD
 {
@@ -20,7 +21,7 @@ namespace PressPlay.FFWD
         private SpriteBatch spriteBatch;
 
         private static Dictionary<int, UnityObject> objects = new Dictionary<int, UnityObject>();
-        private static Dictionary<int, UnityObject> prefabObjects = new Dictionary<int, UnityObject>();
+        private static List<Component> activeComponents = new List<Component>();
 
         public override void Initialize()
         {
@@ -38,12 +39,16 @@ namespace PressPlay.FFWD
         {
             base.Update(gameTime);
             AwakeNewComponents();
-            // TODO: Drop Update on GOs
-            foreach (UnityObject obj in objects.Values)
+            for (int i = 0; i < activeComponents.Count; i++)
             {
-                if (obj is GameObject)
+                if (!activeComponents[i].isStarted)
                 {
-                    (obj as GameObject).FixedUpdate();
+                    activeComponents[i].Start();
+                    activeComponents[i].isStarted = true;
+                }
+                if (activeComponents[i] is IFixedUpdateable)
+                {
+                    (activeComponents[i] as IFixedUpdateable).FixedUpdate();
                 }
             }
             Physics.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
@@ -54,12 +59,16 @@ namespace PressPlay.FFWD
             base.Draw(gameTime);
 
             Color bg = new Color(78, 115, 74);
-            // TODO: Drop Update on GOs
-            foreach (UnityObject obj in objects.Values)
+            for (int i = 0; i < activeComponents.Count; i++)
             {
-                if (obj is GameObject)
+                if (!activeComponents[i].isStarted)
                 {
-                    (obj as GameObject).Update();
+                    activeComponents[i].Start();
+                    activeComponents[i].isStarted = true;
+                }
+                if (activeComponents[i] is PressPlay.FFWD.Interfaces.IUpdateable)
+                {
+                    (activeComponents[i] as PressPlay.FFWD.Interfaces.IUpdateable).Update();
                 }
             }
             // TODO: This is not very cool. Needed to avoid test failures... But cameras should handle this
@@ -70,12 +79,11 @@ namespace PressPlay.FFWD
                 GraphicsDevice.DepthStencilState = DepthStencilState.Default;
                 GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
             }
-            // TODO: Drop Draw on GOs
-            foreach (UnityObject obj in objects.Values)
+            for (int i = 0; i < activeComponents.Count; i++)
             {
-                if (obj is GameObject)
+                if (activeComponents[i] is IRenderable)
                 {
-                    (obj as GameObject).Draw(spriteBatch);
+                    (activeComponents[i] as IRenderable).Draw(spriteBatch);
                 }
             }
         }
@@ -88,18 +96,8 @@ namespace PressPlay.FFWD
 
         public static void LoadLevel(Scene scene)
         {
-            objects.Clear();
-            prefabObjects.Clear();
-
+            Reset();
             scene.AfterLoad();
-            for (int i = 0; i < scene.gameObjects.Count; i++)
-            {
-                objects.Add(scene.gameObjects[i].GetInstanceID(), scene.gameObjects[i]);
-            }
-            for (int i = 0; i < scene.prefabs.Count; i++)
-            {
-                prefabObjects.Add(scene.prefabs[i].GetInstanceID(), scene.prefabs[i]);
-            }
             AwakeNewComponents();
         }
 
@@ -108,10 +106,6 @@ namespace PressPlay.FFWD
             if (objects.ContainsKey(id))
             {
                 return objects[id];
-            }
-            if (prefabObjects.ContainsKey(id))
-            {
-                return prefabObjects[id];
             }
             return null;
         }
@@ -141,15 +135,33 @@ namespace PressPlay.FFWD
             return null;
         }
 
-
         internal static List<Component> NewComponents = new List<Component>();
 
         internal static void AwakeNewComponents()
         {
             for (int i = 0; i < NewComponents.Count; i++)
             {
-                objects.Add(NewComponents[i].GetInstanceID(), NewComponents[i]);
-                NewComponents[i].Awake();
+                Component cmp = NewComponents[i];
+
+                objects.Add(cmp.GetInstanceID(), cmp);
+                if (cmp.gameObject != null)
+                {
+                    if (!cmp.gameObject.isPrefab)
+                    {
+                        activeComponents.Add(cmp);
+                    }
+                    if (!objects.ContainsKey(cmp.gameObject.GetInstanceID()))
+                    {
+                        objects.Add(cmp.gameObject.GetInstanceID(), cmp.gameObject);
+                    }
+                }
+            }
+            for (int i = 0; i < NewComponents.Count; i++)
+            {
+                if (!NewComponents[i].isPrefab)
+                {
+                    NewComponents[i].Awake();
+                }
             }
             NewComponents.Clear();
         }
@@ -162,6 +174,12 @@ namespace PressPlay.FFWD
         internal static void AddNewComponent(Component component)
         {
             NewComponents.Add(component);
+        }
+
+        internal static void Reset()
+        {
+            objects.Clear();
+            activeComponents.Clear();
         }
     }
 }

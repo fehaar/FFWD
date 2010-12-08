@@ -30,6 +30,13 @@ namespace PressPlay.FFWD.Test.Physics_facts
             child.transform.parent = go.transform;
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            Application.AwakeNewComponents();
+            Application.Reset();
+        }
+
         #region OnTriggerEnter calls
 		[Test]
         public void GameObjectWillNotCallOnTriggerEnterOnComponentsNotAwoken()

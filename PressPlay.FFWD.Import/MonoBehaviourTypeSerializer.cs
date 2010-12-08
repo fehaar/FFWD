@@ -19,7 +19,7 @@ namespace PressPlay.FFWD.Import
     {
         protected override ObjectReference Deserialize(IntermediateReader input, ContentSerializerAttribute format, ObjectReference existingInstance)
         {
-            return new ObjectReference() { Id = input.Xml.ReadContentAsInt() };
+            return new ObjectReference() { ReferencedId = input.Xml.ReadContentAsInt() };
         }
 
         protected override void Serialize(IntermediateWriter output, ObjectReference value, ContentSerializerAttribute format)

@@ -17,5 +17,15 @@ namespace PressPlay.FFWD.Test.Core_framework
             go.AddComponent(comp);
             Assert.That(comp.gameObject, Is.SameAs(go));
         }
+
+        [Test]
+        public void ItWillBeSetToBeAPrefabIfTheGameObjectIsAPRefab()
+        {
+            GameObject go = new GameObject() { isPrefab = true };
+            Component comp = new TestComponent();
+            go.AddComponent(comp);
+            Assert.That(comp.isPrefab, Is.EqualTo(go.isPrefab));
+        }
+	
     }
 }

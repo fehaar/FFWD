@@ -14,6 +14,7 @@ namespace PressPlay.FFWD.Test.Core_framework
     {
         TestComponent component;
         TestComponent childComponent;
+        TestComponent prefabComponent;
         Application app;
 
         [SetUp]
@@ -31,19 +32,17 @@ namespace PressPlay.FFWD.Test.Core_framework
             childComponent = new TestComponent();
             child.AddComponent(childComponent);
             child.transform.parent = go.transform;
+
+            GameObject prefab = new GameObject();
+            prefabComponent = new TestComponent();
+            prefab.AddComponent(prefabComponent);
+            scene.prefabs.Add(prefab);
+
             app = new Application(new Game());
             Application.LoadLevel(scene);
         }
 
         #region Fixed update
-        //[Test]
-        //public void FixedUpdateWillAwakeNewComponents()
-        //{
-        //    Assert.That(Application.IsAwake(component), Is.False);
-        //    app.Update(new GameTime());
-        //    Assert.That(Application.IsAwake(component), Is.True);
-        //}
-
         [Test]
         public void FixedUpdateWillCallFixedUpdateOnComponentsOnTheScene()
         {
@@ -54,7 +53,6 @@ namespace PressPlay.FFWD.Test.Core_framework
             app.Update(new GameTime());
             Assert.That(fixedUpdateCalled, Is.True);
         }
-
 
         [Test]
         public void FixedUpdateWillCallFixedUpdateOnChildComponentsOnTheScene()
@@ -68,10 +66,14 @@ namespace PressPlay.FFWD.Test.Core_framework
         }
 
         [Test]
-        public void FixedUpdateWillNotBeCalledOnPrefabComponents()
+        public void PrefabComponentsWillNotBeFixedUpdated()
         {
-            // TODO : Add implementation of test
-            Assert.Ignore("Test not implemented");
+            bool fixedUpdateCalled = false;
+            prefabComponent.onFixedUpdate = () => { fixedUpdateCalled = true; };
+
+            Assert.That(fixedUpdateCalled, Is.False);
+            app.Update(new GameTime());
+            Assert.That(fixedUpdateCalled, Is.False);
         }
         #endregion
 
@@ -123,8 +125,12 @@ namespace PressPlay.FFWD.Test.Core_framework
         [Test]
         public void UpdateWillNotBeCalledOnPrefabComponents()
         {
-            // TODO : Add implementation of test
-            Assert.Ignore("Test not implemented");
+            bool updateCalled = false;
+            prefabComponent.onUpdate = () => { updateCalled = true; };
+
+            Assert.That(updateCalled, Is.False);
+            app.Update(new GameTime());
+            Assert.That(updateCalled, Is.False);
         }
         #endregion
 
@@ -154,7 +160,6 @@ namespace PressPlay.FFWD.Test.Core_framework
         {
             bool drawCalled = false;
             component.onDraw = () => { drawCalled = true; };
-            Application.AwakeNewComponents();
 
             Assert.That(drawCalled, Is.False);
             app.Draw(new GameTime());
@@ -166,7 +171,6 @@ namespace PressPlay.FFWD.Test.Core_framework
         {
             bool drawCalled = false;
             childComponent.onDraw = () => { drawCalled = true; };
-            Application.AwakeNewComponents();
 
             Assert.That(drawCalled, Is.False);
             app.Draw(new GameTime());
@@ -176,8 +180,12 @@ namespace PressPlay.FFWD.Test.Core_framework
         [Test]
         public void DrawWillNotBeCalledOnPrefabComponents()
         {
-            // TODO : Add implementation of test
-            Assert.Ignore("Test not implemented");
+            bool drawCalled = false;
+            prefabComponent.onDraw = () => { drawCalled = true; };
+
+            Assert.That(drawCalled, Is.False);
+            app.Draw(new GameTime());
+            Assert.That(drawCalled, Is.False);
         }
         #endregion
 
@@ -187,7 +195,6 @@ namespace PressPlay.FFWD.Test.Core_framework
         {
             int startCalledCount = 0;
             component.onStart = () => { startCalledCount++; };
-            Application.AwakeNewComponents();
 
             Assert.That(startCalledCount, Is.EqualTo(0));
             app.Update(new GameTime());
@@ -201,7 +208,6 @@ namespace PressPlay.FFWD.Test.Core_framework
         {
             int startCalledCount = 0;
             component.onStart = () => { startCalledCount++; };
-            Application.AwakeNewComponents();
 
             Assert.That(startCalledCount, Is.EqualTo(0));
             app.Draw(new GameTime());
@@ -215,7 +221,6 @@ namespace PressPlay.FFWD.Test.Core_framework
         {
             int startCalledCount = 0;
             component.onStart = () => { startCalledCount++; };
-            Application.AwakeNewComponents();
 
             Assert.That(startCalledCount, Is.EqualTo(0));
             app.Update(new GameTime());

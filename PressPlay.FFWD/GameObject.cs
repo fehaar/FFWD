@@ -64,6 +64,7 @@ namespace PressPlay.FFWD
         {
             components.Add(component);
             component.gameObject = this;
+            component.isPrefab = isPrefab;
         }
 
         internal override UnityObject Clone()
@@ -71,6 +72,8 @@ namespace PressPlay.FFWD
             GameObject obj = base.Clone() as GameObject;
             obj.name = name + "(Clone)";
             obj.active = true;
+            obj.isPrefab = false;
+            obj._transform = null;
             obj.components = new List<Component>();
             for (int i = 0; i < components.Count; i++)
             {
@@ -87,13 +90,42 @@ namespace PressPlay.FFWD
                         child.transform.parent = obj.transform;
                     }
                 }
-                if (transform.parent != null)
-                {
-                    GameObject parentClone = transform.parent.gameObject.Clone() as GameObject;
-                    obj.transform.parent = parentClone.transform;
-                }
             }
             return obj;
+        }
+
+        internal override void SetNewId()
+        {
+            if (this.transform != null && this.transform.parent != null)
+            {
+                this.transform.parent.gameObject.SetNewId();
+            }
+            else
+            {
+                // We are at root
+                SetIdOfChildren();
+            }
+        }
+
+        private void SetIdOfChildren()
+        {
+            base.SetNewId();
+            SetIdOfComponents();
+            if (transform != null && transform.children != null)
+            {
+                for (int i = 0; i < transform.children.Count; i++)
+                {
+                    transform.children[i].SetIdOfChildren();
+                }
+            }
+        }
+
+        private void SetIdOfComponents()
+        {
+            for (int i = 0; i < components.Count; i++)
+            {
+                components[i].SetNewId();
+            }
         }
 
         #region Update and event methods
@@ -380,7 +412,39 @@ namespace PressPlay.FFWD
         {
             return (transform != null && transform.parent != null) ? transform.parent.gameObject : null;
         }
+
+        internal override UnityObject GetObjectById(int id)
+        {
+            UnityObject ret = base.GetObjectById(id);
+            if (ret == null)
+            {
+                for (int i = 0; i < components.Count; i++)
+                {
+                    if (components[i].GetInstanceID() == id)
+                    {
+                        return components[i];
+                    }
+                }
+                if (transform != null && transform.children != null)
+                {
+                    for (int i = 0; i < transform.children.Count; i++)
+                    {
+                        ret = transform.children[i].GetObjectById(id);
+                        if (ret != null)
+                        {
+                            return ret;
+                        }
+                    }
+                }
+            }
+            return ret;
+        }
         #endregion
+
+        public override string ToString()
+        {
+            return name + "(" + GetInstanceID() + ")";
+        }
 
     }
 }

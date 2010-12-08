@@ -20,6 +20,13 @@ namespace PressPlay.FFWD.Test.Core_framework
             Assert.That(isAwoken, Is.True);
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            Application.AwakeNewComponents();
+            Application.Reset();
+        }
+
         [Test]
         public void ItWillOnlyGetAwakeCalledOnce()
         {
@@ -32,5 +39,28 @@ namespace PressPlay.FFWD.Test.Core_framework
             Application.AwakeNewComponents();
             Assert.That(awakeCount, Is.EqualTo(1));
         }
+
+        [Test]
+        public void WeCanFindTheNewComponentByIdAfterItHasBeenAwoken()
+        {
+            TestComponent comp = new TestComponent();
+
+            Assert.That(Application.Find(comp.GetInstanceID()), Is.Null);
+            Application.AwakeNewComponents();
+            Assert.That(Application.Find(comp.GetInstanceID()), Is.Not.Null);
+            Assert.That(Application.Find(comp.GetInstanceID()), Is.SameAs(comp));
+        }
+
+        [Test]
+        public void WeCanRemoveComponentsByResettingTheApplication()
+        {
+            TestComponent comp = new TestComponent();
+
+            Application.AwakeNewComponents();
+            Assert.That(Application.Find(comp.GetInstanceID()), Is.Not.Null);
+            Application.Reset();
+            Assert.That(Application.Find(comp.GetInstanceID()), Is.Null);
+        }
+	
     }
 }

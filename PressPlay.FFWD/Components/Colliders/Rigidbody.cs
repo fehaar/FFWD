@@ -13,5 +13,10 @@ namespace PressPlay.FFWD.Components
         public float angularDrag { get; set; }
         public bool isKinematic { get; set; }
         public bool freezeRotation { get; set; }
+
+        public override void Awake()
+        {
+            base.Awake();
+        }
     }
 }

@@ -2,21 +2,35 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework.Content;
 
 namespace PressPlay.FFWD
 {
     public class ObjectReference : Component
     {
-        public int Id;
+        public int ReferencedId;
+
+        private UnityObject _referencedObject;
+        [ContentSerializerIgnore]
+        public UnityObject ReferencedObject
+        {
+            get
+            {
+                if (_referencedObject == null)
+                {
+                    _referencedObject = Application.Find(ReferencedId);
+                }
+                return _referencedObject;
+            }
+        }
 
         public override GameObject gameObject
         {
             get
             {
-                if (base.gameObject == null)
+                if (base.gameObject == null && ReferencedObject != null)
                 {
-                    UnityObject obj = Application.Find(Id);
-                    base.gameObject = (obj is GameObject) ? (obj as GameObject) : (obj as Component).gameObject;
+                    base.gameObject = (ReferencedObject is GameObject) ? (ReferencedObject as GameObject) : (ReferencedObject as Component).gameObject;
                 }
                 return base.gameObject;
             }

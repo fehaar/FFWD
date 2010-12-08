@@ -13,19 +13,22 @@ namespace PressPlay.FFWD.Test.Core_framework
         GameObject root;
         GameObject child;
         GameObject childOfChild;
-        TestComponent component;
+        TestComponent rootComponent;
         TestComponent childComponent;
         TestComponent childOfChildComponent;
 
         [SetUp]
         public void Setup()
         {
+            Application.AwakeNewComponents();
+            Application.Reset();
+
             scene = new Scene();
             root = new GameObject();
             root.AddComponent(new Transform());
-            component = new TestComponent();
+            rootComponent = new TestComponent();
 
-            root.AddComponent(component);
+            root.AddComponent(rootComponent);
             scene.gameObjects.Add(root);
 
             child = new GameObject();
@@ -47,10 +50,10 @@ namespace PressPlay.FFWD.Test.Core_framework
         public void AfterLoadWillEnsureThatAllReferencesAreSetOnComponents()
         {
             Assert.Inconclusive("This will only work when loading with the intermediate serializer, so we need to do a test like that.");
-            Assert.That(component.gameObject, Is.Null);
+            Assert.That(rootComponent.gameObject, Is.Null);
             scene.AfterLoad();
-            Assert.That(component.gameObject, Is.Not.Null);
-            Assert.That(component.gameObject, Is.EqualTo(root));
+            Assert.That(rootComponent.gameObject, Is.Not.Null);
+            Assert.That(rootComponent.gameObject, Is.EqualTo(root));
         }
 
         [Test]
@@ -121,11 +124,11 @@ namespace PressPlay.FFWD.Test.Core_framework
         [Test]
         public void ComponentsWillNotBeSetAsPrefabs()
         {
-            Assert.That(component.isPrefab, Is.False);
+            Assert.That(rootComponent.isPrefab, Is.False);
             Assert.That(childComponent.isPrefab, Is.False);
             Assert.That(childOfChildComponent.isPrefab, Is.False);
             scene.AfterLoad();
-            Assert.That(component.isPrefab, Is.False);
+            Assert.That(rootComponent.isPrefab, Is.False);
             Assert.That(childComponent.isPrefab, Is.False);
             Assert.That(childOfChildComponent.isPrefab, Is.False);
         }
@@ -149,13 +152,122 @@ namespace PressPlay.FFWD.Test.Core_framework
         {
             scene.prefabs.AddRange(scene.gameObjects);
             scene.gameObjects.Clear();
-            Assert.That(component.isPrefab, Is.False);
+            Assert.That(rootComponent.isPrefab, Is.False);
             Assert.That(childComponent.isPrefab, Is.False);
             Assert.That(childOfChildComponent.isPrefab, Is.False);
             scene.AfterLoad();
-            Assert.That(component.isPrefab, Is.True);
+            Assert.That(rootComponent.isPrefab, Is.True);
             Assert.That(childComponent.isPrefab, Is.True);
             Assert.That(childOfChildComponent.isPrefab, Is.True);
         }
+
+        [Test]
+        public void WeCanFindGameObjectsOnTheScene()
+        {
+            Application.LoadLevel(scene);
+            Assert.That(Application.Find(root.GetInstanceID()), Is.Not.Null);
+            Assert.That(Application.Find(child.GetInstanceID()), Is.Not.Null);
+            Assert.That(Application.Find(childOfChild.GetInstanceID()), Is.Not.Null);
+        }
+
+        [Test]
+        public void WeCanFindComponentsOnTheScene()
+        {
+            Application.LoadLevel(scene);
+            Assert.That(Application.Find(rootComponent.GetInstanceID()), Is.Not.Null);
+            Assert.That(Application.Find(childComponent.GetInstanceID()), Is.Not.Null);
+            Assert.That(Application.Find(childOfChildComponent.GetInstanceID()), Is.Not.Null);
+        }
+
+        [Test]
+        public void WeCanFindPrefabObjectsOnTheScene()
+        {
+            scene.prefabs.AddRange(scene.gameObjects);
+            scene.gameObjects.Clear();
+            Application.LoadLevel(scene);
+            Assert.That(Application.Find(root.GetInstanceID()), Is.Not.Null);
+            Assert.That(Application.Find(child.GetInstanceID()), Is.Not.Null);
+            Assert.That(Application.Find(childOfChild.GetInstanceID()), Is.Not.Null);
+        }
+
+        [Test]
+        public void WeCanFindPrefabComponentsOnTheScene()
+        {
+            scene.prefabs.AddRange(scene.gameObjects);
+            scene.gameObjects.Clear();
+            Application.LoadLevel(scene);
+            Assert.That(Application.Find(rootComponent.GetInstanceID()), Is.Not.Null);
+            Assert.That(Application.Find(childComponent.GetInstanceID()), Is.Not.Null);
+            Assert.That(Application.Find(childOfChildComponent.GetInstanceID()), Is.Not.Null);
+        }
+
+        [Test]
+        public void AwakeWillBeCalledWhenTheSceneIsLoaded()
+        {
+            bool awakeCalled = false;
+            rootComponent.onAwake = () => { awakeCalled = true; };
+
+            Assert.That(awakeCalled, Is.False);
+            Application.LoadLevel(scene);
+            Assert.That(awakeCalled, Is.True);
+        }
+
+        [Test]
+        public void AwakeWillNotBeCalledOnPrefabObjects()
+        {
+            bool awakeCalled = false;
+            rootComponent.onAwake = () => { awakeCalled = true; };
+
+            Assert.That(awakeCalled, Is.False);
+            scene.prefabs.AddRange(scene.gameObjects);
+            scene.gameObjects.Clear();
+            Application.LoadLevel(scene);
+            Assert.That(awakeCalled, Is.False);
+        }
+
+
+        [Test]
+        public void AllGameObjectsWillExistWhenAwakeIsCalled()
+        {
+            bool componentsAreThere = false;
+            rootComponent.onAwake = () =>
+            {
+                componentsAreThere = (Application.Find(root.GetInstanceID()) != null)
+                                    && (Application.Find(child.GetInstanceID()) != null)
+                                    && (Application.Find(childOfChild.GetInstanceID()) != null);
+            };
+            Assert.That(componentsAreThere, Is.False);
+            Application.LoadLevel(scene);
+            Assert.That(componentsAreThere, Is.True);
+        }
+
+        [Test]
+        public void AllComponentsWillExistWhenAwakeIsCalled()
+        {
+            bool componentsAreThere = false;
+            rootComponent.onAwake = () =>
+            {
+                componentsAreThere = (Application.Find(rootComponent.GetInstanceID()) != null)
+                                    && (Application.Find(childComponent.GetInstanceID()) != null)
+                                    && (Application.Find(childOfChildComponent.GetInstanceID()) != null);
+            };
+            Assert.That(componentsAreThere, Is.False);
+            Application.LoadLevel(scene);
+            Assert.That(componentsAreThere, Is.True);
+        }
+
+        [Test]
+        public void IfAComponentIsCreatedDuringAwakeItWillBeAwoken()
+        {
+            bool awakeCalled = false;
+            TestComponent newComponent = null;
+            rootComponent.onAwake = () => { newComponent = new TestComponent() { onAwake = () => { awakeCalled = true; } }; };
+
+            Assert.That(awakeCalled, Is.False);
+            Application.LoadLevel(scene);
+            Assert.That(newComponent, Is.Not.Null);
+            Assert.That(awakeCalled, Is.True);
+        }
+	
     }
 }

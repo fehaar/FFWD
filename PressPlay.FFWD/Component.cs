@@ -53,6 +53,14 @@ namespace PressPlay.FFWD
             // TODO: Objects should be destroyed after Update but before Rendering
         }
 
+        internal override UnityObject Clone()
+        {
+            UnityObject obj = base.Clone();
+            obj.isPrefab = false;
+            Application.AddNewComponent(obj as Component);
+            return obj;
+        }
+
         public string name
         {
             get

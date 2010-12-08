@@ -81,23 +81,44 @@ namespace PressPlay.FFWD
             {
                 return null;
             }
+            GameObject clone = null;
             if (original is Component)
             {
-                GameObject obj = (original as Component).gameObject.Clone() as GameObject;
-                // TODO: There is a problem here if we have more than one object of the same type...
-                return obj.GetComponentInChildren(original.GetType());
+                clone = (original as Component).gameObject.Clone() as GameObject;
             }
-            else
+            else if (original is GameObject)
             {
-                return original.Clone();
+                GameObject toClone = (original as GameObject);
+                while (toClone.transform != null && toClone.transform.parent != null)
+                {
+                    toClone = toClone.transform.parent.gameObject;
+                }
+                clone = toClone.Clone() as GameObject;
             }
+            UnityObject ret = clone.GetObjectById((original is ObjectReference) ? (original as ObjectReference).ReferencedId : original.GetInstanceID());
+            // NOTE: It is very important that this is done at the end otherwise we cannot find the correct object to return.
+            clone.SetNewId();
+            return ret;
+        }
+
+        internal virtual void SetNewId()
+        {
+            _id = nextId++;
         }
 
         internal virtual UnityObject Clone()
         {
             UnityObject obj = MemberwiseClone() as UnityObject;
-            obj._id = nextId++;
             return obj;
+        }
+
+        internal virtual UnityObject GetObjectById(int id)
+        {
+            if (_id == id)
+            {
+                return this;
+            }
+            return null;
         }
 
         public static UnityObject[] FindObjectsOfType(Type type)

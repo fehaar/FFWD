@@ -21,6 +21,7 @@ namespace PressPlay.FFWD.Test.Core_framework
         internal Action onCollisionExit { get; set; }
         internal Action onPreSolve { get; set; }
         internal Action onPostSolve { get; set; }
+        internal string Tag { get; set; }
 
         public override void Awake()
         {

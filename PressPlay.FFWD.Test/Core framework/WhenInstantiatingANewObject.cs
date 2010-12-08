@@ -10,6 +10,13 @@ namespace PressPlay.FFWD.Test.Core_framework
     [TestFixture]
     public class WhenInstantiatingANewObject
     {
+        [TearDown]
+        public void TearDown()
+        {
+            Application.AwakeNewComponents();
+            Application.Reset();
+        }
+
         [Test]
         public void WeWillGetACopyWithANewId()
         {
@@ -76,7 +83,22 @@ namespace PressPlay.FFWD.Test.Core_framework
             Assert.That(comp1, Is.Not.Null);
             Assert.That(comp1, Is.Not.SameAs(comp));
             Assert.That(comp1.GetInstanceID(), Is.Not.EqualTo(comp.GetInstanceID()));
+            Assert.That(comp1.gameObject, Is.Not.SameAs(obj));
+            Assert.That(comp1.gameObject.GetInstanceID(), Is.Not.EqualTo(comp.gameObject.GetInstanceID()));
         }
+
+        [Test]
+        public void WeWillInstantiateTheCorrectComponent()
+        {
+            GameObject obj = new GameObject();
+            TestComponent comp = new TestComponent();
+            TestComponent comp1 = new TestComponent() { Tag = "This" };
+            obj.AddComponent(comp);
+            obj.AddComponent(comp1);
+
+            TestComponent inst = Component.Instantiate(comp1) as TestComponent;
+            Assert.That(inst.Tag, Is.EqualTo(comp1.Tag));
+        }	
 
         [Test]
         public void AnInstantiatedComponentWillHaveACloneOfTheGameObjectAsWell()
@@ -136,6 +158,7 @@ namespace PressPlay.FFWD.Test.Core_framework
             TestComponent childComp = cloneChild.GetComponent<TestComponent>();
             Assert.That(childComp, Is.Not.Null);
             Assert.That(childComp, Is.Not.SameAs(comp));
+            Assert.That(childComp.gameObject, Is.SameAs(cloneChild));
         }
 
         [Test]
@@ -212,11 +235,86 @@ namespace PressPlay.FFWD.Test.Core_framework
         }
 
         [Test]
+        public void IfWeHaveReferencedTheTransformOnTheGameObjectItWillBeCleared()
+        {
+            GameObject root = new GameObject();
+            Transform rootTrans = new Transform();
+            root.AddComponent(rootTrans);
+            Transform callTrans = root.transform;
+
+            GameObject clone = (GameObject)GameObject.Instantiate(root);
+            Assert.That(clone.transform, Is.Not.SameAs(callTrans));
+        }
+
+        [Test]
         public void NewlyInstantiatedObjectsWillBeActive()
         {
             GameObject obj = new GameObject() { name = "MyObject", active = false, layer = 10, tag = "Mytag" };
             GameObject instance = GameObject.Instantiate(obj) as GameObject;
             Assert.That(instance.active, Is.True);
         }
+
+        [Test]
+        public void InstantiatingAPrefabWillMakeNonPrefabObjects()
+        {
+            GameObject obj = new GameObject() { isPrefab = true };
+            TestComponent comp = new TestComponent();
+            obj.AddComponent(comp);
+
+            TestComponent instance = GameObject.Instantiate(comp) as TestComponent;
+            Assert.That(instance.isPrefab, Is.False);
+            Assert.That(instance.gameObject.isPrefab, Is.False);
+        }
+	
+
+        [Test]
+        public void WeCanInstantiateAComponentUsingAReference()
+        {
+            GameObject obj = new GameObject();
+            TestComponent comp = new TestComponent();
+            obj.AddComponent(comp);
+            ObjectReference reference = new ObjectReference() { ReferencedId = comp.GetInstanceID() };
+            Application.AwakeNewComponents();
+
+            TestComponent cmp = (TestComponent)UnityObject.Instantiate(reference);
+            Assert.That(cmp, Is.Not.Null);
+        }
+
+        [Test]
+        public void InstantiatingComponentsWillPutThemInTheAwakeQueue()
+        {
+            int awakeCalls = 0;
+            GameObject obj = new GameObject();
+            TestComponent comp = new TestComponent() { onAwake = () => { awakeCalls++; } };
+            obj.AddComponent(comp);
+            Application.AwakeNewComponents();
+
+            Assert.That(awakeCalls, Is.EqualTo(1));
+            TestComponent cmp = (TestComponent)UnityObject.Instantiate(comp);
+            Assert.That(cmp, Is.Not.Null);
+            Application.AwakeNewComponents();
+            Assert.That(awakeCalls, Is.EqualTo(2));
+        }
+
+        [Test]
+        public void InstantiatingAComponentInAwakeWillAwakeThem()
+        {
+            int awakeCalls = 0;
+            GameObject objPrefab = new GameObject() { isPrefab = true };
+            TestComponent compPrefab = new TestComponent() { onAwake = () => { awakeCalls++; } };
+            objPrefab.AddComponent(compPrefab);
+
+            TestComponent inst = null;
+            GameObject obj = new GameObject();
+            TestComponent comp = new TestComponent() { onAwake = () => { inst = (TestComponent)UnityObject.Instantiate(compPrefab); awakeCalls++; } };
+            obj.AddComponent(comp);
+
+            Application.AwakeNewComponents();
+
+            Assert.That(inst, Is.Not.Null);
+            Assert.That(awakeCalls, Is.EqualTo(2));
+        }
+	
+	
     }
 }
