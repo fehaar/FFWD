@@ -39,5 +39,10 @@ namespace PressPlay.FFWD
                 base.gameObject = value;
             }
         }
+
+        public T Get<T>() where T : UnityObject
+        {
+            return ReferencedObject as T;
+        }
     }
 }
