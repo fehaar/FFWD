@@ -5,6 +5,7 @@ using System.Text;
 using PressPlay.FFWD.Components;
 using PressPlay.FFWD;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework;
 
 namespace PressPlay.Tentacles.Scripts
 {
@@ -39,22 +40,31 @@ namespace PressPlay.Tentacles.Scripts
         //public PoolableObject createOnDeath;
 
         //public Tentacle tentaclePrefab;
-        //public TentacleTip tentacleTipPrefab;
+        public ObjectReference tentacleTipPrefab;
         public ObjectReference mainBodyPrefab;
         //public Claw clawPrefab;
 
         //public ParticleEmitter bubbleTrailPrefab;
         //public ParticleEmitter bleedBubbleTrailPrefab;
 
-        //public LemmyStats stats;
-        //public TentacleStats tentacleStats;
+        [ContentSerializerIgnore]
+        public LemmyStats stats { get { return statsRef.Get<LemmyStats>(); } }
+
+        [ContentSerializer(ElementName="stats")]
+        private ObjectReference statsRef;
+
+        [ContentSerializerIgnore]
+        public TentacleStats tentacleStats { get { return tentacleStatsRef.Get<TentacleStats>(); } }
+        [ContentSerializer(ElementName="tentacleStats")]
+        private ObjectReference tentacleStatsRef;
+
         //public TentacleStats clawStats;
 
         //private int currentTentacleIndex = 0;
 
         //private TentacleJoint[] tentacleRoots;
         //private Tentacle[] tentacles;
-        //private TentacleTip[] tentacleTips;
+        private TentacleTip[] tentacleTips;
         public MainBody mainBody;
         //private Tentacle clawTentacle;
         //private Claw _claw;
@@ -180,26 +190,26 @@ namespace PressPlay.Tentacles.Scripts
             ////create tentacles		
             //tentacleRoots = new TentacleJoint[stats.tentacles];
             //tentacles = new Tentacle[stats.tentacles];
-            //tentacleTips = new TentacleTip[stats.tentacles];
-            //for (int i = 0; i < stats.tentacles; i++)
-            //{
+            tentacleTips = new TentacleTip[stats.tentacles];
+            for (int i = 0; i < stats.tentacles; i++)
+            {
             //    GameObject tmpGameObject = new GameObject();
             //    tmpGameObject.name = "tentacle root " + i;
             //    tmpGameObject.AddComponent(typeof(TentacleJoint));
 
             //    tentacleRoots[i] = tmpGameObject.GetComponent<TentacleJoint>();
 
-            //    tentacleTips[i] = (TentacleTip)Instantiate(tentacleTipPrefab);
-            //    tentacleTips[i].transform.position = transform.position;
+                tentacleTips[i] = (TentacleTip)Instantiate(tentacleTipPrefab);
+                tentacleTips[i].transform.position = transform.position;
 
-            //    Vector3 normal = Vector3.zero;
-            //    normal.x = Mathf.Cos(((i + 0.5f) * Mathf.PI * 2) / stats.tentacles);
-            //    normal.z = Mathf.Sin(((i + 0.5f) * Mathf.PI * 2) / stats.tentacles);
+                Vector3 normal = Vector3.Zero;
+                normal.X = Mathf.Cos(((i + 0.5f) * Mathf.PI * 2) / stats.tentacles);
+                normal.Z = Mathf.Sin(((i + 0.5f) * Mathf.PI * 2) / stats.tentacles);
 
             //    tentacleRoots[i].transform.position = transform.position;
             //    tentacleRoots[i].transform.parent = transform;
 
-            //    tentacleTips[i].Initialize(gameObject, normal, tentacleStats, this);
+                tentacleTips[i].Initialize(gameObject, normal, tentacleStats, this);
 
             //    Physics.IgnoreCollision(tentacleTips[i].collider, collider);
             //    Physics.IgnoreCollision(tentacleTips[i].collider, claw.collider);
@@ -211,7 +221,7 @@ namespace PressPlay.Tentacles.Scripts
             //    tentacles[i] = (Tentacle)Instantiate(tentaclePrefab);
             //    tentacles[i].Initialize(tentacleStats, tentacleRoots[i], bodyJoint, (TentacleJoint)tentacleTips[i].GetComponent(typeof(TentacleJoint)), true);
             //    tentacles[i].SetBodyNormal(normal);
-            //}
+            }
 
             //squishedTester.Initialize();
 
