@@ -445,6 +445,5 @@ namespace PressPlay.FFWD
         {
             return name + "(" + GetInstanceID() + ")";
         }
-
     }
 }

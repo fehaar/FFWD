@@ -135,5 +135,14 @@ namespace PressPlay.FFWD
         {
             return Application.FindObjectOfType(type);
         }
+
+        public static implicit operator bool(UnityObject obj)
+        {            
+            if (obj == null)
+            {
+                return false;
+            }
+            return (Application.Find(obj.GetInstanceID()) != null);
+        }
     }
 }
