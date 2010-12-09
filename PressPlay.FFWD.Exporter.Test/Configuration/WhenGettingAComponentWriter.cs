@@ -23,6 +23,12 @@ namespace PressPlay.FFWD.Exporter.Test.Configuration
         public Filter filter { get; set; }
     }
 
+    public class TestOptionComponentWriter : TestComponentWriter, IOptionComponentWriter
+    {
+        public string options { get; set; }
+    }
+
+
     [TestFixture]
     public class WhenGettingAComponentWriter
     {
@@ -72,6 +78,27 @@ namespace PressPlay.FFWD.Exporter.Test.Configuration
             Assert.That(writer.filter.filterType, Is.EqualTo(Filter.FilterType.Exclude));
             Assert.That(writer.filter.items, Contains.Item("filter"));
         }
+
+        [Test]
+        public void WeWillNotHaveEmptyOptionsIfTheyAreNotDefined()
+        {
+            resolver.ComponentWriters.Add(new ComponentMap() { Type = "System.String", To = typeof(TestOptionComponentWriter).AssemblyQualifiedName });
+            IOptionComponentWriter writer = (IOptionComponentWriter)resolver.GetComponentWriter("Hello".GetType());
+            Assert.That(writer, Is.Not.Null);
+            Assert.That(writer, Is.InstanceOf<TestOptionComponentWriter>());
+            Assert.That(writer.options, Is.EqualTo(String.Empty));
+        }
+
+        [Test]
+        public void WeWillHaveOptionsIfTheyAreDefined()
+        {
+            resolver.ComponentWriters.Add(new ComponentMap() { Type = "System.String", To = typeof(TestOptionComponentWriter).AssemblyQualifiedName, Options = "Test" });
+            IOptionComponentWriter writer = (IOptionComponentWriter)resolver.GetComponentWriter("Hello".GetType());
+            Assert.That(writer, Is.Not.Null);
+            Assert.That(writer, Is.InstanceOf<TestOptionComponentWriter>());
+            Assert.That(writer.options, Is.EqualTo("Test"));
+        }
+	
 	
     }
 }

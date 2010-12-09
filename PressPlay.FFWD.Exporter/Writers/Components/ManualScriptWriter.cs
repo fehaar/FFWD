@@ -10,7 +10,7 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
     /// <summary>
     /// This writer is used to export data for scripts that will be created and handled manually in XNA.
     /// </summary>
-    public class ManualScriptWriter : IFilteredComponentWriter
+    public class ManualScriptWriter : IFilteredComponentWriter, IOptionComponentWriter
     {
         public Filter filter { get; set; }
 
@@ -27,8 +27,15 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
             {
                 WriteFieldsForType(scene, beh, component.GetType());
             }
-            scene.WriteScriptStub(beh);
 
+            if (options.Contains("Stub"))
+            {
+                scene.WriteScriptStub(beh);
+            }
+            else
+            {
+                scene.WriteScript(beh, false);
+            }
         }
 
         private void WriteFieldsForType(SceneWriter scene, MonoBehaviour component, Type t)
@@ -50,6 +57,10 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
                 }
             }                
         }
+        #endregion
+
+        #region IOptionComponentWriter Members
+        public string options { get; set; }
         #endregion
     }
 }

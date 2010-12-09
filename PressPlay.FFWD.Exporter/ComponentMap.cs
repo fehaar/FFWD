@@ -20,5 +20,7 @@ namespace PressPlay.FFWD.Exporter
         public Filter.FilterType FilterType { get; set; }
         [XmlAttribute]
         public string FilterItems { get; set; }
+        [XmlAttribute]
+        public string Options { get; set; }
     }
 }

@@ -62,7 +62,7 @@ namespace PressPlay.FFWD.Exporter
             }
         }
 
-        public void ExportScript(MonoBehaviour component, bool stubOnly)
+        public void ExportScript(MonoBehaviour component, bool stubOnly, bool overwrite)
         {
             if (component == null) return;
             string key = component.GetType().Name;
@@ -70,7 +70,7 @@ namespace PressPlay.FFWD.Exporter
             try
             {
                 string scriptPath = Path.Combine(ScriptDir, key + ".cs");
-                if (stubOnly && File.Exists(scriptPath))
+                if (!overwrite && File.Exists(scriptPath))
                 {
                     return;
                 }
@@ -90,7 +90,7 @@ namespace PressPlay.FFWD.Exporter
             }
             catch (Exception ex)
             {
-                Debug.Log(ex.Message);
+                Debug.Log(key + " export exception: " + ex.Message);
             }
             finally
             {

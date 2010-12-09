@@ -166,20 +166,20 @@ namespace PressPlay.FFWD.Exporter.Writers
             assetHelper.ExportTexture(texture as Texture2D);
         }
 
-        internal void WriteScript(MonoBehaviour component)
+        internal void WriteScript(MonoBehaviour component, bool overwrite)
         {
-            assetHelper.ExportScript(component, false);
+            assetHelper.ExportScript(component, false, overwrite);
             // Check for base classes
             Type tp = component.GetType().BaseType;
             if (tp != typeof(MonoBehaviour))
             {
-                WriteScript(component.gameObject.AddComponent(tp) as MonoBehaviour);
+                WriteScript(component.gameObject.AddComponent(tp) as MonoBehaviour, overwrite);
             }
         }
 
         internal void WriteScriptStub(MonoBehaviour component)
         {
-            assetHelper.ExportScript(component, true);
+            assetHelper.ExportScript(component, true, false);
             // Check for base classes
             Type tp = component.GetType().BaseType;
             if (tp != typeof(MonoBehaviour))
