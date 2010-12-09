@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using System.Text.RegularExpressions;
+using System.IO;
 
 namespace PressPlay.FFWD.Exporter.Test
 {
@@ -105,5 +106,24 @@ namespace PressPlay.FFWD.Exporter.Test
             Assert.That(newScript, Is.StringContaining("Vector3.Forward"));
             Assert.That(newScript, Is.StringContaining("Vector3.Zero"));
         }
+
+        [Test]
+        public void WeCanTranslateTheTestScripts()
+        {
+            foreach (string filename in Directory.GetFiles("TestScripts", "*.cs"))
+            {
+                try
+                {
+                    ScriptTranslator trans = new ScriptTranslator(File.ReadAllLines(filename));
+                    trans.Translate();
+                }
+                catch (Exception ex)
+                {
+                    Assert.Fail("Exception while translating " + Path.GetFileNameWithoutExtension(filename) + ": " + ex.Message);
+                }
+            }
+            Assert.Pass("We have translated all scripts");
+        }
+	
 	}
 }

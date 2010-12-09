@@ -55,6 +55,12 @@
     <Compile Include="Configuration\WhenGettingAComponentWriter.cs" />
     <Compile Include="Configuration\WhenResolvingATypeName.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="TestScripts\LemmyStats.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="TestScripts\TentacleStats.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Compile Include="WhenCreatingAScriptStub.cs" />
     <Compile Include="WhenTranslatingAScript.cs" />
     <Compile Include="WhenUsingTheFilter.cs" />
