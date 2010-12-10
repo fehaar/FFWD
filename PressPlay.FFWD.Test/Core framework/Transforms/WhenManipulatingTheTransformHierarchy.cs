@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
+using Microsoft.Xna.Framework;
 
 namespace PressPlay.FFWD.Test.Core_framework.Transforms
 {
@@ -40,7 +41,33 @@ namespace PressPlay.FFWD.Test.Core_framework.Transforms
             Assert.That(trans.children, Has.No.Member(child.gameObject));
             Assert.That(newParent.children, Has.Member(child.gameObject));
         }
-	
+
+        [Test]
+        public void WhenSettingTheParentOfATransformTheGlobalPositionWillNotChange()
+        {
+            Transform trans = new Transform() { localPosition = new Vector3(2, 3, 4) };
+            Transform child = new Transform() { localPosition = new Vector3(2, 3, 4) };
+
+            Vector3 childPos = child.position;
+            child.parent = trans;
+            Assert.That(child.position, Is.EqualTo(childPos));
+        }
+
+        [Test]
+        public void WhenSettingTheParentOfATransformTheGlobalPositionWillNotChangeEvenWhenRotated()
+        {
+            // TODO : Add implementation of test
+            Assert.Ignore("Test not implemented");
+
+        }
+
+        [Test]
+        public void WhenSettingTheParentOfATransformTheLossyScaleWillNotChange()
+        {
+            // TODO : Add implementation of test
+            Assert.Ignore("Test not implemented");
+
+        }
 	
     }
 }

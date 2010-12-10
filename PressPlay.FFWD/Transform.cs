@@ -80,6 +80,7 @@ namespace PressPlay.FFWD
                 {
                     _parent.children.Remove(gameObject);
                 }
+                Vector3 pos = position;
                 _parent = value;
                 if (_parent == null)
                 {
@@ -90,6 +91,7 @@ namespace PressPlay.FFWD
                     _parent.children = new List<GameObject>();
                 }
                 _parent.children.Add(gameObject);
+                position = pos;
                 _hasDirtyWorld = true;
             }
         }
@@ -146,7 +148,14 @@ namespace PressPlay.FFWD
             }
             set
             {
-                _world.Translation = value;
+                if (parent == null)
+                {
+                    localPosition = value;
+                }
+                else
+                {
+                    localPosition = value - parent.position;
+                }
             }
         }
 
@@ -206,6 +215,10 @@ namespace PressPlay.FFWD
                     return (float)((Math.PI * 2) - Math.Acos(dot));
                 }
             }
+            set
+            {
+                localRotation = Quaternion.CreateFromAxisAngle(Vector3.UnitY, value);
+            }
         }
 
         //[ContentSerializerIgnore]
@@ -263,7 +276,7 @@ namespace PressPlay.FFWD
 
         public void LookAt(Vector3 worldPosition)
         {
-            LookAt(worldPosition, Vector3.Up);
+            LookAt(worldPosition, Vector3.UnitY);
         }
 
         private void WorldChanged()

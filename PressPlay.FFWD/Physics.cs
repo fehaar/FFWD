@@ -56,6 +56,29 @@ namespace PressPlay.FFWD
         public static void Update(float elapsedTime)
         {
             world.Step(elapsedTime, velocityIterations, positionIterations);
+
+            // Sync positions of game objects
+            Body body = world.GetBodyList();
+            do
+            {
+                Component comp = (Component)body.GetUserData();
+                if (comp != null)
+                {
+                    if (body.GetType() == BodyType.Static)
+                    {
+                        body.SetTransform(comp.transform.position.To2d(), comp.transform.angleY);
+                    }
+                    else
+                    {
+                        Box2D.XNA.Transform t;
+                        body.GetTransform(out t);
+                        comp.transform.position = t.Position.To3d();
+                        comp.transform.angleY = t.GetAngle();
+                    }
+                }
+                body = body.GetNext();
+            } while (body != null);
+
             contactProcessor.Update();
         }
 

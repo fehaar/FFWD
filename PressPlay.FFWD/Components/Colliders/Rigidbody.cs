@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
 using Box2D.XNA;
+using PressPlay.FFWD.Extensions;
 
 namespace PressPlay.FFWD.Components
 {
@@ -39,11 +40,33 @@ namespace PressPlay.FFWD.Components
         }
 
         [ContentSerializerIgnore]
-        public float velocity { get; set; }
-
-        public void AddForce(Vector3 elasticityForce)
+        public Vector2 velocity
         {
-            
+            get
+            {
+                return body.GetLinearVelocity();
+            }
+            set
+            {
+                body.SetLinearVelocity(value);
+            }
+        }
+
+        public void AddForce(Vector3 elasticityForce, ForceMode mode = ForceMode.Force)
+        {
+            switch (mode)
+            {
+                case ForceMode.Force:
+                    body.ApplyForce(elasticityForce.To2d(), gameObject.transform.position.To2d());
+                    break;
+                case ForceMode.Acceleration:
+                    break;
+                case ForceMode.Impulse:
+                    body.ApplyLinearImpulse(elasticityForce.To2d(), gameObject.transform.position.To2d());
+                    break;
+                case ForceMode.VelocityChange:
+                    break;
+            }
         }
     }
 }

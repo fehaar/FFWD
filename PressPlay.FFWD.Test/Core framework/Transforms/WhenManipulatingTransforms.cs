@@ -89,7 +89,30 @@ namespace PressPlay.FFWD.Test.Core_framework.Transforms
             trans.localRotation = Quaternion.CreateFromYawPitchRoll(MathHelper.PiOver2, 0.0f, 0.0f);
             Assert.That(child.position, Is.Not.EqualTo(beforeRotate));
         }
-	
 
+        [Test]
+        public void TheLocalPositionWillMoveWithThePositionIfWeHaveNoParent()
+        {
+            Transform trans = new Transform() { localPosition = new Vector3(2, 2, 2) };
+            trans.position = new Vector3(3, 4, 5);
+            Assert.That(trans.localPosition, Is.EqualTo(trans.position));
+            Assert.That(trans.position, Is.EqualTo(new Vector3(3, 4, 5)));
+        }
+
+        [Test]
+        public void TheLocalPositionWillChangeIfWeSetThePositionAndHaveAParent()
+        {
+            Transform trans = new Transform() { localPosition = new Vector3(2, 2, 2) };
+            Vector3 childLocal = new Vector3(3, 2, 1);
+            Transform child = new Transform() { localPosition = childLocal };
+            child.parent = trans;
+
+            Vector3 newPos = childLocal + new Vector3(10, 10, 10);
+            child.position = newPos;
+            Assert.That(child.localPosition, Is.Not.EqualTo(childLocal));
+            Assert.That(child.position, Is.EqualTo(newPos));
+        }
+	
+	
     }
 }
