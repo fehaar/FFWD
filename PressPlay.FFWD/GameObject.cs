@@ -51,6 +51,20 @@ namespace PressPlay.FFWD
             }
         }
 
+        private Collider _collider;
+        [ContentSerializerIgnore]
+        public Collider collider
+        {
+            get
+            {
+                if (_collider == null)
+                {
+                    _collider = GetComponent<Collider>();
+                }
+                return _collider;
+            }
+        }
+
         //public String prefab { get; set; }
         [ContentSerializer(CollectionItemName = "component")]
         private List<Component> components { get; set; }
@@ -93,6 +107,7 @@ namespace PressPlay.FFWD
             // Reset lazy shortcut properties
             obj._transform = null;
             obj._rigidbody = null;
+            obj._collider = null;
 
             obj.components = new List<Component>();
             for (int i = 0; i < components.Count; i++)

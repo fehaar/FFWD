@@ -50,7 +50,33 @@ namespace PressPlay.FFWD.Test.Core_framework
             Assert.That(inst.rigidbody, Is.Not.Null);
             Assert.That(inst.rigidbody, Is.Not.SameAs(body));
         }
-	
+
+        [Test]
+        public void WeWillGetTheColliderIfItIsThere()
+        {
+            GameObject go = new GameObject();
+
+            Assert.That(go.collider, Is.Null);
+
+            Collider body = new BoxCollider();
+            go.AddComponent(body);
+
+            Assert.That(go.collider, Is.Not.Null);
+            Assert.That(go.collider, Is.SameAs(body));
+        }
+
+        [Test]
+        public void WeWillGetTheCorrectColliderAfterAnInstantiation()
+        {
+            GameObject go = new GameObject();
+            Collider body = new BoxCollider();
+            go.AddComponent(body);
+            Assert.That(go.collider, Is.Not.Null);
+
+            GameObject inst = (GameObject)GameObject.Instantiate(go);
+            Assert.That(inst.collider, Is.Not.Null);
+            Assert.That(inst.collider, Is.Not.SameAs(body));
+        }
 	
 	
     }

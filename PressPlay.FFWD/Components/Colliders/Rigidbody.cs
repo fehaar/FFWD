@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
+using Box2D.XNA;
 
 namespace PressPlay.FFWD.Components
 {
@@ -15,9 +16,21 @@ namespace PressPlay.FFWD.Components
         public bool isKinematic { get; set; }
         public bool freezeRotation { get; set; }
 
+        private Body body;
+
         public override void Awake()
         {
-            base.Awake();
+            if (collider != null)
+            {
+                BodyDef def = collider.GetBodyDefinition();
+                def.type = BodyType.Dynamic;
+                body = Physics.AddBody(def);
+                collider.AddCollider(body);
+            }
+            else
+            {
+                Debug.LogWarning("No collider set on this rigid body " + ToString());
+            }
         }
 
         [ContentSerializerIgnore]

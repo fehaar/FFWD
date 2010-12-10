@@ -38,6 +38,15 @@ namespace PressPlay.FFWD
                 return gameObject.rigidbody;
             }
         }
+
+        [ContentSerializerIgnore]
+        public Collider collider
+        {
+            get
+            {
+                return gameObject.collider;
+            }
+        }
         #endregion
 
         public virtual void Awake()

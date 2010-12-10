@@ -16,7 +16,7 @@ namespace PressPlay.FFWD.Components
         public Vector3 size { get; set; }
         #endregion
 
-        protected override void AddCollider(Body body)
+        internal override void AddCollider(Body body)
         {
             Vector2 sz = (size * gameObject.transform.lossyScale).To2d();
             Vector3 transCenter = Vector3.Transform(center, transform.world);

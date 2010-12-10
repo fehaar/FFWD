@@ -24,6 +24,7 @@ namespace PressPlay.FFWD.Components
 
         public override void Awake()
         {
+            base.Awake();
             // For drawing the original mesh
             pointList = new VertexPositionColor[vertices.Length];
             for (int i = 0; i < vertices.Length; i++)
@@ -32,12 +33,12 @@ namespace PressPlay.FFWD.Components
             }
         }
 
-        protected override BodyDef GetBodyDefinition()
+        internal override BodyDef GetBodyDefinition()
         {
             return new BodyDef() { position = transform.position.To2d(), angle = transform.angleY, userData = this };
         }
 
-        protected override void AddCollider(Body body)
+        internal override void AddCollider(Body body)
         {
             List<Vector2[]> tris = new List<Vector2[]>();
             for (int i = 0; i < triangles.Length; i += 3)

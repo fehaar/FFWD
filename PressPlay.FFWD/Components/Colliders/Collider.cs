@@ -15,20 +15,23 @@ namespace PressPlay.FFWD.Components
 
         public override void Awake()
         {
-            Body body = Physics.AddBody();
-            AddCollider(body);
-            if (isTrigger)
+            if (rigidbody == null)
             {
-                body.SetType(BodyType.Kinematic);
+                Body body = Physics.AddBody(GetBodyDefinition());
+                AddCollider(body);
+                if (isTrigger)
+                {
+                    body.SetType(BodyType.Kinematic);
+                }
+                body.SetUserData(this);
             }
-            body.SetUserData(this);
         }
 
-        protected virtual BodyDef GetBodyDefinition()
+        internal virtual BodyDef GetBodyDefinition()
         {
             return new BodyDef();
         }
 
-        protected abstract void AddCollider(Body body);
+        internal abstract void AddCollider(Body body);
     }
 }
