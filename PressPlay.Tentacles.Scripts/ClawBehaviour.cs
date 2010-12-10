@@ -11,16 +11,10 @@ namespace PressPlay.Tentacles.Scripts {
         //public AudioWrapper sndBounce;
         //public AudioWrapper sndConnection;
 		
-		//protected Vector2 grabInputPosition;
-		//protected ObjectMover grabbedObjectMover;
 		protected GameObject grabbedObject;
-		//protected Rigidbody grabbedObjectRigidBody;
-		//protected BasicEnemy grabbedEnemy;
-	    //protected int grabbedObjectOriginalLayer;
-	    //protected Transform grabbedObjectOriginalParent;
 	    protected float grabTime = 0;
-		
-        //protected OnClawBehaviourConnect doOnClawBehaviourConnect;
+
+        protected OnClawBehaviourConnect doOnClawBehaviourConnect;
 		
 	    protected RaycastHit rh;
 	    protected Ray ray;
@@ -36,9 +30,7 @@ namespace PressPlay.Tentacles.Scripts {
 	    protected Vector3 connectionNormal;
 	    protected float connectionTime;
 		protected Collider connectedCollider;
-	    protected GameObject connectionPointerObject;// = new GameObject();
-		
-		//private GameObject connectionPointerObjectPrefab = new GameObject();
+	    protected GameObject connectionPointerObject;
 		
 		protected Vector3 accumulatedTraversal = Vector3.Zero;
 		
@@ -102,10 +94,6 @@ namespace PressPlay.Tentacles.Scripts {
 	    protected ClawStates clawState
 	    {
 	        get { return _clawState; }
-			/*set{
-	            _clawState = value;
-				//Debug.Log("CLAW STATE CHANGED TO : "+_state);
-			}*/
 		}
 		
 		//Use this for initialization
@@ -146,10 +134,6 @@ namespace PressPlay.Tentacles.Scripts {
 	    //// Update is called once per frame
         public override void FixedUpdate()
 	    {
-	        //IdleMovement();
-	        //HandleOverextensionElasticity();
-	        
-	
 	        DoFixedUpdate();
 	    }
 	
@@ -210,30 +194,30 @@ namespace PressPlay.Tentacles.Scripts {
 	        if (grabbedObject != null)
 	        {
                 ////Debug.Log("HandleGrabbedObject : " + grabbedObject.name+" grabTime "+grabTime);
-                //if (Time.time - grabTime > lemmy.stats.grabPickupTime)
-                //{
-                //    ReleaseGrabbedObject();
-                //}
+                if (Time.time - grabTime > lemmy.stats.grabPickupTime)
+                {
+                    ReleaseGrabbedObject();
+                }
 	        }
 	    }
 		
 		void HandleEating()
 		{
-            //dist = (transform.position-lemmy.transform.position);
-            //dir = dist.normalized;
+            dist = (transform.position-lemmy.transform.position);
+            dir = Vector3.Normalize(dist);
 			
-            //if (dist.magnitude < eatSpeed*Time.deltaTime)
-            //{
-            //    transform.position = lemmy.transform.position;
-            //    ReleaseGrabbedObject();
-            //    connectedObjectRipScript.Eat(eatTime, lemmy.transform);
-            //    lemmy.mainBody.Chew();
-            //    ChangeClawState(ClawStates.idle);
+            if (dist.Length() < eatSpeed*Time.deltaTime)
+            {
+                transform.position = lemmy.transform.position;
+                ReleaseGrabbedObject();
+                //connectedObjectRipScript.Eat(eatTime, lemmy.transform);
+                lemmy.mainBody.Chew();
+                ChangeClawState(ClawStates.idle);
 				
-            //}else
-            //{
-            //    transform.position = transform.position - dir*eatSpeed*Time.deltaTime;
-            //}
+            }else
+            {
+                transform.position = transform.position - dir*eatSpeed*Time.deltaTime;
+            }
 			
 		}
 	
@@ -241,91 +225,92 @@ namespace PressPlay.Tentacles.Scripts {
 	    {
 	 
 		
-            //rigidbody.velocity = Vector3.Zero;
+            rigidbody.velocity = Vector3.Zero;
 	        
 	
-            //if (connectionPointerObject != null && connectionPointerObject.active)
-            //{
-            //    transform.position = connectionPointerObject.gameObject.transform.position;
-            //    transform.rotation = connectionPointerObject.gameObject.transform.rotation;
-            //}else
-            //{
-            //    transform.position = connectionPosition;
-            //    transform.LookAt(transform.position - connectionNormal);
-            //}
+            if (connectionPointerObject != null && connectionPointerObject.active)
+            {
+                transform.position = connectionPointerObject.transform.position;
+                transform.rotation = connectionPointerObject.transform.rotation;
+            }else
+            {
+                transform.position = connectionPosition;
+                transform.LookAt(transform.position - connectionNormal);
+            }
 			
-            //if(connectionPointerObject != null && (connectionPointerObject.transform.parent == null || !connectionPointerObject.transform.parent.gameObject.active))
-            //{
-            //    BreakConnection();
-            //}
+            if(connectionPointerObject != null && (connectionPointerObject.transform.parent == null || !connectionPointerObject.transform.parent.gameObject.active))
+            {
+                BreakConnection();
+            }
 			
 	    }
 	
 	    protected void RaycastForEnemies()
 	    {
-            //ray.origin = lastPosition;
-            //ray.direction = traversedVector;
-	        
-		
-            //bool hitWallLayer = Physics.Raycast(ray, out rh, traversedVector.magnitude * 2, GlobalSettings.Instance.allWallsAndShields);
-            //float wallDist = rh.distance;
-            //bool hitEnemyLayer = Physics.Raycast(ray, out rh, traversedVector.magnitude * 2, GlobalSettings.Instance.enemyLayer);
-            //float enemyDist = rh.distance;
-	
-            //if ((hitWallLayer && !hitEnemyLayer) || (hitWallLayer && hitEnemyLayer && wallDist < enemyDist))
-            //{
-	
-            //    HitWall( rh.point, rh.normal, rh.collider);
-	
-            //}
-            //else if ((!hitWallLayer && hitEnemyLayer) || (hitWallLayer && hitEnemyLayer && wallDist > enemyDist))
-            //{	
-            //    EnergyCell energyCell = rh.collider.gameObject.GetComponent<EnergyCell>();
-            //    if (energyCell)
-            //    {
-            //        HitEnergyCell(energyCell, rh.point, rh.normal);
-            //        return;
-            //    }else
-            //    {
-            //        Debug.Log("NO ENERGY CELL FOUND!!! THIS IS BAD");
-            //    }
-	
-	
-            //    BasicBullet bulletScript = (BasicBullet)(rh.collider.gameObject.GetComponent(typeof(BasicBullet)));
-            //    if (bulletScript)
-            //    {
-            //        HitBullet(bulletScript, rh.point);
-            //        return;
-            //    }
-	
-            //    RipableObject ripObj = (RipableObject)(rh.collider.gameObject.GetComponent(typeof(RipableObject)));
-            //    if (ripObj)
-            //    {
-            //        ConnectToRipableObject(rh, ripObj);
-            //        return;
-            //    }
-	
-	
-            //}
+            ray.Position = lastPosition;
+            ray.Direction = traversedVector;
+
+
+            bool hitWallLayer = Physics.Raycast(ray, out rh, traversedVector.Length() * 2, GlobalSettings.Instance.allWallsAndShields);
+            float wallDist = rh.distance;
+            bool hitEnemyLayer = Physics.Raycast(ray, out rh, traversedVector.Length() * 2, GlobalSettings.Instance.enemyLayer);
+            float enemyDist = rh.distance;
+
+            if ((hitWallLayer && !hitEnemyLayer) || (hitWallLayer && hitEnemyLayer && wallDist < enemyDist))
+            {
+
+                HitWall(rh.point, rh.normal, rh.collider);
+
+            }
+            else if ((!hitWallLayer && hitEnemyLayer) || (hitWallLayer && hitEnemyLayer && wallDist > enemyDist))
+            {
+                //EnergyCell energyCell = rh.collider.gameObject.GetComponent<EnergyCell>();
+                //if (energyCell)
+                //{
+                //    HitEnergyCell(energyCell, rh.point, rh.normal);
+                //    return;
+                //}
+                //else
+                //{
+                //    Debug.Log("NO ENERGY CELL FOUND!!! THIS IS BAD");
+                //}
+
+
+                //BasicBullet bulletScript = (BasicBullet)(rh.collider.gameObject.GetComponent(typeof(BasicBullet)));
+                //if (bulletScript)
+                //{
+                //    HitBullet(bulletScript, rh.point);
+                //    return;
+                //}
+
+                //RipableObject ripObj = (RipableObject)(rh.collider.gameObject.GetComponent(typeof(RipableObject)));
+                //if (ripObj)
+                //{
+                //    ConnectToRipableObject(rh, ripObj);
+                //    return;
+                //}
+
+
+            }
 	    }
 		
 		void HitWall(Vector3 hitPosition, Vector3 hitNormal, Collider hitCollider)
 		{
 	        //Debug.Log("HIT WALL!!!");
-	
-            //if (hitCollider != null && hitCollider.gameObject.layer == GlobalSettings.Instance.shieldLayer)
-            //{
-            //    // Add bounce feedback here
-            //    if (createAtShieldConnect != null)
-            //    {
-            //        ObjectPool.Instance.Draw(createAtShieldConnect, transform.position, transform.rotation);
-            //    }
-            //}
+
+            if (hitCollider != null && hitCollider.gameObject.layer == GlobalSettings.Instance.shieldLayer)
+            {
+                // Add bounce feedback here
+                //if (createAtShieldConnect != null)
+                //{
+                //    ObjectPool.Instance.Draw(createAtShieldConnect, transform.position, transform.rotation);
+                //}
+            }
 	
             //sndBounce.PlaySound();
-			
-            //transform.position = rh.point;
-            //rigidbody.velocity = -rigidbody.velocity * 0.2f;
+
+            transform.position = rh.point;
+            rigidbody.velocity = -rigidbody.velocity * 0.2f;
 	        lastPosition = transform.position;
 	        ChangeClawState(ClawStates.idle);
 		}
@@ -398,37 +383,34 @@ namespace PressPlay.Tentacles.Scripts {
 		
 	    protected void ConnectToAtPosition(Vector3 hitPosition, Vector3 hitNormal, GameObject connectTo)
 	    {
-			
-            //connectedCollider = connectTo.collider;
-			
-            //connectionNormal = (-rigidbody.velocity.normalized * 0 + hitNormal * 1).normalized;
-			
-            //rigidbody.velocity = Vector3.Zero;
-            //transform.position = hitPosition;
-            //connectionPosition = hitPosition;
-	
-	
-            //ChangeClawState( ClawStates.connected);
-            //connectionTime = Time.time;
-	
-            ////connectionPointerObject = (GameObject)Instantiate();
-			
-            //if (!connectionPointerObject)
-            //{
-            //    connectionPointerObject = new GameObject();
-            //    connectionPointerObject.name = "connectionPointerObject";
-            //}
-			
-            //connectionPointerObject.active = true;
-            //connectionPointerObject.transform.position = hitPosition;
+
+            connectedCollider = connectTo.collider;
+
+            connectionNormal = Vector3.Normalize(Vector3.Normalize(-rigidbody.velocity) * 0 + hitNormal * 1);
+
+            rigidbody.velocity = Vector3.Zero;
+            transform.position = hitPosition;
+            connectionPosition = hitPosition;
+
+
+            ChangeClawState(ClawStates.connected);
+            connectionTime = Time.time;
+
+            if (!connectionPointerObject)
+            {
+                connectionPointerObject = new GameObject();
+                connectionPointerObject.name = "connectionPointerObject";
+            }
+
+            connectionPointerObject.active = true;
+            connectionPointerObject.transform.position = hitPosition;
             //connectionPointerObject.transform.rotation = Quaternion.LookRotation(-hitNormal);
-            //connectionPointerObject.transform.parent = connectTo.transform;
+            connectionPointerObject.transform.parent = connectTo.transform;
 			
             //sndConnection.PlaySound();
 			
             //if (createAtConnect != null)
             //{
-            //    //Instantiate(createAtConnect, transform.position, transform.rotation);
             //    ObjectPool.Instance.Draw(createAtConnect, transform.position, Quaternion.LookRotation(-connectionNormal));
 				
             //}
@@ -437,46 +419,46 @@ namespace PressPlay.Tentacles.Scripts {
             //{
             //    ObjectPool.Instance.Draw(visualSoundAtConnect, transform.position+(transform.forward/2), transform.rotation);
             //}
-			
-            //doOnClawBehaviourConnect = connectTo.GetComponent<OnClawBehaviourConnect>();
-            //if (doOnClawBehaviourConnect != null)
-            //{
-            //    doOnClawBehaviourConnect.DoOnClawBehaviourConnect(this,hitNormal);
-            //}
+
+            doOnClawBehaviourConnect = connectTo.GetComponent<OnClawBehaviourConnect>();
+            if (doOnClawBehaviourConnect != null)
+            {
+                doOnClawBehaviourConnect.DoOnClawBehaviourConnect(this, hitNormal);
+            }
 	    }
 		
 	    protected void ConnectAtPosition(Vector3 hitPosition, Vector3 hitNormal)
 	    {
-            //if (!isClawAttacking)
-            //{
-            //    //Debug.Log("CLAW is allready connected, or is idle");
-            //    return;
-            //}
-	
-            //if (connectionPointerObject)
-            //{
-            //    //Destroy(connectionPointerObject);
-            //    connectionPointerObject.active = false;// = null;
-            //}
+            if (!isClawAttacking)
+            {
+                //Debug.Log("CLAW is allready connected, or is idle");
+                return;
+            }
+
+            if (connectionPointerObject)
+            {
+                //Destroy(connectionPointerObject);
+                connectionPointerObject.active = false;// = null;
+            }
 	
             ////Debug.Log("Connecting tip at "+hitPosition);
-	
-            //connectionNormal = (-rigidbody.velocity.normalized * 0 + hitNormal * 1) * 0.5f;
-	
-            //rigidbody.velocity = Vector3.Zero;
-            //transform.position = hitPosition;
-            //connectionPosition = hitPosition;
-	
-	
-            //ChangeClawState(ClawStates.connected);
-            //connectionTime = Time.time;
+
+            connectionNormal = (Vector3.Normalize(-rigidbody.velocity) * 0 + hitNormal * 1) * 0.5f;
+
+            rigidbody.velocity = Vector3.Zero;
+            transform.position = hitPosition;
+            connectionPosition = hitPosition;
+
+
+            ChangeClawState(ClawStates.connected);
+            connectionTime = Time.time;
 	    }
 		
 		public void Push(Vector3 _force)
 		{
 			if (!isClawConnected)
 			{
-                //rigidbody.AddForce(_force);
+                rigidbody.AddForce(_force);
 			}
 		}
 		
@@ -485,8 +467,8 @@ namespace PressPlay.Tentacles.Scripts {
 			if (isClawConnected)
 			{
 				BreakConnection();
-			
-                //Push(-transform.forward * pushOfForce);
+
+                Push(-transform.forward * pushOfForce);
 			}
 		}
 		
@@ -510,18 +492,18 @@ namespace PressPlay.Tentacles.Scripts {
 	
 		public void Reset()
 	    {
-            //rigidbody.velocity = Vector3.Zero;
-	       
-            //if (grabbedObject)
-            //{
-            //    ReleaseGrabbedObject();
-            //}
-			
-            //ChangeClawState(ClawStates.idle);
-			
+            rigidbody.velocity = Vector3.Zero;
+
+            if (grabbedObject)
+            {
+                ReleaseGrabbedObject();
+            }
+
+            ChangeClawState(ClawStates.idle);
+
             //connectedObjectRipScript = null;
-	
-            //DoOnReset();
+
+            DoOnReset();
 	    }
 	
 	    public virtual void DoOnReset()
@@ -571,14 +553,14 @@ namespace PressPlay.Tentacles.Scripts {
 	    public void ReleaseGrabbedObject()
 	    {
 			//Debug.Log("ReleaseGrabbedObject : "+grabbedObject.name);
-            //DoOnReleaseGrabbedObject(grabbedObject);
-	
-            //if (grabbedObject.tag == GlobalSettings.Instance.pickupTag)
-            //{
-            //    lemmy.GetPickupGrab(grabbedObject);
-            //}
-			
-            //grabbedObject = null;
+            DoOnReleaseGrabbedObject(grabbedObject);
+
+            if (grabbedObject.tag == GlobalSettings.Instance.pickupTag)
+            {
+                lemmy.GetPickupGrab(grabbedObject);
+            }
+
+            grabbedObject = null;
 			
 			ChangeClawState(ClawStates.idle);
 	    }

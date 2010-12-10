@@ -52,7 +52,7 @@ namespace PressPlay.Tentacles
 #endif
             Components.Add(new Application(this));
             debug = new DebugRenderer(this);
-            debug.Wireframe = debug.PhysicsDebug = true;
+            //debug.Wireframe = debug.PhysicsDebug = true;
             Components.Add(debug);
 
 #if DEBUG
@@ -80,7 +80,7 @@ namespace PressPlay.Tentacles
 #endif
             Application.LoadScene("Scenes/DesatGreen_intro");
 
-            Camera.main.transform.localPosition = camStart = new Vector3(-7, -17, -17);
+            Camera.main.transform.localPosition = camStart = new Vector3(-7, -7, -17);
             Camera.main.transform.localRotation = Quaternion.CreateFromAxisAngle(Vector3.UnitY, MathHelper.ToRadians(-110));
             Camera.main.up = Vector3.Backward;            
             Camera.main.forward = Vector3.UnitY;

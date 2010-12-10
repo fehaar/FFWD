@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using PressPlay.FFWD;
 using PressPlay.FFWD.Components;
+using PressPlay.FFWD.Extensions;
 
 namespace PressPlay.Tentacles.Scripts
 {
@@ -14,32 +15,16 @@ namespace PressPlay.Tentacles.Scripts
         private float idleMovementRandomizer1 = 1;
         private float idleMovementRandomizer2 = 1;
 
-        //public Transform animationObjectTransform;
-        //private bool tightlyLinkedToAnimationObject = true;
-
-        /*private Collider recentHitCollider;
-        private Vector3 recentHitPosition;
-        private Vector3 recentHitNormal;
-        private float recentHitTime;*/
-
-        //private RaycastHit rh;
         private RaycastHit rh_1;
         private RaycastHit rh_2;
-        //private Ray ray = new Ray(Vector3.Zero, Vector3.Zero);
 
-        //private Vector3 lastPosition;
         private GameObject body;
         private Vector3 bodyNormal;
         private TentacleStats stats;
 
         private bool isInitialized = false;
 
-        //private Vector3 connectionNormal;
         private Collider connectedTo;
-        //private float connectionTime = 0;
-        //private Vector3 connectionPosition;
-
-        //private Joint joint;
 
         private float shootTime = 0;
         private Vector3 shootDir = Vector3.Zero;
@@ -64,10 +49,6 @@ namespace PressPlay.Tentacles.Scripts
             get { return (state == States.searchingForConnection); }
         }
 
-        /*public bool isControlled{
-            get{return state == States.controlled;}
-        }*/
-
         public bool isDormant
         {
             get { return (state == TentacleTip.States.usingClawState && clawState == ClawStates.dormant); }
@@ -76,12 +57,8 @@ namespace PressPlay.Tentacles.Scripts
 
         public enum States
         {
-            //idle,
             usingClawState,
             searchingForConnection,
-            //connected,
-            //controlled,
-            //attacking,
             objectGrabbed
         }
 
@@ -93,9 +70,6 @@ namespace PressPlay.Tentacles.Scripts
             {
                 return _state;
             }
-            /*set{
-                _state = value;
-            }*/
         }
 
         // Use this for initialization
@@ -122,14 +96,14 @@ namespace PressPlay.Tentacles.Scripts
             {
 
                 // We check if the collider is still connectable
-                //if (connectedCollider != null && connectedCollider.gameObject.layer != GlobalSettings.Instance.tentacleColliderLayerInt)
-                //{
-                //    BreakConnection(50);
-                //}
-                //else
-                //{
-                //    HandleConnection();
-                //}
+                if (connectedCollider != null && connectedCollider.gameObject.layer != GlobalSettings.Instance.tentacleColliderLayerInt)
+                {
+                    BreakConnection(50);
+                }
+                else
+                {
+                    HandleConnection();
+                }
             }
         }
 
@@ -153,10 +127,10 @@ namespace PressPlay.Tentacles.Scripts
                 CheckConnectionTime();
 
                 // We check if the collider is still connectable
-                //if (connectedCollider != null && connectedCollider.gameObject.layer != GlobalSettings.Instance.tentacleColliderLayerInt)
-                //{
-                //    BreakConnection(50);
-                //}
+                if (connectedCollider != null && connectedCollider.gameObject.layer != GlobalSettings.Instance.tentacleColliderLayerInt)
+                {
+                    BreakConnection(50);
+                }
 
             }
 
@@ -164,20 +138,6 @@ namespace PressPlay.Tentacles.Scripts
             {
                 HandleConnection();
             }
-
-            /*if (isConnected)
-            {
-			
-                // We check if the collider is still connectable
-                if (connectedCollider != null && connectedCollider.gameObject.layer != GlobalSettings.Instance.tentacleColliderLayerInt)
-                {
-                    BreakConnection(50);
-                }
-                else
-                {
-                    HandleConnection();
-                }
-            }*/
 
             if (isSearchingForConnection || isIdle)
             {
@@ -201,12 +161,6 @@ namespace PressPlay.Tentacles.Scripts
             }
         }
 
-        /*void Update()
-        {
-            base.DoUpdate();
-        }*/
-
-
         override protected void ChangeClawState(ClawStates _clawState)
         {
             _state = TentacleTip.States.usingClawState;
@@ -216,7 +170,6 @@ namespace PressPlay.Tentacles.Scripts
 
         void ChangeTentacleState(States newState)
         {
-            //Debug.Log("Change Tentacle State to : "+newState);
             _state = newState;
         }
 
@@ -229,17 +182,6 @@ namespace PressPlay.Tentacles.Scripts
             }
         }
 
-        /*void DoConnection()
-        {
-            if (isConnected)
-            {
-                rigidbody.velocity = Vector3.Zero;
-                transform.position = connectionPosition;
-			
-                transform.LookAt(transform.position - connectionNormal);
-            }
-        }*/
-
         void IdleMovement()
         {
             Vector3 vecToIdlePosition = transform.position - (body.transform.position + bodyNormal * 2) + new Vector3(Mathf.Cos(Time.time * 2.5f * idleMovementRandomizer1) * 0.8f, 0, Mathf.Sin(Time.time * 1.75f * idleMovementRandomizer2) * 0.8f); ;
@@ -249,7 +191,7 @@ namespace PressPlay.Tentacles.Scripts
             rigidbody.velocity *= 0.92f;
             Vector3 elasticityForce = distToIdlePosition * (-vecToIdlePosition) * stats.overMaxLengthElasticity;
             rigidbody.AddForce(elasticityForce);
-
+            
             transform.LookAt(transform.position + (transform.position - body.transform.position));
         }
 
@@ -267,10 +209,10 @@ namespace PressPlay.Tentacles.Scripts
             {
                 Vector3 vecToBody = body.transform.position - transform.position;
 
-                //if (vecToBody.sqrMagnitude > stats.connectionMaxLength * stats.connectionMaxLength)
-                //{
-                //    BreakConnection();
-                //}
+                if (vecToBody.LengthSquared() > stats.connectionMaxLength * stats.connectionMaxLength)
+                {
+                    BreakConnection();
+                }
             }
         }
 
@@ -281,8 +223,8 @@ namespace PressPlay.Tentacles.Scripts
             //    connectionTime += Time.deltaTime;
             //}
 
-            //if (isConnected && connectionTime > stats.connectionTimeout)
-            //{
+            if (isConnected && connectionTime > stats.connectionTimeout)
+            {
 
 
             //    //only break connection if not holding hold connection button
@@ -290,26 +232,24 @@ namespace PressPlay.Tentacles.Scripts
             //    {
             //        BreakConnection();
             //    }
-            //}
+            }
         }
 
         void WallSeekingHelp()
         {
 
             ray.Position = transform.position;
-            //ray.Direction = transform.right;
-            //Debug.DrawRay(ray.origin, ray.direction * stats.wallSeekHelpDistance, Color.red);
-            //if (Physics.Raycast(ray, out rh, stats.wallSeekHelpDistance, GlobalSettings.Instance.tentacleColliderLayer))
-            //{
-            //    SuckTowardRayHit(rh, ray);
-            //}
+            ray.Direction = transform.right;
+            if (Physics.Raycast(ray, out rh, stats.wallSeekHelpDistance, GlobalSettings.Instance.tentacleColliderLayer))
+            {
+                SuckTowardRayHit(rh, ray);
+            }
 
-            //ray.direction = -ray.direction;
-            //Debug.DrawRay(ray.origin, ray.direction * stats.wallSeekHelpDistance, Color.red);
-            //if (Physics.Raycast(ray, out rh, stats.wallSeekHelpDistance, GlobalSettings.Instance.tentacleColliderLayer))
-            //{
-            //    SuckTowardRayHit(rh, ray);
-            //}
+            ray.Direction = -ray.Direction;
+            if (Physics.Raycast(ray, out rh, stats.wallSeekHelpDistance, GlobalSettings.Instance.tentacleColliderLayer))
+            {
+                SuckTowardRayHit(rh, ray);
+            }
         }
 
         void SuckTowardRayHit(RaycastHit _rh, Ray _ray)
@@ -322,43 +262,35 @@ namespace PressPlay.Tentacles.Scripts
             //raycast from last position. Makes sure that the tip doesn't penetrate walls
 
             traversedVector = transform.position - lastPosition;
-            //Vector3 futurePathVector = rigidbody.velocity * Time.deltaTime * 2; //times two
-
-            //ray.origin = lastPosition;
-            //ray.direction = traversedVector;
+            Vector3 futurePathVector = rigidbody.velocity * Time.deltaTime * 2; //times two
 
             ray.Position = lastPosition;
-            //ray.Direction = futurePathVector + traversedVector;
+            ray.Direction = futurePathVector + traversedVector;
 
             lastPosition = transform.position;
 
-            //if (ray.direction.sqrMagnitude == 0)
-            //{
-            //    return;
-            //}
+            if (ray.Direction.LengthSquared() == 0)
+            {
+                return;
+            }
 
-            //float rayLength = (futurePathVector + traversedVector).magnitude;
+            float rayLength = (futurePathVector + traversedVector).Length();
 
             //Debug.DrawRay(ray.origin, ray.direction * rayLength, Color.green);
 
             ////do bounce raycast	
-            //bool bounceHit = Physics.Raycast(ray, out rh_1, rayLength, GlobalSettings.Instance.tentacleBounceColliderLayers);
+            bool bounceHit = Physics.Raycast(ray, out rh_1, rayLength, GlobalSettings.Instance.tentacleBounceColliderLayers);
             ////do connection raycast
-            //bool connectHit = Physics.Raycast(ray, out rh_2, rayLength, GlobalSettings.Instance.tentacleColliderLayer);
+            bool connectHit = Physics.Raycast(ray, out rh_2, rayLength, GlobalSettings.Instance.tentacleColliderLayer);
             //compare distances
 
-            /*if (connectHit)
+            if (isSearchingForConnection && bounceHit && (!connectHit || rh_1.distance < rh_2.distance))
             {
-                recentHitCollider = rh_2.collider;
-            }*/
-
-            //if (isSearchingForConnection && bounceHit && (!connectHit || rh_1.distance < rh_2.distance))
-            //{
                 //sndBounce.PlaySound();
-                //transform.position = rh_1.point;
-                //rigidbody.velocity = -rigidbody.velocity * 0.2f;
-                //lastPosition = transform.position;
-                //ChangeClawState(ClawStates.idle);
+                transform.position = rh_1.point;
+                rigidbody.velocity = -rigidbody.velocity * 0.2f;
+                lastPosition = transform.position;
+                ChangeClawState(ClawStates.idle);
 
                 //// Add bounce feedback here!
                 //if (createAtSlipperyConnect != null)
@@ -371,11 +303,11 @@ namespace PressPlay.Tentacles.Scripts
                 //    ObjectPool.Instance.Draw(visualSoundAtSlipperyConnect, transform.position + (transform.forward / 2), transform.rotation);
                 //}
 
-            //}
-            //else if (connectHit && (!bounceHit || rh_1.distance > rh_2.distance))
-            //{
-                //ConnectToAtPosition(rh_2.point + rh_2.normal * 0.3f, rh_2.normal, rh_2.collider.gameObject);
-            //}
+            }
+            else if (connectHit && (!bounceHit || rh_1.distance > rh_2.distance))
+            {
+                ConnectToAtPosition(rh_2.point + rh_2.normal * 0.3f, rh_2.normal, rh_2.collider.gameObject);
+            }
         }
 
         void HandleOverextensionElasticity()
@@ -383,13 +315,13 @@ namespace PressPlay.Tentacles.Scripts
             //handle elasticity of arm. Slow down movement if distance to lemmy is greater than arm length
             //This is what limits the arm reach (appart from the physics engine. Dampening, gravity, etc. works as well)
             Vector3 vecToBody = transform.position - body.transform.position;
-            //float distToBody = vecToBody.magnitude;
-            //if (distToBody > stats.tentacleLength)
-            //{
-            //    rigidbody.velocity *= 0.91f; //HACK WARNING!!! this is framerate dependent if run i Update instead of FixedUpdate
-            //    Vector3 elasticityForce = (stats.tentacleLength - distToBody) * vecToBody * stats.overMaxLengthElasticity;
-            //    rigidbody.AddForce(elasticityForce);
-            //}
+            float distToBody = vecToBody.Length();
+            if (distToBody > stats.tentacleLength)
+            {
+                rigidbody.velocity *= 0.91f; //HACK WARNING!!! this is framerate dependent if run i Update instead of FixedUpdate
+                Vector3 elasticityForce = (stats.tentacleLength - distToBody) * vecToBody * stats.overMaxLengthElasticity;
+                rigidbody.AddForce(elasticityForce);
+            }
         }
 
         public void ShootInDirection(Vector3 _direction)
@@ -402,18 +334,18 @@ namespace PressPlay.Tentacles.Scripts
             transform.position = body.transform.position;
             lastPosition = body.transform.position;
 
-            //float speed = Mathf.Min(_direction.magnitude, stats.maxShootSpeed);
-            //speed = Mathf.Max(speed, stats.minShootSpeed);
+            float speed = Mathf.Min(_direction.Length(), stats.maxShootSpeed);
+            speed = Mathf.Max(speed, stats.minShootSpeed);
 
-            //rigidbody.velocity = _direction.normalized * stats.tentacleTipMoveSpeed * speed;
+            rigidbody.velocity = Vector3.Normalize(_direction) * stats.tentacleTipMoveSpeed * speed;
 
-            //ChangeTentacleState(TentacleTip.States.searchingForConnection);
+            ChangeTentacleState(TentacleTip.States.searchingForConnection);
 
-            //shootTime = Time.time;
+            shootTime = Time.time;
 
-            //shootDir = _direction.normalized;
+            shootDir = Vector3.Normalize(_direction);
 
-            //transform.LookAt(transform.position + _direction);
+            transform.LookAt(transform.position + _direction);
             //PPMetrics.AddFloatIncrement("shoot_tentacle", 1);
         }
 
@@ -421,17 +353,17 @@ namespace PressPlay.Tentacles.Scripts
         {
             Vector3 force = Vector3.Zero;
 
-            //Vector3 bodyDir = (body.transform.position - transform.position).normalized;
+            Vector3 bodyDir = Vector3.Normalize(body.transform.position - transform.position);
 
-            //Vector3 vecToBody = body.transform.position - (transform.position + bodyDir * stats.optimalConnectionDistance);
+            Vector3 vecToBody = body.transform.position - (transform.position + bodyDir * stats.optimalConnectionDistance);
 
             //Debug.DrawRay(transform.position, bodyDir * stats.optimalConnectionDistance, Color.gray);
 
-            //float distToBody = vecToBody.magnitude;
-            //if (distToBody > stats.dragDistMin)
-            //{
-            //    force += -vecToBody.normalized * (stats.dragBodyForce * Mathf.Pow(distToBody - stats.dragDistMin, stats.dragCurvePow) + Mathf.Cos(Time.time * (1.75f * idleMovementRandomizer2) + idleMovementRandomizer1) * 2.2f);
-            //}
+            float distToBody = vecToBody.Length();
+            if (distToBody > stats.dragDistMin)
+            {
+                force += Vector3.Normalize(-vecToBody) * (stats.dragBodyForce * Mathf.Pow(distToBody - stats.dragDistMin, stats.dragCurvePow) + Mathf.Cos(Time.time * (1.75f * idleMovementRandomizer2) + idleMovementRandomizer1) * 2.2f);
+            }
 
             return force;
         }
@@ -443,7 +375,7 @@ namespace PressPlay.Tentacles.Scripts
                 BreakConnection();
             }
 
-            //rigidbody.velocity = Vector3.Zero;
+            rigidbody.velocity = Vector3.Zero;
             transform.position = body.transform.position;
             ChangeClawState(ClawStates.idle);
 

@@ -89,11 +89,11 @@ namespace PressPlay.Tentacles.Debugging
                 }
                 if (key.IsKeyDown(Keys.F))
                 {
-                    dir.Y += speed;
+                    dir.Y += speed / 5;
                 }
                 if (key.IsKeyDown(Keys.R))
                 {
-                    dir.Y -= speed;
+                    dir.Y -= speed / 5;
                 }
                 if (key.IsKeyDown(Keys.RightShift))
                 {

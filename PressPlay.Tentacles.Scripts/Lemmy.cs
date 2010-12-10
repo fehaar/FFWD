@@ -571,11 +571,11 @@ namespace PressPlay.Tentacles.Scripts
         //    IPickup pickup = (IPickup)pickupObj.GetComponent(typeof(IPickup));
         //    pickup.DoOnCollision(this);
         //}
-        //public void GetPickupGrab(GameObject pickupObj)
-        //{
-        //    IPickup pickup = (IPickup)pickupObj.GetComponent(typeof(IPickup));
-        //    pickup.DoGrabPickUp(this);
-        //}
+        public void GetPickupGrab(GameObject pickupObj)
+        {
+            //IPickup pickup = (IPickup)pickupObj.GetComponent(typeof(IPickup));
+            //pickup.DoGrabPickUp(this);
+        }
 
         //public void Damage(float _damage, Vector3 _direction)
         //{
