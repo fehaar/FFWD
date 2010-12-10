@@ -18,5 +18,13 @@ namespace PressPlay.FFWD.Components
         {
             base.Awake();
         }
+
+        [ContentSerializerIgnore]
+        public float velocity { get; set; }
+
+        public void AddForce(Microsoft.Xna.Framework.Vector3 elasticityForce)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

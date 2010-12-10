@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Content;
 using PressPlay.FFWD.Interfaces;
 using Microsoft.Xna.Framework.Graphics;
 using Box2D.XNA;
+using PressPlay.FFWD.Components;
 
 namespace PressPlay.FFWD
 {
@@ -36,6 +37,20 @@ namespace PressPlay.FFWD
             }
         }
 
+        private Rigidbody _rigidbody;
+        [ContentSerializerIgnore]
+        public Rigidbody rigidbody 
+        {
+            get
+            {
+                if (_rigidbody == null)
+                {
+                    _rigidbody = GetComponent<Rigidbody>();
+                }
+                return _rigidbody;
+            }
+        }
+
         //public String prefab { get; set; }
         [ContentSerializer(CollectionItemName = "component")]
         private List<Component> components { get; set; }
@@ -60,11 +75,12 @@ namespace PressPlay.FFWD
             }
         }
 
-        public void AddComponent(Component component)
+        public T AddComponent<T>(T component) where T : Component
         {
             components.Add(component);
             component.gameObject = this;
             component.isPrefab = isPrefab;
+            return component;
         }
 
         internal override UnityObject Clone()
@@ -73,7 +89,11 @@ namespace PressPlay.FFWD
             obj.name = name + "(Clone)";
             obj.active = true;
             obj.isPrefab = false;
+
+            // Reset lazy shortcut properties
             obj._transform = null;
+            obj._rigidbody = null;
+
             obj.components = new List<Component>();
             for (int i = 0; i < components.Count; i++)
             {

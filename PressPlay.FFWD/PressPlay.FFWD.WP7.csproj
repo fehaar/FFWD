@@ -119,6 +119,7 @@
     <Compile Include="ObjectReference.cs" />
     <Compile Include="Physics.cs" />
     <Compile Include="GameObjectContactProcessor.cs" />
+    <Compile Include="Random.cs" />
     <Compile Include="RaycastHelper.cs" />
     <Compile Include="RaycastHit.cs" />
     <Compile Include="Scene.cs" />

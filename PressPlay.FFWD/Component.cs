@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
+using PressPlay.FFWD.Components;
 
 namespace PressPlay.FFWD
 {
@@ -19,6 +20,7 @@ namespace PressPlay.FFWD
 
         public virtual GameObject gameObject { get; internal set; }
 
+        #region Component shortcut properties
         [ContentSerializerIgnore]
         public Transform transform
         {
@@ -27,6 +29,16 @@ namespace PressPlay.FFWD
                 return gameObject.transform;
             }
         }
+
+        [ContentSerializerIgnore]
+        public Rigidbody rigidbody
+        {
+            get
+            {
+                return gameObject.rigidbody;
+            }
+        }
+        #endregion
 
         public virtual void Awake()
         {

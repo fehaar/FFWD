@@ -255,11 +255,16 @@ namespace PressPlay.FFWD
             }
         }
 
-        //public void LookAt(Vector3 worldPosition, Vector3 worldUp)
-        //{
-        //    _world = Matrix.CreateLookAt(localPosition, worldPosition, worldUp);
-        //    WorldChanged();
-        //}
+        public void LookAt(Vector3 worldPosition, Vector3 worldUp)
+        {
+            _world = Matrix.CreateLookAt(localPosition, worldPosition, worldUp);
+            WorldChanged();
+        }
+
+        public void LookAt(Vector3 worldPosition)
+        {
+            LookAt(worldPosition, Vector3.Up);
+        }
 
         private void WorldChanged()
         {
