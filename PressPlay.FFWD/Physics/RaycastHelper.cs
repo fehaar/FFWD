@@ -5,6 +5,7 @@ using System.Text;
 using Box2D.XNA;
 using Microsoft.Xna.Framework;
 using PressPlay.FFWD.Components;
+using PressPlay.FFWD.Extensions;
 
 namespace PressPlay.FFWD
 {
@@ -27,12 +28,12 @@ namespace PressPlay.FFWD
             if (findClosest)
             {
                 _hits.Clear();
-                _hits.Add(new RaycastHit() { body = fixture.GetBody(), point = point, normal = normal, distance = dist, collider = fixture.GetBody().GetUserData() as MeshCollider });
+                _hits.Add(new RaycastHit() { body = fixture.GetBody(), point = point.To3d(), normal = normal.To3d(), distance = dist, collider = fixture.GetBody().GetUserData() as MeshCollider });
                 return fraction;
             }
             else
             {
-                _hits.Add(new RaycastHit() { body = fixture.GetBody(), point = point, normal = normal, distance = dist, collider = fixture.GetBody().GetUserData() as MeshCollider });
+                _hits.Add(new RaycastHit() { body = fixture.GetBody(), point = point.To3d(), normal = normal.To3d(), distance = dist, collider = fixture.GetBody().GetUserData() as MeshCollider });
                 return 1;
             }
         }   

@@ -40,15 +40,15 @@ namespace PressPlay.FFWD.Components
         }
 
         [ContentSerializerIgnore]
-        public Vector2 velocity
+        public Vector3 velocity
         {
             get
             {
-                return body.GetLinearVelocity();
+                return body.GetLinearVelocity().To3d();
             }
             set
             {
-                body.SetLinearVelocity(value);
+                body.SetLinearVelocity(value.To2d());
             }
         }
 

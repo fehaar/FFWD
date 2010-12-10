@@ -197,6 +197,10 @@ namespace PressPlay.FFWD
                     return rot;
                 }
             }
+            set
+            {
+                // TODO: This does not work yet
+            }
         }
 
         [ContentSerializerIgnore]
@@ -270,12 +274,14 @@ namespace PressPlay.FFWD
 
         public void LookAt(Vector3 worldPosition, Vector3 worldUp)
         {
+            // TODO: Something is off here...
             _world = Matrix.CreateLookAt(localPosition, worldPosition, worldUp);
             WorldChanged();
         }
 
         public void LookAt(Vector3 worldPosition)
         {
+            // TODO: Something is off here...
             LookAt(worldPosition, Vector3.UnitY);
         }
 
@@ -290,6 +296,22 @@ namespace PressPlay.FFWD
                 _localRotation = rot;
                 _localPosition = pos;
                 _hasDirtyWorld = false;
+            }
+        }
+
+        public Vector3 right 
+        {
+            get
+            {
+                return world.Right;
+            }
+        }
+
+        public Vector3 forward
+        {
+            get
+            {
+                return world.Forward;
             }
         }
     }

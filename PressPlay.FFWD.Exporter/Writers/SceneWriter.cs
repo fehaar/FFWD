@@ -230,6 +230,11 @@ namespace PressPlay.FFWD.Exporter.Writers
                 writer.WriteElementString(name, ToString(obj as Vector3[]));
                 return;
             }
+            if (obj is LayerMask)
+            {
+                writer.WriteElementString(name, ((LayerMask)obj).value.ToString());
+                return;
+            }
             if (obj is UnityEngine.Object)
             {
                 UnityEngine.Object theObject = (obj as UnityEngine.Object);
