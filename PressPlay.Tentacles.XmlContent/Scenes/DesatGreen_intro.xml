@@ -10504,13 +10504,13 @@
           <localScale>1 1 1</localScale>
           <localRotation>0 0 0 1</localRotation>
         </component>
-        <component Type="PressPlay.FFWD.Components.BoxCollider">
+        <!--<component Type="PressPlay.FFWD.Components.BoxCollider">
           <id>29318</id>
           <isTrigger>true</isTrigger>
           <material>Default</material>
           <center>0 0 0</center>
           <size>5000 1 5000</size>
-        </component>
+        </component>-->
       </components>
     </gameObject>
     <gameObject>

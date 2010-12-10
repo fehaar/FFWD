@@ -108,8 +108,8 @@ namespace PressPlay.Tentacles.Scripts
             bodyNormal = _bodyNormal;
             stats = _stats;
 
-            //idleMovementRandomizer1 = Random.Range(0.7f, 1.3f);
-            //idleMovementRandomizer2 = Random.Range(0.7f, 1.3f);
+            idleMovementRandomizer1 = PressPlay.FFWD.Random.Range(0.7f, 1.3f);
+            idleMovementRandomizer2 = PressPlay.FFWD.Random.Range(0.7f, 1.3f);
 
             isInitialized = true;
 
@@ -242,28 +242,15 @@ namespace PressPlay.Tentacles.Scripts
 
         void IdleMovement()
         {
-
             Vector3 vecToIdlePosition = transform.position - (body.transform.position + bodyNormal * 2) + new Vector3(Mathf.Cos(Time.time * 2.5f * idleMovementRandomizer1) * 0.8f, 0, Mathf.Sin(Time.time * 1.75f * idleMovementRandomizer2) * 0.8f); ;
 
-            //Vector3 vecToIdlePosition = transform.position - animationObjectTransform.position;
+            float distToIdlePosition = vecToIdlePosition.Length();
 
+            rigidbody.velocity *= 0.92f;
+            Vector3 elasticityForce = distToIdlePosition * (-vecToIdlePosition) * stats.overMaxLengthElasticity;
+            rigidbody.AddForce(elasticityForce);
 
-
-
-            //float distToIdlePosition = vecToIdlePosition.magnitude;
-
-            //rigidbody.velocity *= 0.92f;
-            //Vector3 elasticityForce = distToIdlePosition * (-vecToIdlePosition) * stats.overMaxLengthElasticity;
-            //rigidbody.AddForce(elasticityForce);
-
-
-
-
-
-
-
-            //transform.LookAt(transform.position + (transform.position - body.transform.position));
-
+            transform.LookAt(transform.position + (transform.position - body.transform.position));
         }
 
         void CheckSearchForConnectionTime()

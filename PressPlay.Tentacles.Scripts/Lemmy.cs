@@ -51,12 +51,12 @@ namespace PressPlay.Tentacles.Scripts
         public LemmyStats stats { get { return statsRef.Get<LemmyStats>(); } }
 
         [ContentSerializer(ElementName="stats")]
-        private ObjectReference statsRef;
+        private ObjectReference statsRef = null;
 
         [ContentSerializerIgnore]
         public TentacleStats tentacleStats { get { return tentacleStatsRef.Get<TentacleStats>(); } }
         [ContentSerializer(ElementName="tentacleStats")]
-        private ObjectReference tentacleStatsRef;
+        private ObjectReference tentacleStatsRef = null;
 
         //public TentacleStats clawStats;
 

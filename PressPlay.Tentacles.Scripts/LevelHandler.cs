@@ -478,14 +478,13 @@ namespace PressPlay.Tentacles.Scripts
         //    cam.FollowPathDefaultStats();
         //}
 
-        void FixedUpdate()
+        public override void FixedUpdate()
         {
             //UpdateTurnOffAtDistanceObjects(followObject);
         }
 
         public override void Update()
         {
-            return;
             //if (!GlobalManager.isLoaded) return;
 
             //if (isCommunicatingWithServer && www.isDone)

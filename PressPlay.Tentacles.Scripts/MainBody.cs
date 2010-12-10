@@ -52,7 +52,7 @@ namespace PressPlay.Tentacles.Scripts {
 
 
         // Use this for initialization
-        void Start()
+        public override void Start()
         {
             LookRight();
             ChangeState(State.neutral);
@@ -141,10 +141,9 @@ namespace PressPlay.Tentacles.Scripts {
 
         void UpdateState()
         {
-            if (stateLength != -1 && Time.time > stateChangeTime + stateLength && nextState != null)
+            if (stateLength != -1 && Time.time > stateChangeTime + stateLength)
             {
                 ChangeState(nextState);
-
             }
 
 
@@ -168,7 +167,7 @@ namespace PressPlay.Tentacles.Scripts {
         }
 
         // Update is called once per frame
-        void FixedUpdate()
+        public override void FixedUpdate()
         {
 
 

@@ -144,7 +144,7 @@ namespace PressPlay.Tentacles.Scripts {
 		}
 		
 	    //// Update is called once per frame
-	    void FixedUpdate()
+        public override void FixedUpdate()
 	    {
 	        //IdleMovement();
 	        //HandleOverextensionElasticity();

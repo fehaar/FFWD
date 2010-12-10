@@ -23,7 +23,7 @@ namespace PressPlay.Tentacles.Debugging
         private static object threadLock = new object();
 
         // we use this to keep the last known value from the accelerometer callback
-        private static Vector3 nextValue = new Vector3();
+        //private static Vector3 nextValue = new Vector3();
 
         // whether or not the accelerometer is active
         private static bool isActive = false;
