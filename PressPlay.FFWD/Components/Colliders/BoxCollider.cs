@@ -16,16 +16,11 @@ namespace PressPlay.FFWD.Components
         public Vector3 size { get; set; }
         #endregion
 
-        public override void Awake()
+        protected override void AddCollider(Body body)
         {
             Vector2 sz = (size * gameObject.transform.lossyScale).To2d();
             Vector3 transCenter = Vector3.Transform(center, transform.world);
-            Body bd = Physics.AddBox(sz.X, sz.Y, transCenter.To2d(), transform.angleY, 1);
-            if (isTrigger)
-            {
-                bd.SetType(BodyType.Kinematic);
-            }
-            bd.SetUserData(this);
+            Physics.AddBox(body, sz.X, sz.Y, transCenter.To2d(), transform.angleY, 1);
         }
 
 //#if DEBUG

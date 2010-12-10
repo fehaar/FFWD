@@ -82,76 +82,57 @@ namespace PressPlay.FFWD
         #endregion
 
         #region Helper methods to create physics objects
+        public static Body AddBody()
+        {
+            return world.CreateBody(new BodyDef());
+        }
+
         public static Body AddBody(BodyDef definition)
         {
             return world.CreateBody(definition);
         }
 
-        public static Body AddBox(float width, float height, Vector2 position, float angle, float density)
-        {
-            return AddBox(width, height, position, angle, density, new BodyDef());
-        }
-
-        public static Body AddBox(float width, float height, Vector2 position, float angle, float density, BodyDef definition)
+        public static Body AddBox(Body body, float width, float height, Vector2 position, float angle, float density)
         {
             if (world == null)
             {
                 throw new InvalidOperationException("You have to Initialize the Physics system before adding bodies");
             }
-            Body body = world.CreateBody(definition);
             PolygonShape shp = new PolygonShape();
             shp.SetAsBox(width / 2, height / 2, position, angle);
             body.CreateFixture(shp, density);
             return body;
         }
 
-        public static Body AddCircle(float radius, Vector2 position, float angle, float density)
-        {
-            return AddCircle(radius, angle, density, new BodyDef() { position = position });
-        }
-
-        public static Body AddCircle(float radius, float angle, float density, BodyDef definition)
+        public static Body AddCircle(Body body, float radius, Vector2 position, float angle, float density)
         {
             if (world == null)
             {
                 throw new InvalidOperationException("You have to Initialize the Physics system before adding bodies");
             }
-            Body body = world.CreateBody(definition);
             CircleShape shp = new CircleShape() { _radius = radius };
             body.CreateFixture(shp, density);
             return body;
         }
 
-        public static Body AddTriangle(Vector2[] vertices, float angle, float density)
-        {
-            return AddTriangle(vertices, density, new BodyDef() { angle = angle });
-        }
-
-        public static Body AddTriangle(Vector2[] vertices, float density, BodyDef definition)
+        public static Body AddTriangle(Body body, Vector2[] vertices, float angle, float density)
         {
             if (world == null)
             {
                 throw new InvalidOperationException("You have to Initialize the Physics system before adding bodies");
             }
-            Body body = world.CreateBody(definition);
             PolygonShape shp = new PolygonShape();
             shp.Set(vertices, vertices.Length);
             body.CreateFixture(shp, density);
             return body;
         }
 
-        public static Body AddMesh(IEnumerable<Vector2[]> tris, int density)
-        {
-            return AddMesh(tris, density, new BodyDef());
-        }
-
-        public static Body AddMesh(IEnumerable<Vector2[]> tris, int density, BodyDef definition)
+        public static Body AddMesh(Body body, IEnumerable<Vector2[]> tris, int density)
         {
             if (world == null)
             {
                 throw new InvalidOperationException("You have to Initialize the Physics system before adding bodies");
             }
-            Body body = world.CreateBody(definition);
             for (int i = 0; i < tris.Count(); i++)
             {
                 Vector2[] tri = tris.ElementAt(i);

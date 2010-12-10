@@ -30,9 +30,17 @@ namespace PressPlay.FFWD.Components
             {
                 pointList[i] = new VertexPositionColor(vertices[i], Color.LawnGreen);
             }
+        }
 
+        protected override BodyDef GetBodyDefinition()
+        {
+            return new BodyDef() { position = transform.position.To2d(), angle = transform.angleY, userData = this };
+        }
+
+        protected override void AddCollider(Body body)
+        {
             List<Vector2[]> tris = new List<Vector2[]>();
-            for (int i = 0; i < triangles.Length; i+=3)
+            for (int i = 0; i < triangles.Length; i += 3)
             {
                 if (vertices[triangles[i]].Y + vertices[triangles[i + 1]].Y + vertices[triangles[i + 2]].Y > 1)
                 {
@@ -45,12 +53,7 @@ namespace PressPlay.FFWD.Components
                 };
                 tris.Add(tri);
             }
-            BodyDef def = new BodyDef() { position = transform.position.To2d(), angle = transform.angleY, userData = this };
-            Body bd = Physics.AddMesh(tris, 1, def);
-            if (isTrigger)
-            {
-                bd.SetType(BodyType.Kinematic);
-            }
+            Physics.AddMesh(body, tris, 1);
         }
 
         public void Select()

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework;
 
 namespace PressPlay.FFWD.Components
 {
@@ -22,9 +23,9 @@ namespace PressPlay.FFWD.Components
         [ContentSerializerIgnore]
         public float velocity { get; set; }
 
-        public void AddForce(Microsoft.Xna.Framework.Vector3 elasticityForce)
+        public void AddForce(Vector3 elasticityForce)
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

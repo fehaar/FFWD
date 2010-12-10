@@ -18,14 +18,13 @@ namespace PressPlay.FFWD.Components
 
         public override void Awake()
         {
+        }
+
+        protected override void AddCollider(Body body)
+        {
             float rad = radius * Math.Max(transform.lossyScale.X, Math.Max(transform.lossyScale.Y, transform.lossyScale.Z));
             Vector3 transCenter = Vector3.Transform(center, transform.world);
-            Body bd = Physics.AddCircle(rad, transCenter.To2d(), transform.angleY, 1);
-            if (isTrigger)
-            {
-                bd.SetType(BodyType.Kinematic);
-            }
-            bd.SetUserData(this);
+            Physics.AddCircle(body, rad, transCenter.To2d(), transform.angleY, 1);
         }
     }
 }
