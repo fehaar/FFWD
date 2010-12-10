@@ -21,11 +21,11 @@ namespace PressPlay.FFWD.Components
             return new BodyDef() { position = transform.position.To2d() };
         }
 
-        internal override void AddCollider(Body body)
+        internal override void AddCollider(Body body, float mass)
         {
             float rad = radius * Math.Max(transform.lossyScale.X, Math.Max(transform.lossyScale.Y, transform.lossyScale.Z));
             Vector3 transCenter = Vector3.Transform(center, transform.world);
-            Physics.AddCircle(body, rad, transCenter.To2d(), transform.angleY, 1);
+            Physics.AddCircle(body, isTrigger, rad, transCenter.To2d(), transform.angleY, mass);
         }
     }
 }

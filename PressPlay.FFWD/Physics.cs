@@ -92,7 +92,7 @@ namespace PressPlay.FFWD
             return world.CreateBody(definition);
         }
 
-        public static Body AddBox(Body body, float width, float height, Vector2 position, float angle, float density)
+        public static Body AddBox(Body body, bool isTrigger, float width, float height, Vector2 position, float angle, float density)
         {
             if (world == null)
             {
@@ -100,22 +100,24 @@ namespace PressPlay.FFWD
             }
             PolygonShape shp = new PolygonShape();
             shp.SetAsBox(width / 2, height / 2, position, angle);
-            body.CreateFixture(shp, density);
+            Fixture fix = body.CreateFixture(shp, density);
+            fix.SetSensor(isTrigger);
             return body;
         }
 
-        public static Body AddCircle(Body body, float radius, Vector2 position, float angle, float density)
+        public static Body AddCircle(Body body, bool isTrigger, float radius, Vector2 position, float angle, float density)
         {
             if (world == null)
             {
                 throw new InvalidOperationException("You have to Initialize the Physics system before adding bodies");
             }
             CircleShape shp = new CircleShape() { _radius = radius };
-            body.CreateFixture(shp, density);
+            Fixture fix = body.CreateFixture(shp, density);
+            fix.SetSensor(isTrigger);
             return body;
         }
 
-        public static Body AddTriangle(Body body, Vector2[] vertices, float angle, float density)
+        public static Body AddTriangle(Body body, bool isTrigger, Vector2[] vertices, float angle, float density)
         {
             if (world == null)
             {
@@ -123,11 +125,12 @@ namespace PressPlay.FFWD
             }
             PolygonShape shp = new PolygonShape();
             shp.Set(vertices, vertices.Length);
-            body.CreateFixture(shp, density);
+            Fixture fix = body.CreateFixture(shp, density);
+            fix.SetSensor(isTrigger);
             return body;
         }
 
-        public static Body AddMesh(Body body, IEnumerable<Vector2[]> tris, int density)
+        public static Body AddMesh(Body body, bool isTrigger, IEnumerable<Vector2[]> tris, float density)
         {
             if (world == null)
             {
@@ -140,7 +143,8 @@ namespace PressPlay.FFWD
                 {
                     PolygonShape shp = new PolygonShape();
                     shp.Set(tri, tri.Length);
-                    body.CreateFixture(shp, density);
+                    Fixture fix = body.CreateFixture(shp, density);
+                    fix.SetSensor(isTrigger);
                 }
                 catch (Exception ex)
                 {

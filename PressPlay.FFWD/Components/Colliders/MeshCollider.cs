@@ -38,7 +38,7 @@ namespace PressPlay.FFWD.Components
             return new BodyDef() { position = transform.position.To2d(), angle = transform.angleY, userData = this };
         }
 
-        internal override void AddCollider(Body body)
+        internal override void AddCollider(Body body, float mass)
         {
             List<Vector2[]> tris = new List<Vector2[]>();
             for (int i = 0; i < triangles.Length; i += 3)
@@ -54,7 +54,7 @@ namespace PressPlay.FFWD.Components
                 };
                 tris.Add(tri);
             }
-            Physics.AddMesh(body, tris, 1);
+            Physics.AddMesh(body, isTrigger, tris, mass);
         }
 
         public void Select()

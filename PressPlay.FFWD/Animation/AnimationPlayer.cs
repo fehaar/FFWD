@@ -151,7 +151,6 @@ namespace PressPlay.FFWD.Animation
             while (currentKeyframe < keyframes.Count)
             {
                 Keyframe keyframe = keyframes[currentKeyframe];
-                Debug.Log("Play keyframe " + currentKeyframe);
                 // Stop when we've read up to the current time position.
                 if (keyframe.Time > currentTimeValue)
                     break;

@@ -23,9 +23,14 @@ namespace PressPlay.FFWD.Components
             if (collider != null)
             {
                 BodyDef def = collider.GetBodyDefinition();
-                def.type = BodyType.Dynamic;
+                def.userData = this;
+                def.type = (isKinematic) ? BodyType.Kinematic : BodyType.Dynamic;
+                def.active = gameObject.active;
+                def.linearDamping = drag;
+                def.angularDamping = angularDrag;
+                def.fixedRotation = freezeRotation;
                 body = Physics.AddBody(def);
-                collider.AddCollider(body);
+                collider.AddCollider(body, mass);
             }
             else
             {

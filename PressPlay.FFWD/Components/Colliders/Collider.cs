@@ -17,13 +17,10 @@ namespace PressPlay.FFWD.Components
         {
             if (rigidbody == null)
             {
-                Body body = Physics.AddBody(GetBodyDefinition());
-                AddCollider(body);
-                if (isTrigger)
-                {
-                    body.SetType(BodyType.Kinematic);
-                }
-                body.SetUserData(this);
+                BodyDef def = GetBodyDefinition();
+                def.userData = this;
+                Body body = Physics.AddBody(def);
+                AddCollider(body, 1);
             }
         }
 
@@ -32,6 +29,6 @@ namespace PressPlay.FFWD.Components
             return new BodyDef();
         }
 
-        internal abstract void AddCollider(Body body);
+        internal abstract void AddCollider(Body body, float mass);
     }
 }
