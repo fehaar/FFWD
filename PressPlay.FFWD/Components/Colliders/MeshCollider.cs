@@ -24,15 +24,24 @@ namespace PressPlay.FFWD.Components
 
         public override void Awake()
         {
+            base.Awake();
             // For drawing the original mesh
             pointList = new VertexPositionColor[vertices.Length];
             for (int i = 0; i < vertices.Length; i++)
             {
                 pointList[i] = new VertexPositionColor(vertices[i], Color.LawnGreen);
             }
+        }
 
+        internal override BodyDef GetBodyDefinition()
+        {
+            return new BodyDef() { position = transform.position.To2d(), angle = transform.angleY, userData = this };
+        }
+
+        internal override void AddCollider(Body body, float mass)
+        {
             List<Vector2[]> tris = new List<Vector2[]>();
-            for (int i = 0; i < triangles.Length; i+=3)
+            for (int i = 0; i < triangles.Length; i += 3)
             {
                 if (vertices[triangles[i]].Y + vertices[triangles[i + 1]].Y + vertices[triangles[i + 2]].Y > 1)
                 {
@@ -45,12 +54,7 @@ namespace PressPlay.FFWD.Components
                 };
                 tris.Add(tri);
             }
-            BodyDef def = new BodyDef() { position = transform.position.To2d(), angle = transform.angleY, userData = this };
-            Body bd = Physics.AddMesh(tris, 1, def);
-            if (isTrigger)
-            {
-                bd.SetType(BodyType.Kinematic);
-            }
+            Physics.AddMesh(body, isTrigger, tris, mass);
         }
 
         public void Select()

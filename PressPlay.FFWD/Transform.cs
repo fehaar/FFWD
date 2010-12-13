@@ -109,6 +109,7 @@ namespace PressPlay.FFWD
                 {
                     _parent.children.Remove(gameObject);
                 }
+                Vector3 pos = position;
                 _parent = value;
                 if (_parent == null)
                 {
@@ -119,6 +120,7 @@ namespace PressPlay.FFWD
                     _parent.children = new List<GameObject>();
                 }
                 _parent.children.Add(gameObject);
+                position = pos;
                 _hasDirtyWorld = true;
             }
         }
@@ -175,7 +177,14 @@ namespace PressPlay.FFWD
             }
             set
             {
-                _world.Translation = value;
+                if (parent == null)
+                {
+                    localPosition = value;
+                }
+                else
+                {
+                    localPosition = value - parent.position;
+                }
             }
         }
 
@@ -217,6 +226,10 @@ namespace PressPlay.FFWD
                     return rot;
                 }
             }
+            set
+            {
+                // TODO: This does not work yet
+            }
         }
 
         [ContentSerializerIgnore]
@@ -234,6 +247,10 @@ namespace PressPlay.FFWD
                 {
                     return (float)((Math.PI * 2) - Math.Acos(dot));
                 }
+            }
+            set
+            {
+                localRotation = Quaternion.CreateFromAxisAngle(Vector3.UnitY, value);
             }
         }
 
@@ -284,11 +301,12 @@ namespace PressPlay.FFWD
             }
         }
 
-        //public void LookAt(Vector3 worldPosition, Vector3 worldUp)
-        //{
-        //    _world = Matrix.CreateLookAt(localPosition, worldPosition, worldUp);
-        //    WorldChanged();
-        //}
+        public void LookAt(Vector3 worldPosition, Vector3 worldUp)
+        {
+            // TODO: Something is off here...
+            _world = Matrix.CreateWorld(position, worldPosition - position, worldUp);
+            WorldChanged();
+        }
 
         //TODO: Implement LookAt
         public void LookAt(Transform target, Vector3 worldUp)
@@ -300,6 +318,12 @@ namespace PressPlay.FFWD
         public void LookAt(Vector3 worldPosition, Vector3 worldUp)
         {
 
+        }
+
+        public void LookAt(Vector3 worldPosition)
+        {
+            // TODO: Something is off here...
+            LookAt(worldPosition, Vector3.UnitY);
         }
 
         private void WorldChanged()
@@ -319,6 +343,30 @@ namespace PressPlay.FFWD
         public IEnumerator GetEnumerator()
         {
             return (IEnumerator)this;
+        }
+
+        public Vector3 right 
+        {
+            get
+            {
+                return world.Right;
+            }
+        }
+
+        public Vector3 forward
+        {
+            get
+            {
+                return world.Forward;
+            }
+        }
+
+        public Vector3 up 
+        { 
+            get
+            {
+                return world.Up;
+            }
         }
     }
 }

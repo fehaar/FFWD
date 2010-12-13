@@ -21,6 +21,7 @@ namespace PressPlay.FFWD
 
         public virtual GameObject gameObject { get; internal set; }
 
+        #region Component shortcut properties
         [ContentSerializerIgnore]
         public Transform transform
         {
@@ -56,6 +57,25 @@ namespace PressPlay.FFWD
                 return gameObject.rigidbody;
             }
         }
+
+        [ContentSerializerIgnore]
+        public Rigidbody rigidbody
+        {
+            get
+            {
+                return gameObject.rigidbody;
+            }
+        }
+
+        [ContentSerializerIgnore]
+        public Collider collider
+        {
+            get
+            {
+                return gameObject.collider;
+            }
+        }
+        #endregion
 
         public virtual void Awake()
         {

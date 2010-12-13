@@ -475,23 +475,23 @@ namespace Box2D.XNA
 			        {
                         if (b.IsActive() == false)
                         {
-                            DrawShape(f, xf, new Color(0.5f, 0.5f, 0.3f));
+                            DrawShape(f, xf, Color.DarkGray);
                         }
                         else if (b.GetType() == BodyType.Static)
                         {
-                            DrawShape(f, xf, new Color(0.5f, 0.9f, 0.5f));
+                            DrawShape(f, xf, Color.Green);
                         }
                         else if (b.GetType() == BodyType.Kinematic)
                         {
-                            DrawShape(f, xf, new Color(0.5f, 0.5f, 0.9f));
+                            DrawShape(f, xf, Color.GreenYellow);
                         }
 				        else if (b.IsAwake() == false)
 				        {
-					        DrawShape(f, xf, new Color(0.6f, 0.6f, 0.6f));
+					        DrawShape(f, xf, Color.Pink);
 				        }
 				        else
 				        {
-					        DrawShape(f, xf, new Color(0.9f, 0.7f, 0.7f));
+					        DrawShape(f, xf, Color.HotPink);
 				        }
 			        }
 		        }

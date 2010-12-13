@@ -37,7 +37,7 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
             }
             if (exportScript)
             {
-                scene.WriteScript(beh);
+                scene.WriteScript(beh, true);
             }
         }
         #endregion

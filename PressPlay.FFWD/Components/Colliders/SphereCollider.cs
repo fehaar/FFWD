@@ -16,16 +16,16 @@ namespace PressPlay.FFWD.Components
         public float radius { get; set; }
         #endregion
 
-        public override void Awake()
+        internal override BodyDef GetBodyDefinition()
+        {
+            return new BodyDef() { position = transform.position.To2d() };
+        }
+
+        internal override void AddCollider(Body body, float mass)
         {
             float rad = radius * Math.Max(transform.lossyScale.X, Math.Max(transform.lossyScale.Y, transform.lossyScale.Z));
             Vector3 transCenter = Vector3.Transform(center, transform.world);
-            Body bd = Physics.AddCircle(rad, transCenter.To2d(), transform.angleY, 1);
-            if (isTrigger)
-            {
-                bd.SetType(BodyType.Kinematic);
-            }
-            bd.SetUserData(this);
+            Physics.AddCircle(body, isTrigger, rad, transCenter.To2d(), transform.angleY, mass);
         }
     }
 }

@@ -25,5 +25,20 @@ namespace PressPlay.FFWD.Extensions
                     throw new Exception("Unknown enum " + to2dMode);
             }
         }
+
+        public static Vector3 To3d(this Vector2 vector)
+        {
+            switch (to2dMode)
+            {
+                case To2dMode.DropX:
+                    return new Vector3(0, vector.X, vector.Y);
+                case To2dMode.DropY:
+                    return new Vector3(vector.X, 0, vector.Y);
+                case To2dMode.DropZ:
+                    return new Vector3(vector.X, vector.Y, 0);
+                default:
+                    throw new Exception("Unknown enum " + to2dMode);
+            }
+        }
     }
 }

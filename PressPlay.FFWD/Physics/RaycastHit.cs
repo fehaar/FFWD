@@ -11,8 +11,8 @@ namespace PressPlay.FFWD
     public struct RaycastHit
     {
         public Body body;
-        public Vector2 point;
-        public Vector2 normal;
+        public Vector3 point;
+        public Vector3 normal;
         public float distance;
         public Transform transform;
         public MeshCollider collider;

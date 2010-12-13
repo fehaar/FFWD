@@ -6,6 +6,7 @@ using Box2D.XNA;
 using Microsoft.Xna.Framework;
 using PressPlay.FFWD.Interfaces;
 using PressPlay.FFWD.Extensions;
+using PressPlay.FFWD.Components;
 
 namespace PressPlay.FFWD
 {
@@ -56,6 +57,29 @@ namespace PressPlay.FFWD
         public static void Update(float elapsedTime)
         {
             world.Step(elapsedTime, velocityIterations, positionIterations);
+
+            // Sync positions of game objects
+            Body body = world.GetBodyList();
+            do
+            {
+                Component comp = (Component)body.GetUserData();
+                if (comp != null)
+                {
+                    if (body.GetType() == BodyType.Static)
+                    {
+                        body.SetTransform(comp.transform.position.To2d(), comp.transform.angleY);
+                    }
+                    else
+                    {
+                        Box2D.XNA.Transform t;
+                        body.GetTransform(out t);
+                        comp.transform.position = t.Position.To3d();
+                        comp.transform.angleY = t.GetAngle();
+                    }
+                }
+                body = body.GetNext();
+            } while (body != null);
+
             contactProcessor.Update();
         }
 
@@ -82,76 +106,60 @@ namespace PressPlay.FFWD
         #endregion
 
         #region Helper methods to create physics objects
+        public static Body AddBody()
+        {
+            return world.CreateBody(new BodyDef());
+        }
+
         public static Body AddBody(BodyDef definition)
         {
             return world.CreateBody(definition);
         }
 
-        public static Body AddBox(float width, float height, Vector2 position, float angle, float density)
-        {
-            return AddBox(width, height, position, angle, density, new BodyDef());
-        }
-
-        public static Body AddBox(float width, float height, Vector2 position, float angle, float density, BodyDef definition)
+        public static Body AddBox(Body body, bool isTrigger, float width, float height, Vector2 position, float angle, float density)
         {
             if (world == null)
             {
                 throw new InvalidOperationException("You have to Initialize the Physics system before adding bodies");
             }
-            Body body = world.CreateBody(definition);
             PolygonShape shp = new PolygonShape();
             shp.SetAsBox(width / 2, height / 2, position, angle);
-            body.CreateFixture(shp, density);
+            Fixture fix = body.CreateFixture(shp, density);
+            fix.SetSensor(isTrigger);
             return body;
         }
 
-        public static Body AddCircle(float radius, Vector2 position, float angle, float density)
-        {
-            return AddCircle(radius, angle, density, new BodyDef() { position = position });
-        }
-
-        public static Body AddCircle(float radius, float angle, float density, BodyDef definition)
+        public static Body AddCircle(Body body, bool isTrigger, float radius, Vector2 position, float angle, float density)
         {
             if (world == null)
             {
                 throw new InvalidOperationException("You have to Initialize the Physics system before adding bodies");
             }
-            Body body = world.CreateBody(definition);
             CircleShape shp = new CircleShape() { _radius = radius };
-            body.CreateFixture(shp, density);
+            Fixture fix = body.CreateFixture(shp, density);
+            fix.SetSensor(isTrigger);
             return body;
         }
 
-        public static Body AddTriangle(Vector2[] vertices, float angle, float density)
-        {
-            return AddTriangle(vertices, density, new BodyDef() { angle = angle });
-        }
-
-        public static Body AddTriangle(Vector2[] vertices, float density, BodyDef definition)
+        public static Body AddTriangle(Body body, bool isTrigger, Vector2[] vertices, float angle, float density)
         {
             if (world == null)
             {
                 throw new InvalidOperationException("You have to Initialize the Physics system before adding bodies");
             }
-            Body body = world.CreateBody(definition);
             PolygonShape shp = new PolygonShape();
             shp.Set(vertices, vertices.Length);
-            body.CreateFixture(shp, density);
+            Fixture fix = body.CreateFixture(shp, density);
+            fix.SetSensor(isTrigger);
             return body;
         }
 
-        public static Body AddMesh(IEnumerable<Vector2[]> tris, int density)
-        {
-            return AddMesh(tris, density, new BodyDef());
-        }
-
-        public static Body AddMesh(IEnumerable<Vector2[]> tris, int density, BodyDef definition)
+        public static Body AddMesh(Body body, bool isTrigger, IEnumerable<Vector2[]> tris, float density)
         {
             if (world == null)
             {
                 throw new InvalidOperationException("You have to Initialize the Physics system before adding bodies");
             }
-            Body body = world.CreateBody(definition);
             for (int i = 0; i < tris.Count(); i++)
             {
                 Vector2[] tri = tris.ElementAt(i);
@@ -159,7 +167,8 @@ namespace PressPlay.FFWD
                 {
                     PolygonShape shp = new PolygonShape();
                     shp.Set(tri, tri.Length);
-                    body.CreateFixture(shp, density);
+                    Fixture fix = body.CreateFixture(shp, density);
+                    fix.SetSensor(isTrigger);
                 }
                 catch (Exception ex)
                 {
@@ -170,7 +179,7 @@ namespace PressPlay.FFWD
         }
         #endregion
 
-        #region Unity methods
+        #region Raycast methods
         public static bool Raycast(Vector2 origin, Vector2 direction, float distance, int layerMask)
         {
             RaycastHelper helper = new RaycastHelper(distance, true);
@@ -239,5 +248,15 @@ namespace PressPlay.FFWD
             return RaycastAll(ray.Position.To2d(), ray.Direction.To2d(), distance, layerMask);
         }
         #endregion
+
+        public static void IgnoreCollision(Collider collider1, Collider collider2)
+        {
+            IgnoreCollision(collider1, collider2, true);
+        }
+
+        public static void IgnoreCollision(Collider collider1, Collider collider2, bool ignore)
+        {
+
+        }
     }
 }

@@ -2,14 +2,33 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Box2D.XNA;
 
 namespace PressPlay.FFWD.Components
 {
-    public class Collider : Component
+    public abstract class Collider : Component
     {
         #region ContentProperties
         public bool isTrigger { get; set; }
         public string material { get; set; }
         #endregion
+
+        public override void Awake()
+        {
+            if (rigidbody == null)
+            {
+                BodyDef def = GetBodyDefinition();
+                def.userData = this;
+                Body body = Physics.AddBody(def);
+                AddCollider(body, 1);
+            }
+        }
+
+        internal virtual BodyDef GetBodyDefinition()
+        {
+            return new BodyDef();
+        }
+
+        internal abstract void AddCollider(Body body, float mass);
     }
 }

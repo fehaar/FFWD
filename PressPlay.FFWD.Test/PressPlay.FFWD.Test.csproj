@@ -57,6 +57,7 @@
     <Compile Include="Core framework\Transforms\WhenManipulatingTransforms.cs" />
     <Compile Include="Core framework\Transforms\WhenManipulatingTheTransformHierarchy.cs" />
     <Compile Include="Core framework\WhenAddingAComponentToAGameObject.cs" />
+    <Compile Include="Core framework\AGameObjectCanBeConvertedToBool.cs" />
     <Compile Include="Core framework\WhenCreatingANewComponent.cs" />
     <Compile Include="Core framework\WhenFindingAnObjectById.cs" />
     <Compile Include="Core framework\WhenGettingTheComponentName.cs" />
@@ -65,6 +66,8 @@
     <Compile Include="Core framework\WhenLocatingAComponent.cs" />
     <Compile Include="Core framework\WhenRunningTheGameLoop.cs" />
     <Compile Include="Core framework\WhenSettingNewIds.cs" />
+    <Compile Include="Core framework\WhenUsingTheComponentShortcutMethods.cs" />
+    <Compile Include="Core framework\WhenUsingTheGameObjectShortcutProperties.cs" />
     <Compile Include="Physics facts\WhenInitializingPhysics.cs" />
     <Compile Include="Physics facts\WhenPerformingARaycast.cs" />
     <Compile Include="Physics facts\WhenReactingToPhysics.cs" />

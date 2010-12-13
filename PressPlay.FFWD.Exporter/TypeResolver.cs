@@ -109,6 +109,10 @@ namespace PressPlay.FFWD.Exporter
                         {
                             (writer as IFilteredComponentWriter).filter = new Filter() { filterType = map.FilterType, items = map.FilterItems.Split(',') };
                         }
+                        if (writer is IOptionComponentWriter)
+                        {
+                            (writer as IOptionComponentWriter).options = map.Options ?? String.Empty;
+                        }
 
                         return writer;
                     }

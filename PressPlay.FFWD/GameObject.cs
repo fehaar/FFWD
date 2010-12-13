@@ -59,6 +59,34 @@ namespace PressPlay.FFWD
             }
         }
 
+        private Rigidbody _rigidbody;
+        [ContentSerializerIgnore]
+        public Rigidbody rigidbody 
+        {
+            get
+            {
+                if (_rigidbody == null)
+                {
+                    _rigidbody = GetComponent<Rigidbody>();
+                }
+                return _rigidbody;
+            }
+        }
+
+        private Collider _collider;
+        [ContentSerializerIgnore]
+        public Collider collider
+        {
+            get
+            {
+                if (_collider == null)
+                {
+                    _collider = GetComponent<Collider>();
+                }
+                return _collider;
+            }
+        }
+
         //public String prefab { get; set; }
         [ContentSerializer(CollectionItemName = "component")]
         private List<Component> components { get; set; }
@@ -83,11 +111,12 @@ namespace PressPlay.FFWD
             }
         }
 
-        public void AddComponent(Component component)
+        public T AddComponent<T>(T component) where T : Component
         {
             components.Add(component);
             component.gameObject = this;
             component.isPrefab = isPrefab;
+            return component;
         }
 
         protected Renderer _renderer;
@@ -126,7 +155,12 @@ namespace PressPlay.FFWD
             obj.name = name + "(Clone)";
             obj.active = true;
             obj.isPrefab = false;
+
+            // Reset lazy shortcut properties
             obj._transform = null;
+            obj._rigidbody = null;
+            obj._collider = null;
+
             obj.components = new List<Component>();
             for (int i = 0; i < components.Count; i++)
             {
@@ -494,10 +528,15 @@ namespace PressPlay.FFWD
         }
         #endregion
 
+        #region Unity methods
+        public void SetActiveRecursively(bool _status)
+        {
+        }
+        #endregion
+
         public override string ToString()
         {
             return name + "(" + GetInstanceID() + ")";
         }
-
     }
 }

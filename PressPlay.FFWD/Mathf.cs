@@ -49,5 +49,15 @@ namespace PressPlay.FFWD
         {
             return (float)Math.Asin(x);
         }
+
+        public static float Min(float x, float y)
+        {
+            return Math.Min(x, y);
+        }
+
+        public static float Max(float x, float y)
+        {
+            return Math.Max(x, y);
+        }
     }
 }

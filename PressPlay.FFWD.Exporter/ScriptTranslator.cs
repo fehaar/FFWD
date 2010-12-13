@@ -31,7 +31,10 @@ namespace PressPlay.FFWD.Exporter
             {
                 Regex methEx = new Regex(@"void\s+" + method + @"\s?\(");
                 int startLine = scriptLines.FindIndex(s => methEx.IsMatch(s));
-                scriptLines[startLine] = scriptLines[startLine].Replace("void", "public override void");
+                if (startLine >= 0)
+                {
+                    scriptLines[startLine] = scriptLines[startLine].Replace("void", "public override void");
+                }
             }            
 
             // Replace Vector3 static method names
