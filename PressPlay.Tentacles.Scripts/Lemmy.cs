@@ -11,6 +11,11 @@ namespace PressPlay.Tentacles.Scripts
 {
     public class Lemmy : MonoBehaviour
     {
+        /*private bool _isInputOn = false;
+        public bool isInputOn{
+            get{return _isInputOn;}
+        }*/
+
         public bool aimAtFingerPosition = false;
         public bool useControllerInput = false;
 
@@ -28,10 +33,10 @@ namespace PressPlay.Tentacles.Scripts
 
         //public ScoreHandler scoreHandler = new ScoreHandler();
 
-        //private RaycastHit rh;
-        //private Ray ray;
+        private RaycastHit rh;
+        private Ray ray;
 
-        //private Vector3 lastPosition;
+        private Vector3 lastPosition;
 
         //public PoolableObject createOnLowDamage;
         //public PoolableObject createOnMediumDamage;
@@ -49,18 +54,16 @@ namespace PressPlay.Tentacles.Scripts
 
         [ContentSerializerIgnore]
         public LemmyStats stats { get { return statsRef.Get<LemmyStats>(); } }
-
-        [ContentSerializer(ElementName="stats")]
+        [ContentSerializer(ElementName = "stats")]
         private ObjectReference statsRef = null;
 
         [ContentSerializerIgnore]
         public TentacleStats tentacleStats { get { return tentacleStatsRef.Get<TentacleStats>(); } }
-        [ContentSerializer(ElementName="tentacleStats")]
+        [ContentSerializer(ElementName = "tentacleStats")]
         private ObjectReference tentacleStatsRef = null;
-
         //public TentacleStats clawStats;
 
-        //private int currentTentacleIndex = 0;
+        private int currentTentacleIndex = 0;
 
         //private TentacleJoint[] tentacleRoots;
         //private Tentacle[] tentacles;
@@ -82,16 +85,17 @@ namespace PressPlay.Tentacles.Scripts
         //private ParticleAnimator bleedBubbleTrailAnimator;
 
         //public InputHandler inputHandlerPrefab;
-        //public Camera lemmyFollowCamera;
+        [ContentSerializerIgnore]
+        public Camera lemmyFollowCamera;
         //public PathFollowCam pathFollowCam;
 
-        //private Vector3 forceFromTentacles;
-        //private Vector3 lastInputPosition = Vector3.zero;
-        //private float lastInputTime;
+        private Vector3 forceFromTentacles;
+        private Vector3 lastInputPosition = Vector3.Zero;
+        private float lastInputTime;
 
-        //private float health;
+        private float health;
 
-        //private bool lemmyHasJustDied = false;
+        private bool lemmyHasJustDied = false;
 
         //public LevelSession levelSession;
 
@@ -124,8 +128,11 @@ namespace PressPlay.Tentacles.Scripts
             }
         }
 
-        //// Have we set the number of lives for Lemmy
-        //private bool isBroughtToLife = false;
+
+
+
+        // Have we set the number of lives for Lemmy
+        private bool isBroughtToLife = true;
         //public bool hasExtraLives
         //{
         //    get
@@ -159,19 +166,20 @@ namespace PressPlay.Tentacles.Scripts
         private float stateChangeTime;
 
 
-        //// Use this for initialization
+        // Use this for initialization
         public void Initialize()
         {
+
             //currentEffectScript = GetComponent<RigidbodyAffectedByCurrents>();
 
-            ////create main body
+            //create main body
             mainBody = (MainBody)Instantiate(mainBodyPrefab);
             mainBody.transform.position = transform.position;
             mainBody.transform.parent = transform;
 
             //TentacleJoint bodyJoint = (TentacleJoint)GetComponent(typeof(TentacleJoint));
 
-            ////create claw
+            //create claw
             //_claw = (Claw)Instantiate(clawPrefab);
             //claw.transform.position = transform.position;
             //claw.Initialize(this, Vector3.back, clawStats);
@@ -179,7 +187,7 @@ namespace PressPlay.Tentacles.Scripts
             //clawTentacle = (Tentacle)Instantiate(tentaclePrefab);
             //clawTentacle.Initialize(clawStats, bodyJoint, (TentacleJoint)claw.GetComponent(typeof(TentacleJoint)));
 
-            ////create bubble trail
+            //create bubble trail
             //bubbleTrail = (ParticleEmitter)Instantiate(bubbleTrailPrefab, transform.position, transform.rotation);
             //bubbleTrail.transform.parent = transform;
             //bubbleTrailAnimator = bubbleTrail.GetComponent<ParticleAnimator>();
@@ -187,17 +195,17 @@ namespace PressPlay.Tentacles.Scripts
             //bleedBubbleTrail.transform.parent = transform;
             //bleedBubbleTrailAnimator = bleedBubbleTrail.GetComponent<ParticleAnimator>();
 
-            ////create tentacles		
+            //create tentacles		
             //tentacleRoots = new TentacleJoint[stats.tentacles];
             //tentacles = new Tentacle[stats.tentacles];
             tentacleTips = new TentacleTip[stats.tentacles];
             for (int i = 0; i < stats.tentacles; i++)
             {
-            //    GameObject tmpGameObject = new GameObject();
-            //    tmpGameObject.name = "tentacle root " + i;
-            //    tmpGameObject.AddComponent(typeof(TentacleJoint));
+                //GameObject tmpGameObject = new GameObject();
+                //tmpGameObject.name = "tentacle root " + i;
+                //tmpGameObject.AddComponent(typeof(TentacleJoint));
 
-            //    tentacleRoots[i] = tmpGameObject.GetComponent<TentacleJoint>();
+                //tentacleRoots[i] = tmpGameObject.GetComponent<TentacleJoint>();
 
                 tentacleTips[i] = (TentacleTip)Instantiate(tentacleTipPrefab);
                 tentacleTips[i].transform.position = transform.position;
@@ -206,325 +214,320 @@ namespace PressPlay.Tentacles.Scripts
                 normal.X = Mathf.Cos(((i + 0.5f) * Mathf.PI * 2) / stats.tentacles);
                 normal.Z = Mathf.Sin(((i + 0.5f) * Mathf.PI * 2) / stats.tentacles);
 
-            //    tentacleRoots[i].transform.position = transform.position;
-            //    tentacleRoots[i].transform.parent = transform;
+                //tentacleRoots[i].transform.position = transform.position;
+                //tentacleRoots[i].transform.parent = transform;
 
                 tentacleTips[i].Initialize(gameObject, normal, tentacleStats, this);
 
-            //    Physics.IgnoreCollision(tentacleTips[i].collider, collider);
-            //    Physics.IgnoreCollision(tentacleTips[i].collider, claw.collider);
-            //    for (int j = 0; j < i; j++)
-            //    {
-            //        Physics.IgnoreCollision(tentacleTips[i].collider, tentacleTips[j].collider);
-            //    }
+                Physics.IgnoreCollision(tentacleTips[i].collider, collider);
+                //Physics.IgnoreCollision(tentacleTips[i].collider, claw.collider);
+                for (int j = 0; j < i; j++)
+                {
+                    Physics.IgnoreCollision(tentacleTips[i].collider, tentacleTips[j].collider);
+                }
 
-            //    tentacles[i] = (Tentacle)Instantiate(tentaclePrefab);
-            //    tentacles[i].Initialize(tentacleStats, tentacleRoots[i], bodyJoint, (TentacleJoint)tentacleTips[i].GetComponent(typeof(TentacleJoint)), true);
-            //    tentacles[i].SetBodyNormal(normal);
+                //tentacles[i] = (Tentacle)Instantiate(tentaclePrefab);
+                //tentacles[i].Initialize(tentacleStats, tentacleRoots[i], bodyJoint, (TentacleJoint)tentacleTips[i].GetComponent(typeof(TentacleJoint)), true);
+                //tentacles[i].SetBodyNormal(normal);
             }
 
             //squishedTester.Initialize();
 
             //eggSack = GetComponent<EggSack>();
 
-            //health = stats.health;
+            health = stats.health;
 
-            //rigidbody.drag = stats.rigidbodyDrag;
+            rigidbody.drag = stats.rigidbodyDrag;
 
-            //lastInputTime = Time.time;
+            lastInputTime = Time.time;
 
-            //lastPosition = transform.position;
+            lastPosition = transform.position;
+
+            // TODO: Remove this - it is a hack
+            lemmyFollowCamera = Camera.main;
         }
 
         public void ChangeState(State _newState)
         {
-        //    _state = _newState;
-        //    stateChangeTime = Time.time;
+            _state = _newState;
+            stateChangeTime = Time.time;
 
-        //    switch (_state)
-        //    {
-        //        case State.dormantBeforeSpawn:
-        //            claw.GoDormant();
-        //            claw.Reset();
-        //            mainBody.LookUp();
-        //            for (int i = 0; i < tentacleTips.Length; i++)
-        //            {
-        //                tentacleTips[i].GoDormant();
-        //                tentacles[i].Reset();
-        //            }
-        //            eggSack.Reset();
+            switch (_state)
+            {
+                case State.dormantBeforeSpawn:
+                    //claw.GoDormant();
+                    //claw.Reset();
+                    mainBody.LookUp();
+                    for (int i = 0; i < tentacleTips.Length; i++)
+                    {
+                        tentacleTips[i].GoDormant();
+                        //tentacles[i].Reset();
+                    }
+                    //eggSack.Reset();
 
-        //            break;
+                    break;
 
-        //        case State.normalActivity:
+                case State.normalActivity:
 
-        //            claw.ExitDormant();
-        //            mainBody.LookRight();
-        //            for (int i = 0; i < tentacleTips.Length; i++)
-        //            {
-        //                tentacleTips[i].ExitDormant();
-        //            }
-        //            break;
-        //    }
+                    //claw.ExitDormant();
+                    mainBody.LookRight();
+                    for (int i = 0; i < tentacleTips.Length; i++)
+                    {
+                        tentacleTips[i].ExitDormant();
+                    }
+                    break;
+            }
         }
 
+
+        /*public void ToggleInput(bool turnOn)
+        {
+            _isInputOn = turnOn;
+        }*/
 
         public void SetNumberOfLives(int numberOfLives)
         {
-        //    if (eggSack == null)
-        //    {
-        //        eggSack = GetComponent<EggSack>();
-        //    }
-        //    eggSack.Initialize(this, numberOfLives);
-        //    isBroughtToLife = true;
+            //if (eggSack == null)
+            //{
+            //    eggSack = GetComponent<EggSack>();
+            //}
+            //eggSack.Initialize(this, numberOfLives);
+            isBroughtToLife = true;
         }
 
-        //void Update()
-        //{
-        //    if (!isBroughtToLife) return;
+        public override void Update()
+        {
+            if (!isBroughtToLife) return;
 
-        //    eggSack.DoUpdate();
-
-
+            //eggSack.DoUpdate();
 
 
-        //    //bubble trail SLIGHTLY HACKY! HACK WARNING!
-        //    //Debug.DrawRay(transform.position,bubbleTrail.worldVelocity, Color.blue);
-        //    float speedSqrt = rigidbody.velocity.sqrMagnitude + currentEffectScript.force.magnitude * 0.95f;
-        //    Vector3 trailSpeed = currentEffectScript.force * 0.125f;
-        //    Vector3 trailForce = currentEffectScript.force * 0.05f;
-        //    float minEmission = speedSqrt * 0.05f + 0.04f;
-        //    float maxEmission = speedSqrt * 0.1f + 0.05f;
-
-        //    bubbleTrail.worldVelocity = trailSpeed;
-        //    bubbleTrailAnimator.force = trailForce;
-        //    bubbleTrail.maxEmission = maxEmission;
-        //    bubbleTrail.minEmission = minEmission;
-
-        //    float bleed = 1 - (health / stats.health);
-        //    bleedBubbleTrail.worldVelocity = trailSpeed * bleed;
-        //    bleedBubbleTrailAnimator.force = trailForce * bleed;
-        //    bleedBubbleTrail.maxEmission = maxEmission * bleed;
-        //    bleedBubbleTrail.minEmission = minEmission * bleed;
 
 
-        //    //check if we should use xbox controller input, or do touchscreen/mouse checks
-        //    if (useControllerInput)
-        //    {
-        //        HandleShootTentacleInput_Controller();
-        //    }
-        //    else if (!LevelHandler.Instance.CheckHitUIElements())
-        //    {
-        //        HandleShootTentacleInput();
-        //    }
-        //    ShowNextAvailableTentacle();
+            //bubble trail SLIGHTLY HACKY! HACK WARNING!
+            //Debug.DrawRay(transform.position,bubbleTrail.worldVelocity, Color.blue);
+            //float speedSqrt = rigidbody.velocity.sqrMagnitude + currentEffectScript.force.magnitude * 0.95f;
+            //Vector3 trailSpeed = currentEffectScript.force * 0.125f;
+            //Vector3 trailForce = currentEffectScript.force * 0.05f;
+            //float minEmission = speedSqrt * 0.05f + 0.04f;
+            //float maxEmission = speedSqrt * 0.1f + 0.05f;
+
+            //bubbleTrail.worldVelocity = trailSpeed;
+            //bubbleTrailAnimator.force = trailForce;
+            //bubbleTrail.maxEmission = maxEmission;
+            //bubbleTrail.minEmission = minEmission;
+
+            //float bleed = 1 - (health / stats.health);
+            //bleedBubbleTrail.worldVelocity = trailSpeed * bleed;
+            //bleedBubbleTrailAnimator.force = trailForce * bleed;
+            //bleedBubbleTrail.maxEmission = maxEmission * bleed;
+            //bleedBubbleTrail.minEmission = minEmission * bleed;
 
 
-        //    //HACK!! do damage to kill lemmy for debug reasons
-        //    if (Input.GetKeyDown(KeyCode.K))
-        //    {
-        //        //Kill();
-        //        Damage(60, Vector3.zero);
-        //    }
-        //}
+            //check if we should use xbox controller input, or do touchscreen/mouse checks
+            if (useControllerInput)
+            {
+                HandleShootTentacleInput_Controller();
+            }
+            else if (!LevelHandler.Instance.CheckHitUIElements())
+            {
+                HandleShootTentacleInput();
+            }
+            ShowNextAvailableTentacle();
+        }
 
-        //void FixedUpdate()
-        //{
-        //    if (!isBroughtToLife) return;
+        public override void FixedUpdate()
+        {
+            if (!isBroughtToLife) return;
 
-        //    DoWallCollisionRaycast();
+            DoWallCollisionRaycast();
 
-        //    HandleConnectedTentacleTips();
-
-
-        //    //slightly hacky way to keep claw in front of lemmy
-        //    if (claw.isIdle)
-        //    {
-        //        claw.rigidbody.AddForce(rigidbody.velocity * 150 * Time.deltaTime);
-        //    }
-
-        //    HandleHealth();
-        //}
-
-        //public void AddHealth(float _health)
-        //{
-        //    health += _health;
-
-        //    health = Mathf.Min(health, stats.health);
-
-        //    LevelHandler.Instance.lemmyPainVisualizer.SetHealth(health);
-        //}
-
-        //private void HandleHealth()
-        //{
-        //    if (health < stats.health)
-        //    {
-
-        //        health += stats.regenerateDamagePerSecond * Time.deltaTime;
-        //        health = Mathf.Min(health, stats.health);
-
-        //        //Debug.Log("Regenerating: " + health);
-
-        //        LevelHandler.Instance.lemmyPainVisualizer.SetHealth(health);
-        //    }
-
-        //    mainBody.SetHealthFraction(health / stats.health);
-        //}
-
-        //private void HandleConnectedTentacleTips()
-        //{
-
-        //    //force from tentacles and claw
-        //    forceFromTentacles = Vector3.zero;
-
-        //    //this moves tentacle roots (origins) to edge of lemmy in the connected direction, and back to center of lemmy if not connected
-        //    for (int i = 0; i < tentacleTips.Length; i++)
-        //    {
-        //        if (tentacleTips[i].isConnected)
-        //        {
-        //            forceFromTentacles += tentacleTips[i].GetElasticityForce();
-
-        //            //JUST A TEST!! HACK
-        //            tentacleRoots[i].transform.localPosition = Vector3.Lerp(tentacleRoots[i].transform.localPosition, (tentacleTips[i].transform.position - transform.position).normalized * 0.45f, Time.deltaTime * 1.45f);
-        //        }
-        //        else
-        //        {
-        //            //JUST A TEST!! HACK
-        //            tentacleRoots[i].transform.localPosition = Vector3.Lerp(tentacleRoots[i].transform.localPosition, Vector3.zero, Time.deltaTime * 1.5f);
-        //        }
-        //        tentacleRoots[i].transform.localPosition -= new Vector3(0, tentacleRoots[i].transform.localPosition.y, 0);
-        //    }
-
-        //    if (claw.isConnected)
-        //    {
-        //        forceFromTentacles += claw.GetElasticityForce();
-        //    }
-
-        //    //add connection forces to lemmy rigidbody
-        //    rigidbody.AddForce(forceFromTentacles);
-        //}
-
-        //private void ShowNextAvailableTentacle()
-        //{
-        //    for (int i = 0; i < tentacles.Length; i++)
-        //    {
-        //        tentacles[i].ShowAsUnavailable();
-        //    }
-        //    int nextTentacleIndex = GetNextAvailableTentacleIndex();
-
-        //    tentacles[nextTentacleIndex].ShowAsAvailable();
-        //}
-
-        //private void HandleShootTentacleInput_Controller()
-        //{
-        //    if (isInputLocked)
-        //    {
-        //        return;
-        //    }
-
-        //    if (InputHandler.Instance.GetShootClaw())
-        //    {
-        //        ShootClawInDirection(InputHandler.InputVecToWorldVec(LevelHandler.Instance.cam.raycastCamera, InputHandler.Instance.GetClawDirection()));
-        //    }
-
-        //    if (InputHandler.Instance.GetShootTentacle())
-        //    {
-        //        ShootTentacleInDirection(InputHandler.InputVecToWorldVec(LevelHandler.Instance.cam.raycastCamera, InputHandler.Instance.GetTentacleDirection()));
-        //    }
-        //}
+            HandleConnectedTentacleTips();
 
 
-        //private void HandleShootTentacleInput()
-        //{
-        //    if (isInputLocked)
-        //    {
-        //        return;
-        //    }
+            //slightly hacky way to keep claw in front of lemmy
+            //if (claw.isIdle)
+            //{
+            //    claw.rigidbody.AddForce(rigidbody.velocity * 150 * Time.deltaTime);
+            //}
+
+            HandleHealth();
+        }
+
+        public void AddHealth(float _health)
+        {
+            health += _health;
+
+            health = Mathf.Min(health, stats.health);
+
+            //LevelHandler.Instance.lemmyPainVisualizer.SetHealth(health);
+        }
+
+        private void HandleHealth()
+        {
+            if (health < stats.health)
+            {
+
+                health += stats.regenerateDamagePerSecond * Time.deltaTime;
+                health = Mathf.Min(health, stats.health);
+
+                //Debug.Log("Regenerating: " + health);
+
+                //LevelHandler.Instance.lemmyPainVisualizer.SetHealth(health);
+            }
+
+            mainBody.SetHealthFraction(health / stats.health);
+        }
+
+        private void HandleConnectedTentacleTips()
+        {
+
+            //force from tentacles and claw
+            forceFromTentacles = Vector3.Zero;
+
+            //this moves tentacle roots (origins) to edge of lemmy in the connected direction, and back to center of lemmy if not connected
+            for (int i = 0; i < tentacleTips.Length; i++)
+            {
+                if (tentacleTips[i].isConnected)
+                {
+                    forceFromTentacles += tentacleTips[i].GetElasticityForce();
+
+                    //JUST A TEST!! HACK
+                    //tentacleRoots[i].transform.localPosition = Vector3.Lerp(tentacleRoots[i].transform.localPosition, (tentacleTips[i].transform.position - transform.position).normalized * 0.45f, Time.deltaTime * 1.45f);
+                }
+                else
+                {
+                    //JUST A TEST!! HACK
+                    //tentacleRoots[i].transform.localPosition = Vector3.Lerp(tentacleRoots[i].transform.localPosition, Vector3.zero, Time.deltaTime * 1.5f);
+                }
+                //tentacleRoots[i].transform.localPosition -= new Vector3(0, tentacleRoots[i].transform.localPosition.y, 0);
+            }
+
+            //if (claw.isConnected)
+            //{
+            //    forceFromTentacles += claw.GetElasticityForce();
+            //}
+
+            //add connection forces to lemmy rigidbody
+            rigidbody.AddForce(forceFromTentacles);
+        }
+
+        private void ShowNextAvailableTentacle()
+        {
+            //for (int i = 0; i < tentacles.Length; i++)
+            //{
+            //    tentacles[i].ShowAsUnavailable();
+            //}
+            //int nextTentacleIndex = GetNextAvailableTentacleIndex();
+
+            //tentacles[nextTentacleIndex].ShowAsAvailable();
+        }
+
+        private void HandleShootTentacleInput_Controller()
+        {
+            if (isInputLocked)
+            {
+                return;
+            }
+
+            if (InputHandler.Instance.GetShootClaw())
+            {
+                ShootClawInDirection(InputHandler.InputVecToWorldVec(LevelHandler.Instance.cam.raycastCamera, InputHandler.Instance.GetClawDirection()));
+            }
+
+            if (InputHandler.Instance.GetShootTentacle())
+            {
+                ShootTentacleInDirection(InputHandler.InputVecToWorldVec(LevelHandler.Instance.cam.raycastCamera, InputHandler.Instance.GetTentacleDirection()));
+            }
+        }
 
 
-        //    ray = lemmyFollowCamera.ScreenPointToRay(InputHandler.Instance.GetInputScreenPosition());
+        private void HandleShootTentacleInput()
+        {
+            if (isInputLocked)
+            {
+                return;
+            }
 
-        //    if (InputHandler.Instance.GetShootClaw())
-        //    {
-        //        if (Physics.Raycast(ray, out rh, 1000, GlobalSettings.Instance.inputLayer))
-        //        {
-        //            ShootClawInDirection(rh.point - transform.position);
-        //        }
-        //    }
 
-        //    if (InputHandler.Instance.GetShootTentacle())
-        //    {
-        //        if (Physics.Raycast(ray, out rh, 1000, GlobalSettings.Instance.enemyInputLayer))
-        //        {
+            ray = lemmyFollowCamera.ScreenPointToRay(InputHandler.Instance.GetInputScreenPosition());
 
-        //            if (aimAtFingerPosition)
-        //            {
-        //                //aim at finger position
-        //                ShootClawInDirection(new Vector3(rh.point.x, 0, rh.point.z) - transform.position);
-        //            }
-        //            else
-        //            {
-        //                //aim at enemy center
-        //                ShootClawAtEnemy(rh.collider.gameObject);
-        //            }
+            if (InputHandler.Instance.GetShootTentacle())
+            {
+            //    //Debug.Log(InputHandler.Instance.ScreenRayCheck(ray,GlobalSettings.Instance.enemyInputLayer).ToString());
+                ScreenRayCheckHit hit = InputHandler.Instance.ScreenRayCheck(ray, GlobalSettings.Instance.enemyInputLayer);
 
-        //        }
-        //        else if (Physics.Raycast(ray, out rh, 1000, GlobalSettings.Instance.inputLayer))
-        //        {
-        //            lastInputPosition = rh.point;
-        //            lastInputTime = Time.time;
-        //            ShootTentacleInDirection(rh.point - transform.position);
-        //        }
-        //    }
-        //}
+                if (hit.hitObjectInLayer)
+                {
+                    if (aimAtFingerPosition)
+                    {
+                        //aim at finger position
+                        ShootClawInDirection(new Vector3(hit.position.X, 0, hit.position.Z) - transform.position);
+                    }
+                    else
+                    {
+                        //aim at enemy center
+                        ShootClawAtEnemy(hit.obj);
+                    }
 
-        //private void ShootClawInDirection(Vector3 _direction)
-        //{
-        //    claw.ShootInDirection(_direction);
-        //    sndTentacle.PlaySound();
-        //}
+                }
+                else
+                {
+                    lastInputPosition = hit.position;
+                    lastInputTime = Time.time;
+                    ShootTentacleInDirection(hit.position - transform.position);
+                    Debug.Display("Shoot", hit.position);
+                }
+            }
+        }
 
-        //private void ShootClawAtEnemy(GameObject enemy)
-        //{
-        //    claw.ShootInDirection(enemy.transform.position - transform.position);
-        //    sndTentacle.PlaySound();
-        //}
+        private void ShootClawInDirection(Vector3 _direction)
+        {
+            //claw.ShootInDirection(_direction);
+            //sndTentacle.PlaySound();
+        }
 
-        //private void ShootTentacleInDirection(Vector3 _direction)
-        //{
+        private void ShootClawAtEnemy(GameObject enemy)
+        {
+            //claw.ShootInDirection(enemy.transform.position - transform.position);
+            //sndTentacle.PlaySound();
+        }
 
-        //    currentTentacleIndex = GetNextAvailableTentacleIndex();
-        //    tentacleTips[currentTentacleIndex].ShootInDirection(_direction);
+        private void ShootTentacleInDirection(Vector3 _direction)
+        {
 
-        //    sndTentacle.PlaySound();
-        //}
+            currentTentacleIndex = GetNextAvailableTentacleIndex();
+            tentacleTips[currentTentacleIndex].ShootInDirection(_direction);
 
-        //private int GetNextAvailableTentacleIndex()
-        //{
-        //    for (int i = currentTentacleIndex; i < tentacleTips.Length + currentTentacleIndex; i++)
-        //    {
-        //        if (tentacleTips[i % stats.tentacles].isIdle)
-        //        {
-        //            return i % stats.tentacles;
-        //        }
-        //    }
+            //sndTentacle.PlaySound();
+        }
 
-        //    return (currentTentacleIndex + 1) % stats.tentacles;
-        //}
+        private int GetNextAvailableTentacleIndex()
+        {
+            for (int i = currentTentacleIndex; i < tentacleTips.Length + currentTentacleIndex; i++)
+            {
+                if (tentacleTips[i % stats.tentacles].isIdle)
+                {
+                    return i % stats.tentacles;
+                }
+            }
 
-        //private void DoWallCollisionRaycast()
-        //{
-        //    ray.origin = lastPosition;
-        //    ray.direction = transform.position - lastPosition;
+            return (currentTentacleIndex + 1) % stats.tentacles;
+        }
 
-        //    if (Physics.Raycast(ray, out rh, (transform.position - lastPosition).magnitude, GlobalSettings.Instance.allWallsAndShields))
-        //    {
-        //        transform.position = rh.point + rh.normal * 0.5f;
-        //        rigidbody.velocity = -rigidbody.velocity * 0.1f; //this move only happens if velocity is very very high, so we use some hard coded bounce
-        //    }
+        private void DoWallCollisionRaycast()
+        {
+            ray.Position = lastPosition;
+            ray.Direction = transform.position - lastPosition;
 
-        //    lastPosition = transform.position;
-        //}
+            if (Physics.Raycast(ray, out rh, (transform.position - lastPosition).Length(), GlobalSettings.Instance.allWallsAndShields))
+            {
+                transform.position = rh.point + rh.normal * 0.5f;
+                rigidbody.velocity = -rigidbody.velocity * 0.1f; //this move only happens if velocity is very very high, so we use some hard coded bounce
+            }
+
+            lastPosition = transform.position;
+        }
 
         //void OnCollisionEnter(Collision collision)
         //{
@@ -566,200 +569,200 @@ namespace PressPlay.Tentacles.Scripts
         //    }
         //}
 
-        //public void GetPickupCollision(GameObject pickupObj)
-        //{
-        //    IPickup pickup = (IPickup)pickupObj.GetComponent(typeof(IPickup));
-        //    pickup.DoOnCollision(this);
-        //}
+        public void GetPickupCollision(GameObject pickupObj)
+        {
+            //IPickup pickup = (IPickup)pickupObj.GetComponent(typeof(IPickup));
+            //pickup.DoOnCollision(this);
+        }
         public void GetPickupGrab(GameObject pickupObj)
         {
             //IPickup pickup = (IPickup)pickupObj.GetComponent(typeof(IPickup));
             //pickup.DoGrabPickUp(this);
         }
 
-        //public void Damage(float _damage, Vector3 _direction)
-        //{
-        //    if (_damage == 0)
-        //    {
-        //        return;
-        //    }
+        public void Damage(float _damage, Vector3 _direction)
+        {
+            if (_damage == 0)
+            {
+                return;
+            }
 
-        //    PathFollowCam.Instance.ShakeCamera(0.4f);
-        //    if (!DamageVisualizer.isInitiated)
-        //    {
-        //        LevelHandler.Instance.lemmyPainVisualizer.Init(health);
-        //    }
+            //PathFollowCam.Instance.ShakeCamera(0.4f);
+            //if (!DamageVisualizer.isInitiated)
+            //{
+            //    LevelHandler.Instance.lemmyPainVisualizer.Init(health);
+            //}
 
-        //    //subtract damage from health
-        //    health -= _damage;
+            //subtract damage from health
+            health -= _damage;
 
-        //    //register damage in multiplier
-        //    //levelSession.RegisterMultiplierPenalty(_damage * GlobalManager.Instance.gameplaySettings.multiplyDamagePenalty);
-        //    levelSession.RegisterDamage(_damage);
-
-
-        //    //visualize damage
-        //    mainBody.StartTakeDamageAnimation();
-        //    LevelHandler.Instance.lemmyPainVisualizer.DoDamage(health);
+            //register damage in multiplier
+            //levelSession.RegisterMultiplierPenalty(_damage * GlobalManager.Instance.gameplaySettings.multiplyDamagePenalty);
+            //levelSession.RegisterDamage(_damage);
 
 
-        //    //create damage particles
-        //    Quaternion particleRotation = Quaternion.LookRotation(_direction);
-        //    if (health < 0)
-        //    {
-        //        Kill();
+            //visualize damage
+            mainBody.StartTakeDamageAnimation();
+            //LevelHandler.Instance.lemmyPainVisualizer.DoDamage(health);
 
-        //        return;
-        //    }
-        //    if (_damage == 0 && createOnPushButNoDamage)
-        //    {
-        //        ObjectPool.Instance.Draw(createOnPushButNoDamage, transform.position, particleRotation);
-        //    }
-        //    else if (_damage <= 10 && createOnLowDamage != null)
-        //    {
-        //        ObjectPool.Instance.Draw(createOnLowDamage, transform.position, particleRotation);
-        //        sndDamageLow.PlaySound();
-        //    }
-        //    else if (_damage <= 40 && createOnMediumDamage != null)
-        //    {
-        //        ObjectPool.Instance.Draw(createOnMediumDamage, transform.position, particleRotation);
-        //        sndDamageMedium.PlaySound();
-        //    }
-        //    else if (createOnHighDamage != null)
-        //    {
-        //        ObjectPool.Instance.Draw(createOnHighDamage, transform.position, particleRotation);
-        //        sndDamageHigh.PlaySound();
-        //    }
-        //}
 
-        //public void Push(Vector3 _push)
-        //{
-        //    rigidbody.AddForce(_push);
-        //}
+            //create damage particles
+            //Quaternion particleRotation = Quaternion.LookRotation(_direction);
+            //if (health < 0)
+            //{
+            //    Kill();
+
+            //    return;
+            //}
+            //if (_damage == 0 && createOnPushButNoDamage)
+            //{
+            //    ObjectPool.Instance.Draw(createOnPushButNoDamage, transform.position, particleRotation);
+            //}
+            //else if (_damage <= 10 && createOnLowDamage != null)
+            //{
+            //    ObjectPool.Instance.Draw(createOnLowDamage, transform.position, particleRotation);
+            //    sndDamageLow.PlaySound();
+            //}
+            //else if (_damage <= 40 && createOnMediumDamage != null)
+            //{
+            //    ObjectPool.Instance.Draw(createOnMediumDamage, transform.position, particleRotation);
+            //    sndDamageMedium.PlaySound();
+            //}
+            //else if (createOnHighDamage != null)
+            //{
+            //    ObjectPool.Instance.Draw(createOnHighDamage, transform.position, particleRotation);
+            //    sndDamageHigh.PlaySound();
+            //}
+        }
+
+        public void Push(Vector3 _push)
+        {
+            rigidbody.AddForce(_push);
+        }
 
         public void BreakConnections()
         {
-            //    for (int i = 0; i < tentacleTips.Length; i++)
-            //    {
-            //        if (tentacleTips[i].isConnected)
-            //        {
-            //            tentacleTips[i].BreakConnection();
-            //        }
-            //    }
+            for (int i = 0; i < tentacleTips.Length; i++)
+            {
+                if (tentacleTips[i].isConnected)
+                {
+                    tentacleTips[i].BreakConnection();
+                }
+            }
         }
 
-        //public void SetActivationStatus(bool _status)
-        //{
-        //    for (int i = 0; i < tentacles.Length; i++)
-        //    {
-        //        tentacles[i].gameObject.SetActiveRecursively(_status);
-        //    }
+        public void SetActivationStatus(bool _status)
+        {
+            //for (int i = 0; i < tentacles.Length; i++)
+            //{
+            //    tentacles[i].gameObject.SetActiveRecursively(_status);
+            //}
 
-        //    for (int i = 0; i < tentacleTips.Length; i++)
-        //    {
-        //        tentacleTips[i].gameObject.SetActiveRecursively(_status);
-        //    }
+            for (int i = 0; i < tentacleTips.Length; i++)
+            {
+                tentacleTips[i].gameObject.SetActiveRecursively(_status);
+            }
 
-        //    claw.gameObject.SetActiveRecursively(_status);
-        //    clawTentacle.gameObject.SetActiveRecursively(_status);
-        //    mainBody.gameObject.SetActiveRecursively(_status);
+            //claw.gameObject.SetActiveRecursively(_status);
+            //clawTentacle.gameObject.SetActiveRecursively(_status);
+            mainBody.gameObject.SetActiveRecursively(_status);
 
-        //    if (eggSack != null)
-        //    {
-        //        eggSack.SetActive(_status);
-        //    }
+            //if (eggSack != null)
+            //{
+            //    eggSack.SetActive(_status);
+            //}
 
-        //    gameObject.SetActiveRecursively(_status);
-        //}
+            gameObject.SetActiveRecursively(_status);
+        }
 
         public void SpawnAt(CheckPoint _checkpoint)
         {
             Debug.Log("---------------SPAWNING LEMMY AT : " + _checkpoint.name + "   coordinates : " + _checkpoint.transform.position + "   time : " + Time.realtimeSinceStartup);
 
-        //    SetActivationStatus(true);
+            SetActivationStatus(true);
 
-        //    rigidbody.velocity = Vector3.zero;
+            rigidbody.velocity = Vector3.Zero;
 
-        //    transform.position = _checkpoint.transform.position;
+            transform.position = _checkpoint.transform.position;
 
-        //    lastPosition = _checkpoint.transform.position;
-        //    _checkpoint.ActivateCheckPoint();
-        //    health = stats.health;
+            lastPosition = _checkpoint.transform.position;
+            _checkpoint.ActivateCheckPoint();
+            health = stats.health;
 
-        //    LevelHandler.Instance.lemmyPainVisualizer.SetHealth(stats.health, true);
+            //LevelHandler.Instance.lemmyPainVisualizer.SetHealth(stats.health, true);
 
-        //    for (int i = 0; i < tentacleTips.Length; i++)
-        //    {
-        //        tentacleTips[i].Reset();
-        //    }
+            for (int i = 0; i < tentacleTips.Length; i++)
+            {
+                tentacleTips[i].Reset();
+            }
 
-        //    for (int i = 0; i < tentacles.Length; i++)
-        //    {
-        //        tentacles[i].Reset();
-        //    }
+            //for (int i = 0; i < tentacles.Length; i++)
+            //{
+            //    tentacles[i].Reset();
+            //}
 
-        //    claw.Reset();
-        //    clawTentacle.Reset();
+            //claw.Reset();
+            //clawTentacle.Reset();
 
-        //    PathFollowCam.Instance.ActivateClosestConnection(transform.position);
+            //PathFollowCam.Instance.ActivateClosestConnection(transform.position);
 
-        //    if (lemmyHasJustDied && eggSack.numberOfLivesLeft > 0)
-        //    {
-        //        eggSack.RemoveNextEgg();
-        //    }
+            //if (lemmyHasJustDied && eggSack.numberOfLivesLeft > 0)
+            //{
+            //    eggSack.RemoveNextEgg();
+            //}
 
-        //    _checkpoint.DoOnSpawnLemmy();
+            _checkpoint.DoOnSpawnLemmy();
         }
 
-        //public void Kill()
-        //{
-        //    if (createOnDeath != null)
-        //    {
-        //        ObjectPool.Instance.Draw(createOnDeath, transform.position, transform.rotation);
-        //    }
+        public void Kill()
+        {
+            //if (createOnDeath != null)
+            //{
+            //    ObjectPool.Instance.Draw(createOnDeath, transform.position, transform.rotation);
+            //}
 
-        //    LevelHandler.Instance.DoOnLemmyDeath();
+            LevelHandler.Instance.DoOnLemmyDeath();
 
-        //    SetActivationStatus(false);
+            SetActivationStatus(false);
 
-        //    levelSession.RegisterDeath();
-        //    sndDeath.PlaySound();
+            //levelSession.RegisterDeath();
+            //sndDeath.PlaySound();
 
-        //    if (eggSack.numberOfLivesLeft > 0)
-        //    {
-        //        LevelHandler.Instance.RespawnAtLastCheckpoint();
-        //    }
-        //    else
-        //    {
-        //        LevelHandler.Instance.state = LevelHandler.LevelState.gameover;
-        //    }
+            //if (eggSack.numberOfLivesLeft > 0)
+            //{
+            //    LevelHandler.Instance.RespawnAtLastCheckpoint();
+            //}
+            //else
+            //{
+            //    LevelHandler.Instance.state = LevelHandler.LevelState.gameover;
+            //}
 
-        //    PPMetrics.AddPositionString("lemmy_died", transform.position, LevelHandler.Instance.cam.getCurrentNodeName);
-        //    PPMetrics.AddFloatIncrement("num_of_deaths", 1);
+            //PPMetrics.AddPositionString("lemmy_died", transform.position, LevelHandler.Instance.cam.getCurrentNodeName);
+            //PPMetrics.AddFloatIncrement("num_of_deaths", 1);
 
-        //    lemmyHasJustDied = true;
-        //}
+            lemmyHasJustDied = true;
+        }
 
-        //public void StartExitAnimation()
-        //{
+        public void StartExitAnimation()
+        {
 
-        //}
+        }
 
-        //public void CashInExtraLife()
-        //{
-        //    EggSackElement egg = eggSack.RemoveNextEgg();
-        //    levelSession.RegisterPoint(GlobalManager.Instance.gameplaySettings.pointsForExtraLife, 0, egg.transform.position, false);
-        //}
+        public void CashInExtraLife()
+        {
+            //EggSackElement egg = eggSack.RemoveNextEgg();
+            //levelSession.RegisterPoint(GlobalManager.Instance.gameplaySettings.pointsForExtraLife, 0, egg.transform.position, false);
+        }
 
-        //public void CashInExtraLives()
-        //{
-        //    EggSackElement egg;
+        public void CashInExtraLives()
+        {
+            //EggSackElement egg;
 
-        //    while (eggSack.numberOfLivesLeft > 0)
-        //    {
-        //        egg = eggSack.RemoveNextEgg();
-        //        //Don't know if we should show anything here?
-        //    }
-        //}
+            //while (eggSack.numberOfLivesLeft > 0)
+            //{
+            //    egg = eggSack.RemoveNextEgg();
+            //    //Don't know if we should show anything here?
+            //}
+        }
     }
 }

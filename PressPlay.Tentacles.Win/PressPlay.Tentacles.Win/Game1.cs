@@ -40,6 +40,8 @@ namespace PressPlay.Tentacles
         protected override void Initialize()
         {
 #if WINDOWS
+            this.IsMouseVisible = true;
+
             graphics.PreferredBackBufferWidth = 800;
             graphics.PreferredBackBufferHeight = 480;
             graphics.IsFullScreen = false;
@@ -84,6 +86,7 @@ namespace PressPlay.Tentacles
             Camera.main.transform.localRotation = Quaternion.CreateFromAxisAngle(Vector3.UnitY, MathHelper.ToRadians(-110));
             Camera.main.up = Vector3.Backward;            
             Camera.main.forward = Vector3.UnitY;
+            Camera.main.viewPort = GraphicsDevice.Viewport;
         }
 
         /// <summary>

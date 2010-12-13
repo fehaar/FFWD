@@ -4,7 +4,6 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using PressPlay.FFWD;
 using PressPlay.FFWD.Components;
-using PressPlay.FFWD.Extensions;
 
 namespace PressPlay.Tentacles.Scripts
 {

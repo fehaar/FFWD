@@ -80,7 +80,14 @@ namespace PressPlay.Tentacles.Scripts
         [ContentSerializerIgnore]
         public Lemmy lemmy;
 
-        //public PathFollowCam cam;
+        [ContentSerializerIgnore]
+        public PathFollowCam cam
+        {
+            get
+            {
+                return PathFollowCam.Instance;
+            }
+        }
 
         //public Camera feedbackCam;
 
@@ -363,11 +370,12 @@ namespace PressPlay.Tentacles.Scripts
                     //    currentLevel = GlobalManager.Instance.database.GetCurrentLevelFromSceneName(Application.loadedLevelName);
                     //}
 
-                    levelTypeSettings = GetLevelTypeSettings(currentLevel.levelType);
+                    //levelTypeSettings = GetLevelTypeSettings(currentLevel.levelType);
                     //cam.SetBackgroundColor(levelTypeSettings.backgroundColor);
 
                     if (currentLevel == null)
                     {
+                        lemmy.SetNumberOfLives(3);
                         //lemmy.SetNumberOfLives(GlobalManager.Instance.gameplaySettings.defaultNumberOfLives);
                     }
                     else
@@ -401,7 +409,7 @@ namespace PressPlay.Tentacles.Scripts
                     //lemmy.levelSession.totalNumberOfPickups = pickups.Length;
                     //Debug.Log("NUMBER OF PICKUPS IN LEVEL: " + lemmy.levelSession.totalNumberOfPickups);
 
-                    //lemmy.isInputLocked = false;
+                    lemmy.isInputLocked = false;
                     //lemmy.levelSession.Pause(false);
                     lemmy.ChangeState(Lemmy.State.normalActivity);
                     //lemmy.levelSession.StartTime();
@@ -614,7 +622,7 @@ namespace PressPlay.Tentacles.Scripts
             //    }
             //    else
             //    {
-            //        ChangeState(LevelState.intro);
+            ChangeState(LevelState.intro);
             //    }
             //}
         }
@@ -623,7 +631,7 @@ namespace PressPlay.Tentacles.Scripts
         {
             //if (InputHandler.Instance.GetShootTentacle() || Time.time > lastStateChange + GlobalManager.Instance.gameplaySettings.levelIntroDuration)
             //{
-            //    ChangeState(LevelState.playing);
+            ChangeState(LevelState.playing);
             //    return;
             //}
 
