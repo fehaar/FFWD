@@ -6,6 +6,7 @@ using Box2D.XNA;
 using Microsoft.Xna.Framework;
 using PressPlay.FFWD.Interfaces;
 using PressPlay.FFWD.Extensions;
+using PressPlay.FFWD.Components;
 
 namespace PressPlay.FFWD
 {
@@ -178,7 +179,7 @@ namespace PressPlay.FFWD
         }
         #endregion
 
-        #region Unity methods
+        #region Raycast methods
         public static bool Raycast(Vector2 origin, Vector2 direction, float distance, int layerMask)
         {
             RaycastHelper helper = new RaycastHelper(distance, true);
@@ -247,5 +248,15 @@ namespace PressPlay.FFWD
             return RaycastAll(ray.Position.To2d(), ray.Direction.To2d(), distance, layerMask);
         }
         #endregion
+
+        public static void IgnoreCollision(Collider collider1, Collider collider2)
+        {
+            IgnoreCollision(collider1, collider2, true);
+        }
+
+        public static void IgnoreCollision(Collider collider1, Collider collider2, bool ignore)
+        {
+
+        }
     }
 }

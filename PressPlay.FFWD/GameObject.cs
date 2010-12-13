@@ -476,6 +476,12 @@ namespace PressPlay.FFWD
         }
         #endregion
 
+        #region Unity methods
+        public void SetActiveRecursively(bool _status)
+        {
+        }
+        #endregion
+
         public override string ToString()
         {
             return name + "(" + GetInstanceID() + ")";

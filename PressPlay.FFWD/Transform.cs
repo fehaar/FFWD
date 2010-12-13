@@ -275,7 +275,7 @@ namespace PressPlay.FFWD
         public void LookAt(Vector3 worldPosition, Vector3 worldUp)
         {
             // TODO: Something is off here...
-            _world = Matrix.CreateLookAt(localPosition, worldPosition, worldUp);
+            _world = Matrix.CreateWorld(position, worldPosition - position, worldUp);
             WorldChanged();
         }
 
@@ -312,6 +312,14 @@ namespace PressPlay.FFWD
             get
             {
                 return world.Forward;
+            }
+        }
+
+        public Vector3 up 
+        { 
+            get
+            {
+                return world.Up;
             }
         }
     }

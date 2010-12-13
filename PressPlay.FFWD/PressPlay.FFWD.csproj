@@ -139,6 +139,7 @@
     <Compile Include="Components\Colliders\Rigidbody.cs" />
     <Compile Include="Components\Colliders\SphereCollider.cs" />
     <Compile Include="Components\Renderers\SkinnedMeshRenderer.cs" />
+    <Compile Include="Input.cs" />
     <Compile Include="Mathf.cs" />
     <Compile Include="MonoBehaviour.cs" />
     <Compile Include="Components\Renderers\MeshRenderer.cs" />
