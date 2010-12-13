@@ -6,7 +6,7 @@ using PressPlay.FFWD.Interfaces;
 
 namespace PressPlay.FFWD.Components
 {
-    public class MonoBehaviour : Component, IUpdateable
+    public class MonoBehaviour : Behaviour, IUpdateable
     {
         public virtual void Update()
         {

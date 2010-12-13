@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
+using PressPlay.FFWD;
+using PressPlay.FFWD.Components;
 
 namespace PressPlay.FFWD
 {
@@ -25,6 +27,33 @@ namespace PressPlay.FFWD
             get
             {
                 return gameObject.transform;
+            }
+        }
+
+        [ContentSerializerIgnore]
+        public Renderer renderer
+        {
+            get
+            {
+                return gameObject.renderer;
+            }
+        }
+
+        [ContentSerializerIgnore]
+        public AudioSource audio
+        {
+            get
+            {
+                return gameObject.audio;
+            }
+        }
+
+        [ContentSerializerIgnore]
+        public Rigidbody rigidbody
+        {
+            get
+            {
+                return gameObject.rigidbody;
             }
         }
 
@@ -68,5 +97,42 @@ namespace PressPlay.FFWD
                 return (gameObject == null) ? GetType().Name : gameObject.name;
             }
         }
+
+        #region Component locator methods
+        public T GetComponent<T>() where T : Component
+        {
+            return gameObject.GetComponent<T>();
+        }
+
+        public Component GetComponent(Type type)
+        {
+            return gameObject.GetComponent(type);
+        }
+
+        public T[] GetComponents<T>() where T : Component
+        {
+            return gameObject.GetComponents<T>();
+        }
+
+        public Component[] GetComponents(Type type)
+        {
+            return GetComponents(type);
+        }
+
+        public Component[] GetComponentsInChildren(Type type)
+        {
+            return gameObject.GetComponentsInChildren(type);
+        }
+
+        public Component GetComponentInChildren(Type type)
+        {
+            return gameObject.GetComponentInChildren(type);
+        }
+
+        public T[] GetComponentsInParents<T>() where T : Component
+        {
+            return GetComponentsInParents<T>();
+        }
+        #endregion
     }
 }

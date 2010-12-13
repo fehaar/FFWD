@@ -5,8 +5,9 @@ using System.Text;
 using Microsoft.Xna.Framework.Content;
 using PressPlay.FFWD.Interfaces;
 using Microsoft.Xna.Framework.Graphics;
-using PressPlay.FFWD.Components.Renderers;
 using Box2D.XNA;
+using PressPlay.FFWD;
+using PressPlay.FFWD.Components;
 
 namespace PressPlay.FFWD
 {
@@ -20,7 +21,7 @@ namespace PressPlay.FFWD
 
         public GameObject(string name) : this()
         {
-            transform = new Transform();
+            _transform = new Transform();
             this.name = name;
         }
 
@@ -29,6 +30,20 @@ namespace PressPlay.FFWD
         public int layer { get; set; }
         public bool active { get; set; }
         public string tag { get; set; }
+
+        private Rigidbody _rigidbody;
+        [ContentSerializerIgnore]
+        public Rigidbody rigidbody
+        {
+            get
+            {
+                if (_transform == null)
+                {
+                    _rigidbody = GetComponent<Rigidbody>();
+                }
+                return _rigidbody;
+            }
+        }
 
         private Transform _transform;
         [ContentSerializerIgnore]
@@ -87,6 +102,21 @@ namespace PressPlay.FFWD
                 }
 
                 return _renderer;
+            }
+        }
+
+        protected AudioSource _audio;
+
+        public AudioSource audio
+        {
+            get
+            {
+                if (_audio == null)
+                {
+                    _audio = GetComponent<AudioSource>();
+                }
+
+                return _audio;
             }
         }
 
@@ -324,14 +354,6 @@ namespace PressPlay.FFWD
             }
         }
         #endregion
-
-        public Component AddComponent(Component component)
-        {
-            component.gameObject = this;
-            components.Add(component);
-
-            return component;
-        }
 
         #region Component locator methods
         public T GetComponent<T>() where T : Component

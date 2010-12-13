@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using System.Collections;
 
 namespace PressPlay.FFWD
 {
     public enum Space { World, Self }
 
-    public class Transform : Component
+    public class Transform : Component, IEnumerable
     {
         public Transform()
         {
@@ -28,6 +29,34 @@ namespace PressPlay.FFWD
             {
                 _localPosition = value;
                 _hasDirtyWorld = true;
+            }
+        }
+
+        // TODO: Implement eulerAngles
+        private Vector3 _eulerAngles;
+        public Vector3 eulerAngles
+        {
+            get
+            {
+                return _eulerAngles;
+            }
+            set
+            {
+                _eulerAngles = value;
+            }
+        }
+
+        // TODO: Implement local eulerAngles
+        private Vector3 _localEulerAngles;
+        public Vector3 localEulerAngles
+        {
+            get
+            {
+                return _localEulerAngles;
+            }
+            set
+            {
+                _localEulerAngles = value;
             }
         }
 
@@ -261,6 +290,18 @@ namespace PressPlay.FFWD
         //    WorldChanged();
         //}
 
+        //TODO: Implement LookAt
+        public void LookAt(Transform target, Vector3 worldUp)
+        {
+
+        }
+
+        //TODO: Implement LookAt
+        public void LookAt(Vector3 worldPosition, Vector3 worldUp)
+        {
+
+        }
+
         private void WorldChanged()
         {
             Vector3 scale;
@@ -273,6 +314,11 @@ namespace PressPlay.FFWD
                 _localPosition = pos;
                 _hasDirtyWorld = false;
             }
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return (IEnumerator)this;
         }
     }
 }

@@ -128,7 +128,6 @@ namespace PressPlay.FFWD.ScreenManager
         public override void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)
         {
             base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
-            scene.FixedUpdate();
         }
 
         public override void Draw(GameTime gameTime)
@@ -144,8 +143,6 @@ namespace PressPlay.FFWD.ScreenManager
                 }
             }
 
-            scene.Update();
-            scene.Draw(ScreenManager.SpriteBatch);
 
             spriteBatch.Begin();
             spriteBatch.End();
