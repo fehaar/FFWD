@@ -1,7 +1,7 @@
 ﻿using Box2D.XNA;
 using Microsoft.Xna.Framework;
 using PressPlay.FFWD.Interfaces;
-using PressPlay.FFWD.Extensions;
+using PressPlay.FFWD;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace PressPlay.FFWD.Components

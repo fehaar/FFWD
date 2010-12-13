@@ -12,13 +12,9 @@ namespace PressPlay.FFWD
     /// </summary>
     public static class Mathf
     {
-        public static float PI
-        {
-            get
-            {
-                return MathHelper.Pi;
-            }
-        }
+        public const float PI = MathHelper.Pi;
+
+        public const float Infinity = float.PositiveInfinity;
 
         public static float Cos(float value)
         {
@@ -59,5 +55,7 @@ namespace PressPlay.FFWD
         {
             return Math.Max(x, y);
         }
+
+
     }
 }

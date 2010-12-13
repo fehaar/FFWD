@@ -139,6 +139,19 @@ namespace PressPlay.FFWD
             }
         }
 
+        internal void SetPositionFromPhysics(Vector3 pos, float ang)
+        {
+            if (parent == null)
+            {
+                localPosition = pos;
+            }
+            else
+            {
+                localPosition = pos - parent.position;
+            }
+            localRotation = Quaternion.CreateFromAxisAngle(Vector3.UnitY, ang);
+        }
+
         [ContentSerializerIgnore]
         public Vector3 position
         {
@@ -155,6 +168,10 @@ namespace PressPlay.FFWD
                 else
                 {
                     localPosition = value - parent.position;
+                }
+                if (rigidbody != null)
+                {
+                    rigidbody.MovePosition(position);
                 }
             }
         }
@@ -222,42 +239,19 @@ namespace PressPlay.FFWD
             set
             {
                 localRotation = Quaternion.CreateFromAxisAngle(Vector3.UnitY, value);
+                if (rigidbody != null)
+                {
+                    rigidbody.MoveRotation(localRotation);
+                }
             }
         }
-
-        //[ContentSerializerIgnore]
-        //public Vector3 up
-        //{
-        //    get
-        //    {
-        //        return world.Up;
-        //    }
-        //    set
-        //    {
-        //        _world.Up = value;
-        //        WorldChanged();
-        //    }
-        //}
-
-        //[ContentSerializerIgnore]
-        //public Vector3 forward
-        //{
-        //    get
-        //    {
-        //        return world.Forward;
-        //    }
-        //    set
-        //    {
-        //        _world.Forward = value;
-        //        WorldChanged();
-        //    }
-        //}
 
         public void Rotate(Vector3 axis, float angle, Space relativeTo)
         {
             angle = MathHelper.ToRadians(angle);
             if (relativeTo == Space.World)
             {
+                // TODO: This will have issues with parent rotations
                 Matrix rot;
                 Matrix.CreateFromAxisAngle(ref axis, angle, out rot);
                 Matrix.Multiply(ref _world, ref rot, out _world);
@@ -274,14 +268,22 @@ namespace PressPlay.FFWD
 
         public void LookAt(Vector3 worldPosition, Vector3 worldUp)
         {
-            // TODO: Something is off here...
-            _world = Matrix.CreateWorld(position, worldPosition - position, worldUp);
-            WorldChanged();
+            Matrix m = Matrix.CreateWorld(position, worldPosition - position, worldUp);
+            Vector3 scale;
+            Quaternion rot;
+            Vector3 pos;
+            if (m.Decompose(out scale, out rot, out pos))
+            {
+                localRotation = rot;
+                if (rigidbody != null)
+                {
+                    rigidbody.MoveRotation(localRotation);
+                }
+            }
         }
 
         public void LookAt(Vector3 worldPosition)
         {
-            // TODO: Something is off here...
             LookAt(worldPosition, Vector3.UnitY);
         }
 

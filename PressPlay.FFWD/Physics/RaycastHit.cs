@@ -15,6 +15,6 @@ namespace PressPlay.FFWD
         public Vector3 normal;
         public float distance;
         public Transform transform;
-        public MeshCollider collider;
+        public Collider collider;
     }
 }

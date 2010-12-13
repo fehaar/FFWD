@@ -139,6 +139,8 @@
     <Compile Include="Components\Colliders\Rigidbody.cs" />
     <Compile Include="Components\Colliders\SphereCollider.cs" />
     <Compile Include="Components\Renderers\SkinnedMeshRenderer.cs" />
+    <Compile Include="Extensions\PlaneExtensions.cs" />
+    <Compile Include="Extensions\QuaternionHelpers.cs" />
     <Compile Include="Input.cs" />
     <Compile Include="Mathf.cs" />
     <Compile Include="MonoBehaviour.cs" />

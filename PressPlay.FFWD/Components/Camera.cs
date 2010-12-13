@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace PressPlay.FFWD.Components
 {
@@ -29,6 +30,14 @@ namespace PressPlay.FFWD.Components
             return _view;            
         }
 
+        public Viewport viewPort { get; set; }
         public Matrix projectionMatrix { get; set; }
+
+        public Ray ScreenPointToRay(Vector2 screen)
+        {
+            Vector3 near = viewPort.Unproject(new Vector3(screen.X, screen.Y, 0), projectionMatrix, View(), Matrix.Identity);
+            Vector3 far = viewPort.Unproject(new Vector3(screen.X, screen.Y, 1), projectionMatrix, View(), Matrix.Identity);
+            return new Ray(near, Vector3.Normalize(far - near));
+        }
     }
 }

@@ -52,6 +52,7 @@ namespace PressPlay.FFWD
                 }
             }
             Physics.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+            Input.Update();
         }
 
         public override void Draw(GameTime gameTime)
