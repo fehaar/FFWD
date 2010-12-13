@@ -26,17 +26,27 @@ namespace PressPlay.FFWD
         internal float rayCastCallback(Fixture fixture, Vector2 point, Vector2 normal, float fraction)
         {
             float dist = distance * fraction;
-            if (findClosest)
+            UnityObject uo = fixture.GetBody().GetUserData() as UnityObject;
+            Collider coll = uo as Collider;
+            if (coll == null && (uo is Rigidbody))
             {
-                _hits.Clear();
-                _hits.Add(new RaycastHit() { body = fixture.GetBody(), point = point.To3d(), normal = normal.To3d(), distance = dist, collider = fixture.GetBody().GetUserData() as Collider });
-                return fraction;
+                coll = (uo as Rigidbody).collider;
             }
-            else
+            if ((coll == null) || (layerMask & coll.gameObject.layer) > 0)
             {
-                _hits.Add(new RaycastHit() { body = fixture.GetBody(), point = point.To3d(), normal = normal.To3d(), distance = dist, collider = fixture.GetBody().GetUserData() as Collider });
-                return 1;
+                if (findClosest)
+                {
+                    _hits.Clear();
+                    _hits.Add(new RaycastHit() { body = fixture.GetBody(), point = point.To3d(), normal = normal.To3d(), distance = dist, collider = coll });
+                    return fraction;
+                }
+                else
+                {
+                    _hits.Add(new RaycastHit() { body = fixture.GetBody(), point = point.To3d(), normal = normal.To3d(), distance = dist, collider = coll });
+                    return 1;
+                }
             }
+            return 1;
         }   
 
         internal int HitCount
