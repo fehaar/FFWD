@@ -130,5 +130,17 @@ namespace PressPlay.FFWD.Test.Physics_facts
             Physics.Raycast(Vector2.Zero, Vector2.Zero, out hit, 0, 0);
             Assert.That(hit.body, Is.Null);
         }
+
+        [Test]
+        public void WeWillOnlyGetObjectsInDistance()
+        {
+            Body body = Physics.AddBody();
+            Body body1 = Physics.AddBody();
+            Physics.AddBox(body1, false, 10, 10, new Vector2(0, 50), 0, 1);
+            Physics.AddBox(body, false, 10, 10, new Vector2(0, 20), 0, 1);
+            RaycastHit[] hits = Physics.RaycastAll(Vector2.Zero, Vector2.UnitY, 30, 0);
+            Assert.That(hits.Length, Is.EqualTo(1));
+        }
+	
     }
 }

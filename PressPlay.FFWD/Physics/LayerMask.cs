@@ -18,5 +18,10 @@ namespace PressPlay.FFWD
         {
             return new LayerMask() { value = mask };
         }
+
+        public override string ToString()
+        {
+            return value.ToString();
+        }
     }
 }

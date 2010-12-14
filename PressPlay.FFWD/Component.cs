@@ -26,6 +26,10 @@ namespace PressPlay.FFWD
         {
             get
             {
+                if (gameObject == null)
+                {
+                    return null;
+                }
                 return gameObject.transform;
             }
         }
@@ -35,6 +39,10 @@ namespace PressPlay.FFWD
         {
             get
             {
+                if (gameObject == null)
+                {
+                    return null;
+                }
                 return gameObject.rigidbody;
             }
         }
@@ -44,6 +52,10 @@ namespace PressPlay.FFWD
         {
             get
             {
+                if (gameObject == null)
+                {
+                    return null;
+                }
                 return gameObject.collider;
             }
         }
@@ -61,6 +73,10 @@ namespace PressPlay.FFWD
 
         public override string ToString()
         {
+            if (gameObject == null)
+            {
+                return GetType().Name + " on its own";
+            }
             return GetType().Name + " on " + gameObject.name + " (" + gameObject.GetInstanceID() + ")";
         }
 

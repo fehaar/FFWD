@@ -69,7 +69,7 @@ namespace PressPlay.FFWD.Components
                 animationPlayer.StartClip(clip);
                 // NOTE: I am trying to use scale to make the model smaller... 
                 // The reasoning is that in some way the model is drawn larger than it is due to the scale - but I am grabbing at straws.
-                animationPlayer.Update(0.0f, true, Matrix.Invert(Matrix.CreateScale(transform.lossyScale)));
+                //animationPlayer.Update(0.0f, true, Matrix.Invert(Matrix.CreateScale(transform.lossyScale)));
             }
         }
 
@@ -92,8 +92,6 @@ namespace PressPlay.FFWD.Components
             {
                 return;
             }
-            
-            Matrix world = transform.world;
             
             // Do we have negative scale - if so, switch culling
             RasterizerState oldRaster = batch.GraphicsDevice.RasterizerState;
@@ -122,6 +120,12 @@ namespace PressPlay.FFWD.Components
 
                 SkinnedEffect sEffect = mesh.Effects[e] as SkinnedEffect;
                 sEffect.SetBoneTransforms(bones);
+
+                if (gameObject.name == "superLemmy(Clone)")
+                {
+                    Debug.Display(gameObject.name, transform.world.Translation);
+                }
+
                 sEffect.View = Camera.main.View();
                 sEffect.Projection = Camera.main.projectionMatrix;
                 sEffect.AmbientLightColor = new Vector3(1);
