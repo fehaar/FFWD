@@ -352,6 +352,8 @@ namespace PressPlay.Tentacles.Scripts
             //}
 
             HandleHealth();
+
+            Camera.main.transform.position = mainBody.transform.position + new Vector3(0, -7, 0);
         }
 
         public void AddHealth(float _health)
