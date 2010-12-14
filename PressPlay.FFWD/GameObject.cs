@@ -97,6 +97,11 @@ namespace PressPlay.FFWD
             return component;
         }
 
+        public Component AddComponent(Type tp)
+        {
+            return null;
+        }
+
         internal override UnityObject Clone()
         {
             GameObject obj = base.Clone() as GameObject;

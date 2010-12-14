@@ -7,6 +7,7 @@ using UnityEditor;
 using System.IO;
 using PressPlay.FFWD.Exporter.Interfaces;
 using System.Globalization;
+using System.Reflection;
 
 namespace PressPlay.FFWD.Exporter.Writers
 {
@@ -215,6 +216,11 @@ namespace PressPlay.FFWD.Exporter.Writers
                 writer.WriteElementString(name, ToString((Boolean)obj));
                 return;
             }
+            if (obj is int)
+            {
+                writer.WriteElementString(name, ToString((int)obj));
+                return;
+            }
             if (obj is int[])
             {
                 writer.WriteElementString(name, ToString(obj as int[]));
@@ -235,6 +241,11 @@ namespace PressPlay.FFWD.Exporter.Writers
                 writer.WriteElementString(name, ((LayerMask)obj).value.ToString());
                 return;
             }
+            if (obj is String)
+            {
+                writer.WriteElementString(name, obj.ToString());
+                return;
+            }
             if (obj is UnityEngine.Object)
             {
                 UnityEngine.Object theObject = (obj as UnityEngine.Object);
@@ -248,6 +259,24 @@ namespace PressPlay.FFWD.Exporter.Writers
                 }
                 return;
             }
+            // Check if we have a Serializable class
+            if (obj.GetType().GetCustomAttributes(typeof(SerializableAttribute), true).Length > 0)
+            {
+                writer.WriteStartElement(name);
+                FieldInfo[] memInfo = obj.GetType().GetFields(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance);
+                for (int m = 0; m < memInfo.Length; m++)
+                {
+                    Debug.Log("Ser member: " + memInfo[m].Name);
+                    if (memInfo[m].GetCustomAttributes(typeof(HideInInspector), true).Length > 0)
+                    {
+                        continue;
+                    }
+                    WriteElement(memInfo[m].Name, memInfo[m].GetValue(obj));
+                }
+                writer.WriteEndElement();
+                return;
+            }
+
             writer.WriteElementString(name, obj.ToString());
         }
 

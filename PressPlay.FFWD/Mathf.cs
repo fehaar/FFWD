@@ -51,11 +51,20 @@ namespace PressPlay.FFWD
             return Math.Min(x, y);
         }
 
+        public static int Min(int x, int y)
+        {
+            return Math.Min(x, y);
+        }
+
         public static float Max(float x, float y)
         {
             return Math.Max(x, y);
         }
 
+        public static int Max(int x, int y)
+        {
+            return Math.Max(x, y);
+        }
 
     }
 }
