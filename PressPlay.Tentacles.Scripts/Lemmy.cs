@@ -65,8 +65,8 @@ namespace PressPlay.Tentacles.Scripts
 
         private int currentTentacleIndex = 0;
 
-        //private TentacleJoint[] tentacleRoots;
-        //private Tentacle[] tentacles;
+        private TentacleJoint[] tentacleRoots;
+        private Tentacle[] tentacles;
         private TentacleTip[] tentacleTips;
         public MainBody mainBody;
         //private Tentacle clawTentacle;
@@ -177,7 +177,7 @@ namespace PressPlay.Tentacles.Scripts
             mainBody.transform.position = transform.position;
             mainBody.transform.parent = transform;
 
-            //TentacleJoint bodyJoint = (TentacleJoint)GetComponent(typeof(TentacleJoint));
+            TentacleJoint bodyJoint = (TentacleJoint)GetComponent(typeof(TentacleJoint));
 
             //create claw
             //_claw = (Claw)Instantiate(clawPrefab);
@@ -196,16 +196,18 @@ namespace PressPlay.Tentacles.Scripts
             //bleedBubbleTrailAnimator = bleedBubbleTrail.GetComponent<ParticleAnimator>();
 
             //create tentacles		
-            //tentacleRoots = new TentacleJoint[stats.tentacles];
-            //tentacles = new Tentacle[stats.tentacles];
+            tentacleRoots = new TentacleJoint[stats.tentacles];
+            tentacles = new Tentacle[stats.tentacles];
             tentacleTips = new TentacleTip[stats.tentacles];
             for (int i = 0; i < stats.tentacles; i++)
             {
-                //GameObject tmpGameObject = new GameObject();
-                //tmpGameObject.name = "tentacle root " + i;
-                //tmpGameObject.AddComponent(typeof(TentacleJoint));
+                GameObject tmpGameObject = new GameObject();
+                tmpGameObject.name = "tentacle root " + i;
+                // TODO: This should not be nessecary - the framework is broken!
+                tmpGameObject.AddComponent(new Transform());
+                tmpGameObject.AddComponent(typeof(TentacleJoint));
 
-                //tentacleRoots[i] = tmpGameObject.GetComponent<TentacleJoint>();
+                tentacleRoots[i] = tmpGameObject.GetComponent<TentacleJoint>();
 
                 tentacleTips[i] = (TentacleTip)Instantiate(tentacleTipPrefab);
                 tentacleTips[i].transform.position = transform.position;
@@ -214,8 +216,8 @@ namespace PressPlay.Tentacles.Scripts
                 normal.X = Mathf.Cos(((i + 0.5f) * Mathf.PI * 2) / stats.tentacles);
                 normal.Z = Mathf.Sin(((i + 0.5f) * Mathf.PI * 2) / stats.tentacles);
 
-                //tentacleRoots[i].transform.position = transform.position;
-                //tentacleRoots[i].transform.parent = transform;
+                tentacleRoots[i].transform.position = transform.position;
+                tentacleRoots[i].transform.parent = transform;
 
                 tentacleTips[i].Initialize(gameObject, normal, tentacleStats, this);
 
@@ -226,9 +228,9 @@ namespace PressPlay.Tentacles.Scripts
                     Physics.IgnoreCollision(tentacleTips[i].collider, tentacleTips[j].collider);
                 }
 
-                //tentacles[i] = (Tentacle)Instantiate(tentaclePrefab);
-                //tentacles[i].Initialize(tentacleStats, tentacleRoots[i], bodyJoint, (TentacleJoint)tentacleTips[i].GetComponent(typeof(TentacleJoint)), true);
-                //tentacles[i].SetBodyNormal(normal);
+                tentacles[i] = (Tentacle)Instantiate(tentaclePrefab);
+                tentacles[i].Initialize(tentacleStats, tentacleRoots[i], bodyJoint, (TentacleJoint)tentacleTips[i].GetComponent(typeof(TentacleJoint)), true);
+                tentacles[i].SetBodyNormal(normal);
             }
 
             //squishedTester.Initialize();
@@ -261,7 +263,7 @@ namespace PressPlay.Tentacles.Scripts
                     for (int i = 0; i < tentacleTips.Length; i++)
                     {
                         tentacleTips[i].GoDormant();
-                        //tentacles[i].Reset();
+                        tentacles[i].Reset();
                     }
                     //eggSack.Reset();
 
@@ -395,14 +397,14 @@ namespace PressPlay.Tentacles.Scripts
                     forceFromTentacles += tentacleTips[i].GetElasticityForce();
 
                     //JUST A TEST!! HACK
-                    //tentacleRoots[i].transform.localPosition = Vector3.Lerp(tentacleRoots[i].transform.localPosition, (tentacleTips[i].transform.position - transform.position).normalized * 0.45f, Time.deltaTime * 1.45f);
+                    tentacleRoots[i].transform.localPosition = Vector3.Lerp(tentacleRoots[i].transform.localPosition, Vector3.Normalize(tentacleTips[i].transform.position - transform.position) * 0.45f, Time.deltaTime * 1.45f);
                 }
                 else
                 {
                     //JUST A TEST!! HACK
-                    //tentacleRoots[i].transform.localPosition = Vector3.Lerp(tentacleRoots[i].transform.localPosition, Vector3.zero, Time.deltaTime * 1.5f);
+                    tentacleRoots[i].transform.localPosition = Vector3.Lerp(tentacleRoots[i].transform.localPosition, Vector3.Zero, Time.deltaTime * 1.5f);
                 }
-                //tentacleRoots[i].transform.localPosition -= new Vector3(0, tentacleRoots[i].transform.localPosition.y, 0);
+                tentacleRoots[i].transform.localPosition -= new Vector3(0, tentacleRoots[i].transform.localPosition.Y, 0);
             }
 
             //if (claw.isConnected)
@@ -416,13 +418,13 @@ namespace PressPlay.Tentacles.Scripts
 
         private void ShowNextAvailableTentacle()
         {
-            //for (int i = 0; i < tentacles.Length; i++)
-            //{
-            //    tentacles[i].ShowAsUnavailable();
-            //}
-            //int nextTentacleIndex = GetNextAvailableTentacleIndex();
+            for (int i = 0; i < tentacles.Length; i++)
+            {
+                tentacles[i].ShowAsUnavailable();
+            }
+            int nextTentacleIndex = GetNextAvailableTentacleIndex();
 
-            //tentacles[nextTentacleIndex].ShowAsAvailable();
+            tentacles[nextTentacleIndex].ShowAsAvailable();
         }
 
         private void HandleShootTentacleInput_Controller()
@@ -654,10 +656,10 @@ namespace PressPlay.Tentacles.Scripts
 
         public void SetActivationStatus(bool _status)
         {
-            //for (int i = 0; i < tentacles.Length; i++)
-            //{
-            //    tentacles[i].gameObject.SetActiveRecursively(_status);
-            //}
+            for (int i = 0; i < tentacles.Length; i++)
+            {
+                tentacles[i].gameObject.SetActiveRecursively(_status);
+            }
 
             for (int i = 0; i < tentacleTips.Length; i++)
             {
@@ -697,10 +699,10 @@ namespace PressPlay.Tentacles.Scripts
                 tentacleTips[i].Reset();
             }
 
-            //for (int i = 0; i < tentacles.Length; i++)
-            //{
-            //    tentacles[i].Reset();
-            //}
+            for (int i = 0; i < tentacles.Length; i++)
+            {
+                tentacles[i].Reset();
+            }
 
             //claw.Reset();
             //clawTentacle.Reset();

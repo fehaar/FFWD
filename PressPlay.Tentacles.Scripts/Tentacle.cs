@@ -109,7 +109,9 @@ namespace PressPlay.Tentacles.Scripts {
 				
 				GameObject tmpGameObject = new GameObject();//(GameObject)Instantiate(GameObject);
 				tmpGameObject.name = "Tentacle Joint "+i;
-				TentacleJoint tmpJoint = tmpGameObject.AddComponent(new TentacleJoint());
+                // TODO: This should not be nessecary - the framework is broken!
+                tmpGameObject.AddComponent(new Transform());
+                TentacleJoint tmpJoint = tmpGameObject.AddComponent(new TentacleJoint());
 				joints[i] = tmpJoint;
 				
 				jointPositions[i] = new Vector3(0,0,0);

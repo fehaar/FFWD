@@ -13931,6 +13931,9 @@
           <isKinematic>false</isKinematic>
           <freezeRotation>true</freezeRotation>
         </component>
+        <component Type="PressPlay.Tentacles.Scripts.TentacleJoint">
+          <id>24728</id>
+        </component>
       </components>
     </prefab>
     <prefab>
@@ -13993,6 +13996,9 @@
                   <asset>suction_cup</asset>
                   <mesh>suction_cup</mesh>
                 </component>
+                <component Type="PressPlay.Tentacles.Scripts.TentacleJoint">
+                  <id>30146</id>
+                </component>
               </components>
             </child>
           </children>
@@ -14016,6 +14022,9 @@
           <angularDrag>0.05</angularDrag>
           <isKinematic>false</isKinematic>
           <freezeRotation>true</freezeRotation>
+        </component>
+        <component Type="PressPlay.Tentacles.Scripts.TentacleJoint">
+          <id>24466</id>
         </component>
       </components>
     </prefab>
