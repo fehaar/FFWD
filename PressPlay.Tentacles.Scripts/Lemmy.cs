@@ -177,15 +177,6 @@ namespace PressPlay.Tentacles.Scripts
             mainBody.transform.position = transform.position;
             mainBody.transform.parent = transform;
 
-            //foreach (var item in mainBody.gameObject.GetComponentsInChildren(typeof(SkinnedMeshRenderer)))
-            //{
-            //    if (item.name.Contains("superLemmy"))
-            //    {
-            //        Debug.DisplayHierarchy(item);
-            //    }
-            //}
-
-
             //TentacleJoint bodyJoint = (TentacleJoint)GetComponent(typeof(TentacleJoint));
 
             //create claw
@@ -485,7 +476,6 @@ namespace PressPlay.Tentacles.Scripts
                     lastInputPosition = hit.position;
                     lastInputTime = Time.time;
                     ShootTentacleInDirection(hit.position - transform.position);
-                    Debug.Display("Shoot", hit.position);
                 }
             }
         }

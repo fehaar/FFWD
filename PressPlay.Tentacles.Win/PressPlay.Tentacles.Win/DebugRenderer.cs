@@ -92,7 +92,7 @@ namespace PressPlay.Tentacles
                 string text = displayStrings[i].Key + ": " + displayStrings[i].Value;
                 spriteBatch.DrawString(font, text, Position + Vector2.One + offset, Color.Black);
                 spriteBatch.DrawString(font, text, Position + offset, Color.White);
-                offset.Y += font.MeasureString(text).Y;
+                offset.Y += font.MeasureString(text).Y * 0.75f;
             }
 
             spriteBatch.End();

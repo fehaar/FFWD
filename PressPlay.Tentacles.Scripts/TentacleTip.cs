@@ -253,7 +253,7 @@ namespace PressPlay.Tentacles.Scripts
 
         void SuckTowardRayHit(RaycastHit _rh, Ray _ray)
         {
-            //rigidbody.AddForce((stats.wallSeekHelpDistance - _rh.distance) * ray.direction * stats.wallSeekHelpPower);
+            rigidbody.AddForce((stats.wallSeekHelpDistance - _rh.distance) * ray.Direction * stats.wallSeekHelpPower);
         }
 
         void RaycastForConnection()

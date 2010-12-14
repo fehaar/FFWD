@@ -138,6 +138,12 @@ namespace PressPlay.Tentacles
         protected override void Draw(GameTime gameTime)
         {
             Debug.Display("Cam", Camera.main.transform.position);
+            Ray ray = Camera.main.ScreenPointToRay(InputHandler.Instance.GetInputScreenPosition());
+            float? dist = ray.Intersects(new Plane() { Normal = Vector3.Up });
+            if (dist.HasValue)
+	        {
+                Debug.Display("Mouse", ray.Position + ray.Direction * dist);
+	        }
 
             if (debug.Wireframe)
             {

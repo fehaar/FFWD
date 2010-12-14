@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using PressPlay.FFWD;
 
 namespace PressPlay.Tentacles.Debugging
 {
@@ -53,19 +54,10 @@ namespace PressPlay.Tentacles.Debugging
             }
         }
 
-
         public override void Draw(GameTime gameTime)
         {
             frameCounter++;
-
-            string fps = string.Format("fps: {0}", frameRate);
-
-            spriteBatch.Begin();
-
-            spriteBatch.DrawString(spriteFont, fps, Position + Vector2.One, Color.Black);
-            spriteBatch.DrawString(spriteFont, fps, Position, Color.White);
-
-            spriteBatch.End();
+            Debug.Display("FPS", frameRate);
         }
     }
 }
