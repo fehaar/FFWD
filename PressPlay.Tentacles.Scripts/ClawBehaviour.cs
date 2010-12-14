@@ -399,6 +399,7 @@ namespace PressPlay.Tentacles.Scripts {
             if (!connectionPointerObject)
             {
                 connectionPointerObject = new GameObject();
+                connectionPointerObject.AddComponent(new Transform());
                 connectionPointerObject.name = "connectionPointerObject";
             }
 

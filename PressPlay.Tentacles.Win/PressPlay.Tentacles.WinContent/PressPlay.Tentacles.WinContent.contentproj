@@ -70,14 +70,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="xna_hierarchy_test_02.FBX">
-      <Name>xna_hierarchy_test_02</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>SkinnedModelProcessor</Processor>
-      <ProcessorParameters_Scale>0.1</ProcessorParameters_Scale>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="super_lemmy_parts_anim_cooked.FBX">
       <Name>super_lemmy_parts_anim_cooked</Name>
       <Importer>FbxImporter</Importer>
@@ -213,8 +205,8 @@
       <Importer>FbxImporter</Importer>
       <Processor>SkinnedModelProcessor</Processor>
       <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
-      <ProcessorParameters_RotationX>90</ProcessorParameters_RotationX>
       <ProcessorParameters_RotationY>180</ProcessorParameters_RotationY>
+      <ProcessorParameters_RotationX>90</ProcessorParameters_RotationX>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />

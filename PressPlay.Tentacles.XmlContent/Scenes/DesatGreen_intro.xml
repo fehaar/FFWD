@@ -13918,7 +13918,7 @@
         <component Type="PressPlay.FFWD.Components.SphereCollider">
           <id>15974</id>
           <isTrigger>false</isTrigger>
-          <material>Default</material>
+          <material>LemmySlippery</material>
           <center>0 0 0</center>
           <radius>0.5</radius>
         </component>
@@ -13977,7 +13977,7 @@
         <component Type="PressPlay.FFWD.Components.SphereCollider">
           <id>15668</id>
           <isTrigger>true</isTrigger>
-          <material>Default</material>
+          <material>LemmySlippery</material>
           <center>0 0 0.13182</center>
           <radius>0.16575</radius>
         </component>

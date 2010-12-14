@@ -10,7 +10,6 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using PressPlay.FFWD.Components;
 using PressPlay.FFWD;
-using Box2D.XNA;
 using PressPlay.Tentacles.Debugging;
 using PressPlay.Tentacles.Scripts;
 
@@ -139,6 +138,7 @@ namespace PressPlay.Tentacles
         protected override void Draw(GameTime gameTime)
         {
             Debug.Display("Cam", Camera.main.transform.position);
+
             if (debug.Wireframe)
             {
                 GraphicsDevice.RasterizerState = new RasterizerState() { FillMode = FillMode.WireFrame };

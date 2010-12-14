@@ -177,6 +177,15 @@ namespace PressPlay.Tentacles.Scripts
             mainBody.transform.position = transform.position;
             mainBody.transform.parent = transform;
 
+            //foreach (var item in mainBody.gameObject.GetComponentsInChildren(typeof(SkinnedMeshRenderer)))
+            //{
+            //    if (item.name.Contains("superLemmy"))
+            //    {
+            //        Debug.DisplayHierarchy(item);
+            //    }
+            //}
+
+
             //TentacleJoint bodyJoint = (TentacleJoint)GetComponent(typeof(TentacleJoint));
 
             //create claw
@@ -520,11 +529,11 @@ namespace PressPlay.Tentacles.Scripts
             ray.Position = lastPosition;
             ray.Direction = transform.position - lastPosition;
 
-            if (Physics.Raycast(ray, out rh, (transform.position - lastPosition).Length(), GlobalSettings.Instance.allWallsAndShields))
-            {
-                transform.position = rh.point + rh.normal * 0.5f;
-                rigidbody.velocity = -rigidbody.velocity * 0.1f; //this move only happens if velocity is very very high, so we use some hard coded bounce
-            }
+            //if (Physics.Raycast(ray, out rh, (transform.position - lastPosition).Length(), GlobalSettings.Instance.allWallsAndShields))
+            //{
+            //    transform.position = rh.point + rh.normal * 0.5f;
+            //    rigidbody.velocity = -rigidbody.velocity * 0.1f; //this move only happens if velocity is very very high, so we use some hard coded bounce
+            //}
 
             lastPosition = transform.position;
         }
