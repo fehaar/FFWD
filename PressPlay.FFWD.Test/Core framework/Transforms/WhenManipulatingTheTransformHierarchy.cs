@@ -54,6 +54,29 @@ namespace PressPlay.FFWD.Test.Core_framework.Transforms
         }
 
         [Test]
+        public void ATransformWithNoParentHasItselfAsRoot()
+        {
+            Transform trans = new Transform();
+            Assert.That(trans.root, Is.SameAs(trans));
+        }
+
+        [Test]
+        public void ATransformWithAParentWillHaveItAsRoot()
+        {
+            Transform trans = new Transform();
+            Transform child = new Transform();
+            child.parent = trans;
+            Assert.That(child.root, Is.SameAs(trans));
+        }
+
+        [Test]
+        public void InADeepHiearachyRootWillBeTheTopmostElement()
+        {
+            TestHierarchy h = new TestHierarchy();
+            Assert.That(h.childOfChildTrans.root, Is.SameAs(h.rootTrans));
+        }
+
+        [Test]
         public void WhenSettingTheParentOfATransformTheGlobalPositionWillNotChangeEvenWhenRotated()
         {
             // TODO : Add implementation of test

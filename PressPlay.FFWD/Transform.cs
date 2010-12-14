@@ -27,7 +27,7 @@ namespace PressPlay.FFWD
             set
             {
                 _localPosition = value;
-                _hasDirtyWorld = true;
+                hasDirtyWorld = true;
             }
         }
 
@@ -41,7 +41,7 @@ namespace PressPlay.FFWD
             set
             {
                 _localScale = value;
-                _hasDirtyWorld = true;
+                hasDirtyWorld = true;
             }
         }
 
@@ -55,7 +55,7 @@ namespace PressPlay.FFWD
             set
             {
                 _localRotation = value;
-                _hasDirtyWorld = true;
+                hasDirtyWorld = true;
             }
         }
 
@@ -92,24 +92,28 @@ namespace PressPlay.FFWD
                 }
                 _parent.children.Add(gameObject);
                 position = pos;
-                _hasDirtyWorld = true;
+                hasDirtyWorld = true;
             }
         }
 
         private Matrix _world = Matrix.Identity;
 
         private bool _hasDirtyWorld = true;
-        internal bool hasDirtyWorld
+        private bool hasDirtyWorld
         {
             get
             {
-                if (_parent == null)
+                return _hasDirtyWorld;
+            }
+            set
+            {
+                _hasDirtyWorld = value;
+                if (children != null)
                 {
-                    return _hasDirtyWorld;
-                }
-                else
-                {
-                    return _hasDirtyWorld || _parent.hasDirtyWorld;
+                    for (int i = 0; i < children.Count; i++)
+                    {
+                        children[i].transform.hasDirtyWorld = true;
+                    }
                 }
             }
         }
@@ -129,7 +133,7 @@ namespace PressPlay.FFWD
 
         private void calculateWorld()
         {
-            _hasDirtyWorld = false;
+            hasDirtyWorld = false;
             _world = Matrix.CreateScale(localScale) *
                    Matrix.CreateFromQuaternion(localRotation) *
                    Matrix.CreateTranslation(localPosition);
@@ -262,7 +266,7 @@ namespace PressPlay.FFWD
                 Quaternion q;
                 Quaternion.CreateFromAxisAngle(ref axis, angle, out q);
                 Quaternion.Multiply(ref _localRotation, ref q, out _localRotation);
-                _hasDirtyWorld = true;
+                hasDirtyWorld = true;
             }
         }
 
@@ -297,7 +301,7 @@ namespace PressPlay.FFWD
                 _localScale = scale;
                 _localRotation = rot;
                 _localPosition = pos;
-                _hasDirtyWorld = false;
+                hasDirtyWorld = false;
             }
         }
 
@@ -322,6 +326,19 @@ namespace PressPlay.FFWD
             get
             {
                 return world.Up;
+            }
+        }
+
+        [ContentSerializerIgnore]
+        public Transform root 
+        { 
+            get
+            {
+                if (parent != null)
+                {
+                    return parent.root;
+                }
+                return this;
             }
         }
     }

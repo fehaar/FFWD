@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace PressPlay.FFWD.Exporter.Writers.Components
 {
-    public class MonoBehaviourWriter : IComponentWriter
+    public class MonoBehaviourWriter : IComponentWriter, IOptionComponentWriter
     {
         public List<string> memberFilter = new List<string>();
         public bool filterIsExclude = true;
@@ -37,7 +37,7 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
             }
             if (exportScript)
             {
-                scene.WriteScript(beh, true);
+                scene.WriteScript(beh, !options.Contains("noOverwrite"));
             }
         }
         #endregion
@@ -46,5 +46,9 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
         {
             scene.WriteElement(name, value);
         }
+
+        #region IOptionComponentWriter Members
+        public string options { get; set; }
+        #endregion
     }
 }
