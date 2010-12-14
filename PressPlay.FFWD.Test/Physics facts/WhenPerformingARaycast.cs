@@ -91,8 +91,8 @@ namespace PressPlay.FFWD.Test.Physics_facts
             bool hasHit = Physics.Raycast(Vector2.Zero, Vector2.UnitY, out hit, 100, 0);
             Assert.That(hasHit, Is.True);
             Assert.That(hit.body, Is.SameAs(body));
-            Assert.That(hit.point, Is.EqualTo(new Vector2(0, 45)));
-            Assert.That(hit.normal, Is.EqualTo(new Vector2(0, -1)));
+            Assert.That(hit.point, Is.EqualTo(new Vector3(0, 0, 45)));
+            Assert.That(hit.normal, Is.EqualTo(new Vector3(0, 0, -1)));
             Assert.That(hit.distance, Is.EqualTo(45));
         }
 
