@@ -79,7 +79,7 @@ namespace PressPlay.FFWD.Components
         {
             if (animationPlayer != null)
             {
-                animationPlayer.Update(Time.deltaTime, true, transform.world);
+                animationPlayer.Update(0.0f, true, transform.world);
             }
         }
 
