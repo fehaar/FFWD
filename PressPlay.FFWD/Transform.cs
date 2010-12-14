@@ -133,7 +133,7 @@ namespace PressPlay.FFWD
 
         private void calculateWorld()
         {
-            hasDirtyWorld = false;
+            _hasDirtyWorld = false;
             _world = Matrix.CreateScale(localScale) *
                    Matrix.CreateFromQuaternion(localRotation) *
                    Matrix.CreateTranslation(localPosition);
@@ -171,7 +171,8 @@ namespace PressPlay.FFWD
                 }
                 else
                 {
-                    localPosition = value - parent.position;
+                    Vector3 trans = Vector3.Transform(value, Matrix.Invert(parent.world));
+                    localPosition = trans;
                 }
                 if (rigidbody != null)
                 {

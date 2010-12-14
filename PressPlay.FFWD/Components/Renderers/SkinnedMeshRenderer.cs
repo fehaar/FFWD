@@ -120,12 +120,6 @@ namespace PressPlay.FFWD.Components
 
                 SkinnedEffect sEffect = mesh.Effects[e] as SkinnedEffect;
                 sEffect.SetBoneTransforms(bones);
-
-                if (gameObject.name == "superLemmy(Clone)")
-                {
-                    Debug.Display(gameObject.name, transform.world.Translation);
-                }
-
                 sEffect.View = Camera.main.View();
                 sEffect.Projection = Camera.main.projectionMatrix;
                 sEffect.AmbientLightColor = new Vector3(1);

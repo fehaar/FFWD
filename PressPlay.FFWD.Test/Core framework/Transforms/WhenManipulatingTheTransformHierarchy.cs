@@ -15,7 +15,11 @@ namespace PressPlay.FFWD.Test.Core_framework.Transforms
         {
             Transform trans = new Transform();
             Transform child = new Transform();
+            GameObject childObj = new GameObject();
+            childObj.AddComponent(child);
+
             child.parent = trans;
+
             Assert.That(trans.children, Is.Not.Null);
             Assert.That(trans.children, Contains.Item(child.gameObject));
         }
@@ -25,6 +29,9 @@ namespace PressPlay.FFWD.Test.Core_framework.Transforms
         {
             Transform trans = new Transform();
             Transform child = new Transform();
+            GameObject childObj = new GameObject();
+            childObj.AddComponent(child);
+
             child.parent = trans;
             child.parent = null;
             Assert.That(trans.children, Has.No.Member(child.gameObject));            
@@ -36,21 +43,13 @@ namespace PressPlay.FFWD.Test.Core_framework.Transforms
             Transform trans = new Transform();
             Transform newParent = new Transform();
             Transform child = new Transform();
+            GameObject childObj = new GameObject();
+            childObj.AddComponent(child);
+
             child.parent = trans;
             child.parent = newParent;
             Assert.That(trans.children, Has.No.Member(child.gameObject));
             Assert.That(newParent.children, Has.Member(child.gameObject));
-        }
-
-        [Test]
-        public void WhenSettingTheParentOfATransformTheGlobalPositionWillNotChange()
-        {
-            Transform trans = new Transform() { localPosition = new Vector3(2, 3, 4) };
-            Transform child = new Transform() { localPosition = new Vector3(2, 3, 4) };
-
-            Vector3 childPos = child.position;
-            child.parent = trans;
-            Assert.That(child.position, Is.EqualTo(childPos));
         }
 
         [Test]
@@ -65,6 +64,9 @@ namespace PressPlay.FFWD.Test.Core_framework.Transforms
         {
             Transform trans = new Transform();
             Transform child = new Transform();
+            GameObject childObj = new GameObject();
+            childObj.AddComponent(child);
+
             child.parent = trans;
             Assert.That(child.root, Is.SameAs(trans));
         }
@@ -77,11 +79,29 @@ namespace PressPlay.FFWD.Test.Core_framework.Transforms
         }
 
         [Test]
+        public void WhenSettingTheParentOfATransformTheGlobalPositionWillNotChange()
+        {
+            Transform trans = new Transform() { localPosition = new Vector3(2, 3, 4) };
+            Transform child = new Transform() { localPosition = new Vector3(2, 3, 4) };
+            GameObject childObj = new GameObject();
+            childObj.AddComponent(child);
+
+            Vector3 childPos = child.position;
+            child.parent = trans;
+            Assert.That(child.position, Is.EqualTo(childPos));
+        }
+
+        [Test]
         public void WhenSettingTheParentOfATransformTheGlobalPositionWillNotChangeEvenWhenRotated()
         {
-            // TODO : Add implementation of test
-            Assert.Ignore("Test not implemented");
+            Transform trans = new Transform() { localPosition = new Vector3(2, 3, 4), localRotation = Quaternion.CreateFromYawPitchRoll(MathHelper.PiOver2, 0.0f, 0.0f) };
+            Transform child = new Transform() { localPosition = new Vector3(2, 2, 2) };
+            GameObject childObj = new GameObject();
+            childObj.AddComponent(child);
 
+            Vector3 childPos = child.position;
+            child.parent = trans;
+            Assert.That((child.position - childPos).LengthSquared(), Is.LessThan(0.000001f));
         }
 
         [Test]

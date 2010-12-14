@@ -62,7 +62,7 @@ namespace PressPlay.FFWD
 
             // Sync positions of game objects
             Body body = world.GetBodyList();
-            do
+            while (body != null)
             {
                 Component comp = (Component)body.GetUserData();
                 if (comp != null)
@@ -79,7 +79,7 @@ namespace PressPlay.FFWD
                     }
                 }
                 body = body.GetNext();
-            } while (body != null);
+            };
 
             contactProcessor.Update();
         }
