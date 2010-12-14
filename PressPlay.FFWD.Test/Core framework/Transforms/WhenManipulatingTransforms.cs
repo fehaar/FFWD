@@ -27,7 +27,7 @@ namespace PressPlay.FFWD.Test.Core_framework.Transforms
             Assert.That(trans.position, Is.EqualTo(new Vector3(2, 2, 2)));
             Assert.That(child.position, Is.EqualTo(new Vector3(3, 2, 1)));
             child.parent = trans;
-            Assert.That(child.position, Is.EqualTo(new Vector3(2, 2, 2) + new Vector3(3, 2, 1)));
+            Assert.That(child.position, Is.EqualTo(new Vector3(3, 2, 1)));
         }
 
         [Test]
@@ -36,9 +36,9 @@ namespace PressPlay.FFWD.Test.Core_framework.Transforms
             Transform trans = new Transform() { localPosition = Vector3.One };
             Transform child = new Transform() { localPosition = Vector3.Up };
             child.parent = trans;
-            Assert.That(child.position, Is.EqualTo(Vector3.One + Vector3.Up));
+            Assert.That(child.position, Is.EqualTo(Vector3.Up));            
             trans.localPosition = new Vector3(2, 2, 2);
-            Assert.That(child.position, Is.EqualTo(new Vector3(2, 2, 2) + Vector3.Up));
+            Assert.That(child.position, Is.EqualTo(new Vector3(2, 2, 2) + child.localPosition));
         }
 
         [Test]
