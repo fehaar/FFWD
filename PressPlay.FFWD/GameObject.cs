@@ -99,7 +99,8 @@ namespace PressPlay.FFWD
 
         public Component AddComponent(Type tp)
         {
-            return null;
+            Component cmp = Activator.CreateInstance(tp) as Component;
+            return AddComponent(cmp);
         }
 
         internal override UnityObject Clone()
@@ -484,6 +485,7 @@ namespace PressPlay.FFWD
         #region Unity methods
         public void SetActiveRecursively(bool _status)
         {
+            // TODO: Create this method
         }
         #endregion
 

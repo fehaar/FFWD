@@ -266,7 +266,6 @@ namespace PressPlay.FFWD.Exporter.Writers
                 FieldInfo[] memInfo = obj.GetType().GetFields(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance);
                 for (int m = 0; m < memInfo.Length; m++)
                 {
-                    Debug.Log("Ser member: " + memInfo[m].Name);
                     if (memInfo[m].GetCustomAttributes(typeof(HideInInspector), true).Length > 0)
                     {
                         continue;

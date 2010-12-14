@@ -105,5 +105,10 @@ namespace PressPlay.FFWD
                 return (gameObject == null) ? GetType().Name : gameObject.name;
             }
         }
+
+        public Component GetComponent(Type type)
+        {
+            return gameObject.GetComponent(type);
+        }
     }
 }
