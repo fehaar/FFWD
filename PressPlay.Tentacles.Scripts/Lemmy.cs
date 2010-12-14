@@ -44,7 +44,7 @@ namespace PressPlay.Tentacles.Scripts
         //public PoolableObject createOnPushButNoDamage;
         //public PoolableObject createOnDeath;
 
-        //public Tentacle tentaclePrefab;
+        public ObjectReference tentaclePrefab;
         public ObjectReference tentacleTipPrefab;
         public ObjectReference mainBodyPrefab;
         //public Claw clawPrefab;

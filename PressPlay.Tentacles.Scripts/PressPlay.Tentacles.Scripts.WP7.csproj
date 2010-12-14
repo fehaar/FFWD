@@ -71,8 +71,11 @@
     <Compile Include="PathFollowCam.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimpleRotate.cs" />
+    <Compile Include="Tentacle.cs" />
+    <Compile Include="TentacleJoint.cs" />
     <Compile Include="TentacleStats.cs" />
     <Compile Include="TentacleTip.cs" />
+    <Compile Include="TentacleVisualStats.cs" />
     <Compile Include="TriggeredByLemmy.cs" />
     <Compile Include="TurnOffAtDistanceHandler.cs" />
   </ItemGroup>
