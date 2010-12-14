@@ -79,7 +79,7 @@ namespace PressPlay.FFWD.Components
         {
             if (animationPlayer != null)
             {
-                //animationPlayer.Update(Time.deltaTime, true, Matrix.Identity);
+                animationPlayer.Update(Time.deltaTime, true, transform.world);
             }
         }
 
@@ -122,12 +122,9 @@ namespace PressPlay.FFWD.Components
 
                 SkinnedEffect sEffect = mesh.Effects[e] as SkinnedEffect;
                 sEffect.SetBoneTransforms(bones);
-                sEffect.World = world;
                 sEffect.View = Camera.main.View();
                 sEffect.Projection = Camera.main.projectionMatrix;
-                sEffect.EnableDefaultLighting();
-                sEffect.SpecularColor = new Vector3(0.25f);
-                sEffect.SpecularPower = 16;
+                sEffect.AmbientLightColor = new Vector3(1);
                 sEffect.Texture = tex;
                 mesh.Draw();
             }
