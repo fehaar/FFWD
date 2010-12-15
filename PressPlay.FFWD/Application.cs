@@ -32,6 +32,7 @@ namespace PressPlay.FFWD
             ContentHelper.IgnoreMissingAssets = true;
             Camera.main.projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(60), Game.GraphicsDevice.Viewport.AspectRatio, 0.3f, 1000);
             Physics.Initialize();
+            Input.Initialize();
             spriteBatch = new SpriteBatch(Game.GraphicsDevice);
         }
 
@@ -52,7 +53,6 @@ namespace PressPlay.FFWD
                 }
             }
             Physics.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
-            Input.Update();
         }
 
         public override void Draw(GameTime gameTime)

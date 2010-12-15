@@ -52,7 +52,12 @@ namespace PressPlay.FFWD.Components
             }
         }
 
-        public void AddForce(Vector3 elasticityForce, ForceMode mode = ForceMode.Force)
+        public void AddForce(Vector3 elasticityForce)
+        {
+            AddForce(elasticityForce, ForceMode.Force);
+        }
+
+        public void AddForce(Vector3 elasticityForce, ForceMode mode)
         {
             switch (mode)
             {

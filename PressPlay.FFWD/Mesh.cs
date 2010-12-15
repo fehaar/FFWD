@@ -11,7 +11,7 @@ namespace PressPlay.FFWD
         public Vector3[] vertices { get; set; }
         public Vector3[] normals { get; set; }
         public Vector2[] uv { get; set; }
-        public int[] triangles { get; set; }
+        public short[] triangles { get; set; }
 
         public void Clear()
         {
