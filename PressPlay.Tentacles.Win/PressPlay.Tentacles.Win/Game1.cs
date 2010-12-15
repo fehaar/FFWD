@@ -53,6 +53,8 @@ namespace PressPlay.Tentacles
             graphics.PreferredBackBufferHeight = 480;
             graphics.IsFullScreen = true;
             graphics.ApplyChanges();
+            this.IsFixedTimeStep = true;
+            this.TargetElapsedTime = TimeSpan.FromSeconds(1.0 / 30.0);
 #endif
             Components.Add(new Application(this));
             debug = new DebugRenderer(this);
