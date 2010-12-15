@@ -21,7 +21,7 @@ namespace PressPlay.Tentacles.Scripts {
 
 		private Vector3[] vertices;// = new Vector3[pointCnt * 5];
 	    //private Vector2[] uvs;// = new Vector2[pointCnt * 5];
-	    private int[] triangles;// = new int[((pointCnt-1)*9)+6];
+	    private short[] triangles;// = new int[((pointCnt-1)*9)+6];
 		private bool[] flipped;// = new bool[pointCnt];
 		private float lineIncrementDeltaFraction;// = 1f/((float)pointCnt-1f);
 		
@@ -169,7 +169,7 @@ namespace PressPlay.Tentacles.Scripts {
 		        vertices = new Vector3[pointCnt * 5];
 		        baseUVs = new Vector2[pointCnt * 5];
 				tmpUVs = new Vector2[pointCnt * 5];
-		        triangles = new int[((pointCnt-1)*9)+6];
+		        triangles = new short[((pointCnt-1)*9)+6];
 				flipped = new bool[pointCnt];
 				
 				lineIncrementDeltaFraction = 1f/((float)pointCnt-1f);
@@ -274,36 +274,36 @@ namespace PressPlay.Tentacles.Scripts {
 		            int adder = (i / 9) * 5;
 		            int tmpComp = (i) % 9;
 		            if (tmpComp == 0)
-		                triangles[i] = 0 + adder;
+		                triangles[i] = (short)(0 + adder);
 		            else if (tmpComp == 1)
-		                triangles[i] = 1 + adder;
+                        triangles[i] = (short)(1 + adder);
 		            else if (tmpComp == 2)
-		                triangles[i] = 2 + adder;
+		                triangles[i] = (short)(2 + adder);
 		            else if (tmpComp == 3)
-		                triangles[i] = 3 + adder;
+		                triangles[i] = (short)(3 + adder);
 		            else if (tmpComp == 4)
-		                triangles[i] = 2 + adder;
+		                triangles[i] = (short)(2 + adder);
 		            else if (tmpComp == 5)
-		                triangles[i] = 1 + adder;
+		                triangles[i] = (short)(1 + adder);
 					if (i < triangles.Length-9)
 					{
 				//	Debug.Log((adder/5) + " flipped= "+ flipped[adder/5]);
 						if (flipped[adder/5]){
 							if (tmpComp == 6)
-				                triangles[i] = 3 + adder;
+				                triangles[i] = (short)(3 + adder);
 				            else if (tmpComp == 7)
-				                triangles[i] = 6 + adder;
+				                triangles[i] = (short)(6 + adder);
 				            else if (tmpComp == 8)
-				                triangles[i] = 4 + adder;
+				                triangles[i] = (short)(4 + adder);
 					
 						}
 						else{
 							if (tmpComp == 6)
-				                triangles[i] = 5 + adder;
+				                triangles[i] = (short)(5 + adder);
 				            else if (tmpComp == 7)
-				                triangles[i] = 2 + adder;
+				                triangles[i] = (short)(2 + adder);
 				            else if (tmpComp == 8)
-				                triangles[i] = 4 + adder;
+				                triangles[i] = (short)(4 + adder);
 						}
 					}
 		        }

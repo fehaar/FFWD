@@ -88,12 +88,10 @@
     <Compile Include="Debugging\Accelerometer.cs" />
     <Compile Include="Debugging\FrameRateCounter.cs" />
     <Compile Include="Debugging\Box2DDebugDraw.cs" />
-    <Compile Include="Debugging\PanCamera.cs" />
     <Compile Include="DebugRenderer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
-    <Compile Include="TouchHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

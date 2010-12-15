@@ -7,7 +7,6 @@ using PressPlay.FFWD.Components;
 
 namespace PressPlay.Tentacles.Scripts
 {
-    [System.Serializable]
     public class TentacleVisualStats
     {
 

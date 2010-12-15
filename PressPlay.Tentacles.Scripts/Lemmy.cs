@@ -33,7 +33,7 @@ namespace PressPlay.Tentacles.Scripts
 
         //public ScoreHandler scoreHandler = new ScoreHandler();
 
-        private RaycastHit rh;
+        //private RaycastHit rh;
         private Ray ray;
 
         private Vector3 lastPosition;
@@ -453,12 +453,18 @@ namespace PressPlay.Tentacles.Scripts
                 return;
             }
 
-
             ray = lemmyFollowCamera.ScreenPointToRay(InputHandler.Instance.GetInputScreenPosition());
 
             if (InputHandler.Instance.GetShootTentacle())
             {
-            //    //Debug.Log(InputHandler.Instance.ScreenRayCheck(ray,GlobalSettings.Instance.enemyInputLayer).ToString());
+                Debug.Display("Tap", InputHandler.Instance.GetInputScreenPosition());
+                float? dist = ray.Intersects(new Plane() { Normal = Vector3.Up });
+                if (dist.HasValue)
+                {
+                    Debug.Display("Tap world", ray.Position + ray.Direction * dist);
+                }
+               
+                //    //Debug.Log(InputHandler.Instance.ScreenRayCheck(ray,GlobalSettings.Instance.enemyInputLayer).ToString());
                 ScreenRayCheckHit hit = InputHandler.Instance.ScreenRayCheck(ray, GlobalSettings.Instance.enemyInputLayer);
 
                 if (hit.hitObjectInLayer)

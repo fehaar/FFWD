@@ -13,6 +13,9 @@ namespace PressPlay.Tentacles.Debugging
 #if WINDOWS_PHONE
         // the accelerometer sensor on the device
         private static Microsoft.Devices.Sensors.Accelerometer accelerometer = new Microsoft.Devices.Sensors.Accelerometer();
+
+        // the nextValue to use
+        private static Vector3 nextValue;
 #endif
 
         // we want to prevent the Accelerometer from being initialized twice.

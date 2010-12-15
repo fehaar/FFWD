@@ -23,7 +23,7 @@ namespace PressPlay.Tentacles.Scripts
 
         private bool isInitialized = false;
 
-        private Collider connectedTo;
+        //private Collider connectedTo;
 
         private float shootTime = 0;
         private Vector3 shootDir = Vector3.Zero;

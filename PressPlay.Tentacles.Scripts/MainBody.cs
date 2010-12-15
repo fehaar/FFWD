@@ -16,7 +16,7 @@ namespace PressPlay.Tentacles.Scripts {
 
         //public PPAnimationHandler anim;
 
-        private float healthFraction;
+        //private float healthFraction;
 
         //private Color damageOverlayNeutralColor;
 

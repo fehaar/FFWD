@@ -32,10 +32,9 @@ namespace PressPlay.Tentacles
         {
             base.Initialize();
 #if WINDOWS_PHONE            
-            TouchPanel.EnabledGestures = TouchPanel.EnabledGestures | 
-                                         GestureType.Tap |
-                                         GestureType.DoubleTap |
-                                         GestureType.Hold;
+            //TouchPanel.EnabledGestures = TouchPanel.EnabledGestures | 
+            //                             GestureType.DoubleTap |
+            //                             GestureType.Hold;
 #endif
             physicsDebugDraw = new Box2DDebugDraw() { Flags = DebugDrawFlags.Shape, worldView = Matrix.CreateRotationX(MathHelper.PiOver2) };
             Physics.DebugDraw = physicsDebugDraw;
@@ -52,22 +51,19 @@ namespace PressPlay.Tentacles
         {
             base.Update(gameTime);
 #if WINDOWS_PHONE
-            foreach (GestureSample gesture in TouchHandler.GetSample(GestureType.Tap |
-                                         GestureType.DoubleTap |
-                                         GestureType.Hold))
-            {
-                switch (gesture.GestureType)
-                {
-                    case GestureType.Tap:
-                        break;
-                    case GestureType.DoubleTap:
-                        NextMode();
-                        break;
-                    case GestureType.Hold:
-                        Reset();
-                        break;
-                }
-            }
+            //foreach (GestureSample gesture in TouchHandler.GetSample(GestureType.DoubleTap |
+            //                             GestureType.Hold))
+            //{
+            //    switch (gesture.GestureType)
+            //    {
+            //        case GestureType.DoubleTap:
+            //            NextMode();
+            //            break;
+            //        case GestureType.Hold:
+            //            Reset();
+            //            break;
+            //    }
+            //}
 #endif
         }
 

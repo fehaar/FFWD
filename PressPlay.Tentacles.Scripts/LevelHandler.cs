@@ -50,7 +50,7 @@ namespace PressPlay.Tentacles.Scripts
 
 
         public Level.LevelType debugLevelType;
-        private LevelTypeSettings levelTypeSettings;
+        //private LevelTypeSettings levelTypeSettings;
 
         //public AudioWrapper endSound;
 
@@ -114,7 +114,7 @@ namespace PressPlay.Tentacles.Scripts
         [ContentSerializerIgnore]
         public CheckPoint[] checkpointOrder = new CheckPoint[0];
 
-        private ArrayList activatedCheckPoints = new ArrayList();
+        private List<CheckPoint> activatedCheckPoints = new List<CheckPoint>();
         private CheckPoint[] checkPoints;
         private CheckPoint lastActivatedCheckpoint;
 
@@ -146,7 +146,7 @@ namespace PressPlay.Tentacles.Scripts
         //private float currentFramerate;
         public float criticalFrameRateDropLimit = 20;
         public bool doCriticalFrameRateDropCheck = false;
-        private int criticalFrameRateDropCounter = 0;
+        //private int criticalFrameRateDropCounter = 0;
         public int framesBetweenCriticalFrameChecks = 10;
         //#endregion
 
@@ -209,7 +209,7 @@ namespace PressPlay.Tentacles.Scripts
         }
 
 
-        private float lastExtraLifeCashInTime = 0;
+        //private float lastExtraLifeCashInTime = 0;
 
         //public MusicController musicController;
 

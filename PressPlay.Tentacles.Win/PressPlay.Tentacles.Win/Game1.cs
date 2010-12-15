@@ -65,9 +65,8 @@ namespace PressPlay.Tentacles
             counter.DrawOrder = 2;
             Components.Add(counter);
 
-            Components.Add(new TouchHandler(this));
-            PanCamera cam = new PanCamera(this);
-            Components.Add(cam);
+            //PanCamera cam = new PanCamera(this);
+            //Components.Add(cam);
 #endif
             base.Initialize();
         }
@@ -141,12 +140,13 @@ namespace PressPlay.Tentacles
         protected override void Draw(GameTime gameTime)
         {
             Debug.Display("Cam", Camera.main.transform.position);
-            Ray ray = Camera.main.ScreenPointToRay(InputHandler.Instance.GetInputScreenPosition());
-            float? dist = ray.Intersects(new Plane() { Normal = Vector3.Up });
-            if (dist.HasValue)
-	        {
-                Debug.Display("Mouse", ray.Position + ray.Direction * dist);
-	        }
+            //Debug.Display("Mouse screen", InputHandler.Instance.GetInputScreenPosition());
+            //Ray ray = Camera.main.ScreenPointToRay(InputHandler.Instance.GetInputScreenPosition());
+            //float? dist = ray.Intersects(new Plane() { Normal = Vector3.Up });
+            //if (dist.HasValue)
+            //{
+            //    Debug.Display("Mouse", ray.Position + ray.Direction * dist);
+            //}
 
             if (debug.Wireframe)
             {

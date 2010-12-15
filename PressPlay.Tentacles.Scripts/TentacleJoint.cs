@@ -15,8 +15,8 @@ namespace PressPlay.Tentacles.Scripts
         private Tentacle tentacle;
         private int index;
 
-        private float backConnectionRigidity = 0.001f;
-        private float frontConnectionRigidity = 0.001f;
+        //private float backConnectionRigidity = 0.001f;
+        //private float frontConnectionRigidity = 0.001f;
 
         private Vector3 seekPosition;
 

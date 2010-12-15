@@ -53,12 +53,12 @@ namespace PressPlay.Tentacles.Scripts {
 		public float rightAnalogCurvePow = 1.6f;
 		private Vector2 rightAnalogVector = Vector2.Zero;
 		
-		private float wasdXAxis = 0f;
-		private float wasdYAxis = 0f;
+        //private float wasdXAxis = 0f;
+        //private float wasdYAxis = 0f;
 		private Vector2 wasdVector = Vector2.Zero;
 		
-		private float arrowKeysXAxis = 0f;
-		private float arrowKeysYAxis = 0f;
+        //private float arrowKeysXAxis = 0f;
+        //private float arrowKeysYAxis = 0f;
 		private Vector2 arrowKeysVector = Vector2.Zero;
 	
 		private float leftTriggerAxis = -1;
@@ -359,8 +359,9 @@ namespace PressPlay.Tentacles.Scripts {
 			{
 				return;
 			}
-			
-			DoUpdate();
+
+            Input.Update();
+            DoUpdate();
 		}
 		
 		/*public void FixedUpdate()
@@ -533,7 +534,7 @@ namespace PressPlay.Tentacles.Scripts {
 		
 		public Vector2 GetInputScreenPosition()
 		{
-			return inputPosition;
+            return inputPosition;
 		}
 
         public List<Vector2> GetInputArraylist()
