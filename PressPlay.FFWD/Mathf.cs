@@ -13,8 +13,8 @@ namespace PressPlay.FFWD
     public static class Mathf
     {
         public const float PI = MathHelper.Pi;
-
         public const float Infinity = float.PositiveInfinity;
+        public const float Rad2Deg = 360 / MathHelper.TwoPi;
 
         public static float Cos(float value)
         {
@@ -66,5 +66,9 @@ namespace PressPlay.FFWD
             return Math.Max(x, y);
         }
 
+        public static float Atan2(float x, float y)
+        {
+            return (float)Math.Atan2(x, y);
+        }
     }
 }

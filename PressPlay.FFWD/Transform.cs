@@ -342,5 +342,15 @@ namespace PressPlay.FFWD
                 return this;
             }
         }
+
+        public Vector3 TransformPoint(Vector3 position)
+        {
+            return Vector3.Transform(position, world);
+        }
+
+        public Vector3 InverseTransformPoint(Vector3 position)
+        {
+            return Vector3.Transform(position, Matrix.Invert(world));
+        }
     }
 }

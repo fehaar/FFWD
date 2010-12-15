@@ -199,84 +199,111 @@ namespace PressPlay.FFWD.Exporter.Writers
 
         internal void WriteElement(string name, object obj)
         {
-            if (obj == null)
+            try
             {
-                writer.WriteStartElement(name);
-                writer.WriteAttributeString("Null", ToString(true));
-                writer.WriteEndElement();
-                return;
-            }
-            if (obj is float)
-            {
-                writer.WriteElementString(name, ToString((float)obj));
-                return;
-            }
-            if (obj is Boolean)
-            {
-                writer.WriteElementString(name, ToString((Boolean)obj));
-                return;
-            }
-            if (obj is int)
-            {
-                writer.WriteElementString(name, ToString((int)obj));
-                return;
-            }
-            if (obj is int[])
-            {
-                writer.WriteElementString(name, ToString(obj as int[]));
-                return;
-            }
-            if (obj is Vector3)
-            {
-                writer.WriteElementString(name, ToString((Vector3)obj));
-                return;
-            }
-            if (obj is Vector3[])
-            {
-                writer.WriteElementString(name, ToString(obj as Vector3[]));
-                return;
-            }
-            if (obj is LayerMask)
-            {
-                writer.WriteElementString(name, ((LayerMask)obj).value.ToString());
-                return;
-            }
-            if (obj is String)
-            {
-                writer.WriteElementString(name, obj.ToString());
-                return;
-            }
-            if (obj is UnityEngine.Object)
-            {
-                UnityEngine.Object theObject = (obj as UnityEngine.Object);
-                if (EditorUtility.GetPrefabType(theObject) == PrefabType.Prefab)
+                if (obj == null)
                 {
-                    writer.WriteElementString(name, AddPrefab(theObject));
+                    writer.WriteStartElement(name);
+                    writer.WriteAttributeString("Null", ToString(true));
+                    writer.WriteEndElement();
+                    return;
                 }
-                else
+                if (obj is float)
                 {
-                    writer.WriteElementString(name, theObject.GetInstanceID().ToString());
+                    writer.WriteElementString(name, ToString((float)obj));
+                    return;
                 }
-                return;
-            }
-            // Check if we have a Serializable class
-            if (obj.GetType().GetCustomAttributes(typeof(SerializableAttribute), true).Length > 0)
-            {
-                writer.WriteStartElement(name);
-                FieldInfo[] memInfo = obj.GetType().GetFields(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance);
-                for (int m = 0; m < memInfo.Length; m++)
+                if (obj is Boolean)
                 {
-                    if (memInfo[m].GetCustomAttributes(typeof(HideInInspector), true).Length > 0)
+                    writer.WriteElementString(name, ToString((Boolean)obj));
+                    return;
+                }
+                if (obj is int)
+                {
+                    writer.WriteElementString(name, ToString((int)obj));
+                    return;
+                }
+                if (obj is int[])
+                {
+                    writer.WriteElementString(name, ToString(obj as int[]));
+                    return;
+                }
+                if (obj is Vector3)
+                {
+                    writer.WriteElementString(name, ToString((Vector3)obj));
+                    return;
+                }
+                if (obj is Vector3[])
+                {
+                    writer.WriteElementString(name, ToString(obj as Vector3[]));
+                    return;
+                }
+                if (obj is LayerMask)
+                {
+                    writer.WriteElementString(name, ((LayerMask)obj).value.ToString());
+                    return;
+                }
+                if (obj is Material)
+                {
+                    Material mat = obj as Material;
+                    writer.WriteStartElement(name);
+                    writer.WriteElementString("shader", mat.shader.name);
+                    writer.WriteElementString("mainTexture", mat.mainTexture.name);
+                    writer.WriteElementString("mainTextureOffset", ToString(mat.mainTextureOffset));
+                    writer.WriteElementString("mainTextureScale", ToString(mat.mainTextureScale));
+                    writer.WriteEndElement();
+                    assetHelper.ExportTexture(mat.mainTexture as Texture2D);
+                    return;
+                }
+                if (obj is String)
+                {
+                    writer.WriteElementString(name, obj.ToString());
+                    return;
+                }
+                if (obj is UnityEngine.Object)
+                {
+                    UnityEngine.Object theObject = (obj as UnityEngine.Object);
+                    if (theObject == null)
                     {
-                        continue;
+                        writer.WriteStartElement(name);
+                        writer.WriteAttributeString("Null", ToString(true));
+                        writer.WriteEndElement();
+                        return;
                     }
-                    WriteElement(memInfo[m].Name, memInfo[m].GetValue(obj));
+                    if (EditorUtility.GetPrefabType(theObject) == PrefabType.Prefab)
+                    {
+                        writer.WriteElementString(name, AddPrefab(theObject));
+                    }
+                    else
+                    {
+                        writer.WriteElementString(name, theObject.GetInstanceID().ToString());
+                    }
+                    return;
                 }
-                writer.WriteEndElement();
-                return;
-            }
+                // Check if we have a Serializable class
+                if (obj.GetType().GetCustomAttributes(typeof(SerializableAttribute), true).Length > 0)
+                {
+                    writer.WriteStartElement(name);
+                    FieldInfo[] memInfo = obj.GetType().GetFields(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance);
+                    for (int m = 0; m < memInfo.Length; m++)
+                    {
+                        if (memInfo[m].GetCustomAttributes(typeof(HideInInspector), true).Length > 0)
+                        {
+                            continue;
+                        }
+                        WriteElement(memInfo[m].Name, memInfo[m].GetValue(obj));
+                    }
+                    writer.WriteEndElement();
+                    return;
+                }
 
-            writer.WriteElementString(name, obj.ToString());
+                writer.WriteElementString(name, obj.ToString());
+            }
+            catch (Exception ex)
+            {
+                Debug.Log("Exception when writing " + name + " with value " + obj + ": " + ex.Message);
+                throw;
+            }
         }
 
         private string AddPrefab(UnityEngine.Object theObject)
@@ -318,9 +345,19 @@ namespace PressPlay.FFWD.Exporter.Writers
             return sb.ToString();
         }
 
+        private string ToString(Vector2 vector2)
+        {
+            return vector2.x.ToString("0.#####", CultureInfo.InvariantCulture) + " " + vector2.y.ToString("0.#####", CultureInfo.InvariantCulture);
+        }
+
         private string ToString(Vector3 vector3)
         {
             return vector3.x.ToString("0.#####", CultureInfo.InvariantCulture) + " " + vector3.y.ToString("0.#####", CultureInfo.InvariantCulture) + " " + vector3.z.ToString("0.#####", CultureInfo.InvariantCulture);
+        }
+
+        private string ToString(Color c)
+        {
+            return ((int)(c.a * 255)).ToString("X") + ((int)(c.r * 255)).ToString("X") + ((int)(c.g * 255)).ToString("X") + ((int)(c.b * 255)).ToString("X");
         }
 
         private string ToString(Quaternion quaternion)

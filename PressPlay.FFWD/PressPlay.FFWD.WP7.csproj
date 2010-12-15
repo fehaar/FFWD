@@ -103,7 +103,9 @@
     <Compile Include="Components\Colliders\MeshCollider.cs" />
     <Compile Include="Components\Colliders\Rigidbody.cs" />
     <Compile Include="Components\Colliders\SphereCollider.cs" />
+    <Compile Include="Components\MeshFilter.cs" />
     <Compile Include="Components\Renderers\MeshRenderer.cs" />
+    <Compile Include="Components\Renderers\Renderer.cs" />
     <Compile Include="Components\Renderers\SkinnedMeshRenderer.cs" />
     <Compile Include="ContentHelper.cs" />
     <Compile Include="Debug.cs" />
@@ -118,7 +120,9 @@
     <Compile Include="Interfaces\IFixedUpdateable.cs" />
     <Compile Include="Interfaces\IRenderable.cs" />
     <Compile Include="Interfaces\IUpdateable.cs" />
+    <Compile Include="Material.cs" />
     <Compile Include="Mathf.cs" />
+    <Compile Include="Mesh.cs" />
     <Compile Include="MonoBehaviour.cs" />
     <Compile Include="ObjectReference.cs" />
     <Compile Include="GameObjectContactProcessor.cs" />

@@ -23,6 +23,7 @@ namespace PressPlay.FFWD
         public bool active { get; set; }
         public string tag { get; set; }
 
+        #region Component shortcut methods
         private Transform _transform;
         [ContentSerializerIgnore]
         public Transform transform 
@@ -64,6 +65,21 @@ namespace PressPlay.FFWD
                 return _collider;
             }
         }
+
+        private Renderer _renderer;
+        [ContentSerializerIgnore]
+        public Renderer renderer
+        {
+            get
+            {
+                if (_renderer == null)
+                {
+                    _renderer = GetComponent<Renderer>();
+                }
+                return _renderer;
+            }
+        }
+        #endregion
 
         //public String prefab { get; set; }
         [ContentSerializer(CollectionItemName = "component")]

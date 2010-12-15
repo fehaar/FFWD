@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace PressPlay.FFWD.Components
 {
-    public class SkinnedMeshRenderer : Component, IRenderable, Interfaces.IUpdateable
+    public class SkinnedMeshRenderer : Renderer, Interfaces.IUpdateable
     {
         #region Content properties
         [ContentSerializer(Optional=true)]
@@ -31,6 +31,9 @@ namespace PressPlay.FFWD.Components
         private Matrix[] boneTransforms;
         private AnimationPlayer animationPlayer;
         private int meshIndex = 0;
+
+        [ContentSerializerIgnore]
+        public Mesh sharedMesh;
 
         public override void Awake()
         {
@@ -86,7 +89,7 @@ namespace PressPlay.FFWD.Components
         #endregion
 
         #region IRenderable Members
-        public void Draw(SpriteBatch batch)
+        public override void Draw(SpriteBatch batch)
         {
             if (model == null)
             {
