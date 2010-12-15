@@ -603,9 +603,9 @@ namespace PressPlay.Tentacles.Scripts {
 		public bool hitObjectInLayer;
 		public Vector3 position;
 		public GameObject obj;
-		public string ToString()
+		public override string ToString()
 		{
-			return "hitObjectInLayer : "+hitObjectInLayer + " position : "+position;
+			return "hitObjectInLayer : " + hitObjectInLayer + " position : " + position;
 		}
 	}
 	

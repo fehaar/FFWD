@@ -44,7 +44,7 @@ namespace PressPlay.Tentacles.Scripts
 
 
             //seekPosition = Vector3.Lerp(transform.position + (transform.position-seekPosition).normalized * visualStats.curvature, seekPosition, 0.5f);
-            seekPosition = seekPosition + Vector3.Normalize(transform.position - seekPosition) * visualStats.curvature;
+            seekPosition = seekPosition + (transform.position - seekPosition).UnityNormalize() * visualStats.curvature;
             //seekPosition = Vector3.Lerp(seekPosition,backConnection.GetBackConnectionDirection() * (backConnection.transform.position - transform.position).magnitude, backConnectionRigidity);
             //seekPosition = Vector3.Lerp(seekPosition,frontConnection.GetFrontConnectionDirection() * (frontConnection.transform.position - transform.position).magnitude, frontConnectionRigidity);
 

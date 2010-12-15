@@ -20,7 +20,7 @@ namespace PressPlay.Tentacles.Scripts {
 		private TentacleJoint body;
 		private TentacleJoint tip;
 
-        //private SpriteSheetLineDrawer lineDrawer;
+        private SpriteSheetLineDrawer lineDrawer;
 		
 		private Vector3 bodyNormal;
 		private Vector3 tipNormal;
@@ -40,11 +40,11 @@ namespace PressPlay.Tentacles.Scripts {
 			useAnchor = _useAnchor;
 			
 			CreateJoints();
-			
-            //lineDrawer = (SpriteSheetLineDrawer)GetComponent(typeof(SpriteSheetLineDrawer));
-            //lineDrawer.startWidth = visualStats.startWidth;
-            //lineDrawer.endWidth = visualStats.endWidth;
-            //lineDrawer.Initialize();
+
+            lineDrawer = (SpriteSheetLineDrawer)GetComponent(typeof(SpriteSheetLineDrawer));
+            lineDrawer.startWidth = visualStats.startWidth;
+            lineDrawer.endWidth = visualStats.endWidth;
+            lineDrawer.Initialize();
 		}
 		
 		public TentacleJoint GetJoint(int index)
@@ -146,18 +146,19 @@ namespace PressPlay.Tentacles.Scripts {
 					joints[joints.Length-i-1].DoUpdate();
 				}
 			}
-			
-            //if (lineDrawer != null)
-            //{
-            //    jointPositions = new Vector3[joints.Length+2];
-            //    jointPositions[0] = body.transform.position;
-            //    jointPositions[joints.Length+1] = tip.transform.position;
-				
-            //    for (int i = 0; i < joints.Length; i++) {
-            //        jointPositions[i+1] = joints[i].transform.position;
-            //    }
-            //    lineDrawer.DrawLine(jointPositions);
-            //}
+
+            if (lineDrawer != null)
+            {
+                jointPositions = new Vector3[joints.Length + 2];
+                jointPositions[0] = body.transform.position;
+                jointPositions[joints.Length + 1] = tip.transform.position;
+
+                for (int i = 0; i < joints.Length; i++)
+                {
+                    jointPositions[i + 1] = joints[i].transform.position;
+                }
+                lineDrawer.DrawLine(jointPositions);
+            }
 		}
 		
 		public void Reset()
