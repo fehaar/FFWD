@@ -36,14 +36,5 @@ namespace PressPlay.FFWD
                     throw new Exception("Unknown enum " + ApplicationSettings.to2dMode);
             }
         }
-
-        public static Microsoft.Xna.Framework.Vector3 UnityNormalize(this Microsoft.Xna.Framework.Vector3 vector)
-        {
-            if (vector == Microsoft.Xna.Framework.Vector3.Zero)
-            {
-                return Microsoft.Xna.Framework.Vector3.Zero;
-            }
-            return Microsoft.Xna.Framework.Vector3.Normalize(vector);
-        }
     }
 }
