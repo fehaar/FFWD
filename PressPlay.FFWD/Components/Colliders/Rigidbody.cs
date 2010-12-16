@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
 using Box2D.XNA;
-using PressPlay.FFWD.Extensions;
+using PressPlay.FFWD;
 
 namespace PressPlay.FFWD.Components
 {
@@ -52,7 +52,12 @@ namespace PressPlay.FFWD.Components
             }
         }
 
-        public void AddForce(Vector3 elasticityForce, ForceMode mode = ForceMode.Force)
+        public void AddForce(Vector3 elasticityForce)
+        {
+            AddForce(elasticityForce, ForceMode.Force);
+        }
+
+        public void AddForce(Vector3 elasticityForce, ForceMode mode)
         {
             switch (mode)
             {
@@ -67,6 +72,19 @@ namespace PressPlay.FFWD.Components
                 case ForceMode.VelocityChange:
                     break;
             }
+        }
+
+        public void MovePosition(Vector3 position)
+        {
+            if (body != null)
+            {
+                body.SetTransform(position.To2d(), body.GetAngle());
+            }
+        }
+
+        internal void MoveRotation(Quaternion localRotation)
+        {
+            // TODO: This does not work yet...
         }
     }
 }

@@ -28,7 +28,7 @@ namespace PressPlay.FFWD
             set
             {
                 _localPosition = value;
-                _hasDirtyWorld = true;
+                hasDirtyWorld = true;
             }
         }
 
@@ -70,7 +70,7 @@ namespace PressPlay.FFWD
             set
             {
                 _localScale = value;
-                _hasDirtyWorld = true;
+                hasDirtyWorld = true;
             }
         }
 
@@ -84,7 +84,7 @@ namespace PressPlay.FFWD
             set
             {
                 _localRotation = value;
-                _hasDirtyWorld = true;
+                hasDirtyWorld = true;
             }
         }
 
@@ -121,24 +121,28 @@ namespace PressPlay.FFWD
                 }
                 _parent.children.Add(gameObject);
                 position = pos;
-                _hasDirtyWorld = true;
+                hasDirtyWorld = true;
             }
         }
 
         private Matrix _world = Matrix.Identity;
 
         private bool _hasDirtyWorld = true;
-        internal bool hasDirtyWorld
+        private bool hasDirtyWorld
         {
             get
             {
-                if (_parent == null)
+                return _hasDirtyWorld;
+            }
+            set
+            {
+                _hasDirtyWorld = value;
+                if (children != null)
                 {
-                    return _hasDirtyWorld;
-                }
-                else
-                {
-                    return _hasDirtyWorld || _parent.hasDirtyWorld;
+                    for (int i = 0; i < children.Count; i++)
+                    {
+                        children[i].transform.hasDirtyWorld = true;
+                    }
                 }
             }
         }
@@ -168,6 +172,19 @@ namespace PressPlay.FFWD
             }
         }
 
+        internal void SetPositionFromPhysics(Vector3 pos, float ang)
+        {
+            if (parent == null)
+            {
+                localPosition = pos;
+            }
+            else
+            {
+                localPosition = pos - parent.position;
+            }
+            localRotation = Quaternion.CreateFromAxisAngle(Vector3.UnitY, ang);
+        }
+
         [ContentSerializerIgnore]
         public Vector3 position
         {
@@ -183,7 +200,12 @@ namespace PressPlay.FFWD
                 }
                 else
                 {
-                    localPosition = value - parent.position;
+                    Vector3 trans = Vector3.Transform(value, Matrix.Invert(parent.world));
+                    localPosition = trans;
+                }
+                if (rigidbody != null)
+                {
+                    rigidbody.MovePosition(position);
                 }
             }
         }
@@ -251,42 +273,19 @@ namespace PressPlay.FFWD
             set
             {
                 localRotation = Quaternion.CreateFromAxisAngle(Vector3.UnitY, value);
+                if (rigidbody != null)
+                {
+                    rigidbody.MoveRotation(localRotation);
+                }
             }
         }
-
-        //[ContentSerializerIgnore]
-        //public Vector3 up
-        //{
-        //    get
-        //    {
-        //        return world.Up;
-        //    }
-        //    set
-        //    {
-        //        _world.Up = value;
-        //        WorldChanged();
-        //    }
-        //}
-
-        //[ContentSerializerIgnore]
-        //public Vector3 forward
-        //{
-        //    get
-        //    {
-        //        return world.Forward;
-        //    }
-        //    set
-        //    {
-        //        _world.Forward = value;
-        //        WorldChanged();
-        //    }
-        //}
 
         public void Rotate(Vector3 axis, float angle, Space relativeTo)
         {
             angle = MathHelper.ToRadians(angle);
             if (relativeTo == Space.World)
             {
+                // TODO: This will have issues with parent rotations
                 Matrix rot;
                 Matrix.CreateFromAxisAngle(ref axis, angle, out rot);
                 Matrix.Multiply(ref _world, ref rot, out _world);
@@ -297,15 +296,24 @@ namespace PressPlay.FFWD
                 Quaternion q;
                 Quaternion.CreateFromAxisAngle(ref axis, angle, out q);
                 Quaternion.Multiply(ref _localRotation, ref q, out _localRotation);
-                _hasDirtyWorld = true;
+                hasDirtyWorld = true;
             }
         }
 
         public void LookAt(Vector3 worldPosition, Vector3 worldUp)
         {
-            // TODO: Something is off here...
-            _world = Matrix.CreateWorld(position, worldPosition - position, worldUp);
-            WorldChanged();
+            Matrix m = Matrix.CreateWorld(position, worldPosition - position, worldUp);
+            Vector3 scale;
+            Quaternion rot;
+            Vector3 pos;
+            if (m.Decompose(out scale, out rot, out pos))
+            {
+                localRotation = rot;
+                if (rigidbody != null)
+                {
+                    rigidbody.MoveRotation(localRotation);
+                }
+            }
         }
 
         //TODO: Implement LookAt
@@ -316,7 +324,6 @@ namespace PressPlay.FFWD
 
         public void LookAt(Vector3 worldPosition)
         {
-            // TODO: Something is off here...
             LookAt(worldPosition, Vector3.UnitY);
         }
 
@@ -330,7 +337,7 @@ namespace PressPlay.FFWD
                 _localScale = scale;
                 _localRotation = rot;
                 _localPosition = pos;
-                _hasDirtyWorld = false;
+                hasDirtyWorld = false;
             }
         }
 
@@ -361,6 +368,29 @@ namespace PressPlay.FFWD
             {
                 return world.Up;
             }
+        }
+
+        [ContentSerializerIgnore]
+        public Transform root 
+        { 
+            get
+            {
+                if (parent != null)
+                {
+                    return parent.root;
+                }
+                return this;
+            }
+        }
+
+        public Vector3 TransformPoint(Vector3 position)
+        {
+            return Vector3.Transform(position, world);
+        }
+
+        public Vector3 InverseTransformPoint(Vector3 position)
+        {
+            return Vector3.Transform(position, Matrix.Invert(world));
         }
     }
 }

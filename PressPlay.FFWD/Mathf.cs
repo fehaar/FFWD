@@ -12,13 +12,9 @@ namespace PressPlay.FFWD
     /// </summary>
     public static class Mathf
     {
-        public static float PI
-        {
-            get
-            {
-                return MathHelper.Pi;
-            }
-        }
+        public const float PI = MathHelper.Pi;
+        public const float Infinity = float.PositiveInfinity;
+        public const float Rad2Deg = 360 / MathHelper.TwoPi;
 
         public static float Cos(float value)
         {
@@ -55,9 +51,24 @@ namespace PressPlay.FFWD
             return Math.Min(x, y);
         }
 
+        public static int Min(int x, int y)
+        {
+            return Math.Min(x, y);
+        }
+
         public static float Max(float x, float y)
         {
             return Math.Max(x, y);
+        }
+
+        public static int Max(int x, int y)
+        {
+            return Math.Max(x, y);
+        }
+
+        public static float Atan2(float x, float y)
+        {
+            return (float)Math.Atan2(x, y);
         }
     }
 }

@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using PressPlay.FFWD.Interfaces;
-using PressPlay.FFWD.Extensions;
+using PressPlay.FFWD;
 using Box2D.XNA;
 
 namespace PressPlay.FFWD.Components

@@ -2,23 +2,21 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using PressPlay.FFWD.Interfaces;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Content;
 
 namespace PressPlay.FFWD.Components
 {
-    public abstract class Renderer : Component
+    public abstract class Renderer : Component, IRenderable
     {
-
         public Material material;
         public List<Material> materials;
-
-        public override void Awake()
-        {
-            base.Awake();
-        }
-
-        public override void Start()
-        {
-            base.Start();
-        }
+        [ContentSerializerIgnore]
+        public Material sharedMaterial { get; set; }
+        
+        #region IRenderable Members
+        public abstract void Draw(SpriteBatch batch);
+        #endregion
     }
 }

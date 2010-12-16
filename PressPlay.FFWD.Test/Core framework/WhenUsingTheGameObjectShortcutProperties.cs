@@ -77,7 +77,33 @@ namespace PressPlay.FFWD.Test.Core_framework
             Assert.That(inst.collider, Is.Not.Null);
             Assert.That(inst.collider, Is.Not.SameAs(body));
         }
-	
+
+        [Test]
+        public void WeWillGetTheRendererIfItIsThere()
+        {
+            GameObject go = new GameObject();
+
+            Assert.That(go.renderer, Is.Null);
+
+            Renderer body = new MeshRenderer();
+            go.AddComponent(body);
+
+            Assert.That(go.renderer, Is.Not.Null);
+            Assert.That(go.renderer, Is.SameAs(body));
+        }
+
+        [Test]
+        public void WeWillGetTheCorrectRendererAfterAnInstantiation()
+        {
+            GameObject go = new GameObject();
+            Renderer body = new MeshRenderer();
+            go.AddComponent(body);
+            Assert.That(go.renderer, Is.Not.Null);
+
+            GameObject inst = (GameObject)GameObject.Instantiate(go);
+            Assert.That(inst.renderer, Is.Not.Null);
+            Assert.That(inst.renderer, Is.Not.SameAs(body));
+        }
 	
     }
 }

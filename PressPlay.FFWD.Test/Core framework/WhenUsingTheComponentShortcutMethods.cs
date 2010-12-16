@@ -39,6 +39,13 @@ namespace PressPlay.FFWD.Test.Core_framework
         }
 
         [Test]
+        public void IfTheComponentHasNoGameObjectTransformWillBeNull()
+        {
+            TestComponent comp = new TestComponent();
+            Assert.That(comp.transform, Is.Null);
+        }
+
+        [Test]
         public void WeWillGetTheRigidBodyIfItIsThere()
         {
             Assert.That(comp.rigidbody, Is.Null);
@@ -60,6 +67,13 @@ namespace PressPlay.FFWD.Test.Core_framework
             TestComponent inst = (TestComponent)GameObject.Instantiate(comp);
             Assert.That(inst.rigidbody, Is.Not.Null);
             Assert.That(inst.rigidbody, Is.Not.SameAs(body));
+        }
+
+        [Test]
+        public void IfTheComponentHasNoGameObjectRigidbodyWillBeNull()
+        {
+            TestComponent comp = new TestComponent();
+            Assert.That(comp.rigidbody, Is.Null);
         }
 
         [Test]
@@ -86,5 +100,12 @@ namespace PressPlay.FFWD.Test.Core_framework
             Assert.That(inst.collider, Is.Not.SameAs(body));
         }
 
+
+        [Test]
+        public void IfTheComponentHasNoGameObjectColliderWillBeNull()
+        {
+            TestComponent comp = new TestComponent();
+            Assert.That(comp.collider, Is.Null);
+        }
     }
 }

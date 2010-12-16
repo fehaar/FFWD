@@ -106,11 +106,15 @@
     <Compile Include="Components\Renderers\Renderer.cs" />
     <Compile Include="Components\Colliders\Rigidbody.cs" />
     <Compile Include="Components\Colliders\SphereCollider.cs" />
+    <Compile Include="Components\MeshFilter.cs" />
     <Compile Include="Components\Renderers\SpriteRenderer.cs" />
     <Compile Include="Components\Renderers\MeshRenderer.cs" />
+    <Compile Include="Components\Renderers\Renderer.cs" />
     <Compile Include="Components\Renderers\SkinnedMeshRenderer.cs" />
     <Compile Include="ContentHelper.cs" />
     <Compile Include="Debug.cs" />
+    <Compile Include="Extensions\PlaneExtensions.cs" />
+    <Compile Include="Extensions\QuaternionHelpers.cs" />
     <Compile Include="Extensions\VectorExtensions.cs" />
     <Compile Include="Application.cs" />
     <Compile Include="GameObject.cs" />
@@ -123,6 +127,7 @@
     <Compile Include="iTween\iTween.cs" />
     <Compile Include="Material.cs" />
     <Compile Include="Mathf.cs" />
+    <Compile Include="Mesh.cs" />
     <Compile Include="MonoBehaviour.cs" />
     <Compile Include="ObjectReference.cs" />
     <Compile Include="GameObjectContactProcessor.cs" />
@@ -148,6 +153,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Reference Include="Microsoft.Phone, Version=7.0.0.0, Culture=neutral, PublicKeyToken=24eec0d8c86cda1e, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Xna.Framework">
       <Private>False</Private>
     </Reference>

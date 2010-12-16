@@ -59,7 +59,6 @@
     <Compile Include="Writers\Components\ColliderWriter.cs" />
     <Compile Include="Writers\Components\GenericComponentWriter.cs" />
     <Compile Include="Writers\Components\ManualScriptWriter.cs" />
-    <Compile Include="Writers\Components\Extensions\PackedSpriteWriter.cs" />
     <Compile Include="Writers\Components\MonoBehaviourWriter.cs" />
     <Compile Include="Writers\Components\RigidbodyWriter.cs" />
     <Compile Include="Writers\Components\SphereColliderWriter.cs" />

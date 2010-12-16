@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace PressPlay.FFWD.Components
 {
-    public class SkinnedMeshRenderer : Component, IRenderable, Interfaces.IUpdateable
+    public class SkinnedMeshRenderer : Renderer, Interfaces.IUpdateable
     {
         #region Content properties
         [ContentSerializer(Optional=true)]
@@ -31,6 +31,9 @@ namespace PressPlay.FFWD.Components
         private Matrix[] boneTransforms;
         private AnimationPlayer animationPlayer;
         private int meshIndex = 0;
+
+        [ContentSerializerIgnore]
+        public Mesh sharedMesh;
 
         public override void Awake()
         {
@@ -69,7 +72,7 @@ namespace PressPlay.FFWD.Components
                 animationPlayer.StartClip(clip);
                 // NOTE: I am trying to use scale to make the model smaller... 
                 // The reasoning is that in some way the model is drawn larger than it is due to the scale - but I am grabbing at straws.
-                animationPlayer.Update(0.0f, true, Matrix.Invert(Matrix.CreateScale(transform.lossyScale)));
+                //animationPlayer.Update(0.0f, true, Matrix.Invert(Matrix.CreateScale(transform.lossyScale)));
             }
         }
 
@@ -79,21 +82,19 @@ namespace PressPlay.FFWD.Components
         {
             if (animationPlayer != null)
             {
-                //animationPlayer.Update(Time.deltaTime, true, Matrix.Identity);
+                animationPlayer.Update(0.0f, true, transform.world);
             }
         }
 
         #endregion
 
         #region IRenderable Members
-        public void Draw(SpriteBatch batch)
+        public override void Draw(SpriteBatch batch)
         {
             if (model == null)
             {
                 return;
             }
-            
-            Matrix world = transform.world;
             
             // Do we have negative scale - if so, switch culling
             RasterizerState oldRaster = batch.GraphicsDevice.RasterizerState;
@@ -122,12 +123,9 @@ namespace PressPlay.FFWD.Components
 
                 SkinnedEffect sEffect = mesh.Effects[e] as SkinnedEffect;
                 sEffect.SetBoneTransforms(bones);
-                sEffect.World = world;
                 sEffect.View = Camera.main.View();
                 sEffect.Projection = Camera.main.projectionMatrix;
-                sEffect.EnableDefaultLighting();
-                sEffect.SpecularColor = new Vector3(0.25f);
-                sEffect.SpecularPower = 16;
+                sEffect.AmbientLightColor = new Vector3(1);
                 sEffect.Texture = tex;
                 mesh.Draw();
             }

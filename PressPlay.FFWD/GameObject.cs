@@ -31,7 +31,8 @@ namespace PressPlay.FFWD
         public bool active { get; set; }
         public string tag { get; set; }
 
-        private Rigidbody _rigidbody;
+        #region Component shortcut methods
+        private Transform _transform;
         [ContentSerializerIgnore]
         public Rigidbody rigidbody
         {
@@ -73,6 +74,21 @@ namespace PressPlay.FFWD
             }
         }
 
+        private Renderer _renderer;
+        [ContentSerializerIgnore]
+        public Renderer renderer
+        {
+            get
+            {
+                if (_renderer == null)
+                {
+                    _renderer = GetComponent<Renderer>();
+                }
+                return _renderer;
+            }
+        }
+        #endregion
+
         //public String prefab { get; set; }
         [ContentSerializer(CollectionItemName = "component")]
         private List<Component> components { get; set; }
@@ -105,19 +121,10 @@ namespace PressPlay.FFWD
             return component;
         }
 
-        protected Renderer _renderer;
-
-        public Renderer renderer
+        public Component AddComponent(Type tp)
         {
-            get
-            {
-                if (_renderer == null)
-                {
-                    _renderer = GetComponent<Renderer>();
-                }
-
-                return _renderer;
-            }
+            Component cmp = Activator.CreateInstance(tp) as Component;
+            return AddComponent(cmp);
         }
 
         protected AudioSource _audio;
@@ -517,6 +524,7 @@ namespace PressPlay.FFWD
         #region Unity methods
         public void SetActiveRecursively(bool _status)
         {
+            // TODO: Create this method
         }
         #endregion
 

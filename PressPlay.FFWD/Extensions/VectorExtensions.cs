@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 
-namespace PressPlay.FFWD.Extensions
+namespace PressPlay.FFWD
 {
     public static class VectorExtensions
     {
@@ -39,6 +39,15 @@ namespace PressPlay.FFWD.Extensions
                 default:
                     throw new Exception("Unknown enum " + to2dMode);
             }
+        }
+
+        public static Vector3 UnityNormalize(this Vector3 vector)
+        {
+            if (vector == Vector3.Zero)
+            {
+                return Vector3.Zero;
+            }
+            return Vector3.Normalize(vector);
         }
     }
 }
