@@ -8,7 +8,7 @@ namespace PressPlay.FFWD.Extensions
 {
     public static class QuaternionHelpers
     {
-        public static Vector3 eulerAngles(this Quaternion q1)
+        public static Microsoft.Xna.Framework.Vector3 eulerAngles(this Quaternion q1)
         {
             //Heading = rotation about y axis
             //Attitude = rotation about z axis
@@ -24,8 +24,8 @@ namespace PressPlay.FFWD.Extensions
             //  which gives:
             //      heading = -2 * atan2(x,w)
             //      bank = 0
-            Vector3 radAngles = new Vector3();
-            Vector3 angles = new Vector3();
+            Microsoft.Xna.Framework.Vector3 radAngles = new Microsoft.Xna.Framework.Vector3();
+            Microsoft.Xna.Framework.Vector3 angles = new Microsoft.Xna.Framework.Vector3();
             double test = q1.X * q1.Y + q1.Z * q1.W;
             if (test > 0.499)// singularity at north pole
             {
@@ -64,7 +64,7 @@ namespace PressPlay.FFWD.Extensions
             return Quaternion.CreateFromYawPitchRoll(MathHelper.ToRadians(y), MathHelper.ToRadians(x), MathHelper.ToRadians(z));
         }
 
-        public static Quaternion Euler(this Quaternion q, Vector3 vec)
+        public static Quaternion Euler(this Quaternion q, Microsoft.Xna.Framework.Vector3 vec)
         {
             return q.Euler(vec.X, vec.Y, vec.Z);
         }

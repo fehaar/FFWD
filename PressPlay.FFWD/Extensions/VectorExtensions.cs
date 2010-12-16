@@ -2,52 +2,48 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.Xna.Framework;
 
 namespace PressPlay.FFWD
 {
     public static class VectorExtensions
     {
-        public enum To2dMode { DropX, DropY, DropZ };
-        public static To2dMode to2dMode = To2dMode.DropY;
-
-        public static Vector2 To2d(this Vector3 vector)
+        public static Microsoft.Xna.Framework.Vector2 To2d(this Microsoft.Xna.Framework.Vector3 vector)
         {
-            switch (to2dMode)
+            switch (ApplicationSettings.to2dMode)
             {
-                case To2dMode.DropX:
-                    return new Vector2(vector.Y, vector.Z);
-                case To2dMode.DropY:
-                    return new Vector2(vector.X, vector.Z);
-                case To2dMode.DropZ:
-                    return new Vector2(vector.X, vector.Y);
+                case ApplicationSettings.To2dMode.DropX:
+                    return new Microsoft.Xna.Framework.Vector2(vector.Y, vector.Z);
+                case ApplicationSettings.To2dMode.DropY:
+                    return new Microsoft.Xna.Framework.Vector2(vector.X, vector.Z);
+                case ApplicationSettings.To2dMode.DropZ:
+                    return new Microsoft.Xna.Framework.Vector2(vector.X, vector.Y);
                 default:
-                    throw new Exception("Unknown enum " + to2dMode);
+                    throw new Exception("Unknown enum " + ApplicationSettings.to2dMode);
             }
         }
 
-        public static Vector3 To3d(this Vector2 vector)
+        public static Microsoft.Xna.Framework.Vector3 To3d(this Microsoft.Xna.Framework.Vector2 vector)
         {
-            switch (to2dMode)
+            switch (ApplicationSettings.to2dMode)
             {
-                case To2dMode.DropX:
-                    return new Vector3(0, vector.X, vector.Y);
-                case To2dMode.DropY:
-                    return new Vector3(vector.X, 0, vector.Y);
-                case To2dMode.DropZ:
-                    return new Vector3(vector.X, vector.Y, 0);
+                case ApplicationSettings.To2dMode.DropX:
+                    return new Microsoft.Xna.Framework.Vector3(0, vector.X, vector.Y);
+                case ApplicationSettings.To2dMode.DropY:
+                    return new Microsoft.Xna.Framework.Vector3(vector.X, 0, vector.Y);
+                case ApplicationSettings.To2dMode.DropZ:
+                    return new Microsoft.Xna.Framework.Vector3(vector.X, vector.Y, 0);
                 default:
-                    throw new Exception("Unknown enum " + to2dMode);
+                    throw new Exception("Unknown enum " + ApplicationSettings.to2dMode);
             }
         }
 
-        public static Vector3 UnityNormalize(this Vector3 vector)
+        public static Microsoft.Xna.Framework.Vector3 UnityNormalize(this Microsoft.Xna.Framework.Vector3 vector)
         {
-            if (vector == Vector3.Zero)
+            if (vector == Microsoft.Xna.Framework.Vector3.Zero)
             {
-                return Vector3.Zero;
+                return Microsoft.Xna.Framework.Vector3.Zero;
             }
-            return Vector3.Normalize(vector);
+            return Microsoft.Xna.Framework.Vector3.Normalize(vector);
         }
     }
 }

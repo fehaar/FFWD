@@ -48,7 +48,7 @@ namespace PressPlay.FFWD.Components
             }
             set
             {
-                body.SetLinearVelocity(value.To2d());
+                body.SetLinearVelocity(value);
             }
         }
 
@@ -62,12 +62,12 @@ namespace PressPlay.FFWD.Components
             switch (mode)
             {
                 case ForceMode.Force:
-                    body.ApplyForce(elasticityForce.To2d(), gameObject.transform.position.To2d());
+                    body.ApplyForce(elasticityForce, gameObject.transform.position);
                     break;
                 case ForceMode.Acceleration:
                     break;
                 case ForceMode.Impulse:
-                    body.ApplyLinearImpulse(elasticityForce.To2d(), gameObject.transform.position.To2d());
+                    body.ApplyLinearImpulse(elasticityForce, gameObject.transform.position);
                     break;
                 case ForceMode.VelocityChange:
                     break;
@@ -78,7 +78,7 @@ namespace PressPlay.FFWD.Components
         {
             if (body != null)
             {
-                body.SetTransform(position.To2d(), body.GetAngle());
+                body.SetTransform(position, body.GetAngle());
             }
         }
 

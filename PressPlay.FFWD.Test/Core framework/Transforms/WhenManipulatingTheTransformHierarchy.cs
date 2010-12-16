@@ -101,7 +101,7 @@ namespace PressPlay.FFWD.Test.Core_framework.Transforms
 
             Vector3 childPos = child.position;
             child.parent = trans;
-            Assert.That((child.position - childPos).LengthSquared(), Is.LessThan(0.000001f));
+            Assert.That((child.position - childPos).sqrMagnitude, Is.LessThan(0.000001f));
         }
 
         [Test]

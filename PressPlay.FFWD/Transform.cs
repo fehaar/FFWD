@@ -14,7 +14,7 @@ namespace PressPlay.FFWD
         public Transform()
         {
             localRotation = Quaternion.Identity;
-            localScale = Vector3.One;
+            localScale = Vector3.one;
         }
 
         private Vector3 _localPosition;
@@ -153,7 +153,7 @@ namespace PressPlay.FFWD
             {
                 localPosition = pos - parent.position;
             }
-            localRotation = Quaternion.CreateFromAxisAngle(Vector3.UnitY, ang);
+            localRotation = Quaternion.CreateFromAxisAngle(Vector3.up, ang);
         }
 
         [ContentSerializerIgnore]
@@ -171,7 +171,7 @@ namespace PressPlay.FFWD
                 }
                 else
                 {
-                    Vector3 trans = Vector3.Transform(value, Matrix.Invert(parent.world));
+                    Vector3 trans = Microsoft.Xna.Framework.Vector3.Transform(value, Matrix.Invert(parent.world));
                     localPosition = trans;
                 }
                 if (rigidbody != null)
@@ -192,9 +192,9 @@ namespace PressPlay.FFWD
                 }
                 else
                 {
-                    Vector3 scale;
-                    Quaternion rot;
-                    Vector3 pos;
+                    Microsoft.Xna.Framework.Vector3 scale;
+                    Microsoft.Xna.Framework.Quaternion rot;
+                    Microsoft.Xna.Framework.Vector3 pos;
                     world.Decompose(out scale, out rot, out pos);
                     return scale;
                 }
@@ -212,9 +212,9 @@ namespace PressPlay.FFWD
                 }
                 else
                 {
-                    Vector3 scale;
-                    Quaternion rot;
-                    Vector3 pos;
+                    Microsoft.Xna.Framework.Vector3 scale;
+                    Microsoft.Xna.Framework.Quaternion rot;
+                    Microsoft.Xna.Framework.Vector3 pos;
                     world.Decompose(out scale, out rot, out pos);
                     return rot;
                 }
@@ -230,8 +230,8 @@ namespace PressPlay.FFWD
         {
             get
             {
-                Vector3 normFwd = Vector3.Normalize(world.Forward);
-                float dot = Vector3.Dot(normFwd, Vector3.Forward);
+                Vector3 normFwd = Microsoft.Xna.Framework.Vector3.Normalize(world.Forward);
+                float dot = Vector3.Dot(normFwd, Vector3.forward);
                 if (world.Forward.X > 0)
                 {
                     return (float)Math.Acos(dot);
@@ -243,7 +243,7 @@ namespace PressPlay.FFWD
             }
             set
             {
-                localRotation = Quaternion.CreateFromAxisAngle(Vector3.UnitY, value);
+                localRotation = Quaternion.CreateFromAxisAngle(Vector3.up, value);
                 if (rigidbody != null)
                 {
                     rigidbody.MoveRotation(localRotation);
@@ -251,7 +251,7 @@ namespace PressPlay.FFWD
             }
         }
 
-        public void Rotate(Vector3 axis, float angle, Space relativeTo)
+        public void Rotate(Microsoft.Xna.Framework.Vector3 axis, float angle, Space relativeTo)
         {
             angle = MathHelper.ToRadians(angle);
             if (relativeTo == Space.World)
@@ -274,9 +274,9 @@ namespace PressPlay.FFWD
         public void LookAt(Vector3 worldPosition, Vector3 worldUp)
         {
             Matrix m = Matrix.CreateWorld(position, worldPosition - position, worldUp);
-            Vector3 scale;
+            Microsoft.Xna.Framework.Vector3 scale;
             Quaternion rot;
-            Vector3 pos;
+            Microsoft.Xna.Framework.Vector3 pos;
             if (m.Decompose(out scale, out rot, out pos))
             {
                 localRotation = rot;
@@ -289,14 +289,14 @@ namespace PressPlay.FFWD
 
         public void LookAt(Vector3 worldPosition)
         {
-            LookAt(worldPosition, Vector3.UnitY);
+            LookAt(worldPosition, Vector3.up);
         }
 
         private void WorldChanged()
         {
-            Vector3 scale;
+            Microsoft.Xna.Framework.Vector3 scale;
             Quaternion rot;
-            Vector3 pos;
+            Microsoft.Xna.Framework.Vector3 pos;
             if (_world.Decompose(out scale, out rot, out pos))
             {
                 _localScale = scale;
@@ -345,12 +345,12 @@ namespace PressPlay.FFWD
 
         public Vector3 TransformPoint(Vector3 position)
         {
-            return Vector3.Transform(position, world);
+            return Microsoft.Xna.Framework.Vector3.Transform(position, world);
         }
 
         public Vector3 InverseTransformPoint(Vector3 position)
         {
-            return Vector3.Transform(position, Matrix.Invert(world));
+            return Microsoft.Xna.Framework.Vector3.Transform(position, Matrix.Invert(world));
         }
     }
 }

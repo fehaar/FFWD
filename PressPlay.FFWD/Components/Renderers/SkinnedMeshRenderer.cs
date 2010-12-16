@@ -100,7 +100,7 @@ namespace PressPlay.FFWD.Components
             RasterizerState oldRaster = batch.GraphicsDevice.RasterizerState;
             BlendState oldBlend = batch.GraphicsDevice.BlendState;
             SamplerState oldSample = batch.GraphicsDevice.SamplerStates[0];
-            if (transform.lossyScale.X < 0 || transform.lossyScale.Y < 0 || transform.lossyScale.Z < 0)
+            if (transform.lossyScale.x < 0 || transform.lossyScale.y < 0 || transform.lossyScale.z < 0)
             {
                 batch.GraphicsDevice.RasterizerState = new RasterizerState() { FillMode = oldRaster.FillMode, CullMode = CullMode.CullClockwiseFace };
             }
@@ -130,7 +130,7 @@ namespace PressPlay.FFWD.Components
                 mesh.Draw();
             }
 
-            if (transform.lossyScale.X < 0 || transform.lossyScale.Y < 0 || transform.lossyScale.Z < 0)
+            if (transform.lossyScale.x < 0 || transform.lossyScale.y < 0 || transform.lossyScale.z < 0)
             {
                 batch.GraphicsDevice.RasterizerState = oldRaster;
             }

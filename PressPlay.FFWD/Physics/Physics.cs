@@ -69,13 +69,13 @@ namespace PressPlay.FFWD
                 {
                     if (body.GetType() == BodyType.Static)
                     {
-                        body.SetTransform(comp.transform.position.To2d(), comp.transform.angleY);
+                        body.SetTransform(comp.transform.position, comp.transform.angleY);
                     }
                     else
                     {
                         Box2D.XNA.Transform t;
                         body.GetTransform(out t);
-                        comp.transform.SetPositionFromPhysics(t.Position.To3d(), t.GetAngle());
+                        comp.transform.SetPositionFromPhysics(t.Position, t.GetAngle());
                     }
                 }
                 body = body.GetNext();
@@ -205,17 +205,17 @@ namespace PressPlay.FFWD
 
         public static bool Raycast(Vector3 origin, Vector3 direction)
         {
-            return Raycast(origin.To2d(), direction.To2d(), Mathf.Infinity, kDefaultRaycastLayers);
+            return Raycast(origin, direction, Mathf.Infinity, kDefaultRaycastLayers);
         }
 
         public static bool Raycast(Vector3 origin, Vector3 direction, float distance)
         {
-            return Raycast(origin.To2d(), direction.To2d(), distance, kDefaultRaycastLayers);
+            return Raycast(origin, direction, distance, kDefaultRaycastLayers);
         }
 
         public static bool Raycast(Vector3 origin, Vector3 direction, float distance, int layerMask)
         {
-            return Raycast(origin.To2d(), direction.To2d(), distance, layerMask);
+            return Raycast(origin, direction, distance, layerMask);
         }
 
         public static bool Raycast(Vector2 origin, Vector2 direction, out RaycastHit hitInfo, float distance, int layerMask)
@@ -234,17 +234,17 @@ namespace PressPlay.FFWD
 
         public static bool Raycast(Vector3 origin, Vector3 direction, out RaycastHit hitInfo)
         {
-            return Raycast(origin.To2d(), direction.To2d(), out hitInfo, Mathf.Infinity, kDefaultRaycastLayers);
+            return Raycast(origin, direction, out hitInfo, Mathf.Infinity, kDefaultRaycastLayers);
         }
 
         public static bool Raycast(Vector3 origin, Vector3 direction, out RaycastHit hitInfo, float distance)
         {
-            return Raycast(origin.To2d(), direction.To2d(), out hitInfo, distance, kDefaultRaycastLayers);
+            return Raycast(origin, direction, out hitInfo, distance, kDefaultRaycastLayers);
         }
 
         public static bool Raycast(Vector3 origin, Vector3 direction, out RaycastHit hitInfo, float distance, int layerMask)
         {
-            return Raycast(origin.To2d(), direction.To2d(), out hitInfo, distance, layerMask);
+            return Raycast(origin, direction, out hitInfo, distance, layerMask);
         }
 
         public static bool Raycast(Ray ray)
@@ -301,22 +301,22 @@ namespace PressPlay.FFWD
 
         public static RaycastHit[] RaycastAll(Vector3 origin, Vector3 direction)
         {
-            return RaycastAll(origin.To2d(), direction.To2d(), Mathf.Infinity, kDefaultRaycastLayers);
+            return RaycastAll(origin, direction, Mathf.Infinity, kDefaultRaycastLayers);
         }
 
         public static RaycastHit[] RaycastAll(Vector3 origin, Vector3 direction, float distance)
         {
-            return RaycastAll(origin.To2d(), direction.To2d(), distance, kDefaultRaycastLayers);
+            return RaycastAll(origin, direction, distance, kDefaultRaycastLayers);
         }
 
         public static RaycastHit[] RaycastAll(Vector3 origin, Vector3 direction, float distance, int layerMask)
         {
-            return RaycastAll(origin.To2d(), direction.To2d(), distance, layerMask);
+            return RaycastAll(origin, direction, distance, layerMask);
         }
 
         public static RaycastHit[] RaycastAll(Ray ray, float distance, int layerMask)
         {
-            return RaycastAll(ray.Position.To2d(), ray.Direction.To2d(), distance, layerMask);
+            return RaycastAll(ray.Position, ray.Direction, distance, layerMask);
         }
         #endregion
 

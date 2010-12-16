@@ -26,7 +26,7 @@ namespace PressPlay.FFWD.Components
             _view = Matrix.CreateLookAt(
                 transform.localPosition,
                 transform.localPosition + forward,
-                Vector3.Transform(up, transform.localRotation));
+                Microsoft.Xna.Framework.Vector3.Transform(up, transform.localRotation));
             return _view;            
         }
 
@@ -37,7 +37,7 @@ namespace PressPlay.FFWD.Components
         {
             Vector3 near = viewPort.Unproject(new Vector3(screen.X, screen.Y, 0), projectionMatrix, View(), Matrix.Identity);
             Vector3 far = viewPort.Unproject(new Vector3(screen.X, screen.Y, 1), projectionMatrix, View(), Matrix.Identity);
-            return new Ray(near, Vector3.Normalize(far - near));
+            return new Ray(near, (far - near).normalized);
         }
     }
 }

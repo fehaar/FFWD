@@ -35,7 +35,7 @@ namespace PressPlay.FFWD.Components
 
         internal override BodyDef GetBodyDefinition()
         {
-            return new BodyDef() { position = transform.position.To2d(), angle = transform.angleY, userData = this };
+            return new BodyDef() { position = transform.position, angle = transform.angleY, userData = this };
         }
 
         internal override void AddCollider(Body body, float mass)
@@ -43,14 +43,14 @@ namespace PressPlay.FFWD.Components
             List<Vector2[]> tris = new List<Vector2[]>();
             for (int i = 0; i < triangles.Length; i += 3)
             {
-                if (vertices[triangles[i]].Y + vertices[triangles[i + 1]].Y + vertices[triangles[i + 2]].Y > 1)
+                if (vertices[triangles[i]].y + vertices[triangles[i + 1]].y + vertices[triangles[i + 2]].y > 1)
                 {
                     Debug.Log(" Warning: " + ToString() + " has non zero Y in collider");
                 }
                 Vector2[] tri = new Vector2[] { 
-                    new Vector2(vertices[triangles[i]].X, vertices[triangles[i]].Z),
-                    new Vector2(vertices[triangles[i + 2]].X, vertices[triangles[i + 2]].Z),
-                    new Vector2(vertices[triangles[i + 1]].X, vertices[triangles[i + 1]].Z)
+                    new Vector2(vertices[triangles[i]].x, vertices[triangles[i]].z),
+                    new Vector2(vertices[triangles[i + 2]].x, vertices[triangles[i + 2]].z),
+                    new Vector2(vertices[triangles[i + 1]].x, vertices[triangles[i + 1]].z)
                 };
                 tris.Add(tri);
             }
