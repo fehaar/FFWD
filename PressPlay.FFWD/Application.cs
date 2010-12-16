@@ -60,6 +60,7 @@ namespace PressPlay.FFWD
             base.Draw(gameTime);
 
             Color bg = new Color(78, 115, 74);
+
             for (int i = 0; i < activeComponents.Count; i++)
             {
                 if (!activeComponents[i].isStarted)
@@ -80,12 +81,36 @@ namespace PressPlay.FFWD
                 GraphicsDevice.DepthStencilState = DepthStencilState.Default;
                 GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
             }
+            List<IRenderable> deferred = new List<IRenderable>();
+            List<IRenderable> arms = new List<IRenderable>();
             for (int i = 0; i < activeComponents.Count; i++)
             {
                 if (activeComponents[i] is IRenderable)
                 {
+                    if (activeComponents[i] is MeshRenderer)
+                    {
+                        MeshRenderer r = (activeComponents[i] as MeshRenderer);
+                        if (r.shader == "iPhone/Particles/Additive Culled")
+                        {
+                            deferred.Add(activeComponents[i] as IRenderable);
+                            continue;
+                        }
+                        if (r.sharedMaterial != null)
+                        {
+                            arms.Add(activeComponents[i] as IRenderable);
+                            continue;
+                        }
+                    }
                     (activeComponents[i] as IRenderable).Draw(spriteBatch);
                 }
+            }
+            for (int i = 0; i < deferred.Count; i++)
+            {
+                (deferred[i] as IRenderable).Draw(spriteBatch);
+            }
+            for (int i = 0; i < arms.Count; i++)
+            {
+                (arms[i] as IRenderable).Draw(spriteBatch);
             }
         }
 

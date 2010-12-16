@@ -5,7 +5,9 @@ using System.Text;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
 using PressPlay.FFWD;
+#if WINDOWS_PHONE
 using Microsoft.Xna.Framework.Input.Touch;
+#endif
 
 namespace PressPlay.FFWD
 {
