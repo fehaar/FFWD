@@ -314,12 +314,6 @@ namespace PressPlay.FFWD
 
         }
 
-        //TODO: Implement LookAt
-        public void LookAt(Vector3 worldPosition, Vector3 worldUp)
-        {
-
-        }
-
         public void LookAt(Vector3 worldPosition)
         {
             // TODO: Something is off here...

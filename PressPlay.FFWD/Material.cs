@@ -10,5 +10,9 @@ namespace PressPlay.FFWD
     {
         public Color color;
 
+        public void SetColor(string name, Color color)
+        {
+            this.color = color;
+        }
     }
 }

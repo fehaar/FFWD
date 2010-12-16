@@ -6,6 +6,7 @@ using PressPlay.FFWD.Components;
 using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections;
 #endregion
 
 
@@ -3607,7 +3608,7 @@ namespace PressPlay.FFWD.iTween
                 else
                 {
                     //add and populate AudioSource if one doesn't exist:
-                    gameObject.AddComponent(typeof(AudioSource));
+                    gameObject.AddComponent(new AudioSource());
                     audioSource = audio;
                     audioSource.playOnAwake = false;
 
@@ -4754,9 +4755,9 @@ namespace PressPlay.FFWD.iTween
 
             //generate:
             float diminishingControl = 1 - percentage;
-            vector3s[2].X = UnityEngine.Random.Range(-vector3s[1].X * diminishingControl, vector3s[1].X * diminishingControl);
-            vector3s[2].Y = UnityEngine.Random.Range(-vector3s[1].Y * diminishingControl, vector3s[1].Y * diminishingControl);
-            vector3s[2].Z = UnityEngine.Random.Range(-vector3s[1].Z * diminishingControl, vector3s[1].Z * diminishingControl);
+            vector3s[2].X = Random.Range(-vector3s[1].X * diminishingControl, vector3s[1].X * diminishingControl);
+            vector3s[2].Y = Random.Range(-vector3s[1].Y * diminishingControl, vector3s[1].Y * diminishingControl);
+            vector3s[2].Z = Random.Range(-vector3s[1].Z * diminishingControl, vector3s[1].Z * diminishingControl);
 
             //apply:
             transform.Translate(vector3s[2], space);
@@ -4789,9 +4790,9 @@ namespace PressPlay.FFWD.iTween
 
             //generate:
             float diminishingControl = 1 - percentage;
-            vector3s[2].X = UnityEngine.Random.Range(-vector3s[1].X * diminishingControl, vector3s[1].X * diminishingControl);
-            vector3s[2].Y = UnityEngine.Random.Range(-vector3s[1].Y * diminishingControl, vector3s[1].Y * diminishingControl);
-            vector3s[2].Z = UnityEngine.Random.Range(-vector3s[1].Z * diminishingControl, vector3s[1].Z * diminishingControl);
+            vector3s[2].X = Random.Range(-vector3s[1].X * diminishingControl, vector3s[1].X * diminishingControl);
+            vector3s[2].Y = Random.Range(-vector3s[1].Y * diminishingControl, vector3s[1].Y * diminishingControl);
+            vector3s[2].Z = Random.Range(-vector3s[1].Z * diminishingControl, vector3s[1].Z * diminishingControl);
 
             //apply:
             transform.localScale += vector3s[2];
@@ -4812,9 +4813,9 @@ namespace PressPlay.FFWD.iTween
 
             //generate:
             float diminishingControl = 1 - percentage;
-            vector3s[2].X = UnityEngine.Random.Range(-vector3s[1].X * diminishingControl, vector3s[1].X * diminishingControl);
-            vector3s[2].Y = UnityEngine.Random.Range(-vector3s[1].Y * diminishingControl, vector3s[1].Y * diminishingControl);
-            vector3s[2].Z = UnityEngine.Random.Range(-vector3s[1].Z * diminishingControl, vector3s[1].Z * diminishingControl);
+            vector3s[2].X = Random.Range(-vector3s[1].X * diminishingControl, vector3s[1].X * diminishingControl);
+            vector3s[2].Y = Random.Range(-vector3s[1].Y * diminishingControl, vector3s[1].Y * diminishingControl);
+            vector3s[2].Z = Random.Range(-vector3s[1].Z * diminishingControl, vector3s[1].Z * diminishingControl);
 
             //apply:
             transform.Rotate(vector3s[2], space);
@@ -5269,10 +5270,6 @@ namespace PressPlay.FFWD.iTween
             {
                 colors[0] = colors[1] = target.renderer.material.color;
             }
-            else if (target.light)
-            {
-                colors[0] = colors[1] = target.light.color;
-            }
 
             //to values:
             if (args.ContainsKey("color"))
@@ -5283,19 +5280,19 @@ namespace PressPlay.FFWD.iTween
             {
                 if (args.ContainsKey("r"))
                 {
-                    colors[1].R = (float)args["r"];
+                    colors[1].R = (byte)((float)args["r"] * byte.MaxValue); //(float)args["r"];
                 }
                 if (args.ContainsKey("g"))
                 {
-                    colors[1].G = (float)args["g"];
+                    colors[1].G = (byte)((float)args["g"] * byte.MaxValue); //(float)args["g"];
                 }
                 if (args.ContainsKey("b"))
                 {
-                    colors[1].B = (float)args["b"];
+                    colors[1].B = (byte)((float)args["b"] * byte.MaxValue); //(float)args["b"];
                 }
                 if (args.ContainsKey("a"))
                 {
-                    colors[1].A = (float)args["a"];
+                    colors[1].A = (byte)((float)args["a"] * byte.MaxValue); //(float)args["a"];
                 }
             }
 
@@ -7134,6 +7131,8 @@ namespace PressPlay.FFWD.iTween
 
         private static void DrawLineHelper(Vector3[] line, Color color, string method)
         {
+            throw new NotImplementedException();
+            /*
             Gizmos.color = color;
             for (int i = 0; i < line.Length - 1; i++)
             {
@@ -7147,10 +7146,14 @@ namespace PressPlay.FFWD.iTween
                     //UnityEditor.Handles.DrawLine(line[i], line[i+1]);
                 }
             }
+             */
         }
 
         private static void DrawPathHelper(Vector3[] path, Color color, string method)
         {
+            throw new NotImplementedException();
+            
+            /*
             Vector3[] vector3s = PathControlPointGenerator(path);
 
             //Line Draw:
@@ -7171,7 +7174,7 @@ namespace PressPlay.FFWD.iTween
                     //UnityEditor.Handles.DrawLine(currPt, prevPt);
                 }
                 prevPt = currPt;
-            }
+            }*/
         }
 
         private static Vector3[] PathControlPointGenerator(Vector3[] path)
@@ -7263,7 +7266,7 @@ namespace PressPlay.FFWD.iTween
                 args["target"] = target;
             }
             tweens.Insert(0, args);
-            target.AddComponent("iTween");
+            target.AddComponent(new iTween());
         }
 
         //cast any accidentally supplied doubles and ints as floats as iTween only uses floats internally and unify parameter case:
@@ -7272,12 +7275,12 @@ namespace PressPlay.FFWD.iTween
             Dictionary<string, object> argsCopy = new Dictionary<string, object>(args.Count);
             Dictionary<string, object> argsCaseUnified = new Dictionary<string, object>(args.Count);
 
-            foreach (DictionaryEntry item in args)
+            foreach (KeyValuePair<string, object> item in args)
             {
                 argsCopy.Add(item.Key, item.Value);
             }
 
-            foreach (DictionaryEntry item in argsCopy)
+            foreach (KeyValuePair<string, object> item in argsCopy)
             {
                 if (item.Value.GetType() == typeof(System.Int32))
                 {
@@ -7294,7 +7297,7 @@ namespace PressPlay.FFWD.iTween
             }
 
             //unify parameter case:
-            foreach (DictionaryEntry item in args)
+            foreach (KeyValuePair<string, object> item in argsCopy)
             {
                 argsCaseUnified.Add(item.Key.ToString().ToLower(), item.Value);
             }
@@ -7314,7 +7317,7 @@ namespace PressPlay.FFWD.iTween
             string randomChar = "";
             for (int i = 0; i < strlen; i++)
             {
-                randomChar += chars[(int)Mathf.Floor(UnityEngine.Random.Range(0, num_chars))];
+                randomChar += chars[(int)Mathf.Floor(Random.Range(0, num_chars))];
             }
             return randomChar;
         }
@@ -7618,7 +7621,9 @@ namespace PressPlay.FFWD.iTween
                 //throw an error if a string wasn't passed for callback:
                 if (tweenArguments[callbackType].GetType() == typeof(System.String))
                 {
-                    target.SendMessage((string)tweenArguments[callbackType], (object)tweenArguments[callbackType + "params"], SendMessageOptions.DontRequireReceiver);
+                    // TODO Implement callback function
+                    throw new NotImplementedException("The callback function is not implemented yet");
+                    //target.SendMessage((string)tweenArguments[callbackType], (object)tweenArguments[callbackType + "params"], SendMessageOptions.DontRequireReceiver);
                 }
                 else
                 {
@@ -7661,7 +7666,7 @@ namespace PressPlay.FFWD.iTween
                     }
 
                     //step 2: side-by-side check to figure out if this is an identical tween scenario to handle Update usages of iTween:
-                    foreach (DictionaryEntry currentProp in tweenArguments)
+                    foreach (KeyValuePair<string, object> currentProp in tweenArguments)
                     {
                         if (!item.tweenArguments.ContainsKey(currentProp.Key))
                         {
@@ -7708,7 +7713,7 @@ namespace PressPlay.FFWD.iTween
 
         void ResumeDelay()
         {
-            StartCoroutine("TweenDelay");
+
         }
 
         #endregion	

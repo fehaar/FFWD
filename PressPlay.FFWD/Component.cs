@@ -59,15 +59,6 @@ namespace PressPlay.FFWD
         }
 
         [ContentSerializerIgnore]
-        public Rigidbody rigidbody
-        {
-            get
-            {
-                return gameObject.rigidbody;
-            }
-        }
-
-        [ContentSerializerIgnore]
         public Collider collider
         {
             get

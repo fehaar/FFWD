@@ -59,20 +59,6 @@ namespace PressPlay.FFWD
             }
         }
 
-        private Rigidbody _rigidbody;
-        [ContentSerializerIgnore]
-        public Rigidbody rigidbody 
-        {
-            get
-            {
-                if (_rigidbody == null)
-                {
-                    _rigidbody = GetComponent<Rigidbody>();
-                }
-                return _rigidbody;
-            }
-        }
-
         private Collider _collider;
         [ContentSerializerIgnore]
         public Collider collider
