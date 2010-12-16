@@ -24,6 +24,7 @@ namespace PressPlay.FFWD
 
         private Microsoft.Xna.Framework.Vector3 vector;
 
+        #region Properties
         public float x
         {
             get
@@ -60,6 +61,30 @@ namespace PressPlay.FFWD
             }
         }
 
+        public Vector3 normalized
+        {
+            get
+            {
+                return Microsoft.Xna.Framework.Vector3.Normalize(vector);
+            }
+        }
+
+        public float magnitude
+        {
+            get
+            {
+                return vector.Length();
+            }
+        }
+
+        public float sqrMagnitude
+        {
+            get
+            {
+                return vector.LengthSquared();
+            }
+        }
+
         public float this[int index]
         {
             get
@@ -74,7 +99,7 @@ namespace PressPlay.FFWD
                         return z;
                     default:
                         throw new IndexOutOfRangeException("You must use 0 (x), 1 (y) or 2 (z) as index to the vector.");
-                }                
+                }
             }
             set
             {
@@ -91,10 +116,12 @@ namespace PressPlay.FFWD
                         break;
                     default:
                         throw new IndexOutOfRangeException("You must use 0 (x), 1 (y) or 2 (z) as index to the vector.");
-                }                
+                }
             }
         }
+        #endregion
 
+        #region Operators
         public static implicit operator Microsoft.Xna.Framework.Vector3(Vector3 v)
         {
             return v.vector;
@@ -120,6 +147,11 @@ namespace PressPlay.FFWD
             return new Vector3(a.vector + b.vector);
         }
 
+        public static Vector3 operator -(Vector3 a)
+        {
+            return new Vector3(-a.vector);
+        }
+
         public static Vector3 operator -(Vector3 a, Vector3 b)
         {
             return new Vector3(a.vector - b.vector);
@@ -130,9 +162,19 @@ namespace PressPlay.FFWD
             return new Vector3(a.vector * b.vector);
         }
 
-        public static Vector3 operator /(Vector3 a, Vector3 b)
+        public static Vector3 operator *(float a, Vector3 b)
         {
-            return new Vector3(a.vector / b.vector);
+            return new Vector3(a * b.vector);
+        }
+
+        public static Vector3 operator *(Vector3 a, float b)
+        {
+            return new Vector3(a.vector * b);
+        }
+
+        public static Vector3 operator /(Vector3 a, float b)
+        {
+            return new Vector3(a.vector / b);
         }
 
         public static bool operator ==(Vector3 a, Vector3 b)
@@ -144,46 +186,9 @@ namespace PressPlay.FFWD
         {
             return a.vector != b.vector;
         }
+        #endregion
 
-        public Vector3 normalized
-        {
-            get
-            {
-                return Microsoft.Xna.Framework.Vector3.Normalize(vector);
-            }
-        }
-
-        public float magnitude
-        {
-            get
-            {
-                return vector.Length();
-            }
-        }
-
-        public float sqrMagnitude
-        {
-            get
-            {
-                return vector.LengthSquared();
-            }
-        }
-
-        public void Normalize()
-        {
-            vector.Normalize();
-        }
-
-        public static float Dot(Vector3 lhs, Vector3 rhs)
-        {
-            return Microsoft.Xna.Framework.Vector3.Dot(lhs.vector, rhs.vector);
-        }
-
-        public static Vector3 Reflect(Vector3 inDirection, Vector3 inNormal)
-        {
-            return Microsoft.Xna.Framework.Vector3.Reflect(inDirection.vector, inNormal.vector);
-        }
-
+        #region Static constants
         private static Vector3 _zero = new Vector3(0, 0, 0);
         public static Vector3 zero
         {
@@ -228,13 +233,15 @@ namespace PressPlay.FFWD
                 return _right;
             }
         }
+        #endregion
 
+        #region Overridden methods
         public override bool Equals(object obj)
         {
             if (obj is Vector3)
-	        {
+            {
                 return vector.Equals(((Vector3)obj).vector);
-	        }
+            }
             return false;
         }
 
@@ -242,5 +249,34 @@ namespace PressPlay.FFWD
         {
             return vector.GetHashCode();
         }
+        #endregion
+
+        #region Public methods
+        public void Normalize()
+        {
+            vector.Normalize();
+        }
+
+        public static float Dot(Vector3 lhs, Vector3 rhs)
+        {
+            float f;
+            Microsoft.Xna.Framework.Vector3.Dot(ref lhs.vector, ref rhs.vector, out f);
+            return f;
+        }
+
+        public static Vector3 Reflect(Vector3 inDirection, Vector3 inNormal)
+        {
+            Microsoft.Xna.Framework.Vector3 o;
+            Microsoft.Xna.Framework.Vector3.Reflect(ref inDirection.vector, ref inNormal.vector, out o);
+            return o;
+        }
+
+        public static Vector3 Lerp(Vector3 v1, Vector3 v2, float amount)
+        {
+            Microsoft.Xna.Framework.Vector3 o;
+            Microsoft.Xna.Framework.Vector3.Lerp(ref v1.vector, ref v2.vector, amount, out o);
+            return o;
+        }
+        #endregion
     }
 }

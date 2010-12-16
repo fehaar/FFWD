@@ -130,6 +130,7 @@ namespace PressPlay.FFWD
             obj._transform = null;
             obj._rigidbody = null;
             obj._collider = null;
+            obj._renderer = null;
 
             obj.components = new List<Component>();
             for (int i = 0; i < components.Count; i++)

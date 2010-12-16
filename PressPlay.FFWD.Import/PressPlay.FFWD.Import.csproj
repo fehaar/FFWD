@@ -94,9 +94,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Vector3ArrayTypeSerializer.cs" />
     <Compile Include="LayerMaskTypeSerializer.cs" />
     <Compile Include="MonoBehaviourTypeSerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Vector3TypeSerializer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\PressPlay.Tentacles.Scripts\PressPlay.Tentacles.Scripts.csproj">
