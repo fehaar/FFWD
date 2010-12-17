@@ -18,13 +18,14 @@ namespace PressPlay.FFWD.Import
                 throw new Exception("Not enough floats in the string for Vector3[] - was " + s.Length);
             }
             Vector3[] vs = new Vector3[s.Length / 3];
-            for (int i = 0; i < vs.Length; i += 3)
+            for (int i = 0; i < vs.Length; i++)
             {
                 try
                 {
-                    vs[i][0] = float.Parse(s[i]);
-                    vs[i][1] = float.Parse(s[i + 1]);
-                    vs[i][2] = float.Parse(s[i + 2]);
+                    int triIndex = i * 3;
+                    vs[i][0] = float.Parse(s[triIndex]);
+                    vs[i][1] = float.Parse(s[triIndex + 1]);
+                    vs[i][2] = float.Parse(s[triIndex + 2]);
                 }
                 catch (IndexOutOfRangeException)
                 {

@@ -207,7 +207,7 @@ namespace PressPlay.FFWD
             }
         }
 
-        private static Vector3 _forward = new Vector3(0, 0, 1);
+        private static Vector3 _forward = new Vector3(0, 0, -1);
         public static Vector3 forward
         {
             get
@@ -248,6 +248,11 @@ namespace PressPlay.FFWD
         public override int GetHashCode()
         {
             return vector.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return String.Format("{0:F} {1:F} {2:F}", x, y, z);
         }
         #endregion
 
