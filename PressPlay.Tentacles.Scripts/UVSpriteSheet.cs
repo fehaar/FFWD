@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.Xna.Framework;
 using PressPlay.FFWD;
 using PressPlay.FFWD.Components;
 
@@ -12,22 +11,22 @@ namespace PressPlay.Tentacles.Scripts {
         public MeshFilter meshFilter;
 
         protected Mesh mesh;
-		protected Vector2[] baseUVs;
-		protected Vector2[] tmpUVs;
+        protected Microsoft.Xna.Framework.Vector2[] baseUVs;
+        protected Microsoft.Xna.Framework.Vector2[] tmpUVs;
 		
 		public int xCount;
 		public int yCount;
 		
 		private int currentX = -1;
 		private int currentY = -1;
-		
-		protected Vector2 tileSize;
+
+        protected Microsoft.Xna.Framework.Vector2 tileSize;
 		
 		//protected SpriteSheetFrame[] frames;
 		
 		public bool scaleMeshUVsOnInitialize = true;
-		
-		protected Vector2 offset;
+
+        protected Microsoft.Xna.Framework.Vector2 offset;
 		
 		public override void Start()
 		{
@@ -63,8 +62,8 @@ namespace PressPlay.Tentacles.Scripts {
 			}
 			
 			baseUVs = mesh.uv;
-			
-			tmpUVs = new Vector2[baseUVs.Length];
+
+            tmpUVs = new Microsoft.Xna.Framework.Vector2[baseUVs.Length];
 			
 			for (int i = 0; i < baseUVs.Length; i++) 
 			{
@@ -74,11 +73,11 @@ namespace PressPlay.Tentacles.Scripts {
 					baseUVs[i].X = baseUVs[i].X / xCount;
 					baseUVs[i].Y = baseUVs[i].Y / yCount;
 				}
-				
-				tmpUVs[i] = new Vector2(0,0);
+
+                tmpUVs[i] = new Microsoft.Xna.Framework.Vector2(0, 0);
 			}
-			
-			tileSize = new Vector2(1f/(float)xCount,1f/(float)yCount);
+
+            tileSize = new Microsoft.Xna.Framework.Vector2(1f / (float)xCount, 1f / (float)yCount);
 			
 			/*frames = new SpriteSheetFrame[xCount*yCount];
 			for (int i = 0; i < frames.Length; i++) {
@@ -115,10 +114,10 @@ namespace PressPlay.Tentacles.Scripts {
 			
 			//Debug.Log(mesh.uv);
 		}
-		
-		protected Vector2[] CreateUVs(int _x, int _y)
+
+        protected Microsoft.Xna.Framework.Vector2[] CreateUVs(int _x, int _y)
 		{
-			offset = new Vector2(_x * tileSize.X, 1 - ((_y+1) * tileSize.Y));
+            offset = new Microsoft.Xna.Framework.Vector2(_x * tileSize.X, 1 - ((_y + 1) * tileSize.Y));
 			
 			//Debug.Log("Creating UVs : "+_x+ ", "+_y + " offset : "+offset + " baseUVs.Length "+baseUVs.Length);
 			

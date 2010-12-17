@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.Xna.Framework;
 using PressPlay.FFWD;
 using PressPlay.FFWD.Components;
 
@@ -20,7 +19,7 @@ namespace PressPlay.Tentacles.Scripts
 
         private Vector3 seekPosition;
 
-        private Vector3 normal = Vector3.Right;
+        private Vector3 normal = Vector3.right;
 
         private TentacleVisualStats visualStats;
 
@@ -44,7 +43,7 @@ namespace PressPlay.Tentacles.Scripts
 
 
             //seekPosition = Vector3.Lerp(transform.position + (transform.position-seekPosition).normalized * visualStats.curvature, seekPosition, 0.5f);
-            seekPosition = seekPosition + (transform.position - seekPosition).UnityNormalize() * visualStats.curvature;
+            seekPosition = seekPosition + (transform.position - seekPosition).normalized * visualStats.curvature;
             //seekPosition = Vector3.Lerp(seekPosition,backConnection.GetBackConnectionDirection() * (backConnection.transform.position - transform.position).magnitude, backConnectionRigidity);
             //seekPosition = Vector3.Lerp(seekPosition,frontConnection.GetFrontConnectionDirection() * (frontConnection.transform.position - transform.position).magnitude, frontConnectionRigidity);
 
@@ -68,7 +67,7 @@ namespace PressPlay.Tentacles.Scripts
                 return normal;
             }
 
-            return Vector3.Normalize(transform.position - backConnection.transform.position);
+            return (transform.position - backConnection.transform.position).normalized;
         }
 
         public void SetNormal(Vector3 _normal)
@@ -83,7 +82,7 @@ namespace PressPlay.Tentacles.Scripts
                 return normal;
             }
 
-            return Vector3.Normalize(frontConnection.transform.position - transform.position);
+            return (frontConnection.transform.position - transform.position).normalized;
         }
     }
 }

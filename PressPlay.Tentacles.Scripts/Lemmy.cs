@@ -5,7 +5,6 @@ using System.Text;
 using PressPlay.FFWD.Components;
 using PressPlay.FFWD;
 using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework;
 
 namespace PressPlay.Tentacles.Scripts
 {
@@ -34,7 +33,7 @@ namespace PressPlay.Tentacles.Scripts
         //public ScoreHandler scoreHandler = new ScoreHandler();
 
         //private RaycastHit rh;
-        private Ray ray;
+        private Microsoft.Xna.Framework.Ray ray;
 
         private Vector3 lastPosition;
 
@@ -90,7 +89,7 @@ namespace PressPlay.Tentacles.Scripts
         //public PathFollowCam pathFollowCam;
 
         private Vector3 forceFromTentacles;
-        private Vector3 lastInputPosition = Vector3.Zero;
+        private Vector3 lastInputPosition = Vector3.zero;
         private float lastInputTime;
 
         private float health;
@@ -212,9 +211,9 @@ namespace PressPlay.Tentacles.Scripts
                 tentacleTips[i] = (TentacleTip)Instantiate(tentacleTipPrefab);
                 tentacleTips[i].transform.position = transform.position;
 
-                Vector3 normal = Vector3.Zero;
-                normal.X = Mathf.Cos(((i + 0.5f) * Mathf.PI * 2) / stats.tentacles);
-                normal.Z = Mathf.Sin(((i + 0.5f) * Mathf.PI * 2) / stats.tentacles);
+                Vector3 normal = Vector3.zero;
+                normal.x = Mathf.Cos(((i + 0.5f) * Mathf.PI * 2) / stats.tentacles);
+                normal.z = Mathf.Sin(((i + 0.5f) * Mathf.PI * 2) / stats.tentacles);
 
                 tentacleRoots[i].transform.position = transform.position;
                 tentacleRoots[i].transform.parent = transform;
@@ -355,7 +354,7 @@ namespace PressPlay.Tentacles.Scripts
 
             HandleHealth();
 
-            Camera.main.transform.position = mainBody.transform.position + new Vector3(0, -7, 0);
+            Camera.main.transform.position = mainBody.transform.position + new Vector3(0, -20, 0);
         }
 
         public void AddHealth(float _health)
@@ -387,7 +386,7 @@ namespace PressPlay.Tentacles.Scripts
         {
 
             //force from tentacles and claw
-            forceFromTentacles = Vector3.Zero;
+            forceFromTentacles = Vector3.zero;
 
             //this moves tentacle roots (origins) to edge of lemmy in the connected direction, and back to center of lemmy if not connected
             for (int i = 0; i < tentacleTips.Length; i++)
@@ -397,14 +396,14 @@ namespace PressPlay.Tentacles.Scripts
                     forceFromTentacles += tentacleTips[i].GetElasticityForce();
 
                     //JUST A TEST!! HACK
-                    tentacleRoots[i].transform.localPosition = Vector3.Lerp(tentacleRoots[i].transform.localPosition, Vector3.Normalize(tentacleTips[i].transform.position - transform.position) * 0.45f, Time.deltaTime * 1.45f);
+                    tentacleRoots[i].transform.localPosition = Vector3.Lerp(tentacleRoots[i].transform.localPosition, (tentacleTips[i].transform.position - transform.position).normalized * 0.45f, Time.deltaTime * 1.45f);
                 }
                 else
                 {
                     //JUST A TEST!! HACK
-                    tentacleRoots[i].transform.localPosition = Vector3.Lerp(tentacleRoots[i].transform.localPosition, Vector3.Zero, Time.deltaTime * 1.5f);
+                    tentacleRoots[i].transform.localPosition = Vector3.Lerp(tentacleRoots[i].transform.localPosition, Vector3.zero, Time.deltaTime * 1.5f);
                 }
-                tentacleRoots[i].transform.localPosition -= new Vector3(0, tentacleRoots[i].transform.localPosition.Y, 0);
+                tentacleRoots[i].transform.localPosition -= new Vector3(0, tentacleRoots[i].transform.localPosition.y, 0);
             }
 
             //if (claw.isConnected)
@@ -457,13 +456,6 @@ namespace PressPlay.Tentacles.Scripts
 
             if (InputHandler.Instance.GetShootTentacle())
             {
-                Debug.Display("Tap", InputHandler.Instance.GetInputScreenPosition());
-                float? dist = ray.Intersects(new Plane() { Normal = Vector3.Up });
-                if (dist.HasValue)
-                {
-                    Debug.Display("Tap world", ray.Position + ray.Direction * dist);
-                }
-               
                 //    //Debug.Log(InputHandler.Instance.ScreenRayCheck(ray,GlobalSettings.Instance.enemyInputLayer).ToString());
                 ScreenRayCheckHit hit = InputHandler.Instance.ScreenRayCheck(ray, GlobalSettings.Instance.enemyInputLayer);
 
@@ -472,7 +464,7 @@ namespace PressPlay.Tentacles.Scripts
                     if (aimAtFingerPosition)
                     {
                         //aim at finger position
-                        ShootClawInDirection(new Vector3(hit.position.X, 0, hit.position.Z) - transform.position);
+                        ShootClawInDirection(new Vector3(hit.position.x, 0, hit.position.z) - transform.position);
                     }
                     else
                     {
@@ -529,7 +521,7 @@ namespace PressPlay.Tentacles.Scripts
             ray.Position = lastPosition;
             ray.Direction = transform.position - lastPosition;
 
-            //if (Physics.Raycast(ray, out rh, (transform.position - lastPosition).Length(), GlobalSettings.Instance.allWallsAndShields))
+            //if (Physics.Raycast(ray, out rh, (transform.position - lastPosition).magnitude, GlobalSettings.Instance.allWallsAndShields))
             //{
             //    transform.position = rh.point + rh.normal * 0.5f;
             //    rigidbody.velocity = -rigidbody.velocity * 0.1f; //this move only happens if velocity is very very high, so we use some hard coded bounce
@@ -690,7 +682,7 @@ namespace PressPlay.Tentacles.Scripts
 
             SetActivationStatus(true);
 
-            rigidbody.velocity = Vector3.Zero;
+            rigidbody.velocity = Vector3.zero;
 
             transform.position = _checkpoint.transform.position;
 

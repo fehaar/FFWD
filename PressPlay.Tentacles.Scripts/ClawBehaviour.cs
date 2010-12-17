@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.Xna.Framework;
 using PressPlay.FFWD;
 using PressPlay.FFWD.Components;
 
@@ -17,7 +16,7 @@ namespace PressPlay.Tentacles.Scripts {
         protected OnClawBehaviourConnect doOnClawBehaviourConnect;
 		
 	    protected RaycastHit rh;
-	    protected Ray ray;
+        protected Microsoft.Xna.Framework.Ray ray;
 	    protected Lemmy lemmy;
 		
 		public float eatTime = 0.5f;
@@ -32,7 +31,7 @@ namespace PressPlay.Tentacles.Scripts {
 		protected Collider connectedCollider;
 	    protected GameObject connectionPointerObject;
 		
-		protected Vector3 accumulatedTraversal = Vector3.Zero;
+		protected Vector3 accumulatedTraversal = Vector3.zero;
 		
 	    protected Vector3 lastPosition;
 		protected Vector3 traversedVector;
@@ -204,9 +203,9 @@ namespace PressPlay.Tentacles.Scripts {
 		void HandleEating()
 		{
             dist = (transform.position-lemmy.transform.position);
-            dir = Vector3.Normalize(dist);
+            dir = dist.normalized;
 			
-            if (dist.Length() < eatSpeed*Time.deltaTime)
+            if (dist.magnitude < eatSpeed*Time.deltaTime)
             {
                 transform.position = lemmy.transform.position;
                 ReleaseGrabbedObject();
@@ -225,7 +224,7 @@ namespace PressPlay.Tentacles.Scripts {
 	    {
 	 
 		
-            rigidbody.velocity = Vector3.Zero;
+            rigidbody.velocity = Vector3.zero;
 	        
 	
             if (connectionPointerObject != null && connectionPointerObject.active)
@@ -251,9 +250,9 @@ namespace PressPlay.Tentacles.Scripts {
             ray.Direction = traversedVector;
 
 
-            bool hitWallLayer = Physics.Raycast(ray, out rh, traversedVector.Length() * 2, GlobalSettings.Instance.allWallsAndShields);
+            bool hitWallLayer = Physics.Raycast(ray, out rh, traversedVector.magnitude * 2, GlobalSettings.Instance.allWallsAndShields);
             float wallDist = rh.distance;
-            bool hitEnemyLayer = Physics.Raycast(ray, out rh, traversedVector.Length() * 2, GlobalSettings.Instance.enemyLayer);
+            bool hitEnemyLayer = Physics.Raycast(ray, out rh, traversedVector.magnitude * 2, GlobalSettings.Instance.enemyLayer);
             float enemyDist = rh.distance;
 
             if ((hitWallLayer && !hitEnemyLayer) || (hitWallLayer && hitEnemyLayer && wallDist < enemyDist))
@@ -320,7 +319,7 @@ namespace PressPlay.Tentacles.Scripts {
 	
         //    //Debug.Log("HitEnergyCell");
 	
-        //    rigidbody.velocity = Vector3.Zero;
+        //    rigidbody.velocity = Vector3.zero;
         //    transform.position = hitPosition;
 	
         //    BasicEnemyHitLump lump = cell.GetClosestHitlump(hitPosition);
@@ -339,7 +338,7 @@ namespace PressPlay.Tentacles.Scripts {
 	
         //void HitBullet(BasicBullet bullet, Vector3 hitPosition)
         //{
-        //    rigidbody.velocity = Vector3.Zero;
+        //    rigidbody.velocity = Vector3.zero;
         //    transform.position = hitPosition;
         //    ChangeClawState(ClawStates.idle);
 	
@@ -386,9 +385,9 @@ namespace PressPlay.Tentacles.Scripts {
 
             connectedCollider = connectTo.collider;
 
-            connectionNormal = Vector3.Normalize(Vector3.Normalize(-rigidbody.velocity) * 0 + hitNormal * 1);
+            connectionNormal = (-rigidbody.velocity.normalized * 0 + hitNormal * 1).normalized;
 
-            rigidbody.velocity = Vector3.Zero;
+            rigidbody.velocity = Vector3.zero;
             transform.position = hitPosition;
             connectionPosition = hitPosition;
 
@@ -445,9 +444,9 @@ namespace PressPlay.Tentacles.Scripts {
 	
             ////Debug.Log("Connecting tip at "+hitPosition);
 
-            connectionNormal = (Vector3.Normalize(-rigidbody.velocity) * 0 + hitNormal * 1) * 0.5f;
+            connectionNormal = (-rigidbody.velocity.normalized * 0 + hitNormal * 1) * 0.5f;
 
-            rigidbody.velocity = Vector3.Zero;
+            rigidbody.velocity = Vector3.zero;
             transform.position = hitPosition;
             connectionPosition = hitPosition;
 
@@ -494,7 +493,7 @@ namespace PressPlay.Tentacles.Scripts {
 	
 		public void Reset()
 	    {
-            rigidbody.velocity = Vector3.Zero;
+            rigidbody.velocity = Vector3.zero;
 
             if (grabbedObject)
             {

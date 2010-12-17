@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.Xna.Framework;
 using PressPlay.FFWD;
 using PressPlay.FFWD.Components;
 
@@ -26,7 +25,7 @@ namespace PressPlay.Tentacles.Scripts
         //private Collider connectedTo;
 
         private float shootTime = 0;
-        private Vector3 shootDir = Vector3.Zero;
+        private Vector3 shootDir = Vector3.zero;
 
         public bool isAttacking
         {
@@ -185,7 +184,7 @@ namespace PressPlay.Tentacles.Scripts
         {
             Vector3 vecToIdlePosition = transform.position - (body.transform.position + bodyNormal * 2) + new Vector3(Mathf.Cos(Time.time * 2.5f * idleMovementRandomizer1) * 0.8f, 0, Mathf.Sin(Time.time * 1.75f * idleMovementRandomizer2) * 0.8f); ;
 
-            float distToIdlePosition = vecToIdlePosition.Length();
+            float distToIdlePosition = vecToIdlePosition.magnitude;
 
             rigidbody.velocity *= 0.92f;
             Vector3 elasticityForce = distToIdlePosition * (-vecToIdlePosition) * stats.overMaxLengthElasticity;
@@ -208,7 +207,7 @@ namespace PressPlay.Tentacles.Scripts
             {
                 Vector3 vecToBody = body.transform.position - transform.position;
 
-                if (vecToBody.LengthSquared() > stats.connectionMaxLength * stats.connectionMaxLength)
+                if (vecToBody.sqrMagnitude > stats.connectionMaxLength * stats.connectionMaxLength)
                 {
                     BreakConnection();
                 }
@@ -251,7 +250,7 @@ namespace PressPlay.Tentacles.Scripts
             }
         }
 
-        void SuckTowardRayHit(RaycastHit _rh, Ray _ray)
+        void SuckTowardRayHit(RaycastHit _rh, Microsoft.Xna.Framework.Ray _ray)
         {
             rigidbody.AddForce((stats.wallSeekHelpDistance - _rh.distance) * ray.Direction * stats.wallSeekHelpPower);
         }
@@ -268,12 +267,12 @@ namespace PressPlay.Tentacles.Scripts
 
             lastPosition = transform.position;
 
-            if (ray.Direction.LengthSquared() == 0)
+            if (((Vector3)ray.Direction).sqrMagnitude == 0)
             {
                 return;
             }
 
-            float rayLength = (futurePathVector + traversedVector).Length();
+            float rayLength = (futurePathVector + traversedVector).magnitude;
 
             //Debug.DrawRay(ray.origin, ray.direction * rayLength, Color.green);
 
@@ -314,7 +313,7 @@ namespace PressPlay.Tentacles.Scripts
             //handle elasticity of arm. Slow down movement if distance to lemmy is greater than arm length
             //This is what limits the arm reach (appart from the physics engine. Dampening, gravity, etc. works as well)
             Vector3 vecToBody = transform.position - body.transform.position;
-            float distToBody = vecToBody.Length();
+            float distToBody = vecToBody.magnitude;
             if (distToBody > stats.tentacleLength)
             {
                 rigidbody.velocity *= 0.91f; //HACK WARNING!!! this is framerate dependent if run i Update instead of FixedUpdate
@@ -333,16 +332,16 @@ namespace PressPlay.Tentacles.Scripts
             transform.position = body.transform.position;
             lastPosition = body.transform.position;
 
-            float speed = Mathf.Min(_direction.Length(), stats.maxShootSpeed);
+            float speed = Mathf.Min(_direction.magnitude, stats.maxShootSpeed);
             speed = Mathf.Max(speed, stats.minShootSpeed);
 
-            rigidbody.velocity = Vector3.Normalize(_direction) * stats.tentacleTipMoveSpeed * speed;
+            rigidbody.velocity = _direction.normalized * stats.tentacleTipMoveSpeed * speed;
 
             ChangeTentacleState(TentacleTip.States.searchingForConnection);
 
             shootTime = Time.time;
 
-            shootDir = Vector3.Normalize(_direction);
+            shootDir = _direction.normalized;
 
             transform.LookAt(transform.position + _direction);
             //PPMetrics.AddFloatIncrement("shoot_tentacle", 1);
@@ -350,18 +349,18 @@ namespace PressPlay.Tentacles.Scripts
 
         public Vector3 GetElasticityForce()
         {
-            Vector3 force = Vector3.Zero;
+            Vector3 force = Vector3.zero;
 
-            Vector3 bodyDir = Vector3.Normalize(body.transform.position - transform.position);
+            Vector3 bodyDir = (body.transform.position - transform.position).normalized;
 
             Vector3 vecToBody = body.transform.position - (transform.position + bodyDir * stats.optimalConnectionDistance);
 
             //Debug.DrawRay(transform.position, bodyDir * stats.optimalConnectionDistance, Color.gray);
 
-            float distToBody = vecToBody.Length();
+            float distToBody = vecToBody.magnitude;
             if (distToBody > stats.dragDistMin)
             {
-                force += Vector3.Normalize(-vecToBody) * (stats.dragBodyForce * Mathf.Pow(distToBody - stats.dragDistMin, stats.dragCurvePow) + Mathf.Cos(Time.time * (1.75f * idleMovementRandomizer2) + idleMovementRandomizer1) * 2.2f);
+                force += -vecToBody.normalized * (stats.dragBodyForce * Mathf.Pow(distToBody - stats.dragDistMin, stats.dragCurvePow) + Mathf.Cos(Time.time * (1.75f * idleMovementRandomizer2) + idleMovementRandomizer1) * 2.2f);
             }
 
             return force;
@@ -374,7 +373,7 @@ namespace PressPlay.Tentacles.Scripts
                 BreakConnection();
             }
 
-            rigidbody.velocity = Vector3.Zero;
+            rigidbody.velocity = Vector3.zero;
             transform.position = body.transform.position;
             ChangeClawState(ClawStates.idle);
 

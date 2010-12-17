@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using PressPlay.FFWD.Components;
 using PressPlay.FFWD;
-using Microsoft.Xna.Framework;
 using System.Collections;
 using Microsoft.Xna.Framework.Content;
 
@@ -929,10 +928,10 @@ namespace PressPlay.Tentacles.Scripts
             //GlobalManager.Instance.RestartCurrentLevel();
         }
 
-        public Quaternion GetCameraRelativeRotation(Vector3 direction)
+        public Microsoft.Xna.Framework.Quaternion GetCameraRelativeRotation(Vector3 direction)
         {
             // TODO: This is a missing function in XNA
-            return Quaternion.Identity;//Quaternion.LookRotation(LevelHandler.Instance.feedbackCam.transform.TransformDirection(direction));
+            return Microsoft.Xna.Framework.Quaternion.Identity;//Quaternion.LookRotation(LevelHandler.Instance.feedbackCam.transform.TransformDirection(direction));
         }
 
 

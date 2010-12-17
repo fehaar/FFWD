@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using PressPlay.FFWD;
-using Microsoft.Xna.Framework;
 
 namespace PressPlay.Tentacles.Scripts
 {
@@ -689,249 +688,249 @@ public class Equations {
        
         if(Ease == Ease.Linear)
         {
-            x = EaseNone (t , b.X , c.X , d);
-            y = EaseNone (t , b.Y , c.Y , d);
-            z = EaseNone (t , b.Z , c.Z , d);
+            x = EaseNone (t , b.x , c.x , d);
+            y = EaseNone (t , b.y , c.y , d);
+            z = EaseNone (t , b.z , c.z , d);
         }
         else if(Ease == Ease.EaseQuadIn)
         {
-            x = EaseQuadIn (t , b.X , c.X , d);
-            y = EaseQuadIn (t , b.Y , c.Y , d);
-            z = EaseQuadIn (t , b.Z , c.Z , d);
+            x = EaseQuadIn (t , b.x , c.x , d);
+            y = EaseQuadIn (t , b.y , c.y , d);
+            z = EaseQuadIn (t , b.z , c.z , d);
         }
         else if(Ease == Ease.EaseQuadOut)
         {
-            x = EaseQuadOut (t , b.X , c.X , d);
-            y = EaseQuadOut (t , b.Y , c.Y , d);
-            z = EaseQuadOut (t , b.Z , c.Z , d);
+            x = EaseQuadOut (t , b.x , c.x , d);
+            y = EaseQuadOut (t , b.y , c.y , d);
+            z = EaseQuadOut (t , b.z , c.z , d);
         }
         else if(Ease == Ease.EaseQuadInOut)
         {
-            x = EaseQuadInOut (t , b.X , c.X , d);
-            y = EaseQuadInOut (t , b.Y , c.Y , d);
-            z = EaseQuadInOut (t , b.Z , c.Z , d);
+            x = EaseQuadInOut (t , b.x , c.x , d);
+            y = EaseQuadInOut (t , b.y , c.y , d);
+            z = EaseQuadInOut (t , b.z , c.z , d);
         }
         else if(Ease == Ease.EaseQuadOutIn)
         {
-            x = EaseQuadOutIn (t , b.X , c.X , d);
-            y = EaseQuadOutIn (t , b.Y , c.Y , d);
-            z = EaseQuadOutIn (t , b.Z , c.Z , d);
+            x = EaseQuadOutIn (t , b.x , c.x , d);
+            y = EaseQuadOutIn (t , b.y , c.y , d);
+            z = EaseQuadOutIn (t , b.z , c.z , d);
         }
         else if(Ease == Ease.EaseCubicIn)
         {
-            x = EaseCubicIn (t , b.X , c.X , d);
-            y = EaseCubicIn (t , b.Y , c.Y , d);
-            z = EaseCubicIn (t , b.Z , c.Z , d);
+            x = EaseCubicIn (t , b.x , c.x , d);
+            y = EaseCubicIn (t , b.y , c.y , d);
+            z = EaseCubicIn (t , b.z , c.z , d);
         }
         else if(Ease == Ease.EaseCubicOut)
         {
-            x = EaseCubicOut (t , b.X , c.X , d);
-            y = EaseCubicOut (t , b.Y , c.Y , d);
-            z = EaseCubicOut (t , b.Z , c.Z , d);
+            x = EaseCubicOut (t , b.x , c.x , d);
+            y = EaseCubicOut (t , b.y , c.y , d);
+            z = EaseCubicOut (t , b.z , c.z , d);
         }
         else if(Ease == Ease.EaseCubicInOut)
         {
-            x = EaseCubicInOut (t , b.X , c.X , d);
-            y = EaseCubicInOut (t , b.Y , c.Y , d);
-            z = EaseCubicInOut (t , b.Z , c.Z , d);
+            x = EaseCubicInOut (t , b.x , c.x , d);
+            y = EaseCubicInOut (t , b.y , c.y , d);
+            z = EaseCubicInOut (t , b.z , c.z , d);
         }
         else if(Ease == Ease.EaseCubicOutIn)
         {
-            x = EaseCubicOutIn (t , b.X , c.X , d);
-            y = EaseCubicOutIn (t , b.Y , c.Y , d);
-            z = EaseCubicOutIn (t , b.Z , c.Z , d);
+            x = EaseCubicOutIn (t , b.x , c.x , d);
+            y = EaseCubicOutIn (t , b.y , c.y , d);
+            z = EaseCubicOutIn (t , b.z , c.z , d);
         }
         else if(Ease == Ease.EaseQuartIn)
         {
-            x = EaseQuartIn (t , b.X , c.X , d);
-            y = EaseQuartIn (t , b.Y , c.Y , d);
-            z = EaseQuartIn (t , b.Z , c.Z , d);
+            x = EaseQuartIn (t , b.x , c.x , d);
+            y = EaseQuartIn (t , b.y , c.y , d);
+            z = EaseQuartIn (t , b.z , c.z , d);
         }   
         else if(Ease == Ease.EaseQuartOut) 
         {
-            x = EaseQuartOut (t , b.X , c.X , d);
-            y = EaseQuartOut (t , b.Y , c.Y , d);
-            z = EaseQuartOut (t , b.Z , c.Z , d);
+            x = EaseQuartOut (t , b.x , c.x , d);
+            y = EaseQuartOut (t , b.y , c.y , d);
+            z = EaseQuartOut (t , b.z , c.z , d);
         }   
         else if(Ease == Ease.EaseQuartInOut)
         {
-            x = EaseQuartInOut (t , b.X , c.X , d);
-            y = EaseQuartInOut (t , b.Y , c.Y , d);
-            z = EaseQuartInOut (t , b.Z , c.Z , d);
+            x = EaseQuartInOut (t , b.x , c.x , d);
+            y = EaseQuartInOut (t , b.y , c.y , d);
+            z = EaseQuartInOut (t , b.z , c.z , d);
         }
         else if(Ease == Ease.EaseQuartOutIn)
         {
-            x = EaseQuartOutIn (t , b.X , c.X , d);
-            y = EaseQuartOutIn (t , b.Y , c.Y , d);
-            z = EaseQuartOutIn (t , b.Z , c.Z , d);
+            x = EaseQuartOutIn (t , b.x , c.x , d);
+            y = EaseQuartOutIn (t , b.y , c.y , d);
+            z = EaseQuartOutIn (t , b.z , c.z , d);
         }
         else if(Ease == Ease.EaseQuintIn)
         {
-            x = EaseQuintIn (t , b.X , c.X , d);
-            y = EaseQuintIn (t , b.Y , c.Y , d);
-            z = EaseQuintIn (t , b.Z , c.Z , d);
+            x = EaseQuintIn (t , b.x , c.x , d);
+            y = EaseQuintIn (t , b.y , c.y , d);
+            z = EaseQuintIn (t , b.z , c.z , d);
         }
         else if(Ease == Ease.EaseQuintOut)
         {
-            x = EaseQuintOut (t , b.X , c.X , d);
-            y = EaseQuintOut (t , b.Y , c.Y , d);
-            z = EaseQuintOut (t , b.Z , c.Z , d);
+            x = EaseQuintOut (t , b.x , c.x , d);
+            y = EaseQuintOut (t , b.y , c.y , d);
+            z = EaseQuintOut (t , b.z , c.z , d);
         }
         else if(Ease == Ease.EaseQuintInOut)
         {
-            x = EaseQuintInOut (t , b.X , c.X , d);
-            y = EaseQuintInOut (t , b.Y , c.Y , d);
-            z = EaseQuintInOut (t , b.Z , c.Z , d);
+            x = EaseQuintInOut (t , b.x , c.x , d);
+            y = EaseQuintInOut (t , b.y , c.y , d);
+            z = EaseQuintInOut (t , b.z , c.z , d);
         }
         else if(Ease == Ease.EaseQuintOutIn)
         {
-            x = EaseQuintOutIn (t , b.X , c.X , d);
-            y = EaseQuintOutIn (t , b.Y , c.Y , d);
-            z = EaseQuintOutIn (t , b.Z , c.Z , d);
+            x = EaseQuintOutIn (t , b.x , c.x , d);
+            y = EaseQuintOutIn (t , b.y , c.y , d);
+            z = EaseQuintOutIn (t , b.z , c.z , d);
         }
         else if(Ease == Ease.EaseSineIn)
         {
-            x = EaseSineIn (t , b.X , c.X , d);
-            y = EaseSineIn (t , b.Y , c.Y , d);
-            z = EaseSineIn (t , b.Z , c.Z , d);
+            x = EaseSineIn (t , b.x , c.x , d);
+            y = EaseSineIn (t , b.y , c.y , d);
+            z = EaseSineIn (t , b.z , c.z , d);
         }
         else if(Ease == Ease.EaseSineOut)
         {
-            x = EaseSineOut (t , b.X , c.X , d);
-            y = EaseSineOut (t , b.Y , c.Y , d);
-            z = EaseSineOut (t , b.Z , c.Z , d);
+            x = EaseSineOut (t , b.x , c.x , d);
+            y = EaseSineOut (t , b.y , c.y , d);
+            z = EaseSineOut (t , b.z , c.z , d);
         }
         else if(Ease == Ease.EaseSineInOut)
         {
-            x = EaseSineInOut (t , b.X , c.X , d);
-            y = EaseSineInOut (t , b.Y , c.Y , d);
-            z = EaseSineInOut (t , b.Z , c.Z , d);
+            x = EaseSineInOut (t , b.x , c.x , d);
+            y = EaseSineInOut (t , b.y , c.y , d);
+            z = EaseSineInOut (t , b.z , c.z , d);
         }
         else if(Ease == Ease.EaseSineOutIn)
         {
-            x = EaseSineOutIn (t , b.X , c.X , d);
-            y = EaseSineOutIn (t , b.Y , c.Y , d);
-            z = EaseSineOutIn (t , b.Z , c.Z , d);
+            x = EaseSineOutIn (t , b.x , c.x , d);
+            y = EaseSineOutIn (t , b.y , c.y , d);
+            z = EaseSineOutIn (t , b.z , c.z , d);
         }
         else if(Ease == Ease.EaseExpoIn)
         {
-            x = EaseExpoIn (t , b.X , c.X , d);
-            y = EaseExpoIn (t , b.Y , c.Y , d);
-            z = EaseExpoIn (t , b.Z , c.Z , d);
+            x = EaseExpoIn (t , b.x , c.x , d);
+            y = EaseExpoIn (t , b.y , c.y , d);
+            z = EaseExpoIn (t , b.z , c.z , d);
         }
         else if(Ease == Ease.EaseExpoOut)
         {
-            x = EaseExpoOut (t , b.X , c.X , d);
-            y = EaseExpoOut (t , b.Y , c.Y , d);
-            z = EaseExpoOut (t , b.Z , c.Z , d);
+            x = EaseExpoOut (t , b.x , c.x , d);
+            y = EaseExpoOut (t , b.y , c.y , d);
+            z = EaseExpoOut (t , b.z , c.z , d);
         }
         else if(Ease == Ease.EaseExpoInOut)
         {
-            x = EaseExpoInOut (t , b.X , c.X , d);
-            y = EaseExpoInOut (t , b.Y , c.Y , d);
-            z = EaseExpoInOut (t , b.Z , c.Z , d);
+            x = EaseExpoInOut (t , b.x , c.x , d);
+            y = EaseExpoInOut (t , b.y , c.y , d);
+            z = EaseExpoInOut (t , b.z , c.z , d);
         }
         else if(Ease == Ease.EaseExpoOutIn)
         {
-            x = EaseExpoOutIn (t , b.X , c.X , d);
-            y = EaseExpoOutIn (t , b.Y , c.Y , d);
-            z = EaseExpoOutIn (t , b.Z , c.Z , d);
+            x = EaseExpoOutIn (t , b.x , c.x , d);
+            y = EaseExpoOutIn (t , b.y , c.y , d);
+            z = EaseExpoOutIn (t , b.z , c.z , d);
         }
         else if(Ease == Ease.EaseCircIn)
         {
-            x = EaseCircIn (t , b.X , c.X , d);
-            y = EaseCircIn (t , b.Y , c.Y , d);
-            z = EaseCircIn (t , b.Z , c.Z , d);
+            x = EaseCircIn (t , b.x , c.x , d);
+            y = EaseCircIn (t , b.y , c.y , d);
+            z = EaseCircIn (t , b.z , c.z , d);
         }
         else if(Ease == Ease.EaseCircOut)
         {
-            x = EaseCircOut (t , b.X , c.X , d);
-            y = EaseCircOut (t , b.Y , c.Y , d);
-            z = EaseCircOut (t , b.Z , c.Z , d);
+            x = EaseCircOut (t , b.x , c.x , d);
+            y = EaseCircOut (t , b.y , c.y , d);
+            z = EaseCircOut (t , b.z , c.z , d);
         }
         else if(Ease == Ease.EaseCircInOut)
         {
-            x = EaseCircInOut (t , b.X , c.X , d);
-            y = EaseCircInOut (t , b.Y , c.Y , d);
-            z = EaseCircInOut (t , b.Z , c.Z , d);
+            x = EaseCircInOut (t , b.x , c.x , d);
+            y = EaseCircInOut (t , b.y , c.y , d);
+            z = EaseCircInOut (t , b.z , c.z , d);
         }
         else if(Ease == Ease.EaseCircOutIn)
         {
-            x = EaseCircOutIn (t , b.X , c.X , d);
-            y = EaseCircOutIn (t , b.Y , c.Y , d);
-            z = EaseCircOutIn (t , b.Z , c.Z , d);
+            x = EaseCircOutIn (t , b.x , c.x , d);
+            y = EaseCircOutIn (t , b.y , c.y , d);
+            z = EaseCircOutIn (t , b.z , c.z , d);
         }
         else if(Ease == Ease.EaseElasticIn)
         {
-            x = EaseElasticIn (t , b.X , c.X , d);
-            y = EaseElasticIn (t , b.Y , c.Y , d);
-            z = EaseElasticIn (t , b.Z , c.Z , d);
+            x = EaseElasticIn (t , b.x , c.x , d);
+            y = EaseElasticIn (t , b.y , c.y , d);
+            z = EaseElasticIn (t , b.z , c.z , d);
         }
         else if(Ease == Ease.EaseElasticOut)
         {
-            x = EaseElasticOut (t , b.X , c.X , d);
-            y = EaseElasticOut (t , b.Y , c.Y , d);
-            z = EaseElasticOut (t , b.Z , c.Z , d);
+            x = EaseElasticOut (t , b.x , c.x , d);
+            y = EaseElasticOut (t , b.y , c.y , d);
+            z = EaseElasticOut (t , b.z , c.z , d);
         }
         else if(Ease == Ease.EaseElasticInOut)
         {
-            x = EaseElasticInOut (t , b.X , c.X , d);
-            y = EaseElasticInOut (t , b.Y , c.Y , d);
-            z = EaseElasticInOut (t , b.Z , c.Z , d);
+            x = EaseElasticInOut (t , b.x , c.x , d);
+            y = EaseElasticInOut (t , b.y , c.y , d);
+            z = EaseElasticInOut (t , b.z , c.z , d);
         }
         else if(Ease == Ease.EaseElasticOutIn)
         {
-            x = EaseElasticOutIn (t , b.X , c.X , d);
-            y = EaseElasticOutIn (t , b.Y , c.Y , d);
-            z = EaseElasticOutIn (t , b.Z , c.Z , d);
+            x = EaseElasticOutIn (t , b.x , c.x , d);
+            y = EaseElasticOutIn (t , b.y , c.y , d);
+            z = EaseElasticOutIn (t , b.z , c.z , d);
         }
         else if(Ease == Ease.EaseBackIn)
         {
-            x = EaseBackIn (t , b.X , c.X , d);
-            y = EaseBackIn (t , b.Y , c.Y , d);
-            z = EaseBackIn (t , b.Z , c.Z , d);
+            x = EaseBackIn (t , b.x , c.x , d);
+            y = EaseBackIn (t , b.y , c.y , d);
+            z = EaseBackIn (t , b.z , c.z , d);
         }
         else if(Ease == Ease.EaseBackOut)
         {
-            x = EaseBackOut (t , b.X , c.X , d);
-            y = EaseBackOut (t , b.Y , c.Y , d);
-            z = EaseBackOut (t , b.Z , c.Z , d);
+            x = EaseBackOut (t , b.x , c.x , d);
+            y = EaseBackOut (t , b.y , c.y , d);
+            z = EaseBackOut (t , b.z , c.z , d);
         }
         else if(Ease == Ease.EaseBackInOut)
         {
-            x = EaseBackInOut (t , b.X , c.X , d);
-            y = EaseBackInOut (t , b.Y , c.Y , d);
-            z = EaseBackInOut (t , b.Z , c.Z , d);
+            x = EaseBackInOut (t , b.x , c.x , d);
+            y = EaseBackInOut (t , b.y , c.y , d);
+            z = EaseBackInOut (t , b.z , c.z , d);
         }
         else if(Ease == Ease.EaseBackOutIn)
         {
-            x = EaseBackOutIn (t , b.X , c.X , d);
-            y = EaseBackOutIn (t , b.Y , c.Y , d);
-            z = EaseBackOutIn (t , b.Z , c.Z , d);
+            x = EaseBackOutIn (t , b.x , c.x , d);
+            y = EaseBackOutIn (t , b.y , c.y , d);
+            z = EaseBackOutIn (t , b.z , c.z , d);
         }
         else if(Ease == Ease.EaseBounceIn)
         {
-            x = EaseBounceIn (t , b.X , c.X , d);
-            y = EaseBounceIn (t , b.Y , c.Y , d);
-            z = EaseBounceIn (t , b.Z , c.Z , d);
+            x = EaseBounceIn (t , b.x , c.x , d);
+            y = EaseBounceIn (t , b.y , c.y , d);
+            z = EaseBounceIn (t , b.z , c.z , d);
         }
         else if(Ease == Ease.EaseBounceOut)
         {
-            x = EaseBounceOut (t , b.X , c.X , d);
-            y = EaseBounceOut (t , b.Y , c.Y , d);
-            z = EaseBounceOut (t , b.Z , c.Z , d);
+            x = EaseBounceOut (t , b.x , c.x , d);
+            y = EaseBounceOut (t , b.y , c.y , d);
+            z = EaseBounceOut (t , b.z , c.z , d);
         }
         else if(Ease == Ease.EaseBounceInOut)
         {
-            x = EaseBounceInOut (t , b.X , c.X , d);
-            y = EaseBounceInOut (t , b.Y , c.Y , d);
-            z = EaseBounceInOut (t , b.Z , c.Z , d);
+            x = EaseBounceInOut (t , b.x , c.x , d);
+            y = EaseBounceInOut (t , b.y , c.y , d);
+            z = EaseBounceInOut (t , b.z , c.z , d);
         }
         else if(Ease == Ease.EaseBounceOutIn)
         {
-            x = EaseBounceOutIn (t , b.X , c.X , d);
-            y = EaseBounceOutIn (t , b.Y , c.Y , d);
-            z = EaseBounceOutIn (t , b.Z , c.Z , d);
+            x = EaseBounceOutIn (t , b.x , c.x , d);
+            y = EaseBounceOutIn (t , b.y , c.y , d);
+            z = EaseBounceOutIn (t , b.z , c.z , d);
         }
        
 

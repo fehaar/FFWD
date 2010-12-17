@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.Xna.Framework;
 using PressPlay.FFWD;
 using PressPlay.FFWD.Components;
 using Microsoft.Xna.Framework.Content;
@@ -9,12 +8,12 @@ using Microsoft.Xna.Framework.Content;
 namespace PressPlay.Tentacles.Scripts {
 	public class InputHandler : MonoBehaviour {
 		
-		public Plane screenInputPlane;
+		public Microsoft.Xna.Framework.Plane screenInputPlane;
 		
 		
 		private bool collectInputFlickVectors = false;
-        private List<Vector2> inputList = new List<Vector2>();
-        private List<Vector2> inputDifferenceList = new List<Vector2>();
+        private List<Microsoft.Xna.Framework.Vector2> inputList = new List<Microsoft.Xna.Framework.Vector2>();
+        private List<Microsoft.Xna.Framework.Vector2> inputDifferenceList = new List<Microsoft.Xna.Framework.Vector2>();
 		public ControlSchemeButton[] inputFlickActivationScheme = new ControlSchemeButton[]{ControlSchemeButton.leftMouse};
 		public ControlSchemeScreenPosition inputFlickPositionScheme = ControlSchemeScreenPosition.mousePosition;
 		//public ControlSchemeButton[] endInputFlickScheme = new ControlSchemeButton[]{ControlSchemeButton.leftMouseUp};
@@ -32,9 +31,9 @@ namespace PressPlay.Tentacles.Scripts {
 		public bool turnOff = false;
 		
 		private float lastUpdateTime = 0;
-		
-		private Vector2 inputPosition;
-		private Vector2 lastInputPosition;
+
+        private Microsoft.Xna.Framework.Vector2 inputPosition;
+        private Microsoft.Xna.Framework.Vector2 lastInputPosition;
 		
 		[ContentSerializerIgnore]
 		public float dTime = 0;
@@ -44,22 +43,22 @@ namespace PressPlay.Tentacles.Scripts {
 		public float leftAnalogDeadZone = 0.2f;
 		private float leftAnalogMagnitude = 0;
 		public float leftAnalogCurvePow = 1.6f;
-		private Vector2 leftAnalogVector = Vector2.Zero;
+        private Microsoft.Xna.Framework.Vector2 leftAnalogVector = Microsoft.Xna.Framework.Vector2.Zero;
 		
 		private float rightAnalogXAxis = 0f;
 		private float rightAnalogYAxis = 0f;
 		public float rightAnalogDeadZone = 0.2f;
 		private float rightAnalogMagnitude = 0;
 		public float rightAnalogCurvePow = 1.6f;
-		private Vector2 rightAnalogVector = Vector2.Zero;
+        private Microsoft.Xna.Framework.Vector2 rightAnalogVector = Microsoft.Xna.Framework.Vector2.Zero;
 		
         //private float wasdXAxis = 0f;
         //private float wasdYAxis = 0f;
-		private Vector2 wasdVector = Vector2.Zero;
+        private Microsoft.Xna.Framework.Vector2 wasdVector = Microsoft.Xna.Framework.Vector2.Zero;
 		
         //private float arrowKeysXAxis = 0f;
         //private float arrowKeysYAxis = 0f;
-		private Vector2 arrowKeysVector = Vector2.Zero;
+        private Microsoft.Xna.Framework.Vector2 arrowKeysVector = Microsoft.Xna.Framework.Vector2.Zero;
 	
 		private float leftTriggerAxis = -1;
 		private float rightTriggerAxis = -1;
@@ -308,12 +307,12 @@ namespace PressPlay.Tentacles.Scripts {
 
             return 0;
         }
-		
-		private Vector2 GetControlSchemeScreenPosition(ControlSchemeScreenPosition _scheme)
+
+        private Microsoft.Xna.Framework.Vector2 GetControlSchemeScreenPosition(ControlSchemeScreenPosition _scheme)
 		{
 			if (turnOff)
 			{
-				return Vector2.Zero;
+                return Microsoft.Xna.Framework.Vector2.Zero;
 			}
 			
 			switch(_scheme)
@@ -321,16 +320,16 @@ namespace PressPlay.Tentacles.Scripts {
 				case ControlSchemeScreenPosition.mousePosition:
 				return Input.mousePosition;
 			}
-			
-			return Vector2.Zero;
+
+            return Microsoft.Xna.Framework.Vector2.Zero;
 		}
-		
-		
-		private Vector2 GetControlSchemeVector(ControlSchemeVector _scheme)
+
+
+        private Microsoft.Xna.Framework.Vector2 GetControlSchemeVector(ControlSchemeVector _scheme)
 		{
 			if (turnOff)
 			{
-				return Vector2.Zero;
+                return Microsoft.Xna.Framework.Vector2.Zero;
 			}
 			
 			switch(_scheme)
@@ -347,8 +346,8 @@ namespace PressPlay.Tentacles.Scripts {
 				case ControlSchemeVector.arrowKeys:	
 				return arrowKeysVector;
 			}
-			
-			return Vector2.Zero;
+
+            return Microsoft.Xna.Framework.Vector2.Zero;
 		}
 		
 		
@@ -457,15 +456,15 @@ namespace PressPlay.Tentacles.Scripts {
 			lastInputPosition = inputPosition;
 			inputPosition = GetControlSchemeScreenPosition(inputPositionScheme);
 		}
-		
-		private Vector2 GetLongestVectorScheme(ControlSchemeVector[] _schemes)
+
+        private Microsoft.Xna.Framework.Vector2 GetLongestVectorScheme(ControlSchemeVector[] _schemes)
 		{
 			if (_schemes.Length == 0)
 			{
-				return Vector2.Zero;
+                return Microsoft.Xna.Framework.Vector2.Zero;
 			}
-			
-			Vector2 _longestVec = GetControlSchemeVector(_schemes[0]);
+
+            Microsoft.Xna.Framework.Vector2 _longestVec = GetControlSchemeVector(_schemes[0]);
 	
 			for (int i = 1; i < _schemes.Length; i++) {
 				if (GetControlSchemeVector(_schemes[i]).Length() > _longestVec.Length())	
@@ -526,34 +525,34 @@ namespace PressPlay.Tentacles.Scripts {
 		{
 			return GetOneButtonActive(controlTentacleScheme);
 		}
-		
-		public Vector2 GetInputScreenPositionDifference()
+
+        public Microsoft.Xna.Framework.Vector2 GetInputScreenPositionDifference()
 		{
 			return inputPosition - lastInputPosition;
 		}
-		
-		public Vector2 GetInputScreenPosition()
+
+        public Microsoft.Xna.Framework.Vector2 GetInputScreenPosition()
 		{
             return inputPosition;
 		}
 
-        public List<Vector2> GetInputArraylist()
+        public List<Microsoft.Xna.Framework.Vector2> GetInputArraylist()
 		{
 			return inputList;
 		}
-		
-		public Vector2 GetTentacleDirection()
+
+        public Microsoft.Xna.Framework.Vector2 GetTentacleDirection()
 		{
 			return GetControlSchemeVector(tentacleDirectionScheme);
 		}
-		
-		public Vector2 GetClawDirection()
+
+        public Microsoft.Xna.Framework.Vector2 GetClawDirection()
 		{
 			return GetControlSchemeVector(clawDirectionScheme);
 		}
-		
-		
-		public static Vector3 InputVecToWorldVec(Camera _veiwingCam, Vector2 _inputVec)
+
+
+        public static Vector3 InputVecToWorldVec(Camera _veiwingCam, Microsoft.Xna.Framework.Vector2 _inputVec)
 		{
 			Vector3 newVec = _inputVec.X * _veiwingCam.transform.right + _inputVec.Y * _veiwingCam.transform.up;
 			
@@ -576,9 +575,9 @@ namespace PressPlay.Tentacles.Scripts {
 		/// <param name='_layerMask'>
 		/// _layer mask.
 		/// </param>
-		public ScreenRayCheckHit ScreenRayCheck(Ray _ray, LayerMask _layerMask)
+        public ScreenRayCheckHit ScreenRayCheck(Microsoft.Xna.Framework.Ray _ray, LayerMask _layerMask)
 		{
-			screenInputPlane.Normal = Vector3.Up;
+			screenInputPlane.Normal = Vector3.up;
 
             ScreenRayCheckHit hit = new ScreenRayCheckHit();
             float _intersectionDist;
@@ -587,7 +586,7 @@ namespace PressPlay.Tentacles.Scripts {
             hit.position = _ray.Position + _ray.Direction * _intersectionDist;
 			
 			RaycastHit rh;
-            if (Physics.Pointcast(hit.position.To2d(), out rh, _layerMask))
+            if (Physics.Pointcast((Microsoft.Xna.Framework.Vector2)hit.position, out rh, _layerMask))
             {
                 hit.hitObjectInLayer = true;
                 hit.position = rh.point;

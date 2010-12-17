@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using PressPlay.FFWD;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 
 namespace PressPlay.Tentacles.Scripts
 {

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.Xna.Framework;
 using PressPlay.FFWD;
 using PressPlay.FFWD.Components;
 
@@ -19,9 +18,9 @@ namespace PressPlay.Tentacles.Scripts {
 		// Update is called once per frame
 		public override void Update () {
 			if(!switchDirection){
-			transform.Rotate(Vector3.Up, rotationSpeed* -Time.deltaTime, Space.Self);
+			transform.Rotate(Vector3.up, rotationSpeed* -Time.deltaTime, Space.Self);
 			}else{
-				transform.Rotate(Vector3.Up, rotationSpeed*Time.deltaTime, Space.Self);
+				transform.Rotate(Vector3.up, rotationSpeed*Time.deltaTime, Space.Self);
 			}
 		}
 	}

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.Xna.Framework;
 using PressPlay.FFWD;
 using PressPlay.FFWD.Components;
 
@@ -48,12 +47,12 @@ namespace PressPlay.Tentacles.Scripts {
 		public override void Initialize()
 	    {
 			InitializeLine(100);
+
+
+
+            tileSize = new Microsoft.Xna.Framework.Vector2(1f / (float)xCount, 1f / (float)yCount);
 			
-			
-			
-			tileSize = new Vector2(1f/(float)xCount,1f/(float)yCount);
-			
-			DrawLine(new Vector3[]{Vector3.Zero, Vector3.Forward});
+			DrawLine(new Vector3[]{Vector3.zero, Vector3.forward});
 			
 			if (automaticPlay && automaticPlayAnim != null)
 			{
@@ -167,8 +166,8 @@ namespace PressPlay.Tentacles.Scripts {
 				//Debug.Log("LineDrawerXZ on "+name+" rebuilding arrays and UVs");
 				
 		        vertices = new Vector3[pointCnt * 5];
-		        baseUVs = new Vector2[pointCnt * 5];
-				tmpUVs = new Vector2[pointCnt * 5];
+		        baseUVs = new Microsoft.Xna.Framework.Vector2[pointCnt * 5];
+                tmpUVs = new Microsoft.Xna.Framework.Vector2[pointCnt * 5];
 		        triangles = new short[((pointCnt-1)*9)+6];
 				flipped = new bool[pointCnt];
 				
@@ -188,10 +187,10 @@ namespace PressPlay.Tentacles.Scripts {
 				p3 = points[i+2];
 				
 				// todo fix with if..
-	            float rad = Mathf.Atan2(p2.Z - p1.Z, p1.X - p2.X);
+	            float rad = Mathf.Atan2(p2.z - p1.z, p1.x - p2.x);
 				float tmpRad = rad;
 				if (tmpRad < 0) tmpRad+= 2*Mathf.PI;
-				float tmpRad2 = Mathf.Atan2(p3.Z - p2.Z, p2.X - p3.X);
+				float tmpRad2 = Mathf.Atan2(p3.z - p2.z, p2.x - p3.x);
 				if (tmpRad2 < 0) tmpRad2+= 2*Mathf.PI;
 				tmpRad2 = tmpRad-tmpRad2;
 				if (tmpRad2 < 0) tmpRad2+= 2*Mathf.PI;
@@ -206,8 +205,8 @@ namespace PressPlay.Tentacles.Scripts {
 					flipped[i] = false;
 				}
 							
-				orthogonalVector.X = Mathf.Sin(rad);
-				orthogonalVector.Z = Mathf.Cos(rad);
+				orthogonalVector.x = Mathf.Sin(rad);
+				orthogonalVector.z = Mathf.Cos(rad);
 				
 				//vertices[i * 5] = p1 + orthogonalVector * curWidth;
 	            //vertices[(i * 5) + 1] = p1 - orthogonalVector * curWidth;
@@ -237,12 +236,12 @@ namespace PressPlay.Tentacles.Scripts {
 			
 			if (rebuildArraysAndUVs)
 			{
-				tmpUVs = new Vector2[baseUVs.Length];
+                tmpUVs = new Microsoft.Xna.Framework.Vector2[baseUVs.Length];
 			
 				for (int i = 0; i < baseUVs.Length; i++) 
 				{
-					baseUVs[i] = new Vector2(0,0);
-					tmpUVs[i] = new Vector2(0,0);
+                    baseUVs[i] = new Microsoft.Xna.Framework.Vector2(0, 0);
+                    tmpUVs[i] = new Microsoft.Xna.Framework.Vector2(0, 0);
 				}
 				
 		        for (int i = 0; i < pointCnt - 1; i++)
@@ -263,7 +262,7 @@ namespace PressPlay.Tentacles.Scripts {
 					baseUVs[i * 5 + 3].Y = 1 / (float)yCount;
 		            
 					//ASK MIKKEL WHAT THIS DOES
-					baseUVs[i * 5 + 4] = new Vector2(.5f,.5f);
+                    baseUVs[i * 5 + 4] = new Microsoft.Xna.Framework.Vector2(.5f, .5f);
 					
 		        }
 			}

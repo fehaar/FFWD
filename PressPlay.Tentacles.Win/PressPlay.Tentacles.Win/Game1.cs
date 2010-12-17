@@ -22,7 +22,7 @@ namespace PressPlay.Tentacles
     {
         GraphicsDeviceManager graphics;
         DebugRenderer debug;
-        Vector3 camStart;
+        PressPlay.FFWD.Vector3 camStart;
 
         public Game1()
         {
@@ -85,10 +85,10 @@ namespace PressPlay.Tentacles
 #endif
             Application.LoadScene("Scenes/DesatGreen_intro");
 
-            Camera.main.transform.localPosition = camStart = new Vector3(-7, -7, -17);
-            Camera.main.transform.localRotation = Quaternion.CreateFromAxisAngle(Vector3.UnitY, MathHelper.ToRadians(-110));
-            Camera.main.up = Vector3.Backward;            
-            Camera.main.forward = Vector3.UnitY;
+            Camera.main.transform.localPosition = camStart = new PressPlay.FFWD.Vector3(-7, -7, -17);
+            Camera.main.transform.localRotation = Quaternion.CreateFromAxisAngle(Microsoft.Xna.Framework.Vector3.UnitY, MathHelper.ToRadians(-110));
+            Camera.main.up = Microsoft.Xna.Framework.Vector3.Backward;
+            Camera.main.forward = Microsoft.Xna.Framework.Vector3.UnitY;
             Camera.main.viewPort = GraphicsDevice.Viewport;
         }
 
@@ -164,8 +164,8 @@ namespace PressPlay.Tentacles
         {
             return Matrix.CreateLookAt(
                 Camera.main.transform.localPosition,
-                Camera.main.transform.localPosition + new Vector3(0, 0, -1000),
-                Vector3.Up);
+                Camera.main.transform.localPosition + new PressPlay.FFWD.Vector3(0, 0, -1000),
+                Microsoft.Xna.Framework.Vector3.Up);
         }
     }
 }

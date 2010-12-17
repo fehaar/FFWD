@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.Xna.Framework;
 using PressPlay.FFWD;
 using PressPlay.FFWD.Components;
 
@@ -12,7 +11,7 @@ namespace PressPlay.Tentacles.Scripts {
 
         public ObjectReference gfxTransform;
 
-        Quaternion oldRotation;
+        Microsoft.Xna.Framework.Quaternion oldRotation;
 
         //public PPAnimationHandler anim;
 
