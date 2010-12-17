@@ -65,6 +65,10 @@ namespace PressPlay.FFWD
         {
             get
             {
+                if (vector == Microsoft.Xna.Framework.Vector3.Zero)
+                {
+                    return Vector3.zero;
+                }
                 return Microsoft.Xna.Framework.Vector3.Normalize(vector);
             }
         }
