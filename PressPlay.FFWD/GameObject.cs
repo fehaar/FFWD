@@ -543,6 +543,19 @@ namespace PressPlay.FFWD
             // TODO : Add implementation of method
             throw new NotImplementedException("Method not implemented.");
         }
+
+        /// <summary>
+        /// Finds a game object by name and returns it.
+        /// If no game object with name can be found, null is returned. If name contains a '/' character it will traverse the hierarchy like a path name. This function only returns active gameobjects.
+        /// For performance reasons it is recommended to not use this function every frame Instead cache the result in a member variable at startup or use GameObject.FindWithTag.
+        /// </summary>
+        /// <param name="name">The name of the GameObject to find</param>
+        /// <returns></returns>
+        public static GameObject Find(string name)
+        {
+            // TODO : Add implementation of method
+            throw new NotImplementedException("Method not implemented.");
+        }
         #endregion
 
         public override string ToString()
