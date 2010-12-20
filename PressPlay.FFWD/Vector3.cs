@@ -270,11 +270,78 @@ namespace PressPlay.FFWD
             vector.Normalize();
         }
 
-        public static float Dot(Vector3 lhs, Vector3 rhs)
+        public void Scale(Vector3 scale)
         {
-            float f;
-            Microsoft.Xna.Framework.Vector3.Dot(ref lhs.vector, ref rhs.vector, out f);
-            return f;
+            vector.X *= scale.x;
+            vector.Y *= scale.y;
+            vector.Z *= scale.z;
+        }
+        #endregion
+
+        #region Static methods
+        public static Vector3 Lerp(Vector3 v1, Vector3 v2, float amount)
+        {
+            Microsoft.Xna.Framework.Vector3 o;
+            Microsoft.Xna.Framework.Vector3.Lerp(ref v1.vector, ref v2.vector, amount, out o);
+            return o;
+        }
+
+        public static Vector3 Slerp(Vector3 v1, Vector3 v2, float amount)
+        {
+            // TODO: Implement this method
+            throw new NotImplementedException("Method not implemented.");
+        }
+
+        public static void OrthoNormalize(ref Vector3 normal, ref Vector3 tangent)
+        {
+            // TODO: Implement this method
+            throw new NotImplementedException("Method not implemented.");
+        }
+
+        public static void OrthoNormalize(ref Vector3 normal, ref Vector3 tangent, ref Vector3 binormal)
+        {
+            // TODO: Implement this method
+            throw new NotImplementedException("Method not implemented.");
+        }
+
+        public static Vector3 MoveTowards(Vector3 current, Vector3 traget, float maxDistanceDelta)
+        {
+            // TODO: Implement this method
+            throw new NotImplementedException("Method not implemented.");
+        }
+
+        public static Vector3 RotateTowards(Vector3 current, Vector3 traget, float maxRadiansDelta, float maxMagnitudeDelta)
+        {
+            // TODO: Implement this method
+            throw new NotImplementedException("Method not implemented.");
+        }
+
+        public static Vector3 SmoothDamp(Vector3 current, Vector3 traget, ref Vector3 currentVelocity, float smoothTime)
+        {
+            return SmoothDamp(current, traget, ref currentVelocity, smoothTime, Mathf.Infinity, Time.deltaTime);
+        }
+
+        public static Vector3 SmoothDamp(Vector3 current, Vector3 traget, ref Vector3 currentVelocity, float smoothTime, float maxSpeed)
+        {
+            return SmoothDamp(current, traget, ref currentVelocity, smoothTime, maxSpeed, Time.deltaTime);
+        }
+
+        public static Vector3 SmoothDamp(Vector3 current, Vector3 traget, ref Vector3 currentVelocity, float smoothTime, float maxSpeed, float deltaTime)
+        {
+            // TODO: Implement this method
+            throw new NotImplementedException("Method not implemented.");
+        }
+
+        public static Vector3 Scale(Vector3 a, Vector3 b)
+        {
+            return new Vector3(a.x * b.x, a.y * b.y, a.z * b.z);
+        }
+
+        public static Vector3 Cross(Vector3 a, Vector3 b)
+        {
+            Microsoft.Xna.Framework.Vector3 res;
+            Microsoft.Xna.Framework.Vector3.Cross(ref a.vector, ref b.vector, out res);
+            return new Vector3(res);
         }
 
         public static Vector3 Reflect(Vector3 inDirection, Vector3 inNormal)
@@ -284,11 +351,50 @@ namespace PressPlay.FFWD
             return o;
         }
 
-        public static Vector3 Lerp(Vector3 v1, Vector3 v2, float amount)
+        public static float Dot(Vector3 lhs, Vector3 rhs)
         {
-            Microsoft.Xna.Framework.Vector3 o;
-            Microsoft.Xna.Framework.Vector3.Lerp(ref v1.vector, ref v2.vector, amount, out o);
-            return o;
+            float f;
+            Microsoft.Xna.Framework.Vector3.Dot(ref lhs.vector, ref rhs.vector, out f);
+            return f;
+        }
+
+        public static Vector3 Project(Vector3 a, Vector3 b)
+        {
+            // TODO: Implement this method
+            throw new NotImplementedException("Method not implemented.");
+        }
+
+        public static float Angle(Vector3 a, Vector3 b)
+        {
+            // TODO: Implement this method
+            throw new NotImplementedException("Method not implemented.");
+        }
+
+        public static float Distance(Vector3 a, Vector3 b)
+        {
+            float res;
+            Microsoft.Xna.Framework.Vector3.Distance(ref a.vector, ref b.vector, out res);
+            return res;
+        }
+
+        public Vector3 ClampMagnitude(Vector3 vector, float maxLength)
+        {
+            // TODO: Implement this method
+            throw new NotImplementedException("Method not implemented.");
+        }
+
+        public Vector3 Min(Vector3 lhs, Vector3 rhs)
+        {
+            Microsoft.Xna.Framework.Vector3 res;
+            Microsoft.Xna.Framework.Vector3.Min(ref lhs.vector, ref rhs.vector, out res);
+            return new Vector3(res);
+        }
+
+        public Vector3 Max(Vector3 lhs, Vector3 rhs)
+        {
+            Microsoft.Xna.Framework.Vector3 res;
+            Microsoft.Xna.Framework.Vector3.Max(ref lhs.vector, ref rhs.vector, out res);
+            return new Vector3(res);
         }
         #endregion
     }
