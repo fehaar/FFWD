@@ -81,7 +81,7 @@ namespace PressPlay.Tentacles
             Application.LoadScene("Scenes/DesatGreen_intro");
 
             Camera.main.transform.localPosition = camStart = new PressPlay.FFWD.Vector3(-7, -7, -17);
-            Camera.main.transform.localRotation = Quaternion.CreateFromAxisAngle(Microsoft.Xna.Framework.Vector3.UnitY, MathHelper.ToRadians(-110));
+            Camera.main.transform.localRotation = PressPlay.FFWD.Quaternion.AngleAxis(-110, PressPlay.FFWD.Vector3.up);
             Camera.main.up = Microsoft.Xna.Framework.Vector3.Backward;
             Camera.main.forward = Microsoft.Xna.Framework.Vector3.UnitY;
             Camera.main.viewPort = GraphicsDevice.Viewport;
