@@ -19,7 +19,7 @@ namespace PressPlay.FFWD
         }
         #endregion
 
-        private Microsoft.Xna.Framework.Quaternion quaternion;
+        internal Microsoft.Xna.Framework.Quaternion quaternion;
 
         #region Properties
 		public float x

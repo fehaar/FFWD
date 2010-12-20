@@ -44,6 +44,11 @@ namespace PressPlay.FFWD
         /// <param name="obj"></param>
         public static void Destroy(UnityObject obj)
         {
+            Destroy(obj, 0.0f);
+        }
+
+        public static void Destroy(UnityObject obj, float time)
+        {
             // TODO : Add implementation of method
             throw new NotImplementedException("Method not implemented.");
         }
@@ -143,6 +148,12 @@ namespace PressPlay.FFWD
                 return false;
             }
             return (Application.Find(obj.GetInstanceID()) != null);
+        }
+
+        public static void DontDestroyOnLoad(UnityObject target)
+        {
+            // TODO : Add implementation of method
+            throw new NotImplementedException("Method not implemented.");
         }
     }
 }

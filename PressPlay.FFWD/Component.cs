@@ -20,6 +20,23 @@ namespace PressPlay.FFWD
 
         public virtual GameObject gameObject { get; internal set; }
 
+        public string name
+        {
+            get
+            {
+                return (gameObject == null) ? GetType().Name : gameObject.name;
+            }
+        }
+
+        public string tag
+        {
+            get
+            {
+                // TODO: Objects should be destroyed after Update but before Rendering
+                throw new NotImplementedException("Method not implemented.");
+            }
+        }
+
         #region Component shortcut properties
         [ContentSerializerIgnore]
         public Transform transform
@@ -61,6 +78,7 @@ namespace PressPlay.FFWD
         }
         #endregion
 
+        #region Behaviour methods
         public virtual void Awake()
         {
             // NOTE: Do not do anything here as the convention in Unity is not to call base as it is not a virtual method
@@ -70,7 +88,62 @@ namespace PressPlay.FFWD
         {
             // NOTE: Do not do anything here as the convention in Unity is not to call base as it is not a virtual method
         }
+        #endregion
 
+        #region Public methods
+        public bool CompareTag(string tag)
+        {
+            // TODO : Add implementation of method
+            throw new NotImplementedException("Method not implemented.");
+
+        }
+        #endregion
+
+        #region Internal methods
+        internal override UnityObject Clone()
+        {
+            UnityObject obj = base.Clone();
+            obj.isPrefab = false;
+            Application.AddNewComponent(obj as Component);
+            return obj;
+        }
+        #endregion
+
+        #region Component locator methods
+        public Component GetComponent(Type type)
+        {
+            return gameObject.GetComponent(type);
+        }
+
+        public Component GetComponent(string type)
+        {
+            // TODO: Objects should be destroyed after Update but before Rendering
+            throw new NotImplementedException("Method not implemented.");
+        }
+
+        public Component[] GetComponents(Type type)
+        {
+            return gameObject.GetComponents(type);
+        }
+
+        public Component GetComponentInChildren(Type type)
+        {
+            return gameObject.GetComponentInChildren(type);
+        }
+
+        public Component[] GetComponentsInChildren(Type type)
+        {
+            return gameObject.GetComponentsInChildren(type);
+        }
+
+        public Component[] GetComponentsInChildren(Type type, bool includeInactive)
+        {
+            // TODO: Objects should be destroyed after Update but before Rendering
+            throw new NotImplementedException("Method not implemented.");
+        }
+        #endregion
+
+        #region Overridden methods
         public override string ToString()
         {
             if (gameObject == null)
@@ -79,36 +152,6 @@ namespace PressPlay.FFWD
             }
             return GetType().Name + " on " + gameObject.name + " (" + gameObject.GetInstanceID() + ")";
         }
-
-        public void Destroy(Component component)
-        {
-            // TODO: Objects should be destroyed after Update but before Rendering
-        }
-
-        public void Destroy(GameObject go)
-        {
-            // TODO: Objects should be destroyed after Update but before Rendering
-        }
-
-        internal override UnityObject Clone()
-        {
-            UnityObject obj = base.Clone();
-            obj.isPrefab = false;
-            Application.AddNewComponent(obj as Component);
-            return obj;
-        }
-
-        public string name
-        {
-            get
-            {
-                return (gameObject == null) ? GetType().Name : gameObject.name;
-            }
-        }
-
-        public Component GetComponent(Type type)
-        {
-            return gameObject.GetComponent(type);
-        }
+        #endregion
     }
 }

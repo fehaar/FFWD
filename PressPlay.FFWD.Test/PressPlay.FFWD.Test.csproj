@@ -65,6 +65,7 @@
     <Compile Include="Core framework\WhenLoadingAScene.cs" />
     <Compile Include="Core framework\WhenLocatingAComponent.cs" />
     <Compile Include="Core framework\WhenRunningTheGameLoop.cs" />
+    <Compile Include="Core framework\WhenSettingActiveOnAGameObject.cs" />
     <Compile Include="Core framework\WhenSettingNewIds.cs" />
     <Compile Include="Core framework\WhenTransformingQuaternionsToAndFromEulers.cs" />
     <Compile Include="Core framework\WhenUsingTheComponentShortcutMethods.cs" />

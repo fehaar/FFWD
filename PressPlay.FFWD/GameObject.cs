@@ -16,6 +16,7 @@ namespace PressPlay.FFWD
             : base()
         {
             components = new List<Component>();
+            active = true;
         }
 
         public string name { get; set; }
@@ -500,9 +501,47 @@ namespace PressPlay.FFWD
         #endregion
 
         #region Unity methods
-        public void SetActiveRecursively(bool _status)
+        public void SetActiveRecursively(bool state)
         {
-            // TODO: Create this method
+            active = state;
+            if (transform.children != null)
+            {
+                for (int i = 0; i < transform.children.Count; i++)
+                {
+                    transform.children[i].SetActiveRecursively(state);
+                }
+            }
+        }
+
+        public bool CompareTag(string tag)
+        {
+            // TODO : Add implementation of method
+            throw new NotImplementedException("Method not implemented.");
+
+        }
+
+        /// <summary>
+        /// Returns a list of active GameObjects tagged tag. Returns null if no GameObject was found.
+        /// Tags must be declared in the tag manager before using them.
+        /// </summary>
+        /// <param name="tag">The tag to find</param>
+        /// <returns></returns>
+        public static GameObject FindWithTag(string tag)
+        {
+            // TODO : Add implementation of method
+            throw new NotImplementedException("Method not implemented.");
+        }
+
+        /// <summary>
+        /// Returns a list of active GameObjects tagged tag. Returns null if no GameObject was found.
+        /// Tags must be declared in the tag manager before using them.
+        /// </summary>
+        /// <param name="tag">The tag to find</param>
+        /// <returns></returns>
+        public static GameObject[] FindGameObjectsWithTag(string tag)
+        {
+            // TODO : Add implementation of method
+            throw new NotImplementedException("Method not implemented.");
         }
         #endregion
 
