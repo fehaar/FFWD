@@ -62,6 +62,7 @@
     <Compile Include="Animation\AnimationPlayer.cs" />
     <Compile Include="Animation\Keyframe.cs" />
     <Compile Include="Animation\SkinningData.cs" />
+    <Compile Include="ApplicationSettings.cs" />
     <Compile Include="Behaviour.cs" />
     <Compile Include="Box2D\Collision\BroadPhase.cs" />
     <Compile Include="Box2D\Collision\Collision.cs" />
@@ -136,6 +137,7 @@
     <Compile Include="Time.cs" />
     <Compile Include="Transform.cs" />
     <Compile Include="UnityObject.cs" />
+    <Compile Include="Vector3.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
