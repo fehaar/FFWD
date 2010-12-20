@@ -62,11 +62,6 @@ namespace PressPlay.Tentacles
             Components.Add(debug);
 
 #if DEBUG
-            FrameRateCounter counter = new FrameRateCounter(this, Content.RootDirectory + "/TestFont");
-            counter.Position = new Vector2(32, 18);
-            counter.DrawOrder = 2;
-            Components.Add(counter);
-
             //PanCamera cam = new PanCamera(this);
             //Components.Add(cam);
 #endif
