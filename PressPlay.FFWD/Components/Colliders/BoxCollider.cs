@@ -19,8 +19,7 @@ namespace PressPlay.FFWD.Components
         internal override void AddCollider(Body body, float mass)
         {
             Vector2 sz = (size * gameObject.transform.lossyScale);
-            Vector3 transCenter = Microsoft.Xna.Framework.Vector3.Transform(center, transform.world);
-            Physics.AddBox(body, isTrigger, sz.X, sz.Y, transCenter, transform.angleY, mass);
+            Physics.AddBox(body, isTrigger, sz.X, sz.Y, center, 0, mass);
         }
 
 //#if DEBUG

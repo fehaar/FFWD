@@ -35,7 +35,7 @@ namespace PressPlay.FFWD.Components
 
         internal override BodyDef GetBodyDefinition()
         {
-            return new BodyDef() { position = transform.position, angle = transform.angleY, userData = this };
+            return new BodyDef() { position = transform.position, angle = -MathHelper.ToRadians(transform.rotation.eulerAngles.y), userData = this };
         }
 
         internal override void AddCollider(Body body, float mass)

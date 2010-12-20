@@ -69,7 +69,7 @@ namespace PressPlay.FFWD
                 {
                     if (body.GetType() == BodyType.Static)
                     {
-                        body.SetTransform(comp.transform.position, comp.transform.angleY);
+                        body.SetTransform(comp.transform.position, -MathHelper.ToRadians(comp.transform.rotation.eulerAngles.y));
                     }
                     else
                     {

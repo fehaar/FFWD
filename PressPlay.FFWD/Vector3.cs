@@ -22,7 +22,7 @@ namespace PressPlay.FFWD
             vector = new Microsoft.Xna.Framework.Vector3(p);
         }
 
-        private Microsoft.Xna.Framework.Vector3 vector;
+        internal Microsoft.Xna.Framework.Vector3 vector;
 
         #region Properties
         public float x

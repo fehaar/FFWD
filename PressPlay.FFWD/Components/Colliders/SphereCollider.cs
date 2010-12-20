@@ -24,8 +24,7 @@ namespace PressPlay.FFWD.Components
         internal override void AddCollider(Body body, float mass)
         {
             float rad = radius * Math.Max(transform.lossyScale.x, Math.Max(transform.lossyScale.y, transform.lossyScale.z));
-            Vector3 transCenter = Microsoft.Xna.Framework.Vector3.Transform(center, transform.world);
-            Physics.AddCircle(body, isTrigger, rad, transCenter, transform.angleY, mass);
+            Physics.AddCircle(body, isTrigger, rad, center, -MathHelper.ToRadians(transform.rotation.eulerAngles.y), mass);
         }
     }
 }

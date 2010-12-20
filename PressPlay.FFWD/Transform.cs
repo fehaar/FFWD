@@ -225,51 +225,20 @@ namespace PressPlay.FFWD
             }
         }
 
-        [ContentSerializerIgnore]
-        public float angleY
+        public void Rotate(Vector3 axis, float angle, Space relativeTo)
         {
-            get
-            {
-                Vector3 normFwd = Microsoft.Xna.Framework.Vector3.Normalize(world.Forward);
-                float dot = Vector3.Dot(normFwd, Vector3.forward);
-                if (world.Forward.X > 0)
-                {
-                    return (float)Math.Acos(dot);
-                }
-                else
-                {
-                    return (float)((Math.PI * 2) - Math.Acos(dot));
-                }
-            }
-            set
-            {
-                localRotation = Quaternion.AngleAxis(value, Vector3.up);
-                if (rigidbody != null)
-                {
-                    rigidbody.MoveRotation(localRotation);
-                }
-            }
-        }
-
-        public void Rotate(Microsoft.Xna.Framework.Vector3 axis, float angle, Space relativeTo)
-        {
-            angle = MathHelper.ToRadians(angle);
             if (relativeTo == Space.World)
             {
                 // TODO: This will have issues with parent rotations
                 Matrix rot;
-                Matrix.CreateFromAxisAngle(ref axis, angle, out rot);
+                Matrix.CreateFromAxisAngle(ref axis.vector, angle, out rot);
                 Matrix.Multiply(ref _world, ref rot, out _world);
                 WorldChanged();
             }
             else
             {
-                Microsoft.Xna.Framework.Quaternion q;
-                Microsoft.Xna.Framework.Quaternion locRot;
-                // TODO: Create this method
-                //Microsoft.Xna.Framework.Quaternion.CreateFromAxisAngle(ref axis, angle, out q);
-                //Microsoft.Xna.Framework.Quaternion.Multiply(ref _localRotation, ref q, out locRot);
-                //_localRotation = new Quaternion(locRot);
+                Quaternion q = Quaternion.AngleAxis(angle, axis);
+                localRotation *= q;
                 hasDirtyWorld = true;
             }
         }
@@ -297,6 +266,7 @@ namespace PressPlay.FFWD
 
         private void WorldChanged()
         {
+            // TODO: If we have a parent - this method can frak things up proper!
             Microsoft.Xna.Framework.Vector3 scale;
             Microsoft.Xna.Framework.Quaternion rot;
             Microsoft.Xna.Framework.Vector3 pos;
