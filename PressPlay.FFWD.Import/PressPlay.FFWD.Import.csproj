@@ -94,6 +94,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="QuaternionTypeSerializer.cs" />
     <Compile Include="Vector3ArrayTypeSerializer.cs" />
     <Compile Include="LayerMaskTypeSerializer.cs" />
     <Compile Include="MonoBehaviourTypeSerializer.cs" />

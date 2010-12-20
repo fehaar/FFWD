@@ -66,6 +66,7 @@
     <Compile Include="Core framework\WhenLocatingAComponent.cs" />
     <Compile Include="Core framework\WhenRunningTheGameLoop.cs" />
     <Compile Include="Core framework\WhenSettingNewIds.cs" />
+    <Compile Include="Core framework\WhenTransformingQuaternionsToAndFromEulers.cs" />
     <Compile Include="Core framework\WhenUsingTheComponentShortcutMethods.cs" />
     <Compile Include="Core framework\WhenUsingTheGameObjectShortcutProperties.cs" />
     <Compile Include="Physics facts\WhenDeterminingWhatIsAtAPoint.cs" />

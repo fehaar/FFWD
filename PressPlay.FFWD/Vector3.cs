@@ -246,6 +246,10 @@ namespace PressPlay.FFWD
             {
                 return vector.Equals(((Vector3)obj).vector);
             }
+            if (obj is Microsoft.Xna.Framework.Vector3)
+            {
+                return vector.Equals((Microsoft.Xna.Framework.Vector3)obj);
+            }
             return false;
         }
 

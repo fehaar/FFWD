@@ -94,7 +94,7 @@ namespace PressPlay.FFWD.Test.Core_framework.Transforms
         [Test]
         public void WhenSettingTheParentOfATransformTheGlobalPositionWillNotChangeEvenWhenRotated()
         {
-            Transform trans = new Transform() { localPosition = new Vector3(2, 3, 4), localRotation = Quaternion.CreateFromYawPitchRoll(MathHelper.PiOver2, 0.0f, 0.0f) };
+            Transform trans = new Transform() { localPosition = new Vector3(2, 3, 4), localRotation = Quaternion.Euler(MathHelper.PiOver2, 0.0f, 0.0f) };
             Transform child = new Transform() { localPosition = new Vector3(2, 2, 2) };
             GameObject childObj = new GameObject();
             childObj.AddComponent(child);

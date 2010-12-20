@@ -153,7 +153,7 @@ namespace PressPlay.FFWD
             {
                 localPosition = pos - parent.position;
             }
-            localRotation = Quaternion.CreateFromAxisAngle(Vector3.up, ang);
+            localRotation = Quaternion.AngleAxis(ang, Vector3.up);
         }
 
         [ContentSerializerIgnore]
@@ -243,7 +243,7 @@ namespace PressPlay.FFWD
             }
             set
             {
-                localRotation = Quaternion.CreateFromAxisAngle(Vector3.up, value);
+                localRotation = Quaternion.AngleAxis(value, Vector3.up);
                 if (rigidbody != null)
                 {
                     rigidbody.MoveRotation(localRotation);
@@ -264,9 +264,12 @@ namespace PressPlay.FFWD
             }
             else
             {
-                Quaternion q;
-                Quaternion.CreateFromAxisAngle(ref axis, angle, out q);
-                Quaternion.Multiply(ref _localRotation, ref q, out _localRotation);
+                Microsoft.Xna.Framework.Quaternion q;
+                Microsoft.Xna.Framework.Quaternion locRot;
+                // TODO: Create this method
+                //Microsoft.Xna.Framework.Quaternion.CreateFromAxisAngle(ref axis, angle, out q);
+                //Microsoft.Xna.Framework.Quaternion.Multiply(ref _localRotation, ref q, out locRot);
+                //_localRotation = new Quaternion(locRot);
                 hasDirtyWorld = true;
             }
         }
@@ -275,11 +278,11 @@ namespace PressPlay.FFWD
         {
             Matrix m = Matrix.CreateWorld(position, worldPosition - position, worldUp);
             Microsoft.Xna.Framework.Vector3 scale;
-            Quaternion rot;
+            Microsoft.Xna.Framework.Quaternion rot;
             Microsoft.Xna.Framework.Vector3 pos;
             if (m.Decompose(out scale, out rot, out pos))
             {
-                localRotation = rot;
+                localRotation = new Quaternion(rot);
                 if (rigidbody != null)
                 {
                     rigidbody.MoveRotation(localRotation);
@@ -295,12 +298,12 @@ namespace PressPlay.FFWD
         private void WorldChanged()
         {
             Microsoft.Xna.Framework.Vector3 scale;
-            Quaternion rot;
+            Microsoft.Xna.Framework.Quaternion rot;
             Microsoft.Xna.Framework.Vector3 pos;
             if (_world.Decompose(out scale, out rot, out pos))
             {
                 _localScale = scale;
-                _localRotation = rot;
+                _localRotation = new Quaternion(rot);
                 _localPosition = pos;
                 hasDirtyWorld = false;
             }

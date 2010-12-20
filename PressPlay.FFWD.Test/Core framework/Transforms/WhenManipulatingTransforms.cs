@@ -105,7 +105,7 @@ namespace PressPlay.FFWD.Test.Core_framework.Transforms
             Assert.That(trans.rotation, Is.EqualTo(Quaternion.Identity));
             Assert.That(child.rotation, Is.EqualTo(Quaternion.Identity));
             child.parent = trans;
-            trans.localRotation = Quaternion.CreateFromYawPitchRoll(MathHelper.PiOver2, 0.0f, 0.0f);
+            trans.localRotation = Quaternion.Euler(MathHelper.PiOver2, 0.0f, 0.0f);
             Assert.That(child.rotation, Is.Not.EqualTo(Quaternion.Identity));
         }
 
@@ -121,7 +121,7 @@ namespace PressPlay.FFWD.Test.Core_framework.Transforms
             Assert.That(child.rotation, Is.EqualTo(Quaternion.Identity));
             Vector3 beforeRotate = child.position;
             child.parent = trans;
-            trans.localRotation = Quaternion.CreateFromYawPitchRoll(MathHelper.PiOver2, 0.0f, 0.0f);
+            trans.localRotation = Quaternion.Euler(MathHelper.PiOver2, 0.0f, 0.0f);
             Assert.That(child.position, Is.Not.EqualTo(beforeRotate));
         }
 
