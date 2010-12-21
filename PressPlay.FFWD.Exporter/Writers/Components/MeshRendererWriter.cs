@@ -20,6 +20,10 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
                 throw new Exception(GetType() + " cannot export components of type " + component.GetType());
             }
             writer.WriteElement("materials", mr.sharedMaterials);
+            if (mr is SkinnedMeshRenderer)
+            {
+                writer.WriteMesh((mr as SkinnedMeshRenderer).sharedMesh, "sharedMesh");
+            }
         }
         #endregion
     }

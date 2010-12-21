@@ -19,7 +19,7 @@ namespace PressPlay.FFWD.Components
             base.Awake();            
             if (sharedMesh != null)
             {
-                ContentHelper.LoadModel(sharedMesh.asset);
+                sharedMesh.Awake();
             }
         }
 
@@ -28,18 +28,7 @@ namespace PressPlay.FFWD.Components
             base.Start();
             if (sharedMesh != null)
             {
-                sharedMesh.model = ContentHelper.GetModel(sharedMesh.asset);
-                if (sharedMesh.model != null)
-                {
-                    for (int i = 0; i < sharedMesh.model.Meshes.Count; i++)
-                    {
-                        if (sharedMesh.model.Meshes[i].Name == sharedMesh.name)
-                        {
-                            sharedMesh.meshIndex = i;
-                            break;
-                        }
-                    }
-                }
+                sharedMesh.Start();
             }
         }
 
@@ -50,9 +39,9 @@ namespace PressPlay.FFWD.Components
 
         public ModelMesh GetModelMesh()
         {
-            if (sharedMesh != null && sharedMesh.model != null)
+            if (sharedMesh != null)
             {
-                return sharedMesh.model.Meshes[sharedMesh.meshIndex];
+                return sharedMesh.GetModelMesh();
             }
             return null;
         }

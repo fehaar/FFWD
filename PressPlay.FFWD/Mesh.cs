@@ -15,8 +15,7 @@ namespace PressPlay.FFWD
 
         [ContentSerializerIgnore]
         public Model model;
-        [ContentSerializerIgnore]
-        public int meshIndex;
+        private int meshIndex;
 
         [ContentSerializerIgnore]
         public Vector3[] vertices { get; set; }
@@ -27,6 +26,27 @@ namespace PressPlay.FFWD
         [ContentSerializerIgnore]
         public short[] triangles { get; set; }
 
+        public void Awake()
+        {
+            ContentHelper.LoadModel(asset);
+        }
+
+        public void Start()
+        {
+            model = ContentHelper.GetModel(asset);
+            if (model != null)
+            {
+                for (int i = 0; i < model.Meshes.Count; i++)
+                {
+                    if (model.Meshes[i].Name == name)
+                    {
+                        meshIndex = i;
+                        break;
+                    }
+                }
+            }
+        }
+
         public void Clear()
         {
             vertices = null;
@@ -35,5 +55,13 @@ namespace PressPlay.FFWD
             triangles = null;
         }
 
+        internal ModelMesh GetModelMesh()
+        {
+            if (model != null)
+            {
+                return model.Meshes[meshIndex];
+            }
+            return null;
+        }
     }
 }

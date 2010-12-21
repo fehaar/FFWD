@@ -46,10 +46,6 @@ namespace PressPlay.FFWD.Components
                 materials[0] = value;
             }
         }
-        
-        #region IRenderable Members
-        public abstract void Draw(SpriteBatch batch);
-        #endregion
 
         public override void Awake()
         {
@@ -82,5 +78,10 @@ namespace PressPlay.FFWD.Components
                 }
             }
         }
+
+        #region IRenderable Members
+        public abstract void Draw(SpriteBatch batch);
+        #endregion
+
     }
 }
