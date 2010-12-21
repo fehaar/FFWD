@@ -21,7 +21,7 @@ namespace PressPlay.FFWD.Exporter.Test
             "\t\tif (dir==Vector3.zero) return;",
             "\t}",
             "",
-            "\tvoid Update() {",
+            "\tpublic void Update() {",
             "\t}",
             "}"
         };
@@ -92,19 +92,7 @@ namespace PressPlay.FFWD.Exporter.Test
             string newScript = trans.ToString();
 
             Assert.That(newScript, Is.StringContaining("public override void Update"));
-        }
-
-        [Test]
-        public void WeWillFixVector3StaticMethodCasing()
-        {
-            ScriptTranslator.ScriptNamespace = "TestNamespace";
-            ScriptTranslator trans = new ScriptTranslator(testScript);
-            trans.Translate();
-            string newScript = trans.ToString();
-
-            Assert.That(newScript, Is.StringContaining("Vector3.Up"));
-            Assert.That(newScript, Is.StringContaining("Vector3.Forward"));
-            Assert.That(newScript, Is.StringContaining("Vector3.Zero"));
+            Assert.That(newScript, Is.Not.StringContaining("public public override void Update"));
         }
 
         [Test]

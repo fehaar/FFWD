@@ -157,7 +157,6 @@
     <Compile Include="Interfaces\IFixedUpdateable.cs" />
     <Compile Include="Interfaces\IRenderable.cs" />
     <Compile Include="Interfaces\IUpdateable.cs" />
-    <Compile Include="ObjectReference.cs" />
     <Compile Include="GameObjectContactProcessor.cs" />
     <Compile Include="Physics\LayerMask.cs" />
     <Compile Include="Physics\Physics.cs" />

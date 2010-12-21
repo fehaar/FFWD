@@ -253,18 +253,18 @@ namespace PressPlay.FFWD.Test.Core_framework
         }
 	
 
-        [Test]
-        public void WeCanInstantiateAComponentUsingAReference()
-        {
-            GameObject obj = new GameObject();
-            TestComponent comp = new TestComponent();
-            obj.AddComponent(comp);
-            ObjectReference reference = new ObjectReference() { ReferencedId = comp.GetInstanceID() };
-            Application.AwakeNewComponents();
+        //[Test]
+        //public void WeCanInstantiateAComponentUsingAReference()
+        //{
+        //    GameObject obj = new GameObject();
+        //    TestComponent comp = new TestComponent();
+        //    obj.AddComponent(comp);
+        //    ObjectReference reference = new ObjectReference() { ReferencedId = comp.GetInstanceID() };
+        //    Application.AwakeNewComponents();
 
-            TestComponent cmp = (TestComponent)UnityObject.Instantiate(reference);
-            Assert.That(cmp, Is.Not.Null);
-        }
+        //    TestComponent cmp = (TestComponent)UnityObject.Instantiate(reference);
+        //    Assert.That(cmp, Is.Not.Null);
+        //}
 
         [Test]
         public void InstantiatingComponentsWillPutThemInTheAwakeQueue()

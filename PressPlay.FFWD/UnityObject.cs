@@ -25,7 +25,8 @@ namespace PressPlay.FFWD
             return _id;
         }
 
-        internal bool isPrefab { get; set; }
+        [ContentSerializer(ElementName = "isPrefab", Optional = true)]
+        internal bool isPrefab;
 
         internal virtual void AfterLoad()
         {
@@ -105,7 +106,7 @@ namespace PressPlay.FFWD
                 }
                 clone = toClone.Clone() as GameObject;
             }
-            UnityObject ret = clone.GetObjectById((original is ObjectReference) ? (original as ObjectReference).ReferencedId : original.GetInstanceID());
+            UnityObject ret = clone.GetObjectById(original.GetInstanceID());
             // NOTE: It is very important that this is done at the end otherwise we cannot find the correct object to return.
             clone.SetNewId();
             return ret;
