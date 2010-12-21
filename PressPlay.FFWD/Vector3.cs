@@ -138,12 +138,32 @@ namespace PressPlay.FFWD
 
         public static implicit operator Microsoft.Xna.Framework.Vector2(Vector3 v)
         {
-            return v.vector.To2d();
+            switch (ApplicationSettings.to2dMode)
+            {
+                case ApplicationSettings.To2dMode.DropX:
+                    return new Microsoft.Xna.Framework.Vector2(v.y, v.z);
+                case ApplicationSettings.To2dMode.DropY:
+                    return new Microsoft.Xna.Framework.Vector2(v.x, v.z);
+                case ApplicationSettings.To2dMode.DropZ:
+                    return new Microsoft.Xna.Framework.Vector2(v.x, v.y);
+                default:
+                    throw new Exception("Unknown enum " + ApplicationSettings.to2dMode);
+            }
         }
 
         public static implicit operator Vector3(Microsoft.Xna.Framework.Vector2 v)
         {
-            return new Vector3(v.To3d());
+            switch (ApplicationSettings.to2dMode)
+            {
+                case ApplicationSettings.To2dMode.DropX:
+                    return new Microsoft.Xna.Framework.Vector3(0, v.X, v.Y);
+                case ApplicationSettings.To2dMode.DropY:
+                    return new Microsoft.Xna.Framework.Vector3(v.X, 0, v.Y);
+                case ApplicationSettings.To2dMode.DropZ:
+                    return new Microsoft.Xna.Framework.Vector3(v.X, v.Y, 0);
+                default:
+                    throw new Exception("Unknown enum " + ApplicationSettings.to2dMode);
+            }
         }
 
         public static Vector3 operator +(Vector3 a, Vector3 b)

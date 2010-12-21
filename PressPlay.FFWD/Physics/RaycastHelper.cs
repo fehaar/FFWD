@@ -37,12 +37,12 @@ namespace PressPlay.FFWD
                 if (findClosest)
                 {
                     _hits.Clear();
-                    _hits.Add(new RaycastHit() { body = fixture.GetBody(), point = point.To3d(), normal = normal.To3d(), distance = dist, collider = coll });
+                    _hits.Add(new RaycastHit() { body = fixture.GetBody(), point = point, normal = normal, distance = dist, collider = coll });
                     return fraction;
                 }
                 else
                 {
-                    _hits.Add(new RaycastHit() { body = fixture.GetBody(), point = point.To3d(), normal = normal.To3d(), distance = dist, collider = coll });
+                    _hits.Add(new RaycastHit() { body = fixture.GetBody(), point = point, normal = normal, distance = dist, collider = coll });
                     return 1;
                 }
             }

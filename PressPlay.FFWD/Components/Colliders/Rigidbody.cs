@@ -44,7 +44,7 @@ namespace PressPlay.FFWD.Components
         {
             get
             {
-                return body.GetLinearVelocity().To3d();
+                return body.GetLinearVelocity();
             }
             set
             {

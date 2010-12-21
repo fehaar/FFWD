@@ -143,7 +143,6 @@
     <Compile Include="Components\Renderers\Renderer.cs" />
     <Compile Include="Components\Renderers\SkinnedMeshRenderer.cs" />
     <Compile Include="Extensions\PlaneExtensions.cs" />
-    <Compile Include="Extensions\QuaternionHelpers.cs" />
     <Compile Include="Input.cs" />
     <Compile Include="Material.cs" />
     <Compile Include="Mathf.cs" />
@@ -152,7 +151,6 @@
     <Compile Include="Components\Renderers\MeshRenderer.cs" />
     <Compile Include="ContentHelper.cs" />
     <Compile Include="Debug.cs" />
-    <Compile Include="Extensions\VectorExtensions.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="Interfaces\ICollidable.cs" />
     <Compile Include="Interfaces\IContactProcessor.cs" />
