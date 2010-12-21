@@ -53,7 +53,8 @@ namespace PressPlay.Tentacles.Scripts
 
         //public AudioWrapper endSound;
 
-        public ObjectReference lemmyPrefab;
+        [ContentSerializer(SharedResource = true)]
+        public Lemmy lemmyPrefab;
         //public PathFollowCam cameraPrefab;
         //public Camera feedbackCameraPrefab;
         //public GUICamera GUICameraPrefab;

@@ -43,23 +43,22 @@ namespace PressPlay.Tentacles.Scripts
         //public PoolableObject createOnPushButNoDamage;
         //public PoolableObject createOnDeath;
 
-        public ObjectReference tentaclePrefab;
-        public ObjectReference tentacleTipPrefab;
-        public ObjectReference mainBodyPrefab;
+        [ContentSerializer(SharedResource = true)]
+        public Tentacle tentaclePrefab;
+        [ContentSerializer(SharedResource = true)]
+        public TentacleTip tentacleTipPrefab;
+        [ContentSerializer(SharedResource = true)]
+        public MainBody mainBodyPrefab;
         //public Claw clawPrefab;
 
         //public ParticleEmitter bubbleTrailPrefab;
         //public ParticleEmitter bleedBubbleTrailPrefab;
 
-        [ContentSerializerIgnore]
-        public LemmyStats stats { get { return statsRef.Get<LemmyStats>(); } }
-        [ContentSerializer(ElementName = "stats")]
-        private ObjectReference statsRef = null;
+        [ContentSerializer(SharedResource = true)]
+        public LemmyStats stats = null;
 
-        [ContentSerializerIgnore]
-        public TentacleStats tentacleStats { get { return tentacleStatsRef.Get<TentacleStats>(); } }
-        [ContentSerializer(ElementName = "tentacleStats")]
-        private ObjectReference tentacleStatsRef = null;
+        [ContentSerializer(SharedResource = true)]
+        public TentacleStats tentacleStats = null;
         //public TentacleStats clawStats;
 
         private int currentTentacleIndex = 0;

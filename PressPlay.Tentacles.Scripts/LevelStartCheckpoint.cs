@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using PressPlay.FFWD;
+using Microsoft.Xna.Framework.Content;
 
 namespace PressPlay.Tentacles.Scripts
 {
     public class LevelStartCheckPoint : CheckPoint
     {
-        public ObjectReference lemmyStartPosition;
+        [ContentSerializer(SharedResource = true)]
+        public Transform lemmyStartPosition;
 
         public Ease lemmyMoveEase = Ease.EaseCircOut;
 

@@ -12,13 +12,18 @@ namespace PressPlay.Tentacles.Scripts {
 		
 		public LayerMask squishLemmyLayers;
 		
+		
+		public LayerMask allWallsLayers_ClawSpecific;
+	    public LayerMask allWallsAndShields_ClawSpecific;
+		
+		
 		public LayerMask allWallsLayers;
 	    public LayerMask allWallsAndShields;
 	    public int shieldLayer;
 		
 		public LayerMask tentacleBounceColliderLayerIndex = 14;
 		public LayerMask tentacleBounceColliderLayers;
-	
+		
 	    public LayerMask tentacleColliderLayerInt = 8;
 		public LayerMask tentacleColliderLayer;
 		public int tentacleColliderLayerIndex;

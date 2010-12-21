@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Text;
 using PressPlay.FFWD;
 using PressPlay.FFWD.Components;
+using Microsoft.Xna.Framework.Content;
 
 namespace PressPlay.Tentacles.Scripts {
 	public class MainBody : MonoBehaviour {
         //public Renderer damageRendererOverlay;
         //public Material damageOverlay;
 
-        public ObjectReference gfxTransform;
+        [ContentSerializer(SharedResource = true)]
+        public Transform gfxTransform;
 
         Microsoft.Xna.Framework.Quaternion oldRotation;
 
