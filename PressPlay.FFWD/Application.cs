@@ -8,6 +8,7 @@ using PressPlay.FFWD.Components;
 using Microsoft.Xna.Framework.Graphics;
 using PressPlay.FFWD.Interfaces;
 using PressPlay.FFWD;
+using System.Diagnostics;
 
 namespace PressPlay.FFWD
 {
@@ -20,6 +21,16 @@ namespace PressPlay.FFWD
         }
 
         private SpriteBatch spriteBatch;
+
+        int frameRate = 0;
+        int frameCounter = 0;
+        TimeSpan elapsedTime = TimeSpan.Zero;
+
+#if DEBUG
+        private Stopwatch scripts = new Stopwatch();
+        private Stopwatch physics = new Stopwatch();
+        private Stopwatch graphics = new Stopwatch();
+#endif
 
         private static Dictionary<int, UnityObject> objects = new Dictionary<int, UnityObject>();
         private static List<Component> activeComponents = new List<Component>();
@@ -40,6 +51,12 @@ namespace PressPlay.FFWD
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+
+            UpdateFPS(gameTime);
+
+#if DEBUG
+            scripts.Start();
+#endif
             AwakeNewComponents();
             for (int i = 0; i < activeComponents.Count; i++)
             {
@@ -53,13 +70,24 @@ namespace PressPlay.FFWD
                     (activeComponents[i] as IFixedUpdateable).FixedUpdate();
                 }
             }
+#if DEBUG
+            scripts.Stop();
+            physics.Start();
+#endif
             Physics.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+#if DEBUG
+            physics.Stop();
+#endif
         }
 
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
 
+            frameCounter++;
+#if DEBUG
+            scripts.Start();
+#endif
             Color bg = new Color(78, 115, 74);
 
             for (int i = 0; i < activeComponents.Count; i++)
@@ -74,6 +102,10 @@ namespace PressPlay.FFWD
                     (activeComponents[i] as PressPlay.FFWD.Interfaces.IUpdateable).Update();
                 }
             }
+#if DEBUG
+            scripts.Stop();
+            graphics.Start();
+#endif
             // TODO: This is not very cool. Needed to avoid test failures... But cameras should handle this
             if (gameTime.ElapsedGameTime.TotalMilliseconds > 0)
             {
@@ -112,6 +144,30 @@ namespace PressPlay.FFWD
             for (int i = 0; i < arms.Count; i++)
             {
                 (arms[i] as IRenderable).Draw(spriteBatch);
+            }
+#if DEBUG
+            graphics.Stop();
+            double total = scripts.Elapsed.TotalSeconds + graphics.Elapsed.TotalSeconds + physics.Elapsed.TotalSeconds;
+            if (ApplicationSettings.ShowFPSCounter)
+            {
+                Debug.Display("FPS", frameRate);
+            }
+            if (ApplicationSettings.ShowPerformanceBreakdown)
+            {
+                Debug.Display("S | P | G", String.Format("{0:P1} | {1:P1} | {2:P1}", scripts.Elapsed.TotalSeconds / total, physics.Elapsed.TotalSeconds / total, graphics.Elapsed.TotalSeconds / total));
+            }
+#endif
+        }
+
+        private void UpdateFPS(GameTime gameTime)
+        {
+            elapsedTime += gameTime.ElapsedGameTime;
+
+            if (elapsedTime > TimeSpan.FromSeconds(1))
+            {
+                elapsedTime -= TimeSpan.FromSeconds(1);
+                frameRate = frameCounter;
+                frameCounter = 0;
             }
         }
 

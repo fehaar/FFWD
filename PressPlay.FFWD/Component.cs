@@ -21,6 +21,23 @@ namespace PressPlay.FFWD
 
         public virtual GameObject gameObject { get; internal set; }
 
+        public string name
+        {
+            get
+            {
+                return (gameObject == null) ? GetType().Name : gameObject.name;
+            }
+        }
+
+        public string tag
+        {
+            get
+            {
+                // TODO: Objects should be destroyed after Update but before Rendering
+                throw new NotImplementedException("Method not implemented.");
+            }
+        }
+
         #region Component shortcut properties
         [ContentSerializerIgnore]
         public Transform transform
@@ -80,6 +97,7 @@ namespace PressPlay.FFWD
         }
         #endregion
 
+        #region Behaviour methods
         public virtual void Awake()
         {
             // NOTE: Do not do anything here as the convention in Unity is not to call base as it is not a virtual method
@@ -89,26 +107,18 @@ namespace PressPlay.FFWD
         {
             // NOTE: Do not do anything here as the convention in Unity is not to call base as it is not a virtual method
         }
+        #endregion
 
-        public override string ToString()
+        #region Public methods
+        public bool CompareTag(string tag)
         {
-            if (gameObject == null)
-            {
-                return GetType().Name + " on its own";
-            }
-            return GetType().Name + " on " + gameObject.name + " (" + gameObject.GetInstanceID() + ")";
-        }
+            // TODO : Add implementation of method
+            throw new NotImplementedException("Method not implemented.");
 
-        public void Destroy(Component component)
-        {
-            // TODO: Objects should be destroyed after Update but before Rendering
         }
+        #endregion
 
-        public void Destroy(GameObject go)
-        {
-            // TODO: Objects should be destroyed after Update but before Rendering
-        }
-
+        #region Internal methods
         internal override UnityObject Clone()
         {
             UnityObject obj = base.Clone();
@@ -116,13 +126,28 @@ namespace PressPlay.FFWD
             Application.AddNewComponent(obj as Component);
             return obj;
         }
+        #endregion
 
-        public string name
+        #region Component locator methods
+        public Component GetComponent(Type type)
         {
-            get
-            {
-                return (gameObject == null) ? GetType().Name : gameObject.name;
-            }
+            return gameObject.GetComponent(type);
+        }
+
+        public Component GetComponent(string type)
+        {
+            // TODO: Objects should be destroyed after Update but before Rendering
+            throw new NotImplementedException("Method not implemented.");
+        }
+
+        public Component[] GetComponents(Type type)
+        {
+            return gameObject.GetComponents(type);
+        }
+
+        public Component GetComponentInChildren(Type type)
+        {
+            return gameObject.GetComponentInChildren(type);
         }
 
         #region Component locator methods
@@ -131,29 +156,14 @@ namespace PressPlay.FFWD
             return gameObject.GetComponent<T>();
         }
 
-        public Component GetComponent(Type type)
-        {
-            return gameObject.GetComponent(type);
-        }
-
         public T[] GetComponents<T>() where T : Component
         {
             return gameObject.GetComponents<T>();
         }
 
-        public Component[] GetComponents(Type type)
-        {
-            return GetComponents(type);
-        }
-
         public Component[] GetComponentsInChildren(Type type)
         {
             return gameObject.GetComponentsInChildren(type);
-        }
-
-        public Component GetComponentInChildren(Type type)
-        {
-            return gameObject.GetComponentInChildren(type);
         }
 
         public T[] GetComponentsInParents<T>() where T : Component
@@ -175,6 +185,24 @@ namespace PressPlay.FFWD
             throw new NotImplementedException("Transform.Translate is not implemented yet");
         }
 
+        #endregion
+
+        public Component[] GetComponentsInChildren(Type type, bool includeInactive)
+        {
+            // TODO: Objects should be destroyed after Update but before Rendering
+            throw new NotImplementedException("Method not implemented.");
+        }
+        #endregion
+
+        #region Overridden methods
+        public override string ToString()
+        {
+            if (gameObject == null)
+            {
+                return GetType().Name + " on its own";
+            }
+            return GetType().Name + " on " + gameObject.name + " (" + gameObject.GetInstanceID() + ")";
+        }
         #endregion
     }
 }

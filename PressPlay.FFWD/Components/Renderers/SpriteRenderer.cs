@@ -78,8 +78,8 @@ namespace PressPlay.FFWD.Components
 
         public void Update()
         {
-            Position.X = transform.localPosition.X;
-            Position.Y = transform.localPosition.Y;
+            Position.X = transform.localPosition.x;
+            Position.Y = transform.localPosition.y;
         }
 
         #endregion
@@ -94,7 +94,7 @@ namespace PressPlay.FFWD.Components
             }
 
             batch.Begin();
-            batch.Draw(texture, Position, bounds, material.color, transform.angleY, Origin, Scale, Effects, LayerDepth);
+            batch.Draw(texture, Position, bounds, material.color, transform.eulerAngles.y, Origin, Scale, Effects, LayerDepth);
             batch.End();
         }
         #endregion

@@ -35,7 +35,7 @@ namespace PressPlay.FFWD.Test.Core_framework
         {
             GameObject obj = new GameObject();
             Transform trans = new Transform();
-            trans.localPosition = Vector3.UnitX;
+            trans.localPosition = Vector3.right;
             obj.AddComponent(trans);
             GameObject instance = GameObject.Instantiate(obj) as GameObject;
             Assert.That(instance, Is.Not.Null);
@@ -309,8 +309,8 @@ namespace PressPlay.FFWD.Test.Core_framework
             GameObject obj = new GameObject();
             Transform trans = new Transform();
             obj.AddComponent(trans);
-            Vector3 pos = Vector3.UnitZ;
-            Quaternion rot = Quaternion.CreateFromAxisAngle(Vector3.UnitY, 10);
+            Vector3 pos = Vector3.forward;
+            Quaternion rot = Quaternion.AngleAxis(10, Vector3.up);
             GameObject instance = GameObject.Instantiate(obj, pos, rot) as GameObject;
             Assert.That(instance, Is.Not.Null);
             Assert.That(instance.transform.localPosition, Is.EqualTo(pos));
@@ -324,8 +324,8 @@ namespace PressPlay.FFWD.Test.Core_framework
             GameObject obj = new GameObject();
             Transform trans = new Transform();
             obj.AddComponent(trans);
-            Vector3 pos = Vector3.UnitZ;
-            Quaternion rot = Quaternion.CreateFromAxisAngle(Vector3.UnitY, 10);
+            Vector3 pos = Vector3.forward;
+            Quaternion rot = Quaternion.AngleAxis(10, Vector3.up);
             Transform instance = GameObject.Instantiate(trans, pos, rot) as Transform;
             Assert.That(instance, Is.Not.Null);
             Assert.That(instance.gameObject.transform.localPosition, Is.EqualTo(pos));

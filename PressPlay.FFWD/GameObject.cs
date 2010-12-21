@@ -24,6 +24,7 @@ namespace PressPlay.FFWD
             : base()
         {
             components = new List<Component>();
+            active = true;
         }
 
         public GameObject(string name) : this()
@@ -160,6 +161,7 @@ namespace PressPlay.FFWD
             obj._transform = null;
             obj._rigidbody = null;
             obj._collider = null;
+            obj._renderer = null;
 
             obj.components = new List<Component>();
             for (int i = 0; i < components.Count; i++)
@@ -529,9 +531,60 @@ namespace PressPlay.FFWD
         #endregion
 
         #region Unity methods
-        public void SetActiveRecursively(bool _status)
+        public void SetActiveRecursively(bool state)
         {
-            // TODO: Create this method
+            active = state;
+            if (transform.children != null)
+            {
+                for (int i = 0; i < transform.children.Count; i++)
+                {
+                    transform.children[i].SetActiveRecursively(state);
+                }
+            }
+        }
+
+        public bool CompareTag(string tag)
+        {
+            // TODO : Add implementation of method
+            throw new NotImplementedException("Method not implemented.");
+
+        }
+
+        /// <summary>
+        /// Returns a list of active GameObjects tagged tag. Returns null if no GameObject was found.
+        /// Tags must be declared in the tag manager before using them.
+        /// </summary>
+        /// <param name="tag">The tag to find</param>
+        /// <returns></returns>
+        public static GameObject FindWithTag(string tag)
+        {
+            // TODO : Add implementation of method
+            throw new NotImplementedException("Method not implemented.");
+        }
+
+        /// <summary>
+        /// Returns a list of active GameObjects tagged tag. Returns null if no GameObject was found.
+        /// Tags must be declared in the tag manager before using them.
+        /// </summary>
+        /// <param name="tag">The tag to find</param>
+        /// <returns></returns>
+        public static GameObject[] FindGameObjectsWithTag(string tag)
+        {
+            // TODO : Add implementation of method
+            throw new NotImplementedException("Method not implemented.");
+        }
+
+        /// <summary>
+        /// Finds a game object by name and returns it.
+        /// If no game object with name can be found, null is returned. If name contains a '/' character it will traverse the hierarchy like a path name. This function only returns active gameobjects.
+        /// For performance reasons it is recommended to not use this function every frame Instead cache the result in a member variable at startup or use GameObject.FindWithTag.
+        /// </summary>
+        /// <param name="name">The name of the GameObject to find</param>
+        /// <returns></returns>
+        public static GameObject Find(string name)
+        {
+            // TODO : Add implementation of method
+            throw new NotImplementedException("Method not implemented.");
         }
 
         public void SendMessageUpwards(string methodName, object value, SendMessageOptions SendMessageOptions)

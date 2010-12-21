@@ -31,7 +31,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
         {
             Body body = Physics.AddBody();
             Physics.AddBox(body, false, 10, 10, new Vector2(0, 50), 0, 1);
-            bool hit = Physics.Raycast(Vector3.Zero, Vector3.UnitZ, 100, 0);
+            bool hit = Physics.Raycast(Vector3.zero, Vector3.forward, 100, 0);
             Assert.That(hit, Is.True);
         }
 
@@ -40,7 +40,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
         {
             Body body = Physics.AddBody();
             Physics.AddBox(body, false, 10, 10, new Vector2(0, 50), 0, 1);
-            Ray ray = new Ray(Vector3.Zero, Vector3.UnitZ);
+            Ray ray = new Ray(Vector3.zero, Vector3.forward);
             bool hit = Physics.Raycast(ray, 100, 0);
             Assert.That(hit, Is.True);
         }
@@ -68,7 +68,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
         {
             Body body = Physics.AddBody();
             Physics.AddBox(body, false, 10, 10, new Vector2(0, 50), 0, 1);
-            Ray ray = new Ray(Vector3.Zero, Vector3.UnitX);
+            Ray ray = new Ray(Vector3.zero, Vector3.right);
             bool hit = Physics.Raycast(ray, 100, 0);
             Assert.That(hit, Is.False);
         }
@@ -121,7 +121,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
         }
 
         [Test]
-        public void DoingARaycastWithZeroDistanceWillReturnFalse()
+        public void DoingARaycastWithzeroDistanceWillReturnFalse()
         {
             Assert.That(Physics.Raycast(Vector2.Zero, Vector2.Zero, 0, 0), Is.False);
             Assert.That(Physics.RaycastAll(Vector2.Zero, Vector2.Zero, 0, 0), Is.Empty);

@@ -12,15 +12,18 @@ namespace PressPlay.FFWD
 
     public class Transform : Component, IEnumerable
     {
+        #region Constructors
         public Transform()
         {
             localRotation = Quaternion.Identity;
-            localScale = Vector3.One;
+            localScale = Vector3.one;
         }
+        #endregion
 
+        #region Properties
         private Vector3 _localPosition;
         public Vector3 localPosition
-        { 
+        {
             get
             {
                 return _localPosition;
@@ -32,36 +35,8 @@ namespace PressPlay.FFWD
             }
         }
 
-        // TODO: Implement eulerAngles
-        private Vector3 _eulerAngles;
-        public Vector3 eulerAngles
-        {
-            get
-            {
-                return _eulerAngles;
-            }
-            set
-            {
-                _eulerAngles = value;
-            }
-        }
-
-        // TODO: Implement local eulerAngles
-        private Vector3 _localEulerAngles;
-        public Vector3 localEulerAngles
-        {
-            get
-            {
-                return _localEulerAngles;
-            }
-            set
-            {
-                _localEulerAngles = value;
-            }
-        }
-
         private Vector3 _localScale;
-        public Vector3 localScale 
+        public Vector3 localScale
         {
             get
             {
@@ -75,7 +50,7 @@ namespace PressPlay.FFWD
         }
 
         private Quaternion _localRotation;
-        public Quaternion localRotation 
+        public Quaternion localRotation
         {
             get
             {
@@ -88,18 +63,15 @@ namespace PressPlay.FFWD
             }
         }
 
-
-        [ContentSerializer(Optional = true, CollectionItemName = "child")]
-        internal List<GameObject> children { get; set; }
-
         internal Transform _parent;
         [ContentSerializerIgnore]
-        public Transform parent {
+        public Transform parent
+        {
             get
             {
                 return _parent;
             }
-            set 
+            set
             {
                 if (_parent == value)
                 {
@@ -124,6 +96,9 @@ namespace PressPlay.FFWD
                 hasDirtyWorld = true;
             }
         }
+
+        [ContentSerializer(Optional = true, CollectionItemName = "child")]
+        internal List<GameObject> children { get; set; }
 
         private Matrix _world = Matrix.Identity;
 
@@ -160,6 +135,159 @@ namespace PressPlay.FFWD
             }
         }
 
+        [ContentSerializerIgnore]
+        public Vector3 position
+        {
+            get
+            {
+                return world.Translation;
+            }
+            set
+            {
+                if (parent == null)
+                {
+                    localPosition = value;
+                }
+                else
+                {
+                    Vector3 trans = Microsoft.Xna.Framework.Vector3.Transform(value, Matrix.Invert(parent.world));
+                    localPosition = trans;
+                }
+                if (rigidbody != null)
+                {
+                    rigidbody.MovePosition(position);
+                }
+            }
+        }
+
+        [ContentSerializerIgnore]
+        public Vector3 lossyScale
+        {
+            get
+            {
+                if (parent == null)
+                {
+                    return localScale;
+                }
+                else
+                {
+                    Microsoft.Xna.Framework.Vector3 scale;
+                    Microsoft.Xna.Framework.Quaternion rot;
+                    Microsoft.Xna.Framework.Vector3 pos;
+                    world.Decompose(out scale, out rot, out pos);
+                    return scale;
+                }
+            }
+        }
+
+        [ContentSerializerIgnore]
+        public Quaternion rotation
+        {
+            get
+            {
+                if (parent == null)
+                {
+                    return localRotation;
+                }
+                else
+                {
+                    Microsoft.Xna.Framework.Vector3 scale;
+                    Microsoft.Xna.Framework.Quaternion rot;
+                    Microsoft.Xna.Framework.Vector3 pos;
+                    world.Decompose(out scale, out rot, out pos);
+                    return rot;
+                }
+            }
+            set
+            {
+                if (parent == null)
+                {
+                    localRotation = value;
+                }
+                else
+                {
+                    // TODO: This does not work yet
+                    throw new NotImplementedException("Not implemented yet");
+                }
+            }
+        }
+
+        [ContentSerializerIgnore]
+        public Vector3 eulerAngles
+        {
+            get
+            {
+                return rotation.eulerAngles;
+            }
+            set
+            {
+                rotation = Quaternion.Euler(value);
+            }
+        }
+
+        [ContentSerializerIgnore]
+        public Vector3 localEulerAngles
+        {
+            get
+            {
+                return localRotation.eulerAngles;
+            }
+            set
+            {
+                localRotation = Quaternion.Euler(value);
+            }
+        }
+
+        [ContentSerializerIgnore]
+        public Vector3 right
+        {
+            get
+            {
+                return world.Right;
+            }
+        }
+
+        [ContentSerializerIgnore]
+        public Vector3 forward
+        {
+            get
+            {
+                return world.Forward;
+            }
+        }
+
+        [ContentSerializerIgnore]
+        public Vector3 up
+        {
+            get
+            {
+                return world.Up;
+            }
+        }
+
+        [ContentSerializerIgnore]
+        public Transform root
+        {
+            get
+            {
+                if (parent != null)
+                {
+                    return parent.root;
+                }
+                return this;
+            }
+        }
+
+        public int childCount
+        {
+            get
+            {
+                return children.Count;
+            }
+        }
+        #endregion
+
+        #region Private methods
         private void calculateWorld()
         {
             _hasDirtyWorld = false;
@@ -182,133 +310,112 @@ namespace PressPlay.FFWD
             {
                 localPosition = pos - parent.position;
             }
-            localRotation = Quaternion.CreateFromAxisAngle(Vector3.UnitY, ang);
+            localRotation = Quaternion.AngleAxis(ang, Vector3.up);
         }
+        #endregion
 
-        [ContentSerializerIgnore]
-        public Vector3 position
+        #region Public methods
+        public void Translate(Vector3 translation)
         {
-            get
-            {
-                return world.Translation;
-            }
-            set
-            {
-                if (parent == null)
-                {
-                    localPosition = value;
-                }
-                else
-                {
-                    Vector3 trans = Vector3.Transform(value, Matrix.Invert(parent.world));
-                    localPosition = trans;
-                }
-                if (rigidbody != null)
-                {
-                    rigidbody.MovePosition(position);
-                }
-            }
+            Translate(translation, Space.Self);
         }
 
-        [ContentSerializerIgnore]
-        public Vector3 lossyScale 
-        { 
-            get
-            {
-                if (parent == null)
-                {
-                    return localScale;
-                }
-                else
-                {
-                    Vector3 scale;
-                    Quaternion rot;
-                    Vector3 pos;
-                    world.Decompose(out scale, out rot, out pos);
-                    return scale;
-                }
-            }
-        }
-
-        [ContentSerializerIgnore]
-        public Quaternion rotation 
-        { 
-            get
-            {
-                if (parent == null)
-                {
-                    return localRotation;
-                }
-                else
-                {
-                    Vector3 scale;
-                    Quaternion rot;
-                    Vector3 pos;
-                    world.Decompose(out scale, out rot, out pos);
-                    return rot;
-                }
-            }
-            set
-            {
-                // TODO: This does not work yet
-            }
-        }
-
-        [ContentSerializerIgnore]
-        public float angleY
+        public void Translate(Vector3 translation, Space space)
         {
-            get
+            if (space == Space.Self)
             {
-                Vector3 normFwd = Vector3.Normalize(world.Forward);
-                float dot = Vector3.Dot(normFwd, Vector3.Forward);
-                if (world.Forward.X > 0)
-                {
-                    return (float)Math.Acos(dot);
-                }
-                else
-                {
-                    return (float)((Math.PI * 2) - Math.Acos(dot));
-                }
+                localPosition += translation;
             }
-            set
+            else
             {
-                localRotation = Quaternion.CreateFromAxisAngle(Vector3.UnitY, value);
-                if (rigidbody != null)
-                {
-                    rigidbody.MoveRotation(localRotation);
-                }
+                throw new NotImplementedException("Not implemented yet");
             }
+        }
+
+        public void Translate(float x, float y, float z)
+        {
+            Translate(new Vector3(x, y, z), Space.Self);
+        }
+
+        public void Translate(float x, float y, float z, Space space)
+        {
+            Translate(new Vector3(x, y, z), space);
+        }
+
+        public void Translate(Vector3 translation, Transform relativeTo)
+        {
+            // TODO: Implement this method
+            throw new NotImplementedException("Not implemented yet");
+        }
+
+        public void Translate(float x, float y, float z, Transform relativeTo)
+        {
+            Translate(new Vector3(x, y, z), relativeTo);
         }
 
         public void Rotate(Vector3 axis, float angle, Space relativeTo)
         {
-            angle = MathHelper.ToRadians(angle);
             if (relativeTo == Space.World)
             {
                 // TODO: This will have issues with parent rotations
                 Matrix rot;
-                Matrix.CreateFromAxisAngle(ref axis, angle, out rot);
+                Matrix.CreateFromAxisAngle(ref axis.vector, angle, out rot);
                 Matrix.Multiply(ref _world, ref rot, out _world);
                 WorldChanged();
             }
             else
             {
-                Quaternion q;
-                Quaternion.CreateFromAxisAngle(ref axis, angle, out q);
-                Quaternion.Multiply(ref _localRotation, ref q, out _localRotation);
-                hasDirtyWorld = true;
+                Quaternion q = Quaternion.AngleAxis(angle, axis);
+                localRotation *= q;
+            }
+        }
+
+        public void Rotate(Vector3 axis, float angle)
+        {
+            Rotate(axis, angle, Space.Self);
+        }
+
+        public void Rotate(Vector3 eulerAngles, Space space)
+        {
+            Rotate(eulerAngles.x, eulerAngles.y, eulerAngles.z, space);
+        }
+
+        public void Rotate(Vector3 eulerAngles)
+        {
+            Rotate(eulerAngles.x, eulerAngles.y, eulerAngles.z, Space.Self);
+        }
+
+        public void Rotate(float x, float y, float z)
+        {
+            Rotate(x, y, z, Space.Self);
+        }
+
+        public void Rotate(float x, float y, float z, Space relativeTo)
+        {
+            if (relativeTo == Space.World)
+            {
+                // TODO: This will have issues with parent rotations
+                Matrix rot;
+                Matrix.CreateFromYawPitchRoll(y, x, z, out rot);
+                Matrix.Multiply(ref _world, ref rot, out _world);
+                WorldChanged();
+            }
+            else
+            {
+                Quaternion q = Quaternion.Euler(x, y, z);
+                localRotation *= q;
             }
         }
 
         public void LookAt(Vector3 worldPosition, Vector3 worldUp)
         {
             Matrix m = Matrix.CreateWorld(position, worldPosition - position, worldUp);
-            Vector3 scale;
-            Quaternion rot;
-            Vector3 pos;
+            Microsoft.Xna.Framework.Vector3 scale;
+            Microsoft.Xna.Framework.Quaternion rot;
+            Microsoft.Xna.Framework.Vector3 pos;
             if (m.Decompose(out scale, out rot, out pos))
             {
-                localRotation = rot;
+                localRotation = new Quaternion(rot);
                 if (rigidbody != null)
                 {
                     rigidbody.MoveRotation(localRotation);
@@ -324,18 +431,19 @@ namespace PressPlay.FFWD
 
         public void LookAt(Vector3 worldPosition)
         {
-            LookAt(worldPosition, Vector3.UnitY);
+            LookAt(worldPosition, Vector3.up);
         }
 
         private void WorldChanged()
         {
-            Vector3 scale;
-            Quaternion rot;
-            Vector3 pos;
+            // TODO: If we have a parent - this method can frak things up proper!
+            Microsoft.Xna.Framework.Vector3 scale;
+            Microsoft.Xna.Framework.Quaternion rot;
+            Microsoft.Xna.Framework.Vector3 pos;
             if (_world.Decompose(out scale, out rot, out pos))
             {
                 _localScale = scale;
-                _localRotation = rot;
+                _localRotation = new Quaternion(rot);
                 _localPosition = pos;
                 hasDirtyWorld = false;
             }
@@ -351,51 +459,63 @@ namespace PressPlay.FFWD
             return children.GetEnumerator();
         }
 
-        public Vector3 right 
+        public Vector3 TransformDirection(Vector3 position)
+        {            
+            return Microsoft.Xna.Framework.Vector3.Transform(position, rotation.quaternion);
+        }
+
+        public Vector3 TransformDirection(float x, float y, float z)
         {
-            get
-            {
-                return world.Right;
-            }
+            return Microsoft.Xna.Framework.Vector3.Transform(new Microsoft.Xna.Framework.Vector3(x, y, z), rotation.quaternion);
         }
 
-        public Vector3 forward
+        public Vector3 InverseTransformDirection(Vector3 position)
         {
-            get
-            {
-                return world.Forward;
-            }
+            return Microsoft.Xna.Framework.Vector3.Transform(position, Microsoft.Xna.Framework.Quaternion.Inverse(rotation.quaternion));
         }
 
-        public Vector3 up 
-        { 
-            get
-            {
-                return world.Up;
-            }
-        }
-
-        [ContentSerializerIgnore]
-        public Transform root 
-        { 
-            get
-            {
-                if (parent != null)
-                {
-                    return parent.root;
-                }
-                return this;
-            }
+        public Vector3 InverseTransformDirection(float x, float y, float z)
+        {
+            return Microsoft.Xna.Framework.Vector3.Transform(new Microsoft.Xna.Framework.Vector3(x, y, z), Microsoft.Xna.Framework.Quaternion.Inverse(rotation.quaternion));
         }
 
         public Vector3 TransformPoint(Vector3 position)
         {
-            return Vector3.Transform(position, world);
+            return Microsoft.Xna.Framework.Vector3.Transform(position, world);
+        }
+
+        public Vector3 TransformPoint(float x, float y, float z)
+        {
+            return Microsoft.Xna.Framework.Vector3.Transform(new Microsoft.Xna.Framework.Vector3(x, y, z), world);
         }
 
         public Vector3 InverseTransformPoint(Vector3 position)
         {
-            return Vector3.Transform(position, Matrix.Invert(world));
+            return Microsoft.Xna.Framework.Vector3.Transform(position, Matrix.Invert(world));
         }
+
+        public Vector3 InverseTransformPoint(float x, float y, float z)
+        {
+            return Microsoft.Xna.Framework.Vector3.Transform(new Microsoft.Xna.Framework.Vector3(x, y, z), Matrix.Invert(world));
+        }
+
+        public void DetachChildren()
+        {
+            // TODO: Implement this method
+            throw new NotImplementedException("Not implemented yet");
+        }
+
+        public Transform Find(string name)
+        {
+            // TODO : Add implementation of method
+            throw new NotImplementedException("Method not implemented.");
+        }
+
+        public bool IsChildOf(Transform parent)
+        {
+            // TODO : Add implementation of method
+            throw new NotImplementedException("Method not implemented.");
+        }
+        #endregion
     }
 }

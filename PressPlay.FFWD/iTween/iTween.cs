@@ -7,7 +7,6 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections;
-using PressPlay.FFWD.Extensions;
 #endregion
 
 
@@ -162,7 +161,7 @@ namespace PressPlay.FFWD
             public static float lookAhead = .05f;
             public static bool useRealTime = false; // Added by PressPlay
             //look direction:
-            public static Vector3 up = Vector3.Up;
+            public static Vector3 up = Vector3.up;
         }
 
         #endregion
@@ -1242,16 +1241,16 @@ namespace PressPlay.FFWD
                 switch ((string)args["axis"])
                 {
                     case "x":
-                        tempRestriction.Y = tempRotation.Y;
-                        tempRestriction.Z = tempRotation.Z;
+                        tempRestriction.y = tempRotation.y;
+                        tempRestriction.z = tempRotation.z;
                         break;
                     case "y":
-                        tempRestriction.X = tempRotation.X;
-                        tempRestriction.Z = tempRotation.Z;
+                        tempRestriction.x = tempRotation.x;
+                        tempRestriction.z = tempRotation.z;
                         break;
                     case "z":
-                        tempRestriction.X = tempRotation.X;
-                        tempRestriction.Y = tempRotation.Y;
+                        tempRestriction.x = tempRotation.x;
+                        tempRestriction.y = tempRotation.y;
                         break;
                 }
                 target.transform.eulerAngles = tempRestriction;
@@ -1345,8 +1344,8 @@ namespace PressPlay.FFWD
                 if (args["looktarget"].GetType() == typeof(Transform))
                 {
                     Transform transform = (Transform)args["looktarget"];
-                    args["position"] = new Vector3(transform.position.X, transform.position.Y, transform.position.Z);
-                    args["rotation"] = new Vector3(transform.eulerAngles.X, transform.eulerAngles.Y, transform.eulerAngles.Z);
+                    args["position"] = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+                    args["rotation"] = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, transform.eulerAngles.z);
                 }
             }
 
@@ -1465,9 +1464,9 @@ namespace PressPlay.FFWD
                 if (args["position"].GetType() == typeof(Transform))
                 {
                     Transform transform = (Transform)args["position"];
-                    args["position"] = new Vector3(transform.position.X, transform.position.Y, transform.position.Z);
-                    args["rotation"] = new Vector3(transform.eulerAngles.X, transform.eulerAngles.Y, transform.eulerAngles.Z);
-                    args["scale"] = new Vector3(transform.localScale.X, transform.localScale.Y, transform.localScale.Z);
+                    args["position"] = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+                    args["rotation"] = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, transform.eulerAngles.z);
+                    args["scale"] = new Vector3(transform.localScale.x, transform.localScale.y, transform.localScale.z);
                 }
             }
 
@@ -1672,15 +1671,15 @@ namespace PressPlay.FFWD
                 {
                     if (args.ContainsKey("x"))
                     {
-                        fromPosition.X = (float)args["x"];
+                        fromPosition.x = (float)args["x"];
                     }
                     if (args.ContainsKey("y"))
                     {
-                        fromPosition.Y = (float)args["y"];
+                        fromPosition.y = (float)args["y"];
                     }
                     if (args.ContainsKey("z"))
                     {
-                        fromPosition.Z = (float)args["z"];
+                        fromPosition.z = (float)args["z"];
                     }
                 }
 
@@ -1989,9 +1988,9 @@ namespace PressPlay.FFWD
                 if (args["scale"].GetType() == typeof(Transform))
                 {
                     Transform transform = (Transform)args["scale"];
-                    args["position"] = new Vector3(transform.position.X, transform.position.X, transform.position.Z);
-                    args["rotation"] = new Vector3(transform.eulerAngles.X, transform.eulerAngles.X, transform.eulerAngles.Z);
-                    args["scale"] = new Vector3(transform.localScale.X, transform.localScale.X, transform.localScale.Z);
+                    args["position"] = new Vector3(transform.position.x, transform.position.x, transform.position.z);
+                    args["rotation"] = new Vector3(transform.eulerAngles.x, transform.eulerAngles.x, transform.eulerAngles.z);
+                    args["scale"] = new Vector3(transform.localScale.x, transform.localScale.x, transform.localScale.z);
                 }
             }
 
@@ -2103,15 +2102,15 @@ namespace PressPlay.FFWD
             {
                 if (args.ContainsKey("x"))
                 {
-                    fromScale.X = (float)args["x"];
+                    fromScale.x = (float)args["x"];
                 }
                 if (args.ContainsKey("y"))
                 {
-                    fromScale.Y = (float)args["y"];
+                    fromScale.y = (float)args["y"];
                 }
                 if (args.ContainsKey("z"))
                 {
-                    fromScale.Z = (float)args["z"];
+                    fromScale.z = (float)args["z"];
                 }
             }
 
@@ -2385,9 +2384,9 @@ namespace PressPlay.FFWD
                 if (args["rotation"].GetType() == typeof(Transform))
                 {
                     Transform transform = (Transform)args["rotation"];
-                    args["position"] = new Vector3(transform.position.X, transform.position.Y, transform.position.Z);
-                    args["rotation"] = new Vector3(transform.eulerAngles.X, transform.eulerAngles.Y, transform.eulerAngles.Z);
-                    args["scale"] = new Vector3(transform.localScale.X, transform.localScale.Y, transform.localScale.Z);
+                    args["position"] = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+                    args["rotation"] = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, transform.eulerAngles.z);
+                    args["scale"] = new Vector3(transform.localScale.x, transform.localScale.y, transform.localScale.z);
                 }
             }
 
@@ -2520,15 +2519,15 @@ namespace PressPlay.FFWD
             {
                 if (args.ContainsKey("x"))
                 {
-                    fromRotation.X = (float)args["x"];
+                    fromRotation.x = (float)args["x"];
                 }
                 if (args.ContainsKey("y"))
                 {
-                    fromRotation.Y = (float)args["y"];
+                    fromRotation.y = (float)args["y"];
                 }
                 if (args.ContainsKey("z"))
                 {
-                    fromRotation.Z = (float)args["z"];
+                    fromRotation.z = (float)args["z"];
                 }
             }
 
@@ -3674,22 +3673,22 @@ namespace PressPlay.FFWD
                 switch ((string)tweenArguments["axis"])
                 {
                     case "x":
-                        vector3s[1].Y = vector3s[0].Y;
-                        vector3s[1].Z = vector3s[0].Z;
+                        vector3s[1].y = vector3s[0].y;
+                        vector3s[1].z = vector3s[0].z;
                         break;
                     case "y":
-                        vector3s[1].X = vector3s[0].X;
-                        vector3s[1].Z = vector3s[0].Z;
+                        vector3s[1].x = vector3s[0].x;
+                        vector3s[1].z = vector3s[0].z;
                         break;
                     case "z":
-                        vector3s[1].X = vector3s[0].X;
-                        vector3s[1].Y = vector3s[0].Y;
+                        vector3s[1].x = vector3s[0].x;
+                        vector3s[1].y = vector3s[0].y;
                         break;
                 }
             }
 
             //shortest distance:
-            vector3s[1] = new Vector3(clerp(vector3s[0].X, vector3s[1].X, 1), clerp(vector3s[0].Y, vector3s[1].Y, 1), clerp(vector3s[0].Y, vector3s[1].Y, 1));
+            vector3s[1] = new Vector3(clerp(vector3s[0].x, vector3s[1].x, 1), clerp(vector3s[0].y, vector3s[1].y, 1), clerp(vector3s[0].y, vector3s[1].y, 1));
 
             //need for speed?
             if (tweenArguments.ContainsKey("speed"))
@@ -3828,15 +3827,15 @@ namespace PressPlay.FFWD
             {
                 if (tweenArguments.ContainsKey("x"))
                 {
-                    vector3s[1].X = (float)tweenArguments["x"];
+                    vector3s[1].x = (float)tweenArguments["x"];
                 }
                 if (tweenArguments.ContainsKey("y"))
                 {
-                    vector3s[1].Y = (float)tweenArguments["y"];
+                    vector3s[1].y = (float)tweenArguments["y"];
                 }
                 if (tweenArguments.ContainsKey("z"))
                 {
-                    vector3s[1].Z = (float)tweenArguments["z"];
+                    vector3s[1].z = (float)tweenArguments["z"];
                 }
             }
 
@@ -3874,15 +3873,15 @@ namespace PressPlay.FFWD
             {
                 if (tweenArguments.ContainsKey("x"))
                 {
-                    vector3s[1].X = vector3s[0].X + (float)tweenArguments["x"];
+                    vector3s[1].x = vector3s[0].x + (float)tweenArguments["x"];
                 }
                 if (tweenArguments.ContainsKey("y"))
                 {
-                    vector3s[1].Y = vector3s[0].Y + (float)tweenArguments["y"];
+                    vector3s[1].y = vector3s[0].y + (float)tweenArguments["y"];
                 }
                 if (tweenArguments.ContainsKey("z"))
                 {
-                    vector3s[1].Z = vector3s[0].Z + (float)tweenArguments["z"];
+                    vector3s[1].z = vector3s[0].z + (float)tweenArguments["z"];
                 }
             }
 
@@ -3930,15 +3929,15 @@ namespace PressPlay.FFWD
             {
                 if (tweenArguments.ContainsKey("x"))
                 {
-                    vector3s[1].X = (float)tweenArguments["x"];
+                    vector3s[1].x = (float)tweenArguments["x"];
                 }
                 if (tweenArguments.ContainsKey("y"))
                 {
-                    vector3s[1].Y = (float)tweenArguments["y"];
+                    vector3s[1].y = (float)tweenArguments["y"];
                 }
                 if (tweenArguments.ContainsKey("z"))
                 {
-                    vector3s[1].Z = (float)tweenArguments["z"];
+                    vector3s[1].z = (float)tweenArguments["z"];
                 }
             }
 
@@ -3963,21 +3962,21 @@ namespace PressPlay.FFWD
             {
                 // Unity Version
                 //vector3s[1] = Vector3.Scale(vector3s[1], (Vector3)tweenArguments["amount"]);
-                vector3s[1] = Vector3.Multiply(vector3s[1], (Vector3)tweenArguments["amount"]);
+                vector3s[1] = Vector3.Scale(vector3s[1], (Vector3)tweenArguments["amount"]);
             }
             else
             {
                 if (tweenArguments.ContainsKey("x"))
                 {
-                    vector3s[1].X *= (float)tweenArguments["x"];
+                    vector3s[1].x *= (float)tweenArguments["x"];
                 }
                 if (tweenArguments.ContainsKey("y"))
                 {
-                    vector3s[1].Y *= (float)tweenArguments["y"];
+                    vector3s[1].y *= (float)tweenArguments["y"];
                 }
                 if (tweenArguments.ContainsKey("z"))
                 {
-                    vector3s[1].Z *= (float)tweenArguments["z"];
+                    vector3s[1].z *= (float)tweenArguments["z"];
                 }
             }
 
@@ -4006,15 +4005,15 @@ namespace PressPlay.FFWD
             {
                 if (tweenArguments.ContainsKey("x"))
                 {
-                    vector3s[1].X += (float)tweenArguments["x"];
+                    vector3s[1].x += (float)tweenArguments["x"];
                 }
                 if (tweenArguments.ContainsKey("y"))
                 {
-                    vector3s[1].Y += (float)tweenArguments["y"];
+                    vector3s[1].y += (float)tweenArguments["y"];
                 }
                 if (tweenArguments.ContainsKey("z"))
                 {
-                    vector3s[1].Z += (float)tweenArguments["z"];
+                    vector3s[1].z += (float)tweenArguments["z"];
                 }
             }
 
@@ -4058,20 +4057,20 @@ namespace PressPlay.FFWD
             {
                 if (tweenArguments.ContainsKey("x"))
                 {
-                    vector3s[1].X = (float)tweenArguments["x"];
+                    vector3s[1].x = (float)tweenArguments["x"];
                 }
                 if (tweenArguments.ContainsKey("y"))
                 {
-                    vector3s[1].Y = (float)tweenArguments["y"];
+                    vector3s[1].y = (float)tweenArguments["y"];
                 }
                 if (tweenArguments.ContainsKey("z"))
                 {
-                    vector3s[1].Z = (float)tweenArguments["z"];
+                    vector3s[1].z = (float)tweenArguments["z"];
                 }
             }
 
             //shortest distance:
-            vector3s[1] = new Vector3(clerp(vector3s[0].X, vector3s[1].X, 1), clerp(vector3s[0].Y, vector3s[1].Y, 1), clerp(vector3s[0].Z, vector3s[1].Z, 1));
+            vector3s[1] = new Vector3(clerp(vector3s[0].x, vector3s[1].x, 1), clerp(vector3s[0].y, vector3s[1].y, 1), clerp(vector3s[0].z, vector3s[1].z, 1));
 
             //need for speed?
             if (tweenArguments.ContainsKey("speed"))
@@ -4098,15 +4097,15 @@ namespace PressPlay.FFWD
             {
                 if (tweenArguments.ContainsKey("x"))
                 {
-                    vector3s[1].X += (float)tweenArguments["x"];
+                    vector3s[1].x += (float)tweenArguments["x"];
                 }
                 if (tweenArguments.ContainsKey("y"))
                 {
-                    vector3s[1].Y += (float)tweenArguments["y"];
+                    vector3s[1].y += (float)tweenArguments["y"];
                 }
                 if (tweenArguments.ContainsKey("z"))
                 {
-                    vector3s[1].Z += (float)tweenArguments["z"];
+                    vector3s[1].z += (float)tweenArguments["z"];
                 }
             }
 
@@ -4131,21 +4130,21 @@ namespace PressPlay.FFWD
             {   
                 // Unity version
                 //vector3s[1] += Vector3.Scale((Vector3)tweenArguments["amount"], new Vector3(360, 360, 360));
-                vector3s[1] += Vector3.Multiply((Vector3)tweenArguments["amount"], new Vector3(360, 360, 360));
+                vector3s[1] += Vector3.Scale((Vector3)tweenArguments["amount"], new Vector3(360, 360, 360));
             }
             else
             {
                 if (tweenArguments.ContainsKey("x"))
                 {
-                    vector3s[1].X += 360 * (float)tweenArguments["x"];
+                    vector3s[1].x += 360 * (float)tweenArguments["x"];
                 }
                 if (tweenArguments.ContainsKey("y"))
                 {
-                    vector3s[1].Y += 360 * (float)tweenArguments["y"];
+                    vector3s[1].y += 360 * (float)tweenArguments["y"];
                 }
                 if (tweenArguments.ContainsKey("z"))
                 {
-                    vector3s[1].Z += 360 * (float)tweenArguments["z"];
+                    vector3s[1].z += 360 * (float)tweenArguments["z"];
                 }
             }
 
@@ -4177,15 +4176,15 @@ namespace PressPlay.FFWD
             {
                 if (tweenArguments.ContainsKey("x"))
                 {
-                    vector3s[1].X = (float)tweenArguments["x"];
+                    vector3s[1].x = (float)tweenArguments["x"];
                 }
                 if (tweenArguments.ContainsKey("y"))
                 {
-                    vector3s[1].Y = (float)tweenArguments["y"];
+                    vector3s[1].y = (float)tweenArguments["y"];
                 }
                 if (tweenArguments.ContainsKey("z"))
                 {
-                    vector3s[1].Z = (float)tweenArguments["z"];
+                    vector3s[1].z = (float)tweenArguments["z"];
                 }
             }
         }
@@ -4207,15 +4206,15 @@ namespace PressPlay.FFWD
             {
                 if (tweenArguments.ContainsKey("x"))
                 {
-                    vector3s[1].X = (float)tweenArguments["x"];
+                    vector3s[1].x = (float)tweenArguments["x"];
                 }
                 if (tweenArguments.ContainsKey("y"))
                 {
-                    vector3s[1].Y = (float)tweenArguments["y"];
+                    vector3s[1].y = (float)tweenArguments["y"];
                 }
                 if (tweenArguments.ContainsKey("z"))
                 {
-                    vector3s[1].Z = (float)tweenArguments["z"];
+                    vector3s[1].z = (float)tweenArguments["z"];
                 }
             }
         }
@@ -4237,15 +4236,15 @@ namespace PressPlay.FFWD
             {
                 if (tweenArguments.ContainsKey("x"))
                 {
-                    vector3s[1].X = (float)tweenArguments["x"];
+                    vector3s[1].x = (float)tweenArguments["x"];
                 }
                 if (tweenArguments.ContainsKey("y"))
                 {
-                    vector3s[1].Y = (float)tweenArguments["y"];
+                    vector3s[1].y = (float)tweenArguments["y"];
                 }
                 if (tweenArguments.ContainsKey("z"))
                 {
-                    vector3s[1].Z = (float)tweenArguments["z"];
+                    vector3s[1].z = (float)tweenArguments["z"];
                 }
             }
         }
@@ -4260,7 +4259,7 @@ namespace PressPlay.FFWD
 
             //from values:
             vector3s[0] = transform.position;
-            vector3s[1] = vector3s[3] = Vector3.Zero;
+            vector3s[1] = vector3s[3] = Vector3.zero;
 
             //to values:
             if (tweenArguments.ContainsKey("amount"))
@@ -4271,15 +4270,15 @@ namespace PressPlay.FFWD
             {
                 if (tweenArguments.ContainsKey("x"))
                 {
-                    vector3s[1].X = (float)tweenArguments["x"];
+                    vector3s[1].x = (float)tweenArguments["x"];
                 }
                 if (tweenArguments.ContainsKey("y"))
                 {
-                    vector3s[1].Y = (float)tweenArguments["y"];
+                    vector3s[1].y = (float)tweenArguments["y"];
                 }
                 if (tweenArguments.ContainsKey("z"))
                 {
-                    vector3s[1].Z = (float)tweenArguments["z"];
+                    vector3s[1].z = (float)tweenArguments["z"];
                 }
             }
         }
@@ -4291,7 +4290,7 @@ namespace PressPlay.FFWD
 
             //from values:
             vector3s[0] = transform.eulerAngles;
-            vector3s[1] = vector3s[3] = Vector3.Zero;
+            vector3s[1] = vector3s[3] = Vector3.zero;
 
             //to values:
             if (tweenArguments.ContainsKey("amount"))
@@ -4302,15 +4301,15 @@ namespace PressPlay.FFWD
             {
                 if (tweenArguments.ContainsKey("x"))
                 {
-                    vector3s[1].X = (float)tweenArguments["x"];
+                    vector3s[1].x = (float)tweenArguments["x"];
                 }
                 if (tweenArguments.ContainsKey("y"))
                 {
-                    vector3s[1].Y = (float)tweenArguments["y"];
+                    vector3s[1].y = (float)tweenArguments["y"];
                 }
                 if (tweenArguments.ContainsKey("z"))
                 {
-                    vector3s[1].Z = (float)tweenArguments["z"];
+                    vector3s[1].z = (float)tweenArguments["z"];
                 }
             }
         }
@@ -4322,7 +4321,7 @@ namespace PressPlay.FFWD
 
             //from values:
             vector3s[0] = transform.localScale;
-            vector3s[1] = Vector3.Zero;
+            vector3s[1] = Vector3.zero;
 
             //to values:
             if (tweenArguments.ContainsKey("amount"))
@@ -4333,15 +4332,15 @@ namespace PressPlay.FFWD
             {
                 if (tweenArguments.ContainsKey("x"))
                 {
-                    vector3s[1].X = (float)tweenArguments["x"];
+                    vector3s[1].x = (float)tweenArguments["x"];
                 }
                 if (tweenArguments.ContainsKey("y"))
                 {
-                    vector3s[1].Y = (float)tweenArguments["y"];
+                    vector3s[1].y = (float)tweenArguments["y"];
                 }
                 if (tweenArguments.ContainsKey("z"))
                 {
-                    vector3s[1].Z = (float)tweenArguments["z"];
+                    vector3s[1].z = (float)tweenArguments["z"];
                 }
             }
         }
@@ -4389,9 +4388,9 @@ namespace PressPlay.FFWD
         void ApplyVector3Targets()
         {
             //calculate:
-            vector3s[2].X = ease(vector3s[0].X, vector3s[1].X, percentage);
-            vector3s[2].Y = ease(vector3s[0].Y, vector3s[1].Y, percentage);
-            vector3s[2].Z = ease(vector3s[0].Z, vector3s[1].Z, percentage);
+            vector3s[2].x = ease(vector3s[0].x, vector3s[1].x, percentage);
+            vector3s[2].y = ease(vector3s[0].y, vector3s[1].y, percentage);
+            vector3s[2].z = ease(vector3s[0].z, vector3s[1].z, percentage);
 
             //apply:
             tweenArguments["onupdateparams"] = vector3s[2];
@@ -4546,9 +4545,9 @@ namespace PressPlay.FFWD
             preUpdate = transform.position;
 
             //calculate:
-            vector3s[2].X = ease(vector3s[0].X, vector3s[1].X, percentage);
-            vector3s[2].Y = ease(vector3s[0].Y, vector3s[1].Y, percentage);
-            vector3s[2].Z = ease(vector3s[0].Z, vector3s[1].Z, percentage);
+            vector3s[2].x = ease(vector3s[0].x, vector3s[1].x, percentage);
+            vector3s[2].y = ease(vector3s[0].y, vector3s[1].y, percentage);
+            vector3s[2].z = ease(vector3s[0].z, vector3s[1].z, percentage);
 
             //apply:	
             if (isLocal)
@@ -4596,9 +4595,9 @@ namespace PressPlay.FFWD
             }
 
             //calculate:
-            vector3s[2].X = ease(vector3s[0].X, vector3s[1].X, percentage);
-            vector3s[2].Y = ease(vector3s[0].Y, vector3s[1].Y, percentage);
-            vector3s[2].Z = ease(vector3s[0].Z, vector3s[1].Z, percentage);
+            vector3s[2].x = ease(vector3s[0].x, vector3s[1].x, percentage);
+            vector3s[2].y = ease(vector3s[0].y, vector3s[1].y, percentage);
+            vector3s[2].z = ease(vector3s[0].z, vector3s[1].z, percentage);
 
             //apply:
             transform.Translate(vector3s[2] - vector3s[3], space);
@@ -4631,9 +4630,9 @@ namespace PressPlay.FFWD
         void ApplyScaleToTargets()
         {
             //calculate:
-            vector3s[2].X = ease(vector3s[0].X, vector3s[1].X, percentage);
-            vector3s[2].Y = ease(vector3s[0].Y, vector3s[1].Y, percentage);
-            vector3s[2].Z = ease(vector3s[0].Z, vector3s[1].Z, percentage);
+            vector3s[2].x = ease(vector3s[0].x, vector3s[1].x, percentage);
+            vector3s[2].y = ease(vector3s[0].y, vector3s[1].y, percentage);
+            vector3s[2].z = ease(vector3s[0].z, vector3s[1].z, percentage);
 
             //apply:
             transform.localScale = vector3s[2];
@@ -4648,18 +4647,18 @@ namespace PressPlay.FFWD
         void ApplyLookToTargets()
         {
             //calculate:
-            vector3s[2].X = ease(vector3s[0].X, vector3s[1].X, percentage);
-            vector3s[2].Y = ease(vector3s[0].Y, vector3s[1].Y, percentage);
-            vector3s[2].Z = ease(vector3s[0].Z, vector3s[1].Z, percentage);
+            vector3s[2].x = ease(vector3s[0].x, vector3s[1].x, percentage);
+            vector3s[2].y = ease(vector3s[0].y, vector3s[1].y, percentage);
+            vector3s[2].z = ease(vector3s[0].z, vector3s[1].z, percentage);
 
             //apply:
             if (isLocal)
             {
-                transform.localRotation = QuaternionHelpers.Euler(vector3s[2]);
+                transform.localRotation = Quaternion.Euler(vector3s[2]);
             }
             else
             {
-                transform.rotation = QuaternionHelpers.Euler(vector3s[2]);
+                transform.rotation = Quaternion.Euler(vector3s[2]);
             };
         }
 
@@ -4668,18 +4667,18 @@ namespace PressPlay.FFWD
             preUpdate = transform.eulerAngles;
 
             //calculate:
-            vector3s[2].X = ease(vector3s[0].X, vector3s[1].X, percentage);
-            vector3s[2].Y = ease(vector3s[0].Y, vector3s[1].Y, percentage);
-            vector3s[2].Z = ease(vector3s[0].Z, vector3s[1].Z, percentage);
+            vector3s[2].x = ease(vector3s[0].x, vector3s[1].x, percentage);
+            vector3s[2].y = ease(vector3s[0].y, vector3s[1].y, percentage);
+            vector3s[2].z = ease(vector3s[0].z, vector3s[1].z, percentage);
 
             //apply:
             if (isLocal)
             {
-                transform.localRotation = QuaternionHelpers.Euler(vector3s[2]);
+                transform.localRotation = Quaternion.Euler(vector3s[2]);
             }
             else
             {
-                transform.rotation = QuaternionHelpers.Euler(vector3s[2]);
+                transform.rotation = Quaternion.Euler(vector3s[2]);
             };
 
             //dial in:
@@ -4687,11 +4686,11 @@ namespace PressPlay.FFWD
             {
                 if (isLocal)
                 {
-                    transform.localRotation = QuaternionHelpers.Euler(vector3s[1]);
+                    transform.localRotation = Quaternion.Euler(vector3s[1]);
                 }
                 else
                 {
-                    transform.rotation = QuaternionHelpers.Euler(vector3s[1]);
+                    transform.rotation = Quaternion.Euler(vector3s[1]);
                 };
             }
 
@@ -4700,7 +4699,7 @@ namespace PressPlay.FFWD
             if (physics)
             {
                 transform.eulerAngles = preUpdate;
-                rigidbody.MoveRotation(QuaternionHelpers.Euler(postUpdate));
+                rigidbody.MoveRotation(Quaternion.Euler(postUpdate));
             }
         }
 
@@ -4709,9 +4708,9 @@ namespace PressPlay.FFWD
             preUpdate = transform.eulerAngles;
 
             //calculate:
-            vector3s[2].X = ease(vector3s[0].X, vector3s[1].X, percentage);
-            vector3s[2].Y = ease(vector3s[0].Y, vector3s[1].Y, percentage);
-            vector3s[2].Z = ease(vector3s[0].Z, vector3s[1].Z, percentage);
+            vector3s[2].x = ease(vector3s[0].x, vector3s[1].x, percentage);
+            vector3s[2].y = ease(vector3s[0].y, vector3s[1].y, percentage);
+            vector3s[2].z = ease(vector3s[0].z, vector3s[1].z, percentage);
 
             //apply:
             transform.Rotate(vector3s[2] - vector3s[3], space);
@@ -4724,7 +4723,7 @@ namespace PressPlay.FFWD
             if (physics)
             {
                 transform.eulerAngles = preUpdate;
-                rigidbody.MoveRotation(QuaternionHelpers.Euler(postUpdate));
+                rigidbody.MoveRotation(Quaternion.Euler(postUpdate));
             }
         }
 
@@ -4752,9 +4751,9 @@ namespace PressPlay.FFWD
 
             //generate:
             float diminishingControl = 1 - percentage;
-            vector3s[2].X = Random.Range(-vector3s[1].X * diminishingControl, vector3s[1].X * diminishingControl);
-            vector3s[2].Y = Random.Range(-vector3s[1].Y * diminishingControl, vector3s[1].Y * diminishingControl);
-            vector3s[2].Z = Random.Range(-vector3s[1].Z * diminishingControl, vector3s[1].Z * diminishingControl);
+            vector3s[2].x = Random.Range(-vector3s[1].x * diminishingControl, vector3s[1].x * diminishingControl);
+            vector3s[2].y = Random.Range(-vector3s[1].y * diminishingControl, vector3s[1].y * diminishingControl);
+            vector3s[2].z = Random.Range(-vector3s[1].z * diminishingControl, vector3s[1].z * diminishingControl);
 
             //apply:
             transform.Translate(vector3s[2], space);
@@ -4787,9 +4786,9 @@ namespace PressPlay.FFWD
 
             //generate:
             float diminishingControl = 1 - percentage;
-            vector3s[2].X = Random.Range(-vector3s[1].X * diminishingControl, vector3s[1].X * diminishingControl);
-            vector3s[2].Y = Random.Range(-vector3s[1].Y * diminishingControl, vector3s[1].Y * diminishingControl);
-            vector3s[2].Z = Random.Range(-vector3s[1].Z * diminishingControl, vector3s[1].Z * diminishingControl);
+            vector3s[2].x = Random.Range(-vector3s[1].x * diminishingControl, vector3s[1].x * diminishingControl);
+            vector3s[2].y = Random.Range(-vector3s[1].y * diminishingControl, vector3s[1].y * diminishingControl);
+            vector3s[2].z = Random.Range(-vector3s[1].z * diminishingControl, vector3s[1].z * diminishingControl);
 
             //apply:
             transform.localScale += vector3s[2];
@@ -4810,9 +4809,9 @@ namespace PressPlay.FFWD
 
             //generate:
             float diminishingControl = 1 - percentage;
-            vector3s[2].X = Random.Range(-vector3s[1].X * diminishingControl, vector3s[1].X * diminishingControl);
-            vector3s[2].Y = Random.Range(-vector3s[1].Y * diminishingControl, vector3s[1].Y * diminishingControl);
-            vector3s[2].Z = Random.Range(-vector3s[1].Z * diminishingControl, vector3s[1].Z * diminishingControl);
+            vector3s[2].x = Random.Range(-vector3s[1].x * diminishingControl, vector3s[1].x * diminishingControl);
+            vector3s[2].y = Random.Range(-vector3s[1].y * diminishingControl, vector3s[1].y * diminishingControl);
+            vector3s[2].z = Random.Range(-vector3s[1].z * diminishingControl, vector3s[1].z * diminishingControl);
 
             //apply:
             transform.Rotate(vector3s[2], space);
@@ -4822,7 +4821,7 @@ namespace PressPlay.FFWD
             if (physics)
             {
                 transform.eulerAngles = preUpdate;
-                rigidbody.MoveRotation(QuaternionHelpers.Euler(postUpdate));
+                rigidbody.MoveRotation(Quaternion.Euler(postUpdate));
             }
         }
 
@@ -4840,29 +4839,29 @@ namespace PressPlay.FFWD
             }
 
             //calculate:
-            if (vector3s[1].X > 0)
+            if (vector3s[1].x > 0)
             {
-                vector3s[2].X = punch(vector3s[1].X, percentage);
+                vector3s[2].x = punch(vector3s[1].x, percentage);
             }
-            else if (vector3s[1].X < 0)
+            else if (vector3s[1].x < 0)
             {
-                vector3s[2].X = -punch(Mathf.Abs(vector3s[1].X), percentage);
+                vector3s[2].x = -punch(Mathf.Abs(vector3s[1].x), percentage);
             }
-            if (vector3s[1].Y > 0)
+            if (vector3s[1].y > 0)
             {
-                vector3s[2].Y = punch(vector3s[1].Y, percentage);
+                vector3s[2].y = punch(vector3s[1].y, percentage);
             }
-            else if (vector3s[1].Y < 0)
+            else if (vector3s[1].y < 0)
             {
-                vector3s[2].Y = -punch(Mathf.Abs(vector3s[1].Y), percentage);
+                vector3s[2].y = -punch(Mathf.Abs(vector3s[1].y), percentage);
             }
-            if (vector3s[1].Z > 0)
+            if (vector3s[1].z > 0)
             {
-                vector3s[2].Z = punch(vector3s[1].Z, percentage);
+                vector3s[2].z = punch(vector3s[1].z, percentage);
             }
-            else if (vector3s[1].Z < 0)
+            else if (vector3s[1].z < 0)
             {
-                vector3s[2].Z = -punch(Mathf.Abs(vector3s[1].Z), percentage);
+                vector3s[2].z = -punch(Mathf.Abs(vector3s[1].z), percentage);
             }
 
             //apply:
@@ -4898,29 +4897,29 @@ namespace PressPlay.FFWD
             preUpdate = transform.eulerAngles;
 
             //calculate:
-            if (vector3s[1].X > 0)
+            if (vector3s[1].x > 0)
             {
-                vector3s[2].X = punch(vector3s[1].X, percentage);
+                vector3s[2].x = punch(vector3s[1].x, percentage);
             }
-            else if (vector3s[1].X < 0)
+            else if (vector3s[1].x < 0)
             {
-                vector3s[2].X = -punch(Mathf.Abs(vector3s[1].X), percentage);
+                vector3s[2].x = -punch(Mathf.Abs(vector3s[1].x), percentage);
             }
-            if (vector3s[1].Y > 0)
+            if (vector3s[1].y > 0)
             {
-                vector3s[2].Y = punch(vector3s[1].Y, percentage);
+                vector3s[2].y = punch(vector3s[1].y, percentage);
             }
-            else if (vector3s[1].Y < 0)
+            else if (vector3s[1].y < 0)
             {
-                vector3s[2].Y = -punch(Mathf.Abs(vector3s[1].Y), percentage);
+                vector3s[2].y = -punch(Mathf.Abs(vector3s[1].y), percentage);
             }
-            if (vector3s[1].Z > 0)
+            if (vector3s[1].z > 0)
             {
-                vector3s[2].Z = punch(vector3s[1].Z, percentage);
+                vector3s[2].z = punch(vector3s[1].z, percentage);
             }
-            else if (vector3s[1].Z < 0)
+            else if (vector3s[1].z < 0)
             {
-                vector3s[2].Z = -punch(Mathf.Abs(vector3s[1].Z), percentage);
+                vector3s[2].z = -punch(Mathf.Abs(vector3s[1].z), percentage);
             }
 
             //apply:
@@ -4941,36 +4940,36 @@ namespace PressPlay.FFWD
             if (physics)
             {
                 transform.eulerAngles = preUpdate;
-                rigidbody.MoveRotation(QuaternionHelpers.Euler(postUpdate));
+                rigidbody.MoveRotation(Quaternion.Euler(postUpdate));
             }
         }
 
         void ApplyPunchScaleTargets()
         {
             //calculate:
-            if (vector3s[1].X > 0)
+            if (vector3s[1].x > 0)
             {
-                vector3s[2].X = punch(vector3s[1].X, percentage);
+                vector3s[2].x = punch(vector3s[1].x, percentage);
             }
-            else if (vector3s[1].X < 0)
+            else if (vector3s[1].x < 0)
             {
-                vector3s[2].X = -punch(Mathf.Abs(vector3s[1].X), percentage);
+                vector3s[2].x = -punch(Mathf.Abs(vector3s[1].x), percentage);
             }
-            if (vector3s[1].Y > 0)
+            if (vector3s[1].y > 0)
             {
-                vector3s[2].Y = punch(vector3s[1].Y, percentage);
+                vector3s[2].y = punch(vector3s[1].y, percentage);
             }
-            else if (vector3s[1].Y < 0)
+            else if (vector3s[1].y < 0)
             {
-                vector3s[2].Y = -punch(Mathf.Abs(vector3s[1].Y), percentage);
+                vector3s[2].y = -punch(Mathf.Abs(vector3s[1].y), percentage);
             }
-            if (vector3s[1].Z > 0)
+            if (vector3s[1].z > 0)
             {
-                vector3s[2].Z = punch(vector3s[1].Z, percentage);
+                vector3s[2].z = punch(vector3s[1].z, percentage);
             }
-            else if (vector3s[1].Z < 0)
+            else if (vector3s[1].z < 0)
             {
-                vector3s[2].Z = -punch(Mathf.Abs(vector3s[1].Z), percentage);
+                vector3s[2].z = -punch(Mathf.Abs(vector3s[1].z), percentage);
             }
 
             //apply:
@@ -5494,9 +5493,9 @@ namespace PressPlay.FFWD
             }
 
             //calculate:
-            vector3s[3].X = Mathf.SmoothDampAngle(vector3s[0].X, vector3s[1].X, ref vector3s[2].X, time);
-            vector3s[3].Y = Mathf.SmoothDampAngle(vector3s[0].Y, vector3s[1].Y, ref vector3s[2].Y, time);
-            vector3s[3].Z = Mathf.SmoothDampAngle(vector3s[0].Z, vector3s[1].Z, ref vector3s[2].Z, time);
+            vector3s[3].x = Mathf.SmoothDampAngle(vector3s[0].x, vector3s[1].x, ref vector3s[2].x, time);
+            vector3s[3].y = Mathf.SmoothDampAngle(vector3s[0].y, vector3s[1].y, ref vector3s[2].y, time);
+            vector3s[3].z = Mathf.SmoothDampAngle(vector3s[0].z, vector3s[1].z, ref vector3s[2].z, time);
 
             //apply:
             if (isLocal)
@@ -5513,7 +5512,7 @@ namespace PressPlay.FFWD
             {
                 Vector3 postUpdate = target.transform.eulerAngles;
                 target.transform.eulerAngles = preUpdate;
-                target.rigidbody.MoveRotation(QuaternionHelpers.Euler(postUpdate));
+                target.rigidbody.MoveRotation(Quaternion.Euler(postUpdate));
             }
         }
 
@@ -5590,22 +5589,22 @@ namespace PressPlay.FFWD
             {
                 if (args.ContainsKey("x"))
                 {
-                    vector3s[1].X = (float)args["x"];
+                    vector3s[1].x = (float)args["x"];
                 }
                 if (args.ContainsKey("y"))
                 {
-                    vector3s[1].Y = (float)args["y"];
+                    vector3s[1].y = (float)args["y"];
                 }
                 if (args.ContainsKey("z"))
                 {
-                    vector3s[1].Z = (float)args["z"];
+                    vector3s[1].z = (float)args["z"];
                 }
             }
 
             //calculate:
-            vector3s[3].X = Mathf.SmoothDamp(vector3s[0].X, vector3s[1].X, ref vector3s[2].X, time);
-            vector3s[3].Y = Mathf.SmoothDamp(vector3s[0].Y, vector3s[1].Y, ref vector3s[2].Y, time);
-            vector3s[3].Z = Mathf.SmoothDamp(vector3s[0].Z, vector3s[1].Z, ref vector3s[2].Z, time);
+            vector3s[3].x = Mathf.SmoothDamp(vector3s[0].x, vector3s[1].x, ref vector3s[2].x, time);
+            vector3s[3].y = Mathf.SmoothDamp(vector3s[0].y, vector3s[1].y, ref vector3s[2].y, time);
+            vector3s[3].z = Mathf.SmoothDamp(vector3s[0].z, vector3s[1].z, ref vector3s[2].z, time);
 
             //apply:
             target.transform.localScale = vector3s[3];
@@ -5718,22 +5717,22 @@ namespace PressPlay.FFWD
             {
                 if (args.ContainsKey("x"))
                 {
-                    vector3s[1].X = (float)args["x"];
+                    vector3s[1].x = (float)args["x"];
                 }
                 if (args.ContainsKey("y"))
                 {
-                    vector3s[1].Y = (float)args["y"];
+                    vector3s[1].y = (float)args["y"];
                 }
                 if (args.ContainsKey("z"))
                 {
-                    vector3s[1].Z = (float)args["z"];
+                    vector3s[1].z = (float)args["z"];
                 }
             }
 
             //calculate:
-            vector3s[3].X = Mathf.SmoothDamp(vector3s[0].X, vector3s[1].X, ref vector3s[2].X, time);
-            vector3s[3].Y = Mathf.SmoothDamp(vector3s[0].Y, vector3s[1].Y, ref vector3s[2].Y, time);
-            vector3s[3].Z = Mathf.SmoothDamp(vector3s[0].Z, vector3s[1].Z, ref vector3s[2].Z, time);
+            vector3s[3].x = Mathf.SmoothDamp(vector3s[0].x, vector3s[1].x, ref vector3s[2].x, time);
+            vector3s[3].y = Mathf.SmoothDamp(vector3s[0].y, vector3s[1].y, ref vector3s[2].y, time);
+            vector3s[3].z = Mathf.SmoothDamp(vector3s[0].z, vector3s[1].z, ref vector3s[2].z, time);
 
             //handle orient to path:
             if (args.ContainsKey("orienttopath") && (bool)args["orienttopath"])
@@ -5846,9 +5845,9 @@ namespace PressPlay.FFWD
             target.transform.eulerAngles = vector3s[0];
 
             //calculate:
-            vector3s[3].X = Mathf.SmoothDampAngle(vector3s[0].X, vector3s[1].X, ref vector3s[2].X, time);
-            vector3s[3].Y = Mathf.SmoothDampAngle(vector3s[0].Y, vector3s[1].Y, ref vector3s[2].Y, time);
-            vector3s[3].Z = Mathf.SmoothDampAngle(vector3s[0].Z, vector3s[1].Z, ref vector3s[2].Z, time);
+            vector3s[3].x = Mathf.SmoothDampAngle(vector3s[0].x, vector3s[1].x, ref vector3s[2].x, time);
+            vector3s[3].y = Mathf.SmoothDampAngle(vector3s[0].y, vector3s[1].y, ref vector3s[2].y, time);
+            vector3s[3].z = Mathf.SmoothDampAngle(vector3s[0].z, vector3s[1].z, ref vector3s[2].z, time);
 
             //apply:
             target.transform.eulerAngles = vector3s[3];
@@ -5860,16 +5859,16 @@ namespace PressPlay.FFWD
                 switch ((string)args["axis"])
                 {
                     case "x":
-                        vector3s[4].Y = vector3s[0].Y;
-                        vector3s[4].Z = vector3s[0].Z;
+                        vector3s[4].y = vector3s[0].y;
+                        vector3s[4].z = vector3s[0].z;
                         break;
                     case "y":
-                        vector3s[4].X = vector3s[0].X;
-                        vector3s[4].Z = vector3s[0].Z;
+                        vector3s[4].x = vector3s[0].x;
+                        vector3s[4].z = vector3s[0].z;
                         break;
                     case "z":
-                        vector3s[4].X = vector3s[0].X;
-                        vector3s[4].Y = vector3s[0].Y;
+                        vector3s[4].x = vector3s[0].x;
+                        vector3s[4].y = vector3s[0].y;
                         break;
                 }
 

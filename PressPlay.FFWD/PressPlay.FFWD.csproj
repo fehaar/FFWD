@@ -80,6 +80,7 @@
     <Compile Include="Animation\Keyframe.cs" />
     <Compile Include="Animation\SkinningData.cs" />
     <Compile Include="Application.cs" />
+    <Compile Include="ApplicationSettings.cs" />
     <Compile Include="Behaviour.cs" />
     <Compile Include="Box2D\Collision\BroadPhase.cs" />
     <Compile Include="Box2D\Collision\Collision.cs" />
@@ -129,7 +130,6 @@
     <Compile Include="Material.cs" />
     <Compile Include="Components\Renderers\SkinnedMeshRenderer.cs" />
     <Compile Include="Extensions\PlaneExtensions.cs" />
-    <Compile Include="Extensions\QuaternionHelpers.cs" />
     <Compile Include="Components\Renderers\SpriteRenderer.cs" />
     <Compile Include="iTween\iTween.cs" />
     <Compile Include="Input.cs" />
@@ -139,7 +139,6 @@
     <Compile Include="Components\Renderers\MeshRenderer.cs" />
     <Compile Include="ContentHelper.cs" />
     <Compile Include="Debug.cs" />
-    <Compile Include="Extensions\VectorExtensions.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="Interfaces\ICollidable.cs" />
     <Compile Include="Interfaces\IContactProcessor.cs" />
@@ -152,12 +151,14 @@
     <Compile Include="Physics\Physics.cs" />
     <Compile Include="Physics\RaycastHelper.cs" />
     <Compile Include="Physics\RaycastHit.cs" />
+    <Compile Include="Quaternion.cs" />
     <Compile Include="Random.cs" />
     <Compile Include="Scene.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Time.cs" />
     <Compile Include="Transform.cs" />
     <Compile Include="UnityObject.cs" />
+    <Compile Include="Vector3.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
