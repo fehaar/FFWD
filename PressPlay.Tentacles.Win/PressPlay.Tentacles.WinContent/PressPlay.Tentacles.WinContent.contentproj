@@ -42,14 +42,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\spike_big.FBX">
-      <Name>spike_big</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
-      <ProcessorParameters_RotationX>90</ProcessorParameters_RotationX>
-      <ProcessorParameters_RotationY>180</ProcessorParameters_RotationY>
-    </Compile>
     <Compile Include="Textures\block_brown_desat.png">
       <Name>block_brown_desat</Name>
       <Importer>TextureImporter</Importer>
@@ -212,6 +204,30 @@
   <ItemGroup>
     <Compile Include="Textures\lemmy_tentacle.png">
       <Name>lemmy_tentacle</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\hazard_spike_rotating01.FBX">
+      <Name>hazard_spike_rotating01</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
+      <ProcessorParameters_RotationX>90</ProcessorParameters_RotationX>
+      <ProcessorParameters_RotationY>180</ProcessorParameters_RotationY>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Textures\brain_spike.png">
+      <Name>brain_spike</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Textures\desatgreen_spike.png">
+      <Name>desatgreen_spike</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
