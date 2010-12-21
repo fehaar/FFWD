@@ -32,7 +32,7 @@ namespace PressPlay.Tentacles.Scripts {
 
         public bool autoInitializeOnStart = true;
 
-        public virtual void Start()
+        public override void Start()
         {
             if (autoInitializeOnStart)
             {
