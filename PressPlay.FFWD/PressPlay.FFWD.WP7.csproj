@@ -125,7 +125,6 @@
     <Compile Include="Mathf.cs" />
     <Compile Include="Mesh.cs" />
     <Compile Include="MonoBehaviour.cs" />
-    <Compile Include="ObjectReference.cs" />
     <Compile Include="GameObjectContactProcessor.cs" />
     <Compile Include="Physics\LayerMask.cs" />
     <Compile Include="Physics\Physics.cs" />
