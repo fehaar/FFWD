@@ -95,6 +95,7 @@
     <Compile Include="Box2D\Dynamics\TimeStep.cs" />
     <Compile Include="Box2D\Dynamics\World.cs" />
     <Compile Include="Box2D\Dynamics\WorldCallbacks.cs" />
+    <Compile Include="Color.cs" />
     <Compile Include="Component.cs" />
     <Compile Include="Components\Audio\AudioClip.cs" />
     <Compile Include="Components\Audio\AudioSource.cs" />
@@ -109,7 +110,6 @@
     <Compile Include="Components\MeshFilter.cs" />
     <Compile Include="Components\Renderers\SpriteRenderer.cs" />
     <Compile Include="Components\Renderers\MeshRenderer.cs" />
-    <Compile Include="Components\Renderers\Renderer.cs" />
     <Compile Include="Components\Renderers\SkinnedMeshRenderer.cs" />
     <Compile Include="ContentHelper.cs" />
     <Compile Include="Debug.cs" />

@@ -11,6 +11,13 @@ using PressPlay.FFWD.Components;
 
 namespace PressPlay.FFWD
 {
+
+    public enum SendMessageOptions
+    {
+        RequireReceiver = 0,
+        DontRequireReceiver	= 1
+    }
+
     public class GameObject : UnityObject
     {
         public GameObject()
@@ -32,7 +39,7 @@ namespace PressPlay.FFWD
         public string tag { get; set; }
 
         #region Component shortcut methods
-        private Transform _transform;
+        private Rigidbody _rigidbody;
         [ContentSerializerIgnore]
         public Rigidbody rigidbody
         {
@@ -526,6 +533,17 @@ namespace PressPlay.FFWD
         {
             // TODO: Create this method
         }
+
+        public void SendMessageUpwards(string methodName, object value, SendMessageOptions SendMessageOptions)
+        {
+            throw new NotImplementedException("SendMessageUpwards is not implemented");
+        }
+
+        public void SendMessage(string methodName, object value, SendMessageOptions SendMessageOptions)
+        {
+            throw new NotImplementedException("SendMessage is not implemented");
+        }
+
         #endregion
 
         public override string ToString()

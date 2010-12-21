@@ -343,7 +343,12 @@ namespace PressPlay.FFWD
 
         public IEnumerator GetEnumerator()
         {
-            return (IEnumerator)this;
+            if (children == null)
+            {
+                return (new List<Transform>()).GetEnumerator();
+            }
+            
+            return children.GetEnumerator();
         }
 
         public Vector3 right 

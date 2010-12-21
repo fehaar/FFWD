@@ -68,5 +68,11 @@ namespace PressPlay.FFWD.Extensions
         {
             return q.Euler(vec.X, vec.Y, vec.Z);
         }
+
+        public static Quaternion Euler(Vector3 vec)
+        {
+            // TODO remember to implement a functioning Euler function
+            return Quaternion.Identity;
+        }
     }
 }

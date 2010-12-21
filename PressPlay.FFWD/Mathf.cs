@@ -14,6 +14,7 @@ namespace PressPlay.FFWD
     {
         public const float PI = MathHelper.Pi;
         public const float Infinity = float.PositiveInfinity;
+        public const float NegativeInfinity = float.NegativeInfinity;
         public const float Rad2Deg = 360 / MathHelper.TwoPi;
 
         public static float Cos(float value)
@@ -69,6 +70,62 @@ namespace PressPlay.FFWD
         public static float Atan2(float x, float y)
         {
             return (float)Math.Atan2(x, y);
+        }
+
+        public static float Clamp(float value, float min, float max){
+            return MathHelper.Clamp(value, min, max);
+        }
+
+        public static float Clamp01(float value)
+        {
+            if (value > 1)
+            {
+                return 1f;
+            }
+            else if (value < 0)
+            {
+                return 0f;
+            }
+
+            return value;            
+        }
+
+        public static int FloorToInt(float f)
+        {
+            return (int)Math.Floor((double)f);
+        }
+
+        public static float Floor(float f)
+        {
+            return (float)Math.Floor((double)f);
+        }
+
+        //TODO Implement Lerp function
+        public static float Lerp(float from, float to, float t)
+        {
+            //throw new NotImplementedException("Lerp is not implemented!");
+            return MathHelper.Lerp(from, to, t);
+        }
+
+        public static float SmoothDamp(float current, float target, ref float currentVelocity, float smoothTime)
+        {
+            return Mathf.SmoothDamp(current, target, ref currentVelocity, smoothTime, Mathf.Infinity, Time.deltaTime);
+        }
+
+        //TODO Implement SmoothDamp function
+        public static float SmoothDamp(float current, float target, ref float currentVelocity, float smoothTime, float maxSpeed, float deltaTime){
+            throw new NotImplementedException("SmoothDamp is not implemented!");
+        }
+
+        public static float SmoothDampAngle(float current, float target, ref float currentVelocity, float smoothTime)
+        {
+            return Mathf.SmoothDampAngle(current, target, ref currentVelocity, smoothTime, Mathf.Infinity, Time.deltaTime);
+        }
+
+        //TODO Implement SmoothDampAngle function
+        public static float SmoothDampAngle(float current, float target, ref float currentVelocity, float smoothTime, float maxSpeed, float deltaTime)
+        {
+            throw new NotImplementedException("SmoothDamp is not implemented!");
         }
     }
 }

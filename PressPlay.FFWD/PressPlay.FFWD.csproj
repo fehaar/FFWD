@@ -113,6 +113,7 @@
     <Compile Include="Box2D\Dynamics\TimeStep.cs" />
     <Compile Include="Box2D\Dynamics\World.cs" />
     <Compile Include="Box2D\Dynamics\WorldCallbacks.cs" />
+    <Compile Include="Color.cs" />
     <Compile Include="Component.cs" />
     <Compile Include="Components\Audio\AudioClip.cs" />
     <Compile Include="Components\Audio\AudioSource.cs" />
@@ -124,15 +125,14 @@
     <Compile Include="Components\Colliders\Rigidbody.cs" />
     <Compile Include="Components\Colliders\SphereCollider.cs" />
     <Compile Include="Components\MeshFilter.cs" />
-    <Compile Include="Material.cs" />
     <Compile Include="Components\Renderers\Renderer.cs" />
+    <Compile Include="Material.cs" />
     <Compile Include="Components\Renderers\SkinnedMeshRenderer.cs" />
     <Compile Include="Extensions\PlaneExtensions.cs" />
     <Compile Include="Extensions\QuaternionHelpers.cs" />
     <Compile Include="Components\Renderers\SpriteRenderer.cs" />
     <Compile Include="iTween\iTween.cs" />
     <Compile Include="Input.cs" />
-    <Compile Include="Material.cs" />
     <Compile Include="Mathf.cs" />
     <Compile Include="Mesh.cs" />
     <Compile Include="MonoBehaviour.cs" />

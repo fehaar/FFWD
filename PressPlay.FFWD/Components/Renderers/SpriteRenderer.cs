@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using PressPlay.FFWD;
 using PressPlay.FFWD.Animation;
 using PressPlay.FFWD.Interfaces;
-using PressPlay.FFWD.Components.Renderers;
+using PressPlay.FFWD.Components;
 using Microsoft.Xna.Framework.Content;
 
 namespace PressPlay.FFWD.Components
@@ -40,7 +41,6 @@ namespace PressPlay.FFWD.Components
 
         public Vector2 Position = Vector2.Zero;
         public Rectangle bounds = Rectangle.Empty;
-        public Color Color = Color.White;
         public Vector2 Origin = Vector2.Zero;
         public float Scale = 1f;
         public SpriteEffects Effects = SpriteEffects.None;
@@ -85,7 +85,7 @@ namespace PressPlay.FFWD.Components
         #endregion
 
         #region IRenderable Members
-        public void Draw(SpriteBatch batch)
+        public override void Draw(SpriteBatch batch)
         {
 
             if (texture == null)
@@ -94,7 +94,7 @@ namespace PressPlay.FFWD.Components
             }
 
             batch.Begin();
-            batch.Draw(texture, Position, bounds, Color, transform.angleY, Origin, Scale, Effects, LayerDepth);
+            batch.Draw(texture, Position, bounds, material.color, transform.angleY, Origin, Scale, Effects, LayerDepth);
             batch.End();
         }
         #endregion

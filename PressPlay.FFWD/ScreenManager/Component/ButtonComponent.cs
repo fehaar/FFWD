@@ -99,6 +99,11 @@ namespace PressPlay.FFWD.ScreenManager
             ((SpriteRenderer)gameObject.renderer).texture = normalTexture;
         }
 
+        public void OnTweenUpdate(float value)
+        {
+            Debug.Log("OnTweenUpdate: "+value);
+        }
+
         #region IUpdateable Members
 
         public void Update()

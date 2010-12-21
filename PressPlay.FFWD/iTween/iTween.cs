@@ -7,10 +7,11 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections;
+using PressPlay.FFWD.Extensions;
 #endregion
 
 
-namespace PressPlay.FFWD.iTween
+namespace PressPlay.FFWD
 {
     public class iTween : MonoBehaviour
     {
@@ -151,7 +152,7 @@ namespace PressPlay.FFWD.iTween
             public static bool isLocal = false;
             public static Space space = Space.Self;
             public static bool orientToPath = false;
-            public static Color color = Color.White;
+            public static Color color = Color.white;
             //update defaults:
             public static float updateTimePercentage = .05f;
             public static float updateTime = 1f * updateTimePercentage;
@@ -701,31 +702,31 @@ namespace PressPlay.FFWD.iTween
             {
                 if (args.ContainsKey("r"))
                 {
-                    fromColor.R = (byte)((float)args["r"]*byte.MaxValue);
+                    fromColor.r = (float)args["r"];
                 }
                 if (args.ContainsKey("g"))
                 {
-                    fromColor.G = (byte)((float)args["g"] * byte.MaxValue);
+                    fromColor.r = (float)args["g"];
                 }
                 if (args.ContainsKey("b"))
                 {
-                    fromColor.B = (byte)((float)args["b"] * byte.MaxValue);
+                    fromColor.r = (float)args["b"];
                 }
                 if (args.ContainsKey("a"))
                 {
-                    fromColor.A = (byte)((float)args["a"] * byte.MaxValue);
+                    fromColor.r = (float)args["a"];
                 }
             }
 
             //alpha or amount?
             if (args.ContainsKey("amount"))
             {
-                fromColor.A = (byte)((float)args["amount"] * byte.MaxValue); // (float)args["amount"];
+                fromColor.a = (float)args["amount"];
                 args.Remove("amount");
             }
             else if (args.ContainsKey("alpha"))
             {
-                fromColor.A = (byte)((float)args["alpha"] * byte.MaxValue); //(float)args["alpha"];
+                fromColor.a = (float)args["alpha"];
                 args.Remove("alpha");
             }
 
@@ -1473,6 +1474,9 @@ namespace PressPlay.FFWD.iTween
             //establish iTween:
             args["type"] = "move";
             args["method"] = "to";
+
+            Debug.Log("iTween Calling MoveTo");
+
             Launch(target, args);
         }
 
@@ -3506,7 +3510,7 @@ namespace PressPlay.FFWD.iTween
                     //colors[1].R=(float)tweenArguments["r"];
                     for (int i = 0; i < colors.GetLength(0); i++)
                     {
-                        colors[i, 1].R = (byte)((float)tweenArguments["r"]*byte.MaxValue);
+                        colors[i, 1].r = (float)tweenArguments["r"];
                     }
                 }
                 if (tweenArguments.ContainsKey("g"))
@@ -3514,7 +3518,7 @@ namespace PressPlay.FFWD.iTween
                     //colors[1].G=(float)tweenArguments["g"];
                     for (int i = 0; i < colors.GetLength(0); i++)
                     {
-                        colors[i, 1].G = (byte)((float)tweenArguments["g"] * byte.MaxValue);
+                        colors[i, 1].g = (float)tweenArguments["g"];
                     }
                 }
                 if (tweenArguments.ContainsKey("b"))
@@ -3522,7 +3526,7 @@ namespace PressPlay.FFWD.iTween
                     //colors[1].B=(float)tweenArguments["b"];
                     for (int i = 0; i < colors.GetLength(0); i++)
                     {
-                        colors[i, 1].B = (byte)((float)tweenArguments["b"] * byte.MaxValue);
+                        colors[i, 1].b = (float)tweenArguments["b"];
                     }
                 }
                 if (tweenArguments.ContainsKey("a"))
@@ -3530,7 +3534,7 @@ namespace PressPlay.FFWD.iTween
                     //colors[1].A=(float)tweenArguments["a"];
                     for (int i = 0; i < colors.GetLength(0); i++)
                     {
-                        colors[i, 1].A = (byte)((float)tweenArguments["a"] * byte.MaxValue);
+                        colors[i, 1].a = (float)tweenArguments["a"];
                     }
                 }
             }
@@ -3541,7 +3545,7 @@ namespace PressPlay.FFWD.iTween
                 //colors[1].A=(float)tweenArguments["amount"];
                 for (int i = 0; i < colors.GetLength(0); i++)
                 {
-                    colors[i, 1].A = (byte)((float)tweenArguments["amount"] * byte.MaxValue); //(float)tweenArguments["amount"];
+                    colors[i, 1].a = (float)tweenArguments["amount"];
                 }
             }
             else if (tweenArguments.ContainsKey("alpha"))
@@ -3549,7 +3553,7 @@ namespace PressPlay.FFWD.iTween
                 //colors[1].A=(float)tweenArguments["alpha"];
                 for (int i = 0; i < colors.GetLength(0); i++)
                 {
-                    colors[i, 1].A = (byte)((float)tweenArguments["alpha"] * byte.MaxValue); //(float)tweenArguments["alpha"];
+                    colors[i, 1].a = (float)tweenArguments["alpha"];
                 }
             }
         }
@@ -4367,10 +4371,10 @@ namespace PressPlay.FFWD.iTween
         void ApplyColorTargets()
         {
             //calculate:
-            colors[0, 2].R = (byte)(ease(colors[0, 0].R, colors[0, 1].R, percentage) * byte.MaxValue); //ease(colors[0, 0].R, colors[0, 1].R, percentage);
-            colors[0, 2].G = (byte)(ease(colors[0, 0].G, colors[0, 1].G, percentage) * byte.MaxValue); //ease(colors[0, 0].G, colors[0, 1].G, percentage);
-            colors[0, 2].B = (byte)(ease(colors[0, 0].B, colors[0, 1].B, percentage) * byte.MaxValue); //ease(colors[0, 0].B, colors[0, 1].B, percentage);
-            colors[0, 2].A = (byte)(ease(colors[0, 0].A, colors[0, 1].A, percentage) * byte.MaxValue); //ease(colors[0, 0].A, colors[0, 1].A, percentage);
+            colors[0, 2].r = ease(colors[0, 0].r, colors[0, 1].r, percentage);
+            colors[0, 2].g = ease(colors[0, 0].g, colors[0, 1].g, percentage);
+            colors[0, 2].b = ease(colors[0, 0].b, colors[0, 1].b, percentage);
+            colors[0, 2].a = ease(colors[0, 0].a, colors[0, 1].a, percentage);
 
             //apply:
             tweenArguments["onupdateparams"] = colors[0, 2];
@@ -4436,17 +4440,10 @@ namespace PressPlay.FFWD.iTween
             for (int i = 0; i < colors.GetLength(0); i++)
             {
                 //calculate:
-                colors[i, 2].R = (byte)(ease(colors[i, 0].R, colors[i, 1].R, percentage) * byte.MaxValue);
-                colors[i, 2].G = (byte)(ease(colors[i, 0].G, colors[i, 1].G, percentage) * byte.MaxValue);
-                colors[i, 2].B = (byte)(ease(colors[i, 0].B, colors[i, 1].B, percentage) * byte.MaxValue);
-                colors[i, 2].A = (byte)(ease(colors[i, 0].A, colors[i, 1].A, percentage) * byte.MaxValue);               
-                
-                /*
-                colors[i, 2].R = ease(colors[i, 0].R, colors[i, 1].R, percentage);
-                colors[i, 2].G = ease(colors[i, 0].G, colors[i, 1].G, percentage);
-                colors[i, 2].B = ease(colors[i, 0].B, colors[i, 1].B, percentage);
-                colors[i, 2].A = ease(colors[i, 0].A, colors[i, 1].A, percentage);
-                */
+                colors[i, 2].r = ease(colors[i, 0].r, colors[i, 1].r, percentage);
+                colors[i, 2].g = ease(colors[i, 0].g, colors[i, 1].g, percentage);
+                colors[i, 2].b = ease(colors[i, 0].b, colors[i, 1].b, percentage);
+                colors[i, 2].a = ease(colors[i, 0].a, colors[i, 1].a, percentage);
             }
 
             //apply:
@@ -4658,11 +4655,11 @@ namespace PressPlay.FFWD.iTween
             //apply:
             if (isLocal)
             {
-                transform.localRotation = Quaternion.Euler(vector3s[2]);
+                transform.localRotation = QuaternionHelpers.Euler(vector3s[2]);
             }
             else
             {
-                transform.rotation = Quaternion.Euler(vector3s[2]);
+                transform.rotation = QuaternionHelpers.Euler(vector3s[2]);
             };
         }
 
@@ -4678,11 +4675,11 @@ namespace PressPlay.FFWD.iTween
             //apply:
             if (isLocal)
             {
-                transform.localRotation = Quaternion.Euler(vector3s[2]);
+                transform.localRotation = QuaternionHelpers.Euler(vector3s[2]);
             }
             else
             {
-                transform.rotation = Quaternion.Euler(vector3s[2]);
+                transform.rotation = QuaternionHelpers.Euler(vector3s[2]);
             };
 
             //dial in:
@@ -4690,11 +4687,11 @@ namespace PressPlay.FFWD.iTween
             {
                 if (isLocal)
                 {
-                    transform.localRotation = Quaternion.Euler(vector3s[1]);
+                    transform.localRotation = QuaternionHelpers.Euler(vector3s[1]);
                 }
                 else
                 {
-                    transform.rotation = Quaternion.Euler(vector3s[1]);
+                    transform.rotation = QuaternionHelpers.Euler(vector3s[1]);
                 };
             }
 
@@ -4703,7 +4700,7 @@ namespace PressPlay.FFWD.iTween
             if (physics)
             {
                 transform.eulerAngles = preUpdate;
-                rigidbody.MoveRotation(Quaternion.Euler(postUpdate));
+                rigidbody.MoveRotation(QuaternionHelpers.Euler(postUpdate));
             }
         }
 
@@ -4727,7 +4724,7 @@ namespace PressPlay.FFWD.iTween
             if (physics)
             {
                 transform.eulerAngles = preUpdate;
-                rigidbody.MoveRotation(Quaternion.Euler(postUpdate));
+                rigidbody.MoveRotation(QuaternionHelpers.Euler(postUpdate));
             }
         }
 
@@ -4825,7 +4822,7 @@ namespace PressPlay.FFWD.iTween
             if (physics)
             {
                 transform.eulerAngles = preUpdate;
-                rigidbody.MoveRotation(Quaternion.Euler(postUpdate));
+                rigidbody.MoveRotation(QuaternionHelpers.Euler(postUpdate));
             }
         }
 
@@ -4944,7 +4941,7 @@ namespace PressPlay.FFWD.iTween
             if (physics)
             {
                 transform.eulerAngles = preUpdate;
-                rigidbody.MoveRotation(Quaternion.Euler(postUpdate));
+                rigidbody.MoveRotation(QuaternionHelpers.Euler(postUpdate));
             }
         }
 
@@ -5280,27 +5277,27 @@ namespace PressPlay.FFWD.iTween
             {
                 if (args.ContainsKey("r"))
                 {
-                    colors[1].R = (byte)((float)args["r"] * byte.MaxValue); //(float)args["r"];
+                    colors[1].r = (float)args["r"];
                 }
                 if (args.ContainsKey("g"))
                 {
-                    colors[1].G = (byte)((float)args["g"] * byte.MaxValue); //(float)args["g"];
+                    colors[1].g = (float)args["g"];
                 }
                 if (args.ContainsKey("b"))
                 {
-                    colors[1].B = (byte)((float)args["b"] * byte.MaxValue); //(float)args["b"];
+                    colors[1].b = (float)args["b"];
                 }
                 if (args.ContainsKey("a"))
                 {
-                    colors[1].A = (byte)((float)args["a"] * byte.MaxValue); //(float)args["a"];
+                    colors[1].a = (float)args["a"];
                 }
             }
 
             //calculate:
-            colors[3].R = Mathf.SmoothDamp(colors[0].R, colors[1].R, ref colors[2].R, time);
-            colors[3].G = Mathf.SmoothDamp(colors[0].G, colors[1].G, ref colors[2].G, time);
-            colors[3].B = Mathf.SmoothDamp(colors[0].B, colors[1].B, ref colors[2].B, time);
-            colors[3].A = Mathf.SmoothDamp(colors[0].A, colors[1].A, ref colors[2].A, time);
+            colors[3].r = Mathf.SmoothDamp(colors[0].r, colors[1].r, ref colors[2].r, time);
+            colors[3].g = Mathf.SmoothDamp(colors[0].g, colors[1].g, ref colors[2].g, time);
+            colors[3].b = Mathf.SmoothDamp(colors[0].b, colors[1].b, ref colors[2].b, time);
+            colors[3].a = Mathf.SmoothDamp(colors[0].a, colors[1].a, ref colors[2].a, time);
 
             //apply:
             if (target.renderer != null)
@@ -5516,7 +5513,7 @@ namespace PressPlay.FFWD.iTween
             {
                 Vector3 postUpdate = target.transform.eulerAngles;
                 target.transform.eulerAngles = preUpdate;
-                target.rigidbody.MoveRotation(Quaternion.Euler(postUpdate));
+                target.rigidbody.MoveRotation(QuaternionHelpers.Euler(postUpdate));
             }
         }
 
@@ -6994,7 +6991,15 @@ namespace PressPlay.FFWD.iTween
                 int i = 0;
                 while (i < args.Length - 1)
                 {
-                    hashTable.Add((string)args[i], args[i + 1]);
+
+                    if (args[i + 1].GetType().ToString() == "System.Int32")
+                    {
+                        hashTable.Add((string)args[i], (float)(int)args[i + 1]);
+                    }else{
+                        hashTable.Add((string)args[i], args[i + 1]);
+                    }
+
+                    
                     i += 2;
                 }
                 return hashTable;
@@ -7018,19 +7023,20 @@ namespace PressPlay.FFWD.iTween
 
         #region Component Segments
 
-        void Awake()
+        public override void Awake()
         {
             RetrieveArgs();
             lastRealTime = Time.realtimeSinceStartup; // Added by PressPlay
         }
 
-        void Start()
+        public override void Start()
         {
             TweenStart();
         }
 
         //non-physics
-        void Update()
+
+        public override void Update()
         {
             if (isRunning && !physics)
             {
@@ -7060,7 +7066,7 @@ namespace PressPlay.FFWD.iTween
         }
 
         //physics
-        void FixedUpdate()
+        public override void  FixedUpdate()
         {
             if (isRunning && physics)
             {
@@ -7266,6 +7272,9 @@ namespace PressPlay.FFWD.iTween
                 args["target"] = target;
             }
             tweens.Insert(0, args);
+
+            Debug.Log("iTween Calling Launch");
+
             target.AddComponent(new iTween());
         }
 
@@ -7621,9 +7630,7 @@ namespace PressPlay.FFWD.iTween
                 //throw an error if a string wasn't passed for callback:
                 if (tweenArguments[callbackType].GetType() == typeof(System.String))
                 {
-                    // TODO Implement callback function
-                    throw new NotImplementedException("The callback function is not implemented yet");
-                    //target.SendMessage((string)tweenArguments[callbackType], (object)tweenArguments[callbackType + "params"], SendMessageOptions.DontRequireReceiver);
+                    target.SendMessage((string)tweenArguments[callbackType], (object)tweenArguments[callbackType + "params"], SendMessageOptions.DontRequireReceiver);
                 }
                 else
                 {
@@ -7649,7 +7656,7 @@ namespace PressPlay.FFWD.iTween
 
         void ConflictCheck()
         {//if a new iTween is about to run and is of the same type as an in progress iTween this will destroy the previous if the new one is NOT identical in every way or it will destroy the new iTween if they are:	
-            Component[] tweens = GetComponents(typeof(iTween));
+            Component[] tweens = GetComponents<iTween>(); //GetComponents(typeof(iTween));
             foreach (iTween item in tweens)
             {
                 if (item.type == "value")

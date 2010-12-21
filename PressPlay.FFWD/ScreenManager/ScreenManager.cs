@@ -323,7 +323,7 @@ namespace PressPlay.FFWD.ScreenManager
 
             spriteBatch.Draw(blankTexture,
                              new Rectangle(0, 0, viewport.Width, viewport.Height),
-                             Color.Black * alpha);
+                             Color.black * alpha);
 
             spriteBatch.End();
         }

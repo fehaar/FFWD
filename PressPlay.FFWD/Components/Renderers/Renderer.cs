@@ -10,8 +10,14 @@ namespace PressPlay.FFWD.Components
 {
     public abstract class Renderer : Component, IRenderable
     {
-        public Material material;
-        public List<Material> materials;
+        public Material material
+        {
+            get
+            {
+                return materials[0];
+            }
+        }
+        public List<Material> materials = new List<Material>() { new Material() };
         [ContentSerializerIgnore]
         public Material sharedMaterial { get; set; }
         

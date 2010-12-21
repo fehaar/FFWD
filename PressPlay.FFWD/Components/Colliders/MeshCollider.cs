@@ -29,7 +29,7 @@ namespace PressPlay.FFWD.Components
             pointList = new VertexPositionColor[vertices.Length];
             for (int i = 0; i < vertices.Length; i++)
             {
-                pointList[i] = new VertexPositionColor(vertices[i], Color.LawnGreen);
+                pointList[i] = new VertexPositionColor(vertices[i], Microsoft.Xna.Framework.Color.LawnGreen);
             }
         }
 
@@ -61,7 +61,7 @@ namespace PressPlay.FFWD.Components
         {
             for (int i = 0; i < pointList.Length; i++)
             {
-                pointList[i].Color = Color.Red;
+                pointList[i].Color = Microsoft.Xna.Framework.Color.Red;
             }
         }
 

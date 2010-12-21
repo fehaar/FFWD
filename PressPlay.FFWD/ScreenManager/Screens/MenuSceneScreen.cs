@@ -139,7 +139,7 @@ namespace PressPlay.FFWD.ScreenManager
             foreach (ButtonComponent button in menuEntries)
             {
                 if(button.gameObject.renderer != null){
-                    ((SpriteRenderer)button.gameObject.renderer).Color = Color.FromNonPremultiplied(255, 255, 255, (int)(255*(TransitionAlpha)));
+                    ((SpriteRenderer)button.gameObject.renderer).material.color = new Color(1, 1, 1, TransitionAlpha); //Color.FromNonPremultiplied(255, 255, 255, (int)(255*(TransitionAlpha)));
                 }
             }
 

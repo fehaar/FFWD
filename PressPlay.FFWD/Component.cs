@@ -161,5 +161,20 @@ namespace PressPlay.FFWD
             return GetComponentsInParents<T>();
         }
         #endregion
+
+        public void Rotate(Vector3 eulerAngles, Space relativeTo)
+        {
+            throw new NotImplementedException("Transform.Translate is not implemented yet");
+        }
+
+        #region Translate methods
+
+        // TODO implement Translate function
+        public void Translate(Vector3 translation, Space relativeTo)
+        {
+            throw new NotImplementedException("Transform.Translate is not implemented yet");
+        }
+
+        #endregion
     }
 }
