@@ -10,7 +10,6 @@ namespace PressPlay.Tentacles.Scripts {
         //public Renderer damageRendererOverlay;
         //public Material damageOverlay;
 
-        [ContentSerializer(SharedResource = true)]
         public Transform gfxTransform;
 
         Microsoft.Xna.Framework.Quaternion oldRotation;

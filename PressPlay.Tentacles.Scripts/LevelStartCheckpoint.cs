@@ -9,7 +9,6 @@ namespace PressPlay.Tentacles.Scripts
 {
     public class LevelStartCheckPoint : CheckPoint
     {
-        [ContentSerializer(SharedResource = true)]
         public Transform lemmyStartPosition;
 
         public Ease lemmyMoveEase = Ease.EaseCircOut;

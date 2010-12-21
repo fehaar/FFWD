@@ -3273,7 +3273,74 @@
         <component Type="PressPlay.Tentacles.Scripts.LevelHandler">
           <id>51628</id>
           <debugLevelType>veins</debugLevelType>
-          <lemmyPrefab>#Prefab15738</lemmyPrefab>
+          <lemmyPrefab>
+            <id>15738</id>
+            <isPrefab>true</isPrefab>
+            <aimAtFingerPosition>false</aimAtFingerPosition>
+            <useControllerInput>false</useControllerInput>
+            <tentaclePrefab>
+              <id>15866</id>
+              <isPrefab>true</isPrefab>
+              <visualStats>
+                <joints>7</joints>
+                <startWidth>0.8</startWidth>
+                <endWidth>0.34</endWidth>
+                <jointLinearStiffnes>40</jointLinearStiffnes>
+                <curvature>0.0195</curvature>
+                <physicsIterations>2</physicsIterations>
+              </visualStats>
+              <useAnchor>false</useAnchor>
+            </tentaclePrefab>
+            <tentacleTipPrefab>
+              <id>15962</id>
+              <isPrefab>true</isPrefab>
+              <eatTime>0.5</eatTime>
+              <eatSpeed>15</eatSpeed>
+            </tentacleTipPrefab>
+            <mainBodyPrefab>
+              <id>16122</id>
+              <isPrefab>true</isPrefab>
+              <gfxTransform>
+                <id>16126</id>
+                <isPrefab>true</isPrefab>
+                <localPosition>0 0 0</localPosition>
+                <localScale>1.4528 1.4528 1.4528</localScale>
+                <localRotation>0 0 0 1</localRotation>
+              </gfxTransform>
+            </mainBodyPrefab>
+            <stats>
+              <id>16312</id>
+              <isPrefab>true</isPrefab>
+              <grabPickupTime>0.25</grabPickupTime>
+              <rigidbodyDrag>3</rigidbodyDrag>
+              <tentacles>3</tentacles>
+              <health>100</health>
+              <regenerateDamagePerSecond>2</regenerateDamagePerSecond>
+            </stats>
+            <tentacleStats>
+              <id>16322</id>
+              <isPrefab>true</isPrefab>
+              <dragDistMin>0</dragDistMin>
+              <connectionMaxLength>15</connectionMaxLength>
+              <tentacleLength>6</tentacleLength>
+              <overMaxLengthElasticity>1.5</overMaxLengthElasticity>
+              <dragBodyForce>22</dragBodyForce>
+              <dragCurvePow>0.4</dragCurvePow>
+              <tentacleTipMoveSpeed>1.1</tentacleTipMoveSpeed>
+              <optimalConnectionDistance>1</optimalConnectionDistance>
+              <connectionTimeout>50000000</connectionTimeout>
+              <searchForConnectionTimeout>0.4</searchForConnectionTimeout>
+              <wallSeekHelpDistance>3</wallSeekHelpDistance>
+              <wallSeekHelpPower>15</wallSeekHelpPower>
+              <controlFlickCurvePow>2.2</controlFlickCurvePow>
+              <controlFlickStrength>2500</controlFlickStrength>
+              <minShootSpeed>40</minShootSpeed>
+              <maxShootSpeed>210</maxShootSpeed>
+              <controlForce>400</controlForce>
+              <controlForceCurvePow>0.3</controlForceCurvePow>
+            </tentacleStats>
+            <mainBody Null="true" />
+          </lemmyPrefab>
           <criticalFrameRateDropLimit>20</criticalFrameRateDropLimit>
           <doCriticalFrameRateDropCheck>false</doCriticalFrameRateDropCheck>
           <framesBetweenCriticalFrameChecks>10</framesBetweenCriticalFrameChecks>
@@ -3317,7 +3384,13 @@
           <noDamageBonus>0</noDamageBonus>
           <startDamageChallenge>false</startDamageChallenge>
           <startChallenge>false</startChallenge>
-          <lemmyStartPosition>#Prefab51670</lemmyStartPosition>
+          <lemmyStartPosition>
+            <id>51670</id>
+            <isPrefab>true</isPrefab>
+            <localPosition>0.14769 0 -4.15288</localPosition>
+            <localScale>1 1 1</localScale>
+            <localRotation>0 0 0 1</localRotation>
+          </lemmyStartPosition>
           <lemmyMoveEase>EaseCircOut</lemmyMoveEase>
         </component>
       </components>
@@ -13980,11 +14053,8 @@
         </component>
       </components>
     </gameObject>
-  </Asset>
-  <Resources>
-    <Resource ID="#Prefab5682" Type="PressPlay.FFWD.GameObject">
+    <prefab>
       <id>5682</id>
-      <isPrefab>true</isPrefab>
       <name>05_Lemmy Prefab</name>
       <layer>13</layer>
       <active>false</active>
@@ -14039,11 +14109,67 @@
           <id>15738</id>
           <aimAtFingerPosition>false</aimAtFingerPosition>
           <useControllerInput>false</useControllerInput>
-          <tentaclePrefab>#Prefab15866</tentaclePrefab>
-          <tentacleTipPrefab>#Prefab15962</tentacleTipPrefab>
-          <mainBodyPrefab>#Prefab16122</mainBodyPrefab>
-          <stats>#Prefab16312</stats>
-          <tentacleStats>#Prefab16322</tentacleStats>
+          <tentaclePrefab>
+            <id>15866</id>
+            <isPrefab>true</isPrefab>
+            <visualStats>
+              <joints>7</joints>
+              <startWidth>0.8</startWidth>
+              <endWidth>0.34</endWidth>
+              <jointLinearStiffnes>40</jointLinearStiffnes>
+              <curvature>0.0195</curvature>
+              <physicsIterations>2</physicsIterations>
+            </visualStats>
+            <useAnchor>false</useAnchor>
+          </tentaclePrefab>
+          <tentacleTipPrefab>
+            <id>15962</id>
+            <isPrefab>true</isPrefab>
+            <eatTime>0.5</eatTime>
+            <eatSpeed>15</eatSpeed>
+          </tentacleTipPrefab>
+          <mainBodyPrefab>
+            <id>16122</id>
+            <isPrefab>true</isPrefab>
+            <gfxTransform>
+              <id>16126</id>
+              <isPrefab>true</isPrefab>
+              <localPosition>0 0 0</localPosition>
+              <localScale>1.4528 1.4528 1.4528</localScale>
+              <localRotation>0 0 0 1</localRotation>
+            </gfxTransform>
+          </mainBodyPrefab>
+          <stats>
+            <id>16312</id>
+            <isPrefab>true</isPrefab>
+            <grabPickupTime>0.25</grabPickupTime>
+            <rigidbodyDrag>3</rigidbodyDrag>
+            <tentacles>3</tentacles>
+            <health>100</health>
+            <regenerateDamagePerSecond>2</regenerateDamagePerSecond>
+          </stats>
+          <tentacleStats>
+            <id>16322</id>
+            <isPrefab>true</isPrefab>
+            <dragDistMin>0</dragDistMin>
+            <connectionMaxLength>15</connectionMaxLength>
+            <tentacleLength>6</tentacleLength>
+            <overMaxLengthElasticity>1.5</overMaxLengthElasticity>
+            <dragBodyForce>22</dragBodyForce>
+            <dragCurvePow>0.4</dragCurvePow>
+            <tentacleTipMoveSpeed>1.1</tentacleTipMoveSpeed>
+            <optimalConnectionDistance>1</optimalConnectionDistance>
+            <connectionTimeout>50000000</connectionTimeout>
+            <searchForConnectionTimeout>0.4</searchForConnectionTimeout>
+            <wallSeekHelpDistance>3</wallSeekHelpDistance>
+            <wallSeekHelpPower>15</wallSeekHelpPower>
+            <controlFlickCurvePow>2.2</controlFlickCurvePow>
+            <controlFlickStrength>2500</controlFlickStrength>
+            <minShootSpeed>40</minShootSpeed>
+            <maxShootSpeed>210</maxShootSpeed>
+            <controlForce>400</controlForce>
+            <controlForceCurvePow>0.3</controlForceCurvePow>
+          </tentacleStats>
           <mainBody Null="true" />
         </component>
         <component Type="PressPlay.FFWD.Components.SphereCollider">
@@ -14065,10 +14191,9 @@
           <id>16352</id>
         </component>
       </components>
-    </Resource>
-    <Resource ID="#Prefab2872" Type="PressPlay.FFWD.GameObject">
+    </prefab>
+    <prefab>
       <id>2872</id>
-      <isPrefab>true</isPrefab>
       <name>Tentacle</name>
       <layer>29</layer>
       <active>false</active>
@@ -14114,10 +14239,9 @@
           <endWidth>0</endWidth>
         </component>
       </components>
-    </Resource>
-    <Resource ID="#Prefab1628" Type="PressPlay.FFWD.GameObject">
+    </prefab>
+    <prefab>
       <id>1628</id>
-      <isPrefab>true</isPrefab>
       <name>Tentacle Tip</name>
       <layer>0</layer>
       <active>false</active>
@@ -14180,10 +14304,9 @@
           <id>16050</id>
         </component>
       </components>
-    </Resource>
-    <Resource ID="#Prefab5112" Type="PressPlay.FFWD.GameObject">
+    </prefab>
+    <prefab>
       <id>5112</id>
-      <isPrefab>true</isPrefab>
       <name>lemmy_body</name>
       <layer>0</layer>
       <active>false</active>
@@ -14399,13 +14522,18 @@
         </component>
         <component Type="PressPlay.Tentacles.Scripts.MainBody">
           <id>16122</id>
-          <gfxTransform>#Prefab16126</gfxTransform>
+          <gfxTransform>
+            <id>16126</id>
+            <isPrefab>true</isPrefab>
+            <localPosition>0 0 0</localPosition>
+            <localScale>1.4528 1.4528 1.4528</localScale>
+            <localRotation>0 0 0 1</localRotation>
+          </gfxTransform>
         </component>
       </components>
-    </Resource>
-    <Resource ID="#Prefab318" Type="PressPlay.FFWD.GameObject">
+    </prefab>
+    <prefab>
       <id>318</id>
-      <isPrefab>true</isPrefab>
       <name>Lemmy Basic Stats</name>
       <layer>0</layer>
       <active>false</active>
@@ -14426,10 +14554,9 @@
           <regenerateDamagePerSecond>2</regenerateDamagePerSecond>
         </component>
       </components>
-    </Resource>
-    <Resource ID="#Prefab3132" Type="PressPlay.FFWD.GameObject">
+    </prefab>
+    <prefab>
       <id>3132</id>
-      <isPrefab>true</isPrefab>
       <name>Tentacle Stats Low Wall Seeking</name>
       <layer>0</layer>
       <active>false</active>
@@ -14463,6 +14590,6 @@
           <controlForceCurvePow>0.3</controlForceCurvePow>
         </component>
       </components>
-    </Resource>
-  </Resources>
+    </prefab>
+  </Asset>
 </XnaContent>

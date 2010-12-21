@@ -43,21 +43,16 @@ namespace PressPlay.Tentacles.Scripts
         //public PoolableObject createOnPushButNoDamage;
         //public PoolableObject createOnDeath;
 
-        [ContentSerializer(SharedResource = true)]
         public Tentacle tentaclePrefab;
-        [ContentSerializer(SharedResource = true)]
         public TentacleTip tentacleTipPrefab;
-        [ContentSerializer(SharedResource = true)]
         public MainBody mainBodyPrefab;
         //public Claw clawPrefab;
 
         //public ParticleEmitter bubbleTrailPrefab;
         //public ParticleEmitter bleedBubbleTrailPrefab;
 
-        [ContentSerializer(SharedResource = true)]
         public LemmyStats stats = null;
 
-        [ContentSerializer(SharedResource = true)]
         public TentacleStats tentacleStats = null;
         //public TentacleStats clawStats;
 
