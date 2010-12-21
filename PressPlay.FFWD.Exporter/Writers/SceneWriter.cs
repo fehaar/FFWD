@@ -96,25 +96,32 @@ namespace PressPlay.FFWD.Exporter.Writers
             Component[] comps = go.GetComponents(typeof(Component));
             for (int i = 0; i < comps.Length; i++)
             {
-                WriteComponent(comps[i]);
+                WriteComponent(comps[i], false);
             }
             writer.WriteEndElement();
         }
 
-        private void WriteTransform(Transform transform)
+        private void WriteTransform(Transform transform, bool isPrefab)
         {
             Vector3 pos = transform.localPosition;
             if (FlipYInTransforms)
             {
                 pos.y = -pos.y;
             }
-            writer.WriteStartElement("component");
-            writer.WriteAttributeString("Type", "PressPlay.FFWD.Transform");
+            if (!isPrefab)
+            {
+                writer.WriteStartElement("component");
+                writer.WriteAttributeString("Type", "PressPlay.FFWD.Transform");
+            }
             writer.WriteElementString("id", transform.GetInstanceID().ToString());
+            if (isPrefab)
+            {
+                writer.WriteElementString("isPrefab", ToString(true));
+            }
             writer.WriteElementString("localPosition", ToString(pos));
             writer.WriteElementString("localScale", ToString(transform.localScale));
             writer.WriteElementString("localRotation", ToString(transform.localRotation));
-            if (transform.childCount > 0)
+            if (!isPrefab && transform.childCount > 0)
             {
                 writer.WriteStartElement("children");
                 for (int i = 0; i < transform.childCount; i++)
@@ -125,10 +132,13 @@ namespace PressPlay.FFWD.Exporter.Writers
                 }
                 writer.WriteEndElement();
             }
-            writer.WriteEndElement();
+            if (!isPrefab)
+            {
+                writer.WriteEndElement();
+            }
         }
 
-        private void WriteComponent(Component component)
+        private void WriteComponent(Component component, bool isPrefab)
         {
             if (resolver == null)
             {
@@ -140,7 +150,7 @@ namespace PressPlay.FFWD.Exporter.Writers
             }
             if (component is Transform)
             {
-                WriteTransform(component as Transform);
+                WriteTransform(component as Transform, isPrefab);
                 return;
             }
             if (resolver.SkipComponent(component))
@@ -153,11 +163,21 @@ namespace PressPlay.FFWD.Exporter.Writers
             if (componentWriter != null)
             {
                 writtenIds.Add(component.GetInstanceID());
-                writer.WriteStartElement("component");
-                writer.WriteAttributeString("Type", resolver.ResolveTypeName(component));
+                if (!isPrefab)
+                {
+                    writer.WriteStartElement("component");
+                    writer.WriteAttributeString("Type", resolver.ResolveTypeName(component));
+                }
                 writer.WriteElementString("id", component.GetInstanceID().ToString());
+                if (isPrefab)
+                {
+                    writer.WriteElementString("isPrefab", ToString(true));
+                }
                 componentWriter.Write(this, component);
-                writer.WriteEndElement();
+                if (!isPrefab)
+                {
+                    writer.WriteEndElement();
+                }
             }
         }
 
@@ -263,21 +283,16 @@ namespace PressPlay.FFWD.Exporter.Writers
                 if (obj is UnityEngine.Object)
                 {
                     UnityEngine.Object theObject = (obj as UnityEngine.Object);
+                    writer.WriteStartElement(name);
                     if (theObject == null)
                     {
-                        writer.WriteStartElement(name);
                         writer.WriteAttributeString("Null", ToString(true));
                         writer.WriteEndElement();
                         return;
                     }
-                    if (EditorUtility.GetPrefabType(theObject) == PrefabType.Prefab)
-                    {
-                        writer.WriteElementString(name, AddPrefab(theObject));
-                    }
-                    else
-                    {
-                        writer.WriteElementString(name, theObject.GetInstanceID().ToString());
-                    }
+                    AddPrefab(theObject);
+                    WriteComponent(theObject as Component, true);
+                    writer.WriteEndElement();
                     return;
                 }
                 // Check if we have a Serializable class

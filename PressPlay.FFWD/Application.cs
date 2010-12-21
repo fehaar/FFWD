@@ -221,22 +221,34 @@ namespace PressPlay.FFWD
 
         internal static void AwakeNewComponents()
         {
+            List<Component> prefabReferences = new List<Component>();
             for (int i = 0; i < NewComponents.Count; i++)
             {
                 Component cmp = NewComponents[i];
-
-                objects.Add(cmp.GetInstanceID(), cmp);
-                if (cmp.gameObject != null)
+                if (cmp.isPrefab && cmp.gameObject == null)
                 {
-                    if (!cmp.gameObject.isPrefab)
+                    prefabReferences.Add(cmp);
+                }
+                else
+                {
+                    objects.Add(cmp.GetInstanceID(), cmp);
+                    if (cmp.gameObject != null)
                     {
-                        activeComponents.Add(cmp);
-                    }
-                    if (!objects.ContainsKey(cmp.gameObject.GetInstanceID()))
-                    {
-                        objects.Add(cmp.gameObject.GetInstanceID(), cmp.gameObject);
+                        if (!cmp.gameObject.isPrefab)
+                        {
+                            activeComponents.Add(cmp);
+                        }
+                        if (!objects.ContainsKey(cmp.gameObject.GetInstanceID()))
+                        {
+                            objects.Add(cmp.gameObject.GetInstanceID(), cmp.gameObject);
+                        }
                     }
                 }
+            }
+            // Assign the correct prefab game objects to all prefab references. Note that it will not alter the prefab.
+            for (int i = 0; i < prefabReferences.Count; i++)
+            {
+                prefabReferences[i].gameObject = (Application.Find(prefabReferences[i].GetInstanceID()) as Component).gameObject;
             }
             // All components will exist to be found before awaking - otherwise we can get issues with instantiating on awake.
             Component[] componentsToAwake = NewComponents.ToArray();
