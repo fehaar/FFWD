@@ -209,11 +209,13 @@ namespace PressPlay.FFWD.Exporter.Writers
             }
         }
 
-        internal void WriteMesh(Mesh mesh)
+        internal void WriteMesh(Mesh mesh, string name)
         {
             string asset = Path.GetFileNameWithoutExtension(AssetDatabase.GetAssetPath(mesh.GetInstanceID()));
-            WriteElement("asset", asset);
-            WriteElement("mesh", mesh.name);
+            writer.WriteStartElement(name);
+            writer.WriteElementString("name", mesh.name);
+            writer.WriteElementString("asset", asset);
+            writer.WriteEndElement();
             assetHelper.ExportMesh(mesh);
         }
 
@@ -263,16 +265,34 @@ namespace PressPlay.FFWD.Exporter.Writers
                     writer.WriteElementString(name, ((LayerMask)obj).value.ToString());
                     return;
                 }
+                if (obj is Material[])
+                {
+                    Material[] objArr = obj as Material[];
+                    writer.WriteStartElement(name);
+                    foreach (Material mat in objArr)
+                    {
+                        WriteElement("material", mat);
+                    }
+                    writer.WriteEndElement();
+                    return;
+                }
                 if (obj is Material)
                 {
                     Material mat = obj as Material;
                     writer.WriteStartElement(name);
                     writer.WriteElementString("shader", mat.shader.name);
-                    writer.WriteElementString("mainTexture", mat.mainTexture.name);
-                    writer.WriteElementString("mainTextureOffset", ToString(mat.mainTextureOffset));
-                    writer.WriteElementString("mainTextureScale", ToString(mat.mainTextureScale));
+                    if (mat.HasProperty("_Color"))
+                    {
+                        writer.WriteElementString("color", ToString(mat.color));
+                    }
+                    if (mat.mainTexture != null)
+                    {
+                        writer.WriteElementString("mainTexture", mat.mainTexture.name);
+                        writer.WriteElementString("mainTextureOffset", ToString(mat.mainTextureOffset));
+                        writer.WriteElementString("mainTextureScale", ToString(mat.mainTextureScale));
+                        assetHelper.ExportTexture(mat.mainTexture as Texture2D);
+                    }
                     writer.WriteEndElement();
-                    assetHelper.ExportTexture(mat.mainTexture as Texture2D);
                     return;
                 }
                 if (obj is String)

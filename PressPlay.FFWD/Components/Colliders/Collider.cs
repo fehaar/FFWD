@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Box2D.XNA;
+using Microsoft.Xna.Framework.Content;
 
 namespace PressPlay.FFWD.Components
 {
@@ -10,6 +11,7 @@ namespace PressPlay.FFWD.Components
     {
         #region ContentProperties
         public bool isTrigger { get; set; }
+        [ContentSerializer(Optional = true)]
         public string material { get; set; }
         #endregion
 

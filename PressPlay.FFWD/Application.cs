@@ -122,7 +122,7 @@ namespace PressPlay.FFWD
                     if (activeComponents[i] is MeshRenderer)
                     {
                         MeshRenderer r = (activeComponents[i] as MeshRenderer);
-                        if (r.shader == "iPhone/Particles/Additive Culled")
+                        if (r.material != null && r.material.IsAdditive())
                         {
                             deferred.Add(activeComponents[i] as IRenderable);
                             continue;
