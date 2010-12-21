@@ -303,6 +303,10 @@
                               <mainTextureScale>1 1</mainTextureScale>
                             </material>
                           </materials>
+                          <sharedMesh>
+                            <name>simple_round_enemy</name>
+                            <asset>simple_round_flat_enemy</asset>
+                          </sharedMesh>
                         </component>
                       </components>
                     </child>
@@ -629,6 +633,10 @@
                               <mainTextureScale>1 1</mainTextureScale>
                             </material>
                           </materials>
+                          <sharedMesh>
+                            <name>simple_round_enemy</name>
+                            <asset>simple_round_flat_enemy</asset>
+                          </sharedMesh>
                         </component>
                       </components>
                     </child>
@@ -955,6 +963,10 @@
                               <mainTextureScale>1 1</mainTextureScale>
                             </material>
                           </materials>
+                          <sharedMesh>
+                            <name>simple_round_enemy</name>
+                            <asset>simple_round_flat_enemy</asset>
+                          </sharedMesh>
                         </component>
                       </components>
                     </child>
@@ -1281,6 +1293,10 @@
                               <mainTextureScale>1 1</mainTextureScale>
                             </material>
                           </materials>
+                          <sharedMesh>
+                            <name>simple_round_enemy</name>
+                            <asset>simple_round_flat_enemy</asset>
+                          </sharedMesh>
                         </component>
                       </components>
                     </child>
@@ -1607,6 +1623,10 @@
                               <mainTextureScale>1 1</mainTextureScale>
                             </material>
                           </materials>
+                          <sharedMesh>
+                            <name>simple_round_enemy</name>
+                            <asset>simple_round_flat_enemy</asset>
+                          </sharedMesh>
                         </component>
                       </components>
                     </child>
@@ -17487,6 +17507,10 @@
                               <mainTextureScale>1 1</mainTextureScale>
                             </material>
                           </materials>
+                          <sharedMesh>
+                            <name>mouth</name>
+                            <asset>lemmy_body</asset>
+                          </sharedMesh>
                         </component>
                       </components>
                     </child>
@@ -17513,6 +17537,10 @@
                               <mainTextureScale>1 1</mainTextureScale>
                             </material>
                           </materials>
+                          <sharedMesh>
+                            <name>superLemmy</name>
+                            <asset>lemmy_body</asset>
+                          </sharedMesh>
                         </component>
                       </components>
                     </child>
