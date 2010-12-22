@@ -28,5 +28,18 @@ namespace PressPlay.FFWD
         {
             return shader == "iPhone/Particles/Additive Culled";
         }
+
+        public void PrepareLoadContent()
+        {
+            ContentHelper.LoadTexture(mainTexture);
+        }
+
+        public void EndLoadContent()
+        {
+            if (texture == null)
+            {
+                texture = ContentHelper.GetTexture(mainTexture);
+            }
+        }
     }
 }

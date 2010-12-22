@@ -52,13 +52,13 @@ namespace PressPlay.FFWD.Components
  	        base.Awake();
             if (sharedMaterial != null)
             {
-                ContentHelper.LoadTexture(sharedMaterial.mainTexture);
+                sharedMaterial.PrepareLoadContent();
             }
             if (materials != null)
             {
                 for (int i = 0; i < materials.Length; i++)
                 {
-                    ContentHelper.LoadTexture(materials[i].mainTexture);
+                    materials[i].PrepareLoadContent();
                 }
             }
         }
@@ -68,13 +68,13 @@ namespace PressPlay.FFWD.Components
             base.Start();
             if (sharedMaterial != null)
             {
-                sharedMaterial.texture = ContentHelper.GetTexture(sharedMaterial.mainTexture);
+                sharedMaterial.EndLoadContent();
             }
             if (materials != null)
             {
                 for (int i = 0; i < materials.Length; i++)
                 {
-                    materials[i].texture = ContentHelper.GetTexture(materials[i].mainTexture);
+                    materials[i].EndLoadContent();
                 }
             }
         }
