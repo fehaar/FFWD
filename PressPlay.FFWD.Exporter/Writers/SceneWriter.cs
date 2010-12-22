@@ -315,6 +315,17 @@ namespace PressPlay.FFWD.Exporter.Writers
                     writer.WriteEndElement();
                     return;
                 }
+                // Check if we have a Serializable array
+                if (obj.GetType().IsArray)
+                {
+                    writer.WriteStartElement(name);
+                    foreach (object mat in (Array)obj)
+                    {
+                        WriteElement("Item", mat);
+                    }
+                    writer.WriteEndElement();
+                    return;
+                }
                 // Check if we have a Serializable class
                 if (obj.GetType().GetCustomAttributes(typeof(SerializableAttribute), true).Length > 0)
                 {
