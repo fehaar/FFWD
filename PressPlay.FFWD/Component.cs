@@ -172,21 +172,6 @@ namespace PressPlay.FFWD
         }
         #endregion
 
-        public void Rotate(Vector3 eulerAngles, Space relativeTo)
-        {
-            throw new NotImplementedException("Transform.Translate is not implemented yet");
-        }
-
-        #region Translate methods
-
-        // TODO implement Translate function
-        public void Translate(Vector3 translation, Space relativeTo)
-        {
-            throw new NotImplementedException("Transform.Translate is not implemented yet");
-        }
-
-        #endregion
-
         public Component[] GetComponentsInChildren(Type type, bool includeInactive)
         {
             // TODO: Objects should be destroyed after Update but before Rendering

@@ -11,7 +11,6 @@ namespace PressPlay.FFWD
         public float g;
         public float b;
         public float a;
-        public float greyscale;
 
         public byte R
         {
@@ -58,6 +57,15 @@ namespace PressPlay.FFWD
             set
             {
                 a = (float)(value) / 255;
+            }
+        }
+
+        public float greyscale
+        {
+            get
+            {
+                // TODO: Implement this
+                throw new NotImplementedException("Not implemented");
             }
         }
 
@@ -197,7 +205,6 @@ namespace PressPlay.FFWD
             this.g = g;
             this.b = b;
             this.a = a;
-            greyscale = 1;
         }
         #endregion
 

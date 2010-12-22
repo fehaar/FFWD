@@ -20,7 +20,7 @@ namespace PressPlay.FFWD
         public static List<Dictionary<string,object>> tweens = new List<Dictionary<string,object>>();
 
         //camera fade object:
-        private static GameObject cameraFade;
+        private static GameObject cameraFade = null;
 
         //status members (made public for visual troubleshooting in the inspector):
         public string id, type, method;
@@ -31,8 +31,8 @@ namespace PressPlay.FFWD
 
         //private members:
         private float runningTime, percentage;
-        private float delayStarted; //probably not neccesary that this be protected but it shuts Unity's compiler up about this being "never used"
-        private bool kinematic, isLocal, loop, reverse, wasPaused, physics;
+        private float delayStarted = 0.0f; //probably not neccesary that this be protected but it shuts Unity's compiler up about this being "never used"
+        private bool kinematic, isLocal, loop = false, reverse, physics;
         private Dictionary<string, object> tweenArguments;
         private Space space;
         private delegate float EasingFunction(float start, float end, float value);
@@ -7119,7 +7119,6 @@ namespace PressPlay.FFWD
                 isPaused = false;
                 if (delay > 0)
                 {
-                    wasPaused = true;
                     ResumeDelay();
                 }
             }
