@@ -26,21 +26,18 @@ namespace PressPlay.FFWD.Test.Core_framework
             scene = new Scene();
 
             root = new GameObject();
-            root.AddComponent(new Transform());
             rootComponent = new TestComponent();
 
             root.AddComponent(rootComponent);
             scene.gameObjects.Add(root);
 
             child = new GameObject();
-            child.AddComponent(new Transform());
             childComponent = new TestComponent();
             child.AddComponent(childComponent);
             root.transform.children = new List<GameObject>();
             root.transform.children.Add(child);
 
             childOfChild = new GameObject();
-            childOfChild.AddComponent(new Transform());
             childOfChildComponent = new TestComponent();
             childOfChild.AddComponent(childOfChildComponent);
             child.transform.children = new List<GameObject>();

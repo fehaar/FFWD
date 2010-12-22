@@ -17,11 +17,8 @@ namespace PressPlay.FFWD.Test.Core_framework
         public void Setup()
         {
             root = new GameObject();
-            root.AddComponent(new Transform());
             child = new GameObject();
-            child.AddComponent(new Transform());
             childOfChild = new GameObject();
-            childOfChild.AddComponent(new Transform());
             childOfChild.transform.parent = child.transform;
             child.transform.parent = root.transform;
         }

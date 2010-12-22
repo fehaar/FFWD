@@ -27,18 +27,6 @@ namespace PressPlay.FFWD.Test.Core_framework
         }
 
         [Test]
-        public void WeWillGetTheTransformIfItIsThere()
-        {
-            Assert.That(comp.transform, Is.Null);
-
-            Transform trans = new Transform();
-            go.AddComponent(trans);
-
-            Assert.That(comp.transform, Is.Not.Null);
-            Assert.That(comp.transform, Is.SameAs(trans));
-        }
-
-        [Test]
         public void IfTheComponentHasNoGameObjectTransformWillBeNull()
         {
             TestComponent comp = new TestComponent();

@@ -224,7 +224,7 @@ namespace PressPlay.FFWD
 
         public static implicit operator Microsoft.Xna.Framework.Color(Color c)
         {
-            return Microsoft.Xna.Framework.Color.FromNonPremultiplied(new Microsoft.Xna.Framework.Vector4(c.r * byte.MaxValue, c.g * byte.MaxValue, c.b * byte.MaxValue, c.a * byte.MaxValue));
+            return Microsoft.Xna.Framework.Color.FromNonPremultiplied(new Microsoft.Xna.Framework.Vector4(c.r, c.g, c.b, c.a));
         }
 
         public static implicit operator Color(Microsoft.Xna.Framework.Color c)

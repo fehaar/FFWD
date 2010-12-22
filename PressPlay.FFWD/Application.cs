@@ -88,7 +88,7 @@ namespace PressPlay.FFWD
 #if DEBUG
             scripts.Start();
 #endif
-            Color bg = new Color(78, 115, 74);
+            Microsoft.Xna.Framework.Color bg = new Microsoft.Xna.Framework.Color(78, 115, 74);
 
             for (int i = 0; i < activeComponents.Count; i++)
             {
@@ -114,36 +114,42 @@ namespace PressPlay.FFWD
                 GraphicsDevice.DepthStencilState = DepthStencilState.Default;
                 GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
             }
-            List<IRenderable> deferred = new List<IRenderable>();
-            List<IRenderable> arms = new List<IRenderable>();
+            SortedDictionary<int, List<IRenderable>> queue = new SortedDictionary<int, List<IRenderable>>();
             for (int i = 0; i < activeComponents.Count; i++)
             {
                 if (activeComponents[i] is IRenderable)
                 {
-                    if (activeComponents[i] is MeshRenderer)
+                    int rQ = 0;
+                    if (activeComponents[i] is Renderer)
                     {
-                        MeshRenderer r = (activeComponents[i] as MeshRenderer);
-                        if (r.material != null && r.material.IsAdditive())
+                        Renderer r = (activeComponents[i] as Renderer);
+                        if (r.material != null)
                         {
-                            deferred.Add(activeComponents[i] as IRenderable);
-                            continue;
-                        }
-                        if (r.sharedMaterial != null)
-                        {
-                            arms.Add(activeComponents[i] as IRenderable);
-                            continue;
+                            rQ = r.material.renderQueue;
                         }
                     }
-                    (activeComponents[i] as IRenderable).Draw(spriteBatch);
+                    else if (activeComponents[i] is IRenderable)
+                    {
+                        rQ = 1;
+                    }
+                    if (rQ > 0)
+                    {
+                        if (!queue.ContainsKey(rQ))
+                        {
+                            queue[rQ] = new List<IRenderable>();
+                        }
+                        queue[rQ].Add(activeComponents[i] as IRenderable);
+                    }
                 }
             }
-            for (int i = 0; i < deferred.Count; i++)
+
+            int[] queues = queue.Keys.ToArray();
+            for (int i = 0; i < queues.Length; i++)
             {
-                (deferred[i] as IRenderable).Draw(spriteBatch);
-            }
-            for (int i = 0; i < arms.Count; i++)
-            {
-                (arms[i] as IRenderable).Draw(spriteBatch);
+                for (int j = 0; j < queue[queues[i]].Count; j++)
+                {
+                    queue[queues[i]][j].Draw(spriteBatch);
+                }
             }
 #if DEBUG
             graphics.Stop();

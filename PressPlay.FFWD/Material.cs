@@ -12,6 +12,8 @@ namespace PressPlay.FFWD
     {
         [ContentSerializer]
         private string shader { get; set; }
+        [ContentSerializer]
+        internal int renderQueue { get; set; }
         [ContentSerializer(Optional = true)]
         public Color color { get; set; }
         [ContentSerializer(Optional = true)]

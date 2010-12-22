@@ -11,20 +11,15 @@ namespace PressPlay.FFWD.Test.Core_framework.Transforms
     public class WhenManipulatingTransforms
     {
         [Test]
-        public void WeWillSetTheGameObjectOnANewTransform()
-        {
-            GameObject go = new GameObject();
-            go.AddComponent(new Transform());
-            Assert.That(go.transform.gameObject, Is.EqualTo(go));
-        }
-
-        [Test]
         public void AChildWillBePositionedRelativeToItsParent()
         {
-            Transform trans = new Transform() { localPosition = new Vector3(2, 2, 2) };
-            Transform child = new Transform() { localPosition = new Vector3(3, 2, 1) };
+            GameObject obj = new GameObject();
+            Transform trans = obj.transform;
             GameObject childObj = new GameObject();
-            childObj.AddComponent(child);
+            Transform child = childObj.transform;
+
+            trans.localPosition = new Vector3(2, 2, 2);
+            child.localPosition = new Vector3(3, 2, 1);
 
             Assert.That(trans.position, Is.EqualTo(new Vector3(2, 2, 2)));
             Assert.That(child.position, Is.EqualTo(new Vector3(3, 2, 1)));
@@ -35,10 +30,13 @@ namespace PressPlay.FFWD.Test.Core_framework.Transforms
         [Test]
         public void MovingAParentWillMoveItsChild()
         {
-            Transform trans = new Transform() { localPosition = Vector3.one };
-            Transform child = new Transform() { localPosition = Vector3.up };
+            GameObject obj = new GameObject();
+            Transform trans = obj.transform;
             GameObject childObj = new GameObject();
-            childObj.AddComponent(child);
+            Transform child = childObj.transform;
+
+            trans.localPosition = Vector3.one;
+            child.localPosition = Vector3.up;
 
             child.parent = trans;
             Assert.That(child.position, Is.EqualTo(Vector3.up));            
@@ -49,13 +47,16 @@ namespace PressPlay.FFWD.Test.Core_framework.Transforms
         [Test]
         public void MovingAParentWillMoveAllChildren()
         {
-            Transform trans = new Transform() { localPosition = Vector3.one };
-            Transform child = new Transform() { localPosition = Vector3.up };
-            Transform child2 = new Transform() { localPosition = Vector3.up };
+            GameObject obj = new GameObject();
+            Transform trans = obj.transform;
             GameObject childObj = new GameObject();
-            childObj.AddComponent(child);
-            GameObject childObj2 = new GameObject();
-            childObj2.AddComponent(child2);
+            Transform child = childObj.transform;
+            GameObject child2Obj = new GameObject();
+            Transform child2 = child2Obj.transform;
+
+            trans.localPosition = Vector3.one;
+            child.localPosition = Vector3.up;
+            child2.localPosition = Vector3.up;
 
             child.parent = trans;
             child2.parent = trans;
@@ -69,10 +70,13 @@ namespace PressPlay.FFWD.Test.Core_framework.Transforms
         [Test]
         public void AChildWillBeScaledRelativielyToItsParent()
         {
-            Transform trans = new Transform() { localScale = new Vector3(2, 2, 2) };
-            Transform child = new Transform() { localScale = new Vector3(3, 2, 1) };
+            GameObject obj = new GameObject();
+            Transform trans = obj.transform;
             GameObject childObj = new GameObject();
-            childObj.AddComponent(child);
+            Transform child = childObj.transform;
+
+            trans.localScale = new Vector3(2, 2, 2);
+            child.localScale = new Vector3(3, 2, 1);
 
             Assert.That(trans.lossyScale, Is.EqualTo(new Vector3(2, 2, 2)));
             Assert.That(child.lossyScale, Is.EqualTo(new Vector3(3, 2, 1)));
@@ -83,10 +87,12 @@ namespace PressPlay.FFWD.Test.Core_framework.Transforms
         [Test]
         public void ScalingAParentWillScaleTheChild()
         {
-            Transform trans = new Transform() { localScale = Vector3.one };
-            Transform child = new Transform() { localScale = new Vector3(3, 2, 1) };
+            GameObject obj = new GameObject();
+            Transform trans = obj.transform;
             GameObject childObj = new GameObject();
-            childObj.AddComponent(child);
+            Transform child = childObj.transform;
+            trans.localScale = Vector3.one;
+            child.localScale = new Vector3(3, 2, 1);
 
             child.parent = trans;
             Assert.That(child.lossyScale, Is.EqualTo(new Vector3(3, 2, 1)));
@@ -97,10 +103,12 @@ namespace PressPlay.FFWD.Test.Core_framework.Transforms
         [Test]
         public void RotatingAParentWillRotateTheChild()
         {
-            Transform trans = new Transform() { localRotation = Quaternion.Identity };
-            Transform child = new Transform() { localRotation = Quaternion.Identity };
+            GameObject obj = new GameObject();
+            Transform trans = obj.transform;
             GameObject childObj = new GameObject();
-            childObj.AddComponent(child);
+            Transform child = childObj.transform;
+            trans.localRotation = Quaternion.Identity;
+            child.localRotation = Quaternion.Identity;
 
             Assert.That(trans.rotation, Is.EqualTo(Quaternion.Identity));
             Assert.That(child.rotation, Is.EqualTo(Quaternion.Identity));
@@ -112,10 +120,12 @@ namespace PressPlay.FFWD.Test.Core_framework.Transforms
         [Test]
         public void RotatingAParentWillMoveATranslatedChild()
         {
-            Transform trans = new Transform() { localPosition = new Vector3(2, 2, 2) };
-            Transform child = new Transform() { localPosition = new Vector3(3, 2, 1) };
+            GameObject obj = new GameObject();
+            Transform trans = obj.transform;
             GameObject childObj = new GameObject();
-            childObj.AddComponent(child);
+            Transform child = childObj.transform;
+            trans.localPosition = new Vector3(2, 2, 2);
+            child.localPosition = new Vector3(3, 2, 1);
 
             Assert.That(trans.rotation, Is.EqualTo(Quaternion.Identity));
             Assert.That(child.rotation, Is.EqualTo(Quaternion.Identity));
@@ -137,11 +147,15 @@ namespace PressPlay.FFWD.Test.Core_framework.Transforms
         [Test]
         public void TheLocalPositionWillChangeIfWeSetThePositionAndHaveAParent()
         {
-            Transform trans = new Transform() { localPosition = new Vector3(2, 2, 2) };
-            Vector3 childLocal = new Vector3(3, 2, 1);
-            Transform child = new Transform() { localPosition = childLocal };
+            GameObject obj = new GameObject();
+            Transform trans = obj.transform;
             GameObject childObj = new GameObject();
-            childObj.AddComponent(child);
+            Transform child = childObj.transform;
+
+            trans.localPosition = new Vector3(2, 2, 2);
+            Vector3 childLocal = new Vector3(3, 2, 1);
+            child.localPosition = childLocal;
+
             child.parent = trans;
 
             Vector3 newPos = childLocal + new Vector3(10, 10, 10);

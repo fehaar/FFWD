@@ -24,6 +24,7 @@ namespace PressPlay.FFWD
             : base()
         {
             components = new List<Component>();
+            AddComponent(new Transform());
             active = true;
         }
 
@@ -135,6 +136,10 @@ namespace PressPlay.FFWD
 
         public T AddComponent<T>(T component) where T : Component
         {
+            if (component is Transform && components.Count > 0)
+            {
+                throw new InvalidOperationException("A GameObject already has a Transform");
+            }
             components.Add(component);
             component.gameObject = this;
             component.isPrefab = isPrefab;
