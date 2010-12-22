@@ -10,17 +10,14 @@ namespace PressPlay.FFWD.Test.Core_framework
         public TestHierarchy()
         {
             root = new GameObject();
-            rootTrans = new Transform();
-            root.AddComponent(rootTrans);
+            rootTrans = root.transform;
 
             child = new GameObject();
-            childTrans = new Transform();
-            child.AddComponent(childTrans);
+            childTrans = child.transform;
             childTrans.parent = rootTrans;
 
             childOfChild = new GameObject();
-            childOfChildTrans = new Transform();
-            childOfChild.AddComponent(childOfChildTrans);
+            childOfChildTrans = childOfChild.transform;
             childOfChildTrans.parent = childTrans;
         }
 

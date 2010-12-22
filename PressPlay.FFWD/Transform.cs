@@ -13,7 +13,7 @@ namespace PressPlay.FFWD
     public class Transform : Component, IEnumerable
     {
         #region Constructors
-        public Transform()
+        internal Transform()
         {
             localRotation = Quaternion.Identity;
             localScale = Vector3.one;

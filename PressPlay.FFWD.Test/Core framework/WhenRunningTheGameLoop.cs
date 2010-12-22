@@ -22,13 +22,11 @@ namespace PressPlay.FFWD.Test.Core_framework
         {
             Scene scene = new Scene();
             GameObject go = new GameObject();
-            go.AddComponent(new Transform());
             component = new TestComponent();
             go.AddComponent(component);
             scene.gameObjects.Add(go);
 
             GameObject child = new GameObject();
-            child.AddComponent(new Transform());
             childComponent = new TestComponent();
             child.AddComponent(childComponent);
             child.transform.parent = go.transform;

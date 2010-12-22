@@ -13,10 +13,10 @@ namespace PressPlay.FFWD.Test.Core_framework.Transforms
         [Test]
         public void AChildCanBeAddedBySettingItsParent()
         {
-            Transform trans = new Transform();
-            Transform child = new Transform();
+            GameObject obj = new GameObject();
+            Transform trans = obj.transform;
             GameObject childObj = new GameObject();
-            childObj.AddComponent(child);
+            Transform child = childObj.transform;
 
             child.parent = trans;
 
@@ -27,10 +27,10 @@ namespace PressPlay.FFWD.Test.Core_framework.Transforms
         [Test]
         public void AChildCanBeRemovedBySettingTheParentToNull()
         {
-            Transform trans = new Transform();
-            Transform child = new Transform();
+            GameObject obj = new GameObject();
+            Transform trans = obj.transform;
             GameObject childObj = new GameObject();
-            childObj.AddComponent(child);
+            Transform child = childObj.transform;
 
             child.parent = trans;
             child.parent = null;
@@ -40,16 +40,16 @@ namespace PressPlay.FFWD.Test.Core_framework.Transforms
         [Test]
         public void AChildCanBeMovedToAnotherParent()
         {
-            Transform trans = new Transform();
-            Transform newParent = new Transform();
-            Transform child = new Transform();
+            GameObject obj = new GameObject();
+            Transform trans = obj.transform;
             GameObject childObj = new GameObject();
-            childObj.AddComponent(child);
+            Transform child = childObj.transform;
+            GameObject newObj = new GameObject();
 
             child.parent = trans;
-            child.parent = newParent;
+            child.parent = newObj.transform;
             Assert.That(trans.children, Has.No.Member(child.gameObject));
-            Assert.That(newParent.children, Has.Member(child.gameObject));
+            Assert.That(newObj.transform.children, Has.Member(child.gameObject));
         }
 
         [Test]
@@ -62,10 +62,10 @@ namespace PressPlay.FFWD.Test.Core_framework.Transforms
         [Test]
         public void ATransformWithAParentWillHaveItAsRoot()
         {
-            Transform trans = new Transform();
-            Transform child = new Transform();
+            GameObject obj = new GameObject();
+            Transform trans = obj.transform;
             GameObject childObj = new GameObject();
-            childObj.AddComponent(child);
+            Transform child = childObj.transform;
 
             child.parent = trans;
             Assert.That(child.root, Is.SameAs(trans));
@@ -81,10 +81,13 @@ namespace PressPlay.FFWD.Test.Core_framework.Transforms
         [Test]
         public void WhenSettingTheParentOfATransformTheGlobalPositionWillNotChange()
         {
-            Transform trans = new Transform() { localPosition = new Vector3(2, 3, 4) };
-            Transform child = new Transform() { localPosition = new Vector3(2, 3, 4) };
+            GameObject obj = new GameObject();
+            Transform trans = obj.transform;
             GameObject childObj = new GameObject();
-            childObj.AddComponent(child);
+            Transform child = childObj.transform;
+
+            trans.localPosition = new Vector3(2, 3, 4);
+            child.localPosition = new Vector3(2, 3, 4);
 
             Vector3 childPos = child.position;
             child.parent = trans;
@@ -94,10 +97,14 @@ namespace PressPlay.FFWD.Test.Core_framework.Transforms
         [Test]
         public void WhenSettingTheParentOfATransformTheGlobalPositionWillNotChangeEvenWhenRotated()
         {
-            Transform trans = new Transform() { localPosition = new Vector3(2, 3, 4), localRotation = Quaternion.Euler(MathHelper.PiOver2, 0.0f, 0.0f) };
-            Transform child = new Transform() { localPosition = new Vector3(2, 2, 2) };
+            GameObject obj = new GameObject();
+            Transform trans = obj.transform;
             GameObject childObj = new GameObject();
-            childObj.AddComponent(child);
+            Transform child = childObj.transform;
+
+            trans.localPosition = new Vector3(2, 3, 4);
+            trans.localRotation = Quaternion.Euler(MathHelper.PiOver2, 0.0f, 0.0f);
+            child.localPosition = new Vector3(2, 2, 2);
 
             Vector3 childPos = child.position;
             child.parent = trans;

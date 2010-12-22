@@ -119,17 +119,26 @@ namespace PressPlay.FFWD
             {
                 if (activeComponents[i] is IRenderable)
                 {
+                    int rQ = 0;
                     if (activeComponents[i] is Renderer)
                     {
                         Renderer r = (activeComponents[i] as Renderer);
                         if (r.material != null)
                         {
-                            if (!queue.ContainsKey(r.material.renderQueue))
-                            {
-                                queue[r.material.renderQueue] = new List<IRenderable>();
-                            }
-                            queue[r.material.renderQueue].Add(r);
+                            rQ = r.material.renderQueue;
                         }
+                    }
+                    else if (activeComponents[i] is IRenderable)
+                    {
+                        rQ = 1;
+                    }
+                    if (rQ > 0)
+                    {
+                        if (!queue.ContainsKey(rQ))
+                        {
+                            queue[rQ] = new List<IRenderable>();
+                        }
+                        queue[rQ].Add(activeComponents[i] as IRenderable);
                     }
                 }
             }

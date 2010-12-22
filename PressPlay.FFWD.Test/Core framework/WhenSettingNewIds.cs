@@ -35,11 +35,9 @@ namespace PressPlay.FFWD.Test.Core_framework
         public void WeWillSetTheIdOfAParentObject()
         {
             GameObject obj = new GameObject();
-            Transform trans = new Transform();
-            obj.AddComponent(trans);
+            Transform trans = obj.transform;
             GameObject parent = new GameObject();
-            Transform parentTrans = new Transform();
-            parent.AddComponent(parentTrans);
+            Transform parentTrans = parent.transform;
             trans.parent = parentTrans;
             int id = parent.GetInstanceID();
             obj.SetNewId();
@@ -51,11 +49,9 @@ namespace PressPlay.FFWD.Test.Core_framework
         public void WeWillSetTheIdOfComponentsOnAParentObject()
         {
             GameObject obj = new GameObject();
-            Transform trans = new Transform();
-            obj.AddComponent(trans);
+            Transform trans = obj.transform;
             GameObject parent = new GameObject();
-            Transform parentTrans = new Transform();
-            parent.AddComponent(parentTrans);
+            Transform parentTrans = parent.transform;
             trans.parent = parentTrans;
             int id = parentTrans.GetInstanceID();
             obj.SetNewId();
@@ -67,11 +63,9 @@ namespace PressPlay.FFWD.Test.Core_framework
         public void WeWillSetTheIdOfOurChildrenAndItsComponents()
         {
             GameObject obj = new GameObject();
-            Transform trans = new Transform();
-            obj.AddComponent(trans);
+            Transform trans = obj.transform;
             GameObject parent = new GameObject();
-            Transform parentTrans = new Transform();
-            parent.AddComponent(parentTrans);
+            Transform parentTrans = parent.transform;
             trans.parent = parentTrans;
             int id = obj.GetInstanceID();
             int compId = trans.GetInstanceID();
@@ -84,26 +78,14 @@ namespace PressPlay.FFWD.Test.Core_framework
         [Test]
         public void WeWillSetTheIdOfOurChildrensChildrenAndItsComponents()
         {
-            GameObject root = new GameObject();
-            Transform rootTrans = new Transform();
-            root.AddComponent(rootTrans);
+            TestHierarchy h = new TestHierarchy();
 
-            GameObject child = new GameObject();
-            Transform childTrans = new Transform();
-            child.AddComponent(childTrans);
-            childTrans.parent = rootTrans;
+            int id = h.childOfChild.GetInstanceID();
+            int compId = h.childOfChildTrans.GetInstanceID();
+            h.root.SetNewId();
 
-            GameObject childOfchild = new GameObject();
-            Transform childOfchildTrans = new Transform();
-            childOfchild.AddComponent(childOfchildTrans);
-            childOfchildTrans.parent = childTrans;
-
-            int id = childOfchild.GetInstanceID();
-            int compId = childOfchildTrans.GetInstanceID();
-            root.SetNewId();
-
-            Assert.That(childOfchild.GetInstanceID(), Is.Not.EqualTo(id));
-            Assert.That(childOfchildTrans.GetInstanceID(), Is.Not.EqualTo(compId));
+            Assert.That(h.childOfChild.GetInstanceID(), Is.Not.EqualTo(id));
+            Assert.That(h.childOfChildTrans.GetInstanceID(), Is.Not.EqualTo(compId));
         }
 	
 	

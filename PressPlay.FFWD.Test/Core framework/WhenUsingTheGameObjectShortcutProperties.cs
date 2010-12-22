@@ -11,20 +11,6 @@ namespace PressPlay.FFWD.Test.Core_framework
     public class WhenUsingTheGameObjectShortcutProperties
     {
         [Test]
-        public void WeWillGetTheTransformIfItIsThere()
-        {
-            GameObject go = new GameObject();
-
-            Assert.That(go.transform, Is.Null);
-
-            Transform trans = new Transform();
-            go.AddComponent(trans);
-
-            Assert.That(go.transform, Is.Not.Null);
-            Assert.That(go.transform, Is.SameAs(trans));
-        }
-
-        [Test]
         public void WeWillGetTheRigidBodyIfItIsThere()
         {
             GameObject go = new GameObject();

@@ -34,9 +34,8 @@ namespace PressPlay.FFWD.Test.Core_framework
         public void WeWillGetTheTransformCloned()
         {
             GameObject obj = new GameObject();
-            Transform trans = new Transform();
+            Transform trans = obj.transform;
             trans.localPosition = Vector3.right;
-            obj.AddComponent(trans);
             GameObject instance = GameObject.Instantiate(obj) as GameObject;
             Assert.That(instance, Is.Not.Null);
             Assert.That(instance.transform, Is.Not.Null);
@@ -107,11 +106,9 @@ namespace PressPlay.FFWD.Test.Core_framework
         public void WeWillCloneChildObjects()
         {
             GameObject obj = new GameObject();
-            Transform trans = new Transform();
-            obj.AddComponent(trans);
+            Transform trans = obj.transform;
             GameObject child = new GameObject() { name = "MyObject", active = true, layer = 10, tag = "Mytag" };
-            Transform trans1 = new Transform();
-            child.AddComponent(trans1);
+            Transform trans1 = child.transform;
             trans1.parent = trans;
 
             GameObject clone = GameObject.Instantiate(obj) as GameObject;
@@ -130,11 +127,9 @@ namespace PressPlay.FFWD.Test.Core_framework
         public void WeWillCloneComponentsOnChildObjects()
         {
             GameObject obj = new GameObject();
-            Transform trans = new Transform();
-            obj.AddComponent(trans);
+            Transform trans = obj.transform;
             GameObject child = new GameObject() { name = "MyObject", active = true, layer = 10, tag = "Mytag" };
-            Transform trans1 = new Transform();
-            child.AddComponent(trans1);
+            Transform trans1 = child.transform;
             trans1.parent = trans;
             TestComponent comp = new TestComponent();
             child.AddComponent(comp);
@@ -151,11 +146,9 @@ namespace PressPlay.FFWD.Test.Core_framework
         public void WeWillCloneAParentObject()
         {
             GameObject obj = new GameObject() { name = "MyObject", active = true, layer = 10, tag = "Mytag" };
-            Transform trans = new Transform();
-            obj.AddComponent(trans);
+            Transform trans = obj.transform;
             GameObject child = new GameObject();
-            Transform trans1 = new Transform();
-            child.AddComponent(trans1);
+            Transform trans1 = child.transform;
             trans1.parent = trans;
 
             GameObject clone = GameObject.Instantiate(child) as GameObject;
@@ -174,21 +167,9 @@ namespace PressPlay.FFWD.Test.Core_framework
         [Test]
         public void WeWillCloneAParentHierarchy()
         {
-            GameObject root = new GameObject();
-            Transform rootTrans = new Transform();
-            root.AddComponent(rootTrans);
+            TestHierarchy h = new TestHierarchy();
 
-            GameObject child = new GameObject();
-            Transform childTrans = new Transform();
-            child.AddComponent(childTrans);
-            childTrans.parent = rootTrans;
-
-            GameObject childOfChild = new GameObject();
-            Transform childOfChildTrans = new Transform();
-            childOfChild.AddComponent(childOfChildTrans);
-            childOfChildTrans.parent = childTrans;
-
-            GameObject clone = GameObject.Instantiate(childOfChild) as GameObject;
+            GameObject clone = GameObject.Instantiate(h.childOfChild) as GameObject;
             Assert.That(clone.transform.parent, Is.Not.Null);
             Assert.That(clone.transform.parent.transform.parent, Is.Not.Null);
             Assert.That(clone.transform.parent.transform.parent.transform.parent, Is.Null);
@@ -197,21 +178,10 @@ namespace PressPlay.FFWD.Test.Core_framework
         [Test]
         public void WeWillCloneAParentHierarchyByComponent()
         {
-            GameObject root = new GameObject();
-            Transform rootTrans = new Transform();
-            root.AddComponent(rootTrans);
+            TestHierarchy h = new TestHierarchy();
 
-            GameObject child = new GameObject();
-            Transform childTrans = new Transform();
-            child.AddComponent(childTrans);
-            childTrans.parent = rootTrans;
-
-            GameObject childOfChild = new GameObject();
-            Transform childOfChildTrans = new Transform();
-            childOfChild.AddComponent(childOfChildTrans);
-            childOfChildTrans.parent = childTrans;
             TestComponent comp = new TestComponent();
-            childOfChild.AddComponent(comp);
+            h.childOfChild.AddComponent(comp);
 
             TestComponent clone = GameObject.Instantiate(comp) as TestComponent;
             Assert.That(clone, Is.Not.Null);
@@ -224,8 +194,7 @@ namespace PressPlay.FFWD.Test.Core_framework
         public void IfWeHaveReferencedTheTransformOnTheGameObjectItWillBeCleared()
         {
             GameObject root = new GameObject();
-            Transform rootTrans = new Transform();
-            root.AddComponent(rootTrans);
+            Transform rootTrans = root.transform;
             Transform callTrans = root.transform;
 
             GameObject clone = (GameObject)GameObject.Instantiate(root);
@@ -293,8 +262,7 @@ namespace PressPlay.FFWD.Test.Core_framework
         public void WeCanPlaceTheNewGameObject()
         {
             GameObject obj = new GameObject();
-            Transform trans = new Transform();
-            obj.AddComponent(trans);
+            Transform trans = obj.transform;
             Vector3 pos = Vector3.forward;
             Quaternion rot = Quaternion.AngleAxis(10, Vector3.up);
             GameObject instance = GameObject.Instantiate(obj, pos, rot) as GameObject;
@@ -308,8 +276,7 @@ namespace PressPlay.FFWD.Test.Core_framework
         public void WeCanPlaceTheNewGameObjectWhenCloningByComponent()
         {
             GameObject obj = new GameObject();
-            Transform trans = new Transform();
-            obj.AddComponent(trans);
+            Transform trans = obj.transform;
             Vector3 pos = Vector3.forward;
             Quaternion rot = Quaternion.AngleAxis(10, Vector3.up);
             Transform instance = GameObject.Instantiate(trans, pos, rot) as Transform;
