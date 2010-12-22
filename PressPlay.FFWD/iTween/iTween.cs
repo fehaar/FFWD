@@ -952,26 +952,26 @@ namespace PressPlay.FFWD
             }
 
             //set tempAudioProperties:
-            tempAudioProperties.X = fromAudioProperties.X = tempAudioSource.volume;
-            tempAudioProperties.Y = fromAudioProperties.Y = tempAudioSource.pitch;
+            tempAudioProperties.x = fromAudioProperties.x = tempAudioSource.volume;
+            tempAudioProperties.y = fromAudioProperties.y = tempAudioSource.pitch;
 
             //set augmented fromAudioProperties:
             if (args.ContainsKey("volume"))
             {
-                fromAudioProperties.X = (float)args["volume"];
+                fromAudioProperties.x = (float)args["volume"];
             }
             if (args.ContainsKey("pitch"))
             {
-                fromAudioProperties.Y = (float)args["pitch"];
+                fromAudioProperties.y = (float)args["pitch"];
             }
 
             //apply fromAudioProperties:
-            tempAudioSource.volume = fromAudioProperties.X;
-            tempAudioSource.pitch = fromAudioProperties.Y;
+            tempAudioSource.volume = fromAudioProperties.x;
+            tempAudioSource.pitch = fromAudioProperties.y;
 
             //set new volume and pitch args:
-            args["volume"] = tempAudioProperties.X;
-            args["pitch"] = tempAudioProperties.Y;
+            args["volume"] = tempAudioProperties.x;
+            args["pitch"] = tempAudioProperties.y;
 
             //set a default easeType of linear if none is supplied since eased audio interpolation is nearly unrecognizable:
             if (!args.ContainsKey("easetype"))
@@ -3445,8 +3445,8 @@ namespace PressPlay.FFWD
             //need for speed?
             if (tweenArguments.ContainsKey("speed"))
             {
-                Vector3 fromV3 = new Vector3(vector2s[0].X, vector2s[0].Y, 0);
-                Vector3 toV3 = new Vector3(vector2s[1].X, vector2s[1].Y, 0);
+                Vector3 fromV3 = new Vector3(vector2s[0].x, vector2s[0].y, 0);
+                Vector3 toV3 = new Vector3(vector2s[1].x, vector2s[1].y, 0);
                 float distance = Math.Abs(Vector3.Distance(fromV3, toV3));
                 time = distance / (float)tweenArguments["speed"];
             }
@@ -3587,11 +3587,11 @@ namespace PressPlay.FFWD
             //to values:
             if (tweenArguments.ContainsKey("volume"))
             {
-                vector2s[1].X = (float)tweenArguments["volume"];
+                vector2s[1].x = (float)tweenArguments["volume"];
             }
             if (tweenArguments.ContainsKey("pitch"))
             {
-                vector2s[1].Y = (float)tweenArguments["pitch"];
+                vector2s[1].y = (float)tweenArguments["pitch"];
             }
         }
 
@@ -4405,8 +4405,8 @@ namespace PressPlay.FFWD
         void ApplyVector2Targets()
         {
             //calculate:
-            vector2s[2].X = ease(vector2s[0].X, vector2s[1].X, percentage);
-            vector2s[2].Y = ease(vector2s[0].Y, vector2s[1].Y, percentage);
+            vector2s[2].x = ease(vector2s[0].x, vector2s[1].x, percentage);
+            vector2s[2].y = ease(vector2s[0].y, vector2s[1].y, percentage);
 
             //apply:
             tweenArguments["onupdateparams"] = vector2s[2];
@@ -4472,18 +4472,18 @@ namespace PressPlay.FFWD
         void ApplyAudioToTargets()
         {
             //calculate:
-            vector2s[2].X = ease(vector2s[0].X, vector2s[1].X, percentage);
-            vector2s[2].Y = ease(vector2s[0].Y, vector2s[1].Y, percentage);
+            vector2s[2].x = ease(vector2s[0].x, vector2s[1].x, percentage);
+            vector2s[2].y = ease(vector2s[0].y, vector2s[1].y, percentage);
 
             //apply:
-            audioSource.volume = vector2s[2].X;
-            audioSource.pitch = vector2s[2].Y;
+            audioSource.volume = vector2s[2].x;
+            audioSource.pitch = vector2s[2].y;
 
             //dial in:
             if (percentage == 1)
             {
-                audioSource.volume = vector2s[1].X;
-                audioSource.pitch = vector2s[1].Y;
+                audioSource.volume = vector2s[1].x;
+                audioSource.pitch = vector2s[1].y;
             }
         }
 
@@ -5381,20 +5381,20 @@ namespace PressPlay.FFWD
             //set to:
             if (args.ContainsKey("volume"))
             {
-                vector2s[1].X = (float)args["volume"];
+                vector2s[1].x = (float)args["volume"];
             }
             if (args.ContainsKey("pitch"))
             {
-                vector2s[1].Y = (float)args["pitch"];
+                vector2s[1].y = (float)args["pitch"];
             }
 
             //calculate:
-            vector2s[3].X = Mathf.SmoothDampAngle(vector2s[0].X, vector2s[1].X, ref vector2s[2].X, time);
-            vector2s[3].Y = Mathf.SmoothDampAngle(vector2s[0].Y, vector2s[1].Y, ref vector2s[2].Y, time);
+            vector2s[3].x = Mathf.SmoothDampAngle(vector2s[0].x, vector2s[1].x, ref vector2s[2].x, time);
+            vector2s[3].y = Mathf.SmoothDampAngle(vector2s[0].y, vector2s[1].y, ref vector2s[2].y, time);
 
             //apply:
-            audioSource.volume = vector2s[3].X;
-            audioSource.pitch = vector2s[3].Y;
+            audioSource.volume = vector2s[3].x;
+            audioSource.pitch = vector2s[3].y;
         }
 
         /// <summary>

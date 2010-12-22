@@ -39,9 +39,9 @@ namespace PressPlay.FFWD.Components
             }
         }
 
-        public Vector2 Position = Vector2.Zero;
+        public Vector2 Position = Vector2.zero;
         public Rectangle bounds = Rectangle.Empty;
-        public Vector2 Origin = Vector2.Zero;
+        public Vector2 Origin = Vector2.zero;
         public float Scale = 1f;
         public SpriteEffects Effects = SpriteEffects.None;
         public float LayerDepth = 0;
@@ -78,8 +78,8 @@ namespace PressPlay.FFWD.Components
 
         public void Update()
         {
-            Position.X = transform.localPosition.x;
-            Position.Y = transform.localPosition.y;
+            Position.x = transform.localPosition.x;
+            Position.y = transform.localPosition.y;
         }
 
         #endregion

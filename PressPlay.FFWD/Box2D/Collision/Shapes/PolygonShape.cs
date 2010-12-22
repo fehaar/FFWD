@@ -52,7 +52,7 @@ namespace Box2D.XNA
 
 	    /// Copy vertices. This assumes the vertices define a convex polygon.
 	    /// It is assumed that the exterior is the the right of each edge.
-        public void Set(Vector2[] vertices, int count)
+        public void Set(PressPlay.FFWD.Vector2[] vertices, int count)
         {
             Debug.Assert(2 <= count && count <= Settings.b2_maxPolygonVertices);
             _vertexCount = count;

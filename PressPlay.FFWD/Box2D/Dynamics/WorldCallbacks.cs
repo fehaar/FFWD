@@ -37,7 +37,7 @@ namespace Box2D.XNA
     /// @param normal the normal vector at the point of intersection
     /// @return -1 to filter, 0 to terminate, fraction to clip the ray for
     /// closest hit, 1 to continue
-    public delegate float RayCastCallback(Fixture fixture, Vector2 point, Vector2 normal, float fraction);
+    public delegate float RayCastCallback(Fixture fixture, PressPlay.FFWD.Vector2 point, PressPlay.FFWD.Vector2 normal, float fraction);
 
     public interface IDestructionListener
     {

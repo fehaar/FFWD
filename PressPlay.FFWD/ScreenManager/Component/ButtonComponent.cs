@@ -34,7 +34,7 @@ namespace PressPlay.FFWD.ScreenManager
         {
             get
             {
-                return new Rectangle((int)transform.position.X, (int)transform.position.Y, _bounds.Width, _bounds.Height);
+                return new Rectangle((int)transform.position.x, (int)transform.position.y, _bounds.Width, _bounds.Height);
             }
         }
         #endregion

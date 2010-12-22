@@ -158,7 +158,10 @@
     <Compile Include="Time.cs" />
     <Compile Include="Transform.cs" />
     <Compile Include="UnityObject.cs" />
-    <Compile Include="Vector3.cs" />
+    <Compile Include="Vector2.cs" />
+    <Compile Include="Vector3.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

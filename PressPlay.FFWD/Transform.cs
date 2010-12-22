@@ -358,8 +358,7 @@ namespace PressPlay.FFWD
             if (relativeTo == Space.World)
             {
                 // TODO: This will have issues with parent rotations
-                Matrix rot;
-                Matrix.CreateFromAxisAngle(ref axis.vector, angle, out rot);
+                Matrix rot = Matrix.CreateFromAxisAngle(axis, angle);
                 Matrix.Multiply(ref _world, ref rot, out _world);
                 WorldChanged();
             }

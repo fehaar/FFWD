@@ -115,8 +115,6 @@
     <Compile Include="ContentHelper.cs" />
     <Compile Include="Debug.cs" />
     <Compile Include="Extensions\PlaneExtensions.cs" />
-    <Compile Include="Extensions\QuaternionHelpers.cs" />
-    <Compile Include="Extensions\VectorExtensions.cs" />
     <Compile Include="Application.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="Input.cs" />
@@ -152,6 +150,7 @@
     <Compile Include="Time.cs" />
     <Compile Include="Transform.cs" />
     <Compile Include="UnityObject.cs" />
+    <Compile Include="Vector2.cs" />
     <Compile Include="Vector3.cs" />
   </ItemGroup>
   <ItemGroup />
