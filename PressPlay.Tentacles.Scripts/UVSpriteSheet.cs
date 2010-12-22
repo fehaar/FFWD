@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using PressPlay.FFWD;
 using PressPlay.FFWD.Components;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace PressPlay.Tentacles.Scripts {
 	public class UVSpriteSheet : MonoBehaviour {
@@ -11,8 +12,8 @@ namespace PressPlay.Tentacles.Scripts {
         public MeshFilter meshFilter;
 
         protected Mesh mesh;
-        protected Microsoft.Xna.Framework.Vector2[] baseUVs;
-        protected Microsoft.Xna.Framework.Vector2[] tmpUVs;
+        protected Vector2[] baseUVs;
+        protected Vector2[] tmpUVs;
 
         public int xCount;
         public int yCount;
@@ -20,17 +21,17 @@ namespace PressPlay.Tentacles.Scripts {
         private int currentX = -1;
         private int currentY = -1;
 
-        protected Microsoft.Xna.Framework.Vector2 tileSize;
-
-        //protected SpriteSheetFrame[] frames;
+        protected Vector2 tileSize;
 
         public bool scaleMeshUVsOnInitialize = true;
 
-        protected Microsoft.Xna.Framework.Vector2 offset;
+        protected Vector2 offset;
 
         protected bool isInitialized = false;
 
         public bool autoInitializeOnStart = true;
+
+        private Texture2D[,] frames;
 
         public override void Start()
         {
@@ -47,16 +48,15 @@ namespace PressPlay.Tentacles.Scripts {
             if (isInitialized) { return; }
             isInitialized = true;
 
-            Mesh tmpMesh = new Mesh();
+            tileSize = new Vector2(1f / (float)xCount, 1f / (float)yCount);
 
             if (skinnedMeshRenderer != null)
             {
-                tmpMesh = (Mesh)Instantiate(skinnedMeshRenderer.sharedMesh);
-                skinnedMeshRenderer.sharedMesh = tmpMesh;
-                mesh = skinnedMeshRenderer.sharedMesh;
+                CreateTextureFrames();
             }
             else if (meshFilter != null)
             {
+                Mesh tmpMesh = new Mesh();
                 tmpMesh.vertices = meshFilter.sharedMesh.vertices;
                 tmpMesh.uv = meshFilter.sharedMesh.uv;
                 tmpMesh.normals = meshFilter.sharedMesh.vertices;
@@ -65,37 +65,48 @@ namespace PressPlay.Tentacles.Scripts {
                 mesh = meshFilter.sharedMesh;
             }
 
-            baseUVs = mesh.uv;
-
-            tmpUVs = new Microsoft.Xna.Framework.Vector2[baseUVs.Length];
-
-            for (int i = 0; i < baseUVs.Length; i++)
+            if (mesh != null)
             {
+                baseUVs = mesh.uv;
+                tmpUVs = new Vector2[baseUVs.Length];
 
-                if (scaleMeshUVsOnInitialize)
+                for (int i = 0; i < baseUVs.Length; i++)
                 {
-                    baseUVs[i].X = baseUVs[i].X / xCount;
-                    baseUVs[i].Y = baseUVs[i].Y / yCount;
+
+                    if (scaleMeshUVsOnInitialize)
+                    {
+                        baseUVs[i].x = baseUVs[i].x / xCount;
+                        baseUVs[i].y = baseUVs[i].y / yCount;
+                    }
+
+                    tmpUVs[i] = new Vector2(0, 0);
                 }
-
-                tmpUVs[i] = new Microsoft.Xna.Framework.Vector2(0, 0);
             }
-
-            tileSize = new Microsoft.Xna.Framework.Vector2(1f / (float)xCount, 1f / (float)yCount);
-
-            /*frames = new SpriteSheetFrame[xCount*yCount];
-            for (int i = 0; i < frames.Length; i++) {
-                frames[i] = new SpriteSheetFrame();
-			
-                frames[i]._xPos = XPosFromIndex(i);
-                frames[i]._yPos = YPosFromIndex(i);
-            }*/
 
             currentX = -1;
             currentY = -1;
+
             UpdateUVs(0, 0);
+        }
 
-
+        private void CreateTextureFrames()
+        {
+            frames = new Texture2D[xCount, yCount];
+            skinnedMeshRenderer.sharedMaterial.EndLoadContent();
+            Texture2D spriteSheet = skinnedMeshRenderer.sharedMaterial.texture;
+            int width = (int)((float)spriteSheet.Width * tileSize.x);
+            int height = (int)((float)spriteSheet.Height * tileSize.y);
+            for (int x = 0; x < xCount; x++)
+			{
+                for (int y = 0; y < yCount; y++)
+			    {
+                    Texture2D frame = new Texture2D(spriteSheet.GraphicsDevice, width, height);
+                    Microsoft.Xna.Framework.Color[] data = new Microsoft.Xna.Framework.Color[width * height];
+                    spriteSheet.GetData<Microsoft.Xna.Framework.Color>(0, new Microsoft.Xna.Framework.Rectangle(x * width, y * height, width, height), data, 0, width * height);
+                    frame.SetData(data);
+                    frames[x, y] = frame;
+			    }
+			}
         }
 
         // Update is called once per frame
@@ -107,31 +118,26 @@ namespace PressPlay.Tentacles.Scripts {
             currentX = _x;
             currentY = _y;
 
-            /*offset = new Vector2(_x * tileSize.X, 1 - tileSize.Y - _y * tileSize.Y);
-		
-            Debug.Log("UPDATING UVs : "+_x+ ", "+_y + " offset : "+offset + " baseUVs.Length "+baseUVs.Length);
-		
-            for (int i = 0; i < baseUVs.Length; i++) 
+            if (frames != null)
             {
-                tmpUVs[i].X = baseUVs[i].X + offset.X;
-                tmpUVs[i].Y = baseUVs[i].Y + offset.Y;
-            }*/
-
-            mesh.uv = CreateUVs(currentX, currentY);
-
-            //Debug.Log(mesh.uv);
+                skinnedMeshRenderer.sharedMaterial.texture = frames[currentX, currentY];
+            }
+            else if (mesh != null)
+            {
+                mesh.uv = CreateUVs(currentX, currentY);
+            }
         }
 
-        protected Microsoft.Xna.Framework.Vector2[] CreateUVs(int _x, int _y)
+        protected Vector2[] CreateUVs(int _x, int _y)
         {
-            offset = new Microsoft.Xna.Framework.Vector2(_x * tileSize.X, 1 - ((_y + 1) * tileSize.Y));
+            offset = new Vector2(_x * tileSize.x, 1 - ((_y + 1) * tileSize.y));
 
             //Debug.Log("Creating UVs : "+_x+ ", "+_y + " offset : "+offset + " baseUVs.Length "+baseUVs.Length);
 
             for (int i = 0; i < baseUVs.Length; i++)
             {
-                tmpUVs[i].X = baseUVs[i].X + offset.X;
-                tmpUVs[i].Y = baseUVs[i].Y + offset.Y;
+                tmpUVs[i].x = baseUVs[i].x + offset.x;
+                tmpUVs[i].y = baseUVs[i].y + offset.y;
             }
 
             return tmpUVs;
@@ -147,24 +153,5 @@ namespace PressPlay.Tentacles.Scripts {
         {
             return (int)(_index / xCount);
         }
-
-        /*public int IndexFromFrame(SpriteSheetFrame _frame)
-        {
-            return _frame.xPos + _frame.yPos*xCount;
-        }*/
     }
-
-
-    /*[System.Serializable]
-    public class SpriteSheetFrame{
-        public SpriteSheetFrame(int _xPos, int _yPos)
-        {
-            xPos = _xPos;
-            yPos = _yPos;
-        }
-	
-        public int xPos;
-        public int yPos;
-
-    }*/
 }

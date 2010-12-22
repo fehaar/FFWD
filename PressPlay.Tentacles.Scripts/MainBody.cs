@@ -24,7 +24,7 @@ namespace PressPlay.Tentacles.Scripts {
         //private Color damageOverlayNoAlphaColor;// = new Color(1,1,1,0);
 
 
-        //public UVSpriteSheetAnimator bodySpriteAnim;
+        public UVSpriteSheetAnimator bodySpriteAnim;
 
         private float stateLength;
         private float stateChangeTime;
@@ -181,12 +181,12 @@ namespace PressPlay.Tentacles.Scripts {
 
         public void LookUp()
         {
-            //gfxTransform.localEulerAngles = Vector3.zero;
+            gfxTransform.localEulerAngles = Vector3.zero;
         }
 
         public void LookRight()
         {
-            //gfxTransform.localEulerAngles = Vector3.right * 30;
+            gfxTransform.localEulerAngles = Vector3.right * 30;
         }
 
         public void SetHealthFraction(float _fraction)
@@ -194,9 +194,9 @@ namespace PressPlay.Tentacles.Scripts {
             //healthFraction = _fraction;
 
             //damageOverlayNeutralColor = Color.Lerp(damageOverlayFullAlphaColor,damageOverlayNoAlphaColor, Mathf.Pow(_fraction,2f));
-            //bodySpriteAnim.Play("Damage");
-            //bodySpriteAnim.SetCurrentAnimFraction(Mathf.Pow(1 - _fraction, 0.7f));
-            //bodySpriteAnim.Stop();
+            bodySpriteAnim.Play("Damage");
+            bodySpriteAnim.SetCurrentAnimFraction(Mathf.Pow(1 - _fraction, 0.7f));
+            bodySpriteAnim.Stop();
 
             if (!isAnimatingTakingDamage)
             {

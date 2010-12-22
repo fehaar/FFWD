@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Text;
 using PressPlay.FFWD;
 using PressPlay.FFWD.Components;
+using Microsoft.Xna.Framework.Content;
 
 namespace PressPlay.Tentacles.Scripts {
 	public class UVSpriteSheetAnimator : UVSpriteSheet {
 		
 		public delegate void AnimationCompleteCallback();
-		private AnimationCompleteCallback animCompleteCallback = null;
-		
+		private AnimationCompleteCallback animCompleteCallback;
 		
 		public SpriteSheetAnim[] anims;
 		
@@ -23,8 +23,13 @@ namespace PressPlay.Tentacles.Scripts {
 		public bool automaticPlay= false;
 		public bool randomizeAutomaticPlayStart = false;
 		
+		
+		
+		
 		public override void Initialize()
 		{
+			if (isInitialized){return;}
+			
 			base.Initialize();
 			if (automaticPlay && automaticPlayAnim != null)
 			{
@@ -39,6 +44,8 @@ namespace PressPlay.Tentacles.Scripts {
 		
 		public void Play(string _str)
 		{
+			if (!isInitialized){Initialize();}
+			
 			for (int i = 0; i < anims.Length; i++) {
 				if (anims[i].name == _str)
 				{
@@ -147,6 +154,7 @@ namespace PressPlay.Tentacles.Scripts {
 		}
 	}
 	
+	[System.Serializable]
 	public class SpriteSheetAnim{
 		
 		public enum WrapMode{

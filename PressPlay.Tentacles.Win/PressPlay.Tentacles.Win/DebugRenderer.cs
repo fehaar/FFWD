@@ -26,7 +26,7 @@ namespace PressPlay.Tentacles
         private Box2DDebugDraw physicsDebugDraw;
         private SpriteBatch spriteBatch;
         private SpriteFont font;
-        public Vector2 Position = new Vector2(32, 32);
+        public Microsoft.Xna.Framework.Vector2 Position = new Microsoft.Xna.Framework.Vector2(32, 32);
 
         public override void Initialize()
         {
@@ -82,12 +82,12 @@ namespace PressPlay.Tentacles
             spriteBatch.Begin();
 
             KeyValuePair<string, string>[] displayStrings = Debug.DisplayStrings.ToArray();
-            Vector2 offset = Vector2.Zero;
+            Microsoft.Xna.Framework.Vector2 offset = Microsoft.Xna.Framework.Vector2.Zero;
             for (int i = 0; i < displayStrings.Length; i++)
             {
                 string text = displayStrings[i].Key + ": " + displayStrings[i].Value;
-                spriteBatch.DrawString(font, text, Position + Vector2.One + offset, Color.Black);
-                spriteBatch.DrawString(font, text, Position + offset, Color.White);
+                spriteBatch.DrawString(font, text, Position + Microsoft.Xna.Framework.Vector2.One + offset, Microsoft.Xna.Framework.Color.Black);
+                spriteBatch.DrawString(font, text, Position + offset, Microsoft.Xna.Framework.Color.White);
                 offset.Y += font.MeasureString(text).Y * 0.75f;
             }
 

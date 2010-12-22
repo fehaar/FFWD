@@ -50,7 +50,7 @@ namespace PressPlay.Tentacles.Scripts {
 
 
 
-            tileSize = new Microsoft.Xna.Framework.Vector2(1f / (float)xCount, 1f / (float)yCount);
+            tileSize = new Vector2(1f / (float)xCount, 1f / (float)yCount);
 			
 			DrawLine(new Vector3[]{Vector3.zero, Vector3.forward});
 			
@@ -166,8 +166,8 @@ namespace PressPlay.Tentacles.Scripts {
 				//Debug.Log("LineDrawerXZ on "+name+" rebuilding arrays and UVs");
 				
 		        vertices = new Vector3[pointCnt * 5];
-		        baseUVs = new Microsoft.Xna.Framework.Vector2[pointCnt * 5];
-                tmpUVs = new Microsoft.Xna.Framework.Vector2[pointCnt * 5];
+		        baseUVs = new Vector2[pointCnt * 5];
+                tmpUVs = new Vector2[pointCnt * 5];
 		        triangles = new short[((pointCnt-1)*9)+6];
 				flipped = new bool[pointCnt];
 				
@@ -236,12 +236,12 @@ namespace PressPlay.Tentacles.Scripts {
 			
 			if (rebuildArraysAndUVs)
 			{
-                tmpUVs = new Microsoft.Xna.Framework.Vector2[baseUVs.Length];
+                tmpUVs = new Vector2[baseUVs.Length];
 			
 				for (int i = 0; i < baseUVs.Length; i++) 
 				{
-                    baseUVs[i] = new Microsoft.Xna.Framework.Vector2(0, 0);
-                    tmpUVs[i] = new Microsoft.Xna.Framework.Vector2(0, 0);
+                    baseUVs[i] = new Vector2(0, 0);
+                    tmpUVs[i] = new Vector2(0, 0);
 				}
 				
 		        for (int i = 0; i < pointCnt - 1; i++)
@@ -249,20 +249,20 @@ namespace PressPlay.Tentacles.Scripts {
 					float lineIncrementFraction = i*lineIncrementDeltaFraction;
 					
 		            // UVs
-		            baseUVs[i * 5].X = lineIncrementFraction / (float)xCount;
-					baseUVs[i * 5].Y = 0;
+		            baseUVs[i * 5].x = lineIncrementFraction / (float)xCount;
+					baseUVs[i * 5].y = 0;
 					
-		            baseUVs[i * 5 + 1].X = lineIncrementFraction / (float)xCount;
-					baseUVs[i * 5 + 1].Y = 1 / (float)yCount;
+		            baseUVs[i * 5 + 1].x = lineIncrementFraction / (float)xCount;
+					baseUVs[i * 5 + 1].y = 1 / (float)yCount;
 					
-		            baseUVs[i * 5 + 2].X = (lineIncrementFraction+lineIncrementDeltaFraction) / (float)xCount;
-					baseUVs[i * 5 + 2].Y = 0;
+		            baseUVs[i * 5 + 2].x = (lineIncrementFraction+lineIncrementDeltaFraction) / (float)xCount;
+					baseUVs[i * 5 + 2].y = 0;
 					
-		            baseUVs[i * 5 + 3].X = (lineIncrementFraction+lineIncrementDeltaFraction) / (float)xCount;
-					baseUVs[i * 5 + 3].Y = 1 / (float)yCount;
+		            baseUVs[i * 5 + 3].x = (lineIncrementFraction+lineIncrementDeltaFraction) / (float)xCount;
+					baseUVs[i * 5 + 3].y = 1 / (float)yCount;
 		            
 					//ASK MIKKEL WHAT THIS DOES
-                    baseUVs[i * 5 + 4] = new Microsoft.Xna.Framework.Vector2(.5f, .5f);
+                    baseUVs[i * 5 + 4] = new Vector2(.5f, .5f);
 					
 		        }
 			}
