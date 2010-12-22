@@ -23,7 +23,7 @@ namespace PressPlay.FFWD
         private int layerMask;
         private List<RaycastHit> _hits = new List<RaycastHit>();
 
-        internal float rayCastCallback(Fixture fixture, Vector2 point, Vector2 normal, float fraction)
+        internal float rayCastCallback(Fixture fixture, PressPlay.FFWD.Vector2 point, PressPlay.FFWD.Vector2 normal, float fraction)
         {
             float dist = distance * fraction;
             UnityObject uo = fixture.GetBody().GetUserData() as UnityObject;

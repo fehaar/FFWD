@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
+using PressPlay.FFWD;
 using PressPlay.FFWD.Components;
 
 namespace PressPlay.FFWD
@@ -48,6 +49,24 @@ namespace PressPlay.FFWD
                     return null;
                 }
                 return gameObject.transform;
+            }
+        }
+
+        [ContentSerializerIgnore]
+        public Renderer renderer
+        {
+            get
+            {
+                return gameObject.renderer;
+            }
+        }
+
+        [ContentSerializerIgnore]
+        public AudioSource audio
+        {
+            get
+            {
+                return gameObject.audio;
             }
         }
 
@@ -131,10 +150,42 @@ namespace PressPlay.FFWD
             return gameObject.GetComponentInChildren(type);
         }
 
+        #region Component locator methods
+        public T GetComponent<T>() where T : Component
+        {
+            return gameObject.GetComponent<T>();
+        }
+
+        public T[] GetComponents<T>() where T : Component
+        {
+            return gameObject.GetComponents<T>();
+        }
+
         public Component[] GetComponentsInChildren(Type type)
         {
             return gameObject.GetComponentsInChildren(type);
         }
+
+        public T[] GetComponentsInParents<T>() where T : Component
+        {
+            return GetComponentsInParents<T>();
+        }
+        #endregion
+
+        public void Rotate(Vector3 eulerAngles, Space relativeTo)
+        {
+            throw new NotImplementedException("Transform.Translate is not implemented yet");
+        }
+
+        #region Translate methods
+
+        // TODO implement Translate function
+        public void Translate(Vector3 translation, Space relativeTo)
+        {
+            throw new NotImplementedException("Transform.Translate is not implemented yet");
+        }
+
+        #endregion
 
         public Component[] GetComponentsInChildren(Type type, bool includeInactive)
         {

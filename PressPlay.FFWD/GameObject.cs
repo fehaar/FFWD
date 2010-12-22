@@ -6,10 +6,18 @@ using Microsoft.Xna.Framework.Content;
 using PressPlay.FFWD.Interfaces;
 using Microsoft.Xna.Framework.Graphics;
 using Box2D.XNA;
+using PressPlay.FFWD;
 using PressPlay.FFWD.Components;
 
 namespace PressPlay.FFWD
 {
+
+    public enum SendMessageOptions
+    {
+        RequireReceiver = 0,
+        DontRequireReceiver	= 1
+    }
+
     public class GameObject : UnityObject
     {
         public GameObject()
@@ -19,12 +27,33 @@ namespace PressPlay.FFWD
             active = true;
         }
 
+        public GameObject(string name) : this()
+        {
+            _transform = new Transform();
+            this.name = name;
+        }
+
+        public int id { get; set; }
         public string name { get; set; }
         public int layer { get; set; }
         public bool active { get; set; }
         public string tag { get; set; }
 
         #region Component shortcut methods
+        private Rigidbody _rigidbody;
+        [ContentSerializerIgnore]
+        public Rigidbody rigidbody
+        {
+            get
+            {
+                if (_transform == null)
+                {
+                    _rigidbody = GetComponent<Rigidbody>();
+                }
+                return _rigidbody;
+            }
+        }
+
         private Transform _transform;
         [ContentSerializerIgnore]
         public Transform transform 
@@ -36,20 +65,6 @@ namespace PressPlay.FFWD
                     _transform = GetComponent<Transform>();
                 }
                 return _transform;
-            }
-        }
-
-        private Rigidbody _rigidbody;
-        [ContentSerializerIgnore]
-        public Rigidbody rigidbody 
-        {
-            get
-            {
-                if (_rigidbody == null)
-                {
-                    _rigidbody = GetComponent<Rigidbody>();
-                }
-                return _rigidbody;
             }
         }
 
@@ -118,6 +133,21 @@ namespace PressPlay.FFWD
         {
             Component cmp = Activator.CreateInstance(tp) as Component;
             return AddComponent(cmp);
+        }
+
+        protected AudioSource _audio;
+
+        public AudioSource audio
+        {
+            get
+            {
+                if (_audio == null)
+                {
+                    _audio = GetComponent<AudioSource>();
+                }
+
+                return _audio;
+            }
         }
 
         internal override UnityObject Clone()
@@ -556,6 +586,17 @@ namespace PressPlay.FFWD
             // TODO : Add implementation of method
             throw new NotImplementedException("Method not implemented.");
         }
+
+        public void SendMessageUpwards(string methodName, object value, SendMessageOptions SendMessageOptions)
+        {
+            throw new NotImplementedException("SendMessageUpwards is not implemented");
+        }
+
+        public void SendMessage(string methodName, object value, SendMessageOptions SendMessageOptions)
+        {
+            throw new NotImplementedException("SendMessage is not implemented");
+        }
+
         #endregion
 
         public override string ToString()

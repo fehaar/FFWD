@@ -11,7 +11,7 @@ namespace PressPlay.FFWD.Components
     public abstract class Renderer : Component, IRenderable
     {
         [ContentSerializer(CollectionItemName = "material")]
-        public Material[] materials { get; set; }
+        public Material[] materials{ get; set; }
 
         [ContentSerializerIgnore]
         public Material sharedMaterial

@@ -22,7 +22,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
         {
             Body body = Physics.AddBody();
             Physics.AddBox(body, false, 10, 10, new Vector2(0, 50), 0, 1);
-            bool hit = Physics.Raycast(Vector2.Zero, Vector2.UnitY, 100, 0);
+            bool hit = Physics.Raycast(Vector2.zero, Vector2.up, 100, 0);
             Assert.That(hit, Is.True);
         }
 
@@ -50,7 +50,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
         {
             Body body = Physics.AddBody();
             Physics.AddBox(body, false, 10, 10, new Vector2(0, 50), 0, 1);
-            bool hit = Physics.Raycast(Vector2.Zero, Vector2.UnitX, 100, 0);
+            bool hit = Physics.Raycast(Vector2.zero, Vector2.right, 100, 0);
             Assert.That(hit, Is.False);
         }
 
@@ -59,7 +59,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
         {
             Body body = Physics.AddBody();
             Physics.AddBox(body, false, 10, 10, new Vector2(0, 50), 0, 1);
-            bool hit = Physics.Raycast(Vector2.Zero, Vector2.UnitX, 100, 0);
+            bool hit = Physics.Raycast(Vector2.zero, Vector2.right, 100, 0);
             Assert.That(hit, Is.False);
         }
 
@@ -78,7 +78,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
         {
             Body body = Physics.AddBody();
             Physics.AddBox(body, false, 10, 10, new Vector2(0, 0), 0, 1);
-            bool hit = Physics.Raycast(Vector2.Zero, Vector2.UnitY, 100, 0);
+            bool hit = Physics.Raycast(Vector2.zero, Vector2.up, 100, 0);
             Assert.That(hit, Is.False);
         }
 
@@ -88,7 +88,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
             Body body = Physics.AddBody();
             Physics.AddBox(body, false, 10, 10, new Vector2(0, 50), 0, 1);
             RaycastHit hit = new RaycastHit();
-            bool hasHit = Physics.Raycast(Vector2.Zero, Vector2.UnitY, out hit, 100, 0);
+            bool hasHit = Physics.Raycast(Vector2.zero, Vector2.up, out hit, 100, 0);
             Assert.That(hasHit, Is.True);
             Assert.That(hit.body, Is.SameAs(body));
             Assert.That(hit.point, Is.EqualTo(new Vector3(0, 0, 45)));
@@ -104,7 +104,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
             Physics.AddBox(body, false, 10, 10, new Vector2(0, 20), 0, 1);
             Physics.AddBox(body1, false, 10, 10, new Vector2(0, 50), 0, 1);
             RaycastHit hit = new RaycastHit();
-            bool hasHit = Physics.Raycast(Vector2.Zero, Vector2.UnitY, out hit, 100, 0);
+            bool hasHit = Physics.Raycast(Vector2.zero, Vector2.up, out hit, 100, 0);
             Assert.That(hasHit, Is.True);
             Assert.That(hit.body, Is.SameAs(body));
         }
@@ -116,18 +116,18 @@ namespace PressPlay.FFWD.Test.Physics_facts
             Body body1 = Physics.AddBody();
             Physics.AddBox(body1, false, 10, 10, new Vector2(0, 50), 0, 1);
             Physics.AddBox(body, false, 10, 10, new Vector2(0, 20), 0, 1);
-            RaycastHit[] hits = Physics.RaycastAll(Vector2.Zero, Vector2.UnitY, 100, 0);
+            RaycastHit[] hits = Physics.RaycastAll(Vector2.zero, Vector2.up, 100, 0);
             Assert.That(hits.Length, Is.EqualTo(2));
         }
 
         [Test]
         public void DoingARaycastWithzeroDistanceWillReturnFalse()
         {
-            Assert.That(Physics.Raycast(Vector2.Zero, Vector2.Zero, 0, 0), Is.False);
-            Assert.That(Physics.RaycastAll(Vector2.Zero, Vector2.Zero, 0, 0), Is.Empty);
+            Assert.That(Physics.Raycast(Vector2.zero, Vector2.zero, 0, 0), Is.False);
+            Assert.That(Physics.RaycastAll(Vector2.zero, Vector2.zero, 0, 0), Is.Empty);
 
             RaycastHit hit;
-            Physics.Raycast(Vector2.Zero, Vector2.Zero, out hit, 0, 0);
+            Physics.Raycast(Vector2.zero, Vector2.zero, out hit, 0, 0);
             Assert.That(hit.body, Is.Null);
         }
 
@@ -138,7 +138,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
             Body body1 = Physics.AddBody();
             Physics.AddBox(body1, false, 10, 10, new Vector2(0, 50), 0, 1);
             Physics.AddBox(body, false, 10, 10, new Vector2(0, 20), 0, 1);
-            RaycastHit[] hits = Physics.RaycastAll(Vector2.Zero, Vector2.UnitY, 30, 0);
+            RaycastHit[] hits = Physics.RaycastAll(Vector2.zero, Vector2.up, 30, 0);
             Assert.That(hits.Length, Is.EqualTo(1));
         }
 	

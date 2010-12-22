@@ -12,7 +12,7 @@ namespace PressPlay.FFWD
     {
         [ContentSerializer]
         private string shader { get; set; }
-        [ContentSerializer(Optional=true)]
+        [ContentSerializer(Optional = true)]
         public Color color { get; set; }
         [ContentSerializer(Optional = true)]
         public string mainTexture { get; set; }
@@ -40,6 +40,11 @@ namespace PressPlay.FFWD
             {
                 texture = ContentHelper.GetTexture(mainTexture);
             }
+        }
+
+        public void SetColor(string name, Color color)
+        {
+            this.color = color;
         }
     }
 }

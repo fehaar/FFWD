@@ -123,6 +123,8 @@ namespace PressPlay.FFWD
                 fileName = Path.GetFileNameWithoutExtension(fileName);
             }
 
+            Debug.Log("Textures\\" + fileName);
+
             try
             {
                 Textures.Add(name, Content.Load<Texture2D>("Textures\\" + fileName));

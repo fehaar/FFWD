@@ -40,7 +40,7 @@ namespace PressPlay.FFWD
         #region FFWD specific methods
         public static void Initialize()
         {
-            Initialize(Vector2.Zero, null);
+            Initialize(Vector2.zero, null);
         }
 
         public static void Initialize(Vector2 gravity, IContactProcessor contactProcessor)
@@ -329,7 +329,7 @@ namespace PressPlay.FFWD
         public static bool Pointcast(Vector2 point, int layerMask)
         {
             RaycastHelper helper = new RaycastHelper(float.MaxValue, true, layerMask);
-            AABB aabb = new AABB() { lowerBound = new Vector2(point.X - float.Epsilon, point.Y - float.Epsilon), upperBound = new Vector2(point.X + float.Epsilon, point.Y + float.Epsilon) };
+            AABB aabb = new AABB() { lowerBound = new Vector2(point.x - float.Epsilon, point.y - float.Epsilon), upperBound = new Vector2(point.x + float.Epsilon, point.y + float.Epsilon) };
             world.QueryAABB(helper.pointCastCallback, ref aabb);
             return helper.HitCount > 0;
         }
@@ -342,7 +342,7 @@ namespace PressPlay.FFWD
         public static bool Pointcast(Vector2 point, out RaycastHit hitInfo, int layerMask)
         {
             RaycastHelper helper = new RaycastHelper(float.MaxValue, true, layerMask);
-            AABB aabb = new AABB() { lowerBound = new Vector2(point.X - float.Epsilon, point.Y - float.Epsilon), upperBound = new Vector2(point.X + float.Epsilon, point.Y + float.Epsilon) };
+            AABB aabb = new AABB() { lowerBound = new Vector2(point.x - float.Epsilon, point.y - float.Epsilon), upperBound = new Vector2(point.x + float.Epsilon, point.y + float.Epsilon) };
             world.QueryAABB(helper.pointCastCallback, ref aabb);
             if (helper.HitCount > 0)
             {

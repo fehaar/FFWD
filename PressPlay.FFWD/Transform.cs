@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using System.Collections;
 
 namespace PressPlay.FFWD
 {
     public enum Space { World, Self }
 
-    public class Transform : Component
+    public class Transform : Component, IEnumerable
     {
         #region Constructors
         public Transform()
@@ -357,8 +358,7 @@ namespace PressPlay.FFWD
             if (relativeTo == Space.World)
             {
                 // TODO: This will have issues with parent rotations
-                Matrix rot;
-                Matrix.CreateFromAxisAngle(ref axis.vector, angle, out rot);
+                Matrix rot = Matrix.CreateFromAxisAngle(axis, angle);
                 Matrix.Multiply(ref _world, ref rot, out _world);
                 WorldChanged();
             }
@@ -422,6 +422,12 @@ namespace PressPlay.FFWD
             }
         }
 
+        //TODO: Implement LookAt
+        public void LookAt(Transform target, Vector3 worldUp)
+        {
+
+        }
+
         public void LookAt(Vector3 worldPosition)
         {
             LookAt(worldPosition, Vector3.up);
@@ -440,6 +446,16 @@ namespace PressPlay.FFWD
                 _localPosition = pos;
                 hasDirtyWorld = false;
             }
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            if (children == null)
+            {
+                return (new List<Transform>()).GetEnumerator();
+            }
+            
+            return children.GetEnumerator();
         }
 
         public Vector3 TransformDirection(Vector3 position)
