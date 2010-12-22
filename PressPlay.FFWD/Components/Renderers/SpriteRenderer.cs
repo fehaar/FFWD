@@ -72,6 +72,11 @@ namespace PressPlay.FFWD.Components
             if(texture != null){
                 bounds = texture.Bounds;
             }
+
+            if (material == null)
+            {
+                material = new Material();
+            }
         }
 
         #region IUpdateable Members

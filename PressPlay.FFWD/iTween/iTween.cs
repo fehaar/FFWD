@@ -3477,8 +3477,8 @@ namespace PressPlay.FFWD
             //from and init to values:
             if (renderer != null)
             {
-                colors = new Color[renderer.materials.Count, 3];
-                for (int i = 0; i < renderer.materials.Count; i++)
+                colors = new Color[renderer.materials.Length, 3];
+                for (int i = 0; i < renderer.materials.Length; i++)
                 {
                     // Removed while porting 
                     // colors[i, 0] = renderer.materials[i].GetColor(namedcolorvalue.ToString());
