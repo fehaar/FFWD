@@ -64,7 +64,9 @@
     <Compile Include="Core framework\Transforms\WhenManipulatingTheTransformHierarchy.cs" />
     <Compile Include="Core framework\WhenAddingAComponentToAGameObject.cs" />
     <Compile Include="Core framework\AGameObjectCanBeConvertedToBool.cs" />
+    <Compile Include="Core framework\WhenConvertingAColor.cs" />
     <Compile Include="Core framework\WhenCreatingANewComponent.cs" />
+    <Compile Include="Core framework\WhenCreatingANewGameObject.cs" />
     <Compile Include="Core framework\WhenFindingAnObjectById.cs" />
     <Compile Include="Core framework\WhenGettingTheComponentName.cs" />
     <Compile Include="Core framework\WhenInstantiatingANewObject.cs" />

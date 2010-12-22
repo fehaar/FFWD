@@ -281,6 +281,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                     Material mat = obj as Material;
                     writer.WriteStartElement(name);
                     writer.WriteElementString("shader", mat.shader.name);
+                    writer.WriteElementString("renderQueue", mat.renderQueue.ToString());
                     if (mat.HasProperty("_Color"))
                     {
                         writer.WriteElementString("color", ToString(mat.color));
