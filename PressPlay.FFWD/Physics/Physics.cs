@@ -215,7 +215,7 @@ namespace PressPlay.FFWD
 
         public static bool Raycast(Vector3 origin, Vector3 direction, float distance, int layerMask)
         {
-            return Raycast(origin, direction, distance, layerMask);
+            return Raycast((Vector2)origin, (Vector2)direction, distance, layerMask);
         }
 
         public static bool Raycast(Vector2 origin, Vector2 direction, out RaycastHit hitInfo, float distance, int layerMask)

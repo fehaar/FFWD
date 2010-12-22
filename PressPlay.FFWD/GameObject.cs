@@ -33,7 +33,6 @@ namespace PressPlay.FFWD
             this.name = name;
         }
 
-        public int id { get; set; }
         public string name { get; set; }
         public int layer { get; set; }
         public bool active { get; set; }
@@ -46,7 +45,7 @@ namespace PressPlay.FFWD
         {
             get
             {
-                if (_transform == null)
+                if (_rigidbody == null)
                 {
                     _rigidbody = GetComponent<Rigidbody>();
                 }
@@ -95,6 +94,19 @@ namespace PressPlay.FFWD
                 return _renderer;
             }
         }
+
+        [ContentSerializerIgnore]
+        public AudioSource audio
+        {
+            get
+            {
+                if (_audio == null)
+                {
+                    _audio = GetComponent<AudioSource>();
+                }
+                return _audio;
+            }
+        }
         #endregion
 
         //public String prefab { get; set; }
@@ -137,19 +149,6 @@ namespace PressPlay.FFWD
 
         protected AudioSource _audio;
 
-        public AudioSource audio
-        {
-            get
-            {
-                if (_audio == null)
-                {
-                    _audio = GetComponent<AudioSource>();
-                }
-
-                return _audio;
-            }
-        }
-
         internal override UnityObject Clone()
         {
             GameObject obj = base.Clone() as GameObject;
@@ -162,6 +161,7 @@ namespace PressPlay.FFWD
             obj._rigidbody = null;
             obj._collider = null;
             obj._renderer = null;
+            obj._audio = null;
 
             obj.components = new List<Component>();
             for (int i = 0; i < components.Count; i++)

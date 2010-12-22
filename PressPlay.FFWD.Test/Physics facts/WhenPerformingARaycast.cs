@@ -31,7 +31,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
         {
             Body body = Physics.AddBody();
             Physics.AddBox(body, false, 10, 10, new Vector2(0, 50), 0, 1);
-            bool hit = Physics.Raycast(Vector3.zero, Vector3.forward, 100, 0);
+            bool hit = Physics.Raycast(Vector3.zero, -Vector3.forward, 100, 0);
             Assert.That(hit, Is.True);
         }
 
@@ -40,7 +40,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
         {
             Body body = Physics.AddBody();
             Physics.AddBox(body, false, 10, 10, new Vector2(0, 50), 0, 1);
-            Ray ray = new Ray(Vector3.zero, Vector3.forward);
+            Ray ray = new Ray(Vector3.zero, -Vector3.forward);
             bool hit = Physics.Raycast(ray, 100, 0);
             Assert.That(hit, Is.True);
         }
