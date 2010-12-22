@@ -16,6 +16,15 @@ namespace PressPlay.FFWD
         [ContentSerializerIgnore]
         public SoundEffect sound;
 
+        public float length
+        {
+            get
+            {
+                if (sound == null) return 0.0f;
+                return (float)sound.Duration.TotalSeconds;
+            }
+        }
+
         public void PrepareLoadContent()
         {
             ContentHelper.LoadSound(clip);
