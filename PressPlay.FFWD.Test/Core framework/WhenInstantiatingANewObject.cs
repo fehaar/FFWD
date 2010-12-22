@@ -251,20 +251,6 @@ namespace PressPlay.FFWD.Test.Core_framework
             Assert.That(instance.isPrefab, Is.False);
             Assert.That(instance.gameObject.isPrefab, Is.False);
         }
-	
-
-        [Test]
-        public void WeCanInstantiateAComponentUsingAReference()
-        {
-            GameObject obj = new GameObject();
-            TestComponent comp = new TestComponent();
-            obj.AddComponent(comp);
-            ObjectReference reference = new ObjectReference() { ReferencedId = comp.GetInstanceID() };
-            Application.AwakeNewComponents();
-
-            TestComponent cmp = (TestComponent)UnityObject.Instantiate(reference);
-            Assert.That(cmp, Is.Not.Null);
-        }
 
         [Test]
         public void InstantiatingComponentsWillPutThemInTheAwakeQueue()

@@ -17,7 +17,17 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
                 throw new Exception(GetType() + " cannot export components of type " + component.GetType());
             }
             scene.WriteElement("isTrigger", coll.isTrigger);
-            scene.WriteElement("material", coll.material.name.Replace(" (Instance)", ""));
+            if (coll.sharedMaterial != null)
+            {
+                if (coll.sharedMaterial.name.Contains("(Instance)"))
+                {
+                    UnityEditor.EditorUtility.ResetToPrefabState(coll);
+                }
+                else
+                {
+                    scene.WriteElement("material", coll.sharedMaterial.name);
+                }
+            }
         }
         #endregion
     }

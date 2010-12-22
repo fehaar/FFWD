@@ -17,7 +17,7 @@ namespace PressPlay.FFWD.Exporter
 
         public static string ScriptNamespace { get; set; }
         private List<string> scriptLines;
-        public static List<string> DefaultUsings = new List<string> { "System", "System.Collections.Generic", "System.Text", "Microsoft.Xna.Framework", "PressPlay.FFWD", "PressPlay.FFWD.Components" };
+        public static List<string> DefaultUsings = new List<string> { "System", "System.Collections.Generic", "System.Text", "PressPlay.FFWD", "PressPlay.FFWD.Components" };
 
         public void Translate()
         {
@@ -26,29 +26,23 @@ namespace PressPlay.FFWD.Exporter
             InsertNameSpace();
 
             // Override methods
-            string[] methods = new string[] { "Start", "Update" };
+            string[] methods = new string[] { "Start", "Update", "Awake" };
             foreach (string method in methods)
             {
                 Regex methEx = new Regex(@"void\s+" + method + @"\s?\(");
                 int startLine = scriptLines.FindIndex(s => methEx.IsMatch(s));
                 if (startLine >= 0)
                 {
-                    scriptLines[startLine] = scriptLines[startLine].Replace("void", "public override void");
-                }
-            }            
-
-            // Replace Vector3 static method names
-            Type tp = typeof(Vector3);
-            foreach (PropertyInfo prop in tp.GetProperties(BindingFlags.Static | BindingFlags.Public))
-            {
-                for (int i = 0; i < scriptLines.Count; i++)
-                {
-                    if (scriptLines[i].Contains("Vector3." + prop.Name))
+                    if (scriptLines[startLine].Contains("public void"))
                     {
-                        scriptLines[i] = scriptLines[i].Replace("Vector3." + prop.Name, "Vector3." + StringExtensions.Capitalize(prop.Name));
+                        scriptLines[startLine] = scriptLines[startLine].Replace("public void", "public override void");
+                    }
+                    else
+                    {
+                        scriptLines[startLine] = scriptLines[startLine].Replace("void", "public override void");
                     }
                 }
-            }
+            }            
         }
 
         public void CreateStub()

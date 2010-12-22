@@ -128,7 +128,6 @@
     <Compile Include="Mathf.cs" />
     <Compile Include="Mesh.cs" />
     <Compile Include="MonoBehaviour.cs" />
-    <Compile Include="ObjectReference.cs" />
     <Compile Include="GameObjectContactProcessor.cs" />
     <Compile Include="ScreenManager\Component\ButtonComponent.cs" />
     <Compile Include="ScreenManager\Component\Sprite.cs" />

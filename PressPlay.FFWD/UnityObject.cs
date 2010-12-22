@@ -25,7 +25,8 @@ namespace PressPlay.FFWD
             return _id;
         }
 
-        internal bool isPrefab { get; set; }
+        [ContentSerializer(ElementName = "isPrefab", Optional = true)]
+        internal bool isPrefab;
 
         internal virtual void AfterLoad()
         {
@@ -79,6 +80,16 @@ namespace PressPlay.FFWD
         }
 
         /// <summary>
+        /// This is not used at the moment as we do not treat meshes in the same way as Unity and have no notion of shared vs. normal meshes.
+        /// </summary>
+        /// <param name="original">The original mesh</param>
+        /// <returns></returns>
+        public static Mesh Instantiate(Mesh original)
+        {
+            return original;
+        }
+
+        /// <summary>
         /// Clones the object original, places it at position and sets the rotation to rotation, then returns the cloned object. 
         /// This is essentially the same as using duplicate command (cmd-d) in Unity and then moving the object to the given location. 
         /// If a game object, component or script instance is passed, Instantiate will clone the entire game object hierarchy, with all children cloned as well. 
@@ -105,7 +116,7 @@ namespace PressPlay.FFWD
                 }
                 clone = toClone.Clone() as GameObject;
             }
-            UnityObject ret = clone.GetObjectById((original is ObjectReference) ? (original as ObjectReference).ReferencedId : original.GetInstanceID());
+            UnityObject ret = clone.GetObjectById(original.GetInstanceID());
             // NOTE: It is very important that this is done at the end otherwise we cannot find the correct object to return.
             clone.SetNewId();
             return ret;
