@@ -312,6 +312,18 @@ namespace PressPlay.FFWD
             }
             localRotation = Quaternion.AngleAxis(ang, Vector3.up);
         }
+
+        internal override void FixReferences(Dictionary<int, UnityObject> idMap)
+        {
+            base.FixReferences(idMap);
+            if (children != null)
+            {
+                for (int i = 0; i < children.Count; i++)
+                {
+                    children[i].FixReferences(idMap);
+                }
+            }
+        }
         #endregion
 
         #region Public methods

@@ -58,6 +58,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core framework\ReferencingComponent.cs" />
     <Compile Include="Core framework\TestComponent.cs" />
     <Compile Include="Core framework\TestHierarchy.cs" />
     <Compile Include="Core framework\Transforms\WhenManipulatingTransforms.cs" />
@@ -68,6 +69,7 @@
     <Compile Include="Core framework\WhenCreatingANewComponent.cs" />
     <Compile Include="Core framework\WhenCreatingANewGameObject.cs" />
     <Compile Include="Core framework\WhenFindingAnObjectById.cs" />
+    <Compile Include="Core framework\WhenFixingUpReferences.cs" />
     <Compile Include="Core framework\WhenGettingTheComponentName.cs" />
     <Compile Include="Core framework\WhenInstantiatingANewObject.cs" />
     <Compile Include="Core framework\WhenLoadingAScene.cs" />

@@ -118,13 +118,23 @@ namespace PressPlay.FFWD
             }
             UnityObject ret = clone.GetObjectById(original.GetInstanceID());
             // NOTE: It is very important that this is done at the end otherwise we cannot find the correct object to return.
-            clone.SetNewId();
+            Dictionary<int, UnityObject> idMap = new Dictionary<int, UnityObject>();
+            clone.SetNewId(idMap);
+            clone.FixReferences(idMap);
             return ret;
         }
 
-        internal virtual void SetNewId()
+        internal virtual void SetNewId(Dictionary<int, UnityObject> idMap)
         {
-            _id = nextId++;
+            if (!isPrefab)
+            {
+                idMap[_id] = this;
+                _id = nextId++;
+            }
+        }
+
+        internal virtual void FixReferences(Dictionary<int, UnityObject> idMap)
+        {
         }
 
         internal virtual UnityObject Clone()

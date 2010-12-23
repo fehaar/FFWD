@@ -28,9 +28,16 @@ namespace PressPlay.FFWD
             active = true;
         }
 
+        internal GameObject(bool isPrefab)
+        {
+            this.isPrefab = isPrefab;
+            components = new List<Component>();
+            AddComponent(new Transform());
+            active = true;
+        }
+
         public GameObject(string name) : this()
         {
-            _transform = new Transform();
             this.name = name;
         }
 
@@ -154,6 +161,7 @@ namespace PressPlay.FFWD
 
         protected AudioSource _audio;
 
+        #region Internal methods
         internal override UnityObject Clone()
         {
             GameObject obj = base.Clone() as GameObject;
@@ -188,39 +196,49 @@ namespace PressPlay.FFWD
             return obj;
         }
 
-        internal override void SetNewId()
+        internal override void SetNewId(Dictionary<int, UnityObject> idMap)
         {
             if (this.transform != null && this.transform.parent != null)
             {
-                this.transform.parent.gameObject.SetNewId();
+                this.transform.parent.gameObject.SetNewId(idMap);
             }
             else
             {
                 // We are at root
-                SetIdOfChildren();
+                SetIdOfChildren(idMap);
             }
         }
 
-        private void SetIdOfChildren()
+        private void SetIdOfChildren(Dictionary<int, UnityObject> idMap)
         {
-            base.SetNewId();
-            SetIdOfComponents();
+            base.SetNewId(idMap);
+            SetIdOfComponents(idMap);
             if (transform != null && transform.children != null)
             {
                 for (int i = 0; i < transform.children.Count; i++)
                 {
-                    transform.children[i].SetIdOfChildren();
+                    transform.children[i].SetIdOfChildren(idMap);
                 }
             }
         }
 
-        private void SetIdOfComponents()
+        private void SetIdOfComponents(Dictionary<int, UnityObject> idMap)
         {
             for (int i = 0; i < components.Count; i++)
             {
-                components[i].SetNewId();
+                components[i].SetNewId(idMap);
             }
         }
+
+        internal override void FixReferences(Dictionary<int, UnityObject> idMap)
+        {
+            base.FixReferences(idMap);
+            for (int i = 0; i < components.Count; i++)
+            {
+                components[i].FixReferences(idMap);
+            }
+        }
+        #endregion
 
         #region Update and event methods
         internal void FixedUpdate()

@@ -284,5 +284,29 @@ namespace PressPlay.FFWD.Test.Core_framework
             Assert.That(instance.gameObject.transform.localPosition, Is.EqualTo(pos));
             Assert.That(instance.gameObject.transform.localRotation, Is.EqualTo(rot));
         }
+
+        [Test]
+        public void AfterInstantiatingANewObjectItExists()
+        {
+            Assert.Inconclusive("I am not sure if this is the correct behaviour...");
+            GameObject obj = new GameObject();
+            GameObject clone = (GameObject)GameObject.Instantiate(obj);
+            Assert.That(Application.Find(clone.GetInstanceID()), Is.Not.Null);
+        }
+
+        [Test]
+        public void ReferencesBackToComponentsInTheClonedObjectWillBeChanged()
+        {
+            GameObject obj = new GameObject();
+            ReferencingComponent cmp = new ReferencingComponent();
+            obj.AddComponent(cmp);
+            cmp.reference = obj.transform;
+
+            GameObject clone = (GameObject)GameObject.Instantiate(obj);
+            ReferencingComponent cloneCmp = clone.GetComponent<ReferencingComponent>();
+            Assert.That(cloneCmp.reference, Is.Not.SameAs(obj.transform));
+            Assert.That(cloneCmp.reference, Is.SameAs(clone.transform));
+        }
+	
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
 using PressPlay.FFWD;
 using PressPlay.FFWD.Components;
+using System.Reflection;
 
 namespace PressPlay.FFWD
 {
@@ -125,6 +126,24 @@ namespace PressPlay.FFWD
             obj.isPrefab = false;
             Application.AddNewComponent(obj as Component);
             return obj;
+        }
+
+        internal override void FixReferences(Dictionary<int, UnityObject> idMap)
+        {
+            base.FixReferences(idMap);
+            // We find all fields only - not properties as they cannot be set as references in Unity
+            FieldInfo[] memInfo = this.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
+            for (int i = 0; i < memInfo.Length; i++)
+            {
+                if (typeof(UnityObject).IsAssignableFrom(memInfo[i].FieldType))
+                {
+                    int id = (memInfo[i].GetValue(this) as UnityObject).GetInstanceID();
+                    if (idMap.ContainsKey(id))
+                    {
+                        memInfo[i].SetValue(this, idMap[id]);
+                    }
+                }
+            }
         }
         #endregion
 
