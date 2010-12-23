@@ -198,32 +198,7 @@ namespace PressPlay.FFWD
 
         internal override void SetNewId(Dictionary<int, UnityObject> idMap)
         {
-            if (this.transform != null && this.transform.parent != null)
-            {
-                this.transform.parent.gameObject.SetNewId(idMap);
-            }
-            else
-            {
-                // We are at root
-                SetIdOfChildren(idMap);
-            }
-        }
-
-        private void SetIdOfChildren(Dictionary<int, UnityObject> idMap)
-        {
             base.SetNewId(idMap);
-            SetIdOfComponents(idMap);
-            if (transform != null && transform.children != null)
-            {
-                for (int i = 0; i < transform.children.Count; i++)
-                {
-                    transform.children[i].SetIdOfChildren(idMap);
-                }
-            }
-        }
-
-        private void SetIdOfComponents(Dictionary<int, UnityObject> idMap)
-        {
             for (int i = 0; i < components.Count; i++)
             {
                 components[i].SetNewId(idMap);

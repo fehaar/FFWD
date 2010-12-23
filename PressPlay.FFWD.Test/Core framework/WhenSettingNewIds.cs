@@ -32,34 +32,6 @@ namespace PressPlay.FFWD.Test.Core_framework
         }
 
         [Test]
-        public void WeWillSetTheIdOfAParentObject()
-        {
-            GameObject obj = new GameObject();
-            Transform trans = obj.transform;
-            GameObject parent = new GameObject();
-            Transform parentTrans = parent.transform;
-            trans.parent = parentTrans;
-            int id = parent.GetInstanceID();
-            obj.SetNewId(new Dictionary<int, UnityObject>());
-
-            Assert.That(parent.GetInstanceID(), Is.Not.EqualTo(id));
-        }
-
-        [Test]
-        public void WeWillSetTheIdOfComponentsOnAParentObject()
-        {
-            GameObject obj = new GameObject();
-            Transform trans = obj.transform;
-            GameObject parent = new GameObject();
-            Transform parentTrans = parent.transform;
-            trans.parent = parentTrans;
-            int id = parentTrans.GetInstanceID();
-            obj.SetNewId(new Dictionary<int, UnityObject>());
-
-            Assert.That(parentTrans.GetInstanceID(), Is.Not.EqualTo(id));
-        }
-
-        [Test]
         public void WeWillSetTheIdOfOurChildrenAndItsComponents()
         {
             GameObject obj = new GameObject();
