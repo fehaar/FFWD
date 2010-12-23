@@ -181,18 +181,6 @@ namespace PressPlay.FFWD
             {
                 obj.AddComponent(components[i].Clone() as Component);
             }
-            if (transform != null)
-            {
-                if (transform.children != null && transform.children.Count > 0)
-                {
-                    obj.transform.children = new List<GameObject>();
-                    for (int i = 0; i < transform.children.Count; i++)
-                    {
-                        GameObject child = transform.children[i].Clone() as GameObject;
-                        child.transform.parent = obj.transform;
-                    }
-                }
-            }
             return obj;
         }
 

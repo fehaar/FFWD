@@ -313,6 +313,21 @@ namespace PressPlay.FFWD
             localRotation = Quaternion.AngleAxis(ang, Vector3.up);
         }
 
+        internal override UnityObject Clone()
+        {
+            Transform obj = base.Clone() as Transform;
+            if (children != null)
+            {
+                obj.children = new List<GameObject>();
+                for (int i = 0; i < children.Count; i++)
+                {
+                    GameObject child = children[i].Clone() as GameObject;
+                    child.transform.parent = obj;
+                }
+            }
+            return obj;
+        }
+
         internal override void SetNewId(Dictionary<int, UnityObject> idMap)
         {
             base.SetNewId(idMap);
