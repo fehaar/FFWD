@@ -32,7 +32,7 @@ namespace PressPlay.FFWD.Components
                 filter.Draw(batch, materials);
                 return;
             }
-            
+
             Matrix world = transform.world;
 
             // Do we have negative scale - if so, switch culling

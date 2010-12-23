@@ -56,5 +56,19 @@ namespace PressPlay.FFWD.Test.Core_framework
 
             Assert.That(cmp.reference, Is.SameAs(newCmp));
         }
+
+        [Test]
+        public void ANullReferenceWillNotBeFixed()
+        {
+            GameObject go = new GameObject();
+            ReferencingComponent cmp = new ReferencingComponent();
+            go.AddComponent(cmp);
+            Dictionary<int, UnityObject> dict = new Dictionary<int, UnityObject>();
+
+            cmp.FixReferences(dict);
+
+            Assert.That(cmp.reference, Is.Null);
+        }
+	
     }
 }

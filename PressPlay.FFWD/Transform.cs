@@ -318,8 +318,6 @@ namespace PressPlay.FFWD
             localRotation = Quaternion.AngleAxis(ang, Vector3.up);
         }
 
-        
-
         internal override void AfterLoad()
         {
             base.AfterLoad();
@@ -328,7 +326,7 @@ namespace PressPlay.FFWD
                 for (int i = 0; i < children.Count; i++)
                 {
                     children[i].isPrefab = isPrefab;
-                    children[i].transform._parent = transform;
+                    children[i].transform._parent = this;
                     children[i].AfterLoad();
                 }
             }
@@ -363,7 +361,7 @@ namespace PressPlay.FFWD
 
         internal override void FixReferences(Dictionary<int, UnityObject> idMap)
         {
-            base.FixReferences(idMap);
+            // NOTE: We should not call base as transform has no references to hide
             if (children != null)
             {
                 for (int i = 0; i < children.Count; i++)

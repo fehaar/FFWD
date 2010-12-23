@@ -137,10 +137,14 @@ namespace PressPlay.FFWD
             {
                 if (typeof(UnityObject).IsAssignableFrom(memInfo[i].FieldType))
                 {
-                    int id = (memInfo[i].GetValue(this) as UnityObject).GetInstanceID();
-                    if (idMap.ContainsKey(id))
+                    UnityObject val = (memInfo[i].GetValue(this) as UnityObject);
+                    if (val == null)
+	                {
+                        continue;
+	                }
+                    if (idMap.ContainsKey(val.GetInstanceID()))
                     {
-                        memInfo[i].SetValue(this, idMap[id]);
+                        memInfo[i].SetValue(this, idMap[val.GetInstanceID()]);
                     }
                 }
             }
