@@ -195,54 +195,11 @@ namespace PressPlay.FFWD
         #endregion
 
         #region Update and event methods
-        internal void FixedUpdate()
-        {
-            for (int i = 0; i < components.Count; i++)
-            {
-                if (!components[i].isStarted)
-                {
-                    components[i].Start();
-                    components[i].isStarted = true;
-                }
-                if (Application.IsAwake(components[i]) && components[i] is IFixedUpdateable)
-                {
-                    (components[i] as IFixedUpdateable).FixedUpdate();
-                }
-            }
-        }
-
-        internal void Update()
-        {
-            for (int i = 0; i < components.Count; i++)
-            {
-                if (!components[i].isStarted)
-                {
-                    components[i].Start();
-                    components[i].isStarted = true;
-                }
-                if (Application.IsAwake(components[i]) && components[i] is IUpdateable)
-                {
-                    (components[i] as IUpdateable).Update();
-                }
-            }
-        }
-
-        internal void Draw(SpriteBatch spriteBatch)
-        {
-            for (int i = 0; i < components.Count; i++)
-            {
-                if (Application.IsAwake(components[i]) && components[i] is IRenderable)
-                {
-                    (components[i] as IRenderable).Draw(spriteBatch);
-                }
-            }
-        }
-
         internal void OnTriggerEnter(Contact contact)
         {
             for (int i = 0; i < components.Count; i++)
             {
-                if (Application.IsAwake(components[i]) && components[i] is ICollidable)
+                if (components[i].isStarted && components[i] is ICollidable)
                 {
                     (components[i] as ICollidable).OnTriggerEnter(contact);
                 }
@@ -253,7 +210,7 @@ namespace PressPlay.FFWD
         {
             for (int i = 0; i < components.Count; i++)
             {
-                if (Application.IsAwake(components[i]) && components[i] is ICollidable)
+                if (components[i].isStarted && components[i] is ICollidable)
                 {
                     (components[i] as ICollidable).OnTriggerExit(contact);
                 }
@@ -264,7 +221,7 @@ namespace PressPlay.FFWD
         {
             for (int i = 0; i < components.Count; i++)
             {
-                if (Application.IsAwake(components[i]) && components[i] is ICollidable)
+                if (components[i].isStarted && components[i] is ICollidable)
                 {
                     (components[i] as ICollidable).OnCollisionEnter(contact);
                 }
@@ -275,7 +232,7 @@ namespace PressPlay.FFWD
         {
             for (int i = 0; i < components.Count; i++)
             {
-                if (Application.IsAwake(components[i]) && components[i] is ICollidable)
+                if (components[i].isStarted && components[i] is ICollidable)
                 {
                     (components[i] as ICollidable).OnCollisionExit(contact);
                 }
@@ -286,7 +243,7 @@ namespace PressPlay.FFWD
         {
             for (int i = 0; i < components.Count; i++)
             {
-                if (Application.IsAwake(components[i]) && components[i] is ICollidable)
+                if (components[i].isStarted && components[i] is ICollidable)
                 {
                     (components[i] as ICollidable).OnPreSolve(contact, manifold);
                 }
@@ -297,7 +254,7 @@ namespace PressPlay.FFWD
         {
             for (int i = 0; i < components.Count; i++)
             {
-                if (Application.IsAwake(components[i]) && components[i] is ICollidable)
+                if (components[i].isStarted && components[i] is ICollidable)
                 {
                     (components[i] as ICollidable).OnPostSolve(contact, contactImpulse);
                 }

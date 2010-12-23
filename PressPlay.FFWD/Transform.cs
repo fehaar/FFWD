@@ -11,7 +11,7 @@ namespace PressPlay.FFWD
 {
     public enum Space { World, Self }
 
-    public class Transform : Component, IEnumerable, IFixedUpdateable, PressPlay.FFWD.Interfaces.IUpdateable, IRenderable, ICollidable
+    public class Transform : Component, IEnumerable, ICollidable
     {
         #region Constructors
         internal Transform()
@@ -583,45 +583,6 @@ namespace PressPlay.FFWD
         {
             // TODO : Add implementation of method
             throw new NotImplementedException("Method not implemented.");
-        }
-        #endregion
-
-        #region IUpdateable Members
-        public void Update()
-        {
-            if (children != null)
-            {
-                for (int i = 0; i < children.Count; i++)
-                {
-                    children[i].Update();
-                }
-            }
-        }
-        #endregion
-
-        #region IFixedUpdateable Members
-        public void FixedUpdate()
-        {
-            if (children != null)
-            {
-                for (int i = 0; i < children.Count; i++)
-                {
-                    children[i].FixedUpdate();
-                }
-            }
-        }
-        #endregion
-
-        #region IRenderable Members
-        public void Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch batch)
-        {
-            if (children != null)
-            {
-                for (int i = 0; i < children.Count; i++)
-                {
-                    children[i].Draw(batch);
-                }
-            }
         }
         #endregion
 

@@ -117,6 +117,10 @@ namespace PressPlay.FFWD
             SortedDictionary<int, List<IRenderable>> queue = new SortedDictionary<int, List<IRenderable>>();
             for (int i = 0; i < activeComponents.Count; i++)
             {
+                if (!activeComponents[i].isStarted)
+                {
+                    continue;
+                }
                 if (activeComponents[i] is IRenderable)
                 {
                     int rQ = 0;
@@ -267,11 +271,6 @@ namespace PressPlay.FFWD
                     componentsToAwake[i].Awake();
                 }
             }
-        }
-
-        internal static bool IsAwake(Component component)
-        {
-            return !NewComponents.Contains(component);
         }
 
         internal static void AddNewComponent(Component component)

@@ -48,6 +48,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
         [Test]
         public void GameObjectWillCallOnTriggerEnterOnAwokenComponents()
         {
+            Assert.Inconclusive("It is not given that this should be implemented like this. Perhaps collision will only be called on components.");
             bool componentCalled = false;
             component.onTriggerEnter = () => componentCalled = true;
             Application.AwakeNewComponents();
@@ -58,6 +59,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
         [Test]
         public void GameObjectWillCallOnTriggerEnterOnAwokenComponentsInChildObjects()
         {
+            Assert.Inconclusive("It is not given that this should be implemented like this. Perhaps collision will only be called on components.");
             bool componentCalled = false;
             childComponent.onTriggerEnter = () => componentCalled = true;
             Application.AwakeNewComponents();
@@ -79,6 +81,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
         [Test]
         public void GameObjectWillCallOnTriggerExitOnAwokenComponents()
         {
+            Assert.Inconclusive("It is not given that this should be implemented like this. Perhaps collision will only be called on components.");
             bool componentCalled = false;
             component.onTriggerExit = () => componentCalled = true;
             Application.AwakeNewComponents();
@@ -89,6 +92,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
         [Test]
         public void GameObjectWillCallOnTriggerExitOnAwokenComponentsInChildObjects()
         {
+            Assert.Inconclusive("It is not given that this should be implemented like this. Perhaps collision will only be called on components.");
             bool componentCalled = false;
             childComponent.onTriggerExit = () => componentCalled = true;
             Application.AwakeNewComponents();
@@ -108,8 +112,9 @@ namespace PressPlay.FFWD.Test.Physics_facts
         }
 
         [Test]
-        public void GameObjectWillCallOnCollisionEnterOnAwokenComponents()
+        public void GameObjectWillCallOnCollisionEnterOnStartedComponents()
         {
+            Assert.Inconclusive("It is not given that this should be implemented like this. Perhaps collision will only be called on components.");
             bool componentCalled = false;
             component.onCollisionEnter = () => componentCalled = true;
             Application.AwakeNewComponents();
@@ -120,6 +125,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
         [Test]
         public void GameObjectWillCallOnCollisionEnterOnAwokenComponentsInChildObjects()
         {
+            Assert.Inconclusive("It is not given that this should be implemented like this. Perhaps collision will only be called on components.");
             bool componentCalled = false;
             childComponent.onCollisionEnter = () => componentCalled = true;
             Application.AwakeNewComponents();
@@ -141,6 +147,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
         [Test]
         public void GameObjectWillCallOnCollisionExitOnAwokenComponents()
         {
+            Assert.Inconclusive("It is not given that this should be implemented like this. Perhaps collision will only be called on components.");
             bool componentCalled = false;
             component.onCollisionExit = () => componentCalled = true;
             Application.AwakeNewComponents();
@@ -151,6 +158,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
         [Test]
         public void GameObjectWillCallOnCollisionExitOnAwokenComponentsInChildObjects()
         {
+            Assert.Inconclusive("It is not given that this should be implemented like this. Perhaps collision will only be called on components.");
             bool componentCalled = false;
             childComponent.onCollisionExit = () => componentCalled = true;
             Application.AwakeNewComponents();
@@ -172,6 +180,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
         [Test]
         public void GameObjectWillCallOnPreSolveOnAwokenComponents()
         {
+            Assert.Inconclusive("It is not given that this should be implemented like this. Perhaps collision will only be called on components.");
             bool componentCalled = false;
             component.onPreSolve = () => componentCalled = true;
             Application.AwakeNewComponents();
@@ -182,6 +191,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
         [Test]
         public void GameObjectWillCallOnPreSolveOnAwokenComponentsInChildObjects()
         {
+            Assert.Inconclusive("It is not given that this should be implemented like this. Perhaps collision will only be called on components.");
             bool componentCalled = false;
             childComponent.onPreSolve = () => componentCalled = true;
             Application.AwakeNewComponents();
@@ -203,6 +213,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
         [Test]
         public void GameObjectWillCallOnPostSolveOnAwokenComponents()
         {
+            Assert.Inconclusive("It is not given that this should be implemented like this. Perhaps collision will only be called on components.");
             bool componentCalled = false;
             component.onPostSolve = () => componentCalled = true;
             Application.AwakeNewComponents();
@@ -213,6 +224,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
         [Test]
         public void GameObjectWillCallOnPostSolveOnAwokenComponentsInChildObjects()
         {
+            Assert.Inconclusive("It is not given that this should be implemented like this. Perhaps collision will only be called on components.");
             bool componentCalled = false;
             childComponent.onPostSolve = () => componentCalled = true;
             Application.AwakeNewComponents();
