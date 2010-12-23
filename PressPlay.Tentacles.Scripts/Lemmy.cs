@@ -196,8 +196,6 @@ namespace PressPlay.Tentacles.Scripts
             {
                 GameObject tmpGameObject = new GameObject();
                 tmpGameObject.name = "tentacle root " + i;
-                // TODO: This should not be nessecary - the framework is broken!
-                tmpGameObject.AddComponent(new Transform());
                 tmpGameObject.AddComponent(typeof(TentacleJoint));
 
                 tentacleRoots[i] = tmpGameObject.GetComponent<TentacleJoint>();
