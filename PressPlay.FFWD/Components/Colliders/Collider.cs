@@ -19,7 +19,7 @@ namespace PressPlay.FFWD.Components
         {
             get
             {
-                return new Bounds();
+                throw new NotImplementedException("This is not implemented");
             }
         }
 
