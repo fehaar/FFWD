@@ -210,9 +210,9 @@ namespace PressPlay.FFWD
         {
             if (gameObject == null)
             {
-                return GetType().Name + " on its own";
+                return GetType().Name + " (" + GetInstanceID() + ") on its own";
             }
-            return GetType().Name + " on " + gameObject.name + " (" + gameObject.GetInstanceID() + ")";
+            return GetType().Name + " (" + GetInstanceID() + ") on " + gameObject.name + " (" + gameObject.GetInstanceID() + ")";
         }
         #endregion
     }

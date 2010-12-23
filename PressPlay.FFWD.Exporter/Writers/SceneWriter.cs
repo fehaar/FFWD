@@ -230,6 +230,12 @@ namespace PressPlay.FFWD.Exporter.Writers
                     writer.WriteEndElement();
                     return;
                 }
+                if (obj is Bounds)
+                {
+                    // These components are always skipped for some reason. There must be some logic to it?
+                    return;
+                }
+
                 if (obj is float)
                 {
                     writer.WriteElementString(name, ToString((float)obj));

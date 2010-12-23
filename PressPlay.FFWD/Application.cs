@@ -34,6 +34,7 @@ namespace PressPlay.FFWD
 
         private static Dictionary<int, UnityObject> objects = new Dictionary<int, UnityObject>();
         private static List<Component> activeComponents = new List<Component>();
+        internal static List<UnityObject> markedForDestruction = new List<UnityObject>();
 
         public override void Initialize()
         {
@@ -64,6 +65,10 @@ namespace PressPlay.FFWD
                 {
                     activeComponents[i].Start();
                     activeComponents[i].isStarted = true;
+                }
+                if (activeComponents[i].gameObject == null || !activeComponents[i].gameObject.active)
+                {
+                    continue;
                 }
                 if (activeComponents[i] is IFixedUpdateable)
                 {
@@ -97,6 +102,10 @@ namespace PressPlay.FFWD
                     activeComponents[i].Start();
                     activeComponents[i].isStarted = true;
                 }
+                if (activeComponents[i].gameObject == null || !activeComponents[i].gameObject.active)
+                {
+                    continue;
+                }
                 if (activeComponents[i] is PressPlay.FFWD.Interfaces.IUpdateable)
                 {
                     (activeComponents[i] as PressPlay.FFWD.Interfaces.IUpdateable).Update();
@@ -117,7 +126,7 @@ namespace PressPlay.FFWD
             SortedDictionary<int, List<IRenderable>> queue = new SortedDictionary<int, List<IRenderable>>();
             for (int i = 0; i < activeComponents.Count; i++)
             {
-                if (!activeComponents[i].isStarted)
+                if (!activeComponents[i].isStarted || activeComponents[i].gameObject == null || !activeComponents[i].gameObject.active)
                 {
                     continue;
                 }
@@ -277,6 +286,19 @@ namespace PressPlay.FFWD
         {
             objects.Clear();
             activeComponents.Clear();
+        }
+
+        internal static void CleanUp()
+        {
+            for (int i = 0; i < markedForDestruction.Count; i++)
+            {
+                objects.Remove(markedForDestruction[i].GetInstanceID());
+                if (markedForDestruction[i] is Component)
+	            {
+                    activeComponents.Remove(markedForDestruction[i] as Component);
+	            }
+            }
+            markedForDestruction.Clear();
         }
     }
 }

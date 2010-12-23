@@ -103,6 +103,7 @@ namespace PressPlay.FFWD
             }
         }
 
+        protected AudioSource _audio;
         [ContentSerializerIgnore]
         public AudioSource audio
         {
@@ -150,7 +151,13 @@ namespace PressPlay.FFWD
             return AddComponent(cmp);
         }
 
-        protected AudioSource _audio;
+        internal void RemoveComponent(Component component)
+        {
+            if (components.Remove(component))
+            {
+                component.gameObject = null;
+            }
+        }
 
         #region Internal methods
         internal override UnityObject Clone()
@@ -358,7 +365,7 @@ namespace PressPlay.FFWD
 
         private GameObject GetParent()
         {
-            return (transform != null && transform.parent != null) ? transform.parent.gameObject : null;
+            return (transform.parent != null) ? transform.parent.gameObject : null;
         }
         #endregion
 
@@ -413,16 +420,20 @@ namespace PressPlay.FFWD
             throw new NotImplementedException("Method not implemented.");
         }
 
-        public void SendMessageUpwards(string methodName, object value, SendMessageOptions SendMessageOptions)
+        public void SendMessageUpwards(string methodName, object value, SendMessageOptions sendMessageOptions)
         {
             throw new NotImplementedException("SendMessageUpwards is not implemented");
         }
 
-        public void SendMessage(string methodName, object value, SendMessageOptions SendMessageOptions)
+        public void SendMessage(string methodName, object value, SendMessageOptions sendMessageOptions)
         {
             throw new NotImplementedException("SendMessage is not implemented");
         }
 
+        public void SendMessage(string methodName, SendMessageOptions sendMessageOptions)
+        {
+            SendMessage(methodName, null, sendMessageOptions);
+        }
         #endregion
 
         public override string ToString()

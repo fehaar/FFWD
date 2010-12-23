@@ -58,5 +58,17 @@ namespace PressPlay.FFWD
                 }
             }
         }
+
+        public static void DrawLine(Vector3 start, Vector3 end)
+        {
+            DrawLine(start, end, Color.white);
+        }
+
+        public static void DrawLine(Vector3 start, Vector3 end, Color color)
+        {
+            // TODO : Add implementation of method
+            throw new NotImplementedException("Method not implemented.");
+        }
+	
     }
 }

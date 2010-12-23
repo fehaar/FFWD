@@ -76,6 +76,11 @@ namespace PressPlay.FFWD
             return MathHelper.Clamp(value, min, max);
         }
 
+        public static int Clamp(int value, int min, int max)
+        {
+            return (int)MathHelper.Clamp(value, min, max);
+        }
+
         public static float Clamp01(float value)
         {
             if (value > 1)

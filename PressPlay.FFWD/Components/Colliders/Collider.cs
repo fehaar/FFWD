@@ -15,6 +15,14 @@ namespace PressPlay.FFWD.Components
         public string material { get; set; }
         #endregion
 
+        public Bounds bounds
+        {
+            get
+            {
+                return new Bounds();
+            }
+        }
+
         public override void Awake()
         {
             if (rigidbody == null)

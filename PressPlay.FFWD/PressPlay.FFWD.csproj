@@ -104,6 +104,7 @@
     <Compile Include="AudioClip.cs" />
     <Compile Include="AudioSource.cs" />
     <Compile Include="Behaviour.cs" />
+    <Compile Include="Bounds.cs" />
     <Compile Include="Box2D\Collision\BroadPhase.cs" />
     <Compile Include="Box2D\Collision\Collision.cs" />
     <Compile Include="Box2D\Collision\Distance.cs" />
