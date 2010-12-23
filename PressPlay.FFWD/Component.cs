@@ -144,7 +144,10 @@ namespace PressPlay.FFWD
 	                }
                     if (idMap.ContainsKey(val.GetInstanceID()))
                     {
-                        memInfo[i].SetValue(this, idMap[val.GetInstanceID()]);
+                        if (val != idMap[val.GetInstanceID()])
+                        {
+                            memInfo[i].SetValue(this, idMap[val.GetInstanceID()]);
+                        }
                     }
                 }
             }

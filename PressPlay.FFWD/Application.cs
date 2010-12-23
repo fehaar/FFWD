@@ -251,6 +251,7 @@ namespace PressPlay.FFWD
                     }
                 }
             }
+            // Remove placeholder references and replace them with live ones
             for (int i = 0; i < NewComponents.Count; i++)
             {
                 NewComponents[i].FixReferences(objects);
