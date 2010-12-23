@@ -109,19 +109,14 @@ namespace PressPlay.FFWD
             }
             else if (original is GameObject)
             {
-                GameObject toClone = (original as GameObject);
-                while (toClone.transform != null && toClone.transform.parent != null)
-                {
-                    toClone = toClone.transform.parent.gameObject;
-                }
+                GameObject toClone = (original as GameObject).transform.root.gameObject;
                 clone = toClone.Clone() as GameObject;
             }
-            UnityObject ret = clone.GetObjectById(original.GetInstanceID());
             // NOTE: It is very important that this is done at the end otherwise we cannot find the correct object to return.
             Dictionary<int, UnityObject> idMap = new Dictionary<int, UnityObject>();
             clone.SetNewId(idMap);
             clone.FixReferences(idMap);
-            return ret;
+            return idMap[original.GetInstanceID()];
         }
 
         internal virtual void SetNewId(Dictionary<int, UnityObject> idMap)
@@ -141,15 +136,6 @@ namespace PressPlay.FFWD
         {
             UnityObject obj = MemberwiseClone() as UnityObject;
             return obj;
-        }
-
-        internal virtual UnityObject GetObjectById(int id)
-        {
-            if (_id == id)
-            {
-                return this;
-            }
-            return null;
         }
 
         public static UnityObject[] FindObjectsOfType(Type type)

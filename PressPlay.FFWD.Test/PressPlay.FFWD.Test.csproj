@@ -68,7 +68,6 @@
     <Compile Include="Core framework\WhenConvertingAColor.cs" />
     <Compile Include="Core framework\WhenCreatingANewComponent.cs" />
     <Compile Include="Core framework\WhenCreatingANewGameObject.cs" />
-    <Compile Include="Core framework\WhenFindingAnObjectById.cs" />
     <Compile Include="Core framework\WhenFixingUpReferences.cs" />
     <Compile Include="Core framework\WhenGettingTheComponentName.cs" />
     <Compile Include="Core framework\WhenInstantiatingANewObject.cs" />

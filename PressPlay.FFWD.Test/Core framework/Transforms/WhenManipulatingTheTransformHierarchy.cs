@@ -17,11 +17,11 @@ namespace PressPlay.FFWD.Test.Core_framework.Transforms
             Transform trans = obj.transform;
             GameObject childObj = new GameObject();
             Transform child = childObj.transform;
+            Assert.That(trans.childCount, Is.EqualTo(0));
 
             child.parent = trans;
 
-            Assert.That(trans.children, Is.Not.Null);
-            Assert.That(trans.children, Contains.Item(child.gameObject));
+            Assert.That(trans.childCount, Is.EqualTo(1));
         }
 
         [Test]
@@ -34,7 +34,8 @@ namespace PressPlay.FFWD.Test.Core_framework.Transforms
 
             child.parent = trans;
             child.parent = null;
-            Assert.That(trans.children, Has.No.Member(child.gameObject));            
+
+            Assert.That(trans.childCount, Is.EqualTo(0));
         }
 
         [Test]
@@ -48,8 +49,9 @@ namespace PressPlay.FFWD.Test.Core_framework.Transforms
 
             child.parent = trans;
             child.parent = newObj.transform;
-            Assert.That(trans.children, Has.No.Member(child.gameObject));
-            Assert.That(newObj.transform.children, Has.Member(child.gameObject));
+
+            Assert.That(trans.childCount, Is.EqualTo(0));
+            Assert.That(newObj.transform.childCount, Is.EqualTo(1));
         }
 
         [Test]

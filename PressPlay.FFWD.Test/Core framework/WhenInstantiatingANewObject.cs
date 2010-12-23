@@ -113,14 +113,17 @@ namespace PressPlay.FFWD.Test.Core_framework
 
             GameObject clone = GameObject.Instantiate(obj) as GameObject;
             Assert.That(clone, Is.Not.Null);
-            Assert.That(clone.transform.children, Has.Count.EqualTo(1));
-            GameObject cloneChild = clone.transform.children[0];
-            Assert.That(cloneChild, Is.Not.SameAs(child));
-            Assert.That(cloneChild.GetInstanceID(), Is.Not.EqualTo(child.GetInstanceID()));
-            Assert.That(cloneChild.name, Is.EqualTo(child.name + "(Clone)"));
-            Assert.That(cloneChild.active, Is.True);
-            Assert.That(cloneChild.layer, Is.EqualTo(child.layer));
-            Assert.That(cloneChild.tag, Is.EqualTo(child.tag));
+            Assert.That(clone.transform.childCount, Is.EqualTo(1));
+
+            foreach (GameObject cloneChild in clone.transform)
+            {
+                Assert.That(cloneChild, Is.Not.SameAs(child));
+                Assert.That(cloneChild.GetInstanceID(), Is.Not.EqualTo(child.GetInstanceID()));
+                Assert.That(cloneChild.name, Is.EqualTo(child.name + "(Clone)"));
+                Assert.That(cloneChild.active, Is.True);
+                Assert.That(cloneChild.layer, Is.EqualTo(child.layer));
+                Assert.That(cloneChild.tag, Is.EqualTo(child.tag));    
+            }
         }
 
         [Test]
@@ -135,11 +138,14 @@ namespace PressPlay.FFWD.Test.Core_framework
             child.AddComponent(comp);
 
             GameObject clone = GameObject.Instantiate(obj) as GameObject;
-            GameObject cloneChild = clone.transform.children[0];
-            TestComponent childComp = cloneChild.GetComponent<TestComponent>();
-            Assert.That(childComp, Is.Not.Null);
-            Assert.That(childComp, Is.Not.SameAs(comp));
-            Assert.That(childComp.gameObject, Is.SameAs(cloneChild));
+
+            foreach (GameObject cloneChild in clone.transform)
+            {
+                TestComponent childComp = cloneChild.GetComponent<TestComponent>();
+                Assert.That(childComp, Is.Not.Null);
+                Assert.That(childComp, Is.Not.SameAs(comp));
+                Assert.That(childComp.gameObject, Is.SameAs(cloneChild));
+            }
         }
 
         [Test]

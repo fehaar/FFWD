@@ -130,15 +130,6 @@ namespace PressPlay.FFWD
                 components[j].AfterLoad();
                 components[j].gameObject = this;
             }
-            if (transform != null && transform.children != null)
-            {
-                for (int i = 0; i < transform.children.Count; i++)
-                {
-                    transform.children[i].isPrefab = isPrefab;
-                    transform.children[i].transform._parent = transform;
-                    transform.children[i].AfterLoad();
-                }
-            }
         }
 
         public T AddComponent<T>(T component) where T : Component
@@ -218,13 +209,6 @@ namespace PressPlay.FFWD
                     (components[i] as IFixedUpdateable).FixedUpdate();
                 }
             }
-            if (transform != null && transform.children != null)
-            {
-                for (int i = 0; i < transform.children.Count; i++)
-                {
-                    transform.children[i].FixedUpdate();
-                }
-            }
         }
 
         internal void Update()
@@ -241,13 +225,6 @@ namespace PressPlay.FFWD
                     (components[i] as IUpdateable).Update();
                 }
             }
-            if (transform != null && transform.children != null)
-            {
-                for (int i = 0; i < transform.children.Count; i++)
-                {
-                    transform.children[i].Update();
-                }
-            }
         }
 
         internal void Draw(SpriteBatch spriteBatch)
@@ -257,13 +234,6 @@ namespace PressPlay.FFWD
                 if (Application.IsAwake(components[i]) && components[i] is IRenderable)
                 {
                     (components[i] as IRenderable).Draw(spriteBatch);
-                }
-            }
-            if (transform != null && transform.children != null)
-            {
-                for (int i = 0; i < transform.children.Count; i++)
-                {
-                    transform.children[i].Draw(spriteBatch);
                 }
             }
         }
@@ -277,13 +247,6 @@ namespace PressPlay.FFWD
                     (components[i] as ICollidable).OnTriggerEnter(contact);
                 }
             }
-            if (transform != null && transform.children != null)
-            {
-                for (int i = 0; i < transform.children.Count; i++)
-                {
-                    transform.children[i].OnTriggerEnter(contact);
-                }
-            }
         }
 
         internal void OnTriggerExit(Contact contact)
@@ -293,13 +256,6 @@ namespace PressPlay.FFWD
                 if (Application.IsAwake(components[i]) && components[i] is ICollidable)
                 {
                     (components[i] as ICollidable).OnTriggerExit(contact);
-                }
-            }
-            if (transform != null && transform.children != null)
-            {
-                for (int i = 0; i < transform.children.Count; i++)
-                {
-                    transform.children[i].OnTriggerExit(contact);
                 }
             }
         }
@@ -313,13 +269,6 @@ namespace PressPlay.FFWD
                     (components[i] as ICollidable).OnCollisionEnter(contact);
                 }
             }
-            if (transform != null && transform.children != null)
-            {
-                for (int i = 0; i < transform.children.Count; i++)
-                {
-                    transform.children[i].OnCollisionEnter(contact);
-                }
-            }
         }
 
         internal void OnCollisionExit(Contact contact)
@@ -329,13 +278,6 @@ namespace PressPlay.FFWD
                 if (Application.IsAwake(components[i]) && components[i] is ICollidable)
                 {
                     (components[i] as ICollidable).OnCollisionExit(contact);
-                }
-            }
-            if (transform != null && transform.children != null)
-            {
-                for (int i = 0; i < transform.children.Count; i++)
-                {
-                    transform.children[i].OnCollisionExit(contact);
                 }
             }
         }
@@ -349,13 +291,6 @@ namespace PressPlay.FFWD
                     (components[i] as ICollidable).OnPreSolve(contact, manifold);
                 }
             }
-            if (transform != null && transform.children != null)
-            {
-                for (int i = 0; i < transform.children.Count; i++)
-                {
-                    transform.children[i].OnPreSolve(contact, manifold);
-                }
-            }
         }
 
         internal void OnPostSolve(Contact contact, ContactImpulse contactImpulse)
@@ -365,13 +300,6 @@ namespace PressPlay.FFWD
                 if (Application.IsAwake(components[i]) && components[i] is ICollidable)
                 {
                     (components[i] as ICollidable).OnPostSolve(contact, contactImpulse);
-                }
-            }
-            if (transform != null && transform.children != null)
-            {
-                for (int i = 0; i < transform.children.Count; i++)
-                {
-                    transform.children[i].OnPostSolve(contact, contactImpulse);
                 }
             }
         }
@@ -438,28 +366,16 @@ namespace PressPlay.FFWD
                     list.Add(components[i]);
                 }
             }
-            if (transform.children != null)
-            {
-                for (int childIndex = 0; childIndex < transform.children.Count; childIndex++)
-                {
-                    list.AddRange(transform.children[childIndex].GetComponentsInChildren(type));
-                }
-            }
+            transform.GetComponentsInChildrenInt(type, list);
             return list.ToArray();
         }
 
         public Component GetComponentInChildren(Type type)
         {
-            if (transform != null && transform.children != null)
+            Component cmp = transform.GetComponentInChildrenInt(type);
+            if (cmp != null)
             {
-                for (int childIndex = 0; childIndex < transform.children.Count; childIndex++)
-                {
-                    Component cmp = transform.children[childIndex].GetComponentInChildren(type);
-                    if (cmp != null)
-                    {
-                        return cmp;
-                    }
-                }
+                return cmp;
             }
             for (int i = 0; i < components.Count; i++)
             {
@@ -487,46 +403,13 @@ namespace PressPlay.FFWD
         {
             return (transform != null && transform.parent != null) ? transform.parent.gameObject : null;
         }
-
-        internal override UnityObject GetObjectById(int id)
-        {
-            UnityObject ret = base.GetObjectById(id);
-            if (ret == null)
-            {
-                for (int i = 0; i < components.Count; i++)
-                {
-                    if (components[i].GetInstanceID() == id)
-                    {
-                        return components[i];
-                    }
-                }
-                if (transform != null && transform.children != null)
-                {
-                    for (int i = 0; i < transform.children.Count; i++)
-                    {
-                        ret = transform.children[i].GetObjectById(id);
-                        if (ret != null)
-                        {
-                            return ret;
-                        }
-                    }
-                }
-            }
-            return ret;
-        }
         #endregion
 
         #region Unity methods
         public void SetActiveRecursively(bool state)
         {
             active = state;
-            if (transform.children != null)
-            {
-                for (int i = 0; i < transform.children.Count; i++)
-                {
-                    transform.children[i].SetActiveRecursively(state);
-                }
-            }
+            transform.SetActiveRecursively(state);
         }
 
         public bool CompareTag(string tag)

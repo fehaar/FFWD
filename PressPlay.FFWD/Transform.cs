@@ -5,12 +5,13 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using System.Collections;
+using PressPlay.FFWD.Interfaces;
 
 namespace PressPlay.FFWD
 {
     public enum Space { World, Self }
 
-    public class Transform : Component, IEnumerable
+    public class Transform : Component, IEnumerable, IFixedUpdateable, PressPlay.FFWD.Interfaces.IUpdateable, IRenderable, ICollidable
     {
         #region Constructors
         internal Transform()
@@ -98,7 +99,7 @@ namespace PressPlay.FFWD
         }
 
         [ContentSerializer(Optional = true, CollectionItemName = "child")]
-        internal List<GameObject> children { get; set; }
+        private List<GameObject> children { get; set; }
 
         private Matrix _world = Matrix.Identity;
 
@@ -282,6 +283,10 @@ namespace PressPlay.FFWD
         {
             get
             {
+                if (children == null)
+                {
+                    return 0;
+                }
                 return children.Count;
             }
         }
@@ -311,6 +316,22 @@ namespace PressPlay.FFWD
                 localPosition = pos - parent.position;
             }
             localRotation = Quaternion.AngleAxis(ang, Vector3.up);
+        }
+
+        
+
+        internal override void AfterLoad()
+        {
+            base.AfterLoad();
+            if (children != null)
+            {
+                for (int i = 0; i < children.Count; i++)
+                {
+                    children[i].isPrefab = isPrefab;
+                    children[i].transform._parent = transform;
+                    children[i].AfterLoad();
+                }
+            }
         }
 
         internal override UnityObject Clone()
@@ -348,6 +369,17 @@ namespace PressPlay.FFWD
                 for (int i = 0; i < children.Count; i++)
                 {
                     children[i].FixReferences(idMap);
+                }
+            }
+        }
+
+        internal void SetActiveRecursively(bool state)
+        {
+            if (children != null)
+            {
+                for (int i = 0; i < children.Count; i++)
+                {
+                    children[i].SetActiveRecursively(state);
                 }
             }
         }
@@ -553,6 +585,142 @@ namespace PressPlay.FFWD
         {
             // TODO : Add implementation of method
             throw new NotImplementedException("Method not implemented.");
+        }
+        #endregion
+
+        #region IUpdateable Members
+        public void Update()
+        {
+            if (children != null)
+            {
+                for (int i = 0; i < children.Count; i++)
+                {
+                    children[i].Update();
+                }
+            }
+        }
+        #endregion
+
+        #region IFixedUpdateable Members
+        public void FixedUpdate()
+        {
+            if (children != null)
+            {
+                for (int i = 0; i < children.Count; i++)
+                {
+                    children[i].FixedUpdate();
+                }
+            }
+        }
+        #endregion
+
+        #region IRenderable Members
+        public void Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch batch)
+        {
+            if (children != null)
+            {
+                for (int i = 0; i < children.Count; i++)
+                {
+                    children[i].Draw(batch);
+                }
+            }
+        }
+        #endregion
+
+        #region ICollidable Members
+        public void OnTriggerEnter(Box2D.XNA.Contact contact)
+        {
+            if (children != null)
+            {
+                for (int i = 0; i < children.Count; i++)
+                {
+                    children[i].OnTriggerEnter(contact);
+                }
+            }
+        }
+
+        public void OnTriggerExit(Box2D.XNA.Contact contact)
+        {
+            if (children != null)
+            {
+                for (int i = 0; i < children.Count; i++)
+                {
+                    children[i].OnTriggerExit(contact);
+                }
+            }
+        }
+
+        public void OnCollisionEnter(Box2D.XNA.Contact contact)
+        {
+            if (children != null)
+            {
+                for (int i = 0; i < children.Count; i++)
+                {
+                    children[i].OnCollisionEnter(contact);
+                }
+            }
+        }
+
+        public void OnCollisionExit(Box2D.XNA.Contact contact)
+        {
+            if (children != null)
+            {
+                for (int i = 0; i < children.Count; i++)
+                {
+                    children[i].OnCollisionExit(contact);
+                }
+            }
+        }
+
+        public void OnPreSolve(Box2D.XNA.Contact contact, Box2D.XNA.Manifold manifold)
+        {
+            if (children != null)
+            {
+                for (int i = 0; i < children.Count; i++)
+                {
+                    children[i].OnPreSolve(contact, manifold);
+                }
+            }
+        }
+
+        public void OnPostSolve(Box2D.XNA.Contact contact, Box2D.XNA.ContactImpulse contactImpulse)
+        {
+            if (children != null)
+            {
+                for (int i = 0; i < children.Count; i++)
+                {
+                    children[i].OnPostSolve(contact, contactImpulse);
+                }
+            }
+        }
+        #endregion
+
+        #region Component locator methods
+        internal void GetComponentsInChildrenInt(Type type, List<Component> list)
+        {
+            if (children != null)
+            {
+                for (int childIndex = 0; childIndex < children.Count; childIndex++)
+                {
+                    list.AddRange(children[childIndex].GetComponentsInChildren(type));
+                }
+            }
+        }
+
+        internal Component GetComponentInChildrenInt(Type type)
+        {
+            if (transform != null && transform.children != null)
+            {
+                for (int childIndex = 0; childIndex < transform.children.Count; childIndex++)
+                {
+                    Component cmp = transform.children[childIndex].GetComponentInChildren(type);
+                    if (cmp != null)
+                    {
+                        return cmp;
+                    }
+                }
+            }
+            return null;
         }
         #endregion
     }
