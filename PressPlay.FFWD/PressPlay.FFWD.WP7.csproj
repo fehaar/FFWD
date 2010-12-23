@@ -63,6 +63,8 @@
     <Compile Include="Animation\Keyframe.cs" />
     <Compile Include="Animation\SkinningData.cs" />
     <Compile Include="ApplicationSettings.cs" />
+    <Compile Include="AudioClip.cs" />
+    <Compile Include="AudioSource.cs" />
     <Compile Include="Behaviour.cs" />
     <Compile Include="Box2D\Collision\BroadPhase.cs" />
     <Compile Include="Box2D\Collision\Collision.cs" />
@@ -98,8 +100,6 @@
     <Compile Include="Box2D\Dynamics\WorldCallbacks.cs" />
     <Compile Include="Color.cs" />
     <Compile Include="Component.cs" />
-    <Compile Include="Components\Audio\AudioClip.cs" />
-    <Compile Include="Components\Audio\AudioSource.cs" />
     <Compile Include="Components\Camera.cs" />
     <Compile Include="Components\Colliders\BoxCollider.cs" />
     <Compile Include="Components\Colliders\Collider.cs" />
