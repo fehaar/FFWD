@@ -49,7 +49,7 @@ namespace PressPlay.Tentacles.Scripts
 
 
         public Level.LevelType debugLevelType;
-        //private LevelTypeSettings levelTypeSettings;
+        public LevelTypeSettings levelTypeSettings;
 
         //public AudioWrapper endSound;
 
@@ -123,7 +123,7 @@ namespace PressPlay.Tentacles.Scripts
         private static LevelHandler instance;
 
         //public PathFollowObject lemmyHunter;
-        //private GameObject followObject;
+        private GameObject followObject;
 
         //public GameLibrary library;
 
@@ -259,6 +259,9 @@ namespace PressPlay.Tentacles.Scripts
 
             // We initialize the needed game objects
             lemmy = (Lemmy)Instantiate(lemmyPrefab, startingCheckPoint.GetSpawnPosition(), lemmyPrefab.transform.rotation);
+            // HACK: Follow lemmy with the cam!
+            lemmy.gameObject.AddComponent(cam);
+
             //cam = (PathFollowCam)Instantiate(cameraPrefab);
 
             //HACK!! we need the game object preloader, and for now it is attached to the main camera, so here we go...
@@ -293,12 +296,11 @@ namespace PressPlay.Tentacles.Scripts
             // Here we set different variables. It seems kind of confusing :-)
             //lemmy.lemmyFollowCamera = cam.raycastCamera;
             //lemmy.pathFollowCam = cam;
-            //cam.followObject = lemmy.gameObject;
-            //followObject = cam.gameObject;
-
+            cam.followObject = lemmy.gameObject;
+            followObject = cam.gameObject;
 
             //resetOnDeathObjects = (ResetOnLemmyDeath[])(FindObjectsOfType(typeof(ResetOnLemmyDeath)));
-            //InitializeDistanceHandling(followObject);
+            InitializeDistanceHandling(followObject);
 
             //if (inGameMenuPrefab)
             //{
@@ -311,10 +313,10 @@ namespace PressPlay.Tentacles.Scripts
             //    GlobalManager.Instance.fullscreenImageHandler.DoInstantBlackScreen();
             //}
 
-            //if (levelStartCheckPoint != null)
-            //{
-            //    lemmy.transform.position = levelStartCheckPoint.GetStartTweenPosition(0);
-            //}
+            if (levelStartCheckPoint != null)
+            {
+                lemmy.transform.position = levelStartCheckPoint.GetStartTweenPosition(0);
+            }
 
             lemmy.Initialize();
 
@@ -384,20 +386,20 @@ namespace PressPlay.Tentacles.Scripts
 
                     lemmy.SpawnAt(startingCheckPoint);
 
-                    //if (levelStartCheckPoint != null)
-                    //{
-                    //    lemmy.transform.position = levelStartCheckPoint.GetStartTweenPosition(0);
-                    //}
+                    if (levelStartCheckPoint != null)
+                    {
+                        lemmy.transform.position = levelStartCheckPoint.GetStartTweenPosition(0);
+                    }
                     lemmy.ChangeState(Lemmy.State.dormantBeforeSpawn);
 
                     //We assume the playing cinematic sequence will take care of all camera handling
-                    //if (!isPlayingCinematicSequence)
-                    //{
-                    //    cam.MoveToStablePosition();
-                    //    UpdateAllObjectsImmediatly(cam.gameObject);
-                    //}
+                    if (!isPlayingCinematicSequence)
+                    {
+                        //cam.MoveToStablePosition();
+                        UpdateAllObjectsImmediatly(cam.gameObject);
+                    }
 
-                    //lemmy.mainBody.LookRight();
+                    lemmy.mainBody.LookRight();
                     lemmy.isInputLocked = false;
                     break;
 
@@ -487,7 +489,7 @@ namespace PressPlay.Tentacles.Scripts
 
         public override void FixedUpdate()
         {
-            //UpdateTurnOffAtDistanceObjects(followObject);
+            UpdateTurnOffAtDistanceObjects(followObject);
         }
 
         public override void Update()

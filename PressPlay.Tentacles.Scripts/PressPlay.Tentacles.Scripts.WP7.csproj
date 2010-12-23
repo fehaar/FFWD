@@ -58,6 +58,7 @@
     <Compile Include="ClawBehaviour.cs" />
     <Compile Include="Equations.cs" />
     <Compile Include="GlobalSettings.cs" />
+    <Compile Include="GridElement.cs" />
     <Compile Include="InputHandler.cs" />
     <Compile Include="Lemmy.cs" />
     <Compile Include="LemmyStats.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="TentacleTip.cs" />
     <Compile Include="TentacleVisualStats.cs" />
     <Compile Include="TriggeredByLemmy.cs" />
+    <Compile Include="TurnOffAtDistance.cs" />
     <Compile Include="TurnOffAtDistanceHandler.cs" />
     <Compile Include="UVSpriteSheet.cs" />
     <Compile Include="UVSpriteSheetAnimator.cs" />

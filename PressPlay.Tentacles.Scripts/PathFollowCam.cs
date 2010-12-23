@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using PressPlay.FFWD.Components;
+using PressPlay.FFWD;
 
 namespace PressPlay.Tentacles.Scripts
 {
     public class PathFollowCam : MonoBehaviour
     {
+        public GameObject followObject;
         public Camera raycastCamera;
 
         private static PathFollowCam instance;
@@ -25,6 +27,7 @@ namespace PressPlay.Tentacles.Scripts
                 return instance;
             }
         }
+
     }
 
 

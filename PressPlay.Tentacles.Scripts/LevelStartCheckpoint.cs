@@ -16,9 +16,7 @@ namespace PressPlay.Tentacles.Scripts
         public Vector3 GetStartTweenPosition(float _moveFraction)
         {
             float easedFraction = Equations.ChangeFloat(_moveFraction, 0, 1, 1, lemmyMoveEase);
-            // TODO: The code should be as follows as lemmyStartPosition should be a Transform
-            //return Vector3.Lerp(lemmyStartPosition.position, transform.position, easedFraction);
-            return Vector3.Lerp(lemmyStartPosition.gameObject.transform.position, transform.position, easedFraction);
+            return Vector3.Lerp(lemmyStartPosition.position, transform.position, easedFraction);
         }
 
         public override Vector3 GetSpawnPosition()
