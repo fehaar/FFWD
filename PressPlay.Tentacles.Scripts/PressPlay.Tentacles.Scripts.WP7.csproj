@@ -70,6 +70,8 @@
     <Compile Include="MainBody.cs" />
     <Compile Include="OnClawBehaviourConnect.cs" />
     <Compile Include="PathFollowCam.cs" />
+    <Compile Include="PPAnimationClip.cs" />
+    <Compile Include="PPAnimationHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimpleRotate.cs" />
     <Compile Include="SpriteSheetLineDrawer.cs" />
