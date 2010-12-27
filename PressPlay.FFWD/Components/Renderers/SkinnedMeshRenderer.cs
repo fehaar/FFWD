@@ -81,19 +81,22 @@ namespace PressPlay.FFWD.Components
                 }
 
                 SkinnedEffect sEffect = mesh.Effects[e] as SkinnedEffect;
-                if (boneTransforms != null)
+                if (sEffect != null)
                 {
-                    sEffect.SetBoneTransforms(boneTransforms);
+                    if (boneTransforms != null)
+                    {
+                        sEffect.SetBoneTransforms(boneTransforms);
+                    }
+                    sEffect.World = Matrix.CreateScale(0.01f) * transform.world;
+                    sEffect.View = Camera.main.View();
+                    sEffect.Projection = Camera.main.projectionMatrix;
+                    sEffect.AmbientLightColor = new Vector3(1);
+                    if (material.texture != null)
+                    {
+                        sEffect.Texture = material.texture;
+                    }
+                    mesh.Draw();
                 }
-                sEffect.World = Matrix.CreateScale(0.01f) * transform.world;
-                sEffect.View = Camera.main.View();
-                sEffect.Projection = Camera.main.projectionMatrix;
-                sEffect.AmbientLightColor = new Vector3(1);
-                if (material.texture != null)
-                {
-                    sEffect.Texture = material.texture;
-                }
-                mesh.Draw();
             }
 
             if (transform.lossyScale.x < 0 || transform.lossyScale.y < 0 || transform.lossyScale.z < 0)

@@ -28,6 +28,7 @@ namespace PressPlay.FFWD.Components
 
         // Current timeindex and keyframe in the clip
         int currentKeyframe;
+        float startTime = 0.0f;
 
         /// <summary>
         /// Gets the clip currently being decoded.
@@ -103,11 +104,10 @@ namespace PressPlay.FFWD.Components
 
             // Store the clip and reset playing data            
             currentClipValue = clip;
-            currentKeyframe = Math.Max(0, state.firstFrame);
-            CurrentTimeValue = clip.Keyframes[currentKeyframe].Time;
             currentState = state;
-            currentState.time = (float)CurrentTimeValue.TotalSeconds;
-            currentState.length = (float)clip.Keyframes[Math.Min(state.lastFrame, clip.Keyframes.Count - 1)].Time.TotalSeconds; 
+            currentKeyframe = 0;
+            startTime = state.firstFrame / 30;
+            CurrentTimeValue = TimeSpan.FromSeconds(startTime);
             currentState.enabled = true;
 
             // Call the virtual to allow initialization of the clip
@@ -174,7 +174,7 @@ namespace PressPlay.FFWD.Components
             currentState.time += time;
 
             // See if we should terminate
-            if (currentState.time > currentState.length)
+            if (currentState.time > (currentState.length + startTime))
             {
                 if (currentState.wrapMode == WrapMode.Once)
                 {
@@ -183,7 +183,7 @@ namespace PressPlay.FFWD.Components
                 }
                 if (currentState.wrapMode == WrapMode.Loop)
                 {
-                    currentState.time -= currentState.length;
+                    currentState.time = startTime;
                 }
                 if (currentState.wrapMode == WrapMode.PingPong)
                 {

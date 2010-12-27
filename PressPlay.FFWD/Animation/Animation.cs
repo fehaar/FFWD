@@ -91,6 +91,7 @@ namespace PressPlay.FFWD.Components
             AddClip(clip, newName);
             states[newName].firstFrame = firstFrame;
             states[newName].lastFrame = lastFrame;
+            states[newName].length = (lastFrame - firstFrame) / 30.0f;
         }
 
         public void AddClip(AnimationClip clip, string newName, int firstFrame, int lastFrame, bool addLoopFrame)
