@@ -94,7 +94,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnimatedModelProcessor.cs" />
     <Compile Include="ColorTypeSerializer.cs" />
+    <Compile Include="SkinnedModelProcessor.cs" />
     <Compile Include="Vector2TypeSerializer.cs" />
     <Compile Include="QuaternionTypeSerializer.cs" />
     <Compile Include="Vector3ArrayTypeSerializer.cs" />

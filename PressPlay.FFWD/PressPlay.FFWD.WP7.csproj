@@ -61,6 +61,13 @@
     <Compile Include="Animation\AnimationClip.cs" />
     <Compile Include="Animation\AnimationPlayer.cs" />
     <Compile Include="Animation\Keyframe.cs" />
+    <Compile Include="Animation\ModelAnimationClip.cs" />
+    <Compile Include="Animation\ModelAnimationPlayerBase.cs" />
+    <Compile Include="Animation\ModelData.cs" />
+    <Compile Include="Animation\ModelKeyframe.cs" />
+    <Compile Include="Animation\RigidAnimationPlayer.cs" />
+    <Compile Include="Animation\RootAnimationPlayer.cs" />
+    <Compile Include="Animation\SkinnedAnimationPlayer.cs" />
     <Compile Include="Animation\SkinningData.cs" />
     <Compile Include="ApplicationSettings.cs" />
     <Compile Include="AudioClip.cs" />

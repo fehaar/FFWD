@@ -12,10 +12,12 @@ namespace PressPlay.FFWD.Components
 {
     public class SkinnedMeshRenderer : Renderer, Interfaces.IUpdateable
     {
-        private Matrix[] boneTransforms;
-        private AnimationPlayer animationPlayer;
+        private SkinnedAnimationPlayer animationPlayer;
 
         public Mesh sharedMesh { get; set; }
+        private ModelAnimationClip rootClip;
+        private RootAnimationPlayer rootPlayer;
+        private ModelAnimationClip clip;
 
         public override void Awake()
         {
@@ -34,24 +36,37 @@ namespace PressPlay.FFWD.Components
                 sharedMesh.Start();
             }
 
-            boneTransforms = new Matrix[sharedMesh.model.Bones.Count];
-            // Look up our custom skinning information.
-            SkinningData skinningData = sharedMesh.model.Tag as SkinningData;
-            if (skinningData != null)
+            // Create animation players/clips for the rigid model
+            ModelData modelData = sharedMesh.model.Tag as ModelData;
+            if (modelData != null)
             {
-                // Create an animation player, and start decoding an animation clip.
-                animationPlayer = new AnimationPlayer(skinningData);
-                AnimationClip clip = skinningData.AnimationClips["Take 001"];
-                animationPlayer.StartClip(clip);
+                if (modelData.RootAnimationClips != null && modelData.RootAnimationClips.ContainsKey("Take 001"))
+                {
+                    rootClip = modelData.RootAnimationClips["Take 001"];
+
+                    rootPlayer = new RootAnimationPlayer();
+                    rootPlayer.StartClip(rootClip, 1, TimeSpan.Zero);
+                }
+                if (modelData.ModelAnimationClips != null && modelData.ModelAnimationClips.ContainsKey("Take 001"))
+                {
+                    clip = modelData.ModelAnimationClips["Take 001"];
+                    animationPlayer = new SkinnedAnimationPlayer(modelData.BindPose, modelData.InverseBindPose, modelData.SkeletonHierarchy);
+                    animationPlayer.StartClip(clip, 1, TimeSpan.Zero);
+                }
             }
+
         }
 
         #region IUpdateable Members
         public void Update()
         {
+            if (rootPlayer != null)
+            {
+                rootPlayer.Update();
+            }
             if (animationPlayer != null)
             {
-                animationPlayer.Update(0.0f, true, transform.world);
+                animationPlayer.Update();
             }
         }
         #endregion
@@ -79,18 +94,29 @@ namespace PressPlay.FFWD.Components
             }
 
             // Draw the model.
+
+
             ModelMesh mesh = sharedMesh.GetModelMesh();
             for (int e = 0; e < mesh.Effects.Count; e++)
             {
-                Matrix[] bones = new Matrix[0];
+                Matrix[] boneTransforms = null;
                 if (animationPlayer != null)
                 {
-                    bones = animationPlayer.GetSkinTransforms();
-                    sharedMesh.model.CopyAbsoluteBoneTransformsTo(boneTransforms);
+                    boneTransforms = (animationPlayer as SkinnedAnimationPlayer).GetSkinTransforms();
+                }
+
+                Matrix rootTransform = Matrix.Identity;
+                if (rootPlayer != null)
+                {
+                    rootTransform = rootPlayer.GetCurrentTransform();
                 }
 
                 SkinnedEffect sEffect = mesh.Effects[e] as SkinnedEffect;
-                sEffect.SetBoneTransforms(bones);
+                if (boneTransforms != null)
+                {
+                    sEffect.SetBoneTransforms(boneTransforms);
+                }
+                sEffect.World = Matrix.CreateScale(0.01f) * rootTransform * transform.world;
                 sEffect.View = Camera.main.View();
                 sEffect.Projection = Camera.main.projectionMatrix;
                 sEffect.AmbientLightColor = new Vector3(1);
