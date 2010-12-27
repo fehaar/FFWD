@@ -86,7 +86,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debugging\Accelerometer.cs" />
-    <Compile Include="Debugging\FrameRateCounter.cs" />
     <Compile Include="Debugging\Box2DDebugDraw.cs" />
     <Compile Include="DebugRenderer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

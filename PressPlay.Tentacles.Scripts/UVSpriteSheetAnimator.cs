@@ -154,7 +154,6 @@ namespace PressPlay.Tentacles.Scripts {
 		}
 	}
 	
-	[System.Serializable]
 	public class SpriteSheetAnim{
 		
 		public enum WrapMode{
