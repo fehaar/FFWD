@@ -49,12 +49,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\SkinnedModelPipeline\SkinnedModelPipeline.csproj">
-      <Project>{4636C7E1-B845-4B83-B96D-64A11B8A4515}</Project>
-      <Name>SkinnedModelPipeline</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="TestFont.spritefont">
       <Name>TestFont</Name>
       <Importer>FontDescriptionImporter</Importer>
@@ -159,9 +153,9 @@
       <Name>lemmy_body</Name>
       <Importer>FbxImporter</Importer>
       <Processor>SkinnedModelProcessor</Processor>
-      <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
       <ProcessorParameters_RotationX>90</ProcessorParameters_RotationX>
       <ProcessorParameters_RotationY>180</ProcessorParameters_RotationY>
+      <ProcessorParameters_DefaultEffect>SkinnedEffect</ProcessorParameters_DefaultEffect>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -231,6 +225,12 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\FFWD\PressPlay.FFWD.Import\PressPlay.FFWD.Import.csproj">
+      <Project>{2B962BD4-23CF-4151-8A3F-DF40C4BCC75D}</Project>
+      <Name>PressPlay.FFWD.Import</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <!--  To modify your build process, add your task inside one of the targets below and uncomment it. 
