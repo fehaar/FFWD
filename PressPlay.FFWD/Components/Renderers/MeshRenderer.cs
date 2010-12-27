@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using PressPlay.FFWD.Animation;
+using PressPlay.FFWD.Components;
 using PressPlay.FFWD.Interfaces;
 using Microsoft.Xna.Framework.Content;
 

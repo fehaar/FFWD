@@ -18,5 +18,6 @@ namespace PressPlay.FFWD.Exporter.Interfaces
     public interface IFilteredComponentWriter : IComponentWriter
     {
         Filter filter { get;  set; }
+        Filter.FilterType defaultFilterType { get; }
     }
 }

@@ -58,17 +58,29 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Animation\Animation.cs" />
     <Compile Include="Animation\AnimationClip.cs" />
-    <Compile Include="Animation\AnimationPlayer.cs" />
-    <Compile Include="Animation\Keyframe.cs" />
-    <Compile Include="Animation\ModelAnimationClip.cs" />
-    <Compile Include="Animation\ModelAnimationPlayerBase.cs" />
-    <Compile Include="Animation\ModelData.cs" />
-    <Compile Include="Animation\ModelKeyframe.cs" />
-    <Compile Include="Animation\RigidAnimationPlayer.cs" />
-    <Compile Include="Animation\RootAnimationPlayer.cs" />
-    <Compile Include="Animation\SkinnedAnimationPlayer.cs" />
-    <Compile Include="Animation\SkinningData.cs" />
+    <Compile Include="Animation\AnimationState.cs" />
+    <Compile Include="Animation\ModelAnimationPlayerBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Animation\ModelData.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Animation\ModelKeyframe.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Animation\QueueMode.cs" />
+    <Compile Include="Animation\RigidAnimationPlayer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Animation\RootAnimationPlayer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Animation\SkinnedAnimationPlayer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Animation\WrapMode.cs" />
     <Compile Include="ApplicationSettings.cs" />
     <Compile Include="AudioClip.cs" />
     <Compile Include="AudioSource.cs" />

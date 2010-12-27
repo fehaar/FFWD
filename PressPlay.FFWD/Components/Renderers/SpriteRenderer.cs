@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using PressPlay.FFWD;
-using PressPlay.FFWD.Animation;
+using PressPlay.FFWD.Components;
 using PressPlay.FFWD.Interfaces;
 using PressPlay.FFWD.Components;
 using Microsoft.Xna.Framework.Content;

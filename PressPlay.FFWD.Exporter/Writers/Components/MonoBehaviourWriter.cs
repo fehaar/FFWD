@@ -11,11 +11,17 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
     {
         public Filter filter { get; set; }
 
+        public Filter.FilterType defaultFilterType
+        {
+            get
+            {
+                return Filter.FilterType.IncludeAll;
+            }
+        }
+
         #region IComponentWriter Members
         public virtual void Write(SceneWriter scene, object component)
         {
-            // TODO: This is a dirty hack, we should have some undefined default value
-            filter.filterType = Filter.FilterType.IncludeAll;
             MonoBehaviour beh = component as MonoBehaviour;
             if (beh == null)
             {

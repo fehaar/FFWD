@@ -14,6 +14,14 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
     {
         public Filter filter { get; set; }
 
+        public Filter.FilterType defaultFilterType
+        {
+            get
+            {
+                return Filter.FilterType.IncludeAll;
+            }
+        }
+
         #region IComponentWriter Members
         public void Write(SceneWriter scene, object component)
         {
@@ -31,11 +39,15 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
 
         private void WriteFieldsForType(SceneWriter scene, Component component, Type t)
         {
-            if (t != typeof(Component))
+            if (t != typeof(Behaviour))
             {
                 WriteFieldsForType(scene, component, t.BaseType);
             }
-            FieldInfo[] memInfo = t.GetFields(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance);
+            if (t == typeof(Behaviour))
+            {
+                return;
+            }
+            PropertyInfo[] memInfo = t.GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance);
             for (int m = 0; m < memInfo.Length; m++)
             {
                 if (memInfo[m].GetCustomAttributes(typeof(HideInInspector), true).Length > 0)
@@ -44,7 +56,7 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
                 }
                 if (filter.Includes(memInfo[m].Name))
                 {
-                    scene.WriteElement(memInfo[m].Name, memInfo[m].GetValue(component));
+                    scene.WriteElement(memInfo[m].Name, memInfo[m].GetValue(component, null));
                 }
             }                
         }

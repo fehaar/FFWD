@@ -176,6 +176,11 @@ namespace PressPlay.FFWD
             return gameObject.GetComponentInChildren(type);
         }
 
+        public T GetComponentInChildren<T>() where T: Component
+        {
+            return gameObject.GetComponentInChildren<T>();
+        }
+
         #region Component locator methods
         public T GetComponent<T>() where T : Component
         {
@@ -192,9 +197,14 @@ namespace PressPlay.FFWD
             return gameObject.GetComponentsInChildren(type);
         }
 
+        public T GetComponentInParents<T>() where T : Component
+        {
+            return gameObject.GetComponentInParents<T>();
+        }
+
         public T[] GetComponentsInParents<T>() where T : Component
         {
-            return GetComponentsInParents<T>();
+            throw new NotImplementedException();
         }
         #endregion
 

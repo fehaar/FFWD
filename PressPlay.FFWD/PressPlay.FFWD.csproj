@@ -95,13 +95,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Animation\ModelAnimationClip.cs" />
+    <Compile Include="Animation\Animation.cs" />
+    <Compile Include="Animation\AnimationClip.cs" />
+    <Compile Include="Animation\AnimationState.cs" />
     <Compile Include="Animation\ModelAnimationPlayerBase.cs" />
     <Compile Include="Animation\ModelData.cs" />
     <Compile Include="Animation\ModelKeyframe.cs" />
+    <Compile Include="Animation\QueueMode.cs" />
     <Compile Include="Animation\RigidAnimationPlayer.cs" />
     <Compile Include="Animation\RootAnimationPlayer.cs" />
     <Compile Include="Animation\SkinnedAnimationPlayer.cs" />
+    <Compile Include="Animation\WrapMode.cs" />
     <Compile Include="Application.cs" />
     <Compile Include="ApplicationSettings.cs" />
     <Compile Include="AudioClip.cs" />

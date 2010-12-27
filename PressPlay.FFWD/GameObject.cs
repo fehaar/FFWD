@@ -350,11 +350,31 @@ namespace PressPlay.FFWD
             }
             return null;
         }
+        
+        public T GetComponentInChildren<T>() where T : Component
+        {
+            return (T)GetComponentInChildren(typeof(T));
+        }
+
+        public T GetComponentInParents<T>() where T : Component
+        {
+            GameObject go = this;
+            do
+            {
+                T comp = go.GetComponent<T>();
+                if (comp != null)
+                {
+                    return comp;
+                }
+                go = go.transform.parent.gameObject;
+            } while (go != null);
+            return null;
+        }
 
         public T[] GetComponentsInParents<T>() where T : Component
         {
             List<T> list = new List<T>();
-            GameObject go = GetParent();
+            GameObject go = this;
             while (go != null)
             {
                 list.AddRange(go.GetComponents<T>());

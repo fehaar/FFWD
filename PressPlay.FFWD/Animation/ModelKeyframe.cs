@@ -11,7 +11,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 
-namespace PressPlay.FFWD.Animation
+namespace PressPlay.FFWD.Components
 {
     /// <summary>
     /// Describes the position of a single bone at a single point in time.

@@ -13,7 +13,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using Microsoft.Xna.Framework.Content.Pipeline.Processors;
-using PressPlay.FFWD.Animation;
+using PressPlay.FFWD.Components;
 
 namespace PressPlay.FFWD.Import
 {
@@ -67,9 +67,9 @@ namespace PressPlay.FFWD.Import
             }
 
             // Convert animation data to our runtime format.
-            Dictionary<string, ModelAnimationClip> animationClips = ProcessAnimations(skeleton.Animations, bones);
+            Dictionary<string, AnimationClip> animationClips = ProcessAnimations(skeleton.Animations, bones);
 
-            Dictionary<string, ModelAnimationClip> rootClips = new Dictionary<string, ModelAnimationClip>();
+            Dictionary<string, AnimationClip> rootClips = new Dictionary<string, AnimationClip>();
             
             // Chain to the base ModelProcessor class so it can convert the model data.
             ModelContent model = base.Process(input, context);
@@ -77,7 +77,7 @@ namespace PressPlay.FFWD.Import
             // Convert each animation in the root of the object            
             foreach (KeyValuePair<string, AnimationContent> animation in input.Animations)
             {
-                ModelAnimationClip processed = 
+                AnimationClip processed = 
                     AnimatedModelProcessor.ProcessRootAnimation(animation.Value, model.Bones[0].Name);
 
                 rootClips.Add(animation.Key, processed);
@@ -113,7 +113,7 @@ namespace PressPlay.FFWD.Import
         /// Converts an intermediate format content pipeline AnimationContentDictionary
         /// object to our runtime AnimationClip format.
         /// </summary>
-        static Dictionary<string, ModelAnimationClip> ProcessAnimations(
+        static Dictionary<string, AnimationClip> ProcessAnimations(
             AnimationContentDictionary animations,
             IList<BoneContent> bones)
         {
@@ -129,12 +129,12 @@ namespace PressPlay.FFWD.Import
             }
 
             // Convert each animation in turn.
-            Dictionary<string, ModelAnimationClip> animationClips;
-            animationClips = new Dictionary<string, ModelAnimationClip>();
+            Dictionary<string, AnimationClip> animationClips;
+            animationClips = new Dictionary<string, AnimationClip>();
 
             foreach (KeyValuePair<string, AnimationContent> animation in animations)
             {
-                ModelAnimationClip processed = ProcessAnimation(animation.Value, boneMap);
+                AnimationClip processed = ProcessAnimation(animation.Value, boneMap);
                 
                 animationClips.Add(animation.Key, processed);
             }
@@ -152,7 +152,7 @@ namespace PressPlay.FFWD.Import
         /// Converts an intermediate format content pipeline AnimationContent
         /// object to our runtime AnimationClip format.
         /// </summary>
-        static ModelAnimationClip ProcessAnimation(AnimationContent animation, Dictionary<string, int> boneMap)
+        static AnimationClip ProcessAnimation(AnimationContent animation, Dictionary<string, int> boneMap)
         {
             List<ModelKeyframe> keyframes = new List<ModelKeyframe>();
 
@@ -186,7 +186,7 @@ namespace PressPlay.FFWD.Import
             if (animation.Duration <= TimeSpan.Zero)
                 throw new InvalidContentException("Animation has a zero duration.");
 
-            return new ModelAnimationClip(animation.Duration, keyframes);
+            return new AnimationClip(animation.Duration, keyframes);
         }
 
 

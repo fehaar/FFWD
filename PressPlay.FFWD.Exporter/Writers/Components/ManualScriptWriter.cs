@@ -14,6 +14,14 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
     {
         public Filter filter { get; set; }
 
+        public Filter.FilterType defaultFilterType
+        {
+            get
+            {
+                return Filter.FilterType.ExcludeAll;
+            }
+        }
+
         #region IComponentWriter Members
         public void Write(SceneWriter scene, object component)
         {

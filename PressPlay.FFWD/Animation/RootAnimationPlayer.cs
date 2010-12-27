@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 #endregion
 
-namespace PressPlay.FFWD.Animation
+namespace PressPlay.FFWD.Components
 {
     /// <summary>
     /// The animation player contains a single transformation that is used to move/position/scale

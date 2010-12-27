@@ -6,7 +6,7 @@ namespace PressPlay.FFWD.Exporter
 {
     public class Filter
     {
-        public enum FilterType { ExcludeAll, IncludeAll, Include, Exclude }
+        public enum FilterType { None, ExcludeAll, IncludeAll, Include, Exclude }
 
         public FilterType filterType { get; set; }
 

@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 
-namespace PressPlay.FFWD.Animation
+namespace PressPlay.FFWD.Components
 {
     /// <summary>
     /// Combines all the data needed to render and animate a skinned object.
@@ -26,7 +26,7 @@ namespace PressPlay.FFWD.Animation
         /// clips for "Walk", "Run", "JumpReallyHigh", etc.
         /// </summary>
         [ContentSerializer]
-        public Dictionary<string, ModelAnimationClip> RootAnimationClips { get; private set; }
+        public Dictionary<string, AnimationClip> RootAnimationClips { get; private set; }
 
         /// <summary>
         /// Gets a collection of model animation clips. These are stored by name in a
@@ -34,7 +34,7 @@ namespace PressPlay.FFWD.Animation
         /// "JumpReallyHigh", etc.
         /// </summary>
         [ContentSerializer]
-        public Dictionary<string, ModelAnimationClip> ModelAnimationClips { get; private set; }
+        public Dictionary<string, AnimationClip> ModelAnimationClips { get; private set; }
 
         /// <summary>
         /// Bindpose matrices for each bone in the skeleton,
@@ -59,8 +59,8 @@ namespace PressPlay.FFWD.Animation
         /// Constructs a new skinning data object.
         /// </summary>
         public ModelData(
-            Dictionary<string, ModelAnimationClip> modelAnimationClips,
-            Dictionary<string, ModelAnimationClip> rootAnimationClips,
+            Dictionary<string, AnimationClip> modelAnimationClips,
+            Dictionary<string, AnimationClip> rootAnimationClips,
             List<Matrix> bindPose,
             List<Matrix> inverseBindPose,
             List<int> skeletonHierarchy)

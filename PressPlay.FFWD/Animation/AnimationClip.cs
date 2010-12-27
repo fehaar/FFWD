@@ -11,15 +11,27 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
 
-namespace PressPlay.FFWD.Animation
+namespace PressPlay.FFWD.Components
 {
     /// <summary>
     /// A model animation clip is the runtime equivalent of the
     /// Microsoft.Xna.Framework.Content.Pipeline.Graphics.AnimationContent type.
     /// It holds all the keyframes needed to describe a single model animation.
     /// </summary>
-    public class ModelAnimationClip
+    public class AnimationClip
     {
+        [ContentSerializerIgnore]
+        public float length
+        {
+            get
+            {
+                return (float)Duration.TotalSeconds;
+            }
+        }
+
+        public string name;
+        public WrapMode wrapMode = WrapMode.Once;
+
         /// <summary>
         /// Gets the total length of the model animation clip
         /// </summary>
@@ -36,7 +48,7 @@ namespace PressPlay.FFWD.Animation
         /// <summary>
         /// Constructs a new model animation clip object.
         /// </summary>
-        public ModelAnimationClip(TimeSpan duration, List<ModelKeyframe> keyframes)
+        public AnimationClip(TimeSpan duration, List<ModelKeyframe> keyframes)
         {
             Duration = duration;
             Keyframes = keyframes;
@@ -45,7 +57,7 @@ namespace PressPlay.FFWD.Animation
         /// <summary>
         /// Private constructor for use by the XNB deserializer.
         /// </summary>
-        private ModelAnimationClip()
+        private AnimationClip()
         {
         }
     }

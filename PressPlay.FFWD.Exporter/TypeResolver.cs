@@ -107,7 +107,14 @@ namespace PressPlay.FFWD.Exporter
                         IComponentWriter writer = (IComponentWriter)Activator.CreateInstance(tp);
                         if (writer is IFilteredComponentWriter)
                         {
-                            (writer as IFilteredComponentWriter).filter = new Filter() { filterType = map.FilterType, items = map.FilterItems.Split(',') };
+                            if (map.FilterType == Filter.FilterType.None)
+                            {
+                                (writer as IFilteredComponentWriter).filter = new Filter() { filterType = (writer as IFilteredComponentWriter).defaultFilterType };
+                            }
+                            else
+                            {
+                                (writer as IFilteredComponentWriter).filter = new Filter() { filterType = map.FilterType, items = map.FilterItems.Split(',') };
+                            }
                         }
                         if (writer is IOptionComponentWriter)
                         {

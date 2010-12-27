@@ -21,6 +21,13 @@ namespace PressPlay.FFWD.Exporter.Test.Configuration
     public class TestFilteredComponentWriter : TestComponentWriter, IFilteredComponentWriter
     {
         public Filter filter { get; set; }
+        public Filter.FilterType defaultFilterType
+        {
+            get
+            {
+                return Filter.FilterType.Include;
+            }
+        }
     }
 
     public class TestOptionComponentWriter : TestComponentWriter, IOptionComponentWriter
@@ -58,13 +65,14 @@ namespace PressPlay.FFWD.Exporter.Test.Configuration
         }
 
         [Test]
-        public void WeWillNotHaveAFilterIfOneIsNotConfigured()
+        public void WeWillHAveADefaultFilterIfOneIsNotConfigured()
         {
             resolver.ComponentWriters.Add(new ComponentMap() { Type = "System.String", To = typeof(TestFilteredComponentWriter).AssemblyQualifiedName });
             IFilteredComponentWriter writer = (IFilteredComponentWriter)resolver.GetComponentWriter("Hello".GetType());
             Assert.That(writer, Is.Not.Null);
             Assert.That(writer, Is.InstanceOf<TestFilteredComponentWriter>());
-            Assert.That(writer.filter, Is.Null);
+            Assert.That(writer.filter, Is.Not.Null);
+            Assert.That(writer.filter.filterType, Is.EqualTo(writer.defaultFilterType));
         }
 
         [Test]

@@ -14,7 +14,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using Microsoft.Xna.Framework.Content.Pipeline.Processors;
-using PressPlay.FFWD.Animation;
+using PressPlay.FFWD.Components;
 #endregion
 
 namespace PressPlay.FFWD.Import
@@ -49,10 +49,10 @@ namespace PressPlay.FFWD.Import
             }
             
             // Animation clips inside the object (mesh)
-            Dictionary<string, ModelAnimationClip> animationClips = new Dictionary<string, ModelAnimationClip>();
+            Dictionary<string, AnimationClip> animationClips = new Dictionary<string, AnimationClip>();
             
             // Animation clips at the root of the object
-            Dictionary<string, ModelAnimationClip> rootClips = new Dictionary<string, ModelAnimationClip>();
+            Dictionary<string, AnimationClip> rootClips = new Dictionary<string, AnimationClip>();
 
             // Process the animations
             ProcessAnimations(input, model, animationClips, rootClips);
@@ -71,8 +71,8 @@ namespace PressPlay.FFWD.Import
         static void ProcessAnimations(
             NodeContent input,
             ModelContent model,
-            Dictionary<string, ModelAnimationClip> animationClips,
-            Dictionary<string, ModelAnimationClip> rootClips)
+            Dictionary<string, AnimationClip> animationClips,
+            Dictionary<string, AnimationClip> rootClips)
         {            
             // Build up a table mapping bone names to indices.
             Dictionary<string, int> boneMap = new Dictionary<string, int>();
@@ -87,7 +87,7 @@ namespace PressPlay.FFWD.Import
             // Convert each animation in the root of the object            
             foreach (KeyValuePair<string, AnimationContent> animation in input.Animations)
             {
-                ModelAnimationClip processed = ProcessRootAnimation(animation.Value, model.Bones[0].Name);
+                AnimationClip processed = ProcessRootAnimation(animation.Value, model.Bones[0].Name);
 
                 rootClips.Add(animation.Key, processed);
             }
@@ -99,7 +99,7 @@ namespace PressPlay.FFWD.Import
             // Now create those animations
             foreach (string key in animationNames)
             {
-                ModelAnimationClip processed = ProcessAnimation(key, boneMap, input, model);
+                AnimationClip processed = ProcessAnimation(key, boneMap, input, model);
                 
                 animationClips.Add(key, processed);
             }
@@ -124,7 +124,7 @@ namespace PressPlay.FFWD.Import
         /// Converts an intermediate format content pipeline AnimationContent
         /// object to our runtime AnimationClip format.
         /// </summary>
-        public static ModelAnimationClip ProcessRootAnimation(AnimationContent animation, string name)
+        public static AnimationClip ProcessRootAnimation(AnimationContent animation, string name)
         {
             List<ModelKeyframe> keyframes = new List<ModelKeyframe>();
 
@@ -146,7 +146,7 @@ namespace PressPlay.FFWD.Import
             if (animation.Duration <= TimeSpan.Zero)
                 throw new InvalidContentException("Animation has a zero duration.");
 
-            return new ModelAnimationClip(animation.Duration, keyframes);
+            return new AnimationClip(animation.Duration, keyframes);
         }
 
 
@@ -154,7 +154,7 @@ namespace PressPlay.FFWD.Import
         /// Converts an intermediate format content pipeline AnimationContent
         /// object to our runtime AnimationClip format.
         /// </summary>
-        static ModelAnimationClip ProcessAnimation(
+        static AnimationClip ProcessAnimation(
             string animationName,
             Dictionary<string, int> boneMap,
             NodeContent input,
@@ -174,7 +174,7 @@ namespace PressPlay.FFWD.Import
             if (duration <= TimeSpan.Zero)
                 throw new InvalidContentException("Animation has a zero duration.");
 
-            return new ModelAnimationClip(duration, keyframes);
+            return new AnimationClip(duration, keyframes);
         }
 
         static void AddTransformationNodes(

@@ -4,20 +4,18 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using PressPlay.FFWD.Animation;
+using PressPlay.FFWD.Components;
 using PressPlay.FFWD.Interfaces;
 using Microsoft.Xna.Framework.Content;
 
 namespace PressPlay.FFWD.Components
 {
-    public class SkinnedMeshRenderer : Renderer, Interfaces.IUpdateable
+    public class SkinnedMeshRenderer : Renderer
     {
-        private SkinnedAnimationPlayer animationPlayer;
 
         public Mesh sharedMesh { get; set; }
-        private ModelAnimationClip rootClip;
-        private RootAnimationPlayer rootPlayer;
-        private ModelAnimationClip clip;
+
+        private Animation animation;
 
         public override void Awake()
         {
@@ -38,38 +36,15 @@ namespace PressPlay.FFWD.Components
 
             // Create animation players/clips for the rigid model
             ModelData modelData = sharedMesh.model.Tag as ModelData;
+            animation = GetComponentInParents<Animation>();
             if (modelData != null)
             {
-                if (modelData.RootAnimationClips != null && modelData.RootAnimationClips.ContainsKey("Take 001"))
+                if (modelData.ModelAnimationClips != null)
                 {
-                    rootClip = modelData.RootAnimationClips["Take 001"];
-
-                    rootPlayer = new RootAnimationPlayer();
-                    rootPlayer.StartClip(rootClip, 1, TimeSpan.Zero);
-                }
-                if (modelData.ModelAnimationClips != null && modelData.ModelAnimationClips.ContainsKey("Take 001"))
-                {
-                    clip = modelData.ModelAnimationClips["Take 001"];
-                    animationPlayer = new SkinnedAnimationPlayer(modelData.BindPose, modelData.InverseBindPose, modelData.SkeletonHierarchy);
-                    animationPlayer.StartClip(clip, 1, TimeSpan.Zero);
+                    animation.Initialize(modelData);
                 }
             }
-
         }
-
-        #region IUpdateable Members
-        public void Update()
-        {
-            if (rootPlayer != null)
-            {
-                rootPlayer.Update();
-            }
-            if (animationPlayer != null)
-            {
-                animationPlayer.Update();
-            }
-        }
-        #endregion
 
         #region IRenderable Members
         public override void Draw(SpriteBatch batch)
@@ -100,15 +75,9 @@ namespace PressPlay.FFWD.Components
             for (int e = 0; e < mesh.Effects.Count; e++)
             {
                 Matrix[] boneTransforms = null;
-                if (animationPlayer != null)
+                if (animation != null)
                 {
-                    boneTransforms = (animationPlayer as SkinnedAnimationPlayer).GetSkinTransforms();
-                }
-
-                Matrix rootTransform = Matrix.Identity;
-                if (rootPlayer != null)
-                {
-                    rootTransform = rootPlayer.GetCurrentTransform();
+                    boneTransforms = animation.GetTransforms();
                 }
 
                 SkinnedEffect sEffect = mesh.Effects[e] as SkinnedEffect;
@@ -116,7 +85,7 @@ namespace PressPlay.FFWD.Components
                 {
                     sEffect.SetBoneTransforms(boneTransforms);
                 }
-                sEffect.World = Matrix.CreateScale(0.01f) * rootTransform * transform.world;
+                sEffect.World = Matrix.CreateScale(0.01f) * transform.world;
                 sEffect.View = Camera.main.View();
                 sEffect.Projection = Camera.main.projectionMatrix;
                 sEffect.AmbientLightColor = new Vector3(1);

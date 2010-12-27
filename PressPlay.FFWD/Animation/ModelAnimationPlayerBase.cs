@@ -11,7 +11,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
-namespace PressPlay.FFWD.Animation
+namespace PressPlay.FFWD.Components
 {
     /// <summary>
     /// This class serves as a base class for various animation players.  It contains
@@ -21,29 +21,18 @@ namespace PressPlay.FFWD.Animation
     public abstract class ModelAnimationPlayerBase
     {
         // Clip currently being played
-        ModelAnimationClip currentClipValue;
+        AnimationClip currentClipValue;
+
+        // State of the current animation
+        AnimationState currentState;
 
         // Current timeindex and keyframe in the clip
-        TimeSpan currentTimeValue;
         int currentKeyframe;
 
-        // Speed of playback
-        float playbackRate = 1.0f;
-
-        // The amount of time for which the animation will play.
-        // TimeSpan.MaxValue will loop forever. TimeSpan.Zero will play once. 
-        TimeSpan duration = TimeSpan.MaxValue;
-
-        // Amount of time elapsed while playing
-        TimeSpan elapsedPlaybackTime = TimeSpan.Zero;
-
-        // Whether or not playback is paused
-        bool paused;
-        
         /// <summary>
         /// Gets the clip currently being decoded.
         /// </summary>
-        public ModelAnimationClip CurrentClip
+        public AnimationClip CurrentClip
         {
             get { return currentClipValue; }
         }
@@ -62,6 +51,7 @@ namespace PressPlay.FFWD.Animation
             }
         }
 
+        private TimeSpan currentTimeValue;
         /// <summary>
         /// Gets/set the current play position.
         /// </summary>
@@ -101,39 +91,24 @@ namespace PressPlay.FFWD.Animation
         }
 
         /// <summary>
-        /// Invoked when playback has completed.
-        /// </summary>
-        public event EventHandler Completed;
-
-        /// <summary>
-        /// Starts decoding the specified animation clip.
-        /// </summary>        
-        public void StartClip(ModelAnimationClip clip)
-        {
-            StartClip(clip, 1.0f, TimeSpan.MaxValue);
-        }
-
-        /// <summary>
         /// Starts playing a clip
         /// </summary>
         /// <param name="clip">Animation clip to play</param>
         /// <param name="playbackRate">Speed to playback</param>
         /// <param name="duration">Length of time to play (max is looping, 0 is once)</param>
-        public void StartClip(ModelAnimationClip clip, float playbackRate, TimeSpan duration)
+        public void StartClip(AnimationClip clip, AnimationState state)
         {
             if (clip == null)
                 throw new ArgumentNullException("Clip required");
 
             // Store the clip and reset playing data            
             currentClipValue = clip;
-            currentKeyframe = 0;
-            CurrentTimeValue = TimeSpan.Zero;
-            elapsedPlaybackTime = TimeSpan.Zero;
-            paused = false;
-
-            // Store the data about how we want to playback
-            this.playbackRate = playbackRate;
-            this.duration = duration;
+            currentKeyframe = Math.Max(0, state.firstFrame);
+            CurrentTimeValue = clip.Keyframes[currentKeyframe].Time;
+            currentState = state;
+            currentState.time = (float)CurrentTimeValue.TotalSeconds;
+            currentState.length = (float)clip.Keyframes[Math.Min(state.lastFrame, clip.Keyframes.Count - 1)].Time.TotalSeconds; 
+            currentState.enabled = true;
 
             // Call the virtual to allow initialization of the clip
             InitClip();
@@ -144,7 +119,7 @@ namespace PressPlay.FFWD.Animation
         /// </summary>
         public void PauseClip()
         {
-            paused = true;
+            currentState.enabled = false;
         }
 
         /// <summary>
@@ -152,7 +127,7 @@ namespace PressPlay.FFWD.Animation
         /// </summary>
         public void ResumeClip()
         {
-            paused = false;
+            currentState.enabled = true;
         }
 
         /// <summary>
@@ -187,40 +162,40 @@ namespace PressPlay.FFWD.Animation
             if (currentClipValue == null)
                 return;
 
-            if (paused)
+            if (!currentState.enabled)
                 return;
 
-            TimeSpan time = TimeSpan.FromSeconds(Time.deltaTime);
+            float time = Time.deltaTime;
 
             // Adjust for the rate
-            if (playbackRate != 1.0f)
-                time = TimeSpan.FromMilliseconds(time.TotalMilliseconds * playbackRate);
+            if (currentState.speed != 1.0f)
+                time = time * currentState.speed;
 
-            elapsedPlaybackTime += time;
+            currentState.time += time;
 
             // See if we should terminate
-            if (elapsedPlaybackTime > duration && duration != TimeSpan.Zero ||
-                elapsedPlaybackTime > currentClipValue.Duration && duration == TimeSpan.Zero)
+            if (currentState.time > currentState.length)
             {
-                //if (Completed != null)
-                //    Completed(this, EventArgs.Empty);
-
-                //currentClipValue = null;
-
-                //return;
-
-                // Loop playback
-                elapsedPlaybackTime = new TimeSpan();
+                if (currentState.wrapMode == WrapMode.Once)
+                {
+                    currentState.enabled = false;
+                    return;
+                }
+                if (currentState.wrapMode == WrapMode.Loop)
+                {
+                    currentState.time -= currentState.length;
+                }
+                if (currentState.wrapMode == WrapMode.PingPong)
+                {
+                    currentState.speed *= -1;
+                }
+                if (currentState.wrapMode == WrapMode.Default)
+                {
+                    throw new NotImplementedException("What to do here?");
+                }
             }
 
-            // Update the animation position.        
-            time += currentTimeValue;
-
-            // If we reached the end, loop back to the start.
-            while (time >= currentClipValue.Duration)
-                time -= currentClipValue.Duration;
-
-            CurrentTimeValue = time;
+            CurrentTimeValue = TimeSpan.FromSeconds(currentState.time);
 
             OnUpdate();
         }
