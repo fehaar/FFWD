@@ -123,7 +123,8 @@ namespace PressPlay.FFWD
                 GraphicsDevice.DepthStencilState = DepthStencilState.Default;
                 GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
             }
-            SortedDictionary<int, List<IRenderable>> queue = new SortedDictionary<int, List<IRenderable>>();
+            
+            Dictionary<int, List<IRenderable>> queue = new Dictionary<int, List<IRenderable>>();
             for (int i = 0; i < activeComponents.Count; i++)
             {
                 if (!activeComponents[i].isStarted || activeComponents[i].gameObject == null || !activeComponents[i].gameObject.active)
@@ -156,7 +157,7 @@ namespace PressPlay.FFWD
                 }
             }
 
-            int[] queues = queue.Keys.ToArray();
+            int[] queues = queue.Keys.OrderBy(i => i).ToArray();
             for (int i = 0; i < queues.Length; i++)
             {
                 for (int j = 0; j < queue[queues[i]].Count; j++)
