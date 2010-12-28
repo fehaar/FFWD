@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework;
-using PressPlay.FFWD;
-using PressPlay.FFWD.Components;
 using System.Reflection;
+using Microsoft.Xna.Framework.Content;
+using PressPlay.FFWD.Components;
 
 namespace PressPlay.FFWD
 {
@@ -22,11 +18,16 @@ namespace PressPlay.FFWD
 
         public virtual GameObject gameObject { get; internal set; }
 
+        [ContentSerializerIgnore]
         public string name
         {
             get
             {
                 return (gameObject == null) ? GetType().Name : gameObject.name;
+            }
+            set
+            {
+                if (gameObject != null) gameObject.name = value;
             }
         }
 

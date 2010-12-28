@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework.Content;
-using PressPlay.FFWD.Interfaces;
-using Microsoft.Xna.Framework.Graphics;
 using Box2D.XNA;
-using PressPlay.FFWD;
+using Microsoft.Xna.Framework.Content;
 using PressPlay.FFWD.Components;
+using PressPlay.FFWD.Interfaces;
 
 namespace PressPlay.FFWD
 {
@@ -41,9 +37,13 @@ namespace PressPlay.FFWD
             this.name = name;
         }
 
+        [ContentSerializer(Optional = true)]
         public string name { get; set; }
+        [ContentSerializer(Optional = true)]
         public int layer { get; set; }
+        [ContentSerializer(Optional = true)]
         public bool active { get; set; }
+        [ContentSerializer(Optional = true)]
         public string tag { get; set; }
 
         #region Component shortcut methods
@@ -119,7 +119,7 @@ namespace PressPlay.FFWD
         #endregion
 
         //public String prefab { get; set; }
-        [ContentSerializer(CollectionItemName = "component")]
+        [ContentSerializer(CollectionItemName = "component", Optional = true)]
         private List<Component> components { get; set; }
 
         internal override void AfterLoad()
@@ -332,6 +332,11 @@ namespace PressPlay.FFWD
             }
             transform.GetComponentsInChildrenInt(type, list);
             return list.ToArray();
+        }
+
+        public T[] GetComponentsInChildren<T>() where T: Component
+        {
+            return (T[])GetComponentsInChildren(typeof(T));
         }
 
         public Component GetComponentInChildren(Type type)

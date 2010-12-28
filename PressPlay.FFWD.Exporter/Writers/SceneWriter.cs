@@ -1,13 +1,14 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Xml;
-using UnityEngine;
-using UnityEditor;
-using System.IO;
 using PressPlay.FFWD.Exporter.Interfaces;
-using System.Globalization;
-using System.Reflection;
+using UnityEditor;
+using UnityEngine;
 
 namespace PressPlay.FFWD.Exporter.Writers
 {
@@ -235,7 +236,6 @@ namespace PressPlay.FFWD.Exporter.Writers
                     // These components are always skipped for some reason. There must be some logic to it?
                     return;
                 }
-
                 if (obj is float)
                 {
                     writer.WriteElementString(name, ToString((float)obj));
@@ -266,9 +266,32 @@ namespace PressPlay.FFWD.Exporter.Writers
                     writer.WriteElementString(name, ToString(obj as Vector3[]));
                     return;
                 }
+                if (obj is Color)
+                {
+                    writer.WriteElementString(name, ToString((Color)obj));
+                    return;
+                }
+                if (obj is Rect)
+                {
+                    writer.WriteElementString(name, ToString((Rect)obj));
+                    return;
+                }
                 if (obj is LayerMask)
                 {
                     writer.WriteElementString(name, ((LayerMask)obj).value.ToString());
+                    return;
+                }
+                if (obj is IDictionary)
+                {
+                    writer.WriteStartElement(name);
+                    foreach (DictionaryEntry item in (obj as IDictionary))
+                    {
+                        writer.WriteStartElement("Item");
+                        WriteElement("Key", item.Key);
+                        WriteElement("Value", item.Value);
+                        writer.WriteEndElement();
+                    }
+                    writer.WriteEndElement();
                     return;
                 }
                 if (obj is Material[])
@@ -307,9 +330,25 @@ namespace PressPlay.FFWD.Exporter.Writers
                     writer.WriteElementString(name, obj.ToString());
                     return;
                 }
-                if (obj is UnityEngine.Object)
+                if (obj is GameObject)
                 {
-                    UnityEngine.Object theObject = (obj as UnityEngine.Object);
+                    GameObject go = (obj as GameObject);
+                    writer.WriteStartElement(name);
+                    if (obj == null || (go.GetInstanceID() == 0))
+                    {
+                        writer.WriteAttributeString("Null", ToString(true));
+                    }
+                    else
+                    {
+                        writer.WriteElementString("id", go.GetInstanceID().ToString());
+                        writer.WriteElementString("isPrefab", ToString(true));
+                    }
+                    writer.WriteEndElement();
+                    return;
+                }
+                if (obj is Component)
+                {
+                    Component theObject = (obj as Component);
                     writer.WriteStartElement(name);
                     if (theObject == null)
                     {
@@ -408,9 +447,14 @@ namespace PressPlay.FFWD.Exporter.Writers
             return vector3.x.ToString("0.#####", CultureInfo.InvariantCulture) + " " + vector3.y.ToString("0.#####", CultureInfo.InvariantCulture) + " " + vector3.z.ToString("0.#####", CultureInfo.InvariantCulture);
         }
 
+        private string ToString(Rect rect)
+        {
+            return rect.x.ToString("0.#####", CultureInfo.InvariantCulture) + " " + rect.y.ToString("0.#####", CultureInfo.InvariantCulture) + " " + rect.width.ToString("0.#####", CultureInfo.InvariantCulture) + " " + rect.height.ToString("0.#####", CultureInfo.InvariantCulture);
+        }
+
         private string ToString(Color c)
         {
-            return ((int)(c.a * 255)).ToString("X") + ((int)(c.r * 255)).ToString("X") + ((int)(c.g * 255)).ToString("X") + ((int)(c.b * 255)).ToString("X");
+            return ((int)(c.a * 255)).ToString("X2") + ((int)(c.r * 255)).ToString("X2") + ((int)(c.g * 255)).ToString("X2") + ((int)(c.b * 255)).ToString("X2");
         }
 
         private string ToString(Quaternion quaternion)

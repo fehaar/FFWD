@@ -26,7 +26,6 @@ SOFTWARE.
 #endregion License
 
 using System;
-using System.ComponentModel;
 using System.Text;
 using Microsoft.Xna.Framework;
 
@@ -41,6 +40,7 @@ namespace PressPlay.FFWD
         private static Vector3 Up = new Vector3(0f, 1f, 0f);
         private static Vector3 Right = new Vector3(1f, 0f, 0f);
         private static Vector3 Forward = new Vector3(0f, 0f, -1f);
+        private static Vector3 Down = new Vector3(0f, -1f, 0f);
 
         #endregion Private Fields
 
@@ -85,6 +85,11 @@ namespace PressPlay.FFWD
         public static Vector3 up
         {
             get { return Up; }
+        }
+
+        public static Vector3 down
+        {
+            get { return Down; }
         }
 
         public static Vector3 right

@@ -207,8 +207,7 @@ namespace PressPlay.FFWD
                 }
                 else
                 {
-                    // TODO: This does not work yet
-                    throw new NotImplementedException("Not implemented yet");
+                    localRotation = value * Quaternion.Inverse(parent.rotation);
                 }
             }
         }
@@ -494,7 +493,7 @@ namespace PressPlay.FFWD
         //TODO: Implement LookAt
         public void LookAt(Transform target, Vector3 worldUp)
         {
-
+            // NOTE: Use a look matrix
         }
 
         public void LookAt(Vector3 worldPosition)

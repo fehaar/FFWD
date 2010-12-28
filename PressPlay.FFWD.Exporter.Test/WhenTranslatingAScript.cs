@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NUnit.Framework;
-using System.Text.RegularExpressions;
 using System.IO;
+using NUnit.Framework;
 
 namespace PressPlay.FFWD.Exporter.Test
 {
@@ -16,6 +12,8 @@ namespace PressPlay.FFWD.Exporter.Test
             "using SomeSystem;",
             "",
             "public class TestScript : MonoBehaviour {",
+            "[HideInInspector]",
+            "public string iAmLegion;",
             "\tvoid Start() {",
             "\t\tVector3 dir = Vector3.up + Vector3.forward;",
             "\t\tif (dir==Vector3.zero) return;",
@@ -93,6 +91,18 @@ namespace PressPlay.FFWD.Exporter.Test
 
             Assert.That(newScript, Is.StringContaining("public override void Update"));
             Assert.That(newScript, Is.Not.StringContaining("public public override void Update"));
+        }
+
+        [Test]
+        public void WeWillReplaceAttributes()
+        {
+            ScriptTranslator.ReplaceAttributes = new System.Collections.Generic.Dictionary<string, string>() { { "HideInInspector", "InspectorGadget" } };
+            ScriptTranslator trans = new ScriptTranslator(testScript);
+            trans.Translate();
+            string newScript = trans.ToString();
+
+            Assert.That(newScript, Is.StringContaining("[InspectorGadget]"));
+            Assert.That(newScript, Is.Not.StringContaining("[HideInInspector]"));
         }
 
         [Test]

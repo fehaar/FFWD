@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿
 namespace PressPlay.FFWD
 {
     public static class Random
@@ -39,6 +35,29 @@ namespace PressPlay.FFWD
             get
             {
                 return (float)rnd.NextDouble();
+            }
+        }
+
+        public static Vector3 insideUnitSphere
+        {
+            get
+            {
+                float remain = 1;
+                Vector3 v = new Vector3(value, 0, 0);
+                remain -= v.x;
+                v.y = value * remain;
+                v.z = remain - v.y;
+                return v;
+            }
+        }
+
+        public static Vector2 insideUnitCircle
+        {
+            get
+            {
+                Vector2 v = new Vector2(value, 0);
+                v.y = 1 - v.x;
+                return v;
             }
         }
 

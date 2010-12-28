@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace PressPlay.FFWD
 {
@@ -230,6 +227,12 @@ namespace PressPlay.FFWD
         public static implicit operator Color(Microsoft.Xna.Framework.Color c)
         {
             return c.ToVector4();
+        }
+
+        public static Color Lerp(Color a, Color b, float t)
+        {
+            // TODO: Implement this method
+            return a;
         }
     }
 }

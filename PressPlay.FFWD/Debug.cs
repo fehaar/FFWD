@@ -69,6 +69,11 @@ namespace PressPlay.FFWD
             // TODO : Add implementation of method
             throw new NotImplementedException("Method not implemented.");
         }
-	
+
+        public static void DrawRay(Vector3 start, Vector3 end, Color color)
+        {
+            // TODO : Add implementation of method
+            throw new NotImplementedException("Method not implemented.");
+        }
     }
 }
