@@ -41,6 +41,7 @@ namespace PressPlay.FFWD
             ContentHelper.StaticContent = new ContentManager(Game.Services, Game.Content.RootDirectory);
             ContentHelper.Content = new ContentManager(Game.Services, Game.Content.RootDirectory);
             ContentHelper.IgnoreMissingAssets = true;
+            Camera.FullScreen = Game.GraphicsDevice.Viewport;
             Physics.Initialize();
             Input.Initialize();
             spriteBatch = new SpriteBatch(Game.GraphicsDevice);

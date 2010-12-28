@@ -6,6 +6,13 @@ namespace PressPlay.FFWD.Components
 {
     public class Camera : Component
     {
+        public Camera()
+        {
+            fieldOfView = MathHelper.ToRadians(60);
+            nearClipPlane = 0.3f;
+            farClipPlane = 1000;
+        }
+
         public enum ClearFlags
         {
             Skybox,
@@ -25,24 +32,58 @@ namespace PressPlay.FFWD.Components
         public Color backgroundColor { get; set; }
         public Rectangle rect { get; set; }
         public ClearFlags clearFlags { get; set; }
-        
-        public static Camera main;
+
+        private static Camera _main = null;
+        public static Camera main
+        {
+            get
+            {
+                if (_main == null)
+                {
+                    _main = (Camera)GameObject.FindObjectOfType(typeof(Camera));
+                }
+                return _main;
+            }
+            set
+            {
+                _main = value;
+            }
+        }
+
+        public static Viewport FullScreen;
 
         private Matrix _view;
-
         public Matrix View()
         {
             _view = Matrix.CreateLookAt(
-                transform.localPosition,
-                transform.localPosition + (Vector3)Microsoft.Xna.Framework.Vector3.UnitY,
-                Microsoft.Xna.Framework.Vector3.Transform(Microsoft.Xna.Framework.Vector3.Backward, transform.localRotation));
+                transform.position,
+                transform.position + (Vector3)Microsoft.Xna.Framework.Vector3.UnitY,
+                Microsoft.Xna.Framework.Vector3.Transform(Microsoft.Xna.Framework.Vector3.Backward, transform.rotation));
             return _view;            
         }
 
         [ContentSerializerIgnore]
-        public Viewport viewPort { get; set; }
+        public Viewport viewPort 
+        { 
+            get
+            {
+                return FullScreen;
+            }
+        }
+
+        private Matrix _projectionMatrix = Matrix.Identity;
         [ContentSerializerIgnore]
-        public Matrix projectionMatrix { get; set; }
+        public Matrix projectionMatrix
+        {
+            get
+            {
+                if (_projectionMatrix == Matrix.Identity)
+                {
+                    Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(fieldOfView), FullScreen.AspectRatio, nearClipPlane, farClipPlane, out _projectionMatrix);
+                }
+                return _projectionMatrix;
+            }
+        }
 
         public Ray ScreenPointToRay(Vector2 screen)
         {

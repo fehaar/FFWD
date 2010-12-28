@@ -501,16 +501,23 @@ namespace PressPlay.FFWD
 
         private void WorldChanged()
         {
-            // TODO: If we have a parent - this method can frak things up proper!
-            Microsoft.Xna.Framework.Vector3 scale;
-            Microsoft.Xna.Framework.Quaternion rot;
-            Microsoft.Xna.Framework.Vector3 pos;
-            if (_world.Decompose(out scale, out rot, out pos))
+            if (parent == null)
             {
-                _localScale = scale;
-                _localRotation = new Quaternion(rot);
-                _localPosition = pos;
-                hasDirtyWorld = false;
+                // TODO: If we have a parent - this method can frak things up proper!
+                Microsoft.Xna.Framework.Vector3 scale;
+                Microsoft.Xna.Framework.Quaternion rot;
+                Microsoft.Xna.Framework.Vector3 pos;
+                if (_world.Decompose(out scale, out rot, out pos))
+                {
+                    _localScale = scale;
+                    _localRotation = new Quaternion(rot);
+                    _localPosition = pos;
+                    hasDirtyWorld = false;
+                }
+            }
+            else
+            {
+                throw new NotImplementedException();
             }
         }
 
