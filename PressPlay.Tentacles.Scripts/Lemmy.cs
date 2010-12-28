@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using PressPlay.FFWD.Components;
+﻿using Microsoft.Xna.Framework.Content;
 using PressPlay.FFWD;
-using Microsoft.Xna.Framework.Content;
+using PressPlay.FFWD.Components;
 
 namespace PressPlay.Tentacles.Scripts
 {

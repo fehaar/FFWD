@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using PressPlay.FFWD.Components;
-using PressPlay.FFWD;
-using System.Collections;
 using Microsoft.Xna.Framework.Content;
+using PressPlay.FFWD;
 
 namespace PressPlay.Tentacles.Scripts
 {
@@ -54,7 +50,7 @@ namespace PressPlay.Tentacles.Scripts
         //public AudioWrapper endSound;
 
         public Lemmy lemmyPrefab;
-        //public PathFollowCam cameraPrefab;
+        public PathFollowCam cameraPrefab;
         //public Camera feedbackCameraPrefab;
         //public GUICamera GUICameraPrefab;
         //public UIManager uIManagerPrefab;
@@ -122,7 +118,7 @@ namespace PressPlay.Tentacles.Scripts
         public static bool isLoaded = false;
         private static LevelHandler instance;
 
-        //public PathFollowObject lemmyHunter;
+        public PathFollowObject lemmyHunter;
         private GameObject followObject;
 
         //public GameLibrary library;

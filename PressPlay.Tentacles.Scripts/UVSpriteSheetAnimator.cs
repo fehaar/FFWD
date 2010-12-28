@@ -1,15 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using PressPlay.FFWD;
-using PressPlay.FFWD.Components;
-using Microsoft.Xna.Framework.Content;
 
 namespace PressPlay.Tentacles.Scripts {
 	public class UVSpriteSheetAnimator : UVSpriteSheet {
-		
-		public delegate void AnimationCompleteCallback();
-		private AnimationCompleteCallback animCompleteCallback;
+
+        public delegate void AnimationCompleteCallback();
+        private AnimationCompleteCallback animCompleteCallback;
 		
 		public SpriteSheetAnim[] anims;
 		

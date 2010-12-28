@@ -1,17 +1,9 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
-using PressPlay.FFWD.Components;
 using PressPlay.FFWD;
-using PressPlay.Tentacles.Debugging;
-using PressPlay.Tentacles.Scripts;
+using PressPlay.FFWD.Components;
 
 namespace PressPlay.Tentacles
 {
@@ -76,14 +68,12 @@ namespace PressPlay.Tentacles
         {
 #if WINDOWS_PHONE
             // HACK: Force Phone to include Scripts DLL
-            SimpleRotate rotate = new SimpleRotate();
+            PressPlay.Tentacles.Scripts.SimpleRotate rotate = new PressPlay.Tentacles.Scripts.SimpleRotate();
 #endif
             Application.LoadScene("Scenes/DesatGreen_intro");
-
+            
             Camera.main.transform.localPosition = camStart = new PressPlay.FFWD.Vector3(-7, -7, -17);
             Camera.main.transform.localRotation = PressPlay.FFWD.Quaternion.AngleAxis(-110, PressPlay.FFWD.Vector3.up);
-            Camera.main.up = Microsoft.Xna.Framework.Vector3.Backward;
-            Camera.main.forward = Microsoft.Xna.Framework.Vector3.UnitY;
             Camera.main.viewPort = GraphicsDevice.Viewport;
         }
 

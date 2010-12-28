@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnimatedCheckPoint.cs" />
+    <Compile Include="CamState.cs" />
     <Compile Include="CheckPoint.cs" />
     <Compile Include="ClawBehaviour.cs" />
     <Compile Include="Equations.cs" />
@@ -69,7 +70,16 @@
     <Compile Include="LevelTypeSettings.cs" />
     <Compile Include="MainBody.cs" />
     <Compile Include="OnClawBehaviourConnect.cs" />
-    <Compile Include="PathFollowCam.cs" />
+    <Compile Include="PathFollowCam.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PathFollowCamNode.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PathFollowCamNodeConnection.cs" />
+    <Compile Include="PathFollowCamPosition.cs" />
+    <Compile Include="PathFollowCamStats.cs" />
+    <Compile Include="PathFollowObject.cs" />
     <Compile Include="PPAnimationClip.cs" />
     <Compile Include="PPAnimationHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -85,6 +95,9 @@
     <Compile Include="TurnOffAtDistanceHandler.cs" />
     <Compile Include="UVSpriteSheet.cs" />
     <Compile Include="UVSpriteSheetAnimator.cs" />
+    <Compile Include="Waypoint.cs" />
+    <Compile Include="WaypointMover.cs" />
+    <Compile Include="XNACameraNodeExporter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Background.png">

@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using PressPlay.FFWD;
 using PressPlay.FFWD.Components;
-using Microsoft.Xna.Framework.Content;
 
 namespace PressPlay.Tentacles.Scripts {
 	public class MainBody : MonoBehaviour {

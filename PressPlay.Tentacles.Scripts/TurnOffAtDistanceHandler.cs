@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
+using Microsoft.Xna.Framework.Content;
 using PressPlay.FFWD;
 using PressPlay.FFWD.Components;
-using Microsoft.Xna.Framework.Content;
 
 namespace PressPlay.Tentacles.Scripts {
 	public class TurnOffAtDistanceHandler : MonoBehaviour {
@@ -15,7 +14,7 @@ namespace PressPlay.Tentacles.Scripts {
 
         private TurnOffAtDistance[] turnOffAtDistanceObjects;
 
-        private TurnOffAtDistance[,][] turnOffAtDistanceObjectGrid;
+        //private TurnOffAtDistance[,][] turnOffAtDistanceObjectGrid;
         private GridElement[,] grid;
         private List<GridElement> activeGridElements = new List<GridElement>();
         private List<GridElement> newActiveGridElements = new List<GridElement>();
