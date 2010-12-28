@@ -26,7 +26,7 @@ namespace PressPlay.FFWD.Components
         public Rectangle rect { get; set; }
         public ClearFlags clearFlags { get; set; }
         
-        public static Camera main = new Camera();
+        public static Camera main;
 
         private Matrix _view;
 

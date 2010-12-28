@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace PressPlay.FFWD
 {
@@ -308,6 +305,16 @@ namespace PressPlay.FFWD
         public static Quaternion Euler(Vector3 v)
         {
             return Euler(v.x, v.y, v.z);
+        }
+
+        public static Quaternion LookRotation(Vector3 forward)
+        {
+            return LookRotation(forward, Vector3.up);
+        }
+
+        public static Quaternion LookRotation(Vector3 forward, Vector3 up)
+        {
+            return new Quaternion(Microsoft.Xna.Framework.Quaternion.CreateFromRotationMatrix(Microsoft.Xna.Framework.Matrix.CreateWorld(Microsoft.Xna.Framework.Vector3.Zero, forward, up)));
         }
         #endregion
     }

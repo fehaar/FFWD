@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using PressPlay.FFWD.Components;
 using Microsoft.Xna.Framework.Graphics;
+using PressPlay.FFWD.Components;
 using PressPlay.FFWD.Interfaces;
-using PressPlay.FFWD;
-using System.Diagnostics;
 
 namespace PressPlay.FFWD
 {
@@ -43,7 +41,6 @@ namespace PressPlay.FFWD
             ContentHelper.StaticContent = new ContentManager(Game.Services, Game.Content.RootDirectory);
             ContentHelper.Content = new ContentManager(Game.Services, Game.Content.RootDirectory);
             ContentHelper.IgnoreMissingAssets = true;
-            Camera.main.projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(60), Game.GraphicsDevice.Viewport.AspectRatio, 0.3f, 1000);
             Physics.Initialize();
             Input.Initialize();
             spriteBatch = new SpriteBatch(Game.GraphicsDevice);
@@ -245,19 +242,16 @@ namespace PressPlay.FFWD
             for (int i = 0; i < NewComponents.Count; i++)
             {
                 Component cmp = NewComponents[i];
-                if (!(cmp.isPrefab && cmp.gameObject == null))
+                if (cmp.gameObject != null)
                 {
                     objects.Add(cmp.GetInstanceID(), cmp);
-                    if (cmp.gameObject != null)
+                    if (!cmp.isPrefab)
                     {
-                        if (!cmp.gameObject.isPrefab)
-                        {
-                            activeComponents.Add(cmp);
-                        }
-                        if (!objects.ContainsKey(cmp.gameObject.GetInstanceID()))
-                        {
-                            objects.Add(cmp.gameObject.GetInstanceID(), cmp.gameObject);
-                        }
+                        activeComponents.Add(cmp);
+                    }
+                    if (!objects.ContainsKey(cmp.gameObject.GetInstanceID()))
+                    {
+                        objects.Add(cmp.gameObject.GetInstanceID(), cmp.gameObject);
                     }
                 }
             }

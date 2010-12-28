@@ -1,11 +1,8 @@
-using UnityEngine;
-using UnityEditor;
-using System.Xml;
 using System.IO;
-using System.Collections;
-using System.Collections.Generic;
 using PressPlay.FFWD.Exporter;
 using PressPlay.FFWD.Exporter.Writers;
+using UnityEditor;
+using UnityEngine;
 
 public class ExportSceneWizard : ScriptableWizard {
     

@@ -1,10 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using System.Collections;
 using PressPlay.FFWD.Interfaces;
 
 namespace PressPlay.FFWD
@@ -661,6 +659,17 @@ namespace PressPlay.FFWD
                 for (int childIndex = 0; childIndex < children.Count; childIndex++)
                 {
                     list.AddRange(children[childIndex].GetComponentsInChildren(type));
+                }
+            }
+        }
+
+        internal void GetComponentsInChildrenInt<T>(List<T> list) where T : Component
+        {
+            if (children != null)
+            {
+                for (int childIndex = 0; childIndex < children.Count; childIndex++)
+                {
+                    list.AddRange(children[childIndex].GetComponentsInChildren<T>());
                 }
             }
         }

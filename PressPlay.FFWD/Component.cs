@@ -182,6 +182,11 @@ namespace PressPlay.FFWD
             return gameObject.GetComponentInChildren<T>();
         }
 
+        public T[] GetComponentsInChildren<T>() where T : Component
+        {
+            return gameObject.GetComponentsInChildren<T>();
+        }
+
         #region Component locator methods
         public T GetComponent<T>() where T : Component
         {

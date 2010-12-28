@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace PressPlay.FFWD
 {
@@ -67,13 +66,13 @@ namespace PressPlay.FFWD
         public static void DrawLine(Vector3 start, Vector3 end, Color color)
         {
             // TODO : Add implementation of method
-            throw new NotImplementedException("Method not implemented.");
+            //throw new NotImplementedException("Method not implemented.");
         }
 
         public static void DrawRay(Vector3 start, Vector3 end, Color color)
         {
             // TODO : Add implementation of method
-            throw new NotImplementedException("Method not implemented.");
+            //throw new NotImplementedException("Method not implemented.");
         }
     }
 }

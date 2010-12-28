@@ -25,6 +25,7 @@ namespace PressPlay.FFWD
         }
 
         internal GameObject(bool isPrefab)
+            : base()
         {
             this.isPrefab = isPrefab;
             components = new List<Component>();
@@ -336,7 +337,17 @@ namespace PressPlay.FFWD
 
         public T[] GetComponentsInChildren<T>() where T: Component
         {
-            return (T[])GetComponentsInChildren(typeof(T));
+            List<T> list = new List<T>();
+            for (int i = 0; i < components.Count; i++)
+            {
+                T cmp = components[i] as T;
+                if (cmp != null)
+                {
+                    list.Add(cmp);
+                }
+            }
+            transform.GetComponentsInChildrenInt<T>(list);
+            return list.ToArray();
         }
 
         public Component GetComponentInChildren(Type type)
