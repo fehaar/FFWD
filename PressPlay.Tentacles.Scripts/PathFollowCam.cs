@@ -315,10 +315,17 @@ namespace PressPlay.Tentacles.Scripts {
 			Object[] tmpNodeArray = FindObjectsOfType(typeof(PathFollowCamNode));
 			
 			nodes = new PathFollowCamNode[tmpNodeArray.Length];
-	
+
+            XNACameraNodeExporter nodeExporter = (XNACameraNodeExporter)FindObjectOfType(typeof(XNACameraNodeExporter));
+
 			for (int i = 0; i < tmpNodeArray.Length; i++) {
 				nodes[i] = (PathFollowCamNode)(tmpNodeArray[i]);
-				
+
+                if (nodeExporter.nodes.ContainsKey(nodes[i].GetInstanceID()))
+                {
+                    nodes[i].nextNode = (PathFollowCamNode)Application.Find(nodeExporter.nodes[nodes[i].GetInstanceID()]);
+                }
+
 				if (((PathFollowCamNode)tmpNodeArray[i]).nextNode != null)
 				{
 					((PathFollowCamNode)tmpNodeArray[i]).nextNode.previousNode = (PathFollowCamNode)(tmpNodeArray[i]);

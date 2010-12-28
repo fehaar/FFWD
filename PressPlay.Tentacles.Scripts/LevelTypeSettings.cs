@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using PressPlay.FFWD;
 using PressPlay.FFWD.Components;
 
 namespace PressPlay.Tentacles.Scripts
 {
     public class LevelTypeSettings : MonoBehaviour
     {
-        //public Color backgroundColor;
+        public Color backgroundColor = Color.black;
 
         //public AudioClip defaultBGMusic;
         //public AudioClip defaultBGMusic;

@@ -6,10 +6,5 @@ namespace PressPlay.Tentacles.Scripts
     public class XNACameraNodeExporter : MonoBehaviour
     {
         public Dictionary<int, int> nodes;
-
-        public override void Start()
-        {
-            base.Start();
-        }
     }
 }

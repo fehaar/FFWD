@@ -1,15 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using PressPlay.FFWD;
-using PressPlay.FFWD.Components;
 using Microsoft.Xna.Framework.Content;
+using PressPlay.FFWD;
 
 namespace PressPlay.Tentacles.Scripts {
     public class CheckPoint : TriggeredByLemmy
     {
         [ContentSerializer(Optional = true)]
-        public object connectionedNode { get; set; }
+        public PathFollowCamNode connectionedNode { get; set; }
 
         //public PathFollowCamNode connectionedNode;
         public bool start = false;

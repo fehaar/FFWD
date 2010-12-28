@@ -76,7 +76,8 @@ namespace PressPlay.Tentacles.Scripts
         //public InputHandler inputHandlerPrefab;
         [ContentSerializerIgnore]
         public Camera lemmyFollowCamera;
-        //public PathFollowCam pathFollowCam;
+        [ContentSerializerIgnore]
+        public PathFollowCam pathFollowCam;
 
         private Vector3 forceFromTentacles;
         private Vector3 lastInputPosition = Vector3.zero;
@@ -231,9 +232,6 @@ namespace PressPlay.Tentacles.Scripts
             lastInputTime = Time.time;
 
             lastPosition = transform.position;
-
-            // TODO: Remove this - it is a hack
-            lemmyFollowCamera = Camera.main;
         }
 
         public void ChangeState(State _newState)
@@ -341,8 +339,6 @@ namespace PressPlay.Tentacles.Scripts
             //}
 
             HandleHealth();
-
-            Camera.main.transform.position = mainBody.transform.position + new Vector3(0, -10, 0);
         }
 
         public void AddHealth(float _health)
@@ -440,10 +436,10 @@ namespace PressPlay.Tentacles.Scripts
                 return;
             }
 
-            ray = lemmyFollowCamera.ScreenPointToRay(InputHandler.Instance.GetInputScreenPosition());
 
             if (InputHandler.Instance.GetShootTentacle())
             {
+                ray = lemmyFollowCamera.ScreenPointToRay(InputHandler.Instance.GetInputScreenPosition());
                 //    //Debug.Log(InputHandler.Instance.ScreenRayCheck(ray,GlobalSettings.Instance.enemyInputLayer).ToString());
                 ScreenRayCheckHit hit = InputHandler.Instance.ScreenRayCheck(ray, GlobalSettings.Instance.enemyInputLayer);
 

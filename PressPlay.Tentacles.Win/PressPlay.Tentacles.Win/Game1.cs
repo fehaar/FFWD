@@ -71,10 +71,13 @@ namespace PressPlay.Tentacles
             PressPlay.Tentacles.Scripts.SimpleRotate rotate = new PressPlay.Tentacles.Scripts.SimpleRotate();
 #endif
             Application.LoadScene("Scenes/DesatGreen_intro");
-            
-            Camera.main.transform.localPosition = camStart = new PressPlay.FFWD.Vector3(-7, -7, -17);
-            Camera.main.transform.localRotation = PressPlay.FFWD.Quaternion.AngleAxis(-110, PressPlay.FFWD.Vector3.up);
-            Camera.main.viewPort = GraphicsDevice.Viewport;
+
+            //GameObject mainCam = new GameObject();
+            //Camera.main = (Camera)mainCam.AddComponent(typeof(Camera));
+            //Camera.main.transform.localPosition = camStart = new PressPlay.FFWD.Vector3(-7, -7, -17);
+            //Camera.main.transform.localRotation = PressPlay.FFWD.Quaternion.AngleAxis(-110, PressPlay.FFWD.Vector3.up);
+            //Camera.main.viewPort = GraphicsDevice.Viewport;
+            //Camera.main.projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(60), Camera.main.viewPort.AspectRatio, 0.3f, 1000);
         }
 
         /// <summary>
