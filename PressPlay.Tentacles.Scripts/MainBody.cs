@@ -168,9 +168,9 @@ namespace PressPlay.Tentacles.Scripts {
 
 
             oldRotation = transform.rotation;
-            //transform.LookAt(transform.position + LevelHandler.Instance.cam.GetForwardDirection());
+            transform.LookAt(transform.position + LevelHandler.Instance.cam.GetForwardDirection());
 
-            //transform.rotation = Quaternion.Lerp(oldRotation, transform.rotation, Time.deltaTime * 2f);
+            transform.rotation = Quaternion.Lerp(oldRotation, transform.rotation, Time.deltaTime * 2f);
 
             UpdateState();
         }

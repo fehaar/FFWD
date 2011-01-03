@@ -145,7 +145,7 @@ namespace PressPlay.Tentacles.Scripts {
 		
 		public Vector3 GetForwardDirection()
 		{
-			return currentActiveConnection.transform.right;
+			return -currentActiveConnection.transform.right;
 			//return childCam.transform.right;
 		}
 		
@@ -655,7 +655,7 @@ namespace PressPlay.Tentacles.Scripts {
 			if (_nodeConnection.frontNode.forceCamLookAhead)
 			{
 				//childCamPos.x = _nodeConnection.frontNode.camLookAhead;
-				childCamPos.x = _nodeConnection.frontNode.camLookAheadFraction * (-lerpedCamHeight);
+				childCamPos.x = _nodeConnection.frontNode.camLookAheadFraction * (lerpedCamHeight);
 			}
 			if (_nodeConnection.frontNode.forceCamHeight)
 			{
@@ -734,7 +734,7 @@ namespace PressPlay.Tentacles.Scripts {
 			if (pos.gotoRotation != null)
 			{
 				transform.rotation = Quaternion.Lerp(transform.rotation, pos.gotoRotation, (stats.turnStiffness + (pos.speedMod*stats.speedTurnStiffnessMod)) * Time.deltaTime);
-			}
+            }
 			
 			if (pos.childCamPos != null)
 			{
