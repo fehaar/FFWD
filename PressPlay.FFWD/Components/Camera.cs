@@ -57,8 +57,8 @@ namespace PressPlay.FFWD.Components
         {
             _view = Matrix.CreateLookAt(
                 transform.position,
-                transform.position + (Vector3)Microsoft.Xna.Framework.Vector3.UnitY,
-                Microsoft.Xna.Framework.Vector3.Transform(Microsoft.Xna.Framework.Vector3.Backward, transform.rotation));
+                transform.position - transform.forward,
+                transform.up);
             return _view;            
         }
 

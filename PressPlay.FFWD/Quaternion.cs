@@ -201,6 +201,11 @@ namespace PressPlay.FFWD
         {
             return quaternion.GetHashCode();
         }
+
+        public override string ToString()
+        {
+            return quaternion.ToString();
+        }
         #endregion
 
         #region Private methods
