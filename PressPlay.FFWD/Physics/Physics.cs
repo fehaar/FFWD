@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Box2D.XNA;
 using Microsoft.Xna.Framework;
-using PressPlay.FFWD.Interfaces;
-using PressPlay.FFWD;
 using PressPlay.FFWD.Components;
+using PressPlay.FFWD.Interfaces;
 
 namespace PressPlay.FFWD
 {
@@ -34,8 +32,8 @@ namespace PressPlay.FFWD
 
         private static bool isPaused = false;
         private static IContactProcessor contactProcessor;
-        public static int velocityIterations = 6;
-        public static int positionIterations = 4;
+        public static int velocityIterations = 1;
+        public static int positionIterations = 1;
 
         #region FFWD specific methods
         public static void Initialize()
@@ -67,16 +65,13 @@ namespace PressPlay.FFWD
                 Component comp = (Component)body.GetUserData();
                 if (comp != null)
                 {
-                    if (body.GetType() == BodyType.Static)
-                    {
-                        body.SetTransform(comp.transform.position, -MathHelper.ToRadians(comp.transform.rotation.eulerAngles.y));
-                    }
-                    else
+                    if (body.GetType() != BodyType.Static)
                     {
                         Box2D.XNA.Transform t;
                         body.GetTransform(out t);
                         comp.transform.SetPositionFromPhysics(t.Position, t.GetAngle());
                     }
+                    body.SetActive(comp.gameObject.active);
                 }
                 body = body.GetNext();
             };
