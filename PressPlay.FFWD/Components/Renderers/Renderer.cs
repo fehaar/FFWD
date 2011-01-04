@@ -42,14 +42,6 @@ namespace PressPlay.FFWD.Components
             }
         }
 
-        internal int renderQueue
-        {
-            get
-            {
-                return (material == null) ? 0 : material.renderQueue;
-            }
-        }
-
         public override void Awake()
         {
  	        base.Awake();

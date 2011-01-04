@@ -150,7 +150,17 @@ namespace PressPlay.FFWD.Components
         #region IComparer<IRenderable> Members
         public int Compare(Renderer x, Renderer y)
         {
-            return x.renderQueue.CompareTo(y.renderQueue);
+            int xRq = (x.material != null) ? (x.material.renderQueue) : 0;
+            int yRq = (y.material != null) ? (y.material.renderQueue) : 0;
+            if (xRq == yRq)
+            {
+                if (xRq == 0)
+                {
+                    return 0;
+                }
+                return -x.material.mainTexture.CompareTo(y.material.mainTexture);
+            }
+            return xRq.CompareTo(yRq);
         }
         #endregion
     }
