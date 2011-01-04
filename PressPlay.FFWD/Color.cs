@@ -231,8 +231,7 @@ namespace PressPlay.FFWD
 
         public static Color Lerp(Color a, Color b, float t)
         {
-            // TODO: Implement this method
-            return a;
+            return new Color(Microsoft.Xna.Framework.MathHelper.Lerp(a.r, b.r, t), Microsoft.Xna.Framework.MathHelper.Lerp(a.g, b.g, t), Microsoft.Xna.Framework.MathHelper.Lerp(a.b, b.b, t), Microsoft.Xna.Framework.MathHelper.Lerp(a.a, b.a, t));
         }
     }
 }

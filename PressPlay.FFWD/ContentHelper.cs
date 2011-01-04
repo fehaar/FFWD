@@ -229,7 +229,7 @@ namespace PressPlay.FFWD
             SoundEffect sound = null;
             try
             {
-                sound = Content.Load<SoundEffect>("Sounds\\" + Path.GetFileNameWithoutExtension(name));
+                sound = Content.Load<SoundEffect>(name);
             }
             catch
             {

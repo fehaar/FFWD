@@ -108,7 +108,6 @@ namespace PressPlay.FFWD
         //TODO Implement Lerp function
         public static float Lerp(float from, float to, float t)
         {
-            //throw new NotImplementedException("Lerp is not implemented!");
             return MathHelper.Lerp(from, to, t);
         }
 

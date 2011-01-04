@@ -77,6 +77,8 @@ namespace PressPlay.FFWD.ScreenManager
             if (gameObject.renderer == null)
             {
                 gameObject.AddComponent(new SpriteRenderer());
+                gameObject.renderer.material = new Material();
+                gameObject.renderer.material.renderQueue = 1000;
             }
         }
 
