@@ -46,6 +46,11 @@ namespace PressPlay.FFWD.Components
         public SpriteRenderer(string texture)
         {
             this.Texture = texture;
+            if (material == null)
+            {
+                material = new Material();
+                material.renderQueue = 1000;
+            }
         }
 
         public override void Awake()
@@ -60,6 +65,7 @@ namespace PressPlay.FFWD.Components
             if (texture == null)
             {
                 texture = ContentHelper.GetTexture(Texture);
+                material.texture = texture;
             }
 
             if(texture != null){

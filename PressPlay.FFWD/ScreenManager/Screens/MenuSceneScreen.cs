@@ -132,6 +132,7 @@ namespace PressPlay.FFWD.ScreenManager
 
         public override void Draw(GameTime gameTime)
         {
+            
             GraphicsDevice graphics = ScreenManager.GraphicsDevice;
             SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
             SpriteFont font = ScreenManager.Font;
@@ -142,10 +143,6 @@ namespace PressPlay.FFWD.ScreenManager
                     ((SpriteRenderer)button.gameObject.renderer).material.color = new Color(1, 1, 1, TransitionAlpha); //Color.FromNonPremultiplied(255, 255, 255, (int)(255*(TransitionAlpha)));
                 }
             }
-
-
-            spriteBatch.Begin();
-            spriteBatch.End();
         }
 
         #endregion

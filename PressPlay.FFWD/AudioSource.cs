@@ -37,7 +37,7 @@ namespace PressPlay.FFWD
             set { _maxVolume = Mathf.Clamp01(value); }
         }
 
-        private float _volume = 0;
+        private float _volume = 1;
         public float volume
         {
             get
@@ -66,7 +66,22 @@ namespace PressPlay.FFWD
         }
 
         public float pitch = 0;
-        public bool loop = false;
+        private bool _loop = false;
+        public bool loop
+        {
+            get
+            {
+                return _loop;
+            }
+            set
+            {
+                _loop = value;
+                if (soundEffect != null)
+                {
+                    soundEffect.IsLooped = _loop;
+                }
+            }
+        }
         public bool playOnAwake;
         public float time = 0;
 
@@ -83,6 +98,7 @@ namespace PressPlay.FFWD
         public void Play()
         {
             if (soundEffect == null) return;
+            Debug.Log("Playing sound effect");
             soundEffect.Play();
         }
 
