@@ -25,6 +25,16 @@ namespace PressPlay.FFWD
             }
         }
 
+        public AudioClip()
+        {
+
+        }
+
+        public AudioClip(SoundEffect sound)
+        {
+            this.sound = sound;
+        }
+
         public void PrepareLoadContent()
         {
             ContentHelper.LoadSound(clip);
