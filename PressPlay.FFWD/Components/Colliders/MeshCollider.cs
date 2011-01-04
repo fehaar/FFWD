@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
-using PressPlay.FFWD.Interfaces;
-using PressPlay.FFWD;
+﻿using System.Collections.Generic;
 using Box2D.XNA;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace PressPlay.FFWD.Components
 {
-    public class MeshCollider : Collider, IRenderable
+    public class MeshCollider : Collider
     {
         #region ContentProperties
         public short[] triangles { get; set; }
@@ -64,47 +59,5 @@ namespace PressPlay.FFWD.Components
                 pointList[i].Color = Microsoft.Xna.Framework.Color.Red;
             }
         }
-
-        public override void Start()
-        {
-        }
-
-
-        #region IRenderable Members
-        public void Draw(SpriteBatch batch)
-        {
-            //if (effect == null)
-            //{
-            //    effect = new BasicEffect(batch.GraphicsDevice);
-            //    effect.VertexColorEnabled = true;
-            //}
-
-            //effect.World = transform.world;
-            //effect.View = Camera.main.View();
-            //effect.Projection = Camera.main.projectionMatrix;
-
-            //RasterizerState oldrasterizerState = batch.GraphicsDevice.RasterizerState;
-            //RasterizerState rasterizerState = new RasterizerState();
-            //rasterizerState.FillMode = FillMode.WireFrame;
-            //rasterizerState.CullMode = CullMode.None;
-            //batch.GraphicsDevice.RasterizerState = rasterizerState;
-
-            //foreach (EffectPass pass in effect.CurrentTechnique.Passes)
-            //{
-            //    pass.Apply();
-            //    batch.GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionColor>(
-            //        PrimitiveType.TriangleList,
-            //        pointList,
-            //        0,   // vertex buffer offset to add to each element of the index buffer
-            //        vertices.Length,   // number of vertices to draw
-            //        triangles,
-            //        0,   // first index element to read
-            //        triangles.Length / 3    // number of primitives to draw
-            //    );
-            //}
-
-            //batch.GraphicsDevice.RasterizerState = oldrasterizerState;
-        }
-        #endregion
     }
 }
