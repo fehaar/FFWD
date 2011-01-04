@@ -112,10 +112,6 @@ namespace PressPlay.FFWD.Components
             {
                 renderQueue.Add(renderer);
             }
-            else
-            {
-                int i = 0;
-            }
         }
 
         internal static void DoRender(GraphicsDevice device)
@@ -158,7 +154,7 @@ namespace PressPlay.FFWD.Components
                 {
                     return 0;
                 }
-                return -x.material.mainTexture.CompareTo(y.material.mainTexture);
+                return x.material.mainTexture.CompareTo(y.material.mainTexture);
             }
             return xRq.CompareTo(yRq);
         }
