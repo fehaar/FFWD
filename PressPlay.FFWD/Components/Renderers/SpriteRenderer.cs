@@ -1,11 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using PressPlay.FFWD.Interfaces;
 
 namespace PressPlay.FFWD.Components
 {
-    public class SpriteRenderer : Renderer, IRenderable, Interfaces.IUpdateable
+    public class SpriteRenderer : Renderer, Interfaces.IUpdateable
     {
         #region Content properties
         [ContentSerializer(Optional=true)]
@@ -89,12 +88,17 @@ namespace PressPlay.FFWD.Components
         #endregion
 
         #region IRenderable Members
-        public override void Draw(SpriteBatch batch)
+        private SpriteBatch batch;
+        public override void Draw(GraphicsDevice device, Camera cam)
         {
-
             if (texture == null)
             {
                 return;
+            }
+
+            if (batch == null)
+            {
+                batch = new SpriteBatch(device);
             }
 
             batch.Begin();

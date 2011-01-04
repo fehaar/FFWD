@@ -114,9 +114,7 @@ namespace PressPlay.FFWD
         #region Public methods
         public bool CompareTag(string tag)
         {
-            // TODO : Add implementation of method
-            throw new NotImplementedException("Method not implemented.");
-
+            return gameObject.CompareTag(tag);
         }
         #endregion
 

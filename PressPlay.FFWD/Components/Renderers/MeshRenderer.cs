@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
-using PressPlay.FFWD.Components;
-using PressPlay.FFWD.Interfaces;
-using Microsoft.Xna.Framework.Content;
 
 namespace PressPlay.FFWD.Components
 {
@@ -21,7 +14,7 @@ namespace PressPlay.FFWD.Components
         }
 
         #region IRenderable Members
-        public override void Draw(SpriteBatch batch)
+        public override void Draw(GraphicsDevice device, Camera cam)
         {
             if (filter == null)
             {                
@@ -29,24 +22,24 @@ namespace PressPlay.FFWD.Components
             }
             if (filter.CanDraw())
             {
-                filter.Draw(batch, materials);
+                filter.Draw(device, cam, materials);
                 return;
             }
 
             Matrix world = transform.world;
 
             // Do we have negative scale - if so, switch culling
-            RasterizerState oldRaster = batch.GraphicsDevice.RasterizerState;
-            BlendState oldBlend = batch.GraphicsDevice.BlendState;
-            SamplerState oldSample = batch.GraphicsDevice.SamplerStates[0];
+            RasterizerState oldRaster = device.RasterizerState;
+            BlendState oldBlend = device.BlendState;
+            SamplerState oldSample = device.SamplerStates[0];
             if (transform.lossyScale.x < 0 || transform.lossyScale.y < 0 || transform.lossyScale.z < 0)
             {
-                batch.GraphicsDevice.RasterizerState = new RasterizerState() { FillMode = oldRaster.FillMode, CullMode = CullMode.CullClockwiseFace };
+                device.RasterizerState = new RasterizerState() { FillMode = oldRaster.FillMode, CullMode = CullMode.CullClockwiseFace };
             }
             if (material.IsAdditive())
             {
-                batch.GraphicsDevice.BlendState = BlendState.Additive;
-                batch.GraphicsDevice.SamplerStates[0] = SamplerState.LinearClamp;
+                device.BlendState = BlendState.Additive;
+                device.SamplerStates[0] = SamplerState.LinearClamp;
             }
 
             // Draw the model.
@@ -55,8 +48,8 @@ namespace PressPlay.FFWD.Components
             {
                 BasicEffect effect = mesh.Effects[e] as BasicEffect;
                 effect.World = world;
-                effect.View = Camera.main.View();
-                effect.Projection = Camera.main.projectionMatrix;
+                effect.View = cam.View();
+                effect.Projection = cam.projectionMatrix;
                 effect.LightingEnabled = false;
                 if (material.texture != null)
                 {
@@ -68,12 +61,12 @@ namespace PressPlay.FFWD.Components
 
             if (transform.lossyScale.x < 0 || transform.lossyScale.y < 0 || transform.lossyScale.z < 0)
             {
-                batch.GraphicsDevice.RasterizerState = oldRaster;
+                device.RasterizerState = oldRaster;
             }
             if (material.IsAdditive())
             {
-                batch.GraphicsDevice.BlendState = oldBlend;
-                batch.GraphicsDevice.SamplerStates[0] = oldSample;
+                device.BlendState = oldBlend;
+                device.SamplerStates[0] = oldSample;
             }
         }
         #endregion

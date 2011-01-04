@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Microsoft.Xna.Framework;
 using NUnit.Framework;
-using PressPlay.FFWD.Interfaces;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
 
 namespace PressPlay.FFWD.Test.Core_framework
 {
@@ -153,38 +147,6 @@ namespace PressPlay.FFWD.Test.Core_framework
         //    Assert.That(drawCalled, Is.False);
         //}
 
-        [Test]
-        public void DrawWillCallDrawOnComponentsOnTheScene()
-        {
-            bool drawCalled = false;
-            component.onDraw = () => { drawCalled = true; };
-
-            Assert.That(drawCalled, Is.False);
-            app.Draw(new GameTime());
-            Assert.That(drawCalled, Is.True);
-        }
-
-        [Test]
-        public void DrawWillCallDrawOnChildComponentsOnTheScene()
-        {
-            bool drawCalled = false;
-            childComponent.onDraw = () => { drawCalled = true; };
-
-            Assert.That(drawCalled, Is.False);
-            app.Draw(new GameTime());
-            Assert.That(drawCalled, Is.True);
-        }
-
-        [Test]
-        public void DrawWillNotBeCalledOnPrefabComponents()
-        {
-            bool drawCalled = false;
-            prefabComponent.onDraw = () => { drawCalled = true; };
-
-            Assert.That(drawCalled, Is.False);
-            app.Draw(new GameTime());
-            Assert.That(drawCalled, Is.False);
-        }
         #endregion
 
         #region Start calls

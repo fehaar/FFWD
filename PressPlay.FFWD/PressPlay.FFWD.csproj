@@ -171,7 +171,6 @@
     <Compile Include="Interfaces\ICollidable.cs" />
     <Compile Include="Interfaces\IContactProcessor.cs" />
     <Compile Include="Interfaces\IFixedUpdateable.cs" />
-    <Compile Include="Interfaces\IRenderable.cs" />
     <Compile Include="Interfaces\IUpdateable.cs" />
     <Compile Include="GameObjectContactProcessor.cs" />
     <Compile Include="Physics\LayerMask.cs" />

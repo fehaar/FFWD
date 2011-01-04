@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework.Content;
+﻿using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace PressPlay.FFWD.Components
@@ -46,7 +42,7 @@ namespace PressPlay.FFWD.Components
             return null;
         }
 
-        internal void Draw(SpriteBatch batch, Material[] materials)
+        internal void Draw(GraphicsDevice device, Camera cam, Material[] materials)
         {
             if (sharedMesh.vertices == null)
             {
@@ -54,12 +50,12 @@ namespace PressPlay.FFWD.Components
             }
             if (effect == null)
             {
-                effect = new BasicEffect(batch.GraphicsDevice);
+                effect = new BasicEffect(device);
             }
 
             effect.World = transform.world;
-            effect.View = Camera.main.View();
-            effect.Projection = Camera.main.projectionMatrix;
+            effect.View = cam.View();
+            effect.Projection = cam.projectionMatrix;
             if (materials != null && materials.Length > 0 && materials[0].texture != null)
             {
                 effect.TextureEnabled = true;
@@ -68,13 +64,13 @@ namespace PressPlay.FFWD.Components
             effect.VertexColorEnabled = false;
             effect.Alpha = 1.0f;
 
-            RasterizerState oldrasterizerState = batch.GraphicsDevice.RasterizerState;
+            RasterizerState oldrasterizerState = device.RasterizerState;
             RasterizerState rasterizerState = new RasterizerState();
             rasterizerState.CullMode = CullMode.None;
-            batch.GraphicsDevice.RasterizerState = rasterizerState;
+            device.RasterizerState = rasterizerState;
 
-            BlendState oldBlend = batch.GraphicsDevice.BlendState;
-            batch.GraphicsDevice.BlendState = BlendState.AlphaBlend;
+            BlendState oldBlend = device.BlendState;
+            device.BlendState = BlendState.AlphaBlend;
 
             VertexPositionNormalTexture[] data = new VertexPositionNormalTexture[sharedMesh.vertices.Length];
             for (int i = 0; i < sharedMesh.vertices.Length; i++)
@@ -90,7 +86,7 @@ namespace PressPlay.FFWD.Components
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
-                batch.GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(
+                device.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(
                     PrimitiveType.TriangleList,
                     data,
                     0,
@@ -101,8 +97,8 @@ namespace PressPlay.FFWD.Components
                 );
             }
 
-            batch.GraphicsDevice.RasterizerState = oldrasterizerState;
-            batch.GraphicsDevice.BlendState = oldBlend;
+            device.RasterizerState = oldrasterizerState;
+            device.BlendState = oldBlend;
         }
     }
 }

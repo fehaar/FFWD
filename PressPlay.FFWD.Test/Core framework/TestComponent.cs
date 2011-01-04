@@ -1,20 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework.Graphics;
-using PressPlay.FFWD.Interfaces;
 using Box2D.XNA;
+using PressPlay.FFWD.Interfaces;
 
 namespace PressPlay.FFWD.Test.Core_framework
 {
-    internal class TestComponent : Component, IFixedUpdateable, IUpdateable, IRenderable, ICollidable
+    internal class TestComponent : Component, IFixedUpdateable, IUpdateable, ICollidable
     {
         internal Action onAwake { get; set; }
         internal Action onStart { get; set; }
         internal Action onFixedUpdate { get; set; }
         internal Action onUpdate { get; set; }
-        internal Action onDraw { get; set; }
         internal Action onTriggerEnter { get; set; }
         internal Action onTriggerExit { get; set; }
         internal Action onCollisionEnter { get; set; }
@@ -38,16 +33,6 @@ namespace PressPlay.FFWD.Test.Core_framework
                 onStart();
             }
         }
-
-        #region IRenderable Members
-        public void Draw(SpriteBatch batch)
-        {
-            if (onDraw != null)
-            {
-                onDraw();
-            }
-        }
-        #endregion
 
         #region IUpdateable Members
         public void Update()

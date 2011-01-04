@@ -414,9 +414,7 @@ namespace PressPlay.FFWD
 
         public bool CompareTag(string tag)
         {
-            // TODO : Add implementation of method
-            throw new NotImplementedException("Method not implemented.");
-
+            return this.tag.Equals(tag, StringComparison.InvariantCultureIgnoreCase);
         }
 
         /// <summary>
