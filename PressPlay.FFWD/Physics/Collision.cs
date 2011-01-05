@@ -32,5 +32,14 @@ namespace PressPlay.FFWD
             }
         }
 
+        internal void SetColliders(Collider a, Collider b)
+        {
+            collider = b;
+            for (int j = 0; j < contacts.Length; j++)
+            {
+                contacts[j].thisCollider = a;
+                contacts[j].otherCollider = b;
+            }
+        }
     }
 }
