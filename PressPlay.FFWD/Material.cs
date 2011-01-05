@@ -44,11 +44,12 @@ namespace PressPlay.FFWD
         {
             get
             {
+                // NOTE: We have hardcoded shader values here that should be configurable in some other way
                 if (shader == "iPhone/Particles/Additive Culled")
                 {
                     return BlendState.Additive;
                 }
-                if (renderQueue == 3000)
+                if (renderQueue == 3000 || shader == "TransperantNoLight")
                 {
                     return BlendState.AlphaBlend;
                 }
