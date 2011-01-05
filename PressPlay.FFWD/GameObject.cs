@@ -204,32 +204,68 @@ namespace PressPlay.FFWD
         #region Update and event methods
         internal void OnTriggerEnter(Collider collider)
         {
-            SendMessage("OnTriggerEnter", collider, SendMessageOptions.DontRequireReceiver);
+            for (int i = 0; i < components.Count; i++)
+            {
+                if (components[i] is MonoBehaviour)
+                {
+                    (components[i] as MonoBehaviour).OnTriggerEnter(collider);
+                }
+            }
         }
 
         internal void OnTriggerStay(Collider collider)
         {
-            SendMessage("OnTriggerStay", collider, SendMessageOptions.DontRequireReceiver);
+            for (int i = 0; i < components.Count; i++)
+            {
+                if (components[i] is MonoBehaviour)
+                {
+                    (components[i] as MonoBehaviour).OnTriggerStay(collider);
+                }
+            }
         }
 
         internal void OnTriggerExit(Collider collider)
         {
-            SendMessage("OnTriggerExit", collider, SendMessageOptions.DontRequireReceiver);
+            for (int i = 0; i < components.Count; i++)
+            {
+                if (components[i] is MonoBehaviour)
+                {
+                    (components[i] as MonoBehaviour).OnTriggerExit(collider);
+                }
+            }
         }
 
         internal void OnCollisionEnter(Collision collision)
         {
-            SendMessage("OnCollisionEnter", collision, SendMessageOptions.DontRequireReceiver);
+            for (int i = 0; i < components.Count; i++)
+            {
+                if (components[i] is MonoBehaviour)
+                {
+                    (components[i] as MonoBehaviour).OnCollisionEnter(collision);
+                }
+            }
         }
 
         internal void OnCollisionStay(Collision collision)
         {
-            SendMessage("OnCollisionStay", collision, SendMessageOptions.DontRequireReceiver);
+            for (int i = 0; i < components.Count; i++)
+            {
+                if (components[i] is MonoBehaviour)
+                {
+                    (components[i] as MonoBehaviour).OnCollisionStay(collision);
+                }
+            }
         }
 
         internal void OnCollisionExit(Collision collision)
         {
-            SendMessage("OnCollisionExit", collision, SendMessageOptions.DontRequireReceiver);
+            for (int i = 0; i < components.Count; i++)
+            {
+                if (components[i] is MonoBehaviour)
+                {
+                    (components[i] as MonoBehaviour).OnCollisionExit(collision);
+                }
+            }
         }
         #endregion
 

@@ -84,6 +84,7 @@
     <Compile Include="Core framework\Bounds\WhenCreatingBounds.cs" />
     <Compile Include="Core framework\WhenUsingTheComponentShortcutMethods.cs" />
     <Compile Include="Core framework\WhenUsingTheGameObjectShortcutProperties.cs" />
+    <Compile Include="Physics facts\WhenCollisionsOccur.cs" />
     <Compile Include="Physics facts\WhenDeterminingWhatIsAtAPoint.cs" />
     <Compile Include="Physics facts\WhenInitializingPhysics.cs" />
     <Compile Include="Physics facts\WhenPerformingARaycast.cs" />
