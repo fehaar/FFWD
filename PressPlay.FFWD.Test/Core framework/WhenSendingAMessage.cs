@@ -16,6 +16,11 @@ namespace PressPlay.FFWD.Test.Core_framework
                 messageCalled = true;
             }	
 
+            void NonPublicMessage()
+            {
+                messageCalled = true;
+            }
+
             public void SetValue(int value)
             {
                 this.value = value;
@@ -47,6 +52,18 @@ namespace PressPlay.FFWD.Test.Core_framework
         }
 
         [Test]
+        public void WeCanCallANonPublicMethodWithTheMessage()
+        {
+            GameObject go = new GameObject();
+            MessageComponent comp = new MessageComponent();
+            go.AddComponent(comp);
+
+            go.SendMessage("NonPublicMessage");
+
+            Assert.That(comp.messageCalled, Is.True);
+        }
+
+        [Test]
         public void AnErrorIsLoggedIfWeRequireAReceiverAndNoMethodAnswers()
         {
             GameObject go = new GameObject();
@@ -54,6 +71,7 @@ namespace PressPlay.FFWD.Test.Core_framework
             go.AddComponent(comp);
             MemoryStream ms = new MemoryStream();
             System.Diagnostics.TextWriterTraceListener listener = new System.Diagnostics.TextWriterTraceListener(ms);
+            System.Diagnostics.Debug.Listeners.Clear();
             System.Diagnostics.Debug.Listeners.Add(listener);
 
             go.SendMessage("NonExisting", 42, SendMessageOptions.RequireReceiver);
@@ -70,6 +88,7 @@ namespace PressPlay.FFWD.Test.Core_framework
             go.AddComponent(comp);
             MemoryStream ms = new MemoryStream();
             System.Diagnostics.TextWriterTraceListener listener = new System.Diagnostics.TextWriterTraceListener(ms);
+            System.Diagnostics.Debug.Listeners.Clear();
             System.Diagnostics.Debug.Listeners.Add(listener);
 
             go.SendMessage("NonExisting", 42, SendMessageOptions.DontRequireReceiver);

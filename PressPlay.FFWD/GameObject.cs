@@ -229,7 +229,7 @@ namespace PressPlay.FFWD
 
         internal void OnCollisionExit(Collision collision)
         {
-            SendMessage("OnCollisionEnter", collision, SendMessageOptions.DontRequireReceiver);
+            SendMessage("OnCollisionExit", collision, SendMessageOptions.DontRequireReceiver);
         }
         #endregion
 
@@ -452,8 +452,12 @@ namespace PressPlay.FFWD
             for (int i = 0; i < components.Count; i++)
             {
                 Component cmp = components[i];
+                if (cmp is Transform)
+                {
+                    continue;
+                }
                 Type tp = cmp.GetType();
-                MethodInfo info = tp.GetMethod(methodName);
+                MethodInfo info = tp.GetMethod(methodName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.InvokeMethod);
                 if (info != null)
                 {
                     info.Invoke(cmp, (value == null) ? null : new object[1] { value });
