@@ -1,22 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿
 namespace PressPlay.FFWD.Test.Core_framework
 {
     public class TestHierarchy
     {
         public TestHierarchy()
         {
-            root = new GameObject();
+            root = new GameObject("root");
             rootTrans = root.transform;
 
-            child = new GameObject();
+            child = new GameObject("child");
             childTrans = child.transform;
             childTrans.parent = rootTrans;
 
-            childOfChild = new GameObject();
+            childOfChild = new GameObject("childOfChild");
             childOfChildTrans = childOfChild.transform;
             childOfChildTrans.parent = childTrans;
         }

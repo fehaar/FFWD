@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Box2D.XNA;
+using System.Reflection;
 using Microsoft.Xna.Framework.Content;
 using PressPlay.FFWD.Components;
-using PressPlay.FFWD.Interfaces;
 
 namespace PressPlay.FFWD
 {
@@ -203,70 +202,34 @@ namespace PressPlay.FFWD
         #endregion
 
         #region Update and event methods
-        internal void OnTriggerEnter(Contact contact)
+        internal void OnTriggerEnter(Collider collider)
         {
-            for (int i = 0; i < components.Count; i++)
-            {
-                if (components[i].isStarted && components[i] is ICollidable)
-                {
-                    (components[i] as ICollidable).OnTriggerEnter(contact);
-                }
-            }
+            SendMessage("OnTriggerEnter", collider, SendMessageOptions.DontRequireReceiver);
         }
 
-        internal void OnTriggerExit(Contact contact)
+        internal void OnTriggerStay(Collider collider)
         {
-            for (int i = 0; i < components.Count; i++)
-            {
-                if (components[i].isStarted && components[i] is ICollidable)
-                {
-                    (components[i] as ICollidable).OnTriggerExit(contact);
-                }
-            }
+            SendMessage("OnTriggerStay", collider, SendMessageOptions.DontRequireReceiver);
         }
 
-        internal void OnCollisionEnter(Contact contact)
+        internal void OnTriggerExit(Collider collider)
         {
-            for (int i = 0; i < components.Count; i++)
-            {
-                if (components[i].isStarted && components[i] is ICollidable)
-                {
-                    (components[i] as ICollidable).OnCollisionEnter(contact);
-                }
-            }
+            SendMessage("OnTriggerExit", collider, SendMessageOptions.DontRequireReceiver);
         }
 
-        internal void OnCollisionExit(Contact contact)
+        internal void OnCollisionEnter(Collision collision)
         {
-            for (int i = 0; i < components.Count; i++)
-            {
-                if (components[i].isStarted && components[i] is ICollidable)
-                {
-                    (components[i] as ICollidable).OnCollisionExit(contact);
-                }
-            }
+            SendMessage("OnCollisionEnter", collision, SendMessageOptions.DontRequireReceiver);
         }
 
-        internal void OnPreSolve(Contact contact, Manifold manifold)
+        internal void OnCollisionStay(Collision collision)
         {
-            for (int i = 0; i < components.Count; i++)
-            {
-                if (components[i].isStarted && components[i] is ICollidable)
-                {
-                    (components[i] as ICollidable).OnPreSolve(contact, manifold);
-                }
-            }
+            SendMessage("OnCollisionStay", collision, SendMessageOptions.DontRequireReceiver);
         }
 
-        internal void OnPostSolve(Contact contact, ContactImpulse contactImpulse)
+        internal void OnCollisionExit(Collision collision)
         {
-            for (int i = 0; i < components.Count; i++)
-            {
-                if (components[i].isStarted && components[i] is ICollidable)
-                {
-                    (components[i] as ICollidable).OnPostSolve(contact, contactImpulse);
-                }
-            }
+            SendMessage("OnCollisionEnter", collision, SendMessageOptions.DontRequireReceiver);
         }
         #endregion
 
@@ -454,19 +417,69 @@ namespace PressPlay.FFWD
             throw new NotImplementedException("Method not implemented.");
         }
 
+        public void SendMessageUpwards(string methodName)
+        {
+            SendMessageUpwards(methodName, null, SendMessageOptions.RequireReceiver);
+        }
+
+        public void SendMessageUpwards(string methodName, SendMessageOptions sendMessageOptions)
+        {
+            SendMessageUpwards(methodName, null, sendMessageOptions);
+        }
+
         public void SendMessageUpwards(string methodName, object value, SendMessageOptions sendMessageOptions)
         {
-            throw new NotImplementedException("SendMessageUpwards is not implemented");
+            SendMessage(methodName, value, sendMessageOptions);
+            if (transform.parent != null)
+            {
+                transform.parent.gameObject.SendMessageUpwards(methodName, value, sendMessageOptions);
+            }
+        }
+
+        public void SendMessage(string methodName)
+        {
+            SendMessage(methodName, null, SendMessageOptions.RequireReceiver);
+        }
+
+        public void SendMessage(string methodName, object value)
+        {
+            SendMessage(methodName, value, SendMessageOptions.RequireReceiver);
         }
 
         public void SendMessage(string methodName, object value, SendMessageOptions sendMessageOptions)
         {
-            throw new NotImplementedException("SendMessage is not implemented");
+            bool hadListener = false;
+            for (int i = 0; i < components.Count; i++)
+            {
+                Component cmp = components[i];
+                Type tp = cmp.GetType();
+                MethodInfo info = tp.GetMethod(methodName);
+                if (info != null)
+                {
+                    info.Invoke(cmp, (value == null) ? null : new object[1] { value });
+                    hadListener = true;
+                }
+            }
+            if (sendMessageOptions == SendMessageOptions.RequireReceiver && !hadListener)
+            {
+                Debug.Log("There were no listeners to the message " + methodName + " on " + this.ToString());
+            }
         }
 
-        public void SendMessage(string methodName, SendMessageOptions sendMessageOptions)
+        public void BroadcastMessage(string methodName)
         {
-            SendMessage(methodName, null, sendMessageOptions);
+            BroadcastMessage(methodName, null, SendMessageOptions.RequireReceiver);
+        }
+
+        public void BroadcastMessage(string methodName, object value)
+        {
+            BroadcastMessage(methodName, value, SendMessageOptions.RequireReceiver);
+        }
+
+        public void BroadcastMessage(string methodName, object value, SendMessageOptions sendMessageOptions)
+        {
+            SendMessage(methodName, value, sendMessageOptions);
+            transform.BroadcastMessage(methodName, value, sendMessageOptions);
         }
         #endregion
 

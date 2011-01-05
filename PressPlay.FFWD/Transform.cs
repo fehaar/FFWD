@@ -3,13 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using PressPlay.FFWD.Interfaces;
 
 namespace PressPlay.FFWD
 {
     public enum Space { World, Self }
 
-    public class Transform : Component, IEnumerable, ICollidable
+    public class Transform : Component, IEnumerable
     {
         #region Constructors
         internal Transform()
@@ -590,74 +589,6 @@ namespace PressPlay.FFWD
         }
         #endregion
 
-        #region ICollidable Members
-        public void OnTriggerEnter(Box2D.XNA.Contact contact)
-        {
-            if (children != null)
-            {
-                for (int i = 0; i < children.Count; i++)
-                {
-                    children[i].OnTriggerEnter(contact);
-                }
-            }
-        }
-
-        public void OnTriggerExit(Box2D.XNA.Contact contact)
-        {
-            if (children != null)
-            {
-                for (int i = 0; i < children.Count; i++)
-                {
-                    children[i].OnTriggerExit(contact);
-                }
-            }
-        }
-
-        public void OnCollisionEnter(Box2D.XNA.Contact contact)
-        {
-            if (children != null)
-            {
-                for (int i = 0; i < children.Count; i++)
-                {
-                    children[i].OnCollisionEnter(contact);
-                }
-            }
-        }
-
-        public void OnCollisionExit(Box2D.XNA.Contact contact)
-        {
-            if (children != null)
-            {
-                for (int i = 0; i < children.Count; i++)
-                {
-                    children[i].OnCollisionExit(contact);
-                }
-            }
-        }
-
-        public void OnPreSolve(Box2D.XNA.Contact contact, Box2D.XNA.Manifold manifold)
-        {
-            if (children != null)
-            {
-                for (int i = 0; i < children.Count; i++)
-                {
-                    children[i].OnPreSolve(contact, manifold);
-                }
-            }
-        }
-
-        public void OnPostSolve(Box2D.XNA.Contact contact, Box2D.XNA.ContactImpulse contactImpulse)
-        {
-            if (children != null)
-            {
-                for (int i = 0; i < children.Count; i++)
-                {
-                    children[i].OnPostSolve(contact, contactImpulse);
-                }
-            }
-        }
-        #endregion
-
         #region Component locator methods
         internal void GetComponentsInChildrenInt(Type type, List<Component> list)
         {
@@ -683,7 +614,7 @@ namespace PressPlay.FFWD
 
         internal Component GetComponentInChildrenInt(Type type)
         {
-            if (transform != null && transform.children != null)
+            if (transform.children != null)
             {
                 for (int childIndex = 0; childIndex < transform.children.Count; childIndex++)
                 {
@@ -697,5 +628,16 @@ namespace PressPlay.FFWD
             return null;
         }
         #endregion
+
+        internal void BroadcastMessage(string methodName, object value, SendMessageOptions sendMessageOptions)
+        {
+            if (transform.children != null)
+            {
+                for (int i = 0; i < children.Count; i++)
+                {
+                    children[i].BroadcastMessage(methodName, value, sendMessageOptions);
+                }
+            }
+        }
     }
 }

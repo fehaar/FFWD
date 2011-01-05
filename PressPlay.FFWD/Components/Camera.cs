@@ -124,7 +124,6 @@ namespace PressPlay.FFWD.Components
 
         internal void doRender(GraphicsDevice device)
         {
-            Debug.Display(name, renderQueue.Count);
             renderQueue.Sort(this);
             for (int i = 0; i < renderQueue.Count; i++)
             {

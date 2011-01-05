@@ -76,6 +76,7 @@
     <Compile Include="Core framework\WhenLoadingAScene.cs" />
     <Compile Include="Core framework\WhenLocatingAComponent.cs" />
     <Compile Include="Core framework\WhenRunningTheGameLoop.cs" />
+    <Compile Include="Core framework\WhenSendingAMessage.cs" />
     <Compile Include="Core framework\WhenSettingActiveOnAGameObject.cs" />
     <Compile Include="Core framework\WhenSettingNewIds.cs" />
     <Compile Include="Core framework\Bounds\WhenSettingTheCenterOfBounds.cs" />
@@ -86,7 +87,6 @@
     <Compile Include="Physics facts\WhenDeterminingWhatIsAtAPoint.cs" />
     <Compile Include="Physics facts\WhenInitializingPhysics.cs" />
     <Compile Include="Physics facts\WhenPerformingARaycast.cs" />
-    <Compile Include="Physics facts\WhenReactingToPhysics.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

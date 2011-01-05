@@ -168,11 +168,12 @@
     <Compile Include="ContentHelper.cs" />
     <Compile Include="Debug.cs" />
     <Compile Include="GameObject.cs" />
-    <Compile Include="Interfaces\ICollidable.cs" />
     <Compile Include="Interfaces\IContactProcessor.cs" />
     <Compile Include="Interfaces\IFixedUpdateable.cs" />
     <Compile Include="Interfaces\IUpdateable.cs" />
     <Compile Include="GameObjectContactProcessor.cs" />
+    <Compile Include="Physics\Collision.cs" />
+    <Compile Include="Physics\ContactPoint.cs" />
     <Compile Include="Physics\LayerMask.cs" />
     <Compile Include="Physics\Physics.cs" />
     <Compile Include="Physics\RaycastHelper.cs" />
