@@ -41,7 +41,7 @@ namespace PressPlay.FFWD.Exporter
 
         private void OverrideMethods()
         {
-            string[] methods = new string[] { "Start", "Update", "Awake" };
+            string[] methods = new string[] { "Start", "Update", "Awake", "OnTriggerEnter", "OnTriggerExit", "OnTriggerStay", "OnCollisionEnter", "OnCollisionExit", "OnCollisionStay" };
             foreach (string method in methods)
             {
                 Regex methEx = new Regex(@"void\s+" + method + @"\s?\(");
