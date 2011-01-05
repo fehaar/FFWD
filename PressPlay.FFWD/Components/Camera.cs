@@ -145,8 +145,9 @@ namespace PressPlay.FFWD.Components
         #region IComparer<IRenderable> Members
         public int Compare(Renderer x, Renderer y)
         {
-            int xRq = (x.material != null) ? (x.material.renderQueue) : 0;
-            int yRq = (y.material != null) ? (y.material.renderQueue) : 0;
+            float xRq = GetRenderQueue(x);
+            float yRq = GetRenderQueue(y);
+
             if (xRq == yRq)
             {
                 if (xRq == 0)
@@ -156,6 +157,24 @@ namespace PressPlay.FFWD.Components
                 return x.material.mainTexture.CompareTo(y.material.mainTexture);
             }
             return xRq.CompareTo(yRq);
+        }
+
+        private float GetRenderQueue(Renderer renderer)
+        {
+            if (renderer.material == null)
+            {
+                return 0;
+            }
+            float q = renderer.material.renderQueue;
+            if (renderer.material.blendState == BlendState.AlphaBlend)
+            {
+                return q + 0.1f;
+            }
+            if (renderer.material.blendState == BlendState.Additive)
+            {
+                return q + 0.1f;
+            }
+            return q;
         }
         #endregion
     }

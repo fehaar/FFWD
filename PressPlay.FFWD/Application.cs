@@ -122,7 +122,7 @@ namespace PressPlay.FFWD
                 GraphicsDevice.Clear(bg);
                 GraphicsDevice.BlendState = BlendState.Opaque;
                 GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-                GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+                GraphicsDevice.SamplerStates[0] = SamplerState.LinearClamp;
             }
 
             Camera.DoRender(GraphicsDevice);

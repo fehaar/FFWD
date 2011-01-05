@@ -58,6 +58,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core framework\Bounds\WhenSettingTheCenterOfBounds.cs" />
     <Compile Include="Core framework\ReferencingComponent.cs" />
     <Compile Include="Core framework\TestComponent.cs" />
     <Compile Include="Core framework\TestHierarchy.cs" />
@@ -79,7 +80,7 @@
     <Compile Include="Core framework\WhenSendingAMessage.cs" />
     <Compile Include="Core framework\WhenSettingActiveOnAGameObject.cs" />
     <Compile Include="Core framework\WhenSettingNewIds.cs" />
-    <Compile Include="Core framework\Bounds\WhenSettingTheCenterOfBounds.cs" />
+    <Compile Include="Core framework\Bounds\WhenChangingValuesOnBounds.cs" />
     <Compile Include="Core framework\WhenTransformingQuaternionsToAndFromEulers.cs" />
     <Compile Include="Core framework\Bounds\WhenCreatingBounds.cs" />
     <Compile Include="Core framework\WhenUsingTheComponentShortcutMethods.cs" />

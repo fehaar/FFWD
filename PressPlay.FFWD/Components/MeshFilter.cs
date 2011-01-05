@@ -53,6 +53,11 @@ namespace PressPlay.FFWD.Components
                 effect = new BasicEffect(device);
             }
 
+            RasterizerState oldrasterizerState = device.RasterizerState;
+            RasterizerState rasterizerState = new RasterizerState();
+            rasterizerState.CullMode = CullMode.None;
+            device.RasterizerState = rasterizerState;
+
             effect.World = transform.world;
             effect.View = cam.View();
             effect.Projection = cam.projectionMatrix;
@@ -60,17 +65,10 @@ namespace PressPlay.FFWD.Components
             {
                 effect.TextureEnabled = true;
                 effect.Texture = materials[0].texture;
+                device.BlendState = materials[0].blendState;
             }
             effect.VertexColorEnabled = false;
             effect.Alpha = 1.0f;
-
-            RasterizerState oldrasterizerState = device.RasterizerState;
-            RasterizerState rasterizerState = new RasterizerState();
-            rasterizerState.CullMode = CullMode.None;
-            device.RasterizerState = rasterizerState;
-
-            BlendState oldBlend = device.BlendState;
-            device.BlendState = BlendState.AlphaBlend;
 
             VertexPositionNormalTexture[] data = new VertexPositionNormalTexture[sharedMesh.vertices.Length];
             for (int i = 0; i < sharedMesh.vertices.Length; i++)
@@ -98,7 +96,6 @@ namespace PressPlay.FFWD.Components
             }
 
             device.RasterizerState = oldrasterizerState;
-            device.BlendState = oldBlend;
         }
     }
 }

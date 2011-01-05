@@ -30,17 +30,11 @@ namespace PressPlay.FFWD.Components
 
             // Do we have negative scale - if so, switch culling
             RasterizerState oldRaster = device.RasterizerState;
-            BlendState oldBlend = device.BlendState;
-            SamplerState oldSample = device.SamplerStates[0];
             if (transform.lossyScale.x < 0 || transform.lossyScale.y < 0 || transform.lossyScale.z < 0)
             {
                 device.RasterizerState = new RasterizerState() { FillMode = oldRaster.FillMode, CullMode = CullMode.CullClockwiseFace };
             }
-            if (material.IsAdditive())
-            {
-                device.BlendState = BlendState.Additive;
-                device.SamplerStates[0] = SamplerState.LinearClamp;
-            }
+            device.BlendState = material.blendState;
 
             // Draw the model.
             ModelMesh mesh = filter.GetModelMesh();
@@ -62,11 +56,6 @@ namespace PressPlay.FFWD.Components
             if (transform.lossyScale.x < 0 || transform.lossyScale.y < 0 || transform.lossyScale.z < 0)
             {
                 device.RasterizerState = oldRaster;
-            }
-            if (material.IsAdditive())
-            {
-                device.BlendState = oldBlend;
-                device.SamplerStates[0] = oldSample;
             }
         }
         #endregion
