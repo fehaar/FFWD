@@ -154,12 +154,10 @@
     <Compile Include="Mesh.cs" />
     <Compile Include="MonoBehaviour.cs" />
     <Compile Include="GameObjectContactProcessor.cs" />
-    <Compile Include="ScreenManager\Component\ButtonComponent.cs" />
     <Compile Include="ScreenManager\Component\Sprite.cs" />
     <Compile Include="ScreenManager\GameScreen.cs" />
     <Compile Include="ScreenManager\InputState.cs" />
     <Compile Include="ScreenManager\ScreenManager.cs" />
-    <Compile Include="ScreenManager\Screens\MenuSceneScreen.cs" />
     <Compile Include="ScreenManager\Screens\MenuEntry.cs" />
     <Compile Include="ScreenManager\Screens\MenuScreen.cs" />
     <Compile Include="ScreenManager\Screens\PlayerIndexEventArgs.cs" />

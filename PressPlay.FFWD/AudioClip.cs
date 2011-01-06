@@ -16,6 +16,9 @@ namespace PressPlay.FFWD
         [ContentSerializerIgnore]
         public SoundEffect sound;
 
+        // TODO PUSH TO PARENT (UnityObject)!
+        public string name = "";
+
         public float length
         {
             get

@@ -41,6 +41,7 @@ namespace PressPlay.FFWD.Components
 
         public SpriteRenderer()
         {
+
         }
 
         public SpriteRenderer(string texture)
