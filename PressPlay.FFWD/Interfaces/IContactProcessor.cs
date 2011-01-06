@@ -12,5 +12,6 @@ namespace PressPlay.FFWD.Interfaces
     public interface IContactProcessor: IContactListener
     {
         void Update();
+        void ResetStays(Components.Collider collider);
     }
 }

@@ -114,8 +114,13 @@ namespace PressPlay.FFWD
                 }
             }
 
-            for (int i = 0; i < staying.Count; i++)
+
+            for (int i = staying.Count - 1; i >= 0; i--)
             {
+                if (!staying[i].collA.gameObject.active || !staying[i].collB.gameObject.active)
+                {
+                    staying.RemoveAt(i);
+                }
                 if (staying[i].collision == null)
                 {
                     staying[i].collA.gameObject.OnTriggerStay(staying[i].collB);
@@ -224,6 +229,17 @@ namespace PressPlay.FFWD
                     staying.RemoveAt(i);
                 }
             }
+        }
+
+        public void ResetStays(Collider collider)
+        {
+            for (int i = staying.Count - 1; i >= 0; i--)
+            {
+                if (staying[i].collA == collider || staying[i].collB == collider)
+                {
+                    staying.RemoveAt(i);
+                }
+            }    
         }
         #endregion
     }

@@ -79,6 +79,7 @@ namespace PressPlay.FFWD.Components
             if (body != null)
             {
                 body.SetTransform(position, body.GetAngle());
+                Physics.RemoveStays(collider);
             }
         }
 

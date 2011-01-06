@@ -362,5 +362,9 @@ namespace PressPlay.FFWD
 
         }
 
+        internal static void RemoveStays(Collider collider)
+        {
+            contactProcessor.ResetStays(collider);
+        }
     }
 }
