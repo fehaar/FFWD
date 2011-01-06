@@ -7,8 +7,17 @@ using PressPlay.FFWD.Interfaces;
 
 namespace PressPlay.FFWD
 {
-    public class AudioSource : Behaviour, IUpdateable
+
+    public enum AudioVelocityUpdateMode
     {
+        Auto,
+        Fixed,
+        Dynamic
+    }
+
+    public class AudioSource : Behaviour, IUpdateable
+    {   
+        
         private AudioClip _clip;
         public AudioClip clip
         {
@@ -19,7 +28,7 @@ namespace PressPlay.FFWD
             set
             {
                 _clip = value;
-                SetSoundEffect(_clip.sound.CreateInstance());
+                SetSoundEffect(_clip);
             }
         }
 
@@ -47,8 +56,8 @@ namespace PressPlay.FFWD
             set
             {
                 _volume = Mathf.Clamp01(value);
-                _volume = Mathf.Max(_volume, _minVolume);
-                _volume = Mathf.Min(_volume, minVolume);
+                _volume = Mathf.Max(_volume, minVolume);
+                _volume = Mathf.Min(_volume, maxVolume);
 
                 if (soundEffect != null)
                 {
@@ -82,23 +91,33 @@ namespace PressPlay.FFWD
                 }
             }
         }
-        public bool playOnAwake;
+
+        public bool ignoreListenerVolume = false;
+        public bool playOnAwake = false;
         public float time = 0;
+        public AudioVelocityUpdateMode velocityUpdateMode = AudioVelocityUpdateMode.Auto;
 
         private SoundEffectInstance soundEffect;
 
-        private void SetSoundEffect(SoundEffectInstance sfx)
+        private void SetSoundEffect(AudioClip sfx)
         {
-            soundEffect = sfx;
-            soundEffect.IsLooped = loop;
-            soundEffect.Volume = volume;
-            time = 0;
+            if (sfx == null)
+            {
+                soundEffect = null;
+            }
+            else
+            {
+                soundEffect = sfx.sound.CreateInstance();
+                soundEffect.IsLooped = loop;
+                soundEffect.Volume = volume;
+                time = 0;
+            }
         }
 
         public void Play()
         {
             if (soundEffect == null) return;
-            Debug.Log("Playing sound effect");
+            Debug.Log("Playing sound effect: "+ soundEffect.Volume);
             soundEffect.Play();
         }
 
