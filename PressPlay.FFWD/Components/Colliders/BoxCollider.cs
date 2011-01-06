@@ -19,7 +19,7 @@ namespace PressPlay.FFWD.Components
         internal override void AddCollider(Body body, float mass)
         {
             Vector2 sz = (size * gameObject.transform.lossyScale);
-            Physics.AddBox(body, isTrigger, sz.x, sz.y, center, 0, mass);
+            Physics.AddBox(body, isTrigger, sz.x, sz.y, center, -MathHelper.ToRadians(transform.rotation.eulerAngles.y), mass);
         }
 
 //#if DEBUG

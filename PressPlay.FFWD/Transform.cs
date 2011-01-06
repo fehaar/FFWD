@@ -13,7 +13,7 @@ namespace PressPlay.FFWD
         #region Constructors
         internal Transform()
         {
-            localRotation = Quaternion.Identity;
+            localRotation = Quaternion.identity;
             localScale = Vector3.one;
         }
         #endregion

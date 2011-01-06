@@ -286,7 +286,7 @@ namespace PressPlay.FFWD
         {
             for (int i = 0; i < components.Count; i++)
             {
-                if (components[i].GetType().IsAssignableFrom(type))
+                if (type.IsAssignableFrom(components[i].GetType()))
                 {
                     return components[i];
                 }
@@ -312,7 +312,7 @@ namespace PressPlay.FFWD
             List<Component> list = new List<Component>();
             for (int i = 0; i < components.Count; i++)
             {
-                if (components[i].GetType().IsAssignableFrom(type))
+                if (type.IsAssignableFrom(components[i].GetType()))
                 {
                     list.Add(components[i]);
                 }
@@ -325,7 +325,7 @@ namespace PressPlay.FFWD
             List<Component> list = new List<Component>();
             for (int i = 0; i < components.Count; i++)
             {
-                if (components[i].GetType().IsAssignableFrom(type))
+                if (type.IsAssignableFrom(components[i].GetType()))
                 {
                     list.Add(components[i]);
                 }
@@ -358,7 +358,7 @@ namespace PressPlay.FFWD
             }
             for (int i = 0; i < components.Count; i++)
             {
-                if (components[i].GetType().IsAssignableFrom(type))
+                if (type.IsAssignableFrom(components[i].GetType()))
                 {
                     return components[i];
                 }

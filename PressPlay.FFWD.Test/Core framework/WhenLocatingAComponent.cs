@@ -23,6 +23,12 @@ namespace PressPlay.FFWD.Test.Core_framework
             child.transform.parent = root.transform;
         }
 
+        [TearDown]
+        public void TearDown( )
+        {
+            Application.Reset();
+        }
+
         [Test]
         public void WeWillGetAnEmptyListWhenSearchingForComponentsInTheSameObject()
         {
@@ -86,16 +92,6 @@ namespace PressPlay.FFWD.Test.Core_framework
         }
 
         [Test]
-        public void WhenGettingObjectsInParentWeWillNotGetInOurOwnObject()
-        {
-            TestComponent comp = new TestComponent();
-            child.AddComponent(comp);
-            TestComponent[] components = child.GetComponentsInParents<TestComponent>();
-            Assert.That(components, Is.Not.Null);
-            Assert.That(components, Is.Empty);
-        }
-
-        [Test]
         public void WeCanGetAllComponentsOnTheCurrentScene()
         {
             Scene mainScene = new Scene();
@@ -129,6 +125,19 @@ namespace PressPlay.FFWD.Test.Core_framework
             Assert.That(cmp, Is.Not.Null);
         }
 
+        [Test]
+        public void WeCanFindAllComponentsByItsSubType()
+        {
+            GameObject go = new GameObject();
+            go.AddComponent(typeof(TestComponent));
+            Application.AwakeNewComponents();
+
+            UnityObject[] uo = go.GetComponents(typeof(Component));
+
+            Assert.That(uo, Is.Not.Null);
+            Assert.That(uo.Length, Is.EqualTo(2));
+        }
+	
 
         //[Test]
         //public void WeWillFindTheDeepestComponentInTheHierarchy()

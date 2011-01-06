@@ -71,6 +71,7 @@
     <Compile Include="Core framework\WhenCreatingANewComponent.cs" />
     <Compile Include="Core framework\WhenCreatingANewGameObject.cs" />
     <Compile Include="Core framework\WhenDestroyingAComponent.cs" />
+    <Compile Include="Core framework\WhenFindingAnObject.cs" />
     <Compile Include="Core framework\WhenFixingUpReferences.cs" />
     <Compile Include="Core framework\WhenGettingTheComponentName.cs" />
     <Compile Include="Core framework\WhenInstantiatingANewObject.cs" />

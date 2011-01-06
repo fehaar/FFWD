@@ -179,7 +179,7 @@ namespace PressPlay.FFWD
             List<UnityObject> list = new List<UnityObject>();
             foreach (UnityObject obj in objects.Values)
             {
-                if (obj.GetType().IsAssignableFrom(type))
+                if (obj.GetType() == type)
                 {
                     list.Add(obj);
                 }
@@ -191,7 +191,7 @@ namespace PressPlay.FFWD
         {
             foreach (UnityObject obj in objects.Values)
             {
-                if (obj.GetType().IsAssignableFrom(type))
+                if (obj.GetType() == type)
                 {
                     return obj;
                 }

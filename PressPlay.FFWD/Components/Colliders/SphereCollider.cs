@@ -16,11 +16,6 @@ namespace PressPlay.FFWD.Components
         public float radius { get; set; }
         #endregion
 
-        internal override BodyDef GetBodyDefinition()
-        {
-            return new BodyDef() { position = transform.position };
-        }
-
         internal override void AddCollider(Body body, float mass)
         {
             float rad = radius * Math.Max(transform.lossyScale.x, Math.Max(transform.lossyScale.y, transform.lossyScale.z));

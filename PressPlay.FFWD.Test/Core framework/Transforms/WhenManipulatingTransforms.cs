@@ -107,14 +107,14 @@ namespace PressPlay.FFWD.Test.Core_framework.Transforms
             Transform trans = obj.transform;
             GameObject childObj = new GameObject();
             Transform child = childObj.transform;
-            trans.localRotation = Quaternion.Identity;
-            child.localRotation = Quaternion.Identity;
+            trans.localRotation = Quaternion.identity;
+            child.localRotation = Quaternion.identity;
 
-            Assert.That(trans.rotation, Is.EqualTo(Quaternion.Identity));
-            Assert.That(child.rotation, Is.EqualTo(Quaternion.Identity));
+            Assert.That(trans.rotation, Is.EqualTo(Quaternion.identity));
+            Assert.That(child.rotation, Is.EqualTo(Quaternion.identity));
             child.parent = trans;
             trans.localRotation = Quaternion.Euler(MathHelper.PiOver2, 0.0f, 0.0f);
-            Assert.That(child.rotation, Is.Not.EqualTo(Quaternion.Identity));
+            Assert.That(child.rotation, Is.Not.EqualTo(Quaternion.identity));
         }
 
         [Test]
@@ -127,8 +127,8 @@ namespace PressPlay.FFWD.Test.Core_framework.Transforms
             trans.localPosition = new Vector3(2, 2, 2);
             child.localPosition = new Vector3(3, 2, 1);
 
-            Assert.That(trans.rotation, Is.EqualTo(Quaternion.Identity));
-            Assert.That(child.rotation, Is.EqualTo(Quaternion.Identity));
+            Assert.That(trans.rotation, Is.EqualTo(Quaternion.identity));
+            Assert.That(child.rotation, Is.EqualTo(Quaternion.identity));
             Vector3 beforeRotate = child.position;
             child.parent = trans;
             trans.localRotation = Quaternion.Euler(MathHelper.PiOver2, 0.0f, 0.0f);
