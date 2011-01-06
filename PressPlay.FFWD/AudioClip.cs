@@ -10,6 +10,8 @@ namespace PressPlay.FFWD
 {
     public class AudioClip : UnityObject
     {
+        public string name { get; set; }
+
         [ContentSerializer(Optional = true)]
         public string clip;
 
