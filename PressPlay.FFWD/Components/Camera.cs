@@ -154,7 +154,9 @@ namespace PressPlay.FFWD.Components
                 {
                     return 0;
                 }
-                return x.material.mainTexture.CompareTo(y.material.mainTexture);
+                string xTex = x.material.mainTexture ?? "";
+                string yTex = y.material.mainTexture ?? "";
+                return xTex.CompareTo(yTex);
             }
             return xRq.CompareTo(yRq);
         }
