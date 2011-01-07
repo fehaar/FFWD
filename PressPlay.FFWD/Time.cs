@@ -6,38 +6,39 @@ using Microsoft.Xna.Framework;
 
 namespace PressPlay.FFWD
 {
-    public class Time : DrawableGameComponent
+    public static class Time
     {
-        public Time(Game game)
-            : base(game)
-        {
-            UpdateOrder = 0;
-        }
-
         public static float time = 0.0f;
         public static float deltaTime = 0.0f;
         public static float actualDeltaTime = 0.0f;
         public static float timeScale = 1.0f;
         public static float realtimeSinceStartup = 0.0f;
         public static float timeSinceLastDraw = 0.0f;
-        public static TimeSpan frameTimeSpan;
-        private float lastDrawCall = 0.0f;
+        private static float lastDrawCall = 0.0f;
 
-        public override void Draw(GameTime gameTime)
+        internal static void Reset()
         {
-            base.Draw(gameTime);
+            time = 0.0f;
+            deltaTime = 0.0f;
+            actualDeltaTime = 0.0f;
+            timeScale = 1.0f;
+            realtimeSinceStartup = 0.0f;
+            timeSinceLastDraw = 0.0f;
+            lastDrawCall = 0.0f;
+        }
+
+        internal static void Draw()
+        {
             timeSinceLastDraw = time - lastDrawCall;
             lastDrawCall = time;
         }
 
-        public override void Update(GameTime gameTime)
+        internal static void Update(float elapsedSeconds, float totalSeconds)
         {
-            deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds * timeScale;
-            actualDeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            realtimeSinceStartup = (float)gameTime.TotalGameTime.TotalSeconds;
+            deltaTime = elapsedSeconds * timeScale;
+            actualDeltaTime = elapsedSeconds;
+            realtimeSinceStartup = totalSeconds;
             time += deltaTime;
-            frameTimeSpan = gameTime.ElapsedGameTime;
-            base.Update(gameTime);
         }
     }
 }

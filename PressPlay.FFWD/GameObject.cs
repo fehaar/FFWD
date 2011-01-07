@@ -492,13 +492,7 @@ namespace PressPlay.FFWD
                 {
                     continue;
                 }
-                Type tp = cmp.GetType();
-                MethodInfo info = tp.GetMethod(methodName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.InvokeMethod);
-                if (info != null)
-                {
-                    info.Invoke(cmp, (value == null) ? null : new object[1] { value });
-                    hadListener = true;
-                }
+                hadListener = cmp.SendMessage(methodName, value);
             }
             if (sendMessageOptions == SendMessageOptions.RequireReceiver && !hadListener)
             {
