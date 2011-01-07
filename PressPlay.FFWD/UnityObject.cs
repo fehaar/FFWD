@@ -47,15 +47,7 @@ namespace PressPlay.FFWD
 
         public static void Destroy(UnityObject obj, float time)
         {
-            if (obj is Component)
-            {
-                (obj as Component).gameObject.RemoveComponent(obj as Component);
-            }
-            else
-            {
-                // TODO : Add implementation of method
-                throw new NotImplementedException("Method not implemented.");
-            }
+            Application.markedForDestruction.Add(obj);
         }
 
         /// <summary>

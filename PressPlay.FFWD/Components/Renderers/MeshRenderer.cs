@@ -38,23 +38,26 @@ namespace PressPlay.FFWD.Components
 
             // Draw the model.
             ModelMesh mesh = filter.GetModelMesh();
-            for (int e = 0; e < mesh.Effects.Count; e++)
+            if (mesh != null)
             {
-                BasicEffect effect = mesh.Effects[e] as BasicEffect;
-                effect.World = world;
-                effect.View = cam.View();
-                effect.Projection = cam.projectionMatrix;
-                effect.LightingEnabled = false;
-                if (material.texture != null)
+                for (int e = 0; e < mesh.Effects.Count; e++)
                 {
-                    effect.TextureEnabled = true;
-                    effect.Texture = material.texture;
+                    BasicEffect effect = mesh.Effects[e] as BasicEffect;
+                    effect.World = world;
+                    effect.View = cam.View();
+                    effect.Projection = cam.projectionMatrix;
+                    effect.LightingEnabled = false;
+                    if (material.texture != null)
+                    {
+                        effect.TextureEnabled = true;
+                        effect.Texture = material.texture;
+                    }
+                    else
+                    {
+                        effect.DiffuseColor = (Vector3)material.color;
+                    }
+                    mesh.Draw();
                 }
-                else
-                {
-                    effect.DiffuseColor = (Vector3)material.color;
-                }
-                mesh.Draw();
             }
 
             if (transform.lossyScale.x < 0 || transform.lossyScale.y < 0 || transform.lossyScale.z < 0)

@@ -261,7 +261,9 @@ namespace PressPlay.FFWD
                 objects.Remove(markedForDestruction[i].GetInstanceID());
                 if (markedForDestruction[i] is Component)
 	            {
-                    activeComponents.Remove(markedForDestruction[i] as Component);
+                    Component cmp = (markedForDestruction[i] as Component);
+                    cmp.gameObject.RemoveComponent(cmp);
+                    activeComponents.Remove(cmp);
 	            }
             }
             markedForDestruction.Clear();

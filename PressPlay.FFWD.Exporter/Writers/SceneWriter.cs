@@ -139,47 +139,57 @@ namespace PressPlay.FFWD.Exporter.Writers
             }
         }
 
-        private void WriteComponent(Component component, bool isPrefab)
+        private bool WriteComponent(Component component, bool isPrefab)
         {
             if (resolver == null)
             {
-                return;
+                return false;
             }
             if (component == null)
             {
-                return;
+                return false;
             }
             if (component is Transform)
             {
                 WriteTransform(component as Transform, isPrefab);
-                return;
+                return true;
             }
             if (resolver.SkipComponent(component))
             {
-                return;
+                return false;
             }
 
             System.Type type = component.GetType();
             IComponentWriter componentWriter = resolver.GetComponentWriter(type);
             if (componentWriter != null)
             {
-                writtenIds.Add(component.GetInstanceID());
-                if (!isPrefab)
+                try
                 {
-                    writer.WriteStartElement("component");
-                    writer.WriteAttributeString("Type", resolver.ResolveTypeName(component));
+                    writtenIds.Add(component.GetInstanceID());
+                    if (!isPrefab)
+                    {
+                        writer.WriteStartElement("component");
+                        writer.WriteAttributeString("Type", resolver.ResolveTypeName(component));
+                    }
+                    writer.WriteElementString("id", component.GetInstanceID().ToString());
+                    if (isPrefab)
+                    {
+                        writer.WriteElementString("isPrefab", ToString(true));
+                    }
+                    componentWriter.Write(this, component);
+                    if (!isPrefab)
+                    {
+                        writer.WriteEndElement();
+                    }
+                    return true;
                 }
-                writer.WriteElementString("id", component.GetInstanceID().ToString());
-                if (isPrefab)
+                catch
                 {
-                    writer.WriteElementString("isPrefab", ToString(true));
-                }
-                componentWriter.Write(this, component);
-                if (!isPrefab)
-                {
-                    writer.WriteEndElement();
+                    Debug.Log("Exception when writing " + component.GetType() + " on " + component.name + " under " + component.transform.root.name);
+                    throw;
                 }
             }
+            return false;
         }
 
         internal void WriteTexture(Texture texture)
@@ -190,23 +200,22 @@ namespace PressPlay.FFWD.Exporter.Writers
 
         internal void WriteScript(MonoBehaviour component, bool overwrite)
         {
-            assetHelper.ExportScript(component, false, overwrite);
-            // Check for base classes
-            Type tp = component.GetType().BaseType;
-            if (tp != typeof(MonoBehaviour))
+            // TODO: Find Interfaces as well
+            Type tp = component.GetType();
+            while (tp != typeof(MonoBehaviour))
             {
-                WriteScript(component.gameObject.AddComponent(tp) as MonoBehaviour, overwrite);
+                assetHelper.ExportScript(tp, false, overwrite);
+                tp = tp.BaseType;
             }
         }
 
         internal void WriteScriptStub(MonoBehaviour component)
         {
-            assetHelper.ExportScript(component, true, false);
-            // Check for base classes
-            Type tp = component.GetType().BaseType;
-            if (tp != typeof(MonoBehaviour))
+            Type tp = component.GetType();
+            while (tp != typeof(MonoBehaviour))
             {
-                WriteScriptStub(component.gameObject.AddComponent(tp) as MonoBehaviour);
+                assetHelper.ExportScript(tp, true, false);
+                tp = tp.BaseType;
             }
         }
 
@@ -254,6 +263,16 @@ namespace PressPlay.FFWD.Exporter.Writers
                 if (obj is int[])
                 {
                     writer.WriteElementString(name, ToString(obj as int[]));
+                    return;
+                }
+                if (obj is Guid)
+                {
+                    writer.WriteElementString(name, ToString((Guid)obj));
+                    return;
+                }
+                if (obj is Vector2)
+                {
+                    writer.WriteElementString(name, ToString((Vector2)obj));
                     return;
                 }
                 if (obj is Vector3)
@@ -308,6 +327,10 @@ namespace PressPlay.FFWD.Exporter.Writers
                 if (obj is Material)
                 {
                     Material mat = obj as Material;
+                    if (mat == null)
+                    {
+                        return;
+                    }
                     writer.WriteStartElement(name);
                     writer.WriteElementString("shader", mat.shader.name);
                     writer.WriteElementString("renderQueue", mat.renderQueue.ToString());
@@ -350,14 +373,13 @@ namespace PressPlay.FFWD.Exporter.Writers
                 {
                     Component theObject = (obj as Component);
                     writer.WriteStartElement(name);
-                    if (theObject == null)
+                    if (theObject == null || !WriteComponent(theObject as Component, true))
                     {
                         writer.WriteAttributeString("Null", ToString(true));
                         writer.WriteEndElement();
                         return;
                     }
                     AddPrefab(theObject);
-                    WriteComponent(theObject as Component, true);
                     writer.WriteEndElement();
                     return;
                 }
@@ -402,14 +424,13 @@ namespace PressPlay.FFWD.Exporter.Writers
         {
             if (theObject is GameObject)
             {
-                Prefabs.Add(theObject as GameObject);
+                Prefabs.Add((theObject as GameObject).transform.root.gameObject);
                 return theObject.GetInstanceID().ToString();
             }
             else if (theObject is Component)
             {
-                Prefabs.Add((theObject as Component).gameObject);
+                Prefabs.Add((theObject as Component).gameObject.transform.root.gameObject);
                 return theObject.GetInstanceID().ToString();
-//                return (theObject as Component).gameObject.GetInstanceID().ToString();
             }
             return theObject.GetType().FullName;
         }
@@ -470,6 +491,11 @@ namespace PressPlay.FFWD.Exporter.Writers
         private string ToString(float f)
         {
             return f.ToString("0.#####", CultureInfo.InvariantCulture);
+        }
+
+        private string ToString(Guid g)
+        {
+            return g.ToString();
         }
         #endregion
 

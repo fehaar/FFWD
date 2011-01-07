@@ -133,6 +133,11 @@ namespace PressPlay.FFWD
             }
         }
 
+        public T AddComponent<T>() where T : Component
+        {
+            return (T)AddComponent(typeof(T));
+        }
+
         public T AddComponent<T>(T component) where T : Component
         {
             if (component is Transform && components.Count > 0)

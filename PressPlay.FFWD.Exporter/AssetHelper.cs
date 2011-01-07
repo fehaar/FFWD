@@ -62,10 +62,9 @@ namespace PressPlay.FFWD.Exporter
             }
         }
 
-        public void ExportScript(MonoBehaviour component, bool stubOnly, bool overwrite)
+        public void ExportScript(Type tp, bool stubOnly, bool overwrite)
         {
-            if (component == null) return;
-            string key = component.GetType().Name;
+            string key = tp.Name;
             if (exportedScripts.Contains(key)) return;
             try
             {
