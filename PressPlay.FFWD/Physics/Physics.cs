@@ -63,6 +63,14 @@ namespace PressPlay.FFWD
             while (body != null)
             {
                 Component comp = (Component)body.GetUserData();
+                if (!comp)
+                {
+                    // The component containing the body has been destroyed - so remove the body.
+                    Body nextBody = body.GetNext();
+                    world.DestroyBody(body);
+                    body = nextBody;
+                    continue;
+                }
                 if (comp != null)
                 {
                     if (body.GetType() != BodyType.Static)
