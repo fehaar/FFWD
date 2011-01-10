@@ -27,6 +27,11 @@ namespace PressPlay.FFWD.Test.Core_framework
             }
         }
 
+        class InheritedMessageComponent : MessageComponent
+        {
+
+        }
+
         [Test]
         public void WeCanSendAMessageToAComponentOnAGameObject()
         {
@@ -122,6 +127,30 @@ namespace PressPlay.FFWD.Test.Core_framework
 
             Assert.That(comp.messageCalled, Is.True);
             Assert.That(comp1.messageCalled, Is.True);
+        }
+
+        [Test]
+        public void WeCanSendAMessageToAPublicBaseClassMethod()
+        {
+            GameObject go = new GameObject();
+            InheritedMessageComponent comp = new InheritedMessageComponent();
+            go.AddComponent(comp);
+
+            go.SendMessage("MessageMethod");
+
+            Assert.That(comp.messageCalled, Is.True);
+        }
+
+        [Test]
+        public void WeCanSendAMessageToAPrivateBaseClassMethod()
+        {
+            GameObject go = new GameObject();
+            InheritedMessageComponent comp = new InheritedMessageComponent();
+            go.AddComponent(comp);
+
+            go.SendMessage("NonPublicMessage");
+
+            Assert.That(comp.messageCalled, Is.True);
         }
 	
     }

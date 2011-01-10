@@ -114,7 +114,12 @@ namespace PressPlay.FFWD
                 {
                     Camera.AddRenderer(activeComponents[i] as Renderer);
                 }
+                if ((activeComponents[i] is MonoBehaviour))
+                {
+                    (activeComponents[i] as MonoBehaviour).UpdateInvokeCalls();
+                }
             }
+            CleanUp();
 #if DEBUG
             scripts.Stop();
             graphics.Start();
@@ -252,6 +257,7 @@ namespace PressPlay.FFWD
         {
             objects.Clear();
             activeComponents.Clear();
+            markedForDestruction.Clear();
         }
 
         internal static void CleanUp()

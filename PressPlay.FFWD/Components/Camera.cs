@@ -127,6 +127,12 @@ namespace PressPlay.FFWD.Components
             renderQueue.Sort(this);
             for (int i = 0; i < renderQueue.Count; i++)
             {
+                if (renderQueue[i].gameObject == null)
+                {
+                    // This will happen if the game object has been destroyed in update.
+                    // It is acceptable behaviour.
+                    continue;
+                }
                 if (renderQueue[i].gameObject.active)
                 {
                     renderQueue[i].Draw(device, this);

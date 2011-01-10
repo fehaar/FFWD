@@ -9,6 +9,12 @@ namespace PressPlay.FFWD.Test.Core_framework
     [TestFixture]
     public class WhenDestroyingAGameObject
     {
+        [TearDown]
+        public void TearDown( )
+        {
+            Application.Reset();
+        }
+
         [Test]
         public void ItWillBeMarkedForDestruction()
         {
@@ -31,7 +37,29 @@ namespace PressPlay.FFWD.Test.Core_framework
             Application.CleanUp();
 
             Assert.That((bool)go, Is.False);
-        }  
+        }
+
+        [Test]
+        public void AllItsComponentsWillBeMarkedForDestruction()
+        {
+            GameObject go = new GameObject();
+
+            UnityObject.Destroy(go);
+
+            Assert.That(Application.markedForDestruction.Contains(go.transform));
+        }
+
+
+        [Test]
+        public void AllOfItsChildrenWillBeMarkedForDestruction()
+        {
+            TestHierarchy h = new TestHierarchy();
+
+            UnityObject.Destroy(h.root);
+
+            Assert.That(Application.markedForDestruction.Contains(h.child));
+            Assert.That(Application.markedForDestruction.Contains(h.childOfChild));
+        }
 
     }
 }

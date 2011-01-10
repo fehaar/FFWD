@@ -233,11 +233,17 @@ namespace PressPlay.FFWD
         internal bool SendMessage(string methodName, object value)
         {
             Type tp = this.GetType();
-            MethodInfo info = tp.GetMethod(methodName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.InvokeMethod);
-            if (info != null)
+            BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.InvokeMethod;
+            while (tp != typeof(MonoBehaviour))
             {
-                info.Invoke(this, (value == null) ? null : new object[1] { value });
-                return true;
+                MethodInfo info = tp.GetMethod(methodName, flags);
+                if (info != null)
+                {
+                    info.Invoke(this, (value == null) ? null : new object[1] { value });
+                    return true;
+                }
+                tp = tp.BaseType;
+                flags = BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.InvokeMethod;
             }
             return false;
         }
