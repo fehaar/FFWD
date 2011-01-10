@@ -229,5 +229,17 @@ namespace PressPlay.FFWD
             return GetType().Name + " (" + GetInstanceID() + ") on " + gameObject.name + " (" + gameObject.GetInstanceID() + ")";
         }
         #endregion
+
+        internal bool SendMessage(string methodName, object value)
+        {
+            Type tp = this.GetType();
+            MethodInfo info = tp.GetMethod(methodName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.InvokeMethod);
+            if (info != null)
+            {
+                info.Invoke(this, (value == null) ? null : new object[1] { value });
+                return true;
+            }
+            return false;
+        }
     }
 }

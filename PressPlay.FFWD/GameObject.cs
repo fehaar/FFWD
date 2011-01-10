@@ -133,6 +133,11 @@ namespace PressPlay.FFWD
             }
         }
 
+        public T AddComponent<T>() where T : Component
+        {
+            return (T)AddComponent(typeof(T));
+        }
+
         public T AddComponent<T>(T component) where T : Component
         {
             if (component is Transform && components.Count > 0)
@@ -492,13 +497,7 @@ namespace PressPlay.FFWD
                 {
                     continue;
                 }
-                Type tp = cmp.GetType();
-                MethodInfo info = tp.GetMethod(methodName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.InvokeMethod);
-                if (info != null)
-                {
-                    info.Invoke(cmp, (value == null) ? null : new object[1] { value });
-                    hadListener = true;
-                }
+                hadListener = cmp.SendMessage(methodName, value);
             }
             if (sendMessageOptions == SendMessageOptions.RequireReceiver && !hadListener)
             {

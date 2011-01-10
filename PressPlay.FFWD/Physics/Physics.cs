@@ -359,8 +359,12 @@ namespace PressPlay.FFWD
 
         public static void IgnoreCollision(Collider collider1, Collider collider2, bool ignore)
         {
-
+            // TODO: Create this method by using some sort of filtering in Box2D
         }
 
+        internal static void RemoveStays(Collider collider)
+        {
+            contactProcessor.ResetStays(collider);
+        }
     }
 }

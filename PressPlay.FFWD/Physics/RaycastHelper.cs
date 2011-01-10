@@ -81,9 +81,8 @@ namespace PressPlay.FFWD
             if ((coll == null) || (layerMask & (1 << coll.gameObject.layer)) > 0)
             {
                 _hits.Add(new RaycastHit() { body = fixture.GetBody(), collider = coll });
-                return !findClosest;
             }
-            return false;
+            return true;
         }
 
     }

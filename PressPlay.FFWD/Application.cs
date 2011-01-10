@@ -14,7 +14,8 @@ namespace PressPlay.FFWD
         public Application(Game game)
             : base(game)
         {
-            Game.Components.Add(new Time(game));
+            UpdateOrder = 0;
+            DrawOrder = 0;
         }
 
         private SpriteBatch spriteBatch;
@@ -42,6 +43,7 @@ namespace PressPlay.FFWD
             ContentHelper.IgnoreMissingAssets = true;
             Camera.FullScreen = Game.GraphicsDevice.Viewport;
             Physics.Initialize();
+            Time.Reset();
             Input.Initialize();
             spriteBatch = new SpriteBatch(Game.GraphicsDevice);
         }
@@ -49,7 +51,7 @@ namespace PressPlay.FFWD
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-
+            Time.Update((float)gameTime.ElapsedGameTime.TotalSeconds, (float)gameTime.TotalGameTime.TotalSeconds);
             UpdateFPS(gameTime);
 
 #if DEBUG
@@ -85,6 +87,7 @@ namespace PressPlay.FFWD
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
+            Time.Draw();
 
             frameCounter++;
 #if DEBUG
@@ -258,7 +261,9 @@ namespace PressPlay.FFWD
                 objects.Remove(markedForDestruction[i].GetInstanceID());
                 if (markedForDestruction[i] is Component)
 	            {
-                    activeComponents.Remove(markedForDestruction[i] as Component);
+                    Component cmp = (markedForDestruction[i] as Component);
+                    cmp.gameObject.RemoveComponent(cmp);
+                    activeComponents.Remove(cmp);
 	            }
             }
             markedForDestruction.Clear();

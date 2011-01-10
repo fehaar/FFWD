@@ -229,6 +229,16 @@ namespace PressPlay.FFWD
             return c.ToVector4();
         }
 
+        public static implicit operator Vector3(Color c)
+        {
+            return new Vector3(c.r, c.g, c.b);
+        }
+
+        public static implicit operator Microsoft.Xna.Framework.Vector3(Color c)
+        {
+            return new Microsoft.Xna.Framework.Vector3(c.r, c.g, c.b);
+        }
+
         public static Color Lerp(Color a, Color b, float t)
         {
             return new Color(Microsoft.Xna.Framework.MathHelper.Lerp(a.r, b.r, t), Microsoft.Xna.Framework.MathHelper.Lerp(a.g, b.g, t), Microsoft.Xna.Framework.MathHelper.Lerp(a.b, b.b, t), Microsoft.Xna.Framework.MathHelper.Lerp(a.a, b.a, t));

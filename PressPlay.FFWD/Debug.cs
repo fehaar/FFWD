@@ -8,9 +8,15 @@ namespace PressPlay.FFWD
         private static List<UnityObject> gosToDisplay = new List<UnityObject>();
         private static Dictionary<string, string> _debugDisplay = new Dictionary<string, string>();
 
+        public static bool DisplayLog = false;
+
         public static void Log(object message)
         {
             System.Diagnostics.Debug.WriteLine(message.ToString());
+            if (DisplayLog)
+            {
+                Display("Log", message);
+            }
         }
 
         public static void LogError(string message)

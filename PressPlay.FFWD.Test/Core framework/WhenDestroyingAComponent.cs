@@ -10,15 +10,15 @@ namespace PressPlay.FFWD.Test.Core_framework
     public class WhenDestroyingAComponent
     {
         [Test]
-        public void ItWillBeRemovedFromTheGameObject()
+        public void ItWillNotBeRemovedFromTheGameObject()
         {
             GameObject go = new GameObject();
             TestComponent cmp = go.AddComponent(new TestComponent());
 
             Component.Destroy(cmp);
 
-            Assert.That(cmp.gameObject, Is.Null);
-            Assert.That(go.GetComponent<TestComponent>(), Is.Null);
+            Assert.That(cmp.gameObject, Is.Not.Null);
+            Assert.That(go.GetComponent<TestComponent>(), Is.Not.Null);
         }
 
         [Test]
@@ -29,7 +29,7 @@ namespace PressPlay.FFWD.Test.Core_framework
 
             Component.Destroy(cmp);
 
-            Application.markedForDestruction.Contains(cmp);
+            Assert.That(Application.markedForDestruction.Contains(cmp));
         }
 
         [Test]
@@ -37,13 +37,15 @@ namespace PressPlay.FFWD.Test.Core_framework
         {
             GameObject go = new GameObject();
             TestComponent cmp = go.AddComponent(new TestComponent());
+            Application.AwakeNewComponents();
+            Assert.That((bool)cmp, Is.True);
 
             Component.Destroy(cmp);
 
             Application.CleanUp();
 
             Assert.That((bool)cmp, Is.False);
-        }
+        }  
 	
     }
 }

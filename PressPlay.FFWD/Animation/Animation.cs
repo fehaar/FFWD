@@ -11,6 +11,10 @@ namespace PressPlay.FFWD.Components
     {
         public bool playAutomatically;
 
+        // TODO: This should be moved to a content processor!
+        [ContentSerializer]
+        private string[] animations;
+
         [ContentSerializerIgnore]
         public AnimationClip clip
         {
@@ -46,7 +50,10 @@ namespace PressPlay.FFWD.Components
 
         public void Play(string name)
         {
-            animationPlayer.StartClip(clips[name], states[name]);
+            if (animationPlayer != null)
+            {
+                animationPlayer.StartClip(clips[name], states[name]);
+            }
         }
 
         public void PlayQueued(string name)
@@ -158,6 +165,14 @@ namespace PressPlay.FFWD.Components
                 return animationPlayer.GetSkinTransforms();
             }
             return null;
+        }
+
+        internal override void AfterLoad()
+        {
+            foreach (string item in animations)
+            {
+                AddClip(new AnimationClip(new TimeSpan(), null), item);
+            }
         }
     }
 }

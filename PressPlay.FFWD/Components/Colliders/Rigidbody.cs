@@ -11,7 +11,19 @@ namespace PressPlay.FFWD.Components
 {
     public class Rigidbody : Component
     {
-        public float mass { get; set; }
+        private float _mass = 1.0f;
+        public float mass { 
+            get
+            {
+                return _mass;
+            }
+            set
+            {
+                _mass = value;
+                RescaleMass();
+            }
+        }
+
         public float drag { get; set; }
         public float angularDrag { get; set; }
         public bool isKinematic { get; set; }
@@ -32,10 +44,25 @@ namespace PressPlay.FFWD.Components
                 def.fixedRotation = freezeRotation;
                 body = Physics.AddBody(def);
                 collider.AddCollider(body, mass);
+                RescaleMass();
             }
             else
             {
                 Debug.LogWarning("No collider set on this rigid body " + ToString());
+            }
+        }
+
+        private void RescaleMass()
+        {
+            if (body != null && body.GetMass() > 0)
+            {
+                float bodyMass = body.GetMass();
+                float massRatio = mass / bodyMass;
+                for (Fixture f = body.GetFixtureList(); f != null; f = f._next)
+                {
+                    f._density *= massRatio;
+                }
+                body.ResetMassData();
             }
         }
 
@@ -79,6 +106,7 @@ namespace PressPlay.FFWD.Components
             if (body != null)
             {
                 body.SetTransform(position, body.GetAngle());
+                Physics.RemoveStays(collider);
             }
         }
 

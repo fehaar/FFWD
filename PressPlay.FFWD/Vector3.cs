@@ -35,12 +35,13 @@ namespace PressPlay.FFWD
     {
         #region Private Fields
 
-        private static Vector3 Zero = new Vector3(0f, 0f, 0f);
-        private static Vector3 One = new Vector3(1f, 1f, 1f);
-        private static Vector3 Up = new Vector3(0f, 1f, 0f);
-        private static Vector3 Right = new Vector3(1f, 0f, 0f);
-        private static Vector3 Forward = new Vector3(0f, 0f, -1f);
-        private static Vector3 Down = new Vector3(0f, -1f, 0f);
+        private static Vector3 _zero = new Vector3(0f, 0f, 0f);
+        private static Vector3 _one = new Vector3(1f, 1f, 1f);
+        private static Vector3 _up = new Vector3(0f, 1f, 0f);
+        private static Vector3 _right = new Vector3(1f, 0f, 0f);
+        private static Vector3 _forward = new Vector3(0f, 0f, -1f);
+        private static Vector3 _back = new Vector3(0f, 0f, 1f);
+        private static Vector3 _down = new Vector3(0f, -1f, 0f);
 
         #endregion Private Fields
 
@@ -74,32 +75,37 @@ namespace PressPlay.FFWD
 
         public static Vector3 zero
         {
-            get { return Zero; }
+            get { return _zero; }
         }
 
         public static Vector3 one
         {
-            get { return One; }
+            get { return _one; }
         }
 
         public static Vector3 up
         {
-            get { return Up; }
+            get { return _up; }
         }
 
         public static Vector3 down
         {
-            get { return Down; }
+            get { return _down; }
         }
 
         public static Vector3 right
         {
-            get { return Right; }
+            get { return _right; }
         }
 
         public static Vector3 forward
         {
-            get { return Forward; }
+            get { return _forward; }
+        }
+
+        public static Vector3 back
+        {
+            get { return _back; }
         }
 
         public float this[int index]
