@@ -377,6 +377,18 @@ namespace PressPlay.FFWD
                 }
             }
         }
+
+        protected override void Destroy()
+        {
+            base.Destroy();
+            if (children != null)
+            {
+                for (int i = 0; i < children.Count; i++)
+                {
+                    Destroy(children[i]);
+                }
+            }
+        }
         #endregion
 
         #region Public methods

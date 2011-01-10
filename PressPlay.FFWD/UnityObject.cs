@@ -47,7 +47,12 @@ namespace PressPlay.FFWD
 
         public static void Destroy(UnityObject obj, float time)
         {
-            Application.markedForDestruction.Add(obj);
+            obj.Destroy();
+        }
+
+        protected virtual void Destroy()
+        {
+            Application.markedForDestruction.Add(this);
         }
 
         /// <summary>

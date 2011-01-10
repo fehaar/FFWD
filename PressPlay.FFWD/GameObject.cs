@@ -458,6 +458,15 @@ namespace PressPlay.FFWD
             throw new NotImplementedException("Method not implemented.");
         }
 
+        protected override void Destroy()
+        {
+            for (int i = 0; i < components.Count; i++)
+            {
+                Destroy(components[i]);
+            }
+            base.Destroy();
+        }
+
         public void SendMessageUpwards(string methodName)
         {
             SendMessageUpwards(methodName, null, SendMessageOptions.RequireReceiver);

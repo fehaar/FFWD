@@ -10,35 +10,42 @@ namespace PressPlay.FFWD.Components
         #region Overridable methods
         public virtual void Update()
         {
-            UpdateInvokeCalls();
+            // NOTE: Do not make any code here. Typically base.Update() is NOT called in MonoScripts so this will not be called either!!!!!
         }
 
         public virtual void FixedUpdate()
         {
+            // NOTE: Do not make any code here. Typically base.Update() is NOT called in MonoScripts so this will not be called either!!!!!
         }
 
         public virtual void OnCollisionEnter(Collision collision)
         {
+            // NOTE: Do not make any code here. Typically base.Update() is NOT called in MonoScripts so this will not be called either!!!!!
         }
 
         public virtual void OnCollisionStay(Collision collision)
         {
+            // NOTE: Do not make any code here. Typically base.Update() is NOT called in MonoScripts so this will not be called either!!!!!
         }
 
         public virtual void OnCollisionExit(Collision collision)
         {
+            // NOTE: Do not make any code here. Typically base.Update() is NOT called in MonoScripts so this will not be called either!!!!!
         }
 
         public virtual void OnTriggerStay(Collider collider)
         {
+            // NOTE: Do not make any code here. Typically base.Update() is NOT called in MonoScripts so this will not be called either!!!!!
         }
 
         public virtual void OnTriggerEnter(Collider collider)
         {
+            // NOTE: Do not make any code here. Typically base.Update() is NOT called in MonoScripts so this will not be called either!!!!!
         }
 
         public virtual void OnTriggerExit(Collider collider)
         {
+            // NOTE: Do not make any code here. Typically base.Update() is NOT called in MonoScripts so this will not be called either!!!!!
         }
         #endregion
 
@@ -76,7 +83,7 @@ namespace PressPlay.FFWD.Components
 
         private List<InvokeCall> invokeCalls;
 
-        private void UpdateInvokeCalls()
+        internal void UpdateInvokeCalls()
         {
             if (invokeCalls == null)
             {
@@ -84,10 +91,15 @@ namespace PressPlay.FFWD.Components
             }
             for (int i = invokeCalls.Count - 1; i >= 0; i--)
             {
-                if (invokeCalls[i].Update(Time.deltaTime))
+                InvokeCall call = invokeCalls[i];
+                if (call.Update(Time.deltaTime))
                 {
                     SendMessage(invokeCalls[i].methodName, null);
                     invokeCalls.RemoveAt(i);
+                }
+                else
+                {
+                    invokeCalls[i] = call;
                 }
             }
         }
