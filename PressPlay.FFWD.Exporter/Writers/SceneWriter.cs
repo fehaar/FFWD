@@ -248,7 +248,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                 }
                 if (obj is int)
                 {
-                    writer.WriteElementString(name, ToString((int)obj));
+                    writer.WriteElementString(name, obj.ToString());
                     return;
                 }
                 if (obj is int[])

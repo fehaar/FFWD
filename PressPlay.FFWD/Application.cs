@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -108,6 +107,10 @@ namespace PressPlay.FFWD
                 {
                     (activeComponents[i] as PressPlay.FFWD.Interfaces.IUpdateable).Update();
                 }
+                if ((activeComponents[i] is Renderer))
+                {
+                    Camera.AddRenderer(activeComponents[i] as Renderer);
+                }
             }
 #if DEBUG
             scripts.Stop();
@@ -119,50 +122,10 @@ namespace PressPlay.FFWD
                 GraphicsDevice.Clear(bg);
                 GraphicsDevice.BlendState = BlendState.Opaque;
                 GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-                GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
-            }
-            
-            Dictionary<int, List<IRenderable>> queue = new Dictionary<int, List<IRenderable>>();
-            for (int i = 0; i < activeComponents.Count; i++)
-            {
-                if (!activeComponents[i].isStarted || activeComponents[i].gameObject == null || !activeComponents[i].gameObject.active)
-                {
-                    continue;
-                }
-                if (activeComponents[i] is IRenderable)
-                {
-                    int rQ = 0;
-                    if (activeComponents[i] is Renderer)
-                    {
-                        Renderer r = (activeComponents[i] as Renderer);
-                        if (r.material != null)
-                        {
-                            rQ = r.material.renderQueue;
-                        }
-                    }
-                    else if (activeComponents[i] is IRenderable)
-                    {
-                        rQ = 1;
-                    }
-                    if (rQ > 0)
-                    {
-                        if (!queue.ContainsKey(rQ))
-                        {
-                            queue[rQ] = new List<IRenderable>();
-                        }
-                        queue[rQ].Add(activeComponents[i] as IRenderable);
-                    }
-                }
+                GraphicsDevice.SamplerStates[0] = SamplerState.LinearClamp;
             }
 
-            int[] queues = queue.Keys.OrderBy(i => i).ToArray();
-            for (int i = 0; i < queues.Length; i++)
-            {
-                for (int j = 0; j < queue[queues[i]].Count; j++)
-                {
-                    queue[queues[i]][j].Draw(spriteBatch);
-                }
-            }
+            Camera.DoRender(GraphicsDevice);
 #if DEBUG
             graphics.Stop();
             double total = scripts.Elapsed.TotalSeconds + graphics.Elapsed.TotalSeconds + physics.Elapsed.TotalSeconds;
@@ -216,7 +179,7 @@ namespace PressPlay.FFWD
             List<UnityObject> list = new List<UnityObject>();
             foreach (UnityObject obj in objects.Values)
             {
-                if (obj.GetType().IsAssignableFrom(type))
+                if (obj.GetType() == type)
                 {
                     list.Add(obj);
                 }
@@ -228,7 +191,7 @@ namespace PressPlay.FFWD
         {
             foreach (UnityObject obj in objects.Values)
             {
-                if (obj.GetType().IsAssignableFrom(type))
+                if (obj.GetType() == type)
                 {
                     return obj;
                 }
@@ -249,6 +212,10 @@ namespace PressPlay.FFWD
                     if (!cmp.isPrefab)
                     {
                         activeComponents.Add(cmp);
+                        if (cmp is Renderer)
+                        {
+                            Camera.AddRenderer(cmp as Renderer);
+                        }
                     }
                     if (!objects.ContainsKey(cmp.gameObject.GetInstanceID()))
                     {

@@ -10,14 +10,13 @@ namespace PressPlay.FFWD
 {
     public class AudioClip : UnityObject
     {
+        public string name { get; set; }
+
         [ContentSerializer(Optional = true)]
         public string clip;
 
         [ContentSerializerIgnore]
         public SoundEffect sound;
-
-        // TODO PUSH TO PARENT (UnityObject)!
-        public string name = "";
 
         public float length
         {

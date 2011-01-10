@@ -17,9 +17,6 @@ namespace PressPlay.FFWD
         [ContentSerializer(ElementName="id")]
         private int _id;
 
-
-        //public string name = "";
-
         public int GetInstanceID()
         {
             return _id;

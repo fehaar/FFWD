@@ -143,7 +143,7 @@ namespace PressPlay.FFWD
         #endregion
 
         private static Quaternion _identity = new Quaternion(Microsoft.Xna.Framework.Quaternion.Identity);
-        public static Quaternion Identity
+        public static Quaternion identity
         {
             get
             {

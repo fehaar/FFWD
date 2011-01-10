@@ -41,21 +41,19 @@ namespace PressPlay.FFWD.Exporter
 
         private void OverrideMethods()
         {
-            string[] methods = new string[] { "Start", "Update", "Awake" };
+            string[] methods = new string[] { "Start", "Update", "FixedUpdate", "Awake", "OnTriggerEnter", "OnTriggerExit", "OnTriggerStay", "OnCollisionEnter", "OnCollisionExit", "OnCollisionStay" };
             foreach (string method in methods)
             {
                 Regex methEx = new Regex(@"void\s+" + method + @"\s?\(");
                 int startLine = scriptLines.FindIndex(s => methEx.IsMatch(s));
                 if (startLine >= 0)
                 {
-                    if (scriptLines[startLine].Contains("public void"))
-                    {
-                        scriptLines[startLine] = scriptLines[startLine].Replace("public void", "public override void");
-                    }
-                    else
-                    {
-                        scriptLines[startLine] = scriptLines[startLine].Replace("void", "public override void");
-                    }
+                    scriptLines[startLine] = scriptLines[startLine]
+                        .Replace("public ", "")
+                        .Replace("protected ", "")
+                        .Replace("override ", "")
+                        .Replace("virtual ", "");
+                    scriptLines[startLine] = scriptLines[startLine].Replace("void", "public override void");
                 }
             }
         }

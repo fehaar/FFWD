@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
-using PressPlay.FFWD.Components;
-using PressPlay.FFWD.Interfaces;
-using Microsoft.Xna.Framework.Content;
 
 namespace PressPlay.FFWD.Components
 {
@@ -47,7 +40,7 @@ namespace PressPlay.FFWD.Components
         }
 
         #region IRenderable Members
-        public override void Draw(SpriteBatch batch)
+        public override void Draw(GraphicsDevice device, Camera cam)
         {
             if (sharedMesh == null || sharedMesh.model == null)
             {
@@ -55,22 +48,14 @@ namespace PressPlay.FFWD.Components
             }
             
             // Do we have negative scale - if so, switch culling
-            RasterizerState oldRaster = batch.GraphicsDevice.RasterizerState;
-            BlendState oldBlend = batch.GraphicsDevice.BlendState;
-            SamplerState oldSample = batch.GraphicsDevice.SamplerStates[0];
+            RasterizerState oldRaster = device.RasterizerState;
             if (transform.lossyScale.x < 0 || transform.lossyScale.y < 0 || transform.lossyScale.z < 0)
             {
-                batch.GraphicsDevice.RasterizerState = new RasterizerState() { FillMode = oldRaster.FillMode, CullMode = CullMode.CullClockwiseFace };
+                device.RasterizerState = new RasterizerState() { FillMode = oldRaster.FillMode, CullMode = CullMode.CullClockwiseFace };
             }
-            if (material.IsAdditive())
-            {
-                batch.GraphicsDevice.BlendState = BlendState.Additive;
-                batch.GraphicsDevice.SamplerStates[0] = SamplerState.LinearClamp;
-            }
+            device.BlendState = material.blendState;
 
             // Draw the model.
-
-
             ModelMesh mesh = sharedMesh.GetModelMesh();
             for (int e = 0; e < mesh.Effects.Count; e++)
             {
@@ -88,8 +73,8 @@ namespace PressPlay.FFWD.Components
                         sEffect.SetBoneTransforms(boneTransforms);
                     }
                     sEffect.World = Matrix.CreateScale(0.01f) * transform.world;
-                    sEffect.View = Camera.main.View();
-                    sEffect.Projection = Camera.main.projectionMatrix;
+                    sEffect.View = cam.View();
+                    sEffect.Projection = cam.projectionMatrix;
                     sEffect.AmbientLightColor = new Vector3(1);
                     if (material.texture != null)
                     {
@@ -101,12 +86,7 @@ namespace PressPlay.FFWD.Components
 
             if (transform.lossyScale.x < 0 || transform.lossyScale.y < 0 || transform.lossyScale.z < 0)
             {
-                batch.GraphicsDevice.RasterizerState = oldRaster;
-            }
-            if (material.IsAdditive())
-            {
-                batch.GraphicsDevice.BlendState = oldBlend;
-                batch.GraphicsDevice.SamplerStates[0] = oldSample;
+                device.RasterizerState = oldRaster;
             }
         }
         #endregion

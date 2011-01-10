@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using PressPlay.FFWD.Interfaces;
+﻿using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Content;
 
 namespace PressPlay.FFWD.Components
 {
-    public abstract class Renderer : Component, IRenderable
+    public abstract class Renderer : Component
     {
         [ContentSerializer(CollectionItemName = "material")]
         public Material[] materials{ get; set; }
@@ -80,7 +75,7 @@ namespace PressPlay.FFWD.Components
         }
 
         #region IRenderable Members
-        public abstract void Draw(SpriteBatch batch);
+        public abstract void Draw(GraphicsDevice device, Camera cam);
         #endregion
 
     }

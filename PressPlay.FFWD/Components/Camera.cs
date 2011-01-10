@@ -1,10 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace PressPlay.FFWD.Components
 {
-    public class Camera : Component
+    public class Camera : Component, IComparer<Camera>, IComparer<Renderer>
     {
         public Camera()
         {
@@ -33,22 +34,26 @@ namespace PressPlay.FFWD.Components
         public Rectangle rect { get; set; }
         public ClearFlags clearFlags { get; set; }
 
-        private static Camera _main = null;
-        public static Camera main
+        public override void Awake()
+        {
+            _allCameras.Add(this);
+            _allCameras.Sort(this);
+            if (gameObject.CompareTag("MainCamera"))
+            {
+                main = this;
+            }
+        }
+
+        private static List<Camera> _allCameras = new List<Camera>();
+        public static IEnumerable<Camera> allCameras
         {
             get
             {
-                if (_main == null)
-                {
-                    _main = (Camera)GameObject.FindObjectOfType(typeof(Camera));
-                }
-                return _main;
-            }
-            set
-            {
-                _main = value;
+                return _allCameras;
             }
         }
+
+        public static Camera main { get; private set; }
 
         public static Viewport FullScreen;
 
@@ -92,5 +97,87 @@ namespace PressPlay.FFWD.Components
             return new Ray(near, (far - near).normalized);
         }
 
+        internal static void AddRenderer(Renderer renderer)
+        {
+            // Tag UI renderes og gem dem i en liste. Returner så kameraerne ikke f'r den
+            for (int i = 0; i < _allCameras.Count; i++)
+            {
+                _allCameras[i].addRenderer(renderer);
+            }
+        }
+
+        List<Renderer> renderQueue = new List<Renderer>();
+        private void addRenderer(Renderer renderer)
+        {
+            if ((cullingMask & (1 << renderer.gameObject.layer)) > 0)
+            {
+                renderQueue.Add(renderer);
+            }
+        }
+
+        internal static void DoRender(GraphicsDevice device)
+        {
+            for (int i = 0; i < _allCameras.Count; i++)
+            {
+                _allCameras[i].doRender(device);
+            }
+            // Efter vi har renderet alle kam,eraer, kør alle UI renderes igennem og Draw dem.
+        }
+
+        internal void doRender(GraphicsDevice device)
+        {
+            renderQueue.Sort(this);
+            for (int i = 0; i < renderQueue.Count; i++)
+            {
+                if (renderQueue[i].gameObject.active)
+                {
+                    renderQueue[i].Draw(device, this);
+                }
+            }
+            renderQueue.Clear();
+        }
+            
+        #region IComparer<Camera> Members
+        public int Compare(Camera x, Camera y)
+        {
+            return x.depth.CompareTo(y.depth);
+        }
+        #endregion
+
+        #region IComparer<IRenderable> Members
+        public int Compare(Renderer x, Renderer y)
+        {
+            float xRq = GetRenderQueue(x);
+            float yRq = GetRenderQueue(y);
+
+            if (xRq == yRq)
+            {
+                if (xRq == 0)
+                {
+                    return 0;
+                }
+                return x.material.mainTexture.CompareTo(y.material.mainTexture);
+            }
+            return xRq.CompareTo(yRq);
+        }
+
+        private float GetRenderQueue(Renderer renderer)
+        {
+            if (renderer.material == null)
+            {
+                return 0;
+            }
+            float q = renderer.material.renderQueue;
+            if (renderer.material.blendState == BlendState.AlphaBlend)
+            {
+                return q + 0.1f;
+            }
+            if (renderer.material.blendState == BlendState.Additive)
+            {
+                return q + 0.1f;
+            }
+            return q;
+        }
+        #endregion
     }
 }

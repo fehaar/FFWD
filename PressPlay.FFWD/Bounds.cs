@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace PressPlay.FFWD
 {
@@ -67,9 +64,7 @@ namespace PressPlay.FFWD
         #region Public functions
         public void SetMinMax(Vector3 min, Vector3 max)
         {
-            // TODO : Add implementation of method
-            throw new NotImplementedException("Method not implemented.");
-
+            box = new Microsoft.Xna.Framework.BoundingBox(min, max);
         }
 
         public void Encapsulate(Vector3 point)

@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
 using PressPlay.FFWD;
+using PressPlay.FFWD.ScreenManager;
 #if WINDOWS_PHONE
 using Microsoft.Xna.Framework.Input.Touch;
 #endif
@@ -22,23 +23,28 @@ namespace PressPlay.FFWD
 
         internal static void Initialize()
         {
+            /*
 #if WINDOWS_PHONE
             TouchPanel.EnabledGestures = TouchPanel.EnabledGestures | 
                                          GestureType.Tap;
 #endif
+             */
         }
 
-        public static void Update()
+        public static void Update(InputState inputState)
         {
             lastMouseState = currentMouseState;
             currentMouseState = Mouse.GetState();
 
 #if WINDOWS_PHONE
+            /*
             samples.Clear();
             while (TouchPanel.IsGestureAvailable)
             {
                 samples.Add(TouchPanel.ReadGesture());
             }
+             */
+            samples = inputState.Gestures;
             if (HasSample(GestureType.Tap))
             {
                 lastTap = GetSample(GestureType.Tap).First().Position;

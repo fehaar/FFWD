@@ -36,7 +36,7 @@ namespace PressPlay.FFWD.Components
 
         internal virtual BodyDef GetBodyDefinition()
         {
-            return new BodyDef();
+            return new BodyDef() { position = transform.position };
         }
 
         internal abstract void AddCollider(Body body, float mass);

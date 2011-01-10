@@ -1,20 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework.Graphics;
 using PressPlay.FFWD.Interfaces;
-using Box2D.XNA;
 
 namespace PressPlay.FFWD.Test.Core_framework
 {
-    internal class TestComponent : Component, IFixedUpdateable, IUpdateable, IRenderable, ICollidable
+    internal class TestComponent : Component, IFixedUpdateable, IUpdateable
     {
         internal Action onAwake { get; set; }
         internal Action onStart { get; set; }
         internal Action onFixedUpdate { get; set; }
         internal Action onUpdate { get; set; }
-        internal Action onDraw { get; set; }
         internal Action onTriggerEnter { get; set; }
         internal Action onTriggerExit { get; set; }
         internal Action onCollisionEnter { get; set; }
@@ -39,16 +33,6 @@ namespace PressPlay.FFWD.Test.Core_framework
             }
         }
 
-        #region IRenderable Members
-        public void Draw(SpriteBatch batch)
-        {
-            if (onDraw != null)
-            {
-                onDraw();
-            }
-        }
-        #endregion
-
         #region IUpdateable Members
         public void Update()
         {
@@ -67,58 +51,6 @@ namespace PressPlay.FFWD.Test.Core_framework
                 onFixedUpdate();
             }
         }
-        #endregion
-
-        #region ICollidable Members
-
-        public void OnTriggerEnter(Contact contact)
-        {
-            if (onTriggerEnter != null)
-            {
-                onTriggerEnter();
-            }
-        }
-
-        public void OnTriggerExit(Box2D.XNA.Contact contact)
-        {
-            if (onTriggerExit != null)
-            {
-                onTriggerExit();
-            }
-        }
-
-        public void OnCollisionEnter(Box2D.XNA.Contact contact)
-        {
-            if (onCollisionEnter != null)
-            {
-                onCollisionEnter();
-            }
-        }
-
-        public void OnCollisionExit(Box2D.XNA.Contact contact)
-        {
-            if (onCollisionExit != null)
-            {
-                onCollisionExit();
-            }
-        }
-
-        public void OnPreSolve(Box2D.XNA.Contact contact, Box2D.XNA.Manifold manifold)
-        {
-            if (onPreSolve != null)
-            {
-                onPreSolve();
-            }
-        }
-
-        public void OnPostSolve(Box2D.XNA.Contact contact, Box2D.XNA.ContactImpulse contactImpulse)
-        {
-            if (onPostSolve != null)
-            {
-                onPostSolve();
-            }
-        }
-
         #endregion
     }
 }

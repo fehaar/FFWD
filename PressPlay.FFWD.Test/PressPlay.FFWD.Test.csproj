@@ -58,6 +58,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core framework\Bounds\WhenSettingTheCenterOfBounds.cs" />
     <Compile Include="Core framework\ReferencingComponent.cs" />
     <Compile Include="Core framework\TestComponent.cs" />
     <Compile Include="Core framework\TestHierarchy.cs" />
@@ -65,27 +66,30 @@
     <Compile Include="Core framework\Transforms\WhenManipulatingTheTransformHierarchy.cs" />
     <Compile Include="Core framework\WhenAddingAComponentToAGameObject.cs" />
     <Compile Include="Core framework\AGameObjectCanBeConvertedToBool.cs" />
+    <Compile Include="Core framework\WhenComparingTags.cs" />
     <Compile Include="Core framework\WhenConvertingAColor.cs" />
     <Compile Include="Core framework\WhenCreatingANewComponent.cs" />
     <Compile Include="Core framework\WhenCreatingANewGameObject.cs" />
     <Compile Include="Core framework\WhenDestroyingAComponent.cs" />
+    <Compile Include="Core framework\WhenFindingAnObject.cs" />
     <Compile Include="Core framework\WhenFixingUpReferences.cs" />
     <Compile Include="Core framework\WhenGettingTheComponentName.cs" />
     <Compile Include="Core framework\WhenInstantiatingANewObject.cs" />
     <Compile Include="Core framework\WhenLoadingAScene.cs" />
     <Compile Include="Core framework\WhenLocatingAComponent.cs" />
     <Compile Include="Core framework\WhenRunningTheGameLoop.cs" />
+    <Compile Include="Core framework\WhenSendingAMessage.cs" />
     <Compile Include="Core framework\WhenSettingActiveOnAGameObject.cs" />
     <Compile Include="Core framework\WhenSettingNewIds.cs" />
-    <Compile Include="Core framework\Bounds\WhenSettingTheCenterOfBounds.cs" />
+    <Compile Include="Core framework\Bounds\WhenChangingValuesOnBounds.cs" />
     <Compile Include="Core framework\WhenTransformingQuaternionsToAndFromEulers.cs" />
     <Compile Include="Core framework\Bounds\WhenCreatingBounds.cs" />
     <Compile Include="Core framework\WhenUsingTheComponentShortcutMethods.cs" />
     <Compile Include="Core framework\WhenUsingTheGameObjectShortcutProperties.cs" />
+    <Compile Include="Physics facts\WhenCollisionsOccur.cs" />
     <Compile Include="Physics facts\WhenDeterminingWhatIsAtAPoint.cs" />
     <Compile Include="Physics facts\WhenInitializingPhysics.cs" />
     <Compile Include="Physics facts\WhenPerformingARaycast.cs" />
-    <Compile Include="Physics facts\WhenReactingToPhysics.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

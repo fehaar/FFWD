@@ -21,6 +21,8 @@ namespace PressPlay.FFWD.Exporter.Test
             "",
             "\tpublic void Update() {",
             "\t}",
+            "\tvirtual protected void FixedUpdate() {",
+            "\t}",
             "}"
         };
 
@@ -84,7 +86,6 @@ namespace PressPlay.FFWD.Exporter.Test
         [Test]
         public void WeWillOverrideTheUpdateMethod()
         {
-            ScriptTranslator.ScriptNamespace = "TestNamespace";
             ScriptTranslator trans = new ScriptTranslator(testScript);
             trans.Translate();
             string newScript = trans.ToString();
@@ -92,6 +93,18 @@ namespace PressPlay.FFWD.Exporter.Test
             Assert.That(newScript, Is.StringContaining("public override void Update"));
             Assert.That(newScript, Is.Not.StringContaining("public public override void Update"));
         }
+
+        [Test]
+        public void WeWillOverrideTheFixedUpdateMEthodEvenWithABrokenSignature()
+        {
+            ScriptTranslator trans = new ScriptTranslator(testScript);
+            trans.Translate();
+            string newScript = trans.ToString();
+
+            Assert.That(newScript, Is.StringContaining("public override void FixedUpdate"));
+            Assert.That(newScript, Is.Not.StringContaining("virtual protected public override void"));
+        }
+	
 
         [Test]
         public void WeWillReplaceAttributes()

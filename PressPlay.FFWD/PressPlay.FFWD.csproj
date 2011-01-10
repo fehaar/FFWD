@@ -160,6 +160,7 @@
     <Compile Include="Components\Colliders\SphereCollider.cs" />
     <Compile Include="Components\MeshFilter.cs" />
     <Compile Include="Components\Renderers\Renderer.cs" />
+    <Compile Include="Gestures.cs" />
     <Compile Include="Material.cs" />
     <Compile Include="Components\Renderers\SkinnedMeshRenderer.cs" />
     <Compile Include="Extensions\PlaneExtensions.cs" />
@@ -173,12 +174,12 @@
     <Compile Include="ContentHelper.cs" />
     <Compile Include="Debug.cs" />
     <Compile Include="GameObject.cs" />
-    <Compile Include="Interfaces\ICollidable.cs" />
     <Compile Include="Interfaces\IContactProcessor.cs" />
     <Compile Include="Interfaces\IFixedUpdateable.cs" />
-    <Compile Include="Interfaces\IRenderable.cs" />
     <Compile Include="Interfaces\IUpdateable.cs" />
     <Compile Include="GameObjectContactProcessor.cs" />
+    <Compile Include="Physics\Collision.cs" />
+    <Compile Include="Physics\ContactPoint.cs" />
     <Compile Include="Physics\LayerMask.cs" />
     <Compile Include="Physics\Physics.cs" />
     <Compile Include="Physics\RaycastHelper.cs" />
@@ -196,6 +197,11 @@
     <Compile Include="ScreenManager\Screens\PlayerIndexEventArgs.cs" />
     <Compile Include="Time.cs" />
     <Compile Include="Transform.cs" />
+    <Compile Include="UI\Controls\Control.cs" />
+    <Compile Include="UI\Controls\ScrollTracker.cs" />
+    <Compile Include="UI\UIButtonRenderer.cs" />
+    <Compile Include="UI\UIRenderer.cs" />
+    <Compile Include="UI\UISpriteRenderer.cs" />
     <Compile Include="UnityObject.cs" />
     <Compile Include="Vector2.cs" />
     <Compile Include="Vector3.cs">
