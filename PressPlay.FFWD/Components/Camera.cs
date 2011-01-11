@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using PressPlay.FFWD.UI;
 
 namespace PressPlay.FFWD.Components
 {
@@ -97,9 +98,16 @@ namespace PressPlay.FFWD.Components
             return new Ray(near, (far - near).normalized);
         }
 
+        private static List<UIRenderer> uiRenderQueue = new List<UIRenderer>();
         internal static void AddRenderer(Renderer renderer)
         {
             // Tag UI renderes og gem dem i en liste. Returner så kameraerne ikke f'r den
+            if (renderer is UIRenderer)
+            {
+                uiRenderQueue.Add((UIRenderer)renderer);
+                return;
+            }
+
             for (int i = 0; i < _allCameras.Count; i++)
             {
                 _allCameras[i].addRenderer(renderer);
@@ -108,7 +116,7 @@ namespace PressPlay.FFWD.Components
 
         List<Renderer> renderQueue = new List<Renderer>();
         private void addRenderer(Renderer renderer)
-        {
+        {            
             if ((cullingMask & (1 << renderer.gameObject.layer)) > 0)
             {
                 renderQueue.Add(renderer);
@@ -119,9 +127,14 @@ namespace PressPlay.FFWD.Components
         {
             for (int i = 0; i < _allCameras.Count; i++)
             {
-                _allCameras[i].doRender(device);
+                //_allCameras[i].doRender(device);
             }
-            // Efter vi har renderet alle kam,eraer, kør alle UI renderes igennem og Draw dem.
+
+            for (int i = 0; i < uiRenderQueue.Count; i++)
+            {
+                uiRenderQueue[i].Draw(device, null);
+            }
+            uiRenderQueue.Clear();
         }
 
         internal void doRender(GraphicsDevice device)

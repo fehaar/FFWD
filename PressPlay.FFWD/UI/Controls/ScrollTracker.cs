@@ -5,7 +5,7 @@
 // Copyright (C) Microsoft Corporation. All rights reserved.
 //-----------------------------------------------------------------------------
 
-/*
+
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input.Touch;
@@ -24,6 +24,7 @@ namespace PressPlay.FFWD.UI.Controls
     /// </remarks>
     public class ScrollTracker
     {
+        
         /// Handling TouchPanel.EnabledGestures
         /// --------------------------
         /// This class watches for HorizontalDrag, DragComplete, and Flick gestures. However, it cannot just
@@ -90,7 +91,7 @@ namespace PressPlay.FFWD.UI.Controls
 
         public bool IsMoving
         {
-            get { return IsTracking || Velocity.X != 0 || Velocity.Y != 0 || !FullCanvasRect.Contains(ViewRect); }
+            get { return IsTracking || Velocity.x != 0 || Velocity.y != 0 || !FullCanvasRect.Contains(ViewRect); }
         }
 
         public ScrollTracker()
@@ -100,35 +101,37 @@ namespace PressPlay.FFWD.UI.Controls
         }
 
         // This must be called manually each tick that the ScrollTracker is active.
-        public void Update(GameTime gametime)
+        public void Update()
         {
             // Apply velocity and clamping
-            float dt = (float)gametime.ElapsedGameTime.TotalSeconds;
+            float dt = Time.deltaTime;
 
-            Vector2 viewMin = new Vector2 { X = 0, Y = 0 };
-            Vector2 viewMax = new Vector2 { X = CanvasRect.Width - ViewRect.Width, Y = CanvasRect.Height - ViewRect.Height };
-            viewMax.X = Math.Max(viewMin.X, viewMax.X);
-            viewMax.Y = Math.Max(viewMin.Y, viewMax.Y);
+            Vector2 viewMin = new Vector2 { x = 0, y = 0 };
+            Vector2 viewMax = new Vector2 { x = CanvasRect.Width - ViewRect.Width, y = CanvasRect.Height - ViewRect.Height };
+            viewMax.x = Math.Max(viewMin.x, viewMax.x);
+            viewMax.y = Math.Max(viewMin.y, viewMax.y);
 
             if (IsTracking)
             {
                 // ViewOrigin is a soft-clamped version of UnclampedOffset
-                ViewOrigin.X = SoftClamp(UnclampedViewOrigin.X, viewMin.X, viewMax.X);
-                ViewOrigin.Y = SoftClamp(UnclampedViewOrigin.Y, viewMin.Y, viewMax.Y);
+                ViewOrigin.x = SoftClamp(UnclampedViewOrigin.x, viewMin.x, viewMax.x);
+                ViewOrigin.y = SoftClamp(UnclampedViewOrigin.y, viewMin.y, viewMax.y);
             }
             else
             {
                 // Apply velocity
-                ApplyVelocity(dt, ref ViewOrigin.X, ref Velocity.X, viewMin.X, viewMax.X);
-                ApplyVelocity(dt, ref ViewOrigin.Y, ref Velocity.Y, viewMin.Y, viewMax.Y);
+                ApplyVelocity(dt, ref ViewOrigin.x, ref Velocity.x, viewMin.x, viewMax.x);
+                ApplyVelocity(dt, ref ViewOrigin.y, ref Velocity.y, viewMin.y, viewMax.y);
             }
-            ViewRect.X = (int)ViewOrigin.X;
-            ViewRect.Y = (int)ViewOrigin.Y;
+
+            ViewRect.X = (int)ViewOrigin.x;
+            ViewRect.Y = (int)ViewOrigin.y;
         }
 
         // This must be called manually each tick that the ScrollTracker is active.
         public void HandleInput(InputState input)
         {
+           
             // Turn on tracking as soon as we seen any kind of touch. We can't use gestures for this
             // because no gesture data is returned on the initial touch. We have to be careful to
             // pick out only 'Pressed' locations, because TouchState can return other events a frame
@@ -136,10 +139,10 @@ namespace PressPlay.FFWD.UI.Controls
             if (!IsTracking)
             {
                 for (int i = 0; i < input.TouchState.Count; i++)
-                {
+                {                    
                     if (input.TouchState[i].State == TouchLocationState.Pressed)
                     {
-                        Velocity = Vector2.Zero;
+                        Velocity = Vector2.zero;
                         UnclampedViewOrigin = ViewOrigin;
                         IsTracking = true;
                         break;
@@ -152,7 +155,8 @@ namespace PressPlay.FFWD.UI.Controls
                 switch (sample.GestureType)
                 {
                     case GestureType.VerticalDrag:
-                        UnclampedViewOrigin.Y -= sample.Delta.Y;
+                        UnclampedViewOrigin.y -= sample.Delta.Y;
+
                         break;
 
                     case GestureType.Flick:
@@ -212,4 +216,3 @@ namespace PressPlay.FFWD.UI.Controls
         }
     }
 }
-*/

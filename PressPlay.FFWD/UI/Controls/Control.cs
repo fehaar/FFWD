@@ -14,7 +14,12 @@ namespace PressPlay.FFWD.UI.Controls
         private Vector2 _size;
         private bool sizeValid = false;
         private bool autoSize = true;
-        private List<Control> children = null;
+        protected List<Control> children = null;
+        public Vector2 drawOffset = Vector2.zero;
+        /// <summary>
+        /// Event raised when the menu entry is selected.
+        /// </summary>
+        public event EventHandler<PlayerIndexEventArgs> OnClickedEvent;
         #endregion
 
         #region properties
@@ -37,7 +42,7 @@ namespace PressPlay.FFWD.UI.Controls
             }
             set
             {
-                position = value;
+                gameObject.transform.localPosition = value;
                 if (parent != null)
                 {
                     parent.InvalidateAutoSize();
@@ -64,7 +69,7 @@ namespace PressPlay.FFWD.UI.Controls
             // Setting the size overrides whatever ComputeSize() would return, and disables autoSize
             set
             {
-                size = value;
+                _size = value;
                 sizeValid = true;
                 autoSize = false;
                 if (parent != null)
@@ -112,10 +117,17 @@ namespace PressPlay.FFWD.UI.Controls
         }
         #endregion
 
-        /// <summary>
-        /// Event raised when the menu entry is selected.
-        /// </summary>
-        public event EventHandler<PlayerIndexEventArgs> OnClickedEvent;
+
+#region constructors
+        public Control()
+        {
+            if (gameObject == null)
+            {
+                GameObject go = new GameObject("control");
+                go.AddComponent(this);
+            }
+        }
+#endregion
 
         /// <summary>
         /// Method for raising the Selected event.
@@ -164,7 +176,7 @@ namespace PressPlay.FFWD.UI.Controls
 
         #region IUpdateable Members
 
-        public void Update()
+        public virtual void Update()
         {
 
         }
@@ -178,6 +190,7 @@ namespace PressPlay.FFWD.UI.Controls
             {
                 child.parent.RemoveChild(child);
             }
+
             AddChild(child, childCount);
         }
 
@@ -189,10 +202,12 @@ namespace PressPlay.FFWD.UI.Controls
             }
             child.parent = this;
             child.transform.parent = transform;
+
             if (children == null)
             {
                 children = new List<Control>();
             }
+
             children.Insert(index, child);
             OnChildAdded(index, child);
         }
