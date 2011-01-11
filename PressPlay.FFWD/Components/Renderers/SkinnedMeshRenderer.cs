@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using PressPlay.FFWD;
 
 namespace PressPlay.FFWD.Components
 {
@@ -28,11 +29,11 @@ namespace PressPlay.FFWD.Components
             }
 
             // Create animation players/clips for the rigid model
-            ModelData modelData = sharedMesh.model.Tag as ModelData;
+            SkinningData modelData = sharedMesh.model.Tag as SkinningData;
             animation = GetComponentInParents<Animation>();
             if (modelData != null)
             {
-                if (modelData.ModelAnimationClips != null)
+                if (modelData.AnimationClips != null)
                 {
                     animation.Initialize(modelData);
                 }
@@ -54,6 +55,8 @@ namespace PressPlay.FFWD.Components
                 device.RasterizerState = new RasterizerState() { FillMode = oldRaster.FillMode, CullMode = CullMode.CullClockwiseFace };
             }
             device.BlendState = material.blendState;
+
+            Debug.Display(ToString(), "Skinned");
 
             // Draw the model.
             ModelMesh mesh = sharedMesh.GetModelMesh();

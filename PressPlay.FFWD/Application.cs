@@ -182,6 +182,20 @@ namespace PressPlay.FFWD
             return null;
         }
 
+        internal static T[] FindObjectsOfType<T>() where T : UnityObject
+        {
+            List<T> list = new List<T>();
+            foreach (UnityObject obj in objects.Values)
+            {
+                T myObj = obj as T;
+                if (myObj != null)
+                {
+                    list.Add(myObj);
+                }
+            }
+            return list.ToArray();
+        }
+
         internal static UnityObject[] FindObjectsOfType(Type type)
         {
             List<UnityObject> list = new List<UnityObject>();

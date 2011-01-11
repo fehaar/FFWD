@@ -11,7 +11,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
-namespace PressPlay.FFWD.Components
+namespace PressPlay.FFWD
 {
     /// <summary>
     /// This class serves as a base class for various animation players.  It contains

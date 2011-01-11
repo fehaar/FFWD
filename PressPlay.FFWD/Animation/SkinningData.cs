@@ -7,7 +7,6 @@
 //-----------------------------------------------------------------------------
 #endregion
 
-using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -17,24 +16,19 @@ namespace PressPlay.FFWD
     /// <summary>
     /// Combines all the data needed to render and animate a skinned object.
     /// This is typically stored in the Tag property of the Model being animated.
+    /// 
+    /// This class was taken from the original Skinned Model Sample:
+    /// http://creators.xna.com/en-US/sample/skinnedmodel 
     /// </summary>
-    public class ModelData
+    public class SkinningData
     {
         /// <summary>
-        /// Gets a collection of animation clips that operate on the root of the object.
-        /// These are stored by name in a dictionary, so there could for instance be 
-        /// clips for "Walk", "Run", "JumpReallyHigh", etc.
-        /// </summary>
-        [ContentSerializer]
-        public Dictionary<string, AnimationClip> RootAnimationClips { get; private set; }
-
-        /// <summary>
-        /// Gets a collection of model animation clips. These are stored by name in a
+        /// Gets a collection of animation clips. These are stored by name in a
         /// dictionary, so there could for instance be clips for "Walk", "Run",
         /// "JumpReallyHigh", etc.
         /// </summary>
         [ContentSerializer]
-        public Dictionary<string, AnimationClip> ModelAnimationClips { get; private set; }
+        public Dictionary<string, AnimationClip> AnimationClips { get; private set; }
 
         /// <summary>
         /// Bindpose matrices for each bone in the skeleton,
@@ -58,15 +52,11 @@ namespace PressPlay.FFWD
         /// <summary>
         /// Constructs a new skinning data object.
         /// </summary>
-        public ModelData(
-            Dictionary<string, AnimationClip> modelAnimationClips,
-            Dictionary<string, AnimationClip> rootAnimationClips,
-            List<Matrix> bindPose,
-            List<Matrix> inverseBindPose,
-            List<int> skeletonHierarchy)
+        public SkinningData(Dictionary<string, AnimationClip> animationClips,
+                            List<Matrix> bindPose, List<Matrix> inverseBindPose,
+                            List<int> skeletonHierarchy)
         {
-            ModelAnimationClips = modelAnimationClips;
-            RootAnimationClips = rootAnimationClips;
+            AnimationClips = animationClips;
             BindPose = bindPose;
             InverseBindPose = inverseBindPose;
             SkeletonHierarchy = skeletonHierarchy;
@@ -75,7 +65,7 @@ namespace PressPlay.FFWD
         /// <summary>
         /// Private constructor for use by the XNB deserializer.
         /// </summary>
-        private ModelData()
+        private SkinningData()
         {
         }
     }
