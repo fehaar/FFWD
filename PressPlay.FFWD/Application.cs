@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
@@ -145,6 +146,24 @@ namespace PressPlay.FFWD
             {
                 Debug.Display("S | P | G", String.Format("{0:P1} | {1:P1} | {2:P1}", scripts.Elapsed.TotalSeconds / total, physics.Elapsed.TotalSeconds / total, graphics.Elapsed.TotalSeconds / total));
             }
+            if (ApplicationSettings.ShowDebugDisplays)
+	        {
+		        spriteBatch.Begin();
+
+                KeyValuePair<string, string>[] displayStrings = Debug.DisplayStrings.ToArray();
+                Microsoft.Xna.Framework.Vector2 Position = new Microsoft.Xna.Framework.Vector2(32, 32);
+                Microsoft.Xna.Framework.Vector2 offset = Microsoft.Xna.Framework.Vector2.Zero;
+                for (int i = 0; i < displayStrings.Length; i++)
+                {
+                    string text = displayStrings[i].Key + ": " + displayStrings[i].Value;
+                    spriteBatch.DrawString(ApplicationSettings.DebugFont, text, Position + Microsoft.Xna.Framework.Vector2.One + offset, Microsoft.Xna.Framework.Color.Black);
+                    spriteBatch.DrawString(ApplicationSettings.DebugFont, text, Position + offset, Microsoft.Xna.Framework.Color.White);
+                    offset.Y += ApplicationSettings.DebugFont.MeasureString(text).Y * 0.75f;
+                }
+
+                spriteBatch.End();
+            }
+
 #endif
         }
 
