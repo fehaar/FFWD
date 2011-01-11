@@ -32,12 +32,12 @@ namespace PressPlay.FFWD.Import.Animation
 
         public override string GetRuntimeType(TargetPlatform targetPlatform)
         {
-            return "PressPlay.FFWD.SkinnedModel.CpuSkinnedModel, PressPlay.FFWD.SkinnedModel";
+            return "PressPlay.FFWD.SkinnedModel.CpuSkinnedModel, PressPlay.FFWD";
         }
 
         public override string GetRuntimeReader(TargetPlatform targetPlatform)
         {
-            return "PressPlay.FFWD.SkinnedModel.CpuSkinnedModelReader, PressPlay.FFWD.SkinnedModel";
+            return "PressPlay.FFWD.SkinnedModel.CpuSkinnedModelReader, PressPlay.FFWD";
         }
     }
 
@@ -57,12 +57,12 @@ namespace PressPlay.FFWD.Import.Animation
 
         public override string GetRuntimeType(TargetPlatform targetPlatform)
         {
-            return "PressPlay.FFWD.CpuSkinnedModelPart, PressPlay.FFWD";
+            return "PressPlay.FFWD.SkinnedModel.CpuSkinnedModelPart, PressPlay.FFWD";
         }
 
         public override string GetRuntimeReader(TargetPlatform targetPlatform)
         {
-            return "PressPlay.FFWD.CpuSkinnedModelPartReader, PressPlay.FFWD";
+            return "PressPlay.FFWD.SkinnedModel.CpuSkinnedModelPartReader, PressPlay.FFWD";
         }
     }
 }

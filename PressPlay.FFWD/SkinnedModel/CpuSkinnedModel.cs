@@ -27,7 +27,7 @@ namespace PressPlay.FFWD.SkinnedModel
         /// <summary>
         /// The import scale of the model
         /// </summary>
-        public float Scale { get; set; }
+        public Matrix Scale { get; set; }
         /// <summary>
         /// The import rotation of the model
         /// </summary>

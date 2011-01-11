@@ -31,8 +31,8 @@ namespace PressPlay.FFWD.SkinnedModel
             SkinningData skinningData = input.ReadObject<SkinningData>();
 
             CpuSkinnedModel model = new CpuSkinnedModel(modelParts, skinningData);
-            model.Scale = input.ReadObject<Single>();
-            model.Rotation = Matrix.CreateFromQuaternion(input.ReadObject<Quaternion>());
+            model.Scale = Matrix.CreateScale(input.ReadObject<Single>());
+            model.Rotation = Matrix.CreateFromQuaternion(input.ReadObject<Microsoft.Xna.Framework.Quaternion>());
             return model;
         }
     }
