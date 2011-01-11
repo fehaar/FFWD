@@ -58,21 +58,19 @@ namespace PressPlay.FFWD.Components
             device.BlendState = material.blendState;
 
             // Draw the model.
-            foreach (CpuSkinnedModelPart modelPart in sharedMesh.skinnedModel.Parts)
+            CpuSkinnedModelPart modelPart = sharedMesh.GetSkinnedModelPart();
+            modelPart.SetBones(animation.GetTransforms());
+
+            modelPart.Effect.World = sharedMesh.skinnedModel.BakedTransform * transform.world;
+            modelPart.Effect.View = cam.View();
+            modelPart.Effect.Projection = cam.projectionMatrix;
+            if (material.texture != null)
             {
-                modelPart.SetBones(animation.GetTransforms());
-
-                modelPart.Effect.World = sharedMesh.skinnedModel.Scale * sharedMesh.skinnedModel.Rotation * transform.world;
-                modelPart.Effect.View = cam.View();
-                modelPart.Effect.Projection = cam.projectionMatrix;
-                if (material.texture != null)
-                {
-                    modelPart.Effect.TextureEnabled = true;
-                    modelPart.Effect.Texture = material.texture;
-                }
-
-                modelPart.Draw();
+                modelPart.Effect.TextureEnabled = true;
+                modelPart.Effect.Texture = material.texture;
             }
+
+            modelPart.Draw();
 
             device.RasterizerState = oldRaster;
             if (transform.lossyScale.x < 0 || transform.lossyScale.y < 0 || transform.lossyScale.z < 0)

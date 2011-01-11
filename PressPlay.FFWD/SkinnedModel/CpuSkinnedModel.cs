@@ -25,14 +25,9 @@ namespace PressPlay.FFWD.SkinnedModel
         public SkinningData SkinningData { get; internal set; }
 
         /// <summary>
-        /// The import scale of the model
+        /// The baked transform in terms of scale and rotation
         /// </summary>
-        public Matrix Scale { get; set; }
-        /// <summary>
-        /// The import rotation of the model
-        /// </summary>
-        public Matrix Rotation { get; set; }
-
+        public Matrix BakedTransform { get; set; }
         /// <summary>
         /// Gets a collection of the model parts that make up this model.
         /// </summary>

@@ -31,8 +31,7 @@ namespace PressPlay.FFWD.SkinnedModel
             SkinningData skinningData = input.ReadObject<SkinningData>();
 
             CpuSkinnedModel model = new CpuSkinnedModel(modelParts, skinningData);
-            model.Scale = Matrix.CreateScale(input.ReadObject<Single>());
-            model.Rotation = Matrix.CreateFromQuaternion(input.ReadObject<Microsoft.Xna.Framework.Quaternion>());
+            model.BakedTransform = input.ReadMatrix();
             return model;
         }
     }
@@ -45,12 +44,13 @@ namespace PressPlay.FFWD.SkinnedModel
         protected override CpuSkinnedModelPart Read(ContentReader input, CpuSkinnedModelPart existingInstance)
         {
             // read in all of our data
+            string name = input.ReadString();
             int triangleCount = input.ReadInt32();
             CpuVertex[] cpuVertices = input.ReadObject<CpuVertex[]>();
             IndexBuffer indexBuffer = input.ReadObject<IndexBuffer>();
 
             // create the model part from this data
-            CpuSkinnedModelPart modelPart = new CpuSkinnedModelPart(triangleCount, cpuVertices, indexBuffer);
+            CpuSkinnedModelPart modelPart = new CpuSkinnedModelPart(name, triangleCount, cpuVertices, indexBuffer);
 
             // read in the BasicEffect as a shared resource
             input.ReadSharedResource<BasicEffect>(fx => modelPart.Effect = fx);

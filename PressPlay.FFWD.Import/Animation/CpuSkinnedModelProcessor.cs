@@ -79,7 +79,7 @@ namespace PressPlay.FFWD.Import.Animation
                 // Process all the geometry in the mesh.
                 foreach (GeometryContent geometry in mesh.Geometry)
                 {
-                    ProcessGeometry(geometry);
+                    ProcessGeometry(node.Name, geometry);
                 }
             }
 
@@ -90,7 +90,7 @@ namespace PressPlay.FFWD.Import.Animation
             }
         }
 
-        void ProcessGeometry(GeometryContent geometry)
+        void ProcessGeometry(string name, GeometryContent geometry)
         {
             // find and process the geometry's bone weights
             for (int i = 0; i < geometry.Vertices.Channels.Count; i++)
@@ -135,7 +135,7 @@ namespace PressPlay.FFWD.Import.Animation
             MaterialContent material = ProcessMaterial(geometry.Material);
 
             // Add the new piece of geometry to our output model.
-            outputModel.AddModelPart(triangleCount, geometry.Indices, vertices, material as BasicMaterialContent);
+            outputModel.AddModelPart(name, triangleCount, geometry.Indices, vertices, material as BasicMaterialContent);
         }
 
         static void ProcessWeightsChannel(GeometryContent geometry, int vertexChannelIndex)

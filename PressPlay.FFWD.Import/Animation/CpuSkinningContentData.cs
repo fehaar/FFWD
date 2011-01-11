@@ -27,6 +27,7 @@ namespace PressPlay.FFWD.Import.Animation
         public Microsoft.Xna.Framework.Vector3 Rotation = Microsoft.Xna.Framework.Vector3.Zero;
 
         public void AddModelPart(
+            string name,
             int triangleCount,
             IndexCollection indexCollection,
             CpuVertex[] vertices,
@@ -37,6 +38,7 @@ namespace PressPlay.FFWD.Import.Animation
 
             ModelParts.Add(new CpuSkinnedModelPartContent
             {
+                Name = name,
                 TriangleCount = triangleCount,
                 IndexCollection = indexCollection,
                 Vertices = vertices,
@@ -50,6 +52,7 @@ namespace PressPlay.FFWD.Import.Animation
     /// </summary>
     class CpuSkinnedModelPartContent
     {
+        public string Name;
         public int TriangleCount;
         public CpuVertex[] Vertices;
         public IndexCollection IndexCollection;

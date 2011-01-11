@@ -39,6 +39,17 @@ namespace PressPlay.FFWD
             if (isSkinnedModel)
             {
                 skinnedModel = ContentHelper.GetSkinnedModel(asset);
+                if (skinnedModel != null)
+                {
+                    for (int i = 0; i < skinnedModel.Parts.Count; i++)
+                    {
+                        if (skinnedModel.Parts[i].name == name)
+                        {
+                            meshIndex = i;
+                            break;
+                        }
+                    }
+                }
             }
             else
             {
@@ -70,6 +81,15 @@ namespace PressPlay.FFWD
             if (model != null)
             {
                 return model.Meshes[meshIndex];
+            }
+            return null;
+        }
+
+        internal CpuSkinnedModelPart GetSkinnedModelPart()
+        {
+            if (skinnedModel != null)
+            {
+                return skinnedModel.Parts[meshIndex];
             }
             return null;
         }

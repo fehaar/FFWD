@@ -15,6 +15,7 @@ namespace PressPlay.FFWD.SkinnedModel
 {
     public class CpuSkinnedModelPart
     {
+        public readonly string name;
         private readonly int triangleCount;
         private readonly int vertexCount;
         private readonly CpuVertex[] cpuVertices;
@@ -25,8 +26,9 @@ namespace PressPlay.FFWD.SkinnedModel
 
         public BasicEffect Effect { get; internal set; }
         
-        internal CpuSkinnedModelPart(int triangleCount, CpuVertex[] vertices, IndexBuffer indexBuffer)
+        internal CpuSkinnedModelPart(string name, int triangleCount, CpuVertex[] vertices, IndexBuffer indexBuffer)
         {
+            this.name = name;
             this.triangleCount = triangleCount;
             this.vertexCount = vertices.Length;
             this.cpuVertices = vertices;
