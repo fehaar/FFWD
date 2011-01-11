@@ -40,6 +40,7 @@ namespace PressPlay.FFWD.Components
 
         public SpriteRenderer()
         {
+
         }
 
         public SpriteRenderer(string texture)
@@ -88,7 +89,7 @@ namespace PressPlay.FFWD.Components
         #endregion
 
         #region IRenderable Members
-        private SpriteBatch batch;
+        protected SpriteBatch batch;
         public override void Draw(GraphicsDevice device, Camera cam)
         {
             if (texture == null)

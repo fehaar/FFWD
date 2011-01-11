@@ -157,6 +157,7 @@
     <Compile Include="Components\Colliders\SphereCollider.cs" />
     <Compile Include="Components\MeshFilter.cs" />
     <Compile Include="Components\Renderers\Renderer.cs" />
+    <Compile Include="Gestures.cs" />
     <Compile Include="Material.cs" />
     <Compile Include="Components\Renderers\SkinnedMeshRenderer.cs" />
     <Compile Include="Extensions\PlaneExtensions.cs" />
@@ -184,13 +185,11 @@
     <Compile Include="Random.cs" />
     <Compile Include="Scene.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ScreenManager\Component\ButtonComponent.cs" />
     <Compile Include="ScreenManager\Component\Sprite.cs" />
     <Compile Include="ScreenManager\GameScreen.cs" />
     <Compile Include="ScreenManager\InputState.cs" />
     <Compile Include="ScreenManager\ScreenManager.cs" />
     <Compile Include="ScreenManager\Screens\MenuEntry.cs" />
-    <Compile Include="ScreenManager\Screens\MenuSceneScreen.cs" />
     <Compile Include="ScreenManager\Screens\MenuScreen.cs" />
     <Compile Include="ScreenManager\Screens\PlayerIndexEventArgs.cs" />
     <Compile Include="SkinnedModel\CpuSkinnedModel.cs" />
@@ -200,6 +199,14 @@
     <Compile Include="SkinnedModel\CpuVertex.cs" />
     <Compile Include="Time.cs" />
     <Compile Include="Transform.cs" />
+    <Compile Include="UI\Controls\Control.cs" />
+    <Compile Include="UI\Controls\ImageControl.cs" />
+    <Compile Include="UI\Controls\PanelControl.cs" />
+    <Compile Include="UI\Controls\ScrollingPanelControl.cs" />
+    <Compile Include="UI\Controls\ScrollTracker.cs" />
+    <Compile Include="UI\UIButtonRenderer.cs" />
+    <Compile Include="UI\UIRenderer.cs" />
+    <Compile Include="UI\UISpriteRenderer.cs" />
     <Compile Include="UnityObject.cs" />
     <Compile Include="Vector2.cs" />
     <Compile Include="Vector3.cs">
