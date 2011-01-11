@@ -127,7 +127,7 @@ namespace PressPlay.FFWD.Components
         {
             for (int i = 0; i < _allCameras.Count; i++)
             {
-                //_allCameras[i].doRender(device);
+                _allCameras[i].doRender(device);
             }
 
             for (int i = 0; i < uiRenderQueue.Count; i++)
