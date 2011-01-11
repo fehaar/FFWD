@@ -28,13 +28,16 @@ namespace PressPlay.FFWD.Components
             }
 
             // Create animation players/clips for the rigid model
-            ModelData modelData = sharedMesh.model.Tag as ModelData;
-            animation = GetComponentInParents<Animation>();
-            if (modelData != null)
+            if (sharedMesh.model != null)
             {
-                if (modelData.ModelAnimationClips != null)
+                ModelData modelData = sharedMesh.model.Tag as ModelData;
+                animation = GetComponentInParents<Animation>();
+                if (modelData != null)
                 {
-                    animation.Initialize(modelData);
+                    if (modelData.ModelAnimationClips != null)
+                    {
+                        animation.Initialize(modelData);
+                    }
                 }
             }
         }
