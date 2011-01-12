@@ -15,8 +15,8 @@ namespace PressPlay.FFWD
         public Application(Game game)
             : base(game)
         {
-            UpdateOrder = 0;
-            DrawOrder = 0;
+            UpdateOrder = 1;
+            DrawOrder = 1;
         }
 
         private SpriteBatch spriteBatch;
