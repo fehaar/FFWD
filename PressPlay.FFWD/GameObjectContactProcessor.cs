@@ -117,11 +117,11 @@ namespace PressPlay.FFWD
 
             for (int i = staying.Count - 1; i >= 0; i--)
             {
-                if (!staying[i].collA.gameObject.active || !staying[i].collB.gameObject.active)
+                if (staying[i].collA.gameObject == null || !staying[i].collA.gameObject.active || !staying[i].collB.gameObject.active)
                 {
                     staying.RemoveAt(i);
                 }
-                if (staying[i].collision == null)
+                else if (staying[i].collision == null)
                 {
                     staying[i].collA.gameObject.OnTriggerStay(staying[i].collB);
                     staying[i].collB.gameObject.OnTriggerStay(staying[i].collA);
