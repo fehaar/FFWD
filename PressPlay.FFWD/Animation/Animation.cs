@@ -158,6 +158,12 @@ namespace PressPlay.FFWD.Components
                 animationPlayer.Update(true, Matrix.Identity);
             }
         }
+
+        public void LateUpdate()
+        {
+
+        }
+
         #endregion
 
         internal Microsoft.Xna.Framework.Matrix[] GetTransforms()

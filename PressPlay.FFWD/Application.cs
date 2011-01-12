@@ -25,6 +25,8 @@ namespace PressPlay.FFWD
         int frameCounter = 0;
         TimeSpan elapsedTime = TimeSpan.Zero;
 
+       
+
 #if DEBUG
         private Stopwatch scripts = new Stopwatch();
         private Stopwatch physics = new Stopwatch();
@@ -34,6 +36,7 @@ namespace PressPlay.FFWD
         private static Dictionary<int, UnityObject> objects = new Dictionary<int, UnityObject>();
         private static List<Component> activeComponents = new List<Component>();
         internal static List<UnityObject> markedForDestruction = new List<UnityObject>();
+        private static List<Interfaces.IUpdateable> lateUpdates = new List<Interfaces.IUpdateable>();
 
         public override void Initialize()
         {
@@ -95,7 +98,7 @@ namespace PressPlay.FFWD
             scripts.Start();
 #endif
             Microsoft.Xna.Framework.Color bg = new Microsoft.Xna.Framework.Color(78, 115, 74);
-
+            
             for (int i = 0; i < activeComponents.Count; i++)
             {
                 if (!activeComponents[i].isStarted)
@@ -110,6 +113,7 @@ namespace PressPlay.FFWD
                 if (activeComponents[i] is PressPlay.FFWD.Interfaces.IUpdateable)
                 {
                     (activeComponents[i] as PressPlay.FFWD.Interfaces.IUpdateable).Update();
+                    lateUpdates.Add((activeComponents[i] as PressPlay.FFWD.Interfaces.IUpdateable));
                 }
                 if ((activeComponents[i] is Renderer))
                 {
@@ -120,6 +124,12 @@ namespace PressPlay.FFWD
                     (activeComponents[i] as MonoBehaviour).UpdateInvokeCalls();
                 }
             }
+
+            for (int i = 0; i < lateUpdates.Count; i++)
+            {
+                lateUpdates[i].LateUpdate();
+            }
+
             CleanUp();
 #if DEBUG
             scripts.Stop();
@@ -291,6 +301,7 @@ namespace PressPlay.FFWD
             objects.Clear();
             activeComponents.Clear();
             markedForDestruction.Clear();
+            lateUpdates.Clear();
         }
 
         internal static void CleanUp()
@@ -306,6 +317,7 @@ namespace PressPlay.FFWD
 	            }
             }
             markedForDestruction.Clear();
+            lateUpdates.Clear();
         }
     }
 }
