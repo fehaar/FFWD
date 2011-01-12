@@ -185,7 +185,7 @@ namespace PressPlay.FFWD
             LoadLevel(scene);
         }
 
-        public static void LoadLevel(Scene scene)
+        internal static void LoadLevel(Scene scene)
         {
             Reset();
             scene.AfterLoad();
@@ -307,5 +307,7 @@ namespace PressPlay.FFWD
             }
             markedForDestruction.Clear();
         }
+
+        public static string loadedLevelName { get; private set; }
     }
 }

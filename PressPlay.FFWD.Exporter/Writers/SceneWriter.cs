@@ -379,16 +379,16 @@ namespace PressPlay.FFWD.Exporter.Writers
                     Component theObject = (obj as Component);
                     writer.WriteStartElement(name);
 
+                    if ((theObject != null) && (obj is MonoBehaviour) && obj.GetType() != elementType)
+                    {
+                        writer.WriteAttributeString("Type", resolver.ResolveTypeName(obj));
+                    }
+                   
                     if (theObject == null || !WriteComponent(theObject as Component, true))
                     {
                         writer.WriteAttributeString("Null", ToString(true));
                         writer.WriteEndElement();
                         return;
-                    }
-
-                    if ((obj is MonoBehaviour) && obj.GetType() != elementType)
-                    {
-                        writer.WriteAttributeString("Type", resolver.ResolveTypeName(obj));
                     }
 
                     AddPrefab(theObject);
@@ -402,6 +402,17 @@ namespace PressPlay.FFWD.Exporter.Writers
                     foreach (object mat in (Array)obj)
                     {
                         WriteElement("Item", mat);
+                    }
+                    writer.WriteEndElement();
+                    return;
+                }
+                // Check if we have a List
+                if (obj is IList)
+                {
+                    writer.WriteStartElement(name);
+                    foreach (object item in (IList)obj)
+                    {
+                        WriteElement("Item", item);
                     }
                     writer.WriteEndElement();
                     return;

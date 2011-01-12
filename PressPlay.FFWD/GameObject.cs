@@ -434,6 +434,17 @@ namespace PressPlay.FFWD
         }
 
         /// <summary>
+        /// Returns the first GameObject tagged tag. Returns null if no GameObject was found.
+        /// Tags must be declared in the tag manager before using them.
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
+        public static GameObject FindGameObjectWithTag(string p)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
         /// Returns a list of active GameObjects tagged tag. Returns null if no GameObject was found.
         /// Tags must be declared in the tag manager before using them.
         /// </summary>
