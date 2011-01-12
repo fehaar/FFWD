@@ -418,7 +418,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                     return;
                 }
                 // Check if we have a Serializable class
-                if (obj.GetType().GetCustomAttributes(typeof(SerializableAttribute), true).Length > 0)
+                if (obj.GetType().GetCustomAttributes(typeof(SerializableAttribute), true).Length > 0 || (obj.GetType().IsValueType && !obj.GetType().IsEnum))
                 {
                     writer.WriteStartElement(name);
                     FieldInfo[] memInfo = obj.GetType().GetFields(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance);

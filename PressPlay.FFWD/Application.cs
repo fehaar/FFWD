@@ -189,13 +189,13 @@ namespace PressPlay.FFWD
             }
         }
 
-        public static void LoadScene(string name)
+        public static void LoadLevel(string name)
         {
             Scene scene = ContentHelper.Content.Load<Scene>(name);
             LoadLevel(scene);
         }
 
-        internal static void LoadLevel(Scene scene)
+        public static void LoadLevel(Scene scene)
         {
             Reset();
             scene.AfterLoad();
