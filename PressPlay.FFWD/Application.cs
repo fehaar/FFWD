@@ -36,6 +36,7 @@ namespace PressPlay.FFWD
         private static Dictionary<int, UnityObject> objects = new Dictionary<int, UnityObject>();
         private static List<Component> activeComponents = new List<Component>();
         internal static List<UnityObject> markedForDestruction = new List<UnityObject>();
+        internal static List<GameObject> dontDestroyOnLoad = new List<GameObject>();
         private static List<Interfaces.IUpdateable> lateUpdates = new List<Interfaces.IUpdateable>();
 
         public override void Initialize()
@@ -193,11 +194,18 @@ namespace PressPlay.FFWD
         {
             Scene scene = ContentHelper.Content.Load<Scene>(name);
             LoadLevel(scene);
+            loadedLevelName = name;
         }
 
         public static void LoadLevel(Scene scene)
         {
             Reset();
+            // TODO: Make don't destroy on load work
+            //for (int i = 0; i < dontDestroyOnLoad.Count; i++)
+            //{
+            //    objects.Add(dontDestroyOnLoad[i].GetInstanceID(), dontDestroyOnLoad[i]);
+            //    activeComponents.AddRange(dontDestroyOnLoad[i])
+            //}
             scene.AfterLoad();
             AwakeNewComponents();
         }
@@ -321,5 +329,10 @@ namespace PressPlay.FFWD
         }
 
         public static string loadedLevelName { get; private set; }
+
+        internal static void DontDestroyOnLoad(UnityObject target)
+        {
+            // TODO: Make this work when switching scenes
+        }
     }
 }

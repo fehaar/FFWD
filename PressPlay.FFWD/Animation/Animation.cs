@@ -83,6 +83,10 @@ namespace PressPlay.FFWD.Components
 	
         public void AddClip(AnimationClip clip, string newName)
         {
+            if (String.IsNullOrEmpty(newName))
+            {
+                return;
+            }
             if (String.IsNullOrEmpty(clip.name))
             {
                 clip.name = newName;
