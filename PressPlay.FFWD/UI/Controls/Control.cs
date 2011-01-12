@@ -19,7 +19,6 @@ namespace PressPlay.FFWD.UI.Controls
         /// <summary>
         /// Event raised when the menu entry is selected.
         /// </summary>
-        public event EventHandler<PlayerIndexEventArgs> OnClickedEvent;
         #endregion
 
         #region properties
@@ -27,7 +26,9 @@ namespace PressPlay.FFWD.UI.Controls
         {
             get
             {
-                return new Rectangle((int)transform.position.x, (int)transform.position.y, (int)size.x, (int)size.y);
+                Vector2 pos = transform.position;
+                Vector2 scale = transform.lossyScale;
+                return new Rectangle((int)pos.x, (int)pos.y, (int)(size.x * scale.x), (int)(size.y * scale.y));
             }
         }
 
@@ -118,7 +119,7 @@ namespace PressPlay.FFWD.UI.Controls
         #endregion
 
 
-#region constructors
+        #region constructors
         public Control()
         {
             if (gameObject == null)
@@ -127,18 +128,8 @@ namespace PressPlay.FFWD.UI.Controls
                 go.AddComponent(this);
             }
         }
-#endregion
+        #endregion
 
-        /// <summary>
-        /// Method for raising the Selected event.
-        /// </summary>
-        protected virtual void OnSelectEntry(PlayerIndex playerIndex)
-        {
-            if (OnClickedEvent != null)
-            {
-                OnClickedEvent(this, new PlayerIndexEventArgs(PlayerIndex.One));
-            }
-        }
 
         #region Handle input
         /// <summary>
@@ -147,9 +138,18 @@ namespace PressPlay.FFWD.UI.Controls
         /// </summary>
         public virtual void HandleInput(InputState input)
         {
-
+            for (int i = 0; i < childCount; i++)
+            {
+                children[i].HandleInput(input);
+            }
         }
         #endregion
+
+        public void SetScale(Vector3 scale)
+        {
+            transform.localScale = scale;
+            InvalidateAutoSize();
+        }
 
         /// <summary>
         /// Called when the Size property is read and sizeValid is false. Call base.ComputeSize() to compute the
@@ -163,15 +163,37 @@ namespace PressPlay.FFWD.UI.Controls
             }
             else
             {
-                Vector2 bounds = children[0].position + children[0].size;
+                Vector2 childBounds = children[0].position + children[0].size;
+                //Debug.Log("childBounds" + childBounds);
                 for (int i = 1; i < children.Count; i++)
                 {
                     Vector2 corner = children[i].position + children[i].size;
-                    bounds.x = Math.Max(bounds.x, corner.y);
-                    bounds.y = Math.Max(bounds.x, corner.y);
+                    //Debug.Log("children[" + i + "]" + corner);
+                    childBounds.x = Math.Max(childBounds.x, corner.x);
+                    childBounds.y = Math.Max(childBounds.y, corner.y);
                 }
-                return bounds;
+
+                return childBounds;
             }
+        }
+
+        protected virtual bool isInputWithinBounds(InputState input)
+        {
+            return isInputWithinBounds(input, bounds);
+        }
+
+        protected virtual bool isInputWithinBounds(InputState input, Rectangle box)
+        {
+            for (int i = 0; i < input.TouchState.Count; i++)
+            {
+                //Debug.Log("bounds: " + box + " input.TouchState[" + i + "]: " + input.TouchState[i].Position);
+                if (box.Contains((int)input.TouchState[i].Position.X, (int)input.TouchState[i].Position.Y))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         #region IUpdateable Members

@@ -76,6 +76,8 @@ namespace PressPlay.FFWD.Components
             {
                 material = new Material();
             }
+
+            material.renderQueue = 1000;
         }
 
         #region IUpdateable Members
@@ -101,6 +103,8 @@ namespace PressPlay.FFWD.Components
             {
                 batch = new SpriteBatch(device);
             }
+
+            Debug.Log("I want to render SpriteRender");
 
             batch.Begin();
             batch.Draw(texture, Position, bounds, material.color, transform.eulerAngles.y, Origin, Scale, Effects, LayerDepth);
