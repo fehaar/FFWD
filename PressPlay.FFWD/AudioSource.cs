@@ -165,5 +165,10 @@ namespace PressPlay.FFWD
                 }
             }
         }
+
+        public void LateUpdate()
+        {
+ 
+        }
     }
 }

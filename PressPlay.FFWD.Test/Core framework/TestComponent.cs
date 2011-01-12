@@ -41,6 +41,11 @@ namespace PressPlay.FFWD.Test.Core_framework
                 onUpdate();
             }
         }
+
+        public void LateUpdate()
+        {
+
+        }
         #endregion
 
         #region IFixedUpdateable Members
