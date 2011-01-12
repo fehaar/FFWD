@@ -60,26 +60,11 @@
   <ItemGroup>
     <Compile Include="Animation\Animation.cs" />
     <Compile Include="Animation\AnimationClip.cs" />
+    <Compile Include="Animation\AnimationPlayer.cs" />
     <Compile Include="Animation\AnimationState.cs" />
-    <Compile Include="Animation\ModelAnimationPlayerBase.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Animation\ModelData.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Animation\ModelKeyframe.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Animation\Keyframe.cs" />
     <Compile Include="Animation\QueueMode.cs" />
-    <Compile Include="Animation\RigidAnimationPlayer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Animation\RootAnimationPlayer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Animation\SkinnedAnimationPlayer.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Animation\SkinningData.cs" />
     <Compile Include="Animation\WrapMode.cs" />
     <Compile Include="ApplicationSettings.cs" />
     <Compile Include="AudioClip.cs" />
@@ -170,6 +155,11 @@
     <Compile Include="Random.cs" />
     <Compile Include="Scene.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SkinnedModel\CpuSkinnedModel.cs" />
+    <Compile Include="SkinnedModel\CpuSkinnedModelPart.cs" />
+    <Compile Include="SkinnedModel\CpuSkinnedModelReader.cs" />
+    <Compile Include="SkinnedModel\CpuSkinningHelpers.cs" />
+    <Compile Include="SkinnedModel\CpuVertex.cs" />
     <Compile Include="Time.cs" />
     <Compile Include="Transform.cs" />
     <Compile Include="UI\Controls\Control.cs" />

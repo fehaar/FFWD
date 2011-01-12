@@ -10,20 +10,21 @@ using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework;
 using PressPlay.FFWD.Components;
 using PressPlay.FFWD;
-#if WINDOWS
-using System.Diagnostics;
-#endif
+using PressPlay.FFWD.SkinnedModel;
 
 namespace PressPlay.FFWD
 {
     public static class ContentHelper
     {
+        private struct ModelData
+        {
+            public Model model;
+            public CpuSkinnedModel skinnedModel;
+        }
+
         public static GameServiceContainer Services { get; set; }
         public static ContentManager Content;
         public static ContentManager StaticContent;
-#if WINDOWS
-        public static HashSet<string> MissingAssets = new HashSet<string>();
-#endif
 
         private struct TextureToColor
         {
@@ -34,11 +35,11 @@ namespace PressPlay.FFWD
         public static bool IgnoreMissingAssets { get; set; }
 
         private static Dictionary<string, Texture2D> StaticTextures = new Dictionary<string, Texture2D>();
-        private static Dictionary<string, Model> StaticModels = new Dictionary<string, Model>();
+        private static Dictionary<string, ModelData> StaticModels = new Dictionary<string, ModelData>();
         private static Dictionary<string, SoundEffect> StaticSounds = new Dictionary<string, SoundEffect>();
 
         private static Dictionary<string, Texture2D> Textures = new Dictionary<string, Texture2D>();
-        private static Dictionary<string, Model> Models = new Dictionary<string, Model>();
+        private static Dictionary<string, ModelData> Models = new Dictionary<string, ModelData>();
         private static Dictionary<TextureToColor, Texture2D> coloredTextures = new Dictionary<TextureToColor, Texture2D>();
         public static Dictionary<string, SoundEffect> Sounds = new Dictionary<string, SoundEffect>();
         private static Dictionary<string, Song> Songs = new Dictionary<string, Song>();
@@ -131,7 +132,7 @@ namespace PressPlay.FFWD
             }
             catch
             {
-                MissingAsset("Texture", name);
+                Debug.Display("Missing texture", name);
                 if (!IgnoreMissingAssets)
                 {
                     throw;
@@ -139,20 +140,25 @@ namespace PressPlay.FFWD
             }
         }
 
-        private static void MissingAsset(string type, string name)
-        {
-#if WINDOWS
-            string key = type + ": " + name;
-            if (!MissingAssets.Contains(key))
-            {
-                MissingAssets.Add(key);
-            }
-#else
-            return;
-#endif
-        }
+//        private static void MissingAsset(string type, string name)
+//        {
+//#if WINDOWS
+//            string key = type + ": " + name;
+//            if (!MissingAssets.Contains(key))
+//            {
+//                MissingAssets.Add(key);
+//            }
+//#else
+//            return;
+//#endif
+//        }
 
         public static void LoadModel(string name)
+        {
+            LoadModel(name, false);
+        }
+
+        public static void LoadModel(string name, bool skinnedModel)
         {
             if (String.IsNullOrEmpty(name))
                 return;
@@ -184,11 +190,21 @@ namespace PressPlay.FFWD
 
             try
             {
-                Models.Add(name, Content.Load<Model>("Models\\" + fileName));
+                ModelData data = new ModelData();
+                if (skinnedModel)
+                {
+
+                    data.skinnedModel = Content.Load<CpuSkinnedModel>("Models\\" + fileName);
+                }
+                else
+                {
+                    data.model = Content.Load<Model>("Models\\" + fileName);
+                }
+                Models.Add(name, data);
             }
             catch
             {
-                MissingAsset("Model", name);
+                Debug.Display("Missing model", name);
                 if (!IgnoreMissingAssets)
                 {
                     throw;
@@ -233,7 +249,7 @@ namespace PressPlay.FFWD
             }
             catch
             {
-                MissingAsset("Sound", name);
+                Debug.Display("Missing sound", name);
             }
             if (sound != null)
             {
@@ -273,7 +289,7 @@ namespace PressPlay.FFWD
             }
             catch
             {
-                Debug.Log("Missing song : " + name);
+                Debug.Display("Missing song", name);
             }
             if (song != null)
                 ContentHelper.Songs.Add(name, song);
@@ -307,7 +323,7 @@ namespace PressPlay.FFWD
             }
             catch
             {
-                Debug.Log("Missing sound: " + name);
+                Debug.Display("Missing sound", name);
             }
             if (sound != null)
             {
@@ -375,13 +391,33 @@ namespace PressPlay.FFWD
             if (String.IsNullOrEmpty(name))
                 return null;
 
-            Model model;
-            Models.TryGetValue(name, out model);
-            if (model == null)
+            ModelData model;
+            if (Models.ContainsKey(name))
+            {
+                model = Models[name];
+            }
+            else
             {
                 StaticModels.TryGetValue(name, out model);
             }
-            return model;
+            return model.model;
+        }
+
+        public static CpuSkinnedModel GetSkinnedModel(string name)
+        {
+            if (String.IsNullOrEmpty(name))
+                return null;
+
+            ModelData model;
+            if (Models.ContainsKey(name))
+            {
+                model = Models[name];
+            }
+            else
+            {
+                StaticModels.TryGetValue(name, out model);
+            }
+            return model.skinnedModel;
         }
 
         public static SoundEffect GetSound(string name)

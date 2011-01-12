@@ -9,7 +9,7 @@ namespace PressPlay.FFWD
         public AudioWrapper sound;
 
         // Use this for initialization
-        void Start()
+        public override void Start()
         {
             sound.PlaySound();
         }

@@ -11,7 +11,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
-namespace PressPlay.FFWD.Components
+namespace PressPlay.FFWD
 {
     /// <summary>
     /// The animation player manipulates a skinned model

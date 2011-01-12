@@ -98,6 +98,8 @@ namespace PressPlay.FFWD.ScreenManager
             // we must set EnabledGestures before we can query for them, but
             // we don't assume the game wants to read them.
             TouchPanel.EnabledGestures = GestureType.None;
+            UpdateOrder = 0;
+            DrawOrder = 0;
         }
 
 

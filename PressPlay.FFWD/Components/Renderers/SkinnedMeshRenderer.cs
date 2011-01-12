@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using PressPlay.FFWD;
+using PressPlay.FFWD.SkinnedModel;
 
 namespace PressPlay.FFWD.Components
 {
@@ -15,7 +17,7 @@ namespace PressPlay.FFWD.Components
             base.Awake();
             if (sharedMesh != null)
             {
-                sharedMesh.Awake();
+                sharedMesh.Awake(true);
             }
         }
 
@@ -24,20 +26,16 @@ namespace PressPlay.FFWD.Components
             base.Start();
             if (sharedMesh != null)
             {
-                sharedMesh.Start();
+                sharedMesh.Start(true);
             }
 
             // Create animation players/clips for the rigid model
-            if (sharedMesh.model != null)
+            animation = GetComponentInParents<Animation>();
+            if ((sharedMesh.skinnedModel != null) && (sharedMesh.skinnedModel.SkinningData != null))
             {
-                ModelData modelData = sharedMesh.model.Tag as ModelData;
-                animation = GetComponentInParents<Animation>();
-                if (modelData != null)
+                if (sharedMesh.skinnedModel.SkinningData.AnimationClips != null)
                 {
-                    if (modelData.ModelAnimationClips != null)
-                    {
-                        animation.Initialize(modelData);
-                    }
+                    animation.Initialize(sharedMesh.skinnedModel.SkinningData);
                 }
             }
         }
@@ -45,7 +43,7 @@ namespace PressPlay.FFWD.Components
         #region IRenderable Members
         public override void Draw(GraphicsDevice device, Camera cam)
         {
-            if (sharedMesh == null || sharedMesh.model == null)
+            if (sharedMesh == null || sharedMesh.skinnedModel == null)
             {
                 return;
             }
@@ -56,37 +54,25 @@ namespace PressPlay.FFWD.Components
             {
                 device.RasterizerState = new RasterizerState() { FillMode = oldRaster.FillMode, CullMode = CullMode.CullClockwiseFace };
             }
+            device.RasterizerState = new RasterizerState() { FillMode = oldRaster.FillMode, CullMode = CullMode.None };
             device.BlendState = material.blendState;
 
             // Draw the model.
-            ModelMesh mesh = sharedMesh.GetModelMesh();
-            for (int e = 0; e < mesh.Effects.Count; e++)
-            {
-                Matrix[] boneTransforms = null;
-                if (animation != null)
-                {
-                    boneTransforms = animation.GetTransforms();
-                }
+            CpuSkinnedModelPart modelPart = sharedMesh.GetSkinnedModelPart();
+            modelPart.SetBones(animation.GetTransforms());
 
-                SkinnedEffect sEffect = mesh.Effects[e] as SkinnedEffect;
-                if (sEffect != null)
-                {
-                    if (boneTransforms != null)
-                    {
-                        sEffect.SetBoneTransforms(boneTransforms);
-                    }
-                    sEffect.World = Matrix.CreateScale(0.01f) * transform.world;
-                    sEffect.View = cam.View();
-                    sEffect.Projection = cam.projectionMatrix;
-                    sEffect.AmbientLightColor = new Vector3(1);
-                    if (material.texture != null)
-                    {
-                        sEffect.Texture = material.texture;
-                    }
-                    mesh.Draw();
-                }
+            modelPart.Effect.World = sharedMesh.skinnedModel.BakedTransform * transform.world;
+            modelPart.Effect.View = cam.View();
+            modelPart.Effect.Projection = cam.projectionMatrix;
+            if (material.texture != null)
+            {
+                modelPart.Effect.TextureEnabled = true;
+                modelPart.Effect.Texture = material.texture;
             }
 
+            modelPart.Draw();
+
+            device.RasterizerState = oldRaster;
             if (transform.lossyScale.x < 0 || transform.lossyScale.y < 0 || transform.lossyScale.z < 0)
             {
                 device.RasterizerState = oldRaster;

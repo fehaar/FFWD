@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
@@ -14,8 +15,8 @@ namespace PressPlay.FFWD
         public Application(Game game)
             : base(game)
         {
-            UpdateOrder = 0;
-            DrawOrder = 0;
+            UpdateOrder = 1;
+            DrawOrder = 1;
         }
 
         private SpriteBatch spriteBatch;
@@ -145,6 +146,24 @@ namespace PressPlay.FFWD
             {
                 Debug.Display("S | P | G", String.Format("{0:P1} | {1:P1} | {2:P1}", scripts.Elapsed.TotalSeconds / total, physics.Elapsed.TotalSeconds / total, graphics.Elapsed.TotalSeconds / total));
             }
+            if (ApplicationSettings.ShowDebugDisplays)
+	        {
+		        spriteBatch.Begin();
+
+                KeyValuePair<string, string>[] displayStrings = Debug.DisplayStrings.ToArray();
+                Microsoft.Xna.Framework.Vector2 Position = new Microsoft.Xna.Framework.Vector2(32, 32);
+                Microsoft.Xna.Framework.Vector2 offset = Microsoft.Xna.Framework.Vector2.Zero;
+                for (int i = 0; i < displayStrings.Length; i++)
+                {
+                    string text = displayStrings[i].Key + ": " + displayStrings[i].Value;
+                    spriteBatch.DrawString(ApplicationSettings.DebugFont, text, Position + Microsoft.Xna.Framework.Vector2.One + offset, Microsoft.Xna.Framework.Color.Black);
+                    spriteBatch.DrawString(ApplicationSettings.DebugFont, text, Position + offset, Microsoft.Xna.Framework.Color.White);
+                    offset.Y += ApplicationSettings.DebugFont.MeasureString(text).Y * 0.75f;
+                }
+
+                spriteBatch.End();
+            }
+
 #endif
         }
 
@@ -180,6 +199,20 @@ namespace PressPlay.FFWD
                 return objects[id];
             }
             return null;
+        }
+
+        internal static T[] FindObjectsOfType<T>() where T : UnityObject
+        {
+            List<T> list = new List<T>();
+            foreach (UnityObject obj in objects.Values)
+            {
+                T myObj = obj as T;
+                if (myObj != null)
+                {
+                    list.Add(myObj);
+                }
+            }
+            return list.ToArray();
         }
 
         internal static UnityObject[] FindObjectsOfType(Type type)
