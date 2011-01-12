@@ -49,7 +49,7 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
                 }
                 if (filter.Includes(memInfo[m].Name))
                 {
-                    scene.WriteElement(memInfo[m].Name, memInfo[m].GetValue(component));
+                    scene.WriteElement(memInfo[m].Name, memInfo[m].GetValue(component), memInfo[m].FieldType);
                 }
             }
         }

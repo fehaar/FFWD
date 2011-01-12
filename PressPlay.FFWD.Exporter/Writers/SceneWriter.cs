@@ -231,6 +231,11 @@ namespace PressPlay.FFWD.Exporter.Writers
 
         internal void WriteElement(string name, object obj)
         {
+            WriteElement(name, obj, typeof(MonoBehaviour));
+        }
+
+        internal void WriteElement(string name, object obj, Type elementType)
+        {
             try
             {
                 if (obj == null)
@@ -373,12 +378,19 @@ namespace PressPlay.FFWD.Exporter.Writers
                 {
                     Component theObject = (obj as Component);
                     writer.WriteStartElement(name);
+
                     if (theObject == null || !WriteComponent(theObject as Component, true))
                     {
                         writer.WriteAttributeString("Null", ToString(true));
                         writer.WriteEndElement();
                         return;
                     }
+
+                    if ((obj is MonoBehaviour) && obj.GetType() != elementType)
+                    {
+                        writer.WriteAttributeString("Type", resolver.ResolveTypeName(obj));
+                    }
+
                     AddPrefab(theObject);
                     writer.WriteEndElement();
                     return;
