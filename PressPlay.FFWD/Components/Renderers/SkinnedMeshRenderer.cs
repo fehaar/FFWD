@@ -31,7 +31,7 @@ namespace PressPlay.FFWD.Components
 
             // Create animation players/clips for the rigid model
             animation = GetComponentInParents<Animation>();
-            if (sharedMesh.skinnedModel.SkinningData != null)
+            if ((sharedMesh.skinnedModel != null) && (sharedMesh.skinnedModel.SkinningData != null))
             {
                 if (sharedMesh.skinnedModel.SkinningData.AnimationClips != null)
                 {
