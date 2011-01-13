@@ -33,6 +33,8 @@ namespace PressPlay.FFWD.Exporter.Writers
 
         public void Write(string path)
         {
+            path = PreparePath(path);
+
             XmlWriterSettings settings = new XmlWriterSettings();
             settings.Indent = true;
             settings.IndentChars = "  ";
@@ -51,12 +53,7 @@ namespace PressPlay.FFWD.Exporter.Writers
 
         public void WriteResource(string path, GameObject go)
         {
-            path = Path.Combine(ExportDir, path);
-            if (!Directory.Exists(Path.GetDirectoryName(path)))
-            {
-                Directory.CreateDirectory(Path.GetDirectoryName(path));
-                Debug.Log("Created directory " + Path.GetDirectoryName(path));
-            }
+            path = PreparePath(path);
 
             XmlWriterSettings settings = new XmlWriterSettings();
             settings.Indent = true;
@@ -73,6 +70,16 @@ namespace PressPlay.FFWD.Exporter.Writers
             }
         }
 
+        private string PreparePath(string path)
+        {
+            path = Path.Combine(ExportDir, path);
+            if (!Directory.Exists(Path.GetDirectoryName(path)))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(path));
+                Debug.Log("Created directory " + Path.GetDirectoryName(path));
+            }
+            return path;
+        }
 
         private void WriteGOs()
         {
@@ -122,7 +129,15 @@ namespace PressPlay.FFWD.Exporter.Writers
             Component[] comps = go.GetComponents(typeof(Component));
             for (int i = 0; i < comps.Length; i++)
             {
-                WriteComponent(comps[i], false);
+                try
+                {
+                    WriteComponent(comps[i], false);
+                }
+                catch (Exception ex)
+                {
+                    Debug.Log("Exception while writing Component of type " + comps[i].GetType());
+                    throw;
+                }
             }
             writer.WriteEndElement();
         }
