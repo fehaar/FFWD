@@ -139,8 +139,15 @@ namespace PressPlay.FFWD
             for (int i = 0; i < beginContacts.Count; ++i)
             {
                 Contact contact = beginContacts[i];
+
                 Fixture fixtureA = contact.GetFixtureA();
                 Fixture fixtureB = contact.GetFixtureB();
+
+                if (fixtureA == null || fixtureB == null)
+                {
+                    continue;
+                }
+
                 if (fixtureA.GetBody().GetType() == BodyType.Static && fixtureB.GetBody().GetType() == BodyType.Static)
                 {
                     continue;
