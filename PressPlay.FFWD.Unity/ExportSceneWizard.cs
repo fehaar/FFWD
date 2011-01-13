@@ -55,7 +55,7 @@ public class ExportSceneWizard : ScriptableWizard {
         ScriptTranslator.ScriptNamespace = scriptNamespace;
 
         Debug.Log("Start scene export of " + Path.GetFileName(EditorApplication.currentScene));
-        scene.Write(Path.Combine(exportDir, Path.ChangeExtension(Path.GetFileName(EditorApplication.currentScene), "xml")));
+        scene.Write(Path.ChangeExtension(Path.GetFileName(EditorApplication.currentScene), "xml"));
         Debug.Log("End scene export of " + Path.GetFileName(EditorApplication.currentScene));
     }
 

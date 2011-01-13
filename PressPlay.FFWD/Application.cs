@@ -99,7 +99,6 @@ namespace PressPlay.FFWD
 #if DEBUG
             scripts.Start();
 #endif
-            Microsoft.Xna.Framework.Color bg = new Microsoft.Xna.Framework.Color(78, 115, 74);
             
             for (int i = 0; i < activeComponents.Count; i++)
             {

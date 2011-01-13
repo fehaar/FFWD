@@ -5,6 +5,12 @@ namespace PressPlay.FFWD.Components
 {
     public abstract class Renderer : Component
     {
+        public Renderer()
+            :base()
+        {
+            enabled = true;
+        }
+
         [ContentSerializer(CollectionItemName = "material")]
         public Material[] materials{ get; set; }
 
