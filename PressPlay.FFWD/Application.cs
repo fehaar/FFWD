@@ -38,6 +38,7 @@ namespace PressPlay.FFWD
         internal static List<UnityObject> markedForDestruction = new List<UnityObject>();
         internal static List<GameObject> dontDestroyOnLoad = new List<GameObject>();
         private static List<Interfaces.IUpdateable> lateUpdates = new List<Interfaces.IUpdateable>();
+        internal static bool loadingScene = false;
 
         public override void Initialize()
         {
@@ -192,7 +193,9 @@ namespace PressPlay.FFWD
 
         public static void LoadLevel(string name)
         {
+            loadingScene = true;
             Scene scene = ContentHelper.Content.Load<Scene>(name);
+            loadingScene = false;
             LoadLevel(scene);
             loadedLevelName = name;
         }
@@ -267,6 +270,14 @@ namespace PressPlay.FFWD
                 Component cmp = NewComponents[i];
                 if (cmp.gameObject != null)
                 {
+                    // TODO: Fix this with a content processor!
+                    // Purge superfluous Transforms that is created when GameObjects are imported from the scene
+                    if ((cmp is Transform) && (cmp.gameObject.transform != cmp))
+                    {
+                        cmp.gameObject = null;
+                        continue;
+                    }
+
                     objects.Add(cmp.GetInstanceID(), cmp);
                     if (!cmp.isPrefab)
                     {

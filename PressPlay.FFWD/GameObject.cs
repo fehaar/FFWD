@@ -19,7 +19,10 @@ namespace PressPlay.FFWD
             : base()
         {
             components = new List<Component>();
-            AddComponent(new Transform());
+            if (!Application.loadingScene)
+            {
+                AddComponent(new Transform());
+            }
             active = true;
         }
 
