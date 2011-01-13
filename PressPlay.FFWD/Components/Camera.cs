@@ -130,6 +130,14 @@ namespace PressPlay.FFWD.Components
 
         internal static void DoRender(GraphicsDevice device)
         {
+            if (device != null)
+            {
+                device.Clear(Color.black);
+                device.BlendState = BlendState.Opaque;
+                device.DepthStencilState = DepthStencilState.Default;
+                device.SamplerStates[0] = SamplerState.LinearClamp;
+            }
+
             for (int i = 0; i < _allCameras.Count; i++)
             {
                 _allCameras[i].doRender(device);

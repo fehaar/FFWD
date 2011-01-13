@@ -137,15 +137,6 @@ namespace PressPlay.FFWD
             scripts.Stop();
             graphics.Start();
 #endif
-            // TODO: This is not very cool. Needed to avoid test failures... But cameras should handle this
-            if (gameTime.ElapsedGameTime.TotalMilliseconds > 0)
-            {
-                GraphicsDevice.Clear(bg);
-                GraphicsDevice.BlendState = BlendState.Opaque;
-                GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-                GraphicsDevice.SamplerStates[0] = SamplerState.LinearClamp;
-            }
-
             Camera.DoRender(GraphicsDevice);
 #if DEBUG
             graphics.Stop();
@@ -197,7 +188,7 @@ namespace PressPlay.FFWD
             Scene scene = ContentHelper.Content.Load<Scene>(name);
             loadingScene = false;
             LoadLevel(scene);
-            loadedLevelName = name;
+            loadedLevelName = name.Contains('/') ? name.Substring(name.LastIndexOf('/') + 1) : name;
         }
 
         public static void LoadLevel(Scene scene)
@@ -331,7 +322,10 @@ namespace PressPlay.FFWD
                 if (markedForDestruction[i] is Component)
 	            {
                     Component cmp = (markedForDestruction[i] as Component);
-                    cmp.gameObject.RemoveComponent(cmp);
+                    if (cmp.gameObject != null)
+                    {
+                        cmp.gameObject.RemoveComponent(cmp);
+                    }
                     activeComponents.Remove(cmp);
 	            }
             }
