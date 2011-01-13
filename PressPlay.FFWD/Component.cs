@@ -234,7 +234,7 @@ namespace PressPlay.FFWD
         {
             Type tp = this.GetType();
             BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.InvokeMethod;
-            while (tp != typeof(MonoBehaviour))
+            while (tp != typeof(Component))
             {
                 MethodInfo info = tp.GetMethod(methodName, flags);
                 if (info != null)
