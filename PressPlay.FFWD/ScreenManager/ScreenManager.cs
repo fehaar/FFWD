@@ -71,6 +71,10 @@ namespace PressPlay.FFWD.ScreenManager
             get { return font; }
         }
 
+        public Texture2D BlankTexture
+        {
+            get { return blankTexture; }
+        }
 
         /// <summary>
         /// If true, the manager prints out a list of all the screens

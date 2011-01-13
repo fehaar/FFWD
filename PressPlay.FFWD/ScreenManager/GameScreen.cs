@@ -311,8 +311,6 @@ namespace PressPlay.FFWD.ScreenManager
                 transitionDelta = (float)(gameTime.ElapsedGameTime.TotalMilliseconds /
                                           time.TotalMilliseconds);
 
-            Debug.Log("Updating transition: "+transitionPosition);
-
             // Update the transition position.
             transitionPosition += transitionDelta * direction;
 
