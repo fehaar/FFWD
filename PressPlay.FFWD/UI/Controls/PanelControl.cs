@@ -24,12 +24,15 @@ namespace PressPlay.FFWD.UI.Controls
         public void LayoutColumn(float xMargin, float yMargin, float ySpacing)
         {
 
-            float y = yMargin;
+            // Parent offset
+            Vector2 offset = transform.position;
+
+            float y = yMargin + offset.y;
             
             for (int i = 0; i < childCount; i++)
             {
                 Control child = this[i];
-                child.transform.localPosition = new Vector2 { x = xMargin, y = y };
+                child.transform.position = new Vector2 { x = offset.x + xMargin, y = y };
                 y += child.bounds.Height + ySpacing;
             }
 
@@ -44,13 +47,20 @@ namespace PressPlay.FFWD.UI.Controls
         // Position child components in a row, with the given spacing between components
         public void LayoutRow(float xMargin, float yMargin, float xSpacing)
         {
-            float x = xMargin;
+
+            // Parent offset
+            Vector2 offset = transform.position;
+
+            float x = xMargin + offset.x;
 
             for (int i = 0; i < childCount; i++)
             {
                 Control child = this[i];
-                child.transform.position = new Vector2 { x = x, y = yMargin };
+                child.transform.position = new Vector2 { x = x, y = offset.y + yMargin };
+
                 x += child.bounds.Width + xSpacing;
+
+                //Debug.Log("x: "+x+" child.bounds.Width: " + child.bounds.Width);
             }
 
             InvalidateAutoSize();

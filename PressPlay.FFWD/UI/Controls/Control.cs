@@ -84,7 +84,7 @@ namespace PressPlay.FFWD.UI.Controls
         /// Call this method when a control's content changes so that its size needs to be recomputed. This has no
         /// effect if autoSize has been disabled.
         /// </summary>
-        protected void InvalidateAutoSize()
+        public void InvalidateAutoSize()
         {
             if (autoSize)
             {
@@ -238,6 +238,8 @@ namespace PressPlay.FFWD.UI.Controls
 
         public void AddChild(Control child, int index)
         {
+            //Debug.Log("Adding child "+child.name+" to "+this.name);
+            
             if (child.parent != null)
             {
                 child.parent.RemoveChild(child);

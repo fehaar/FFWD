@@ -12,6 +12,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input.Touch;
 using System.IO;
+using Microsoft.Xna.Framework.Content;
 #endregion
 
 namespace PressPlay.FFWD.ScreenManager
@@ -55,6 +56,12 @@ namespace PressPlay.FFWD.ScreenManager
 
         bool isPopup = false;
 
+        private CachedContent content;
+        public CachedContent Content
+        {
+            get{ return content; }
+            set { content = value; }
+        }
 
         /// <summary>
         /// Indicates how long the screen takes to
@@ -373,7 +380,6 @@ namespace PressPlay.FFWD.ScreenManager
                 isExiting = true;
             }
         }
-
 
         #endregion
     }
