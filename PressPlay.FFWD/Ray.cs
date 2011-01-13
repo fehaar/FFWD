@@ -2,11 +2,9 @@
 
 namespace PressPlay.FFWD
 {
-    
-
-    struct Ray
+    public struct Ray
     {
-        private Microsoft.Xna.Framework.Ray ray = new Microsoft.Xna.Framework.Ray();
+        private Microsoft.Xna.Framework.Ray ray;
 
         public Vector3 origin
         {
@@ -28,14 +26,9 @@ namespace PressPlay.FFWD
             }
         }
 
-        public Ray()
-        {
-            this.origin = Vector3.zero;
-            this.direction = Vector3.zero;
-        }
-
         public Ray(Vector3 origin, Vector3 direction)
         {
+            ray = new Microsoft.Xna.Framework.Ray();
             this.origin = origin;
             this.direction = direction;
         }
@@ -43,6 +36,11 @@ namespace PressPlay.FFWD
         public Vector3 GetPoint(float distance)
         {
             return origin + direction * distance;
+        }
+
+        public float? Intersects(Microsoft.Xna.Framework.Plane plane)
+        {
+            return ray.Intersects(plane);
         }
     }
 }

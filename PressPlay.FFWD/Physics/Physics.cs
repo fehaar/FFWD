@@ -319,7 +319,7 @@ namespace PressPlay.FFWD
 
         public static RaycastHit[] RaycastAll(Ray ray, float distance, int layerMask)
         {
-            return RaycastAll(ray.Position, ray.Direction, distance, layerMask);
+            return RaycastAll(ray.origin, ray.direction, distance, layerMask);
         }
         #endregion
 
