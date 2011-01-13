@@ -135,12 +135,17 @@ namespace PressPlay.FFWD.Components
                 _allCameras[i].doRender(device);
             }
 
-            //if(UIRenderer.batch
+            if (UIRenderer.batch == null)
+            {
+                UIRenderer.SetSpriteBatch(device);
+            }
 
+            UIRenderer.batch.Begin();
             for (int i = 0; i < uiRenderQueue.Count; i++)
             {
                 uiRenderQueue[i].Draw(device, null);
             }
+            UIRenderer.batch.End();
             uiRenderQueue.Clear();
         }
 

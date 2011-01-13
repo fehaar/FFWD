@@ -131,10 +131,8 @@ namespace PressPlay.FFWD.UI
                 return;
             }
 
-            batch.Begin();
-            batch.Draw(texture, control.bounds, sourceRect, material.color, transform.eulerAngles.y, origin, effects, layerDepth);
+            UIRenderer.batch.Draw(texture, control.bounds, sourceRect, material.color, transform.eulerAngles.y, origin, effects, layerDepth);
             //batch.Draw(texture, transform.position, sourceRect, material.color, transform.eulerAngles.y, origin, scale, effects, layerDepth);
-            batch.End();
         }
         #endregion
     }
