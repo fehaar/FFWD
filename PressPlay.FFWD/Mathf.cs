@@ -17,8 +17,15 @@ namespace PressPlay.FFWD
         public const float NegativeInfinity = float.NegativeInfinity;
         public const float Rad2Deg = 360 / MathHelper.TwoPi;
 
+        public static int Sign(float value)
+        {
+            return Math.Sign(value);
+        }
+
         public static float Cos(float value)
         {
+            
+
             return (float)Math.Cos(value);
         }
 
