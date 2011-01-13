@@ -139,6 +139,11 @@ namespace PressPlay.FFWD
             return obj;
         }
 
+        public static T[] FindObjectsOfType<T>() where T : UnityObject
+        {
+            return Application.FindObjectsOfType<T>();
+        }
+
         public static UnityObject[] FindObjectsOfType(Type type)
         {
             return Application.FindObjectsOfType(type);
@@ -160,8 +165,7 @@ namespace PressPlay.FFWD
 
         public static void DontDestroyOnLoad(UnityObject target)
         {
-            // TODO : Add implementation of method
-            throw new NotImplementedException("Method not implemented.");
+            Application.DontDestroyOnLoad(target);
         }
     }
 }

@@ -105,9 +105,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AnimatedModelProcessor.cs" />
     <Compile Include="ColorTypeSerializer.cs" />
-    <Compile Include="SkinnedModelProcessor.cs" />
+    <Compile Include="Animation\CpuSkinnedModelProcessor.cs" />
+    <Compile Include="Animation\CpuSkinnedModelWriter.cs" />
+    <Compile Include="Animation\CpuSkinningContentData.cs" />
+    <Compile Include="Animation\GpuSkinnedModelProcessor.cs" />
+    <Compile Include="Animation\SkinningHelpers.cs" />
     <Compile Include="Vector2TypeSerializer.cs" />
     <Compile Include="QuaternionTypeSerializer.cs" />
     <Compile Include="Vector3ArrayTypeSerializer.cs" />

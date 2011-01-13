@@ -9,6 +9,9 @@ namespace PressPlay.FFWD.Components
         public Material[] materials{ get; set; }
 
         [ContentSerializerIgnore]
+        public bool enabled { get; set; }
+
+        [ContentSerializerIgnore]
         public Material sharedMaterial
         {
             get 

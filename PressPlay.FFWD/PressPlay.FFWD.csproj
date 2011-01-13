@@ -97,14 +97,11 @@
   <ItemGroup>
     <Compile Include="Animation\Animation.cs" />
     <Compile Include="Animation\AnimationClip.cs" />
+    <Compile Include="Animation\AnimationPlayer.cs" />
     <Compile Include="Animation\AnimationState.cs" />
-    <Compile Include="Animation\ModelAnimationPlayerBase.cs" />
-    <Compile Include="Animation\ModelData.cs" />
-    <Compile Include="Animation\ModelKeyframe.cs" />
+    <Compile Include="Animation\Keyframe.cs" />
     <Compile Include="Animation\QueueMode.cs" />
-    <Compile Include="Animation\RigidAnimationPlayer.cs" />
-    <Compile Include="Animation\RootAnimationPlayer.cs" />
-    <Compile Include="Animation\SkinnedAnimationPlayer.cs" />
+    <Compile Include="Animation\SkinningData.cs" />
     <Compile Include="Animation\WrapMode.cs" />
     <Compile Include="Application.cs" />
     <Compile Include="ApplicationSettings.cs" />
@@ -186,6 +183,7 @@
     <Compile Include="Physics\RaycastHit.cs" />
     <Compile Include="Quaternion.cs" />
     <Compile Include="Random.cs" />
+    <Compile Include="Ray.cs" />
     <Compile Include="Scene.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScreenManager\Component\Sprite.cs" />
@@ -195,6 +193,11 @@
     <Compile Include="ScreenManager\Screens\MenuEntry.cs" />
     <Compile Include="ScreenManager\Screens\MenuScreen.cs" />
     <Compile Include="ScreenManager\Screens\PlayerIndexEventArgs.cs" />
+    <Compile Include="SkinnedModel\CpuSkinnedModel.cs" />
+    <Compile Include="SkinnedModel\CpuSkinnedModelPart.cs" />
+    <Compile Include="SkinnedModel\CpuSkinnedModelReader.cs" />
+    <Compile Include="SkinnedModel\CpuSkinningHelpers.cs" />
+    <Compile Include="SkinnedModel\CpuVertex.cs" />
     <Compile Include="Time.cs" />
     <Compile Include="Transform.cs" />
     <Compile Include="UI\Controls\ButtonControl.cs" />

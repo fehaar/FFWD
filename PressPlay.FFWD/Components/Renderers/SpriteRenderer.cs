@@ -88,6 +88,11 @@ namespace PressPlay.FFWD.Components
             Position.y = transform.localPosition.y;
         }
 
+        public void LateUpdate()
+        {
+
+        }
+
         #endregion
 
         #region IRenderable Members

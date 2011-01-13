@@ -15,7 +15,7 @@ namespace PressPlay.FFWD.Components
             base.Awake();            
             if (sharedMesh != null)
             {
-                sharedMesh.Awake();
+                sharedMesh.Awake(false);
             }
         }
 
@@ -24,7 +24,7 @@ namespace PressPlay.FFWD.Components
             base.Start();
             if (sharedMesh != null)
             {
-                sharedMesh.Start();
+                sharedMesh.Start(false);
             }
         }
 

@@ -10,7 +10,7 @@
 using System;
 using Microsoft.Xna.Framework;
 
-namespace PressPlay.FFWD.Components
+namespace PressPlay.FFWD
 {
     /// <summary>
     /// This animation player knows how to play an animation on a rigid model, applying transformations

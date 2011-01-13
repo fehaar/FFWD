@@ -252,32 +252,32 @@ namespace PressPlay.FFWD
 
         public static bool Raycast(Ray ray)
         {
-            return Raycast(ray.Position, ray.Direction, Mathf.Infinity, kDefaultRaycastLayers);
+            return Raycast(ray.origin, ray.direction, Mathf.Infinity, kDefaultRaycastLayers);
         }
 
         public static bool Raycast(Ray ray, float distance)
         {
-            return Raycast(ray.Position, ray.Direction, distance, kDefaultRaycastLayers);
+            return Raycast(ray.origin, ray.direction, distance, kDefaultRaycastLayers);
         }
 
         public static bool Raycast(Ray ray, float distance, int layerMask)
         {
-            return Raycast(ray.Position, ray.Direction, distance, layerMask);
+            return Raycast(ray.origin, ray.direction, distance, layerMask);
         }
 
         public static bool Raycast(Ray ray, out RaycastHit hitInfo)
         {
-            return Raycast(ray.Position, ray.Direction, out hitInfo, Mathf.Infinity, kDefaultRaycastLayers);
+            return Raycast(ray.origin, ray.direction, out hitInfo, Mathf.Infinity, kDefaultRaycastLayers);
         }
 
         public static bool Raycast(Ray ray, out RaycastHit hitInfo, float distance)
         {
-            return Raycast(ray.Position, ray.Direction, out hitInfo, distance, kDefaultRaycastLayers);
+            return Raycast(ray.origin, ray.direction, out hitInfo, distance, kDefaultRaycastLayers);
         }
 
         public static bool Raycast(Ray ray, out RaycastHit hitInfo, float distance, int layerMask)
         {
-            return Raycast(ray.Position, ray.Direction, out hitInfo, distance, layerMask);
+            return Raycast(ray.origin, ray.direction, out hitInfo, distance, layerMask);
         }
 
         public static RaycastHit[] RaycastAll(Vector2 origin, Vector2 direction)
@@ -319,7 +319,7 @@ namespace PressPlay.FFWD
 
         public static RaycastHit[] RaycastAll(Ray ray, float distance, int layerMask)
         {
-            return RaycastAll(ray.Position, ray.Direction, distance, layerMask);
+            return RaycastAll(ray.origin, ray.direction, distance, layerMask);
         }
         #endregion
 

@@ -101,6 +101,11 @@ namespace PressPlay.FFWD.Components
         private static List<UIRenderer> uiRenderQueue = new List<UIRenderer>();
         internal static void AddRenderer(Renderer renderer)
         {
+            //if (!renderer.enabled) 
+            //{ 
+            //    return; 
+            //}
+
             // Tag UI renderes og gem dem i en liste. Returner så kameraerne ikke f'r den
             if (renderer is UIRenderer)
             {

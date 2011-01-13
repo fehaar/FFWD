@@ -240,7 +240,7 @@ namespace PressPlay.FFWD
         {
             get
             {
-                return world.Right;
+                return Microsoft.Xna.Framework.Vector3.Normalize(world.Right);
             }
         }
 
@@ -249,7 +249,7 @@ namespace PressPlay.FFWD
         {
             get
             {
-                return world.Forward;
+                return Microsoft.Xna.Framework.Vector3.Normalize(world.Forward);
             }
         }
 
@@ -258,7 +258,7 @@ namespace PressPlay.FFWD
         {
             get
             {
-                return world.Up;
+                return Microsoft.Xna.Framework.Vector3.Normalize(world.Up);
             }
         }
 

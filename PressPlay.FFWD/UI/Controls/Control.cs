@@ -218,6 +218,11 @@ namespace PressPlay.FFWD.UI.Controls
 
         }
 
+        public void LateUpdate()
+        {
+
+        }
+
         #endregion
 
         #region Child control API

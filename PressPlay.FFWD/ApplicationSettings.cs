@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace PressPlay.FFWD
 {
@@ -12,5 +13,7 @@ namespace PressPlay.FFWD
 
         public static bool ShowPerformanceBreakdown = true;
         public static bool ShowFPSCounter = true;
+        public static bool ShowDebugDisplays = true;
+        public static SpriteFont DebugFont;
     }
 }

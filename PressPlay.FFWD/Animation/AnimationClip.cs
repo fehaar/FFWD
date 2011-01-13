@@ -11,7 +11,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
 
-namespace PressPlay.FFWD.Components
+namespace PressPlay.FFWD
 {
     /// <summary>
     /// A model animation clip is the runtime equivalent of the
@@ -43,12 +43,12 @@ namespace PressPlay.FFWD.Components
         /// sorted by time.
         /// </summary>
         [ContentSerializer]
-        public List<ModelKeyframe> Keyframes { get; private set; }
+        public List<Keyframe> Keyframes { get; private set; }
 
         /// <summary>
         /// Constructs a new model animation clip object.
         /// </summary>
-        public AnimationClip(TimeSpan duration, List<ModelKeyframe> keyframes)
+        public AnimationClip(TimeSpan duration, List<Keyframe> keyframes)
         {
             Duration = duration;
             Keyframes = keyframes;

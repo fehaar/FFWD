@@ -1,6 +1,6 @@
 #region File Description
 //-----------------------------------------------------------------------------
-// ModelKeyframe.cs
+// Keyframe.cs
 //
 // Microsoft XNA Community Game Platform
 // Copyright (C) Microsoft Corporation. All rights reserved.
@@ -15,8 +15,11 @@ namespace PressPlay.FFWD
 {
     /// <summary>
     /// Describes the position of a single bone at a single point in time.
+    /// 
+    /// This class was taken from the original Skinned Model Sample:
+    /// http://creators.xna.com/en-US/sample/skinnedmodel 
     /// </summary>
-    public class ModelKeyframe
+    public class Keyframe
     {
         /// <summary>
         /// Gets the index of the target bone that is animated by this keyframe.
@@ -37,19 +40,19 @@ namespace PressPlay.FFWD
         public Matrix Transform { get; private set; }
 
         /// <summary>
-        /// Constructs a new ModelKeyframe object.
+        /// Constructs a new keyframe object.
         /// </summary>
-        public ModelKeyframe(int bone, TimeSpan time, Matrix transform)
+        public Keyframe(int bone, TimeSpan time, Matrix transform)
         {
             Bone = bone;
             Time = time;
             Transform = transform;
         }
-
+        
         /// <summary>
         /// Private constructor for use by the XNB deserializer.
         /// </summary>
-        private ModelKeyframe()
+        private Keyframe()
         {
         }
     }

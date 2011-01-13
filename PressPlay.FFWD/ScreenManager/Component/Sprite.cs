@@ -85,6 +85,11 @@ namespace PressPlay.FFWD.ScreenManager
 
         }
 
+        public void LateUpdate()
+        {
+
+        }
+
         #endregion
     }
 }

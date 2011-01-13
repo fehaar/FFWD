@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using PressPlay.FFWD.SkinnedModel;
 
 namespace PressPlay.FFWD
 {
@@ -15,6 +16,8 @@ namespace PressPlay.FFWD
 
         [ContentSerializerIgnore]
         public Model model;
+        [ContentSerializerIgnore]
+        public CpuSkinnedModel skinnedModel;
         private int meshIndex;
 
         [ContentSerializerIgnore]
@@ -26,22 +29,40 @@ namespace PressPlay.FFWD
         [ContentSerializerIgnore]
         public short[] triangles { get; set; }
 
-        public void Awake()
+        public void Awake(bool skinnedModel)
         {
-            ContentHelper.LoadModel(asset);
+            ContentHelper.LoadModel(asset, skinnedModel);
         }
 
-        public void Start()
+        public void Start(bool isSkinnedModel)
         {
-            model = ContentHelper.GetModel(asset);
-            if (model != null)
+            if (isSkinnedModel)
             {
-                for (int i = 0; i < model.Meshes.Count; i++)
+                skinnedModel = ContentHelper.GetSkinnedModel(asset);
+                if (skinnedModel != null)
                 {
-                    if (model.Meshes[i].Name == name)
+                    for (int i = 0; i < skinnedModel.Parts.Count; i++)
                     {
-                        meshIndex = i;
-                        break;
+                        if (skinnedModel.Parts[i].name == name)
+                        {
+                            meshIndex = i;
+                            break;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                model = ContentHelper.GetModel(asset);
+                if (model != null)
+                {
+                    for (int i = 0; i < model.Meshes.Count; i++)
+                    {
+                        if (model.Meshes[i].Name == name)
+                        {
+                            meshIndex = i;
+                            break;
+                        }
                     }
                 }
             }
@@ -60,6 +81,15 @@ namespace PressPlay.FFWD
             if (model != null)
             {
                 return model.Meshes[meshIndex];
+            }
+            return null;
+        }
+
+        internal CpuSkinnedModelPart GetSkinnedModelPart()
+        {
+            if (skinnedModel != null)
+            {
+                return skinnedModel.Parts[meshIndex];
             }
             return null;
         }

@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Content;
 using PressPlay.FFWD.Interfaces;
+using PressPlay.FFWD;
+using Microsoft.Xna.Framework;
 
 namespace PressPlay.FFWD.Components
 {
-    public class Animation : Behaviour, IUpdateable
+    public class Animation : Behaviour, PressPlay.FFWD.Interfaces.IUpdateable
     {
         public bool playAutomatically;
 
@@ -27,7 +29,7 @@ namespace PressPlay.FFWD.Components
         private Dictionary<string, AnimationClip> clips = new Dictionary<string, AnimationClip>();
         private Dictionary<string, AnimationState> states = new Dictionary<string, AnimationState>();
         private string animationIndex;
-        private SkinnedAnimationPlayer animationPlayer;
+        private AnimationPlayer animationPlayer;
 
         public AnimationState this[string index]
         {
@@ -81,6 +83,10 @@ namespace PressPlay.FFWD.Components
 	
         public void AddClip(AnimationClip clip, string newName)
         {
+            if (String.IsNullOrEmpty(newName))
+            {
+                return;
+            }
             if (String.IsNullOrEmpty(clip.name))
             {
                 clip.name = newName;
@@ -135,13 +141,13 @@ namespace PressPlay.FFWD.Components
 
         }
 
-        internal void Initialize(ModelData modelData)
+        internal void Initialize(SkinningData modelData)
         {
-            foreach (string name in modelData.ModelAnimationClips.Keys)
+            foreach (string name in modelData.AnimationClips.Keys)
             {
-                AddClip(modelData.ModelAnimationClips[name], name);
+                AddClip(modelData.AnimationClips[name], name);
             }
-            animationPlayer = new SkinnedAnimationPlayer(modelData.BindPose, modelData.InverseBindPose, modelData.SkeletonHierarchy);
+            animationPlayer = new AnimationPlayer(modelData);
             if (playAutomatically)
             {
                 animationPlayer.StartClip(clip, states[clip.name]);
@@ -153,16 +159,22 @@ namespace PressPlay.FFWD.Components
         {
             if (animationPlayer != null)
             {
-                animationPlayer.Update();
+                animationPlayer.Update(true, Matrix.Identity);
             }
         }
+
+        public void LateUpdate()
+        {
+
+        }
+
         #endregion
 
         internal Microsoft.Xna.Framework.Matrix[] GetTransforms()
         {
             if (animationPlayer != null)
             {
-                return animationPlayer.GetSkinTransforms();
+                return animationPlayer.SkinTransforms;
             }
             return null;
         }

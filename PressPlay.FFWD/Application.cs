@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
@@ -14,8 +15,8 @@ namespace PressPlay.FFWD
         public Application(Game game)
             : base(game)
         {
-            UpdateOrder = 0;
-            DrawOrder = 0;
+            UpdateOrder = 1;
+            DrawOrder = 1;
         }
 
         private SpriteBatch spriteBatch;
@@ -23,6 +24,8 @@ namespace PressPlay.FFWD
         int frameRate = 0;
         int frameCounter = 0;
         TimeSpan elapsedTime = TimeSpan.Zero;
+
+       
 
 #if DEBUG
         private Stopwatch scripts = new Stopwatch();
@@ -33,6 +36,9 @@ namespace PressPlay.FFWD
         private static Dictionary<int, UnityObject> objects = new Dictionary<int, UnityObject>();
         private static List<Component> activeComponents = new List<Component>();
         internal static List<UnityObject> markedForDestruction = new List<UnityObject>();
+        internal static List<GameObject> dontDestroyOnLoad = new List<GameObject>();
+        private static List<Interfaces.IUpdateable> lateUpdates = new List<Interfaces.IUpdateable>();
+        internal static bool loadingScene = false;
 
         public override void Initialize()
         {
@@ -94,7 +100,7 @@ namespace PressPlay.FFWD
             scripts.Start();
 #endif
             Microsoft.Xna.Framework.Color bg = new Microsoft.Xna.Framework.Color(78, 115, 74);
-
+            
             for (int i = 0; i < activeComponents.Count; i++)
             {
                 if (!activeComponents[i].isStarted)
@@ -109,6 +115,7 @@ namespace PressPlay.FFWD
                 if (activeComponents[i] is PressPlay.FFWD.Interfaces.IUpdateable)
                 {
                     (activeComponents[i] as PressPlay.FFWD.Interfaces.IUpdateable).Update();
+                    lateUpdates.Add((activeComponents[i] as PressPlay.FFWD.Interfaces.IUpdateable));
                 }
                 if ((activeComponents[i] is Renderer))
                 {
@@ -119,6 +126,12 @@ namespace PressPlay.FFWD
                     (activeComponents[i] as MonoBehaviour).UpdateInvokeCalls();
                 }
             }
+
+            for (int i = 0; i < lateUpdates.Count; i++)
+            {
+                lateUpdates[i].LateUpdate();
+            }
+
             CleanUp();
 #if DEBUG
             scripts.Stop();
@@ -145,6 +158,24 @@ namespace PressPlay.FFWD
             {
                 Debug.Display("S | P | G", String.Format("{0:P1} | {1:P1} | {2:P1}", scripts.Elapsed.TotalSeconds / total, physics.Elapsed.TotalSeconds / total, graphics.Elapsed.TotalSeconds / total));
             }
+            if (ApplicationSettings.ShowDebugDisplays)
+	        {
+		        spriteBatch.Begin();
+
+                KeyValuePair<string, string>[] displayStrings = Debug.DisplayStrings.ToArray();
+                Microsoft.Xna.Framework.Vector2 Position = new Microsoft.Xna.Framework.Vector2(32, 32);
+                Microsoft.Xna.Framework.Vector2 offset = Microsoft.Xna.Framework.Vector2.Zero;
+                for (int i = 0; i < displayStrings.Length; i++)
+                {
+                    string text = displayStrings[i].Key + ": " + displayStrings[i].Value;
+                    spriteBatch.DrawString(ApplicationSettings.DebugFont, text, Position + Microsoft.Xna.Framework.Vector2.One + offset, Microsoft.Xna.Framework.Color.Black);
+                    spriteBatch.DrawString(ApplicationSettings.DebugFont, text, Position + offset, Microsoft.Xna.Framework.Color.White);
+                    offset.Y += ApplicationSettings.DebugFont.MeasureString(text).Y * 0.75f;
+                }
+
+                spriteBatch.End();
+            }
+
 #endif
         }
 
@@ -160,15 +191,24 @@ namespace PressPlay.FFWD
             }
         }
 
-        public static void LoadScene(string name)
+        public static void LoadLevel(string name)
         {
+            loadingScene = true;
             Scene scene = ContentHelper.Content.Load<Scene>(name);
+            loadingScene = false;
             LoadLevel(scene);
+            loadedLevelName = name;
         }
 
         public static void LoadLevel(Scene scene)
         {
             Reset();
+            // TODO: Make don't destroy on load work
+            //for (int i = 0; i < dontDestroyOnLoad.Count; i++)
+            //{
+            //    objects.Add(dontDestroyOnLoad[i].GetInstanceID(), dontDestroyOnLoad[i]);
+            //    activeComponents.AddRange(dontDestroyOnLoad[i])
+            //}
             scene.AfterLoad();
             AwakeNewComponents();
         }
@@ -180,6 +220,20 @@ namespace PressPlay.FFWD
                 return objects[id];
             }
             return null;
+        }
+
+        internal static T[] FindObjectsOfType<T>() where T : UnityObject
+        {
+            List<T> list = new List<T>();
+            foreach (UnityObject obj in objects.Values)
+            {
+                T myObj = obj as T;
+                if (myObj != null)
+                {
+                    list.Add(myObj);
+                }
+            }
+            return list.ToArray();
         }
 
         internal static UnityObject[] FindObjectsOfType(Type type)
@@ -216,6 +270,14 @@ namespace PressPlay.FFWD
                 Component cmp = NewComponents[i];
                 if (cmp.gameObject != null)
                 {
+                    // TODO: Fix this with a content processor!
+                    // Purge superfluous Transforms that is created when GameObjects are imported from the scene
+                    if ((cmp is Transform) && (cmp.gameObject.transform != cmp))
+                    {
+                        cmp.gameObject = null;
+                        continue;
+                    }
+
                     objects.Add(cmp.GetInstanceID(), cmp);
                     if (!cmp.isPrefab)
                     {
@@ -258,6 +320,7 @@ namespace PressPlay.FFWD
             objects.Clear();
             activeComponents.Clear();
             markedForDestruction.Clear();
+            lateUpdates.Clear();
         }
 
         internal static void CleanUp()
@@ -273,6 +336,14 @@ namespace PressPlay.FFWD
 	            }
             }
             markedForDestruction.Clear();
+            lateUpdates.Clear();
+        }
+
+        public static string loadedLevelName { get; private set; }
+
+        internal static void DontDestroyOnLoad(UnityObject target)
+        {
+            // TODO: Make this work when switching scenes
         }
     }
 }

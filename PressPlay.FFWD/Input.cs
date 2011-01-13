@@ -152,8 +152,8 @@ namespace PressPlay.FFWD
                 case 2:
                     return (currentMouseState.RightButton == ButtonState.Pressed) && (lastMouseState.RightButton == ButtonState.Released);
             }
-#endif
             return false;
+#endif
         }
 
         public static bool GetMouseButtonUp(int button)
