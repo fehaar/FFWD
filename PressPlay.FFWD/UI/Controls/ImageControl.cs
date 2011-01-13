@@ -3,21 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
 
 namespace PressPlay.FFWD.UI.Controls
 {
     public class ImageControl : Control
     {
-        // Position within the source texture, in texels. Default is (0,0) for the upper-left corner.
-        public Vector2 origin;
 
-        // Size in texels of source rectangle. If null (the default), size will be the same as the size of the control.
-        // You only need to set this property if you want texels scaled at some other size than 1-to-1; normally
-        // you can just set the size of both the source and destination rectangles with the Size property.
-        public Vector2? sourceSize;
 
-        // Color to modulate the texture with. The default is white, which displays the original unmodified texture.
-        public Color color;
 
         // Texture to draw
         public Texture2D texture
@@ -40,11 +33,26 @@ namespace PressPlay.FFWD.UI.Controls
             this.texture = texture;
         }
 
+        public ImageControl(Texture2D texture, Rectangle sourceRect)
+            : this(texture)
+        {
+            ((UISpriteRenderer)gameObject.renderer).sourceRect = sourceRect;
+        }
+
         public override Vector2 ComputeSize()
         {
-            if (texture != null)
+            UISpriteRenderer r = (UISpriteRenderer)gameObject.renderer;
+            
+            if (r.texture != null)
             {
-                return new Vector2(texture.Width, texture.Height);
+                if (r.sourceRect != Rectangle.Empty)
+                {
+                    return new Vector2(r.sourceRect.Width, r.sourceRect.Height);
+                }
+                else
+                {
+                    return new Vector2(texture.Width, texture.Height);
+                }
             }
             return Vector2.zero;
         }

@@ -8,14 +8,18 @@ namespace PressPlay.FFWD.UI.Controls
 {
     public class PanelControl : Control
     {
-        protected Rectangle clipRect;
+        public Rectangle clipRect;
 
-        public PanelControl(int width, int height) : base()
+        public PanelControl() : base()
         {
             gameObject.name = "PanelControl";
-            clipRect = new Rectangle(0, 0, width, height);
         }
-        
+
+        public void LayoutColumn()
+        {
+            LayoutColumn(0, 0, 0);
+        }
+
         // Position child components in a column, with the given spacing between components
         public void LayoutColumn(float xMargin, float yMargin, float ySpacing)
         {
@@ -26,11 +30,15 @@ namespace PressPlay.FFWD.UI.Controls
             {
                 Control child = this[i];
                 child.transform.localPosition = new Vector2 { x = xMargin, y = y };
-                Debug.Log("child.transform.localPosition: " + child.transform.localPosition + " child.size.y: " + child.size.y);
-                y += child.size.y + ySpacing;
+                y += child.bounds.Height + ySpacing;
             }
 
             InvalidateAutoSize();
+        }
+
+        public void LayoutRow()
+        {
+            LayoutRow(0, 0, 0);
         }
 
         // Position child components in a row, with the given spacing between components
@@ -41,9 +49,8 @@ namespace PressPlay.FFWD.UI.Controls
             for (int i = 0; i < childCount; i++)
             {
                 Control child = this[i];
-
-                child.position = new Vector2 { x = x, y = yMargin };
-                x += child.size.x + xSpacing;
+                child.transform.position = new Vector2 { x = x, y = yMargin };
+                x += child.bounds.Width + xSpacing;
             }
 
             InvalidateAutoSize();
@@ -53,8 +60,8 @@ namespace PressPlay.FFWD.UI.Controls
         {
             base.OnChildAdded(index, child);
 
-            Debug.Log("Setting ClipRect: " + clipRect);
-            ((UIRenderer)child.renderer).clipRect = clipRect;
+            //Debug.Log("Setting ClipRect: " + clipRect);
+            //((UIRenderer)child.renderer).clipRect = clipRect;
         }
     }
 }
