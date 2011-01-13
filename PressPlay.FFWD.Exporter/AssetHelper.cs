@@ -10,6 +10,7 @@ namespace PressPlay.FFWD.Exporter
     public class AssetHelper
     {
         public string TextureDir { get; set; }
+        public string AudioDir { get; set; }
         public string MeshDir { get; set; }
         public string ScriptDir { get; set; }
 
@@ -17,6 +18,7 @@ namespace PressPlay.FFWD.Exporter
         //private HashSet<string> exportedScripts = new HashSet<string>();
         //private HashSet<string> exportedMeshes = new HashSet<string>();
         private List<string> exportedTextures = new List<string>();
+        private List<string> exportedAudio = new List<string>();
         private List<string> exportedScripts = new List<string>();
         private List<string> exportedMeshes = new List<string>();
 
@@ -116,6 +118,26 @@ namespace PressPlay.FFWD.Exporter
             {
                 Debug.Log("Could not copy mesh '" + path + "' for " + mesh.name + ". " + ex.Message, mesh);
             }
+        }
+
+        internal void ExportAudio(AudioClip audio)
+        {
+            if (audio == null) return;
+            string path = AssetDatabase.GetAssetPath(audio.GetInstanceID());
+            if (exportedAudio.Contains(path)) return;
+
+            exportedAudio.Add(path);
+            string dest = Path.Combine(AudioDir, Path.GetFileName(path));
+
+            try
+            {
+                File.Copy(path, dest, true);
+            }
+            catch (UnityException ue)
+            {
+                Debug.Log(ue.ToString());
+            }
+
         }
     }
 }
