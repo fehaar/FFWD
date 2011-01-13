@@ -23,7 +23,13 @@ namespace PressPlay.FFWD.UI
             }
         }
 
-        protected SpriteBatch batch;
+        // This is set within the camera class for centralized batching
+        public static SpriteBatch batch;
+
+        public static void SetSpriteBatch(GraphicsDevice device)
+        {
+            UIRenderer.batch = new SpriteBatch(device);
+        }
 
         public UIRenderer() : base(){
             if (material == null)

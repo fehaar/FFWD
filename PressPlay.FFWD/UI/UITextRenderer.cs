@@ -51,7 +51,7 @@ namespace PressPlay.FFWD.UI
 
             batch.Begin();
             //Debug.Log("I want to draw string: " + text + " at " + renderPosition);
-            batch.DrawString(font, text, renderPosition, color);
+            batch.DrawString(font, text, renderPosition, material.color);
             batch.End();
         }
     }
