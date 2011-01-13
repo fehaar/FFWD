@@ -163,6 +163,12 @@ namespace PressPlay.FFWD.Components
             UIRenderer.batch.Begin();
             for (int i = 0; i < uiRenderQueue.Count; i++)
             {
+                if (uiRenderQueue[i].gameObject == null)
+                {
+                    // This will happen if the game object has been destroyed in update.
+                    // It is acceptable behaviour.
+                    continue;
+                }                
                 uiRenderQueue[i].Draw(device, null);
             }
             UIRenderer.batch.End();
