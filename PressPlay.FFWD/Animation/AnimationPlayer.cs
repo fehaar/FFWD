@@ -24,6 +24,7 @@ namespace PressPlay.FFWD
     {
         // Information about the currently playing animation clip.
         private AnimationClip currentClipValue;
+        private AnimationState currentStateValue;
         private TimeSpan currentTimeValue;
         private int currentKeyframe;
         
@@ -100,7 +101,11 @@ namespace PressPlay.FFWD
                 throw new ArgumentNullException("clip");
 
             currentClipValue = clip;
+            currentStateValue = state;
+            state.time = 0;
+
             currentTimeValue = TimeSpan.Zero;
+
             currentKeyframe = 0;
 
             // Initialize bone transforms to the bind pose.
@@ -112,7 +117,7 @@ namespace PressPlay.FFWD
         /// </summary>
         public void Update(bool relativeToCurrentTime, Matrix rootTransform)
         {
-            UpdateBoneTransforms(TimeSpan.FromSeconds(Time.deltaTime), relativeToCurrentTime);
+            UpdateBoneTransforms(TimeSpan.FromSeconds(Time.deltaTime * currentStateValue.speed), relativeToCurrentTime);
             UpdateWorldTransforms(rootTransform);
             UpdateSkinTransforms();
         }
@@ -124,6 +129,9 @@ namespace PressPlay.FFWD
         {
             if (currentClipValue == null)
                 throw new InvalidOperationException("AnimationPlayer.Update was called before StartClip");
+
+            //set the current time of the animation, to what is set in the current AnimationState. This is how we scrub through animations
+            currentTimeValue = TimeSpan.FromSeconds(currentStateValue.time);
 
             // Update the animation position.
             if (relativeToCurrentTime)
@@ -145,7 +153,9 @@ namespace PressPlay.FFWD
                 skinningDataValue.BindPose.CopyTo(boneTransforms, 0);
             }
 
+            //set current time values, both locally and in AnimationState
             currentTimeValue = time;
+            currentStateValue.time = (float)currentTimeValue.TotalSeconds;
 
             // Read keyframe matrices.
             IList<Keyframe> keyframes = currentClipValue.Keyframes;
@@ -163,6 +173,8 @@ namespace PressPlay.FFWD
 
                 currentKeyframe++;
             }
+
+            
         }
         
         /// <summary>
