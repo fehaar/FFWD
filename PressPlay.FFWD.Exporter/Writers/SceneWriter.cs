@@ -231,6 +231,11 @@ namespace PressPlay.FFWD.Exporter.Writers
 
         internal void WriteElement(string name, object obj)
         {
+            WriteElement(name, obj, typeof(MonoBehaviour));
+        }
+
+        internal void WriteElement(string name, object obj, Type elementType)
+        {
             try
             {
                 if (obj == null)
@@ -373,12 +378,19 @@ namespace PressPlay.FFWD.Exporter.Writers
                 {
                     Component theObject = (obj as Component);
                     writer.WriteStartElement(name);
+
+                    if ((theObject != null) && (obj is MonoBehaviour) && obj.GetType() != elementType)
+                    {
+                        writer.WriteAttributeString("Type", resolver.ResolveTypeName(obj));
+                    }
+                   
                     if (theObject == null || !WriteComponent(theObject as Component, true))
                     {
                         writer.WriteAttributeString("Null", ToString(true));
                         writer.WriteEndElement();
                         return;
                     }
+
                     AddPrefab(theObject);
                     writer.WriteEndElement();
                     return;
@@ -394,8 +406,19 @@ namespace PressPlay.FFWD.Exporter.Writers
                     writer.WriteEndElement();
                     return;
                 }
+                // Check if we have a List
+                if (obj is IList)
+                {
+                    writer.WriteStartElement(name);
+                    foreach (object item in (IList)obj)
+                    {
+                        WriteElement("Item", item);
+                    }
+                    writer.WriteEndElement();
+                    return;
+                }
                 // Check if we have a Serializable class
-                if (obj.GetType().GetCustomAttributes(typeof(SerializableAttribute), true).Length > 0)
+                if (obj.GetType().GetCustomAttributes(typeof(SerializableAttribute), true).Length > 0 || (obj.GetType().IsValueType && !obj.GetType().IsEnum))
                 {
                     writer.WriteStartElement(name);
                     FieldInfo[] memInfo = obj.GetType().GetFields(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance);

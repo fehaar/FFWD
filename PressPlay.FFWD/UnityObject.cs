@@ -165,8 +165,7 @@ namespace PressPlay.FFWD
 
         public static void DontDestroyOnLoad(UnityObject target)
         {
-            // TODO : Add implementation of method
-            throw new NotImplementedException("Method not implemented.");
+            Application.DontDestroyOnLoad(target);
         }
     }
 }

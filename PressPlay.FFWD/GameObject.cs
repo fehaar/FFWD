@@ -19,7 +19,10 @@ namespace PressPlay.FFWD
             : base()
         {
             components = new List<Component>();
-            AddComponent(new Transform());
+            if (!Application.loadingScene)
+            {
+                AddComponent(new Transform());
+            }
             active = true;
         }
 
@@ -431,6 +434,17 @@ namespace PressPlay.FFWD
         {
             // TODO : Add implementation of method
             throw new NotImplementedException("Method not implemented.");
+        }
+
+        /// <summary>
+        /// Returns the first GameObject tagged tag. Returns null if no GameObject was found.
+        /// Tags must be declared in the tag manager before using them.
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
+        public static GameObject FindGameObjectWithTag(string p)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
