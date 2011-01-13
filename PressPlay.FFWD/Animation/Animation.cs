@@ -44,6 +44,17 @@ namespace PressPlay.FFWD.Components
             return clips[name];
         }
 
+        public bool isPlaying {
+            get { return true; } //TODO check if animation is playing or not
+            private set { }
+        }
+
+        public void Rewind()
+        {
+            // TODO : Add implementation of method
+            throw new NotImplementedException("Method not implemented.");
+        }
+
         public void Play()
         {
             // TODO : Add implementation of method
