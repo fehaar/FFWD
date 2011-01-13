@@ -31,7 +31,20 @@ namespace PressPlay.FFWD.Components
         public int depth { get; set; }
         public float aspect { get; set; }
         public int cullingMask { get; set; }
-        public Color backgroundColor { get; set; }
+
+        private Color _backgroundColor = Color.black;
+        public Color backgroundColor
+        { 
+            get 
+            {
+                return _backgroundColor;
+            }
+            set
+            {
+                _backgroundColor = new Color(value.r, value.g, value.b, 1);
+            }
+        }
+
         public Rectangle rect { get; set; }
         public ClearFlags clearFlags { get; set; }
 
@@ -101,10 +114,10 @@ namespace PressPlay.FFWD.Components
         private static List<UIRenderer> uiRenderQueue = new List<UIRenderer>();
         internal static void AddRenderer(Renderer renderer)
         {
-            //if (!renderer.enabled) 
-            //{ 
-            //    return; 
-            //}
+            if (!renderer.enabled)
+            {
+                return;
+            }
 
             // Tag UI renderes og gem dem i en liste. Returner så kameraerne ikke f'r den
             if (renderer is UIRenderer)
@@ -132,7 +145,6 @@ namespace PressPlay.FFWD.Components
         {
             if (device != null)
             {
-                device.Clear(Color.black);
                 device.BlendState = BlendState.Opaque;
                 device.DepthStencilState = DepthStencilState.Default;
                 device.SamplerStates[0] = SamplerState.LinearClamp;
@@ -159,6 +171,8 @@ namespace PressPlay.FFWD.Components
 
         internal void doRender(GraphicsDevice device)
         {
+            Clear(device);
+
             renderQueue.Sort(this);
             for (int i = 0; i < renderQueue.Count; i++)
             {
@@ -174,6 +188,22 @@ namespace PressPlay.FFWD.Components
                 }
             }
             renderQueue.Clear();
+        }
+
+        private void Clear(GraphicsDevice device)
+        {
+            switch (clearFlags)
+            {
+                case ClearFlags.Skybox:
+                    device.Clear(backgroundColor);
+                    break;
+                case ClearFlags.Color:
+                    device.Clear(backgroundColor);
+                    break;
+                case ClearFlags.Depth:
+                    device.Clear(ClearOptions.DepthBuffer, backgroundColor, 1.0f, 0);
+                    break;
+            }
         }
             
         #region IComparer<Camera> Members
