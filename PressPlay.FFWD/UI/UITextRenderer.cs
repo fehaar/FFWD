@@ -49,10 +49,7 @@ namespace PressPlay.FFWD.UI
             renderPosition.x = control.bounds.X + control.bounds.Width/2 - textSize.x / 2 +  textOffset.x;
             renderPosition.y = control.bounds.Y + control.bounds.Height/2 - textSize.y / 2 +  textOffset.y;
 
-            batch.Begin();
-            //Debug.Log("I want to draw string: " + text + " at " + renderPosition);
-            batch.DrawString(font, text, renderPosition, material.color);
-            batch.End();
+            UIRenderer.batch.DrawString(font, text, renderPosition, material.color);
         }
     }
 }

@@ -42,10 +42,6 @@ namespace PressPlay.FFWD.UI
 
         public override void Draw(GraphicsDevice device, Camera cam)
         {
-            if (batch == null)
-            {
-                batch = new SpriteBatch(device);
-            }
         }
     }
 }
