@@ -18,22 +18,36 @@ namespace PressPlay.FFWD.UI
             set
             {
                 material.texture = value;
-
+                /*
                 if (value != null)
                 {
                     _bounds = value.Bounds;
                 }
+                */
             }
         }
 
         private Vector2 sourceOffset = Vector2.zero;
-        private Rectangle sourceRect
+        private Rectangle _sourceRect = Rectangle.Empty;
+        public Rectangle sourceRect
         {
             get
             {
-                return new Rectangle((int)sourceOffset.x, (int)sourceOffset.y, texture.Bounds.Width, texture.Bounds.Height);
+                if (_sourceRect == Rectangle.Empty)
+                {
+                    return new Rectangle(0, 0, texture.Bounds.Width, texture.Bounds.Height);
+                }
+                else
+                {
+                    return _sourceRect;
+                }
+            }
+            set
+            {
+                _sourceRect = value;
             }
         }
+        /*
         private Rectangle _bounds = Rectangle.Empty;
         public Rectangle bounds
         {
@@ -45,7 +59,7 @@ namespace PressPlay.FFWD.UI
                 return _bounds;
             }
         }
-
+        */
         public Vector2 origin = Vector2.zero;
         public float scale = 1f;
         public SpriteEffects effects = SpriteEffects.None;
@@ -53,27 +67,9 @@ namespace PressPlay.FFWD.UI
 
         private Vector2 drawPosition = Vector2.zero;
 
-        private Control _control;
-        private Control control{
-            get
-            {
-                if (_control == null)
-                {
-                    _control = gameObject.GetComponent<Control>();
-                }
-
-                return _control;
-            }
-        }
-
         public UISpriteRenderer() : base()
         {
-            if (material == null)
-            {
-                material = new Material();
-                material.renderQueue = 1000;
-                material.SetColor("", Color.white);
-            }
+
         }
 
         public UISpriteRenderer(string texture) : this()
@@ -102,6 +98,7 @@ namespace PressPlay.FFWD.UI
         }
 
         private void CalculateDrawOffset(){
+            /*
             if (drawPosition.y < 0)
             {
                 if(drawPosition.y + bounds.Height < 0){
@@ -120,36 +117,22 @@ namespace PressPlay.FFWD.UI
                 {
                     sourceOffset.y = drawPosition.y;
                 }
-            }
+            }*/
         }
 
         #region IRenderable Members
-        protected SpriteBatch batch;
+
         public override void Draw(GraphicsDevice device, Camera cam)
         {
-            if (batch == null)
-            {
-                batch = new SpriteBatch(device);
-            }
+            base.Draw(device, cam);
 
             if (texture == null)
             {
                 return;
             }
 
-            
-            if (!clipRect.Contains(bounds))
-            {
-                //return;
-            }
-
-            drawPosition = new Vector2(control.drawOffset.x + transform.position.x,  control.drawOffset.y + transform.position.z);
-
-            //CalculateDrawOffset();
-
-            batch.Begin();
-            batch.Draw(texture, drawPosition, sourceRect, material.color, transform.eulerAngles.y, origin, scale, effects, layerDepth);
-            batch.End();
+            UIRenderer.batch.Draw(texture, control.bounds, sourceRect, material.color, transform.eulerAngles.y, origin, effects, layerDepth);
+            //batch.Draw(texture, transform.position, sourceRect, material.color, transform.eulerAngles.y, origin, scale, effects, layerDepth);
         }
         #endregion
     }

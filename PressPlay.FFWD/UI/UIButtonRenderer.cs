@@ -73,7 +73,7 @@ namespace PressPlay.FFWD.UI
             }
 
             batch.Begin();
-            batch.DrawString(font, ((upperCase) ? _text.ToUpper() : _text), new Vector2(transform.localPosition.x + bounds.Width / 2 - textSize.x / 2 + textOffset.x, transform.localPosition.y + bounds.Height / 2 - textSize.y / 2 + textOffset.y), textColor);
+            //batch.DrawString(font, ((upperCase) ? _text.ToUpper() : _text), new Vector2(transform.localPosition.x + material.texture.Width / 2 - textSize.x / 2 + textOffset.x, transform.localPosition.y + bounds.Height / 2 - textSize.y / 2 + textOffset.y), textColor);
             batch.End();
         }
         #endregion

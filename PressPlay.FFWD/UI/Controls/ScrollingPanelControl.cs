@@ -10,15 +10,17 @@ namespace PressPlay.FFWD.UI.Controls
     public class ScrollingPanelControl : PanelControl
     {
         private ScrollTracker scrollTracker = new ScrollTracker();
+        private Vector3 startPosition;
+        private bool hasScrolled = false;
 
         public ScrollingPanelControl(int width, int height)
-            : base(width, height)
+            : base()
         {
             scrollTracker.ViewRect.Width = width;
             scrollTracker.ViewRect.Width = height;
-            scrollTracker.CanvasRect = scrollTracker.ViewRect;
+            //scrollTracker.CanvasRect = scrollTracker.ViewRect;
 
-
+            startPosition = transform.position;
             gameObject.name = "ScrollingPanelControl";
         }
 
@@ -26,19 +28,23 @@ namespace PressPlay.FFWD.UI.Controls
         {
             
             Vector2 size = ComputeSize();
-            //scrollTracker.CanvasRect.Width = (int)size.x;
-            //scrollTracker.CanvasRect.Height = (int)size.y;
-            scrollTracker.Update();          
+            scrollTracker.CanvasRect.X = bounds.X;
+            scrollTracker.CanvasRect.Y = bounds.Y;
+            scrollTracker.CanvasRect.Width = bounds.Width;
+            scrollTracker.CanvasRect.Height = bounds.Height;
+            scrollTracker.Update();
             
             base.Update();
         }
 
         public override void HandleInput(InputState input)
         {
+            base.HandleInput(input);
+            
             bool doScrollInput = false;
             for (int i = 0; i < input.TouchState.Count; i++)
             {
-                Debug.Log(i + ". TouchPosition: " + input.TouchState[i].Position + " bounds: " + scrollTracker.CanvasRect);
+                //Debug.Log(i + ". TouchPosition: " + input.TouchState[i].Position + " bounds: " + scrollTracker.CanvasRect);
                 
                 if (scrollTracker.CanvasRect.Contains((int)input.TouchState[i].Position.X, (int)input.TouchState[i].Position.Y))
                 {
@@ -48,16 +54,38 @@ namespace PressPlay.FFWD.UI.Controls
 
             if(doScrollInput){
                 scrollTracker.HandleInput(input);
-                Debug.Log("I can ACCEPT input");
             }
 
-            foreach (Control c in children)
+            if (hasScrolled)
             {
-                c.drawOffset.y = -scrollTracker.ViewRect.Y;
-                //((UISpriteRenderer)c.renderer).origin.y = scrollTracker.ViewRect.Y;
+                foreach (Control c in children)
+                {
+                    //c.drawOffset.y = -scrollTracker.ViewRect.Y;
+                    PositionChildControls(new Vector2(0, -scrollTracker.ViewRect.Y), 0, 0, 0);
+                    //((UISpriteRenderer)c.renderer).origin.y = scrollTracker.ViewRect.Y;
+                }
             }
 
-            base.HandleInput(input);
+            hasScrolled = scrollTracker.IsMoving;
+        }
+
+        private void PositionChildControls(Vector2 topPosition, float xMargin, float yMargin, float ySpacing)
+        {
+            if (children != null || children.Count > 0)
+            {
+                float y = yMargin + topPosition.y;
+
+                //Debug.Log("TopPosition: "+topPosition);
+
+                for (int i = 0; i < childCount; i++)
+                {
+                    Control child = this[i];
+                    child.transform.localPosition = new Vector2 { x = xMargin, y = y };
+                    y += child.bounds.Height + ySpacing;
+                }
+            }
+
+            InvalidateAutoSize();
         }
     }
 }
