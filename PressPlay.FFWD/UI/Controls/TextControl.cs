@@ -18,10 +18,12 @@ namespace PressPlay.FFWD.UI.Controls
     /// </summary>
     public class TextControl : Control
     {
+        private UITextRenderer textRenderer;
+
         private SpriteFont _font;
         private string _text;
 
-        public Color Color;
+        //public Color Color;
 
         // Actual text to draw
         public string text
@@ -32,6 +34,7 @@ namespace PressPlay.FFWD.UI.Controls
                 if (_text != value)
                 {
                     _text = value;
+                    textRenderer.text = _text;
                     InvalidateAutoSize();
                 }
             }
@@ -68,13 +71,21 @@ namespace PressPlay.FFWD.UI.Controls
 
         public TextControl(string text, SpriteFont font, Color color, Vector2 position) : base()
         {
+            textRenderer = (UITextRenderer)gameObject.AddComponent(new UITextRenderer(text, font));
+            gameObject.name = "TextControl";
+
+
             this.text = text;
             this.font = font;
             this.position = position;
-            this.Color = color;
+            SetColor(color);
 
-            gameObject.AddComponent(new UITextRenderer(text, font));
-            gameObject.name = "TextControl";
+            //this.Color = color;
+        }
+
+        public void SetColor(Color color)
+        {
+            renderer.material.color = color;
         }
 
         /*
@@ -85,6 +96,8 @@ namespace PressPlay.FFWD.UI.Controls
             context.SpriteBatch.DrawString(font, Text, context.DrawOffset, Color);
         }
         */
+
+
 
         override public Vector2 ComputeSize()
         {
