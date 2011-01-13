@@ -130,6 +130,14 @@ namespace PressPlay.FFWD.Components
 
         internal static void DoRender(GraphicsDevice device)
         {
+            if (device != null)
+            {
+                device.Clear(Color.black);
+                device.BlendState = BlendState.Opaque;
+                device.DepthStencilState = DepthStencilState.Default;
+                device.SamplerStates[0] = SamplerState.LinearClamp;
+            }
+
             for (int i = 0; i < _allCameras.Count; i++)
             {
                 _allCameras[i].doRender(device);
@@ -143,6 +151,12 @@ namespace PressPlay.FFWD.Components
             UIRenderer.batch.Begin();
             for (int i = 0; i < uiRenderQueue.Count; i++)
             {
+                if (uiRenderQueue[i].gameObject == null)
+                {
+                    // This will happen if the game object has been destroyed in update.
+                    // It is acceptable behaviour.
+                    continue;
+                }                
                 uiRenderQueue[i].Draw(device, null);
             }
             UIRenderer.batch.End();

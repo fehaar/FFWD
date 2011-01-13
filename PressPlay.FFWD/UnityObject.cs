@@ -124,7 +124,10 @@ namespace PressPlay.FFWD
         {
             if (!isPrefab)
             {
-                idMap[_id] = this;
+                if (idMap != null)
+                {
+                    idMap[_id] = this;
+                }
                 _id = nextId++;
             }
         }

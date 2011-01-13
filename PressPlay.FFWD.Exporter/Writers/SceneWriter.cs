@@ -49,6 +49,31 @@ namespace PressPlay.FFWD.Exporter.Writers
             }
         }
 
+        public void WriteResource(string path, GameObject go)
+        {
+            path = Path.Combine(ExportDir, path);
+            if (!Directory.Exists(Path.GetDirectoryName(path)))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(path));
+                Debug.Log("Created directory " + Path.GetDirectoryName(path));
+            }
+
+            XmlWriterSettings settings = new XmlWriterSettings();
+            settings.Indent = true;
+            settings.IndentChars = "  ";
+            using (writer = XmlWriter.Create(path, settings))
+            {
+                writer.WriteStartDocument();
+                writer.WriteStartElement("XnaContent");
+                writer.WriteStartElement("Asset");
+                writer.WriteAttributeString("Type", resolver.DefaultNamespace + ".GameObject");
+                WriteGameObject(go);
+                writer.WriteEndElement();
+                writer.WriteEndElement();
+            }
+        }
+
+
         private void WriteGOs()
         {
             UnityEngine.Object[] objs = GameObject.FindObjectsOfType(typeof(GameObject));
@@ -351,6 +376,17 @@ namespace PressPlay.FFWD.Exporter.Writers
                         assetHelper.ExportTexture(mat.mainTexture as Texture2D);
                     }
                     writer.WriteEndElement();
+                    return;
+                }
+                if (obj is AudioClip)
+                {
+                    AudioClip audio = obj as AudioClip;
+                    if (audio == null)
+                    {
+                        return;
+                    }
+                    writer.WriteElementString(name, audio.name);
+                    assetHelper.ExportAudio(audio);
                     return;
                 }
                 if (obj is String)

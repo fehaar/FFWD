@@ -7628,7 +7628,8 @@ namespace PressPlay.FFWD
                 //throw an error if a string wasn't passed for callback:
                 if (tweenArguments[callbackType].GetType() == typeof(System.String))
                 {
-                    target.SendMessage((string)tweenArguments[callbackType], (object)tweenArguments[callbackType + "params"], SendMessageOptions.DontRequireReceiver);
+                    object pars = tweenArguments.ContainsKey(callbackType + "params") ? (object)tweenArguments[callbackType + "params"] : null;
+                    target.SendMessage((string)tweenArguments[callbackType], pars, SendMessageOptions.DontRequireReceiver);
                 }
                 else
                 {

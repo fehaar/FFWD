@@ -126,7 +126,7 @@ namespace PressPlay.FFWD.UI
         {
             base.Draw(device, cam);
 
-            if (texture == null)
+            if (texture.IsDisposed || texture == null)
             {
                 return;
             }

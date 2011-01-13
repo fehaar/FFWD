@@ -267,6 +267,7 @@ namespace PressPlay.FFWD.ScreenManager
             screen.ControllingPlayer = controllingPlayer;
             screen.ScreenManager = this;
             screen.IsExiting = false;
+            screen.Content = new CachedContent(new ContentManager(Game.Services, Game.Content.RootDirectory));
 
             // If we have a graphics device, tell the screen to load content.
             if (isInitialized)
