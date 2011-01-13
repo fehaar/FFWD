@@ -25,6 +25,15 @@ namespace PressPlay.FFWD.UI
 
         protected SpriteBatch batch;
 
+        public UIRenderer() : base(){
+            if (material == null)
+            {
+                material = new Material();
+                material.renderQueue = 1000;
+                material.SetColor("", Color.white);
+            }
+        }
+
         public override void Draw(GraphicsDevice device, Camera cam)
         {
             if (batch == null)

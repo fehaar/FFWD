@@ -196,6 +196,21 @@ namespace PressPlay.FFWD.UI.Controls
             return false;
         }
 
+        public virtual void DoTransition(float transitionTime)
+        {
+            if (gameObject.renderer != null)
+            {
+                UIRenderer r = (UIRenderer)gameObject.renderer;
+                
+                r.material.color = new PressPlay.FFWD.Color(r.material.color.r, r.material.color.g, r.material.color.b, 1f - transitionTime);
+            }
+
+            for (int i = 0; i < childCount; i++)
+            {
+                children[i].DoTransition(transitionTime);
+            }
+        }
+
         #region IUpdateable Members
 
         public virtual void Update()

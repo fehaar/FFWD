@@ -9,17 +9,51 @@ using Microsoft.Xna.Framework.Input.Touch;
 
 namespace PressPlay.FFWD.UI.Controls
 {
+
+    public class ButtonControlEventArgs : EventArgs
+    {
+        string _link;
+
+        public ButtonControlEventArgs(string link)
+        {
+            this._link = link;
+        }
+
+        /// <summary>
+        /// Gets the index of the player who triggered this event.
+        /// </summary>
+        public string link
+        {
+            get { return _link; }
+        }
+
+
+    }
+    
     public class ButtonControl : Control
     {
 
-        public ButtonControl(Texture2D texture)
-            : base()
+        public ButtonControl(Texture2D texture, string link)
+            : this(texture, link, "", null, Vector2.zero)
+        {
+
+        }
+
+        public ButtonControl(Texture2D texture, string link, string text, SpriteFont font, Vector2 textPosition)
         {
             gameObject.name = "ButtonControl";
 
+            this.link = link;
+
             AddChild(new ImageControl(texture));
+
+            if (text != "" && font != null)
+            {
+                AddChild(new TextControl(text, font, Color.white, textPosition));
+            }
         }
 
+        private string link;
         private bool useCustomClickRect = false;
         private Rectangle _clickRect;
         public Rectangle clickRect
@@ -38,7 +72,7 @@ namespace PressPlay.FFWD.UI.Controls
         /// <summary>
         /// Event raised when the menu entry is selected.
         /// </summary>
-        public event EventHandler OnClickEvent;
+        public event EventHandler<ButtonControlEventArgs> OnClickEvent;
 
         /// <summary>
         /// Method for raising the Selected event.
@@ -47,7 +81,7 @@ namespace PressPlay.FFWD.UI.Controls
         {
             if (OnClickEvent != null)
             {
-                OnClickEvent(this, null);
+                OnClickEvent(this, new ButtonControlEventArgs(link));
             }
         }
 
