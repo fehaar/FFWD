@@ -185,7 +185,6 @@
     <Compile Include="UI\Controls\Control.cs" />
     <Compile Include="UI\Controls\Events\LevelSelectEventArgs.cs" />
     <Compile Include="UI\Controls\ImageControl.cs" />
-    <Compile Include="UI\Controls\LevelSelectButton.cs" />
     <Compile Include="UI\Controls\PanelControl.cs" />
     <Compile Include="UI\Controls\ScrollingPanelControl.cs" />
     <Compile Include="UI\Controls\ScrollTracker.cs" />
