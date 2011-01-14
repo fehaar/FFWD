@@ -196,6 +196,16 @@ namespace PressPlay.FFWD
         {
             foreach (UnityObject obj in objects.Values)
             {
+                if (obj is Component)
+                {
+                    GameObject gObj = ((Component)obj).gameObject;
+
+                    if (!dontDestroyOnLoad.Contains(gObj))
+                    {
+                        markedForDestruction.Add(obj);
+                    }
+                }
+
                 if (obj is GameObject)
                 {
                     GameObject gObj = (GameObject)obj;
@@ -277,7 +287,19 @@ namespace PressPlay.FFWD
                         continue;
                     }
 
+                    if (objects.ContainsKey(cmp.GetInstanceID()))
+                    {
+                        UnityObject obj = objects[cmp.GetInstanceID()];
+                        Dictionary<int, UnityObject> newIds = new Dictionary<int, UnityObject>();
+                        obj.SetNewId(newIds);
+                        foreach (var item in newIds)
+                        {
+                            objects.Remove(item.Key);
+                            objects.Add(item.Value.GetInstanceID(), item.Value);
+                        }
+                    }
                     objects.Add(cmp.GetInstanceID(), cmp);
+
                     if (!cmp.isPrefab)
                     {
                         activeComponents.Add(cmp);
@@ -327,8 +349,15 @@ namespace PressPlay.FFWD
             for (int i = 0; i < markedForDestruction.Count; i++)
             {
                 objects.Remove(markedForDestruction[i].GetInstanceID());
+
                 if (markedForDestruction[i] is Component)
 	            {
+                    //HACK to remove camera from allcameras list
+                    if (markedForDestruction[i] is Camera)
+                    {
+                        ((Camera)markedForDestruction[i]).Destroy();
+                    }
+
                     Component cmp = (markedForDestruction[i] as Component);
                     if (cmp.gameObject != null)
                     {

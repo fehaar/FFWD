@@ -57,6 +57,11 @@ namespace PressPlay.FFWD.Components
                 main = this;
             }
         }
+        public void Destroy()
+        {
+            _allCameras.Remove(this);
+        }
+
 
         private static List<Camera> _allCameras = new List<Camera>();
         public static IEnumerable<Camera> allCameras

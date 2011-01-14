@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using PressPlay.FFWD.UI.Controls;
 using PressPlay.FFWD;
 
-namespace PressPlay.FFWD.Components.Renderers
+namespace PressPlay.FFWD.Components
 {
     public class TextRenderer : Renderer
     {
