@@ -104,6 +104,7 @@ namespace PressPlay.FFWD.ScreenManager
             TouchPanel.EnabledGestures = GestureType.None;
             UpdateOrder = 0;
             DrawOrder = 0;
+            Application.screenManager = this;
         }
 
 
@@ -257,7 +258,10 @@ namespace PressPlay.FFWD.ScreenManager
         #endregion
 
         #region Public Methods
-
+        public void AddScreen(GameScreen screen)
+        {
+            AddScreen(screen, null);
+        }
 
         /// <summary>
         /// Adds a new screen to the screen manager.
