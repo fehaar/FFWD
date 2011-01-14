@@ -125,11 +125,6 @@
     <Compile Include="ApplicationSettings.cs" />
     <Compile Include="AudioClip.cs" />
     <Compile Include="AudioSource.cs" />
-    <Compile Include="Audio\AudioManager.cs" />
-    <Compile Include="Audio\AudioObject.cs" />
-    <Compile Include="Audio\AudioSettings.cs" />
-    <Compile Include="Audio\AudioWrapper.cs" />
-    <Compile Include="Audio\AudioWrapperComponent.cs" />
     <Compile Include="Behaviour.cs" />
     <Compile Include="Bounds.cs" />
     <Compile Include="Box2D\Collision\BroadPhase.cs" />
