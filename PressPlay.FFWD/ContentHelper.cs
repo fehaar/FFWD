@@ -245,7 +245,7 @@ namespace PressPlay.FFWD
             SoundEffect sound = null;
             try
             {
-                sound = Content.Load<SoundEffect>(name);
+                sound = Content.Load<SoundEffect>("Sounds\\" + name);
             }
             catch
             {

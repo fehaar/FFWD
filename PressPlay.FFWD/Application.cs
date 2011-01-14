@@ -192,13 +192,20 @@ namespace PressPlay.FFWD
 
         public static void LoadLevel(Scene scene)
         {
-            Reset();
-            // TODO: Make don't destroy on load work
-            //for (int i = 0; i < dontDestroyOnLoad.Count; i++)
-            //{
-            //    objects.Add(dontDestroyOnLoad[i].GetInstanceID(), dontDestroyOnLoad[i]);
-            //    activeComponents.AddRange(dontDestroyOnLoad[i])
-            //}
+            foreach (UnityObject obj in objects.Values)
+            {
+                if (obj is GameObject)
+                {
+                    GameObject gObj = (GameObject)obj;
+
+                    if (!dontDestroyOnLoad.Contains(gObj))
+                    {
+                        markedForDestruction.Add(obj);
+                    }
+                }
+            }
+            CleanUp();
+
             scene.AfterLoad();
             AwakeNewComponents();
         }
@@ -336,7 +343,21 @@ namespace PressPlay.FFWD
 
         internal static void DontDestroyOnLoad(UnityObject target)
         {
-            // TODO: Make this work when switching scenes
+            if (target is Component)
+            {
+                if(!dontDestroyOnLoad.Contains(((Component)target).gameObject))
+                {
+                    dontDestroyOnLoad.Add(((Component)target).gameObject);
+                }
+            }
+
+            if (target is GameObject)
+            {
+                if (!dontDestroyOnLoad.Contains((GameObject)target))
+                {
+                    dontDestroyOnLoad.Add((GameObject)target);
+                }
+            }
         }
     }
 }
