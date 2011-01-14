@@ -18,6 +18,7 @@ namespace PressPlay.FFWD.UI.Controls
     /// </summary>
     public class TextControl : Control
     {
+
         private UITextRenderer textRenderer;
 
         private SpriteFont _font;

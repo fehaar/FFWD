@@ -11,6 +11,7 @@ namespace PressPlay.FFWD.Components
 {
     public class Animation : Behaviour, PressPlay.FFWD.Interfaces.IUpdateable
     {
+
         public bool playAutomatically;
 
         // TODO: This should be moved to a content processor!

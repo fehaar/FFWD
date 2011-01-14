@@ -111,6 +111,11 @@ namespace PressPlay.FFWD.Components
             return new Ray(near, (far - near).normalized);
         }
 
+        public Vector3 WorldToViewportPoint(Vector3 position)
+        {
+            return viewPort.Project(position, projectionMatrix, View(), Matrix.Identity);
+        }
+
         private static List<UIRenderer> uiRenderQueue = new List<UIRenderer>();
         internal static void AddRenderer(Renderer renderer)
         {
