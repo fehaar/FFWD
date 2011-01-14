@@ -33,6 +33,8 @@ namespace PressPlay.FFWD
         private Stopwatch graphics = new Stopwatch();
 #endif
 
+        public static ScreenManager.ScreenManager screenManager;
+
         private static Dictionary<int, UnityObject> objects = new Dictionary<int, UnityObject>();
         private static List<Component> activeComponents = new List<Component>();
         internal static List<UnityObject> markedForDestruction = new List<UnityObject>();

@@ -123,7 +123,6 @@
     <Compile Include="Box2D\Dynamics\World.cs" />
     <Compile Include="Box2D\Dynamics\WorldCallbacks.cs" />
     <Compile Include="CachedContent.cs" />
-    <Compile Include="Components\Renderers\TextRenderer.cs" />
     <Compile Include="Ray.cs" />
     <Compile Include="Color.cs" />
     <Compile Include="Component.cs" />
@@ -162,6 +161,7 @@
     <Compile Include="ScreenManager\GameScreen.cs" />
     <Compile Include="ScreenManager\InputState.cs" />
     <Compile Include="ScreenManager\ScreenManager.cs" />
+    <Compile Include="ScreenManager\Screens\LoadingScreen.cs" />
     <Compile Include="ScreenManager\Screens\MenuEntry.cs" />
     <Compile Include="ScreenManager\Screens\MenuScreen.cs" />
     <Compile Include="ScreenManager\Screens\PlayerIndexEventArgs.cs" />

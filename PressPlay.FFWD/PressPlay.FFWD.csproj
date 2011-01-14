@@ -170,7 +170,6 @@
     <Compile Include="Components\Colliders\Rigidbody.cs" />
     <Compile Include="Components\Colliders\SphereCollider.cs" />
     <Compile Include="Components\MeshFilter.cs" />
-    <Compile Include="Components\Renderers\TextRenderer.cs" />
     <Compile Include="Components\Renderers\Renderer.cs" />
     <Compile Include="Gestures.cs" />
     <Compile Include="Material.cs" />
@@ -206,6 +205,7 @@
     <Compile Include="ScreenManager\GameScreen.cs" />
     <Compile Include="ScreenManager\InputState.cs" />
     <Compile Include="ScreenManager\ScreenManager.cs" />
+    <Compile Include="ScreenManager\Screens\LoadingScreen.cs" />
     <Compile Include="ScreenManager\Screens\MenuEntry.cs" />
     <Compile Include="ScreenManager\Screens\MenuScreen.cs" />
     <Compile Include="ScreenManager\Screens\PlayerIndexEventArgs.cs" />

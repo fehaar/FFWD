@@ -32,7 +32,7 @@ namespace PressPlay.FFWD
             {
                 coll = (uo as Rigidbody).collider;
             }
-            if ((coll == null) || (layerMask & (1 << coll.gameObject.layer)) > 0)
+            if ((coll != null) && (coll.gameObject != null) && (layerMask & (1 << coll.gameObject.layer)) > 0)
             {
                 if (findClosest)
                 {
@@ -78,7 +78,7 @@ namespace PressPlay.FFWD
             {
                 coll = (uo as Rigidbody).collider;
             }
-            if ((coll == null) || (layerMask & (1 << coll.gameObject.layer)) > 0)
+            if ((coll != null) && (coll.gameObject != null) && (layerMask & (1 << coll.gameObject.layer)) > 0)
             {
                 _hits.Add(new RaycastHit() { body = fixture.GetBody(), collider = coll });
             }
