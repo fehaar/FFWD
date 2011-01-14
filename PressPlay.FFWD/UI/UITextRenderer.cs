@@ -45,11 +45,11 @@ namespace PressPlay.FFWD.UI
         public override void Draw(GraphicsDevice device, Camera cam)
         {
             base.Draw(device, cam);
-
-            renderPosition.x = control.bounds.X + control.bounds.Width/2 - textSize.x / 2 +  textOffset.x;
-            renderPosition.y = control.bounds.Y + control.bounds.Height/2 - textSize.y / 2 +  textOffset.y;
-
-            UIRenderer.batch.DrawString(font, text, renderPosition, material.color);
+            /*
+            renderPosition.x = control.bounds.Width/2 - textSize.x / 2 +  textOffset.x;
+            renderPosition.y = control.bounds.Height/2 - textSize.y / 2 +  textOffset.y;
+            */
+            UIRenderer.batch.DrawString(font, text, transform.position, material.color);
         }
     }
 }
