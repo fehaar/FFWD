@@ -102,9 +102,12 @@ namespace PressPlay.FFWD
 
             currentClipValue = clip;
             currentStateValue = state;
-            state.time = 0;
-
-            currentTimeValue = TimeSpan.Zero;
+            state.startTime = state.firstFrame / 30;
+            state.time = state.startTime;
+            state.length = (state.lastFrame - state.firstFrame) / 30;
+            state.enabled = true;
+        
+            currentTimeValue = TimeSpan.FromSeconds(state.time);
 
             currentKeyframe = 0;
 
@@ -130,6 +133,11 @@ namespace PressPlay.FFWD
             if (currentClipValue == null)
                 throw new InvalidOperationException("AnimationPlayer.Update was called before StartClip");
 
+            if (!currentStateValue.enabled)
+            {
+                return;
+            }
+
             //set the current time of the animation, to what is set in the current AnimationState. This is how we scrub through animations
             currentTimeValue = TimeSpan.FromSeconds(currentStateValue.time);
 
@@ -145,6 +153,28 @@ namespace PressPlay.FFWD
 
             if ((time < TimeSpan.Zero) || (time >= currentClipValue.Duration))
                 throw new ArgumentOutOfRangeException("time");
+
+            // See if we should terminate
+            if (time.TotalSeconds > (currentStateValue.length + currentStateValue.startTime))
+            {
+                if (currentStateValue.wrapMode == WrapMode.Once)
+                {
+                    currentStateValue.enabled = false;
+                    return;
+                }
+                if (currentStateValue.wrapMode == WrapMode.Loop)
+                {
+                    time = TimeSpan.FromSeconds(currentStateValue.startTime);
+                }
+                if (currentStateValue.wrapMode == WrapMode.PingPong)
+                {
+                    currentStateValue.speed *= -1;
+                }
+                if (currentStateValue.wrapMode == WrapMode.Default)
+                {
+                    throw new NotImplementedException("What to do here?");
+                }
+            }
 
             // If the position moved backwards, reset the keyframe index.
             if (time < currentTimeValue)

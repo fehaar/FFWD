@@ -307,8 +307,11 @@ namespace PressPlay.FFWD.Exporter.Writers
                 }
                 if (obj is int[])
                 {
-                    writer.WriteElementString(name, ToString(obj as int[]));
-                    return;
+                    if (!obj.GetType().GetElementType().IsEnum)
+                    {
+                        writer.WriteElementString(name, ToString(obj as int[]));
+                        return;
+                    }
                 }
                 if (obj is Guid)
                 {
