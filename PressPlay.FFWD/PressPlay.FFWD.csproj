@@ -175,7 +175,6 @@
     <Compile Include="Components\Colliders\Rigidbody.cs" />
     <Compile Include="Components\Colliders\SphereCollider.cs" />
     <Compile Include="Components\MeshFilter.cs" />
-    <Compile Include="Components\Renderers\TextRenderer.cs" />
     <Compile Include="Components\Renderers\Renderer.cs" />
     <Compile Include="Gestures.cs" />
     <Compile Include="Material.cs" />
