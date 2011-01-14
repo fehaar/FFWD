@@ -19,6 +19,7 @@ namespace PressPlay.FFWD
 
 #if WINDOWS_PHONE
         private static Vector2 lastTap;
+        private static bool newTap = false;
 #endif
 
         internal static void Initialize()
@@ -45,9 +46,15 @@ namespace PressPlay.FFWD
             }
              */
             samples = inputState.Gestures;
-            if (HasSample(GestureType.Tap))
+
+            newTap = false;
+            for (int i = 0; i < inputState.TouchState.Count; i++)
             {
-                lastTap = GetSample(GestureType.Tap).First().Position;
+                if (inputState.TouchState[i].State == TouchLocationState.Pressed)
+                {
+                    lastTap = inputState.TouchState[i].Position;
+                    newTap = true;
+                }
             }
 #endif
         }
@@ -114,7 +121,7 @@ namespace PressPlay.FFWD
         public static bool GetMouseButton(int button)
         {
 #if WINDOWS_PHONE
-            return HasSample(GestureType.Tap);
+            return newTap;
 #else
             switch (button)
             {
@@ -132,7 +139,7 @@ namespace PressPlay.FFWD
         public static bool GetMouseButtonDown(int button)
         {
 #if WINDOWS_PHONE
-            return HasSample(GestureType.Tap);
+            return newTap;
             //switch (button)
             //{
             //    case 0:
@@ -159,7 +166,7 @@ namespace PressPlay.FFWD
         public static bool GetMouseButtonUp(int button)
         {
 #if WINDOWS_PHONE
-            return !HasSample(GestureType.Tap);
+            return !newTap;
 #else
             switch (button)
             {
