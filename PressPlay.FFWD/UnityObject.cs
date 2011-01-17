@@ -132,7 +132,7 @@ namespace PressPlay.FFWD
                 {
                     idMap[_id] = this;
                 }
-//                _id = nextId++;
+                _id = nextId++;
             }
         }
 
