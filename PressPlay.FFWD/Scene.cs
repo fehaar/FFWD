@@ -21,16 +21,16 @@ namespace PressPlay.FFWD
         [ContentSerializer(FlattenContent = true, CollectionItemName = "prefab")]
         public List<GameObject> prefabs { get; set; }
 
-        public void AfterLoad()
+        public void AfterLoad(Dictionary<int, UnityObject> idMap)
         {
             for (int i = 0; i < gameObjects.Count; i++)
             {
-                gameObjects[i].AfterLoad();
+                gameObjects[i].AfterLoad(idMap);
             }
             for (int i = 0; i < prefabs.Count; i++)
             {
                 prefabs[i].isPrefab = true;
-                prefabs[i].AfterLoad();
+                prefabs[i].AfterLoad(idMap);
             }
         }
     }

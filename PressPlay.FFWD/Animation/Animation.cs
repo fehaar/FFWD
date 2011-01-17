@@ -191,8 +191,9 @@ namespace PressPlay.FFWD.Components
             return null;
         }
 
-        internal override void AfterLoad()
+        internal override void AfterLoad(Dictionary<int, UnityObject> idMap)
         {
+            base.AfterLoad(idMap);
             foreach (string item in animations)
             {
                 AddClip(new AnimationClip(new TimeSpan(), null), item);

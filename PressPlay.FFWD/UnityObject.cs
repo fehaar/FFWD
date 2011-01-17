@@ -12,10 +12,10 @@ namespace PressPlay.FFWD
             isPrefab = false;
         }
 
-        private static int nextId = 1;
-
         [ContentSerializer(ElementName="id")]
-        private int _id;
+        private int _id = -1;
+
+        private static int nextId = 1;
 
         public int GetInstanceID()
         {
@@ -25,8 +25,12 @@ namespace PressPlay.FFWD
         [ContentSerializer(ElementName = "isPrefab", Optional = true)]
         internal bool isPrefab;
 
-        internal virtual void AfterLoad()
+        internal virtual void AfterLoad(Dictionary<int, UnityObject> idMap)
         {
+            if (idMap != null)
+            {
+                idMap.Add(_id, this);
+            }
             if (_id > nextId)
             {
                 nextId = _id + 1;
@@ -128,7 +132,7 @@ namespace PressPlay.FFWD
                 {
                     idMap[_id] = this;
                 }
-                _id = nextId++;
+//                _id = nextId++;
             }
         }
 

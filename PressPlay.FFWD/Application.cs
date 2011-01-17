@@ -24,7 +24,7 @@ namespace PressPlay.FFWD
         int frameRate = 0;
         int frameCounter = 0;
         TimeSpan elapsedTime = TimeSpan.Zero;
-        private static string sceneToLoad = "";       
+        private static string sceneToLoad = "";
 
 #if DEBUG
         private Stopwatch scripts = new Stopwatch();
@@ -193,7 +193,14 @@ namespace PressPlay.FFWD
             loadedLevelName = sceneToLoad.Contains('/') ? sceneToLoad.Substring(sceneToLoad.LastIndexOf('/') + 1) : sceneToLoad;
             sceneToLoad = "";
             loadingScene = false;
-            scene.AfterLoad();
+
+            Dictionary<int, UnityObject> idMap = new Dictionary<int, UnityObject>();
+            scene.AfterLoad(idMap);            
+            // Remove placeholder references and replace them with live ones
+            for (int i = 0; i < NewComponents.Count; i++)
+            {
+                NewComponents[i].FixReferences(idMap);
+            }
         }
 
         public static void LoadLevel(string name)
@@ -292,21 +299,16 @@ namespace PressPlay.FFWD
                     if (!cmp.isPrefab)
                     {
                         activeComponents.Add(cmp);
-                        if (cmp is Renderer)
-                        {
-                            Camera.AddRenderer(cmp as Renderer);
-                        }
+                        //if (cmp is Renderer)
+                        //{
+                        //    Camera.AddRenderer(cmp as Renderer);
+                        //}
                     }
                     if (!objects.ContainsKey(cmp.gameObject.GetInstanceID()))
                     {
                         objects.Add(cmp.gameObject.GetInstanceID(), cmp.gameObject);
                     }
                 }
-            }
-            // Remove placeholder references and replace them with live ones
-            for (int i = 0; i < NewComponents.Count; i++)
-            {
-                NewComponents[i].FixReferences(objects);
             }
             // All components will exist to be found before awaking - otherwise we can get issues with instantiating on awake.
             Component[] componentsToAwake = NewComponents.ToArray();
@@ -347,7 +349,6 @@ namespace PressPlay.FFWD
 
                 if (markedForDestruction[i] is Component)
 	            {
-                    //HACK to remove camera from allcameras list
                     if (markedForDestruction[i] is Camera)
                     {
                         ((Camera)markedForDestruction[i]).Destroy();
