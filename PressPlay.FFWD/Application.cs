@@ -86,7 +86,8 @@ namespace PressPlay.FFWD
             scripts.Stop();
             physics.Start();
 #endif
-            Physics.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+            //Physics.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+            Physics.Update(Time.deltaTime);
 #if DEBUG
             physics.Stop();
 #endif
