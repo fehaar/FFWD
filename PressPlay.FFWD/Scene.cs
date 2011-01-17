@@ -8,9 +8,9 @@ using Box2D.XNA;
 
 namespace PressPlay.FFWD
 {
-    public class Scene
+    internal class Scene
     {
-        public Scene()
+        internal Scene()
         {
             gameObjects = new List<GameObject>();
             prefabs = new List<GameObject>();

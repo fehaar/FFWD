@@ -24,8 +24,7 @@ namespace PressPlay.FFWD
         int frameRate = 0;
         int frameCounter = 0;
         TimeSpan elapsedTime = TimeSpan.Zero;
-
-       
+        private static string sceneToLoad = "";       
 
 #if DEBUG
         private Stopwatch scripts = new Stopwatch();
@@ -61,6 +60,11 @@ namespace PressPlay.FFWD
             base.Update(gameTime);
             Time.Update((float)gameTime.ElapsedGameTime.TotalSeconds, (float)gameTime.TotalGameTime.TotalSeconds);
             UpdateFPS(gameTime);
+
+            if (!String.IsNullOrEmpty(sceneToLoad))
+            {
+                DoSceneLoad();
+            }
 
 #if DEBUG
             scripts.Start();
@@ -167,7 +171,6 @@ namespace PressPlay.FFWD
 
                 spriteBatch.End();
             }
-
 #endif
         }
 
@@ -183,17 +186,19 @@ namespace PressPlay.FFWD
             }
         }
 
-        public static void LoadLevel(string name)
+        private void DoSceneLoad()
         {
             loadingScene = true;
-            Scene scene = ContentHelper.Content.Load<Scene>(name);
+            Scene scene = ContentHelper.Content.Load<Scene>(sceneToLoad);
+            loadedLevelName = sceneToLoad.Contains('/') ? sceneToLoad.Substring(sceneToLoad.LastIndexOf('/') + 1) : sceneToLoad;
+            sceneToLoad = "";
             loadingScene = false;
-            LoadLevel(scene);
-            loadedLevelName = name.Contains('/') ? name.Substring(name.LastIndexOf('/') + 1) : name;
+            scene.AfterLoad();
         }
 
-        public static void LoadLevel(Scene scene)
+        public static void LoadLevel(string name)
         {
+            sceneToLoad = name;
             foreach (UnityObject obj in objects.Values)
             {
                 if (obj is Component)
@@ -216,10 +221,6 @@ namespace PressPlay.FFWD
                     }
                 }
             }
-            CleanUp();
-
-            scene.AfterLoad();
-            AwakeNewComponents();
         }
 
         public static UnityObject Find(int id)
@@ -286,18 +287,6 @@ namespace PressPlay.FFWD
                         cmp.gameObject = null;
                         continue;
                     }
-
-                    if (objects.ContainsKey(cmp.GetInstanceID()))
-                    {
-                        UnityObject obj = objects[cmp.GetInstanceID()];
-                        Dictionary<int, UnityObject> newIds = new Dictionary<int, UnityObject>();
-                        obj.SetNewId(newIds);
-                        foreach (var item in newIds)
-                        {
-                            objects.Remove(item.Key);
-                            objects.Add(item.Value.GetInstanceID(), item.Value);
-                        }
-                    }
                     objects.Add(cmp.GetInstanceID(), cmp);
 
                     if (!cmp.isPrefab)
@@ -328,6 +317,12 @@ namespace PressPlay.FFWD
                 {
                     componentsToAwake[i].Awake();
                 }
+            }
+            // Do a recursive awake to awake components instantiated in the previous awake.
+            // In this way we will make sure that everything is instantiated before the first run.
+            if (NewComponents.Count > 0)
+            {
+                AwakeNewComponents();
             }
         }
 
