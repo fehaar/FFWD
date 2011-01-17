@@ -8,7 +8,10 @@ namespace PressPlay.FFWD
     {
         public UnityObject()
         {
-            _id = nextId++;
+            if (!Application.loadingScene)
+            {
+                _id = nextId++;
+            }
             isPrefab = false;
         }
 
@@ -31,10 +34,10 @@ namespace PressPlay.FFWD
             {
                 idMap.Add(_id, this);
             }
-            if (_id > nextId)
-            {
-                nextId = _id + 1;
-            }
+            //if (_id > nextId)
+            //{
+            //    nextId = _id + 1;
+            //}
         }
 
         /// <summary>
@@ -132,8 +135,8 @@ namespace PressPlay.FFWD
                 {
                     idMap[_id] = this;
                 }
-                _id = nextId++;
             }
+            _id = nextId++;
         }
 
         internal virtual void FixReferences(Dictionary<int, UnityObject> idMap)
