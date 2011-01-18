@@ -9,10 +9,11 @@ namespace PressPlay.FFWD
     public class AssetHelper
     {
         private Dictionary<string, ContentManager> contentManagers = new Dictionary<string, ContentManager>();
+        private Dictionary<string, List<string>> managerContent = new Dictionary<string, List<string>>();
         private Dictionary<string, object> content = new Dictionary<string, object>();
 
         public Func<ContentManager> CreateContentManager;
-        public static List<string> staticAssets = new List<string>();
+        private static List<string> staticAssets = new List<string>();
 
         public T Load<T>(string contentPath)
         {
@@ -23,7 +24,7 @@ namespace PressPlay.FFWD
         {
             if (!content.ContainsKey(contentPath))
             {
-                if (staticAssets.Contains(contentPath))
+                if (staticAssets.Contains(contentPath) || staticAssets.Contains(category))
                 {
                     category = "Static";
                 }
@@ -31,6 +32,7 @@ namespace PressPlay.FFWD
                 try
                 {
                     content.Add(contentPath, manager.Load<T>(contentPath));
+                    managerContent[category].Add(contentPath);
                 }
                 catch
                 {
@@ -48,13 +50,35 @@ namespace PressPlay.FFWD
             return (T)content[contentPath];
         }
 
+        public void Unload(string category)
+        {
+            if (contentManagers.ContainsKey(category))
+            {
+                ContentManager manager = GetContentManager(category);
+                contentManagers.Remove(category);
+                List<string> contentInManager = managerContent[category];
+                for (int i = 0; i < contentInManager.Count; i++)
+                {
+                    content.Remove(contentInManager[i]);
+                }
+                managerContent.Remove(category);
+                manager.Unload();
+            }
+        }
+
         private ContentManager GetContentManager(string category)
         {
             if (!contentManagers.ContainsKey(category))
             {
                 contentManagers.Add(category, CreateContentManager());
+                managerContent.Add(category, new List<string>());
             }
             return contentManagers[category];
+        }
+
+        public static void AddStaticAsset(string name)
+        {
+            staticAssets.Add(name);
         }
     }
 }

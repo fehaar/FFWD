@@ -73,6 +73,8 @@ namespace PressPlay.FFWD
 
             if (!String.IsNullOrEmpty(sceneToLoad))
             {
+                CleanUp();
+                GC.Collect();
                 DoSceneLoad();
             }
             LoadNewAssets();
@@ -199,6 +201,11 @@ namespace PressPlay.FFWD
 
         private void DoSceneLoad()
         {
+            if (!String.IsNullOrEmpty(loadedLevelName))
+            {
+                assetHelper.Unload(loadedLevelName);
+            }
+
             loadingScene = true;
             loadedLevelName = sceneToLoad.Contains('/') ? sceneToLoad.Substring(sceneToLoad.LastIndexOf('/') + 1) : sceneToLoad;
             Scene scene = assetHelper.Load<Scene>(sceneToLoad);
@@ -338,10 +345,6 @@ namespace PressPlay.FFWD
                     if (!cmp.isPrefab)
                     {
                         activeComponents.Add(cmp);
-                        //if (cmp is Renderer)
-                        //{
-                        //    Camera.AddRenderer(cmp as Renderer);
-                        //}
                     }
                     if (!objects.ContainsKey(cmp.gameObject.GetInstanceID()))
                     {
