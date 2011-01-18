@@ -15,20 +15,6 @@ namespace PressPlay.FFWD.Components
         public override void Awake()
         {
             base.Awake();
-            if (sharedMesh != null)
-            {
-                sharedMesh.Awake(true);
-            }
-        }
-
-        public override void Start()
-        {
-            base.Start();
-            if (sharedMesh != null)
-            {
-                sharedMesh.Start(true);
-            }
-
             // Create animation players/clips for the rigid model
             animation = GetComponentInParents<Animation>();
             if ((sharedMesh.skinnedModel != null) && (sharedMesh.skinnedModel.SkinningData != null))

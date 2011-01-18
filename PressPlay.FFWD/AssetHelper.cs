@@ -38,6 +38,13 @@ namespace PressPlay.FFWD
                     return default(T);
                 }
             }
+            else
+            {
+                if (!(content[contentPath] is T))
+                {
+                    return default(T);
+                }
+            }
             return (T)content[contentPath];
         }
 

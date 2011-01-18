@@ -9,9 +9,8 @@ using PressPlay.FFWD.SkinnedModel;
 
 namespace PressPlay.FFWD
 {
-    public class Mesh
+    public class Mesh : Asset
     {
-        public string name { get; set; }
         public string asset { get; set; }
 
         [ContentSerializerIgnore]
@@ -29,16 +28,11 @@ namespace PressPlay.FFWD
         [ContentSerializerIgnore]
         public short[] triangles { get; set; }
 
-        public void Awake(bool skinnedModel)
+        internal override void LoadAsset(AssetHelper assetHelper)
         {
-            ContentHelper.LoadModel(asset, skinnedModel);
-        }
-
-        public void Start(bool isSkinnedModel)
-        {
-            if (isSkinnedModel)
+            if (asset != null)
             {
-                skinnedModel = ContentHelper.GetSkinnedModel(asset);
+                skinnedModel = assetHelper.Load<CpuSkinnedModel>("Models/" + asset);
                 if (skinnedModel != null)
                 {
                     for (int i = 0; i < skinnedModel.Parts.Count; i++)
@@ -50,23 +44,23 @@ namespace PressPlay.FFWD
                         }
                     }
                 }
-            }
-            else
-            {
-                model = ContentHelper.GetModel(asset);
-                if (model != null)
+                else
                 {
-                    for (int i = 0; i < model.Meshes.Count; i++)
+                    model = assetHelper.Load<Model>("Models/" + asset);
+                    if (model != null)
                     {
-                        if (model.Meshes[i].Name == name)
+                        for (int i = 0; i < model.Meshes.Count; i++)
                         {
-                            meshIndex = i;
-                            break;
+                            if (model.Meshes[i].Name == name)
+                            {
+                                meshIndex = i;
+                                break;
+                            }
                         }
                     }
                 }
             }
-        }
+        } 
 
         public void Clear()
         {

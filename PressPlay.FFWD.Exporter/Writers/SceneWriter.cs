@@ -263,6 +263,7 @@ namespace PressPlay.FFWD.Exporter.Writers
         {
             string asset = Path.GetFileNameWithoutExtension(AssetDatabase.GetAssetPath(mesh.GetInstanceID()));
             writer.WriteStartElement(name);
+            writer.WriteElementString("id", mesh.GetInstanceID().ToString());
             writer.WriteElementString("name", mesh.name);
             writer.WriteElementString("asset", asset);
             writer.WriteEndElement();

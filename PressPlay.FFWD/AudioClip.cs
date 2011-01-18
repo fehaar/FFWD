@@ -51,7 +51,7 @@ namespace PressPlay.FFWD
 
         internal override void LoadAsset(AssetHelper assetHelper)
         {
-            sound = assetHelper.Load<SoundEffect>(clip);
+            sound = assetHelper.Load<SoundEffect>("Sounds/" + clip);
         }
     }
 }
