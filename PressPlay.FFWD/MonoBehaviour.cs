@@ -55,6 +55,23 @@ namespace PressPlay.FFWD.Components
         }
         #endregion
 
+        #region Sealed methods
+        internal override sealed void SetNewId(Dictionary<int, UnityObject> idMap)
+        {
+            base.SetNewId(idMap);
+        }
+
+        internal override sealed void AfterLoad(Dictionary<int, UnityObject> idMap)
+        {
+            base.AfterLoad(idMap);
+        }
+
+        internal override sealed void FixReferences(Dictionary<int, UnityObject> idMap)
+        {
+            base.FixReferences(idMap);
+        }
+        #endregion
+
         #region Invoke
         private struct InvokeCall
         {

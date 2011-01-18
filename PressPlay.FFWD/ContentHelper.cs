@@ -140,19 +140,6 @@ namespace PressPlay.FFWD
             }
         }
 
-//        private static void MissingAsset(string type, string name)
-//        {
-//#if WINDOWS
-//            string key = type + ": " + name;
-//            if (!MissingAssets.Contains(key))
-//            {
-//                MissingAssets.Add(key);
-//            }
-//#else
-//            return;
-//#endif
-//        }
-
         public static void LoadModel(string name)
         {
             LoadModel(name, false);
@@ -333,12 +320,12 @@ namespace PressPlay.FFWD
 
         }
 
-        public static Scene LoadScene(string name, int level)
-        {
-            Scene theScene = Content.Load<Scene>("Scenes\\" + name);
-            PreLoadContent(level);
-            return theScene;
-        }
+        //public static Scene LoadScene(string name, int level)
+        //{
+        //    Scene theScene = Content.Load<Scene>("Scenes\\" + name);
+        //    PreLoadContent(level);
+        //    return theScene;
+        //}
 
         public static void LoadStaticTexture(string name)
         {

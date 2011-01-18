@@ -125,13 +125,13 @@ namespace PressPlay.FFWD
         [ContentSerializer(CollectionItemName = "component", Optional = true)]
         private List<Component> components { get; set; }
 
-        internal override void AfterLoad()
+        internal override void AfterLoad(Dictionary<int, UnityObject> idMap)
         {
-            base.AfterLoad();
+            base.AfterLoad(idMap);
             for (int j = 0; j < components.Count; j++)
             {
                 components[j].isPrefab = isPrefab;
-                components[j].AfterLoad();
+                components[j].AfterLoad(idMap);
                 components[j].gameObject = this;
             }
         }

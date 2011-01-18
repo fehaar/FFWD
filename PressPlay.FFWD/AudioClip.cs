@@ -8,9 +8,8 @@ using Microsoft.Xna.Framework.Audio;
 
 namespace PressPlay.FFWD
 {
-    public class AudioClip : UnityObject
+    public class AudioClip : Asset
     {
-        public string name { get; set; }
 
         [ContentSerializer(Optional = true)]
         public string clip;
@@ -37,17 +36,22 @@ namespace PressPlay.FFWD
             this.sound = sound;
         }
 
-        public void PrepareLoadContent()
-        {
-            ContentHelper.LoadSound(clip);
-        }
+        //public void PrepareLoadContent()
+        //{
+        //    ContentHelper.LoadSound(clip);
+        //}
 
-        public void EndLoadContent()
+        //public void EndLoadContent()
+        //{
+        //    if (sound == null)
+        //    {
+        //        sound = ContentHelper.GetSound(clip);
+        //    }
+        //}
+
+        internal override void LoadAsset(AssetHelper assetHelper)
         {
-            if (sound == null)
-            {
-                sound = ContentHelper.GetSound(clip);
-            }
+            sound = assetHelper.Load<SoundEffect>("Sounds/" + clip);
         }
     }
 }

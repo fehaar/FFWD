@@ -30,7 +30,8 @@ namespace PressPlay.FFWD.Exporter.Writers.Components.Extensions
                     nodeRefs.Add(node.GetInstanceID(), obj.GetInstanceID());
 	            }
             }
-            scene.WriteElement("nodes", nodeRefs);
+            scene.WriteElement("fieldName", propertyName);
+            scene.WriteElement("map", nodeRefs);
         }
         #endregion
     }
