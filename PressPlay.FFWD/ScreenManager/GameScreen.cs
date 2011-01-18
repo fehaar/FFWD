@@ -56,11 +56,11 @@ namespace PressPlay.FFWD.ScreenManager
 
         bool isPopup = false;
 
-        private CachedContent content;
+        private static CachedContent content;
         public CachedContent Content
         {
-            get{ return content; }
-            set { content = value; }
+            get{ return GameScreen.content; }
+            set { GameScreen.content = value; }
         }
 
         /// <summary>

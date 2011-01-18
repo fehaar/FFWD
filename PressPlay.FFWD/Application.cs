@@ -67,6 +67,13 @@ namespace PressPlay.FFWD
 
         public override void Update(GameTime gameTime)
         {
+            if (Application.quitNextUpdate)
+            {
+                base.Game.Exit();
+                return;
+            }
+
+
             base.Update(gameTime);
             Time.Update((float)gameTime.ElapsedGameTime.TotalSeconds, (float)gameTime.TotalGameTime.TotalSeconds);
             UpdateFPS(gameTime);
@@ -103,7 +110,8 @@ namespace PressPlay.FFWD
             scripts.Stop();
             physics.Start();
 #endif
-            Physics.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+            //Physics.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+            Physics.Update(Time.deltaTime);
 #if DEBUG
             physics.Stop();
 #endif
@@ -432,6 +440,17 @@ namespace PressPlay.FFWD
                     dontDestroyOnLoad.Add((GameObject)target);
                 }
             }
+        }
+
+
+        private static bool quitNextUpdate = false;
+        
+        /// <summary>
+        /// Quits the application using game.Exit in the begin of the next Update 
+        /// </summary>
+        public static void Quit()
+        {
+            quitNextUpdate = true;
         }
     }
 }
