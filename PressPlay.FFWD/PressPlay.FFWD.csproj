@@ -123,6 +123,8 @@
     <Compile Include="Animation\WrapMode.cs" />
     <Compile Include="Application.cs" />
     <Compile Include="ApplicationSettings.cs" />
+    <Compile Include="Asset.cs" />
+    <Compile Include="AssetHelper.cs" />
     <Compile Include="AudioClip.cs" />
     <Compile Include="AudioSource.cs" />
     <Compile Include="Behaviour.cs" />

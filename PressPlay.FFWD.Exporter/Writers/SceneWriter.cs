@@ -380,6 +380,8 @@ namespace PressPlay.FFWD.Exporter.Writers
                         return;
                     }
                     writer.WriteStartElement(name);
+                    writer.WriteElementString("id", mat.GetInstanceID().ToString());
+                    writer.WriteElementString("name", mat.name);
                     writer.WriteElementString("shader", mat.shader.name);
                     writer.WriteElementString("renderQueue", mat.renderQueue.ToString());
                     if (mat.HasProperty("_Color"))

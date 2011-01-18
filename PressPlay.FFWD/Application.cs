@@ -35,11 +35,15 @@ namespace PressPlay.FFWD
         public static ScreenManager.ScreenManager screenManager;
 
         private static Dictionary<int, UnityObject> objects = new Dictionary<int, UnityObject>();
+        internal static List<Component> newComponents = new List<Component>();
+        internal static List<Asset> newAssets = new List<Asset>();
         private static List<Component> activeComponents = new List<Component>();
         internal static List<UnityObject> markedForDestruction = new List<UnityObject>();
         internal static List<GameObject> dontDestroyOnLoad = new List<GameObject>();
         private static List<Interfaces.IUpdateable> lateUpdates = new List<Interfaces.IUpdateable>();
         internal static bool loadingScene = false;
+
+        private AssetHelper assetHelper = new AssetHelper();
 
         public override void Initialize()
         {
@@ -53,6 +57,12 @@ namespace PressPlay.FFWD
             Time.Reset();
             Input.Initialize();
             spriteBatch = new SpriteBatch(Game.GraphicsDevice);
+            assetHelper.CreateContentManager = CreateContentManager;
+        }
+
+        private ContentManager CreateContentManager()
+        {
+            return new ContentManager(Game.Services, Game.Content.RootDirectory);
         }
 
         public override void Update(GameTime gameTime)
@@ -65,6 +75,7 @@ namespace PressPlay.FFWD
             {
                 DoSceneLoad();
             }
+            LoadNewAssets();
 
 #if DEBUG
             scripts.Start();
@@ -189,8 +200,8 @@ namespace PressPlay.FFWD
         private void DoSceneLoad()
         {
             loadingScene = true;
-            Scene scene = ContentHelper.Content.Load<Scene>(sceneToLoad);
             loadedLevelName = sceneToLoad.Contains('/') ? sceneToLoad.Substring(sceneToLoad.LastIndexOf('/') + 1) : sceneToLoad;
+            Scene scene = assetHelper.Load<Scene>(sceneToLoad);
             sceneToLoad = "";
             loadingScene = false;
 
@@ -198,12 +209,12 @@ namespace PressPlay.FFWD
             scene.AfterLoad(idMap);            
             // Remove placeholder references and replace them with live ones
             List<IdMap> idMaps = new List<IdMap>();
-            for (int i = 0; i < NewComponents.Count; i++)
+            for (int i = 0; i < newComponents.Count; i++)
             {
-                NewComponents[i].FixReferences(idMap);
-                if (NewComponents[i] is IdMap)
+                newComponents[i].FixReferences(idMap);
+                if (newComponents[i] is IdMap)
                 {
-                    idMaps.Add(NewComponents[i] as IdMap);
+                    idMaps.Add(newComponents[i] as IdMap);
                 }
             }
             idMap.Clear();
@@ -219,9 +230,18 @@ namespace PressPlay.FFWD
             for (int i = 0; i < idMaps.Count; i++)
             {
                 idMaps[i].UpdateIdReferences(idMap);
-                NewComponents.Remove(idMaps[i]);
+                newComponents.Remove(idMaps[i]);
             }
             GC.Collect();
+        }
+
+        private void LoadNewAssets()
+        {
+            for (int i = newAssets.Count - 1; i >= 0; i--)
+            {
+                newAssets[i].LoadAsset(assetHelper);
+                newAssets.RemoveAt(i);
+            }
         }
 
         public static void LoadLevel(string name)
@@ -299,13 +319,11 @@ namespace PressPlay.FFWD
             return null;
         }
 
-        internal static List<Component> NewComponents = new List<Component>();
-
         internal static void AwakeNewComponents()
         {
-            for (int i = 0; i < NewComponents.Count; i++)
+            for (int i = 0; i < newComponents.Count; i++)
             {
-                Component cmp = NewComponents[i];
+                Component cmp = newComponents[i];
                 if (cmp.gameObject != null)
                 {
                     // TODO: Fix this with a content processor!
@@ -332,8 +350,8 @@ namespace PressPlay.FFWD
                 }
             }
             // All components will exist to be found before awaking - otherwise we can get issues with instantiating on awake.
-            Component[] componentsToAwake = NewComponents.ToArray();
-            NewComponents.Clear();
+            Component[] componentsToAwake = newComponents.ToArray();
+            newComponents.Clear();
             for (int i = 0; i < componentsToAwake.Length; i++)
             {
                 if (!componentsToAwake[i].isPrefab)
@@ -343,7 +361,7 @@ namespace PressPlay.FFWD
             }
             // Do a recursive awake to awake components instantiated in the previous awake.
             // In this way we will make sure that everything is instantiated before the first run.
-            if (NewComponents.Count > 0)
+            if (newComponents.Count > 0)
             {
                 AwakeNewComponents();
             }
@@ -351,7 +369,12 @@ namespace PressPlay.FFWD
 
         internal static void AddNewComponent(Component component)
         {
-            NewComponents.Add(component);
+            newComponents.Add(component);
+        }
+
+        internal static void AddNewAsset(Asset asset)
+        {
+            newAssets.Add(asset);
         }
 
         internal static void Reset()

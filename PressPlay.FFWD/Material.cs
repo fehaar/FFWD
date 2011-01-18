@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace PressPlay.FFWD
 {
-    public class Material
+    public class Material : Asset
     {
         [ContentSerializer]
         private string shader { get; set; }
@@ -21,18 +21,18 @@ namespace PressPlay.FFWD
         [ContentSerializerIgnore]
         public Texture2D texture;
 
-        public void PrepareLoadContent()
-        {
-            ContentHelper.LoadTexture(mainTexture);
-        }
+        //public void PrepareLoadContent()
+        //{
+        //    ContentHelper.LoadTexture(mainTexture);
+        //}
 
-        public void EndLoadContent()
-        {
-            if (texture == null)
-            {
-                texture = ContentHelper.GetTexture(mainTexture);
-            }
-        }
+        //public void EndLoadContent()
+        //{
+        //    if (texture == null)
+        //    {
+        //        texture = ContentHelper.GetTexture(mainTexture);
+        //    }
+        //}
 
         public void SetColor(string name, Color color)
         {
@@ -54,6 +54,14 @@ namespace PressPlay.FFWD
                     return BlendState.AlphaBlend;
                 }
                 return BlendState.Opaque;
+            }
+        }
+
+        internal override void LoadAsset(AssetHelper assetHelper)
+        {
+            if (mainTexture != null)
+            {
+                texture = assetHelper.Load<Texture2D>("Textures/" + mainTexture);
             }
         }
     }
