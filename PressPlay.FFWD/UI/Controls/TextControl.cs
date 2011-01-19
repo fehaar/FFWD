@@ -91,7 +91,8 @@ namespace PressPlay.FFWD.UI.Controls
             pos.x = rect.X + rect.Width / 2 - size.x / 2;
             pos.y = rect.Y + rect.Height / 2 - size.y / 2;
 
-            transform.position = pos;
+            transform.position = new Vector3(pos.x, transform.position.y, pos.y);
+
         }
 
         public void SetColor(Color color)
