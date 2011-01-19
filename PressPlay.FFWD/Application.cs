@@ -262,6 +262,11 @@ namespace PressPlay.FFWD
         public static void LoadLevel(string name)
         {
             sceneToLoad = name;
+            UnloadCurrentLevel();
+        }
+
+        public static void UnloadCurrentLevel()
+        {
             foreach (UnityObject obj in objects.Values)
             {
                 if (obj is Component)
