@@ -10,24 +10,6 @@ namespace PressPlay.FFWD.Components
 
         private BasicEffect effect;
 
-        public override void Awake()
-        {
-            base.Awake();            
-            if (sharedMesh != null)
-            {
-                sharedMesh.Awake(false);
-            }
-        }
-
-        public override void Start()
-        {
-            base.Start();
-            if (sharedMesh != null)
-            {
-                sharedMesh.Start(false);
-            }
-        }
-
         internal bool CanDraw()
         {
             return (sharedMesh != null && sharedMesh.model == null);

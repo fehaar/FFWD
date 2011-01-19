@@ -101,7 +101,7 @@ namespace PressPlay.FFWD
 
         private void SetSoundEffect(AudioClip sfx)
         {
-            if (sfx == null)
+            if (sfx == null || sfx.sound == null)
             {
                 soundEffect = null;
             }

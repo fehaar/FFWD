@@ -14,11 +14,9 @@ namespace PressPlay.FFWD.Test.Core_framework
         [SetUp]
         public void Setup()
         {
-            Scene scene = new Scene();
             GameObject go = new GameObject();
             component = new TestComponent();
             go.AddComponent(component);
-            scene.gameObjects.Add(go);
 
             GameObject child = new GameObject();
             childComponent = new TestComponent();
@@ -28,10 +26,8 @@ namespace PressPlay.FFWD.Test.Core_framework
             GameObject prefab = new GameObject();
             prefabComponent = new TestComponent();
             prefab.AddComponent(prefabComponent);
-            scene.prefabs.Add(prefab);
 
             app = new Application(new Game());
-            Application.LoadLevel(scene);
         }
 
         #region Fixed update

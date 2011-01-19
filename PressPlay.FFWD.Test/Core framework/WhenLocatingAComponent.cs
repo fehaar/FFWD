@@ -94,15 +94,12 @@ namespace PressPlay.FFWD.Test.Core_framework
         [Test]
         public void WeCanGetAllComponentsOnTheCurrentScene()
         {
-            Scene mainScene = new Scene();
-            mainScene.gameObjects.Add(root);
             TestComponent comp = new TestComponent();
             TestComponent comp1 = new TestComponent();
             TestComponent comp2 = new TestComponent();
             root.AddComponent(comp);
             child.AddComponent(comp1);
             childOfChild.AddComponent(comp2);
-            Application.LoadLevel(mainScene);
 
             UnityObject[] components = UnityObject.FindObjectsOfType(typeof(TestComponent));
             Assert.That(components, Is.Not.Null);
@@ -115,11 +112,8 @@ namespace PressPlay.FFWD.Test.Core_framework
         [Test]
         public void WeCanFindTheFirstComponentOfAGivenType()
         {
-            Scene mainScene = new Scene();
-            mainScene.gameObjects.Add(root);
             TestComponent comp = new TestComponent();
             child.AddComponent(comp);
-            Application.LoadLevel(mainScene);
 
             UnityObject cmp = UnityObject.FindObjectOfType(typeof(TestComponent));
             Assert.That(cmp, Is.Not.Null);

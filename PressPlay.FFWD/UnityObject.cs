@@ -8,14 +8,17 @@ namespace PressPlay.FFWD
     {
         public UnityObject()
         {
-            _id = nextId++;
+            if (!Application.loadingScene)
+            {
+                _id = nextId++;
+            }
             isPrefab = false;
         }
 
-        private static int nextId = 1;
-
         [ContentSerializer(ElementName="id")]
-        private int _id;
+        private int _id = -1;
+
+        private static int nextId = 1;
 
         public int GetInstanceID()
         {
@@ -25,12 +28,16 @@ namespace PressPlay.FFWD
         [ContentSerializer(ElementName = "isPrefab", Optional = true)]
         internal bool isPrefab;
 
-        internal virtual void AfterLoad()
+        internal virtual void AfterLoad(Dictionary<int, UnityObject> idMap)
         {
-            if (_id > nextId)
+            if (idMap != null)
             {
-                nextId = _id + 1;
+                idMap.Add(_id, this);
             }
+            //if (_id > nextId)
+            //{
+            //    nextId = _id + 1;
+            //}
         }
 
         /// <summary>
@@ -128,8 +135,8 @@ namespace PressPlay.FFWD
                 {
                     idMap[_id] = this;
                 }
-                _id = nextId++;
             }
+            _id = nextId++;
         }
 
         internal virtual void FixReferences(Dictionary<int, UnityObject> idMap)
@@ -164,6 +171,15 @@ namespace PressPlay.FFWD
                 return false;
             }
             return (Application.Find(obj.GetInstanceID()) != null);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+            {
+                return (Application.Find(GetInstanceID()) != null);
+            }
+            return base.Equals(obj);
         }
 
         public static void DontDestroyOnLoad(UnityObject target)

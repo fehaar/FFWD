@@ -86,6 +86,8 @@
     <Compile Include="Animation\SkinningData.cs" />
     <Compile Include="Animation\WrapMode.cs" />
     <Compile Include="ApplicationSettings.cs" />
+    <Compile Include="Asset.cs" />
+    <Compile Include="AssetHelper.cs" />
     <Compile Include="AudioClip.cs" />
     <Compile Include="AudioSource.cs" />
     <Compile Include="Behaviour.cs" />
@@ -123,6 +125,7 @@
     <Compile Include="Box2D\Dynamics\World.cs" />
     <Compile Include="Box2D\Dynamics\WorldCallbacks.cs" />
     <Compile Include="CachedContent.cs" />
+    <Compile Include="Components\IdMap.cs" />
     <Compile Include="Components\Renderers\TextRenderer.cs" />
     <Compile Include="Ray.cs" />
     <Compile Include="Color.cs" />

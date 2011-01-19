@@ -24,8 +24,7 @@ namespace PressPlay.FFWD
         int frameRate = 0;
         int frameCounter = 0;
         TimeSpan elapsedTime = TimeSpan.Zero;
-
-       
+        private static string sceneToLoad = "";
 
 #if DEBUG
         private Stopwatch scripts = new Stopwatch();
@@ -36,11 +35,15 @@ namespace PressPlay.FFWD
         public static ScreenManager.ScreenManager screenManager;
 
         private static Dictionary<int, UnityObject> objects = new Dictionary<int, UnityObject>();
+        internal static List<Component> newComponents = new List<Component>();
+        internal static List<Asset> newAssets = new List<Asset>();
         private static List<Component> activeComponents = new List<Component>();
         internal static List<UnityObject> markedForDestruction = new List<UnityObject>();
         internal static List<GameObject> dontDestroyOnLoad = new List<GameObject>();
         private static List<Interfaces.IUpdateable> lateUpdates = new List<Interfaces.IUpdateable>();
         internal static bool loadingScene = false;
+
+        private AssetHelper assetHelper = new AssetHelper();
 
         public override void Initialize()
         {
@@ -54,6 +57,12 @@ namespace PressPlay.FFWD
             Time.Reset();
             Input.Initialize();
             spriteBatch = new SpriteBatch(Game.GraphicsDevice);
+            assetHelper.CreateContentManager = CreateContentManager;
+        }
+
+        private ContentManager CreateContentManager()
+        {
+            return new ContentManager(Game.Services, Game.Content.RootDirectory);
         }
 
         public override void Update(GameTime gameTime)
@@ -68,6 +77,14 @@ namespace PressPlay.FFWD
             base.Update(gameTime);
             Time.Update((float)gameTime.ElapsedGameTime.TotalSeconds, (float)gameTime.TotalGameTime.TotalSeconds);
             UpdateFPS(gameTime);
+
+            if (!String.IsNullOrEmpty(sceneToLoad))
+            {
+                CleanUp();
+                GC.Collect();
+                DoSceneLoad();
+            }
+            LoadNewAssets();
 
 #if DEBUG
             scripts.Start();
@@ -175,7 +192,6 @@ namespace PressPlay.FFWD
 
                 spriteBatch.End();
             }
-
 #endif
         }
 
@@ -191,17 +207,61 @@ namespace PressPlay.FFWD
             }
         }
 
-        public static void LoadLevel(string name)
+        private void DoSceneLoad()
         {
+            if (!String.IsNullOrEmpty(loadedLevelName))
+            {
+                assetHelper.Unload(loadedLevelName);
+            }
+
             loadingScene = true;
-            Scene scene = ContentHelper.Content.Load<Scene>(name);
+            loadedLevelName = sceneToLoad.Contains('/') ? sceneToLoad.Substring(sceneToLoad.LastIndexOf('/') + 1) : sceneToLoad;
+            Scene scene = assetHelper.Load<Scene>(sceneToLoad);
+            sceneToLoad = "";
             loadingScene = false;
-            LoadLevel(scene);
-            loadedLevelName = name.Contains('/') ? name.Substring(name.LastIndexOf('/') + 1) : name;
+
+            Dictionary<int, UnityObject> idMap = new Dictionary<int, UnityObject>();
+            scene.AfterLoad(idMap);            
+            // Remove placeholder references and replace them with live ones
+            List<IdMap> idMaps = new List<IdMap>();
+            for (int i = 0; i < newComponents.Count; i++)
+            {
+                newComponents[i].FixReferences(idMap);
+                if (newComponents[i] is IdMap)
+                {
+                    idMaps.Add(newComponents[i] as IdMap);
+                }
+            }
+            idMap.Clear();
+            // Issue new ids to all objects from a scene now that references have been fixed
+            for (int i = 0; i < scene.gameObjects.Count; i++)
+            {
+                scene.gameObjects[i].SetNewId(idMap);
+            }
+            for (int i = 0; i < scene.prefabs.Count; i++)
+            {
+                scene.prefabs[i].SetNewId(idMap);
+            }
+            for (int i = 0; i < idMaps.Count; i++)
+            {
+                idMaps[i].UpdateIdReferences(idMap);
+                newComponents.Remove(idMaps[i]);
+            }
+            GC.Collect();
         }
 
-        public static void LoadLevel(Scene scene)
+        private void LoadNewAssets()
         {
+            for (int i = newAssets.Count - 1; i >= 0; i--)
+            {
+                newAssets[i].LoadAsset(assetHelper);
+                newAssets.RemoveAt(i);
+            }
+        }
+
+        public static void LoadLevel(string name)
+        {
+            sceneToLoad = name;
             foreach (UnityObject obj in objects.Values)
             {
                 if (obj is Component)
@@ -224,10 +284,6 @@ namespace PressPlay.FFWD
                     }
                 }
             }
-            CleanUp();
-
-            scene.AfterLoad();
-            AwakeNewComponents();
         }
 
         public static UnityObject Find(int id)
@@ -278,13 +334,11 @@ namespace PressPlay.FFWD
             return null;
         }
 
-        internal static List<Component> NewComponents = new List<Component>();
-
         internal static void AwakeNewComponents()
         {
-            for (int i = 0; i < NewComponents.Count; i++)
+            for (int i = 0; i < newComponents.Count; i++)
             {
-                Component cmp = NewComponents[i];
+                Component cmp = newComponents[i];
                 if (cmp.gameObject != null)
                 {
                     // TODO: Fix this with a content processor!
@@ -294,27 +348,11 @@ namespace PressPlay.FFWD
                         cmp.gameObject = null;
                         continue;
                     }
-
-                    if (objects.ContainsKey(cmp.GetInstanceID()))
-                    {
-                        UnityObject obj = objects[cmp.GetInstanceID()];
-                        Dictionary<int, UnityObject> newIds = new Dictionary<int, UnityObject>();
-                        obj.SetNewId(newIds);
-                        foreach (var item in newIds)
-                        {
-                            objects.Remove(item.Key);
-                            objects.Add(item.Value.GetInstanceID(), item.Value);
-                        }
-                    }
                     objects.Add(cmp.GetInstanceID(), cmp);
 
                     if (!cmp.isPrefab)
                     {
                         activeComponents.Add(cmp);
-                        if (cmp is Renderer)
-                        {
-                            Camera.AddRenderer(cmp as Renderer);
-                        }
                     }
                     if (!objects.ContainsKey(cmp.gameObject.GetInstanceID()))
                     {
@@ -322,14 +360,9 @@ namespace PressPlay.FFWD
                     }
                 }
             }
-            // Remove placeholder references and replace them with live ones
-            for (int i = 0; i < NewComponents.Count; i++)
-            {
-                NewComponents[i].FixReferences(objects);
-            }
             // All components will exist to be found before awaking - otherwise we can get issues with instantiating on awake.
-            Component[] componentsToAwake = NewComponents.ToArray();
-            NewComponents.Clear();
+            Component[] componentsToAwake = newComponents.ToArray();
+            newComponents.Clear();
             for (int i = 0; i < componentsToAwake.Length; i++)
             {
                 if (!componentsToAwake[i].isPrefab)
@@ -337,11 +370,22 @@ namespace PressPlay.FFWD
                     componentsToAwake[i].Awake();
                 }
             }
+            // Do a recursive awake to awake components instantiated in the previous awake.
+            // In this way we will make sure that everything is instantiated before the first run.
+            if (newComponents.Count > 0)
+            {
+                AwakeNewComponents();
+            }
         }
 
         internal static void AddNewComponent(Component component)
         {
-            NewComponents.Add(component);
+            newComponents.Add(component);
+        }
+
+        internal static void AddNewAsset(Asset asset)
+        {
+            newAssets.Add(asset);
         }
 
         internal static void Reset()
@@ -360,7 +404,6 @@ namespace PressPlay.FFWD
 
                 if (markedForDestruction[i] is Component)
 	            {
-                    //HACK to remove camera from allcameras list
                     if (markedForDestruction[i] is Camera)
                     {
                         ((Camera)markedForDestruction[i]).Destroy();

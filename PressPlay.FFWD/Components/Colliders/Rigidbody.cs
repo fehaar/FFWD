@@ -71,11 +71,18 @@ namespace PressPlay.FFWD.Components
         {
             get
             {
+                if (body == null)
+                {
+                    return Vector3.zero;
+                }
                 return body.GetLinearVelocity();
             }
             set
             {
-                body.SetLinearVelocity(value);
+                if (body != null)
+                {
+                    body.SetLinearVelocity(value);
+                }
             }
         }
 

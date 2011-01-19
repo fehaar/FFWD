@@ -12,7 +12,7 @@ namespace PressPlay.FFWD
         {
             Application.loadingScene = true;
             GameObject go = ContentHelper.Content.Load<GameObject>(Path.Combine("Resources", name));
-            go.AfterLoad();
+            go.AfterLoad(null);
             go.SetNewId(null);
             Application.loadingScene = false;
             return go;
