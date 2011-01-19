@@ -53,6 +53,7 @@ namespace PressPlay.FFWD
             ContentHelper.Content = new ContentManager(Game.Services, Game.Content.RootDirectory);
             ContentHelper.IgnoreMissingAssets = true;
             Camera.FullScreen = Game.GraphicsDevice.Viewport;
+            Resources.AssetHelper = assetHelper;
             Physics.Initialize();
             Time.Reset();
             Input.Initialize();
