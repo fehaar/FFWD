@@ -32,8 +32,8 @@ namespace PressPlay.FFWD
 
         private static bool isPaused = false;
         private static IContactProcessor contactProcessor;
-        public static int velocityIterations = 1;
-        public static int positionIterations = 1;
+        public static int velocityIterations = 5;
+        public static int positionIterations = 5;
 
         #region FFWD specific methods
         public static void Initialize()
@@ -78,6 +78,8 @@ namespace PressPlay.FFWD
                         Box2D.XNA.Transform t;
                         body.GetTransform(out t);
                         comp.transform.SetPositionFromPhysics(t.Position, t.GetAngle());
+                        comp.collider.ResizeConnectedBody();
+                        //TODO: Resize body shape to the current transform.scale of the components game object. Maybe this should be done before physics update. It should only be hard coded in AddCollider in static objects
                     }
                     body.SetActive(comp.gameObject.active);
                 }
@@ -110,6 +112,14 @@ namespace PressPlay.FFWD
         #endregion
 
         #region Helper methods to create physics objects
+
+        public static Bounds BoundsFromAABB(AABB aabb, float width)
+        {
+            Vector2 center = aabb.GetCenter();
+            Vector2 size = aabb.GetExtents();
+            return new Bounds(new Vector3(center.x, 0, center.y),new Vector3(size.x, width, size.y));
+        }
+
         public static Body AddBody()
         {
             return world.CreateBody(new BodyDef());
