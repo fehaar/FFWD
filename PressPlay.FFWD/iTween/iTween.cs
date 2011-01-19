@@ -4435,6 +4435,8 @@ namespace PressPlay.FFWD
 
         void ApplyColorToTargets()
         {
+
+            Debug.Log("ApplyColorToTargets: "+percentage);
             //calculate:
             for (int i = 0; i < colors.GetLength(0); i++)
             {
