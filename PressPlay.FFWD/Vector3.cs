@@ -387,6 +387,21 @@ namespace PressPlay.FFWD
             }
         }
 
+        public static explicit operator float(Vector3 v)
+        {
+            switch (ApplicationSettings.to2dMode)
+            {
+                case ApplicationSettings.To2dMode.DropX:
+                    return v.x;
+                case ApplicationSettings.To2dMode.DropY:
+                    return v.y;
+                case ApplicationSettings.To2dMode.DropZ:
+                    return v.z;
+                default:
+                    throw new Exception("Unknown enum " + ApplicationSettings.to2dMode);
+            }
+        }
+
         public static bool operator ==(Vector3 value1, Vector3 value2)
         {
             return value1.x == value2.x

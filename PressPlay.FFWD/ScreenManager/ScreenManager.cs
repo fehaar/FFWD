@@ -40,6 +40,12 @@ namespace PressPlay.FFWD.ScreenManager
         SpriteFont font;
         Texture2D blankTexture;
 
+
+        public static Viewport Viewport
+        {
+            get; private set;
+        }
+
         public string fontSource;
         public string blankTextureSource;
 
@@ -104,6 +110,7 @@ namespace PressPlay.FFWD.ScreenManager
             TouchPanel.EnabledGestures = GestureType.None;
             UpdateOrder = 0;
             DrawOrder = 0;
+            Viewport = game.GraphicsDevice.Viewport;
             Application.screenManager = this;
         }
 
@@ -332,12 +339,10 @@ namespace PressPlay.FFWD.ScreenManager
         /// </summary>
         public void FadeBackBufferToBlack(float alpha)
         {
-            Viewport viewport = GraphicsDevice.Viewport;
-
             spriteBatch.Begin();
 
             spriteBatch.Draw(blankTexture,
-                             new Rectangle(0, 0, viewport.Width, viewport.Height),
+                             new Rectangle(0, 0, Viewport.Width, Viewport.Height),
                              Color.black * alpha);
 
             spriteBatch.End();

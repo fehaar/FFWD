@@ -170,7 +170,7 @@ namespace PressPlay.FFWD.Components
                 UIRenderer.SetSpriteBatch(device);
             }
 
-            UIRenderer.batch.Begin();
+            UIRenderer.batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
             for (int i = 0; i < uiRenderQueue.Count; i++)
             {
                 if (uiRenderQueue[i].gameObject == null)

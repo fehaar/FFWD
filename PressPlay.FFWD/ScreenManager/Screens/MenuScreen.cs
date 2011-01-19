@@ -79,7 +79,7 @@ namespace PressPlay.FFWD.ScreenManager
         {
             // the hit bounds are the entire width of the screen, and the height of the entry
             // with some additional padding above and below.
-            return new Rectangle(0,(int)entry.Position.y - menuEntryPadding,ScreenManager.GraphicsDevice.Viewport.Width,entry.GetHeight(this) + (menuEntryPadding * 2));
+            return new Rectangle(0,(int)entry.Position.y - menuEntryPadding,ScreenManager.Viewport.Width,entry.GetHeight(this) + (menuEntryPadding * 2));
         }
 
         /// <summary>
@@ -173,7 +173,7 @@ namespace PressPlay.FFWD.ScreenManager
                 MenuEntry menuEntry = menuEntries[i];
                 
                 // each entry is to be centered horizontally
-                position.x = ScreenManager.GraphicsDevice.Viewport.Width / 2 - menuEntry.GetWidth(this) / 2;
+                position.x = ScreenManager.Viewport.Width / 2 - menuEntry.GetWidth(this) / 2;
 
                 if (ScreenState == ScreenState.TransitionOn)
                     position.x -= transitionOffset * 256;
@@ -236,7 +236,7 @@ namespace PressPlay.FFWD.ScreenManager
             float transitionOffset = (float)Math.Pow(TransitionPosition, 2);
 
             // Draw the menu title centered on the screen
-            Vector2 titlePosition = new Vector2(graphics.Viewport.Width / 2, 80);
+            Vector2 titlePosition = new Vector2(ScreenManager.Viewport.Width / 2, 80);
             Vector2 titleOrigin = font.MeasureString(menuTitle) / 2;
             Color titleColor = new Color(192, 192, 192) * TransitionAlpha;
             float titleScale = 1.25f;

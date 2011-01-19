@@ -124,15 +124,26 @@ namespace PressPlay.FFWD.UI
 
         public override void Draw(GraphicsDevice device, Camera cam)
         {
-            base.Draw(device, cam);
-
             if (texture.IsDisposed || texture == null)
             {
                 return;
             }
 
-            UIRenderer.batch.Draw(texture, control.bounds, sourceRect, material.color, transform.eulerAngles.y, origin, effects, layerDepth);
-            //batch.Draw(texture, transform.position, sourceRect, material.color, transform.eulerAngles.y, origin, scale, effects, layerDepth);
+            Rectangle bounds;
+            if (control != null)
+            {
+                bounds = control.bounds;
+            }
+            else
+            {
+                Vector2 pos = transform.position;
+                Vector2 sz = transform.lossyScale;
+                bounds = new Rectangle((int)pos.x, (int)pos.y, (int)sz.x, (int)sz.y);
+            }
+
+            float depth = 1 - ((float)transform.position / 10000f);
+
+            UIRenderer.batch.Draw(texture, bounds, sourceRect, material.color, transform.eulerAngles.y, origin, effects, depth);
         }
         #endregion
     }

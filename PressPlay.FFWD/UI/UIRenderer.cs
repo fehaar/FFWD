@@ -39,9 +39,5 @@ namespace PressPlay.FFWD.UI
                 material.SetColor("", Color.white);
             }
         }
-
-        public override void Draw(GraphicsDevice device, Camera cam)
-        {
-        }
     }
 }
