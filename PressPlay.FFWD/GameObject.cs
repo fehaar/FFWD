@@ -505,6 +505,11 @@ namespace PressPlay.FFWD
             SendMessage(methodName, null, SendMessageOptions.RequireReceiver);
         }
 
+        public void SendMessage(string methodName, SendMessageOptions sendMessageOptions)
+        {
+            SendMessage(methodName, null, sendMessageOptions);
+        }
+
         public void SendMessage(string methodName, object value)
         {
             SendMessage(methodName, value, SendMessageOptions.RequireReceiver);
