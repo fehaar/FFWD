@@ -168,6 +168,30 @@ namespace PressPlay.FFWD
             this.z = z;
         }
 
+        public Vector3(Vector2 position, float depth)
+        {
+            switch (ApplicationSettings.to2dMode)
+            {
+                case ApplicationSettings.To2dMode.DropX:
+                    this.x = depth;
+                    this.y = position.x;
+                    this.z = position.y;
+                    break;
+                case ApplicationSettings.To2dMode.DropY:
+                    this.x = position.x;
+                    this.y = depth;
+                    this.z = position.y;
+                    break;
+                case ApplicationSettings.To2dMode.DropZ:
+                    this.x = position.x;
+                    this.y = position.y;
+                    this.z = depth;
+                    break;
+                default:
+                    throw new Exception("Unknown enum " + ApplicationSettings.to2dMode);
+            }
+        }
+
         public Vector3(Microsoft.Xna.Framework.Vector3 v) : this(v.X, v.Y, v.Z) { }
 
         #endregion Constructors
