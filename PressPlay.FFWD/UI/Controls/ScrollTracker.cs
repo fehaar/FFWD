@@ -131,13 +131,14 @@ namespace PressPlay.FFWD.UI.Controls
         // This must be called manually each tick that the ScrollTracker is active.
         public void HandleInput(InputState input)
         {
-           
+
             // Turn on tracking as soon as we seen any kind of touch. We can't use gestures for this
             // because no gesture data is returned on the initial touch. We have to be careful to
             // pick out only 'Pressed' locations, because TouchState can return other events a frame
             // *after* we've seen GestureType.Flick or GestureType.DragComplete.
             if (!IsTracking)
             {
+                
                 for (int i = 0; i < input.TouchState.Count; i++)
                 {                    
                     if (input.TouchState[i].State == TouchLocationState.Pressed)
@@ -152,8 +153,10 @@ namespace PressPlay.FFWD.UI.Controls
 
             foreach (GestureSample sample in input.Gestures)
             {
+                
                 switch (sample.GestureType)
                 {
+                    
                     case GestureType.VerticalDrag:
                         UnclampedViewOrigin.y -= sample.Delta.Y;
 

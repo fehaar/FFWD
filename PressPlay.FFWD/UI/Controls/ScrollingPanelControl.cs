@@ -40,7 +40,7 @@ namespace PressPlay.FFWD.UI.Controls
         public override void HandleInput(InputState input)
         {
             base.HandleInput(input);
-            
+
             bool doScrollInput = false;
             for (int i = 0; i < input.TouchState.Count; i++)
             {
@@ -53,6 +53,7 @@ namespace PressPlay.FFWD.UI.Controls
             }            
 
             if(doScrollInput){
+                //Debug.Log("Updating scrollbar: " + scrollTracker.ViewRect.Y);
                 scrollTracker.HandleInput(input);
             }
 

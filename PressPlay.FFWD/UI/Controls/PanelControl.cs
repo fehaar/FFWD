@@ -66,6 +66,42 @@ namespace PressPlay.FFWD.UI.Controls
             InvalidateAutoSize();
         }
 
+
+        // Position child components in a row, with the given spacing between components
+        public void LayoutRowCentered(float xMargin, float yMargin, float xSpacing)
+        {
+
+            // Parent offset
+            Vector2 offset = transform.position;
+
+            float x = xMargin + offset.x;
+            float totalWidth = 0;
+            for (int i = 0; i < childCount; i++)
+            {
+                Control child = this[i];
+                child.transform.position = new Vector2 { x = x, y = offset.y + yMargin };
+
+                x += child.bounds.Width + xSpacing;
+
+                totalWidth += child.bounds.Width + xSpacing;
+
+                //Debug.Log("x: "+x+" child.bounds.Width: " + child.bounds.Width);
+            }
+            totalWidth -= xSpacing; //only spacing BETWEEN childs, not after the last one
+
+            //move childs backwards, to center children in panel
+            for (int i = 0; i < childCount; i++)
+            {
+                Control child = this[i];
+                child.transform.position = child.transform.position + new Vector3( -totalWidth * 0.5f, 0, 0);
+            }
+
+
+
+
+            InvalidateAutoSize();
+        }
+
         protected override void OnChildAdded(int index, Control child)
         {
             base.OnChildAdded(index, child);

@@ -90,7 +90,7 @@ namespace PressPlay.FFWD.ScreenManager
         {
             // we cancel the current menu screen if the user presses the back button
             PlayerIndex player;
-            if (input.IsNewButtonPress(Buttons.Back, ControllingPlayer, out player))
+            if (input.IsMenuCancel(ControllingPlayer, out player))
             {
                 OnCancel(player);
             }
