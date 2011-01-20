@@ -72,14 +72,14 @@ namespace PressPlay.FFWD.UI.Controls
         {
 
             // Parent offset
-            Vector2 offset = transform.position;
+            Vector3 offset = transform.position;
 
             float x = xMargin + offset.x;
             float totalWidth = 0;
             for (int i = 0; i < childCount; i++)
             {
                 Control child = this[i];
-                child.transform.position = new Vector2 { x = x, y = offset.y + yMargin };
+                child.transform.position = new Vector3 (x, offset.y, offset.z + yMargin);
 
                 x += child.bounds.Width + xSpacing;
 
@@ -93,7 +93,7 @@ namespace PressPlay.FFWD.UI.Controls
             for (int i = 0; i < childCount; i++)
             {
                 Control child = this[i];
-                child.transform.position = child.transform.position + new Vector3( -totalWidth * 0.5f, 0, 0);
+                child.transform.position = child.transform.position + new Vector3(-totalWidth * 0.5f, 0, 0);
             }
 
 

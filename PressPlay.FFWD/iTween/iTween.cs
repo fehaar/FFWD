@@ -826,6 +826,7 @@ namespace PressPlay.FFWD
         /// </param>
         public static void ColorTo(GameObject target, Dictionary<string, object> args)
         {
+            
             //clean args:
             args = iTween.CleanArgs(args);
 
@@ -1457,7 +1458,7 @@ namespace PressPlay.FFWD
         {
             //clean args:
             args = iTween.CleanArgs(args);
-
+            
             //additional property to ensure ConflictCheck can work correctly since Transforms are refrences:		
             if (args.ContainsKey("position"))
             {
@@ -3408,6 +3409,8 @@ namespace PressPlay.FFWD
 
         void GenerateColorTargets()
         {
+            Debug.Log("GenerateColorTargets from: " + (Color)tweenArguments["from"] + " to: " + (Color)tweenArguments["to"]);
+            
             //values holder [0] from, [1] to, [2] calculated value from ease equation:
             colors = new Color[1, 3];
 
@@ -4541,6 +4544,7 @@ namespace PressPlay.FFWD
 
         void ApplyMoveToTargets()
         {
+            
             //record current:
             preUpdate = transform.position;
 
@@ -5038,7 +5042,7 @@ namespace PressPlay.FFWD
         */
 
         void TweenUpdate()
-        {
+        {            
             apply();
             CallBack("onupdate");
             UpdatePercentage();
@@ -5236,6 +5240,8 @@ namespace PressPlay.FFWD
         /// </param>
         public static void ColorUpdate(GameObject target, Dictionary<string, object> args)
         {
+            Debug.Log("iTween ColorUpdate");
+            
             CleanArgs(args);
 
             float time;
@@ -7037,6 +7043,7 @@ namespace PressPlay.FFWD
 
         public override void Update()
         {
+
             if (isRunning && !physics)
             {
                 if (!reverse)
@@ -7094,8 +7101,10 @@ namespace PressPlay.FFWD
             }
         }
 
-        void LateUpdate()
+        public override void  LateUpdate()
         {
+ 	        base.LateUpdate();
+
             //look applications:
             if (tweenArguments.ContainsKey("looktarget") && isRunning)
             {
@@ -7271,7 +7280,7 @@ namespace PressPlay.FFWD
             }
             tweens.Insert(0, args);
 
-            Debug.Log("iTween Calling Launch");
+            Debug.Log("iTween Calling Launch. Type: " + args["type"] + " method: " + args["method"] + " #tweens: " + tweens.Count);
 
             target.AddComponent(new iTween());
         }
@@ -7332,10 +7341,14 @@ namespace PressPlay.FFWD
         //grab and set generic, neccesary iTween arguments:
         void RetrieveArgs()
         {
+
             foreach (Dictionary<string, object> item in tweens)
             {
-                if ((GameObject)item["target"] == gameObject)
+                if ((GameObject)item["target"] == gameObject && !item.ContainsKey("hasBeenAdded"))
                 {
+                    // We add a bool to make sure, that we don't add the same tween twice.
+                    // This is because we don't awake tweens instantly but do it collectively before an update
+                    item.Add("hasBeenAdded", true);
                     tweenArguments = item;
                     break;
                 }
@@ -7344,6 +7357,8 @@ namespace PressPlay.FFWD
             id = (string)tweenArguments["id"];
             type = (string)tweenArguments["type"];
             method = (string)tweenArguments["method"];
+
+            Debug.Log("Retrieving arguments for type: "+type);
 
             if (tweenArguments.ContainsKey("time"))
             {

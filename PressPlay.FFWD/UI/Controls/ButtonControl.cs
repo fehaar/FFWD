@@ -49,7 +49,9 @@ namespace PressPlay.FFWD.UI.Controls
 
             if (text != "" && font != null)
             {
-                AddChild(new TextControl(text, font, Color.white, textPosition));
+                TextControl t = new TextControl(text, font, Color.white, textPosition);
+                AddChild(t);
+                t.transform.localPosition += new Vector3(0,100,0);
             }
         }
 
