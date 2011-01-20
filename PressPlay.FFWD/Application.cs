@@ -43,7 +43,7 @@ namespace PressPlay.FFWD
         private static List<Interfaces.IUpdateable> lateUpdates = new List<Interfaces.IUpdateable>();
         internal static bool loadingScene = false;
 
-        private AssetHelper assetHelper = new AssetHelper();
+        private static AssetHelper assetHelper = new AssetHelper();
 
         public override void Initialize()
         {
@@ -251,7 +251,7 @@ namespace PressPlay.FFWD
             GC.Collect();
         }
 
-        private void LoadNewAssets()
+        internal static void LoadNewAssets()
         {
             for (int i = newAssets.Count - 1; i >= 0; i--)
             {

@@ -17,6 +17,7 @@ namespace PressPlay.FFWD.Components
             base.Awake();
             // Create animation players/clips for the rigid model
             animation = GetComponentInParents<Animation>();
+
         }
 
         #region IRenderable Members
@@ -27,6 +28,7 @@ namespace PressPlay.FFWD.Components
                 return;
             }
             
+
             // Do we have negative scale - if so, switch culling
             RasterizerState oldRaster = device.RasterizerState;
             if (transform.lossyScale.x < 0 || transform.lossyScale.y < 0 || transform.lossyScale.z < 0)

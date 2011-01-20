@@ -116,8 +116,11 @@ namespace PressPlay.FFWD
 
         public void Play()
         {
-            if (soundEffect == null) return;
-            Debug.Log("Playing sound effect: "+ soundEffect.Volume);
+            if (soundEffect == null)
+            { 
+                return; 
+            }
+
             soundEffect.Play();
         }
 
