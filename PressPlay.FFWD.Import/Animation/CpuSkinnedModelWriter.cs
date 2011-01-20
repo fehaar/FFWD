@@ -24,10 +24,6 @@ namespace PressPlay.FFWD.Import.Animation
         {
             output.WriteObject(value.ModelParts);
             output.WriteObject(value.SkinningData);
-
-            Microsoft.Xna.Framework.Quaternion rotation = Microsoft.Xna.Framework.Quaternion.CreateFromYawPitchRoll(MathHelper.ToRadians(value.Rotation.Y), MathHelper.ToRadians(value.Rotation.X), MathHelper.ToRadians(value.Rotation.Z));
-            Matrix m = Matrix.CreateScale(value.Scale) * Matrix.CreateFromQuaternion(rotation);
-            output.Write(m);
         }
 
         public override string GetRuntimeType(TargetPlatform targetPlatform)

@@ -40,6 +40,7 @@ namespace PressPlay.FFWD.Components
             {
                 device.RasterizerState = new RasterizerState() { FillMode = oldRaster.FillMode, CullMode = CullMode.CullClockwiseFace };
             }
+            device.RasterizerState = new RasterizerState() { FillMode = oldRaster.FillMode, CullMode = CullMode.None };
             device.BlendState = material.blendState;
 
             // Draw the model.
@@ -49,7 +50,14 @@ namespace PressPlay.FFWD.Components
                 for (int e = 0; e < mesh.Effects.Count; e++)
                 {
                     BasicEffect effect = mesh.Effects[e] as BasicEffect;
-                    effect.World = world;
+                    if (filter.sharedMesh.model.Tag is GameObjectAnimationData)
+                    {
+                        effect.World = (filter.sharedMesh.model.Tag as GameObjectAnimationData).BakedTransform * world;
+                    }
+                    else
+                    {
+                        effect.World = world;
+                    }
                     effect.View = cam.View();
                     effect.Projection = cam.projectionMatrix;
                     effect.LightingEnabled = false;
@@ -66,6 +74,7 @@ namespace PressPlay.FFWD.Components
                 }
             }
 
+            device.RasterizerState = oldRaster;
             if (transform.lossyScale.x < 0 || transform.lossyScale.y < 0 || transform.lossyScale.z < 0)
             {
                 device.RasterizerState = oldRaster;

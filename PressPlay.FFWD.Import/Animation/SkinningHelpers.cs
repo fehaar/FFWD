@@ -64,6 +64,34 @@ namespace PressPlay.FFWD.Import.Animation
             return new SkinningData(animationClips, bindPose, inverseBindPose, skeletonHierarchy);
         }
 
+
+        internal static GameObjectAnimationData GetGameObjectAnimationData(NodeContent input, ContentProcessorContext context)
+        {
+            AnimationContentDictionary dict = new AnimationContentDictionary();
+            Dictionary<string, Matrix> childAbsoluteTransforms = new Dictionary<string, Matrix>();
+
+            List<BoneContent> bones = new List<BoneContent>();
+            for (int i = 0; i < input.Children.Count; i++)
+            {
+                NodeContent child = input.Children[i];
+                bones.Add(
+                    new BoneContent()
+                    {
+                        Name = child.Name
+                    }
+                );
+                childAbsoluteTransforms.Add(child.Name, child.Transform);
+                foreach (var item in child.Animations)
+                {
+                    dict.Add(child.Name + ":" + item.Key, item.Value);
+                }
+            }
+
+            Dictionary<string, AnimationClip> animationClips = ProcessAnimations(dict, bones);
+
+            return new GameObjectAnimationData(animationClips, childAbsoluteTransforms);
+        }
+
         /// <summary>
         /// Converts an intermediate format content pipeline AnimationContentDictionary
         /// object to our runtime AnimationClip format.
