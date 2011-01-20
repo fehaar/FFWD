@@ -35,7 +35,7 @@ namespace PressPlay.FFWD
             }
             Matrix t;
             player.GetTransform(out t);
-            t = t * BaseTransform;
+            t = BaseTransform * t;
             t.Translation *= 0.01f;
             transform.SetLocalTransform(t);
         }
