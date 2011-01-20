@@ -50,6 +50,10 @@ namespace PressPlay.FFWD.Components
                 modelPart.Effect.TextureEnabled = true;
                 modelPart.Effect.Texture = material.texture;
             }
+            else
+            {
+                modelPart.Effect.DiffuseColor = (Vector3)material.color;
+            }
 
             modelPart.Draw();
 

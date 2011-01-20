@@ -32,6 +32,8 @@ namespace PressPlay.FFWD.Components
         public float aspect { get; set; }
         public int cullingMask { get; set; }
 
+        public static bool wireframeRender = false;
+
         private Color _backgroundColor = Color.black;
         public Color backgroundColor
         { 
@@ -163,6 +165,12 @@ namespace PressPlay.FFWD.Components
                 device.BlendState = BlendState.Opaque;
                 device.DepthStencilState = DepthStencilState.Default;
                 device.SamplerStates[0] = SamplerState.LinearClamp;
+                if (wireframeRender)
+                {
+                    RasterizerState state = new RasterizerState();
+                    state.FillMode = FillMode.WireFrame;
+                    device.RasterizerState = state;
+                }
             }
 
             for (int i = 0; i < _allCameras.Count; i++)
@@ -170,11 +178,14 @@ namespace PressPlay.FFWD.Components
                 _allCameras[i].doRender(device);
             }
 
+            if (wireframeRender)
+            {
+                device.RasterizerState = RasterizerState.CullCounterClockwise;
+            }
             if (UIRenderer.batch == null)
             {
                 UIRenderer.SetSpriteBatch(device);
             }
-
             UIRenderer.batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
             for (int i = 0; i < uiRenderQueue.Count; i++)
             {
