@@ -34,7 +34,6 @@ namespace PressPlay.FFWD.Components
             {
                 device.RasterizerState = new RasterizerState() { FillMode = oldRaster.FillMode, CullMode = CullMode.CullClockwiseFace };
             }
-            device.RasterizerState = new RasterizerState() { FillMode = oldRaster.FillMode, CullMode = CullMode.None };
             device.BlendState = material.blendState;
 
             // Draw the model.
@@ -68,7 +67,6 @@ namespace PressPlay.FFWD.Components
                 }
             }
 
-            device.RasterizerState = oldRaster;
             if (transform.lossyScale.x < 0 || transform.lossyScale.y < 0 || transform.lossyScale.z < 0)
             {
                 device.RasterizerState = oldRaster;
