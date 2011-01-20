@@ -47,6 +47,10 @@ namespace PressPlay.FFWD.SkinnedModel
 
         public void SetBones(Matrix[] bones)
         {
+            if (bones == null)
+            {
+                return;
+            }
             // skin all of the vertices
             for (int i = 0; i < vertexCount; i++)
             {

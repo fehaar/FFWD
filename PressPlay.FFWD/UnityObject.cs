@@ -173,15 +173,6 @@ namespace PressPlay.FFWD
             return (Application.Find(obj.GetInstanceID()) != null);
         }
 
-        public override bool Equals(object obj)
-        {
-            if (obj == null)
-            {
-                return (Application.Find(GetInstanceID()) != null);
-            }
-            return base.Equals(obj);
-        }
-
         public static void DontDestroyOnLoad(UnityObject target)
         {
             Application.DontDestroyOnLoad(target);

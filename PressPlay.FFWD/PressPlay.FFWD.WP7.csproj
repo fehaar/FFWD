@@ -65,6 +65,25 @@
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'PipelineDebug|Windows Phone'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Windows Phone\PipelineDebug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;WINDOWS_PHONE</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Windows Phone\Debug\PressPlay.FFWD.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <LangVersion>3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
   <ItemGroup>
     <None Include="Background.png">
       <XnaPlatformSpecific>true</XnaPlatformSpecific>
@@ -79,11 +98,15 @@
   <ItemGroup>
     <Compile Include="Animation\Animation.cs" />
     <Compile Include="Animation\AnimationClip.cs" />
-    <Compile Include="Animation\AnimationPlayer.cs" />
     <Compile Include="Animation\AnimationState.cs" />
+    <Compile Include="Animation\BaseAnimationPlayer.cs" />
+    <Compile Include="Animation\GameObjectAnimationData.cs" />
+    <Compile Include="Animation\GameObjectAnimationPlayer.cs" />
     <Compile Include="Animation\Keyframe.cs" />
     <Compile Include="Animation\QueueMode.cs" />
+    <Compile Include="Animation\SkinnedAnimationPlayer.cs" />
     <Compile Include="Animation\SkinningData.cs" />
+    <Compile Include="Animation\TransformAnimation.cs" />
     <Compile Include="Animation\WrapMode.cs" />
     <Compile Include="ApplicationSettings.cs" />
     <Compile Include="Asset.cs" />

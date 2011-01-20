@@ -23,12 +23,26 @@ namespace PressPlay.FFWD
     public class SkinningData
     {
         /// <summary>
+        /// The baked transform in terms of scale and rotation
+        /// </summary>
+        [ContentSerializer]
+        public Matrix BakedTransform { get; set; }
+
+        /// <summary>
         /// Gets a collection of animation clips. These are stored by name in a
         /// dictionary, so there could for instance be clips for "Walk", "Run",
         /// "JumpReallyHigh", etc.
         /// </summary>
         [ContentSerializer]
         public Dictionary<string, AnimationClip> AnimationClips { get; private set; }
+
+        /// <summary>
+        /// Gets a collection of animation clips. These are stored by name in a
+        /// dictionary, so there could for instance be clips for "Walk", "Run",
+        /// "JumpReallyHigh", etc.
+        /// </summary>
+        [ContentSerializer]
+        public Dictionary<string, Matrix> ChildAbsoluteTransforms { get; private set; }
 
         /// <summary>
         /// Bindpose matrices for each bone in the skeleton,
