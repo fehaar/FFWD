@@ -36,19 +36,6 @@ namespace PressPlay.FFWD
             this.sound = sound;
         }
 
-        //public void PrepareLoadContent()
-        //{
-        //    ContentHelper.LoadSound(clip);
-        //}
-
-        //public void EndLoadContent()
-        //{
-        //    if (sound == null)
-        //    {
-        //        sound = ContentHelper.GetSound(clip);
-        //    }
-        //}
-
         internal override void LoadAsset(AssetHelper assetHelper)
         {
             sound = assetHelper.Load<SoundEffect>("Sounds/" + clip);
