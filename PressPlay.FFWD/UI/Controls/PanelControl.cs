@@ -10,6 +10,11 @@ namespace PressPlay.FFWD.UI.Controls
     {
         public Rectangle clipRect;
 
+        protected float xMargin = 0;
+        protected float yMargin = 0;
+        protected float xSpacing = 0;
+        protected float ySpacing = 0;
+
         public PanelControl() : base()
         {
             gameObject.name = "PanelControl";
@@ -23,6 +28,9 @@ namespace PressPlay.FFWD.UI.Controls
         // Position child components in a column, with the given spacing between components
         public void LayoutColumn(float xMargin, float yMargin, float ySpacing)
         {
+            this.xMargin = xMargin;
+            this.yMargin = yMargin;
+            this.ySpacing = ySpacing;
 
             // Parent offset
             Vector2 offset = transform.position;
@@ -32,7 +40,8 @@ namespace PressPlay.FFWD.UI.Controls
             for (int i = 0; i < childCount; i++)
             {
                 Control child = this[i];
-                child.transform.position = new Vector2 { x = offset.x + xMargin, y = y };
+                //child.transform.position = new Vector2 { x = offset.x + xMargin, y = y };
+                child.transform.localPosition = new Vector2 { x = offset.x + xMargin, y = y };
                 y += child.bounds.Height + ySpacing;
             }
 
@@ -47,7 +56,10 @@ namespace PressPlay.FFWD.UI.Controls
         // Position child components in a row, with the given spacing between components
         public void LayoutRow(float xMargin, float yMargin, float xSpacing)
         {
-
+            this.xMargin = xMargin;
+            this.yMargin = yMargin;
+            this.xSpacing = xSpacing;
+            
             // Parent offset
             Vector2 offset = transform.position;
 
@@ -56,6 +68,7 @@ namespace PressPlay.FFWD.UI.Controls
             for (int i = 0; i < childCount; i++)
             {
                 Control child = this[i];
+
                 child.transform.position = new Vector2 { x = x, y = offset.y + yMargin };
 
                 x += child.bounds.Width + xSpacing;
@@ -70,6 +83,9 @@ namespace PressPlay.FFWD.UI.Controls
         // Position child components in a row, with the given spacing between components
         public void LayoutRowCentered(float xMargin, float yMargin, float xSpacing)
         {
+            this.xMargin = xMargin;
+            this.yMargin = yMargin;
+            this.xSpacing = xSpacing;
 
             // Parent offset
             Vector3 offset = transform.position;
@@ -95,9 +111,6 @@ namespace PressPlay.FFWD.UI.Controls
                 Control child = this[i];
                 child.transform.position = child.transform.position + new Vector3(-totalWidth * 0.5f, 0, 0);
             }
-
-
-
 
             InvalidateAutoSize();
         }

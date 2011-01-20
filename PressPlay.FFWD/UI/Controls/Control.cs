@@ -244,13 +244,19 @@ namespace PressPlay.FFWD.UI.Controls
             {
                 child.parent.RemoveChild(child);
             }
-            child.parent = this;
-            child.transform.parent = transform;
-
             if (children == null)
             {
                 children = new List<Control>();
             }
+
+            child.parent = this;
+            child.transform.parent = transform;
+
+            Vector2 childPos = child.transform.localPosition;
+            //Vector2 parentPos = transform.localPosition;
+            //childPos.y += parentPos.y;
+
+            child.transform.localPosition = new Vector3(childPos, children.Count + 1);
 
             children.Insert(index, child);
             OnChildAdded(index, child);
