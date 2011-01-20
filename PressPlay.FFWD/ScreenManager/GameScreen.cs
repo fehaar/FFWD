@@ -284,6 +284,10 @@ namespace PressPlay.FFWD.ScreenManager
                 else
                 {
                     // Transition finished!
+                    if (screenState != ScreenState.Hidden)
+                    {
+                        OnTransitionOffComplete();
+                    }
                     screenState = ScreenState.Hidden;
                 }
             }
@@ -298,6 +302,10 @@ namespace PressPlay.FFWD.ScreenManager
                 else
                 {
                     // Transition finished!
+                    if (screenState != ScreenState.Active)
+                    {
+                        OnTransitionOnComplete();
+                    }
                     screenState = ScreenState.Active;
                 }
             }
@@ -381,6 +389,8 @@ namespace PressPlay.FFWD.ScreenManager
             }
         }
 
+        public virtual void OnTransitionOnComplete(){}
+        public virtual void OnTransitionOffComplete(){}
         #endregion
     }
 }
