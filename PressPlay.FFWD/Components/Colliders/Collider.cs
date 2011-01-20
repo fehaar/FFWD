@@ -13,14 +13,21 @@ namespace PressPlay.FFWD.Components
         public bool isTrigger { get; set; }
         [ContentSerializer(Optional = true)]
         public string material { get; set; }
+        protected Body connectedBody;
+        protected Vector3 lastResizeScale;
         #endregion
 
         public Bounds bounds
         {
             get
             {
-                // TODO: Implement this!
-                return new Bounds();
+                // TODO: TEST this!
+                if (connectedBody == null) 
+                {
+                    return new Bounds(); 
+                }
+
+                return Physics.BoundsFromAABB(connectedBody._fixtureList._aabb, 10);
             }
         }
 
@@ -41,5 +48,15 @@ namespace PressPlay.FFWD.Components
         }
 
         internal abstract void AddCollider(Body body, float mass);
+
+        internal void ResizeConnectedBody()
+        {
+            if (lastResizeScale == transform.lossyScale) { return; }
+
+            Fixture fixture = connectedBody.GetFixtureList();
+            connectedBody.DestroyFixture(fixture);
+
+            AddCollider(connectedBody, connectedBody._mass);
+        }
     }
 }

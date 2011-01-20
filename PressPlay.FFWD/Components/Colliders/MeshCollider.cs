@@ -49,7 +49,7 @@ namespace PressPlay.FFWD.Components
                 };
                 tris.Add(tri);
             }
-            Physics.AddMesh(body, isTrigger, tris, mass);
+            connectedBody = Physics.AddMesh(body, isTrigger, tris, mass);
         }
 
         public void Select()

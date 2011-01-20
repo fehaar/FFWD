@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
 
 namespace PressPlay.FFWD.Components
 {
@@ -9,6 +10,7 @@ namespace PressPlay.FFWD.Components
         public Mesh sharedMesh { get; set; }
 
         private BasicEffect effect;
+        private BoundingSphere boundingSphere = new BoundingSphere();
 
         internal bool CanDraw()
         {
@@ -22,6 +24,16 @@ namespace PressPlay.FFWD.Components
                 return sharedMesh.GetModelMesh();
             }
             return null;
+        }
+
+        internal bool IsInBoundingFrustrum(BoundingFrustum boundingFrustum, Matrix world)
+        {
+            if (boundingSphere.Radius == 0)
+            {
+                sharedMesh.model.Meshes[0].BoundingSphere.Transform(ref world, out boundingSphere);
+            }
+
+            return boundingSphere.Intersects(boundingFrustum);
         }
 
         internal void Draw(GraphicsDevice device, Camera cam, Material[] materials)

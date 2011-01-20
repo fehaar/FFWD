@@ -62,7 +62,7 @@ namespace PressPlay.FFWD.UI.Controls
                 foreach (Control c in children)
                 {
                     //c.drawOffset.y = -scrollTracker.ViewRect.Y;
-                    PositionChildControls(new Vector2(0, -scrollTracker.ViewRect.Y), 0, 0, 0);
+                    PositionChildControls(new Vector2(0, -scrollTracker.ViewRect.Y));
                     //((UISpriteRenderer)c.renderer).origin.y = scrollTracker.ViewRect.Y;
                 }
             }
@@ -70,7 +70,7 @@ namespace PressPlay.FFWD.UI.Controls
             hasScrolled = scrollTracker.IsMoving;
         }
 
-        private void PositionChildControls(Vector2 topPosition, float xMargin, float yMargin, float ySpacing)
+        private void PositionChildControls(Vector2 topPosition)
         {
             if (children != null || children.Count > 0)
             {
