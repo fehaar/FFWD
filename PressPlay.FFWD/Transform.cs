@@ -80,6 +80,7 @@ namespace PressPlay.FFWD
                     _parent.children.Remove(gameObject);
                 }
                 Vector3 pos = position;
+                Quaternion rot = rotation;
                 _parent = value;
                 if (_parent == null)
                 {
@@ -91,6 +92,7 @@ namespace PressPlay.FFWD
                 }
                 _parent.children.Add(gameObject);
                 position = pos;
+                rotation = rot;
                 hasDirtyWorld = true;
             }
         }
