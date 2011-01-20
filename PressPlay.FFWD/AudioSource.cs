@@ -70,6 +70,8 @@ namespace PressPlay.FFWD
         {
             get
             {
+                if (soundEffect.IsDisposed) { return false; }
+
                 return (soundEffect != null && soundEffect.State == SoundState.Playing);
             }
         }
