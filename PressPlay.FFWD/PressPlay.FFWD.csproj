@@ -195,6 +195,10 @@
     <Compile Include="Components\Colliders\SphereCollider.cs" />
     <Compile Include="Components\IdMap.cs" />
     <Compile Include="Components\MeshFilter.cs" />
+    <Compile Include="Components\Particle.cs" />
+    <Compile Include="Components\ParticleAnimator.cs" />
+    <Compile Include="Components\ParticleEmitter.cs" />
+    <Compile Include="Components\Renderers\ParticleRenderer.cs" />
     <Compile Include="Components\Renderers\MeshRenderer.cs" />
     <Compile Include="Components\Renderers\Renderer.cs" />
     <Compile Include="Components\Renderers\SkinnedMeshRenderer.cs" />

@@ -102,6 +102,11 @@ namespace PressPlay.FFWD
             return value;            
         }
 
+        public static int CeilToInt(float f)
+        {
+            return (int)Math.Ceiling((double)f);
+        }
+
         public static int FloorToInt(float f)
         {
             return (int)Math.Floor((double)f);

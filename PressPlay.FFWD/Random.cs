@@ -38,25 +38,34 @@ namespace PressPlay.FFWD
             }
         }
 
+        /// <summary>
+        /// NOTE: This is a bad implementation of this as we statistically get more points on the outside of the circle.
+        /// </summary>
         public static Vector3 insideUnitSphere
         {
             get
             {
-                float remain = 1;
-                Vector3 v = new Vector3(value, 0, 0);
-                remain -= v.x;
-                v.y = value * remain;
-                v.z = remain - v.y;
+                Vector3 v = new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), Random.Range(-1, 1));
+                if (v.sqrMagnitude > 1.0f)
+                {
+                    v.Normalize();
+                }
                 return v;
             }
         }
 
+        /// <summary>
+        /// NOTE: This is a bad implementation of this as we statistically get more points on the outside of the circle.
+        /// </summary>
         public static Vector2 insideUnitCircle
         {
             get
             {
-                Vector2 v = new Vector2(value, 0);
-                v.y = 1 - v.x;
+                Vector2 v = new Vector2(Random.Range(-1, 1), Random.Range(-1, 1));
+                if (v.sqrMagnitude > 1.0f)
+                {
+                    v.Normalize();
+                }
                 return v;
             }
         }
