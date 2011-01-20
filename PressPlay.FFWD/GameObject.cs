@@ -389,7 +389,14 @@ namespace PressPlay.FFWD
                 {
                     return comp;
                 }
-                go = go.transform.parent.gameObject;
+                if (go.transform.parent == null)
+                {
+                    go = null;
+                }
+                else
+                {
+                    go = go.transform.parent.gameObject;
+                }
             } while (go != null);
             return null;
         }

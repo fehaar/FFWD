@@ -23,8 +23,6 @@ namespace PressPlay.FFWD.Import.Animation
     {
         public List<CpuSkinnedModelPartContent> ModelParts = new List<CpuSkinnedModelPartContent>();
         public SkinningData SkinningData;
-        public float Scale = 1.0f;
-        public Microsoft.Xna.Framework.Vector3 Rotation = Microsoft.Xna.Framework.Vector3.Zero;
 
         public void AddModelPart(
             string name,

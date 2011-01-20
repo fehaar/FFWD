@@ -20,7 +20,7 @@ namespace PressPlay.FFWD
     /// This class was taken from the original Skinned Model Sample:
     /// http://creators.xna.com/en-US/sample/skinnedmodel 
     /// </summary>
-    public class AnimationPlayer
+    public class SkinnedAnimationPlayer
     {
         // Information about the currently playing animation clip.
         private AnimationClip currentClipValue;
@@ -80,7 +80,7 @@ namespace PressPlay.FFWD
         /// <summary>
         /// Constructs a new animation player.
         /// </summary>
-        public AnimationPlayer(SkinningData skinningData)
+        public SkinnedAnimationPlayer(SkinningData skinningData)
         {
             if (skinningData == null)
                 throw new ArgumentNullException("skinningData");

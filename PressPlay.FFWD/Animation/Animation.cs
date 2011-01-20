@@ -30,7 +30,34 @@ namespace PressPlay.FFWD.Components
         private Dictionary<string, AnimationClip> clips = new Dictionary<string, AnimationClip>();
         private Dictionary<string, AnimationState> states = new Dictionary<string, AnimationState>();
         private string animationIndex;
-        private AnimationPlayer animationPlayer;
+        private SkinnedAnimationPlayer animationPlayer;
+
+        public override void Awake()
+        {
+            MeshFilter filter = GetComponentInChildren<MeshFilter>();
+            if (filter != null)
+            {
+                if (filter.sharedMesh.model != null)
+                {
+                    GameObjectAnimationData data = filter.sharedMesh.model.Tag as GameObjectAnimationData;
+                    if (data != null)
+                    {
+                        InitializeChildAnimation(data);
+                    }
+                }
+            }
+            else
+            {
+                SkinnedMeshRenderer smr = GetComponentInChildren<SkinnedMeshRenderer>();
+                if (smr.sharedMesh != null && smr.sharedMesh.skinnedModel != null)
+                {
+                    if (smr.sharedMesh.skinnedModel.SkinningData.AnimationClips != null)
+                    {
+                        Initialize(smr.sharedMesh.skinnedModel.SkinningData);
+                    }
+                }
+            }
+        }
 
         public AnimationState this[string index]
         {
@@ -153,13 +180,35 @@ namespace PressPlay.FFWD.Components
 
         }
 
+        internal void InitializeChildAnimation(GameObjectAnimationData modelData)
+        {
+            Transform[] children = GetComponentsInChildren<Transform>();
+            foreach (string name in modelData.AnimationClips.Keys)
+            {
+                for (int i = 0; i < children.Length; i++)
+                {
+                    if (children[i].gameObject == gameObject)
+                    {
+                        continue;
+                    }
+                    if (name.Contains(children[i].gameObject.name + ":"))
+                    {
+                        TransformAnimation anim = children[i].gameObject.AddComponent<TransformAnimation>();
+                        anim.BaseTransform = Matrix.Invert(modelData.ChildAbsoluteTransforms[children[i].gameObject.name]);
+                        anim.AddClip(modelData.AnimationClips[name], name.Replace(anim.gameObject.name + ":", ""));
+                        break;
+                    }
+                }
+            }
+        }
+
         internal void Initialize(SkinningData modelData)
         {
             foreach (string name in modelData.AnimationClips.Keys)
             {
                 AddClip(modelData.AnimationClips[name], name);
             }
-            animationPlayer = new AnimationPlayer(modelData);
+            animationPlayer = new SkinnedAnimationPlayer(modelData);
             if (playAutomatically)
             {
                 animationPlayer.StartClip(clip, states[clip.name]);
@@ -179,7 +228,6 @@ namespace PressPlay.FFWD.Components
         {
 
         }
-
         #endregion
 
         internal Microsoft.Xna.Framework.Matrix[] GetTransforms()

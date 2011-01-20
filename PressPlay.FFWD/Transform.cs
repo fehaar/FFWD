@@ -288,7 +288,7 @@ namespace PressPlay.FFWD
         }
         #endregion
 
-        #region Private methods
+        #region Private and internal methods
         private void calculateWorld()
         {
             _hasDirtyWorld = false;
@@ -298,6 +298,20 @@ namespace PressPlay.FFWD
             if (_parent != null)
             {
                 _world = _world * _parent.world;
+            }
+        }
+
+        internal void SetLocalTransform(Matrix m)
+        {
+            Microsoft.Xna.Framework.Vector3 scale;
+            Microsoft.Xna.Framework.Quaternion rot;
+            Microsoft.Xna.Framework.Vector3 pos;
+            if (m.Decompose(out scale, out rot, out pos))
+            {
+                _localScale = scale;
+                _localRotation = new Quaternion(rot);
+                _localPosition = pos;
+                hasDirtyWorld = true;
             }
         }
 
