@@ -28,6 +28,12 @@ namespace PressPlay.FFWD.Components
 
             Matrix world = transform.world;
 
+            //viewport culling
+            //if (!filter.IsInBoundingFrustrum(cam.GetBoundingFrustum(), world))
+            //{
+            //    return;
+            //}
+
             // Do we have negative scale - if so, switch culling
             RasterizerState oldRaster = device.RasterizerState;
             if (transform.lossyScale.x < 0 || transform.lossyScale.y < 0 || transform.lossyScale.z < 0)

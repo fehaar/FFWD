@@ -78,8 +78,9 @@ namespace PressPlay.FFWD
                         Box2D.XNA.Transform t;
                         body.GetTransform(out t);
                         comp.transform.SetPositionFromPhysics(t.Position, t.GetAngle());
-                        comp.collider.ResizeConnectedBody();
+                        
                         //TODO: Resize body shape to the current transform.scale of the components game object. Maybe this should be done before physics update. It should only be hard coded in AddCollider in static objects
+                        //comp.collider.ResizeConnectedBody();
                     }
                     body.SetActive(comp.gameObject.active);
                 }

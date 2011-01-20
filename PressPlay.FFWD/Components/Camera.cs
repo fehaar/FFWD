@@ -121,6 +121,11 @@ namespace PressPlay.FFWD.Components
             return viewPort.Project(position, projectionMatrix, View(), Matrix.Identity);
         }
 
+        internal BoundingFrustum GetBoundingFrustum()
+        {
+            return new BoundingFrustum(_view * projectionMatrix);
+        }
+
         private static List<UIRenderer> uiRenderQueue = new List<UIRenderer>();
         internal static void AddRenderer(Renderer renderer)
         {

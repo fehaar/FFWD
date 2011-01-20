@@ -30,7 +30,7 @@ namespace PressPlay.FFWD
 
         internal override void LoadAsset(AssetHelper assetHelper)
         {
-            if (asset != null)
+            if (!String.IsNullOrEmpty(asset))
             {
                 skinnedModel = assetHelper.Load<CpuSkinnedModel>("Models/" + asset);
                 if (skinnedModel != null)
