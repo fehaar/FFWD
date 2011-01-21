@@ -10,8 +10,8 @@ namespace PressPlay.FFWD.Components
 {
     public class ParticleRenderer : Renderer
     {
-        public int lengthScale;
-        public int velocityScale;
+        public float lengthScale;
+        public float velocityScale;
         public float maxParticleSize;
         public Vector3 uvAnimation;
 

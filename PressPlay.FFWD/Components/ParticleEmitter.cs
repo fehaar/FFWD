@@ -39,8 +39,28 @@ namespace PressPlay.FFWD.Components
         [ContentSerializerIgnore]
         public Vector3 minEmitterRange { get; set; }
 
+        private Particle[] _particles;
         [ContentSerializerIgnore]
-        public Particle[] particles = null;
+        public Particle[] particles       
+        {
+            get
+            {
+                return _particles;
+            }
+            set
+            {
+                _particles = value;
+                particlesInUse = 0;
+                for (int i = 0; i < _particles.Length; i++)
+                {
+                    if (_particles[i].Energy > 0)
+                    {
+                        particlesInUse++;
+                    }
+                }
+            }
+        }
+
         internal int particlesAllocated;
         internal int particlesInUse;
 
@@ -64,7 +84,7 @@ namespace PressPlay.FFWD.Components
                 //particles.AllocateMemory(MaxEmission);
                 int parts = Mathf.FloorToInt(maxEmission);
                 particles = new Particle[parts];
-                particlesInUse = parts;
+                particlesInUse = 0;
                 particlesAllocated = parts;
             }
             else
@@ -72,7 +92,7 @@ namespace PressPlay.FFWD.Components
                 //particles.AllocateMemory(MaxEmission * (int)Math.Max(1, MaxEnergy * 2));
                 particlesAllocated = Mathf.CeilToInt(maxEmission) * (int)Math.Max(1, maxEnergy * 2);
                 particles = new Particle[particlesAllocated];
-                particlesInUse = particlesAllocated;
+                particlesInUse = 0;
             }
             if (minEmission <= 0)
             {
@@ -222,17 +242,31 @@ namespace PressPlay.FFWD.Components
                 }
             }
 
+            if (numToEmit == 0 && particlesInUse == 0)
+            {
+                return;
+            }
+
+            int particlesToCheck = particlesInUse;
             for (int i = 0; i < particles.Length; i++)
             {
                 if (particles[i].Energy > 0)
                 {
-                    particles[i].Energy -= Time.deltaTime;
+                    if ((particles[i].Energy -= Time.deltaTime) <= 0)
+                    {
+                        particlesInUse--;
+                    }
+                    if (--particlesToCheck <= 0 && numToEmit == 0)
+                    {
+                        break;
+                    }
                 }
                 else
                 {
                     if (numToEmit > 0)
                     {
                         numToEmit--;
+                        particlesInUse++;
                         SetNewParticleAt(i);
                     }
                 }
@@ -279,7 +313,7 @@ namespace PressPlay.FFWD.Components
 
         private float GetNewEmissionTime()
         {
-            return Random.Range(minEmission, maxEmission);
+            return Random.Range(1.0f / minEmission, 1.0f / maxEmission);
         }
 
 
