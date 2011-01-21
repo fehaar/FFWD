@@ -469,31 +469,41 @@ namespace Box2D.XNA
 	        {
 		        for (Body b = _bodyList; b != null; b = b.GetNext())
 		        {
-                    Transform xf;
-                    b.GetTransform(out xf);
-			        for (Fixture f = b.GetFixtureList(); f != null; f = f.GetNext())
-			        {
-                        if (b.IsActive() == false)
+                    if (b._fixtureList != null)
+                    {
+                        Transform xf;
+                        b.GetTransform(out xf);
+                        for (Fixture f = b.GetFixtureList(); f != null; f = f.GetNext())
                         {
-                            DrawShape(f, xf, Color.DarkGray);
+                            if (b.IsActive() == false)
+                            {
+                                DrawShape(f, xf, Color.DarkGray);
+                            }
+                            else if (b.GetType() == BodyType.Static)
+                            {
+                                if (f._isSensor)
+                                {
+                                    DrawShape(f, xf, Color.LimeGreen);
+                                }
+                                else
+                                {
+                                    DrawShape(f, xf, Color.Green);
+                                }
+                            }
+                            else if (b.GetType() == BodyType.Kinematic)
+                            {
+                                DrawShape(f, xf, Color.GreenYellow);
+                            }
+                            else if (b.IsAwake() == false)
+                            {
+                                DrawShape(f, xf, Color.Pink);
+                            }
+                            else
+                            {
+                                DrawShape(f, xf, Color.HotPink);
+                            }
                         }
-                        else if (b.GetType() == BodyType.Static)
-                        {
-                            DrawShape(f, xf, Color.Green);
-                        }
-                        else if (b.GetType() == BodyType.Kinematic)
-                        {
-                            DrawShape(f, xf, Color.GreenYellow);
-                        }
-				        else if (b.IsAwake() == false)
-				        {
-					        DrawShape(f, xf, Color.Pink);
-				        }
-				        else
-				        {
-					        DrawShape(f, xf, Color.HotPink);
-				        }
-			        }
+                    }
 		        }
 	        }
 
