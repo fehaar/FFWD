@@ -256,10 +256,7 @@ namespace PressPlay.FFWD.Components
                     {
                         particlesInUse--;
                     }
-                    if (--particlesToCheck <= 0 && numToEmit == 0)
-                    {
-                        break;
-                    }
+                    particlesToCheck--;
                 }
                 else
                 {
@@ -269,6 +266,10 @@ namespace PressPlay.FFWD.Components
                         particlesInUse++;
                         SetNewParticleAt(i);
                     }
+                }
+                if (particlesToCheck == 0 && numToEmit == 0)
+                {
+                    break;
                 }
             }
         }
@@ -308,7 +309,7 @@ namespace PressPlay.FFWD.Components
                 particles[index].Position += gameObject.transform.position;
             }
 
-            particles[index].Size = Random.Range(minSize, maxSize) / 10;
+            particles[index].Size = Random.Range(minSize, maxSize);
         }
 
         private float GetNewEmissionTime()
