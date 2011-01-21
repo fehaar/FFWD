@@ -50,7 +50,9 @@ namespace PressPlay.FFWD.UI
         {
             //UIRenderer.batch.DrawString(font, text, transform.position, material.color);
             float depth = 1 - ((float)transform.position / 10000f);
-            UIRenderer.batch.DrawString(font, text, transform.position, material.color, 0, Microsoft.Xna.Framework.Vector2.Zero, transform.localScale, effects, depth);
+
+            //UIRenderer.batch.DrawString(font, text, transform.position, material.color, 0, Microsoft.Xna.Framework.Vector2.Zero, transform.localScale, effects, depth);
+            UIRenderer.batch.DrawString(font, WordWrap(text, control.bounds.Width, font), transform.position, material.color, 0, Microsoft.Xna.Framework.Vector2.Zero, transform.lossyScale, effects, depth);
         }
 
         protected static char[] splitTokens = { ' ', '-' };
@@ -60,14 +62,14 @@ namespace PressPlay.FFWD.UI
         /// it's not completely accurate with respect to kerning & spaces and
         /// doesn't handle localized text, but is easy to read for sample use.
         /// </summary>
-        protected static string WordWrap(string input, int width, SpriteFont font)
+        protected string WordWrap(string input, int width, SpriteFont font)
         {
             StringBuilder output = new StringBuilder();
             output.Length = 0;
 
             string[] wordArray = input.Split(splitTokens, StringSplitOptions.None);
 
-            int space = (int)font.MeasureString(spaceString).X;
+            int space = (int)(font.MeasureString(spaceString).X*transform.lossyScale.x);
 
             int lineLength = 0;
             int wordLength = 0;
@@ -75,7 +77,7 @@ namespace PressPlay.FFWD.UI
 
             for (int i = 0; i < wordArray.Length; i++)
             {
-                wordLength = (int)font.MeasureString(wordArray[i]).X;
+                wordLength = (int)(font.MeasureString(wordArray[i]).X*transform.lossyScale.x);
 
                 // don't overflow the desired width unless there are no other words on the line
                 if (wordCount > 0 && wordLength + lineLength > width)

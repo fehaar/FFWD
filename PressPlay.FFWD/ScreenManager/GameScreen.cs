@@ -279,6 +279,10 @@ namespace PressPlay.FFWD.ScreenManager
                 if (UpdateTransition(gameTime, transitionOffTime, 1))
                 {
                     // Still busy transitioning.
+                    if (screenState != ScreenState.TransitionOff)
+                    {
+                        OnTransitionOffBegin();
+                    }
                     screenState = ScreenState.TransitionOff;
                 }
                 else
@@ -297,6 +301,10 @@ namespace PressPlay.FFWD.ScreenManager
                 if (UpdateTransition(gameTime, transitionOnTime, -1))
                 {
                     // Still busy transitioning.
+                    if (screenState != ScreenState.TransitionOn)
+                    {
+                        OnTransitionOnBegin();
+                    }
                     screenState = ScreenState.TransitionOn;
                 }
                 else
@@ -389,8 +397,11 @@ namespace PressPlay.FFWD.ScreenManager
             }
         }
 
-        public virtual void OnTransitionOnComplete(){}
-        public virtual void OnTransitionOffComplete(){}
+        public virtual void OnTransitionOnBegin() { }
+        public virtual void OnTransitionOnComplete(){ }
+        public virtual void OnTransitionOffBegin() { }
+        public virtual void OnTransitionOffComplete(){ }
+
         #endregion
     }
 }

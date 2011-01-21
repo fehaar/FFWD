@@ -26,12 +26,15 @@ namespace PressPlay.FFWD.UI.Controls
 
         public override void Update()
         {
-            
-            Vector2 size = ComputeSize();
+
+            /*
             scrollTracker.CanvasRect.X = bounds.X;
             scrollTracker.CanvasRect.Y = bounds.Y;
             scrollTracker.CanvasRect.Width = bounds.Width;
             scrollTracker.CanvasRect.Height = bounds.Height;
+            */
+
+            scrollTracker.CanvasRect = bounds;
             scrollTracker.Update();
             
             base.Update();
@@ -57,7 +60,7 @@ namespace PressPlay.FFWD.UI.Controls
                 scrollTracker.HandleInput(input);
             }
 
-            if (hasScrolled)
+            if (hasScrolled && children != null)
             {
                 foreach (Control c in children)
                 {
