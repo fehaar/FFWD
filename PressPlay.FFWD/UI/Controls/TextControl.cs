@@ -100,17 +100,6 @@ namespace PressPlay.FFWD.UI.Controls
             renderer.material.color = color;
         }
 
-        /*
-        public override void Draw(DrawContext context)
-        {
-            base.Draw(context);
-
-            context.SpriteBatch.DrawString(font, Text, context.DrawOffset, Color);
-        }
-        */
-
-
-
         override public Vector2 ComputeSize()
         {
             return font.MeasureString(text);

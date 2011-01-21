@@ -126,6 +126,8 @@ namespace PressPlay.FFWD.UI.Controls
 
             ViewRect.X = (int)ViewOrigin.x;
             ViewRect.Y = (int)ViewOrigin.y;
+
+            //Debug.Log("ViewRect: "+ViewRect+" CanvasRect: "+CanvasRect+" ViewMin: "+viewMin+" ViewMax: "+viewMax);
         }
 
         // This must be called manually each tick that the ScrollTracker is active.
