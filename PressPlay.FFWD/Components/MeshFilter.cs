@@ -64,6 +64,7 @@ namespace PressPlay.FFWD.Components
             effect.VertexColorEnabled = false;
             effect.Alpha = 1.0f;
 
+            // TODO: This can be optimized by not recreating data every time
             VertexPositionNormalTexture[] data = new VertexPositionNormalTexture[sharedMesh.vertices.Length];
             for (int i = 0; i < sharedMesh.vertices.Length; i++)
             {

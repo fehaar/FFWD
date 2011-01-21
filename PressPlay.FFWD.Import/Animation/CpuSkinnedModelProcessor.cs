@@ -57,11 +57,8 @@ namespace PressPlay.FFWD.Import.Animation
 
             // cpu skinning can support any number of bones, so we'll just use int.MaxValue as our limit.
             outputModel.SkinningData = SkinningHelpers.GetSkinningData(input, context, int.MaxValue);
-
-            Microsoft.Xna.Framework.Quaternion rotation = Microsoft.Xna.Framework.Quaternion.CreateFromYawPitchRoll(MathHelper.ToRadians(RotationY), MathHelper.ToRadians(RotationX), MathHelper.ToRadians(RotationZ));
-            Matrix m = Matrix.CreateScale(Scale) * Matrix.CreateFromQuaternion(rotation);
-
-            outputModel.SkinningData.BakedTransform = m;
+            outputModel.Scale = Scale;
+            outputModel.Rotation = new Vector3(RotationX, RotationY, RotationZ);
 
             ProcessNode(input);
 
