@@ -22,6 +22,7 @@ namespace PressPlay.FFWD
         private float distance;
         private int layerMask;
         private List<RaycastHit> _hits = new List<RaycastHit>();
+        private float nearest = float.PositiveInfinity;
 
         internal float rayCastCallback(Fixture fixture, PressPlay.FFWD.Vector2 point, PressPlay.FFWD.Vector2 normal, float fraction)
         {
@@ -36,8 +37,12 @@ namespace PressPlay.FFWD
             {
                 if (findClosest)
                 {
-                    _hits.Clear();
-                    _hits.Add(new RaycastHit() { body = fixture.GetBody(), point = point, normal = normal, distance = dist, collider = coll });
+                    if (dist < nearest)
+                    {
+                        nearest = dist;
+                        _hits.Clear();
+                        _hits.Add(new RaycastHit() { body = fixture.GetBody(), point = point, normal = normal, distance = dist, collider = coll });
+                    }
                     return fraction;
                 }
                 else

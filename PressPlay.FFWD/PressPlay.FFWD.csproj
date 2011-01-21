@@ -188,6 +188,7 @@
     <Compile Include="Component.cs" />
     <Compile Include="Components\Camera.cs" />
     <Compile Include="Components\Colliders\BoxCollider.cs" />
+    <Compile Include="Components\Colliders\CapsuleCollider.cs" />
     <Compile Include="Components\Colliders\Collider.cs" />
     <Compile Include="Components\Colliders\ForceMode.cs" />
     <Compile Include="Components\Colliders\MeshCollider.cs" />

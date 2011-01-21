@@ -4,15 +4,16 @@ using System.Linq;
 using System.Text;
 using Box2D.XNA;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework;
 
 namespace PressPlay.FFWD.Components
 {
     public abstract class Collider : Component
     {
         #region ContentProperties
-        public bool isTrigger { get; set; }
+        public bool isTrigger;
         [ContentSerializer(Optional = true)]
-        public string material { get; set; }
+        public string material;
         #endregion
 
         internal Body connectedBody;
@@ -40,6 +41,7 @@ namespace PressPlay.FFWD.Components
                 def.userData = this;
                 Body body = Physics.AddBody(def);
                 AddCollider(body, 1);
+                body.Rotation = -MathHelper.ToRadians(transform.rotation.eulerAngles.y);
             }
         }
 
@@ -56,7 +58,7 @@ namespace PressPlay.FFWD.Components
 
             Fixture fixture = connectedBody.GetFixtureList();
             connectedBody.DestroyFixture(fixture);
-
+            
             AddCollider(connectedBody, connectedBody._mass);
         }
     }

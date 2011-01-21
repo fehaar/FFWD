@@ -5,7 +5,14 @@ using System.Text;
 using PressPlay.FFWD.ScreenManager;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+
+#if WINDOWS_PHONE
 using Microsoft.Xna.Framework.Input.Touch;
+#endif
+ 
+#if WINDOWS
+using Microsoft.Xna.Framework.Input;
+#endif
 
 namespace PressPlay.FFWD.UI.Controls
 {
@@ -33,6 +40,8 @@ namespace PressPlay.FFWD.UI.Controls
     public class ButtonControl : Control
     {
 
+        public TextControl textControl;
+
         public ButtonControl(Texture2D texture, string link)
             : this(texture, link, "", null, Vector2.zero)
         {
@@ -49,9 +58,9 @@ namespace PressPlay.FFWD.UI.Controls
 
             if (text != "" && font != null)
             {
-                TextControl t = new TextControl(text, font, Color.white, textPosition);
-                AddChild(t);
-                t.transform.localPosition += new Vector3(0,100,0);
+                textControl = new TextControl(text, font, Color.white, textPosition);
+                AddChild(textControl);
+                //t.transform.localPosition += new Vector3(0,100,0);
             }
         }
 
@@ -91,6 +100,7 @@ namespace PressPlay.FFWD.UI.Controls
         {
             base.HandleInput(input);
 
+#if WINDOWS_PHONE
             if(isInputWithinBounds(input)){
                 foreach (GestureSample sample in input.Gestures)
                 {
@@ -102,6 +112,27 @@ namespace PressPlay.FFWD.UI.Controls
                             break;
                     }
                 }
+            }
+#else
+            MouseState ms = Mouse.GetState(); 
+            
+            if (ms.LeftButton == ButtonState.Pressed && IsMouseClickWithinBounds(new Point(ms.X, ms.Y)))
+            {
+                OnClickMethod();
+            }
+
+#endif
+        }
+
+        protected bool IsMouseClickWithinBounds(Point p)
+        {
+            if (useCustomClickRect)
+            {
+                return clickRect.Contains(p);
+            }
+            else
+            {
+                return bounds.Contains(p);
             }
         }
 
