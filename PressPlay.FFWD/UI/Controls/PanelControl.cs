@@ -42,7 +42,9 @@ namespace PressPlay.FFWD.UI.Controls
                 Control child = this[i];
                 //child.transform.position = new Vector2 { x = offset.x + xMargin, y = y };
                 child.transform.localPosition = new Vector2 { x = offset.x + xMargin, y = y };
-                y += child.bounds.Height + ySpacing;
+                //y += child.bounds.Height + ySpacing;
+
+                y += size.y + ySpacing;
             }
 
             InvalidateAutoSize();
@@ -61,22 +63,28 @@ namespace PressPlay.FFWD.UI.Controls
             this.xSpacing = xSpacing;
             
             // Parent offset
-            Vector2 offset = transform.position;
+            //Vector2 offset = transform.position;
+            Vector2 offset = Vector2.zero;
 
             float x = xMargin + offset.x;
+
+            Debug.Log("Row size before layout: " + bounds);
 
             for (int i = 0; i < childCount; i++)
             {
                 Control child = this[i];
 
-                child.transform.position = new Vector2 { x = x, y = offset.y + yMargin };
+                child.transform.localPosition = new Vector2 { x = x, y = offset.y + yMargin };
 
-                x += child.bounds.Width + xSpacing;
+                Debug.Log("x: " + x + " child.bounds.Width: " + child.bounds.Width);
 
-                //Debug.Log("x: "+x+" child.bounds.Width: " + child.bounds.Width);
+                //x += child.bounds.Width * (1.09f + 1 - child.transform.lossyScale.x) + xSpacing;
+                x += child.size.x + xSpacing;
             }
 
             InvalidateAutoSize();
+
+            Debug.Log("Row size after layout: "+bounds);
         }
 
 
