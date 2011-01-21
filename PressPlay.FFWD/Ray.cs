@@ -17,12 +17,16 @@ namespace PressPlay.FFWD
                 ray.Position = value;
             }
         }
-        public Vector3 direction {
-            get {
+
+        public Vector3 direction 
+        {
+            get 
+            {
                 return ray.Direction;
             }
-            set {
-                ray.Direction = value;
+            set 
+            {
+                ray.Direction = value.normalized;
             }
         }
 
