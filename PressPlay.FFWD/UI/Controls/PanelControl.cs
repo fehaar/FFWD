@@ -68,7 +68,7 @@ namespace PressPlay.FFWD.UI.Controls
 
             float x = xMargin + offset.x;
 
-            Debug.Log("Row size before layout: " + bounds);
+            //Debug.Log("Row size before layout: " + bounds);
 
             for (int i = 0; i < childCount; i++)
             {
@@ -76,7 +76,7 @@ namespace PressPlay.FFWD.UI.Controls
 
                 child.transform.localPosition = new Vector2 { x = x, y = offset.y + yMargin };
 
-                Debug.Log("x: " + x + " child.bounds.Width: " + child.bounds.Width);
+                //Debug.Log("x: " + x + " child.bounds.Width: " + child.bounds.Width);
 
                 //x += child.bounds.Width * (1.09f + 1 - child.transform.lossyScale.x) + xSpacing;
                 x += child.size.x + xSpacing;
@@ -84,7 +84,7 @@ namespace PressPlay.FFWD.UI.Controls
 
             InvalidateAutoSize();
 
-            Debug.Log("Row size after layout: "+bounds);
+            //Debug.Log("Row size after layout: "+bounds);
         }
 
 
