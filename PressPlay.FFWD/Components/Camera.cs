@@ -282,5 +282,17 @@ namespace PressPlay.FFWD.Components
             return q;
         }
         #endregion
+
+        internal static Camera FindByName(string name)
+        {
+            for (int i = 0; i < _allCameras.Count; i++)
+            {
+                if (_allCameras[i].name == name)
+                {
+                    return _allCameras[i];
+                }
+            }
+            return null;
+        }
     }
 }

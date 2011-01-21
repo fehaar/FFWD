@@ -168,6 +168,11 @@ namespace PressPlay.FFWD
 #if DEBUG
             graphics.Stop();
             double total = scripts.Elapsed.TotalSeconds + graphics.Elapsed.TotalSeconds + physics.Elapsed.TotalSeconds;
+            if (ApplicationSettings.ShowDebugLines)
+            {
+                // NOTE: This is a brutal hack of which camera to display
+                Debug.DrawLines(GraphicsDevice, Camera.FindByName(ApplicationSettings.DebugLineCamera));
+            }
             if (ApplicationSettings.ShowFPSCounter)
             {
                 Debug.Display("FPS", frameRate);
