@@ -1,12 +1,31 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Xna.Framework.Graphics;
+using PressPlay.FFWD.Components;
+using Microsoft.Xna.Framework;
 
 namespace PressPlay.FFWD
 {
     public class Debug
     {
+        internal struct Line
+        {
+            internal Line(Vector3 start, Vector3 end, Color color)
+            {
+                this.start = start;
+                this.end = end;
+                this.color = color;
+            }
+
+            internal Microsoft.Xna.Framework.Vector3 start;
+            internal Microsoft.Xna.Framework.Vector3 end;
+            internal Microsoft.Xna.Framework.Color color;
+        }
+
         private static List<UnityObject> gosToDisplay = new List<UnityObject>();
         private static Dictionary<string, string> _debugDisplay = new Dictionary<string, string>();
+
+        private static List<Line> lines;
 
         public static bool DisplayLog = false;
 
@@ -70,14 +89,83 @@ namespace PressPlay.FFWD
 
         public static void DrawLine(Vector3 start, Vector3 end, Color color)
         {
-            // TODO : Add implementation of method
-            //throw new NotImplementedException("Method not implemented.");
+            if (lines == null)
+            {
+                lines = new List<Line>();
+            }
+            lines.Add(new Line(start, end, color));
         }
 
-        public static void DrawRay(Vector3 start, Vector3 end, Color color)
+        public static void DrawRay(Vector3 start, Vector3 direction, Color color)
         {
-            // TODO : Add implementation of method
-            //throw new NotImplementedException("Method not implemented.");
+            if (lines == null)
+            {
+                lines = new List<Line>();
+            }
+            lines.Add(new Line(start, start + (direction * 10000f), color));
+        }
+
+        private static BasicEffect effect;
+        internal static void DrawLines(GraphicsDevice device, Camera cam)
+        {
+            if (lines == null || lines.Count == 0)
+            {
+                return;
+            }
+
+            if (cam == null)
+            {
+                lines.Clear();
+                return;
+            }
+
+            if (effect == null)
+            {
+                effect = new BasicEffect(device);
+            }
+
+            RasterizerState oldrasterizerState = device.RasterizerState;
+            RasterizerState rasterizerState = new RasterizerState();
+            rasterizerState.CullMode = CullMode.None;
+            device.RasterizerState = rasterizerState;
+
+            effect.World = Matrix.Identity;
+            effect.View = cam.View();
+            effect.Projection = cam.projectionMatrix;
+            effect.VertexColorEnabled = true;
+            effect.Alpha = 1.0f;
+
+            // TODO: This can be optimized by not recreating data every time
+            VertexPositionColor[] data = new VertexPositionColor[lines.Count * 2];
+            int dataPos = 0;
+            for (int i = 0; i < lines.Count; i++)
+            {
+                data[dataPos++] = new VertexPositionColor()
+                {
+                    Position = lines[i].start,
+                    Color = lines[i].color
+                };
+                data[dataPos++] = new VertexPositionColor()
+                {
+                    Position = lines[i].end,
+                    Color = lines[i].color
+                };
+            }
+
+            foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+                device.DrawUserPrimitives<VertexPositionColor>(
+                    PrimitiveType.LineList,
+                    data,
+                    0,
+                    data.Length / 2
+                );
+            }
+
+            device.RasterizerState = oldrasterizerState;
+
+            lines.Clear();
         }
     }
 }
