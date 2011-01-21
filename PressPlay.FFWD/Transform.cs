@@ -242,7 +242,7 @@ namespace PressPlay.FFWD
         {
             get
             {
-                return Microsoft.Xna.Framework.Vector3.Normalize(world.Right);
+                return -Microsoft.Xna.Framework.Vector3.Normalize(world.Right);
             }
         }
 
