@@ -120,6 +120,8 @@ namespace PressPlay.FFWD.Components
         internal void MoveRotation(Quaternion localRotation)
         {
             // TODO: This does not work yet...
+            body.SetTransform(body.GetPosition(), localRotation.eulerAngles.y);
+            Physics.RemoveStays(collider);
         }
     }
 }
