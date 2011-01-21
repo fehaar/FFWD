@@ -39,11 +39,11 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
 
         private void WriteFieldsForType(SceneWriter scene, Component component, Type t)
         {
-            if (t != typeof(Behaviour))
+            if (t != typeof(Behaviour) && t != typeof(Component))
             {
                 WriteFieldsForType(scene, component, t.BaseType);
             }
-            if (t == typeof(Behaviour))
+            if (t == typeof(Behaviour) || t == typeof(Component))
             {
                 return;
             }

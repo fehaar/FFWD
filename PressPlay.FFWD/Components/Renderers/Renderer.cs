@@ -35,7 +35,7 @@ namespace PressPlay.FFWD.Components
         {
             get
             {
-                if (materials == null)
+                if (materials == null || materials.Length == 0)
                 {
                     return null;
                 }

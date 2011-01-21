@@ -7,7 +7,7 @@ namespace PressPlay.FFWD.Exporter.Interfaces
 {
     public interface IComponentWriter
     {
-        void Write(SceneWriter scene, object component);
+        void Write(SceneWriter writer, object component);
     }
 
     public interface IOptionComponentWriter : IComponentWriter
