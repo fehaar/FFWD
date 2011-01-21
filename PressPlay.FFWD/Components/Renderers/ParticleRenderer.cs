@@ -105,10 +105,10 @@ namespace PressPlay.FFWD.Components
                 effect = new BasicEffect(device);
             }
 
-            if (emitter.particleCount == 0)
-	        {
+            //if (emitter.particleCount == 0)
+            //{
                 return;
-	        }
+            //}
 
             RasterizerState oldrasterizerState = device.RasterizerState;
             RasterizerState rasterizerState = new RasterizerState();

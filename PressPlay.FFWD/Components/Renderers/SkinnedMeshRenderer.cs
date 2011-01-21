@@ -17,6 +17,13 @@ namespace PressPlay.FFWD.Components
             base.Awake();
             // Create animation players/clips for the rigid model
             animation = GetComponentInParents<Animation>();
+            if ((sharedMesh.skinnedModel != null) && (sharedMesh.skinnedModel.SkinningData != null))
+            {
+                if (sharedMesh.skinnedModel.SkinningData.AnimationClips != null)
+                {
+                    animation.Initialize(sharedMesh.skinnedModel.SkinningData);
+                }
+            }
         }
 
         #region IRenderable Members
@@ -40,17 +47,13 @@ namespace PressPlay.FFWD.Components
             CpuSkinnedModelPart modelPart = sharedMesh.GetSkinnedModelPart();
             modelPart.SetBones(animation.GetTransforms());
 
-            modelPart.Effect.World = sharedMesh.skinnedModel.SkinningData.BakedTransform * transform.world;
+            modelPart.Effect.World = sharedMesh.skinnedModel.BakedTransform * transform.world;
             modelPart.Effect.View = cam.View();
             modelPart.Effect.Projection = cam.projectionMatrix;
             if (material.texture != null)
             {
                 modelPart.Effect.TextureEnabled = true;
                 modelPart.Effect.Texture = material.texture;
-            }
-            else
-            {
-                modelPart.Effect.DiffuseColor = (Vector3)material.color;
             }
 
             modelPart.Draw();
