@@ -58,6 +58,7 @@
     <Compile Include="Writers\Components\AnimationWriter.cs" />
     <Compile Include="Writers\Components\BoxColliderWriter.cs" />
     <Compile Include="Writers\Components\ColliderWriter.cs" />
+    <Compile Include="Writers\Components\CapsuleColliderWriter.cs" />
     <Compile Include="Writers\Components\Extensions\IdMapExporter.cs" />
     <Compile Include="Writers\Components\GenericComponentWriter.cs" />
     <Compile Include="Writers\Components\ManualScriptWriter.cs" />
