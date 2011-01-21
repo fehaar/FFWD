@@ -15,22 +15,23 @@ namespace PressPlay.FFWD.Components
         public float maxParticleSize;
         public Vector3 uvAnimation;
 
+        private BasicEffect effect;
         private ParticleEmitter emitter;
-        private ParticleAnimator animator;
-        
+        private VertexPositionTexture[] vertices;
+        private short[] triangles;
         
         [ContentSerializerIgnore]
         public Rectangle ParticleBounds;
 
-        private Texture2D colorMultipliedTexture;
-        private Texture2D[] colorMultipliedTextures;
+        //private Texture2D colorMultipliedTexture;
+        //private Texture2D[] colorMultipliedTextures;
         
         public override void Awake()
         {
             base.Awake();
 
             emitter = gameObject.GetComponent<ParticleEmitter>();
-            animator = gameObject.GetComponent<ParticleAnimator>();
+            //animator = gameObject.GetComponent<ParticleAnimator>();
             //if (TileScale == Vector2.zero)
             //    TileScale = Vector2.one;
 
@@ -69,18 +70,18 @@ namespace PressPlay.FFWD.Components
             return new Rectangle(0, 0, material.texture.Width, material.texture.Height);
         }
 
-        private Texture2D GetTexture(int index)
-        {
-            if (!animator.doesAnimateColor)
-                return colorMultipliedTexture;
+        //private Texture2D GetTexture(int index)
+        //{
+        //    if (!animator.doesAnimateColor)
+        //        return colorMultipliedTexture;
 
-            float colorScale = 1 - (emitter.particles[index].Energy / emitter.particles[index].StartingEnergy);
-            int colorIndex = (int)(colorMultipliedTextures.Length * colorScale);
-            if (colorIndex == colorMultipliedTextures.Length)
-                colorIndex -= 1;
+        //    float colorScale = 1 - (emitter.particles[index].Energy / emitter.particles[index].StartingEnergy);
+        //    int colorIndex = (int)(colorMultipliedTextures.Length * colorScale);
+        //    if (colorIndex == colorMultipliedTextures.Length)
+        //        colorIndex -= 1;
 
-            return colorMultipliedTextures[colorIndex];
-        }
+        //    return colorMultipliedTextures[colorIndex];
+        //}
 
 
         public bool IsVisible(Viewport viewport)
@@ -98,58 +99,69 @@ namespace PressPlay.FFWD.Components
         public override void Draw(GraphicsDevice device, Camera cam)
         {
             if (emitter.particles == null) return;
-            //Rectangle sourceRect = GetSourceRect();
-            //Vector2 drawScale;
-            //Vector2 drawPosition;
-            //float angle;
-            //gameObject.GetDrawPositionalInfo(out drawPosition, out drawScale, out angle);
-            //drawScale /= new Vector2(sourceRect.Width, sourceRect.Height);
-            //Vector2 origin = new Vector2((float)sourceRect.Width / 2, (float)sourceRect.Height / 2);
 
-            //Vector2 xBounds = new Vector2(Single.PositiveInfinity, Single.NegativeInfinity);
-            //Vector2 yBounds = new Vector2(Single.PositiveInfinity, Single.NegativeInfinity);
-            //bool isVisible = IsVisible();
+            if (effect == null)
+            {
+                effect = new BasicEffect(device);
+            }
 
-            //for (int i = 0; i < emitter.particles.Length; i++)
-            //{
-            //    if (emitter.particles[i].Energy > 0)
-            //    {
-            //        Vector2 pos = emitter.particles[i].Position;
-            //        Vector2 size = new Vector2(emitter.particles[i].Size, emitter.particles[i].Size) * 0.1f;
-            //        pos.y *= -1;
-            //        if (!emitter.useWorldSpace)
-            //        {
-            //            pos += drawPosition;
-            //        }
+            if (emitter.particleCount == 0)
+	        {
+                return;
+	        }
 
-            //        Texture2D tex = GetTexture(i);
+            RasterizerState oldrasterizerState = device.RasterizerState;
+            RasterizerState rasterizerState = new RasterizerState();
+            rasterizerState.CullMode = CullMode.None;
+            device.RasterizerState = rasterizerState;
 
-            //        if (isVisible)
-            //        {
-            //            spriteBatch.Draw(tex, pos, sourceRect, Microsoft.Xna.Framework.Color.White, angle, origin, size, gameObject.FlipSprite ? SpriteEffects.FlipHorizontally : SpriteEffects.None, .5f - (.5f * (float)(Layer + i * 0.01) / 1000f));
-            //        }
+            effect.World = (emitter.useWorldSpace) ? Matrix.Identity : transform.world;
+            effect.View = cam.View();
+            effect.Projection = cam.projectionMatrix;
+            if (materials != null && materials.Length > 0 && materials[0].texture != null)
+            {
+                effect.TextureEnabled = true;
+                effect.Texture = materials[0].texture;
+                device.BlendState = materials[0].blendState;
+            }
+            effect.VertexColorEnabled = false;
 
-            //        size.x *= colorMultipliedTexture.Width;
-            //        size.y *= colorMultipliedTexture.Height;
-            //        if (xBounds.x > (pos.x - size.x))
-            //        {
-            //            xBounds.x = pos.x - size.x;
-            //        }
-            //        if (xBounds.y < (pos.x + size.x))
-            //        {
-            //            xBounds.y = pos.x + size.x;
-            //        }
-            //        if (yBounds.x > (pos.y - size.y))
-            //        {
-            //            yBounds.x = pos.y - size.y;
-            //        }
-            //        if (yBounds.y < (pos.y + size.y))
-            //        {
-            //            yBounds.y = pos.y + size.y;
-            //        }
-            //    }
-            //}
-            //ParticleBounds = new Rectangle((int)xBounds.x, (int)yBounds.x, (int)Math.Ceiling(xBounds.y - xBounds.x), (int)Math.Ceiling(yBounds.y - yBounds.x));
+            if (vertices == null)
+	        {
+                vertices = new VertexPositionTexture[emitter.particles.Length * 4];
+                triangles = new short[emitter.particles.Length * 6];
+	        }
+
+            int particlesRendered = 0;
+            for (int i = 0; i < emitter.particles.Length && particlesRendered < emitter.particlesInUse; i++)
+            {
+                if (emitter.particles[i].Energy > 0)
+                {
+                    RenderParticle(particlesRendered * 4, particlesRendered * 6, ref emitter.particles[i]);
+                    particlesRendered++;
+                }
+            }
+
+            foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+                device.DrawUserIndexedPrimitives<VertexPositionTexture>(
+                    PrimitiveType.TriangleList,
+                    vertices,
+                    0,
+                    particlesRendered * 4,
+                    triangles,
+                    0,
+                    particlesRendered * 2
+                );
+            }
+
+            device.RasterizerState = oldrasterizerState;
+        }
+
+        private void RenderParticle(int vertexIndex, int triangleIndex, ref Particle particle)
+        {
+            //vertices[vertexIndex] = new VertexPositionTexture() { TextureCoordinate = new Microsoft.Xna.Framework.Vector2(0, 0), Position = new  };
         }
 
         //public float GetLayer()
