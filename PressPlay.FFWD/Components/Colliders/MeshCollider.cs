@@ -43,9 +43,9 @@ namespace PressPlay.FFWD.Components
                     Debug.Log(" Warning: " + ToString() + " has non zero Y in collider");
                 }
                 Vector2[] tri = new Vector2[] { 
-                    new Vector2(vertices[triangles[i]].x, vertices[triangles[i]].z),
-                    new Vector2(vertices[triangles[i + 2]].x, vertices[triangles[i + 2]].z),
-                    new Vector2(vertices[triangles[i + 1]].x, vertices[triangles[i + 1]].z)
+                    new Vector2(vertices[triangles[i]].x * transform.lossyScale.x, vertices[triangles[i]].z * transform.lossyScale.z),
+                    new Vector2(vertices[triangles[i + 2]].x * transform.lossyScale.x, vertices[triangles[i + 2]].z * transform.lossyScale.z),
+                    new Vector2(vertices[triangles[i + 1]].x * transform.lossyScale.x, vertices[triangles[i + 1]].z * transform.lossyScale.z)
                 };
                 tris.Add(tri);
             }

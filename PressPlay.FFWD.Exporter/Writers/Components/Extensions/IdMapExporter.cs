@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace PressPlay.FFWD.Exporter.Writers.Components.Extensions
 {
-    public class XNACameraNodeExporter : IComponentWriter
+    public class IdMapExporter : IComponentWriter
     {
         #region IComponentWriter Members
         public void Write(SceneWriter scene, object component)
