@@ -14,9 +14,10 @@ namespace PressPlay.FFWD.Components
         public bool isTrigger;
         [ContentSerializer(Optional = true)]
         public string material;
-        protected Body connectedBody;
-        protected Vector3 lastResizeScale;
         #endregion
+
+        internal Body connectedBody;
+        protected Vector3 lastResizeScale;
 
         public Bounds bounds
         {
