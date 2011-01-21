@@ -32,8 +32,8 @@ namespace PressPlay.FFWD
 
         private static bool isPaused = false;
         private static IContactProcessor contactProcessor;
-        public static int velocityIterations = 5;
-        public static int positionIterations = 5;
+        public static int velocityIterations = 10;
+        public static int positionIterations = 10;
 
         #region FFWD specific methods
         public static void Initialize()

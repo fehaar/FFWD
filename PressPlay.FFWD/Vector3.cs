@@ -328,6 +328,12 @@ namespace PressPlay.FFWD
             if (this == Vector3.zero) return;
             
             float factor = Distance(this, Vector3.zero);
+
+            if (factor == 0)
+            {
+                return;
+            }
+
             factor = 1f / factor;
             this.x *= factor;
             this.y *= factor;
