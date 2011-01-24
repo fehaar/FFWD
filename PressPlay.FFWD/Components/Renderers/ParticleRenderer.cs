@@ -23,66 +23,17 @@ namespace PressPlay.FFWD.Components
         [ContentSerializerIgnore]
         public Rectangle ParticleBounds;
 
-        //private Texture2D colorMultipliedTexture;
-        //private Texture2D[] colorMultipliedTextures;
-        
         public override void Awake()
         {
             base.Awake();
 
             emitter = gameObject.GetComponent<ParticleEmitter>();
-            //animator = gameObject.GetComponent<ParticleAnimator>();
-            //if (TileScale == Vector2.zero)
-            //    TileScale = Vector2.one;
-
-            //if (TileOffset == Vector2.zero)
-            //    TileOffset = Vector2.one;
-        }
-
-
-        public override void Start()
-        {
-            base.Start();
-            // TODO: Make pre colored textures!
-            //colorMultipliedTexture = ContentHelper.GetColoredTexture(animator.ColorAnimation0, Texture);
-            //if (animator.DoesAnimateColor)
-            //{
-            //    Color[] colors = animator.GetAnimationColors();
-            //    colorMultipliedTextures = new Texture2D[colors.Length];
-            //    for (int i = 0; i < colors.Length; i++)
-            //    {
-            //        colorMultipliedTextures[i] = ContentHelper.GetColoredTexture(colors[i], Texture);
-            //    }
-            //}
         }
 
         public Rectangle GetSourceRect()
         {
-            //if (colorMultipliedTexture == null)
-            //{
-            //    colorMultipliedTexture = ContentHelper.GetColoredTexture(animator.ColorAnimation0, Texture);
-            //}
-            //return new Rectangle((int)((float)colorMultipliedTexture.Width * material.mainTextureOffset.x + 1),
-            //                    (int)((float)colorMultipliedTexture.Height * ((1 - material.mainTextureOffset.y - material.mainTextureOffset.y) + 1)),
-            //                    (int)Math.Ceiling((float)colorMultipliedTexture.Width * TileScale.x - 2),
-            //                    (int)Math.Ceiling((float)colorMultipliedTexture.Height * TileScale.y - 2));
-
             return new Rectangle(0, 0, material.texture.Width, material.texture.Height);
         }
-
-        //private Texture2D GetTexture(int index)
-        //{
-        //    if (!animator.doesAnimateColor)
-        //        return colorMultipliedTexture;
-
-        //    float colorScale = 1 - (emitter.particles[index].Energy / emitter.particles[index].StartingEnergy);
-        //    int colorIndex = (int)(colorMultipliedTextures.Length * colorScale);
-        //    if (colorIndex == colorMultipliedTextures.Length)
-        //        colorIndex -= 1;
-
-        //    return colorMultipliedTextures[colorIndex];
-        //}
-
 
         public bool IsVisible(Viewport viewport)
         {
@@ -197,12 +148,5 @@ namespace PressPlay.FFWD.Components
             triangles[triangleIndex + 5] = (short)(vertexIndex + 3);
         }
 
-        //public float GetLayer()
-        //{
-        //    if (drawLayer < 0)
-        //        drawLayer = (.5f - (.5f * (float)Layer * 0.001f));
-        //    return drawLayer;
-        //}
-        
     }
 }

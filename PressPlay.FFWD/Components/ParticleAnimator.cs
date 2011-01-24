@@ -45,6 +45,11 @@ namespace PressPlay.FFWD.Components
                     emitter.particles[i].Velocity *= 1 - ((1 - damping) * Time.deltaTime);
                     Vector3 RandomForce = Random.insideUnitSphere * rndForce / 2;
                     emitter.particles[i].Velocity += (force + RandomForce) * Time.deltaTime;
+                    if (emitter.tangentVelocity != Vector3.zero)
+                    {
+                        Vector3 v = Vector3.Cross(transform.up, emitter.particles[i].Velocity);
+                        emitter.particles[i].Velocity += (v * emitter.tangentVelocity) * Time.deltaTime;
+                    }
                     emitter.particles[i].Size += sizeGrow * Time.deltaTime;
                     if (doesAnimateColor)
                     {
