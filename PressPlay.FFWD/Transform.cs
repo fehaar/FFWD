@@ -109,13 +109,13 @@ namespace PressPlay.FFWD
         private Matrix _world = Matrix.Identity;
 
         private bool _hasDirtyWorld = true;
-        private bool hasDirtyWorld
+        internal bool hasDirtyWorld
         {
             get
             {
                 return _hasDirtyWorld;
             }
-            set
+            private set
             {
                 _hasDirtyWorld = value;
                 if (children != null)
@@ -171,10 +171,17 @@ namespace PressPlay.FFWD
                     Vector3 trans = Microsoft.Xna.Framework.Vector3.Transform(value, Matrix.Invert(parent.world));
                     localPosition = trans;
                 }
+
+                
+
                 if (rigidbody != null)
                 {
                     rigidbody.MovePosition(position);
                 }
+                /*else if (collider != null)
+                {
+                    collider.MovePosition(position);
+                }*/
             }
         }
 

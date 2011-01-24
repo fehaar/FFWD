@@ -56,9 +56,6 @@ namespace PressPlay.FFWD
 
         public static void Update(float elapsedTime)
         {
-            world.Step(elapsedTime, velocityIterations, positionIterations);
-
-            // Sync positions of game objects
             Body body = world.GetBodyList();
             while (body != null)
             {
@@ -73,16 +70,39 @@ namespace PressPlay.FFWD
                 }
                 if (comp != null)
                 {
+                    if (body.GetType() == BodyType.Static)
+                    {
+                        float rad = -MathHelper.ToRadians(comp.transform.eulerAngles.y);
+                        if (body.Position != (Microsoft.Xna.Framework.Vector2)comp.transform.position || body.Rotation != rad)
+                        {
+                            body.SetTransform(comp.transform.position, rad);
+                        }
+
+                        //TODO: Resize body shape to the current transform.scale of the components game object. Maybe this should be done before physics update. It should only be hard coded in AddCollider in static objects
+                        //comp.collider.ResizeConnectedBody();
+                    }
+                    body.SetActive(comp.gameObject.active);
+                }
+                body = body.GetNext();
+            }
+
+
+            world.Step(elapsedTime, velocityIterations, positionIterations);
+
+            // Sync positions of game objects
+            body = world.GetBodyList();
+            while (body != null)
+            {
+                Component comp = (Component)body.GetUserData();
+              
+                if (comp != null)
+                {
                     if (body.GetType() != BodyType.Static)
                     {
                         Box2D.XNA.Transform t;
                         body.GetTransform(out t);
                         comp.transform.SetPositionFromPhysics(t.Position, t.GetAngle());
-                        
-                        //TODO: Resize body shape to the current transform.scale of the components game object. Maybe this should be done before physics update. It should only be hard coded in AddCollider in static objects
-                        //comp.collider.ResizeConnectedBody();
                     }
-                    body.SetActive(comp.gameObject.active);
                 }
                 body = body.GetNext();
             };
@@ -323,11 +343,6 @@ namespace PressPlay.FFWD
             return RaycastAll(origin, direction, distance, kDefaultRaycastLayers);
         }
 
-        public static RaycastHit[] RaycastAll(Vector3 origin, Vector3 direction, float distance, int layerMask)
-        {
-            return RaycastAll(origin, direction, distance, layerMask);
-        }
-
         public static RaycastHit[] RaycastAll(Ray ray, float distance, int layerMask)
         {
             return RaycastAll(ray.origin, ray.direction, distance, layerMask);
@@ -368,6 +383,41 @@ namespace PressPlay.FFWD
                 hitInfo = new RaycastHit();
                 return false;
             }
+        }
+        #endregion
+
+        #region Linecast methods
+        public static bool Linecast(Vector3 start, Vector3 end, out RaycastHit hitInfo, int layerMask)
+        {
+            Vector2 pt2 = end;
+            Vector2 origin = start;
+            RaycastHelper helper = new RaycastHelper((origin - pt2).magnitude, true, layerMask);
+            if (pt2 == origin)
+            {
+                hitInfo = new RaycastHit();
+                return false;
+            }
+            world.RayCast(helper.rayCastCallback, origin, pt2);
+            hitInfo = helper.ClosestHit();
+            return (helper.HitCount > 0);
+        }
+        public static bool Linecast(Vector3 start, Vector3 end, out RaycastHit hitInfo)
+        {
+            return Linecast(start, end, out hitInfo, kDefaultRaycastLayers);
+        }
+        #endregion
+
+        #region CheckCapsule methods
+        public static bool CheckCapsule(Vector3 start, Vector3 end, float radius)
+        {
+            return CheckCapsule(start, end, radius, kDefaultRaycastLayers);
+        }
+
+        public static bool CheckCapsule(Vector3 start, Vector3 end, float radius, LayerMask layermask)
+        {
+            //TODO: implement this
+
+            return false;
         }
         #endregion
 
