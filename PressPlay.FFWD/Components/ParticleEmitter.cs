@@ -139,8 +139,9 @@ namespace PressPlay.FFWD.Components
             {
                 if (particles[i].Energy > 0)
                 {
-                    if ((particles[i].Energy -= Time.deltaTime) <= 0)
+                    if ((particles[i].Energy -= Time.deltaTime) <= 0 || (particles[i].Size < 0))
                     {
+                        particles[i].Energy = 0;
                         particleCount--;
                     }
                     particlesToCheck--;
@@ -177,8 +178,9 @@ namespace PressPlay.FFWD.Components
                                             Random.Range(-rndVelocity.y, rndVelocity.y),
                                             Random.Range(-rndVelocity.z, rndVelocity.z)) / 2;
 
-            Vector3 localVel = Microsoft.Xna.Framework.Vector3.Transform(localVelocity, transform.rotation);
+            Vector3 localVel = transform.forward * localVelocity;
             particles[index].Velocity = emitterVelocity + worldVelocity + localVel + randomVel;
+            Debug.Log("Part " + index + " from " + ToString() + " : " + particles[index].Velocity);
 
             if (useWorldSpace)
             {
