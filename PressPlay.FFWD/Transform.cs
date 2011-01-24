@@ -28,6 +28,12 @@ namespace PressPlay.FFWD
             }
             set
             {
+                if (float.IsNaN(value.x) || float.IsNaN(value.y) || float.IsNaN(value.z))
+                {
+                    Debug.Log("Trying to set local position to NaN!!!");
+                    return;
+                }
+
                 _localPosition = value;
                 hasDirtyWorld = true;
             }
@@ -140,10 +146,22 @@ namespace PressPlay.FFWD
         {
             get
             {
+                //Vector3 pos = world.Translation;
+                //if (float.IsNaN(pos.x) || float.IsNaN(pos.y) || float.IsNaN(pos.z))
+                //{
+                //    //Debug.Log("Trying to set position to NaN!!!");
+                //    return pos;
+                //}
                 return world.Translation;
             }
             set
             {
+                if (float.IsNaN(value.x) || float.IsNaN(value.y) || float.IsNaN(value.z))
+                {
+                    //Debug.Log("Trying to set position to NaN!!!");
+                    return;
+                }
+
                 if (parent == null)
                 {
                     localPosition = value;
