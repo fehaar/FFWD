@@ -108,6 +108,7 @@ namespace PressPlay.FFWD.Components
         public void FixedUpdate()
         {
             bool destroy = hasHadParticles;
+            int particlesToCheck = emitter.particlesInUse;
             for (int i = 0; i < emitter.particles.Length; i++)
             {
                 if (emitter.particles[i].Energy > 0)
@@ -119,6 +120,10 @@ namespace PressPlay.FFWD.Components
                     Vector3 RandomForce = Random.insideUnitSphere * rndForce / 2;
                     emitter.particles[i].Velocity += (force + RandomForce) * Time.deltaTime;
                     emitter.particles[i].Size += sizeGrow * Time.deltaTime;
+                    if (--particlesToCheck == 0)
+                    {
+                        break;
+                    }
                 }
             }
 

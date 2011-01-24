@@ -172,6 +172,10 @@ namespace PressPlay.FFWD
             {
                 Camera lineCam = (String.IsNullOrEmpty(ApplicationSettings.DebugLineCamera)) ? Camera.main : Camera.FindByName(ApplicationSettings.DebugLineCamera);
                 Debug.DrawLines(GraphicsDevice, lineCam);
+                if (lineCam != null)
+                {
+                    Debug.Display(lineCam.name, lineCam.transform.position);
+                }
             }
             if (ApplicationSettings.ShowFPSCounter)
             {

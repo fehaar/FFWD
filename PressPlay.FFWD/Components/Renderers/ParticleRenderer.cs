@@ -98,24 +98,19 @@ namespace PressPlay.FFWD.Components
 
         public override void Draw(GraphicsDevice device, Camera cam)
         {
-            if (emitter.particles == null) return;
+            if (emitter.particles == null || emitter.particlesInUse == 0) return;
 
             if (effect == null)
             {
                 effect = new BasicEffect(device);
             }
 
-            //if (emitter.particleCount == 0)
-            //{
-                return;
-            //}
-
             RasterizerState oldrasterizerState = device.RasterizerState;
             RasterizerState rasterizerState = new RasterizerState();
             rasterizerState.CullMode = CullMode.None;
             device.RasterizerState = rasterizerState;
 
-            effect.World = (emitter.useWorldSpace) ? Matrix.Identity : transform.world;
+            effect.World = Matrix.Identity;
             effect.View = cam.View();
             effect.Projection = cam.projectionMatrix;
             if (materials != null && materials.Length > 0 && materials[0].texture != null)
@@ -139,6 +134,10 @@ namespace PressPlay.FFWD.Components
                 {
                     RenderParticle(particlesRendered * 4, particlesRendered * 6, ref emitter.particles[i]);
                     particlesRendered++;
+                    if (particlesRendered == 1)
+                    {
+                        Debug.Display("First part at " + ToString(), emitter.particles[i].Position);
+                    }
                 }
             }
 
@@ -161,7 +160,37 @@ namespace PressPlay.FFWD.Components
 
         private void RenderParticle(int vertexIndex, int triangleIndex, ref Particle particle)
         {
-            //vertices[vertexIndex] = new VertexPositionTexture() { TextureCoordinate = new Microsoft.Xna.Framework.Vector2(0, 0), Position = new  };
+            Vector3 pos = particle.Position;
+            float size = particle.Size / 2;
+            if (!emitter.useWorldSpace)
+            {
+                pos += transform.position;
+            }
+            vertices[vertexIndex] = new VertexPositionTexture() { 
+                TextureCoordinate = new Microsoft.Xna.Framework.Vector2(0, 1),
+                Position = pos + (Vector3)new Vector2(-size, size)
+            };
+            vertices[vertexIndex + 1] = new VertexPositionTexture()
+            {
+                TextureCoordinate = new Microsoft.Xna.Framework.Vector2(0, 0),
+                Position = pos + (Vector3)new Vector2(-size, -size)
+            };
+            vertices[vertexIndex + 2] = new VertexPositionTexture()
+            {
+                TextureCoordinate = new Microsoft.Xna.Framework.Vector2(1, 1),
+                Position = pos + (Vector3)new Vector2(size, size)
+            };
+            vertices[vertexIndex + 3] = new VertexPositionTexture()
+            {
+                TextureCoordinate = new Microsoft.Xna.Framework.Vector2(1, 0),
+                Position = pos + (Vector3)new Vector2(size, -size)
+            };
+            triangles[triangleIndex] = (short)vertexIndex;
+            triangles[triangleIndex + 1] = (short)(vertexIndex + 1);
+            triangles[triangleIndex + 2] = (short)(vertexIndex + 2);
+            triangles[triangleIndex + 3] = (short)(vertexIndex + 2);
+            triangles[triangleIndex + 4] = (short)(vertexIndex + 1);
+            triangles[triangleIndex + 5] = (short)(vertexIndex + 3);
         }
 
         //public float GetLayer()
