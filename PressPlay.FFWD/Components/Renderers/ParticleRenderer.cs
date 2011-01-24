@@ -17,72 +17,23 @@ namespace PressPlay.FFWD.Components
 
         private BasicEffect effect;
         private ParticleEmitter emitter;
-        private VertexPositionTexture[] vertices;
+        private VertexPositionColorTexture[] vertices;
         private short[] triangles;
         
         [ContentSerializerIgnore]
         public Rectangle ParticleBounds;
 
-        //private Texture2D colorMultipliedTexture;
-        //private Texture2D[] colorMultipliedTextures;
-        
         public override void Awake()
         {
             base.Awake();
 
             emitter = gameObject.GetComponent<ParticleEmitter>();
-            //animator = gameObject.GetComponent<ParticleAnimator>();
-            //if (TileScale == Vector2.zero)
-            //    TileScale = Vector2.one;
-
-            //if (TileOffset == Vector2.zero)
-            //    TileOffset = Vector2.one;
-        }
-
-
-        public override void Start()
-        {
-            base.Start();
-            // TODO: Make pre colored textures!
-            //colorMultipliedTexture = ContentHelper.GetColoredTexture(animator.ColorAnimation0, Texture);
-            //if (animator.DoesAnimateColor)
-            //{
-            //    Color[] colors = animator.GetAnimationColors();
-            //    colorMultipliedTextures = new Texture2D[colors.Length];
-            //    for (int i = 0; i < colors.Length; i++)
-            //    {
-            //        colorMultipliedTextures[i] = ContentHelper.GetColoredTexture(colors[i], Texture);
-            //    }
-            //}
         }
 
         public Rectangle GetSourceRect()
         {
-            //if (colorMultipliedTexture == null)
-            //{
-            //    colorMultipliedTexture = ContentHelper.GetColoredTexture(animator.ColorAnimation0, Texture);
-            //}
-            //return new Rectangle((int)((float)colorMultipliedTexture.Width * material.mainTextureOffset.x + 1),
-            //                    (int)((float)colorMultipliedTexture.Height * ((1 - material.mainTextureOffset.y - material.mainTextureOffset.y) + 1)),
-            //                    (int)Math.Ceiling((float)colorMultipliedTexture.Width * TileScale.x - 2),
-            //                    (int)Math.Ceiling((float)colorMultipliedTexture.Height * TileScale.y - 2));
-
             return new Rectangle(0, 0, material.texture.Width, material.texture.Height);
         }
-
-        //private Texture2D GetTexture(int index)
-        //{
-        //    if (!animator.doesAnimateColor)
-        //        return colorMultipliedTexture;
-
-        //    float colorScale = 1 - (emitter.particles[index].Energy / emitter.particles[index].StartingEnergy);
-        //    int colorIndex = (int)(colorMultipliedTextures.Length * colorScale);
-        //    if (colorIndex == colorMultipliedTextures.Length)
-        //        colorIndex -= 1;
-
-        //    return colorMultipliedTextures[colorIndex];
-        //}
-
 
         public bool IsVisible(Viewport viewport)
         {
@@ -98,7 +49,7 @@ namespace PressPlay.FFWD.Components
 
         public override void Draw(GraphicsDevice device, Camera cam)
         {
-            if (emitter.particles == null || emitter.particlesInUse == 0) return;
+            if (emitter.particles == null || emitter.particleCount == 0) return;
 
             if (effect == null)
             {
@@ -119,16 +70,16 @@ namespace PressPlay.FFWD.Components
                 effect.Texture = materials[0].texture;
                 device.BlendState = materials[0].blendState;
             }
-            effect.VertexColorEnabled = false;
+            effect.VertexColorEnabled = true;
 
             if (vertices == null)
 	        {
-                vertices = new VertexPositionTexture[emitter.particles.Length * 4];
+                vertices = new VertexPositionColorTexture[emitter.particles.Length * 4];
                 triangles = new short[emitter.particles.Length * 6];
 	        }
 
             int particlesRendered = 0;
-            for (int i = 0; i < emitter.particles.Length && particlesRendered < emitter.particlesInUse; i++)
+            for (int i = 0; i < emitter.particles.Length && particlesRendered < emitter.particleCount; i++)
             {
                 if (emitter.particles[i].Energy > 0)
                 {
@@ -144,7 +95,7 @@ namespace PressPlay.FFWD.Components
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
-                device.DrawUserIndexedPrimitives<VertexPositionTexture>(
+                device.DrawUserIndexedPrimitives<VertexPositionColorTexture>(
                     PrimitiveType.TriangleList,
                     vertices,
                     0,
@@ -166,24 +117,28 @@ namespace PressPlay.FFWD.Components
             {
                 pos += transform.position;
             }
-            vertices[vertexIndex] = new VertexPositionTexture() { 
+            vertices[vertexIndex] = new VertexPositionColorTexture() { 
                 TextureCoordinate = new Microsoft.Xna.Framework.Vector2(0, 1),
-                Position = pos + (Vector3)new Vector2(-size, size)
+                Position = pos + (Vector3)new Vector2(-size, size),
+                Color = particle.Color
             };
-            vertices[vertexIndex + 1] = new VertexPositionTexture()
+            vertices[vertexIndex + 1] = new VertexPositionColorTexture()
             {
                 TextureCoordinate = new Microsoft.Xna.Framework.Vector2(0, 0),
-                Position = pos + (Vector3)new Vector2(-size, -size)
+                Position = pos + (Vector3)new Vector2(-size, -size),
+                Color = particle.Color
             };
-            vertices[vertexIndex + 2] = new VertexPositionTexture()
+            vertices[vertexIndex + 2] = new VertexPositionColorTexture()
             {
                 TextureCoordinate = new Microsoft.Xna.Framework.Vector2(1, 1),
-                Position = pos + (Vector3)new Vector2(size, size)
+                Position = pos + (Vector3)new Vector2(size, size),
+                Color = particle.Color
             };
-            vertices[vertexIndex + 3] = new VertexPositionTexture()
+            vertices[vertexIndex + 3] = new VertexPositionColorTexture()
             {
                 TextureCoordinate = new Microsoft.Xna.Framework.Vector2(1, 0),
-                Position = pos + (Vector3)new Vector2(size, -size)
+                Position = pos + (Vector3)new Vector2(size, -size),
+                Color = particle.Color
             };
             triangles[triangleIndex] = (short)vertexIndex;
             triangles[triangleIndex + 1] = (short)(vertexIndex + 1);
@@ -193,12 +148,5 @@ namespace PressPlay.FFWD.Components
             triangles[triangleIndex + 5] = (short)(vertexIndex + 3);
         }
 
-        //public float GetLayer()
-        //{
-        //    if (drawLayer < 0)
-        //        drawLayer = (.5f - (.5f * (float)Layer * 0.001f));
-        //    return drawLayer;
-        //}
-        
     }
 }
