@@ -45,7 +45,7 @@ namespace PressPlay.FFWD
         {
             get
             {
-                Vector3 v = new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), Random.Range(-1, 1));
+                Vector3 v = new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f));
                 if (v.sqrMagnitude > 1.0f)
                 {
                     v.Normalize();
@@ -61,7 +61,7 @@ namespace PressPlay.FFWD
         {
             get
             {
-                Vector2 v = new Vector2(Random.Range(-1, 1), Random.Range(-1, 1));
+                Vector2 v = new Vector2(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f));
                 if (v.sqrMagnitude > 1.0f)
                 {
                     v.Normalize();
