@@ -65,46 +65,6 @@ namespace PressPlay.FFWD.Components
         //    return colors;
         //}
 
-        public Color GetParticleColor(int index)
-        {
-            if (doesAnimateColor)
-            {
-                // PERF: We can optimize this further by pregenerating a number of color samples and just find the correct index according to time
-                float colorScale = 1 - (emitter.particles[index].Energy / emitter.particles[index].StartingEnergy);
-                float startIndex = colorScale * 4;
-                if (startIndex == 4)
-                {
-                    startIndex = 3;
-                }
-                colorScale = startIndex - (int)startIndex;
-                Color c1 = colorAnimation[(int)startIndex];
-                Color c2 = colorAnimation[(int)startIndex + 1];
-                return Microsoft.Xna.Framework.Color.FromNonPremultiplied(
-                        (int)MathHelper.Lerp(c1.R, c2.R, colorScale),
-                        (int)MathHelper.Lerp(c1.G, c2.G, colorScale),
-                        (int)MathHelper.Lerp(c1.B, c2.B, colorScale),
-                        (int)MathHelper.Lerp(c1.A, c2.A, colorScale)
-                    );
-            }
-            else
-            {
-                return FixedColor;
-            }
-        }
-
-        //public override void Update()
-        //{
-        //    base.Update();
-        //    if (!Scene.CurrentScene.drawDebug) return;
-        //    Vector2 arrowDir1 = new Vector2(Force.y, -Force..x) - Force;
-        //    Vector2 arrowDir2 = new Vector2(-Force.y, Force..x) - Force;
-        //    arrowDir1.Normalize();
-        //    arrowDir2.Normalize();
-        //    DebugDrawController.Instance.AddLine2Draw(gameObject.Position, gameObject.Position + Force);
-        //    DebugDrawController.Instance.AddLine2Draw(gameObject.Position + Force, gameObject.Position + Force + arrowDir1 * 5);
-        //    DebugDrawController.Instance.AddLine2Draw(gameObject.Position + Force, gameObject.Position + Force + arrowDir2 * 5);
-        //}
-
         public void FixedUpdate()
         {
             bool destroy = hasHadParticles;
@@ -120,6 +80,10 @@ namespace PressPlay.FFWD.Components
                     Vector3 RandomForce = Random.insideUnitSphere * rndForce / 2;
                     emitter.particles[i].Velocity += (force + RandomForce) * Time.deltaTime;
                     emitter.particles[i].Size += sizeGrow * Time.deltaTime;
+                    if (doesAnimateColor)
+                    {
+                        UpdateParticleColor(ref emitter.particles[i]);
+                    }
                     if (--particlesToCheck == 0)
                     {
                         break;
@@ -132,5 +96,18 @@ namespace PressPlay.FFWD.Components
                 Destroy(gameObject);
             }
         }
+
+        public void UpdateParticleColor(ref Particle particle)
+        {
+            float colorScale = 1 - (particle.Energy / particle.StartingEnergy);
+            float startIndex = colorScale * 4;
+            if (startIndex == 4)
+            {
+                startIndex = 3;
+            }
+            colorScale = startIndex - (int)startIndex;
+            particle.Color = Color.Lerp(colorAnimation[(int)startIndex], colorAnimation[(int)startIndex + 1], colorScale);
+        }
+
     }
 }

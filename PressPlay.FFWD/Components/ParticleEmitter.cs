@@ -25,6 +25,8 @@ namespace PressPlay.FFWD.Components
         public bool enabled;
         [ContentSerializer(Optional=true)]
         public Vector3 ellipsoid;
+        [ContentSerializerIgnore]
+        public bool oneShot = false;
 
         [ContentSerializerIgnore]
         public int particleCount
@@ -35,7 +37,6 @@ namespace PressPlay.FFWD.Components
             }
         }
 
-        internal bool oneShot = false;
 
         //[ContentSerializerIgnore]
         //public Vector3 minEmitterRange { get; set; }
@@ -183,6 +184,7 @@ namespace PressPlay.FFWD.Components
             }
 
             particles[index].Size = Random.Range(minSize, maxSize);
+            particles[index].Color = renderer.material.color;
         }
 
         private float GetNewEmissionTime()
@@ -190,11 +192,14 @@ namespace PressPlay.FFWD.Components
             return Random.Range(1.0f / minEmission, 1.0f / maxEmission);
         }
 
-        internal void ClearParticles()
+        public void ClearParticles()
         {
-            for (int i = 0; i < particles.Length; i++)
+            if (particles != null)
             {
-                particles[i].Energy = 0;
+                for (int i = 0; i < particles.Length; i++)
+                {
+                    particles[i].Energy = 0;
+                }
                 particlesInUse = 0;
             }
         }
