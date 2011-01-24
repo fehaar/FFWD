@@ -63,8 +63,11 @@ namespace PressPlay.FFWD.Exporter.Writers
                 writer.WriteStartDocument();
                 writer.WriteStartElement("XnaContent");
                 writer.WriteStartElement("Asset");
-                writer.WriteAttributeString("Type", resolver.DefaultNamespace + ".GameObject");
+                writer.WriteAttributeString("Type", resolver.DefaultNamespace + ".Scene");
+                writer.WriteStartElement("gameObject");
                 WriteGameObject(go);
+                writer.WriteEndElement();
+                WritePrefabs();
                 writer.WriteEndElement();
                 writer.WriteEndElement();
             }
