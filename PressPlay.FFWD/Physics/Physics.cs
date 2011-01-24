@@ -32,8 +32,8 @@ namespace PressPlay.FFWD
 
         private static bool isPaused = false;
         private static IContactProcessor contactProcessor;
-        public static int velocityIterations = 10;
-        public static int positionIterations = 10;
+        public static int velocityIterations = 3;
+        public static int positionIterations = 3;
 
         #region FFWD specific methods
         public static void Initialize()
@@ -70,7 +70,7 @@ namespace PressPlay.FFWD
                 }
                 if (comp != null)
                 {
-                    if (body.GetType() == BodyType.Static)
+                    if (comp.gameObject.active && body.GetType() == BodyType.Kinematic && !comp.gameObject.isStatic && comp.rigidbody == null)
                     {
                         float rad = -MathHelper.ToRadians(comp.transform.eulerAngles.y);
                         if (body.Position != (Microsoft.Xna.Framework.Vector2)comp.transform.position || body.Rotation != rad)
@@ -99,9 +99,20 @@ namespace PressPlay.FFWD
                 {
                     if (body.GetType() != BodyType.Static)
                     {
-                        Box2D.XNA.Transform t;
-                        body.GetTransform(out t);
-                        comp.transform.SetPositionFromPhysics(t.Position, t.GetAngle());
+                        if (comp.rigidbody != null)
+                        {
+                            Box2D.XNA.Transform t;
+                            body.GetTransform(out t);
+                            comp.transform.SetPositionFromPhysics(t.Position, t.GetAngle());
+                        }
+                        /*else
+                        {
+                            float rad = -MathHelper.ToRadians(comp.transform.eulerAngles.y);
+                            if (body.Position != (Microsoft.Xna.Framework.Vector2)comp.transform.position || body.Rotation != rad)
+                            {
+                                body.SetTransform(comp.transform.position, rad);
+                            }
+                        }*/
                     }
                 }
                 body = body.GetNext();

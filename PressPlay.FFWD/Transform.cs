@@ -117,6 +117,10 @@ namespace PressPlay.FFWD
             }
             private set
             {
+                if (gameObject != null)
+                {
+                    gameObject.isStatic = false;
+                }
                 _hasDirtyWorld = value;
                 if (children != null)
                 {

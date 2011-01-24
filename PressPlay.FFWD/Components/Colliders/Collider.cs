@@ -41,9 +41,18 @@ namespace PressPlay.FFWD.Components
             {
                 BodyDef def = GetBodyDefinition();
                 def.userData = this;
+                def.type = (gameObject.isStatic) ? BodyType.Static : BodyType.Kinematic;
                 Body body = Physics.AddBody(def);
                 AddCollider(body, 1);
                 body.Rotation = -MathHelper.ToRadians(transform.rotation.eulerAngles.y);
+            }
+        }
+
+        internal void SetStatic(bool isStatic)
+        {
+            if (connectedBody != null)
+            {
+                connectedBody.SetType((isStatic) ? BodyType.Static : BodyType.Kinematic);
             }
         }
 

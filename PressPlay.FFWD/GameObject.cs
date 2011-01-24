@@ -49,6 +49,21 @@ namespace PressPlay.FFWD
         [ContentSerializer(Optional = true)]
         public string tag { get; set; }
 
+        private bool _isStatic = true;
+        [ContentSerializer(Optional = true)]
+        public bool isStatic { 
+            get{return _isStatic;} 
+            set
+            {
+                if (value == _isStatic) { return; }
+                _isStatic = value;
+                if (collider != null && rigidbody == null)
+                {
+                    collider.SetStatic(_isStatic);
+                }
+            }
+        }
+
         #region Component shortcut methods
         private Rigidbody _rigidbody;
         [ContentSerializerIgnore]
