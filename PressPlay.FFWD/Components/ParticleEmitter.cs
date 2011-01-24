@@ -23,18 +23,22 @@ namespace PressPlay.FFWD.Components
         public Vector3 rndVelocity;
         public bool useWorldSpace;
         public bool enabled;
+
+        // NOTE: These values are not accessible in Unity, therefore we have to deal with them ourselves
         [ContentSerializer(Optional=true)]
-        public Vector3 ellipsoid;
-        [ContentSerializerIgnore]
-        public bool oneShot = false;
+        internal Vector3 ellipsoid;
+        [ContentSerializer(Optional = true)]
+        internal bool oneShot = false;
+        [ContentSerializer(Optional = true)]
+        internal Vector3 tangentVelocity;
+        [ContentSerializer(Optional = true)]
+        internal float minEmitterRange;
 
         [ContentSerializerIgnore]
         public int particleCount
         {
-            get
-            {
-                return particles.Length;
-            }
+            get;
+            private set;
         }
 
 
@@ -52,19 +56,16 @@ namespace PressPlay.FFWD.Components
             set
             {
                 _particles = value;
-                particlesInUse = 0;
+                particleCount = 0;
                 for (int i = 0; i < _particles.Length; i++)
                 {
                     if (_particles[i].Energy > 0)
                     {
-                        particlesInUse++;
+                        particleCount++;
                     }
                 }
             }
         }
-
-        internal int particlesAllocated;
-        internal int particlesInUse;
 
         private float timeToNextEmit = 0.0f;
 
@@ -80,14 +81,13 @@ namespace PressPlay.FFWD.Components
             {
                 int parts = Mathf.FloorToInt(maxEmission);
                 particles = new Particle[parts];
-                particlesInUse = 0;
-                particlesAllocated = parts;
+                particleCount = 0;
             }
             else
             {
-                particlesAllocated = Mathf.CeilToInt(maxEmission) * (int)Math.Max(1, maxEnergy * 2);
-                particles = new Particle[particlesAllocated];
-                particlesInUse = 0;
+                int parts = Mathf.CeilToInt(maxEmission) * (int)Math.Max(1, maxEnergy * 2);
+                particles = new Particle[parts];
+                particleCount = 0;
             }
             if (minEmission <= 0)
             {
@@ -129,19 +129,19 @@ namespace PressPlay.FFWD.Components
                 }
             }
 
-            if (numToEmit == 0 && particlesInUse == 0)
+            if (numToEmit == 0 && particleCount == 0)
             {
                 return;
             }
 
-            int particlesToCheck = particlesInUse;
+            int particlesToCheck = particleCount;
             for (int i = 0; i < particles.Length; i++)
             {
                 if (particles[i].Energy > 0)
                 {
                     if ((particles[i].Energy -= Time.deltaTime) <= 0)
                     {
-                        particlesInUse--;
+                        particleCount--;
                     }
                     particlesToCheck--;
                 }
@@ -150,7 +150,7 @@ namespace PressPlay.FFWD.Components
                     if (numToEmit > 0)
                     {
                         numToEmit--;
-                        particlesInUse++;
+                        particleCount++;
                         SetNewParticleAt(i);
                     }
                 }
@@ -176,7 +176,9 @@ namespace PressPlay.FFWD.Components
             Vector3 randomVel = new Vector3(Random.Range(-rndVelocity.x, rndVelocity.x),
                                             Random.Range(-rndVelocity.y, rndVelocity.y),
                                             Random.Range(-rndVelocity.z, rndVelocity.z)) / 2;
-            particles[index].Velocity = emitterVelocity + worldVelocity + localVelocity + randomVel;
+
+            Vector3 localVel = Microsoft.Xna.Framework.Vector3.Transform(localVelocity, transform.rotation);
+            particles[index].Velocity = emitterVelocity + worldVelocity + localVel + randomVel;
 
             if (useWorldSpace)
             {
@@ -200,7 +202,7 @@ namespace PressPlay.FFWD.Components
                 {
                     particles[i].Energy = 0;
                 }
-                particlesInUse = 0;
+                particleCount = 0;
             }
         }
     }

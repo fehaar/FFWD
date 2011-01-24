@@ -98,7 +98,7 @@ namespace PressPlay.FFWD.Components
 
         public override void Draw(GraphicsDevice device, Camera cam)
         {
-            if (emitter.particles == null || emitter.particlesInUse == 0) return;
+            if (emitter.particles == null || emitter.particleCount == 0) return;
 
             if (effect == null)
             {
@@ -128,7 +128,7 @@ namespace PressPlay.FFWD.Components
 	        }
 
             int particlesRendered = 0;
-            for (int i = 0; i < emitter.particles.Length && particlesRendered < emitter.particlesInUse; i++)
+            for (int i = 0; i < emitter.particles.Length && particlesRendered < emitter.particleCount; i++)
             {
                 if (emitter.particles[i].Energy > 0)
                 {

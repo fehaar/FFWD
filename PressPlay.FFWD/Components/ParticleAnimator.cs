@@ -31,44 +31,10 @@ namespace PressPlay.FFWD.Components
             emitter = gameObject.GetComponent<ParticleEmitter>();
         }
 
-        public override void Start()
-        {
-            base.Start();
-            if (!emitter.useWorldSpace)
-            {
-                //Force = gameObject.LocalDirection2GlobalDirection(Force);
-                //RndForce = gameObject.LocalDirection2GlobalDirection(RndForce);
-            }
-        }
-
-        //public Color[] GetAnimationColors()
-        //{
-        //    int extraColors = 3;
-        //    Color[] colors = new Color[AnimationColors.Length + (AnimationColors.Length - 1) * extraColors];
-        //    for (int i = 0; i < AnimationColors.Length-1; i++)
-        //    {
-        //        int num = (extraColors + 1);
-        //        Color c1 = AnimationColors[i];
-        //        Color c2 = AnimationColors[i + 1];
-        //        colors[num * i] = c1;
-        //        for (int j = 1; j < extraColors + 1; j++)
-        //        {
-        //            colors[num * i + j] =
-        //            Microsoft.Xna.Framework.Color.FromNonPremultiplied(
-        //                    (int)MathHelper.Lerp(c1.R, c2.R, (float)j / num),
-        //                    (int)MathHelper.Lerp(c1.G, c2.G, (float)j / num),
-        //                    (int)MathHelper.Lerp(c1.B, c2.B, (float)j / num),
-        //                    (int)MathHelper.Lerp(c1.A, c2.A, (float)j / num));
-        //        }
-        //    }
-        //    colors[colors.Length-1] = AnimationColors[AnimationColors.Length-1];
-        //    return colors;
-        //}
-
         public void FixedUpdate()
         {
             bool destroy = hasHadParticles;
-            int particlesToCheck = emitter.particlesInUse;
+            int particlesToCheck = emitter.particleCount;
             for (int i = 0; i < emitter.particles.Length; i++)
             {
                 if (emitter.particles[i].Energy > 0)

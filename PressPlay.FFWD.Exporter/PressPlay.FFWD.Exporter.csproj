@@ -64,6 +64,7 @@
     <Compile Include="Writers\Components\ManualScriptWriter.cs" />
     <Compile Include="Writers\Components\MeshFilterWriter.cs" />
     <Compile Include="Writers\Components\MonoBehaviourWriter.cs" />
+    <Compile Include="Writers\Components\ParticleEmitterWriter.cs" />
     <Compile Include="Writers\Components\ParticleRendererWriter.cs" />
     <Compile Include="Writers\Components\RigidbodyWriter.cs" />
     <Compile Include="Writers\Components\SphereColliderWriter.cs" />
