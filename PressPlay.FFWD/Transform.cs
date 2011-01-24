@@ -28,6 +28,12 @@ namespace PressPlay.FFWD
             }
             set
             {
+                if (float.IsNaN(value.x) || float.IsNaN(value.y) || float.IsNaN(value.z))
+                {
+                    Debug.Log("Trying to set local position to NaN!!!");
+                    return;
+                }
+
                 _localPosition = value;
                 hasDirtyWorld = true;
             }
@@ -140,10 +146,22 @@ namespace PressPlay.FFWD
         {
             get
             {
+                //Vector3 pos = world.Translation;
+                //if (float.IsNaN(pos.x) || float.IsNaN(pos.y) || float.IsNaN(pos.z))
+                //{
+                //    //Debug.Log("Trying to set position to NaN!!!");
+                //    return pos;
+                //}
                 return world.Translation;
             }
             set
             {
+                if (float.IsNaN(value.x) || float.IsNaN(value.y) || float.IsNaN(value.z))
+                {
+                    //Debug.Log("Trying to set position to NaN!!!");
+                    return;
+                }
+
                 if (parent == null)
                 {
                     localPosition = value;
@@ -242,7 +260,7 @@ namespace PressPlay.FFWD
         {
             get
             {
-                return -Microsoft.Xna.Framework.Vector3.Normalize(world.Right);
+                return Microsoft.Xna.Framework.Vector3.Normalize(world.Right);
             }
         }
 
@@ -501,6 +519,8 @@ namespace PressPlay.FFWD
 
         public void LookAt(Vector3 worldPosition, Vector3 worldUp)
         {
+            if (worldPosition == position) { return; }
+
             Matrix m = Matrix.CreateWorld(position, worldPosition - position, worldUp);
             Microsoft.Xna.Framework.Vector3 scale;
             Microsoft.Xna.Framework.Quaternion rot;
