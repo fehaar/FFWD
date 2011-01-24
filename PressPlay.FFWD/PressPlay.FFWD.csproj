@@ -223,6 +223,7 @@
     <Compile Include="Physics\Collision.cs" />
     <Compile Include="Physics\ContactPoint.cs" />
     <Compile Include="Physics\LayerMask.cs" />
+    <Compile Include="Physics\LayerMaskOperations.cs" />
     <Compile Include="Physics\Physics.cs" />
     <Compile Include="Physics\RaycastHelper.cs" />
     <Compile Include="Physics\RaycastHit.cs" />
