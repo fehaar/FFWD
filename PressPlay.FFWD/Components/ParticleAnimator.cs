@@ -22,7 +22,6 @@ namespace PressPlay.FFWD.Components
 
         private ParticleEmitter emitter;
         private bool hasHadParticles = false;
-        private Color FixedColor;
 
         public override void Awake()
         {
@@ -51,10 +50,7 @@ namespace PressPlay.FFWD.Components
                         emitter.particles[i].Velocity += (v * emitter.tangentVelocity) * Time.deltaTime;
                     }
                     emitter.particles[i].Size += sizeGrow * Time.deltaTime;
-                    if (doesAnimateColor)
-                    {
-                        UpdateParticleColor(ref emitter.particles[i]);
-                    }
+                    UpdateParticleColor(ref emitter.particles[i]);
                     if (--particlesToCheck == 0)
                     {
                         break;
@@ -70,14 +66,21 @@ namespace PressPlay.FFWD.Components
 
         public void UpdateParticleColor(ref Particle particle)
         {
-            float colorScale = 1 - (particle.Energy / particle.StartingEnergy);
-            float startIndex = colorScale * 4;
-            if (startIndex == 4)
+            if (doesAnimateColor)
             {
-                startIndex = 3;
+                float colorScale = 1 - (particle.Energy / particle.StartingEnergy);
+                float startIndex = colorScale * 4;
+                if (startIndex == 4)
+                {
+                    startIndex = 3;
+                }
+                colorScale = startIndex - (int)startIndex;
+                particle.Color = Color.Lerp(colorAnimation[(int)startIndex], colorAnimation[(int)startIndex + 1], colorScale);
             }
-            colorScale = startIndex - (int)startIndex;
-            particle.Color = Color.Lerp(colorAnimation[(int)startIndex], colorAnimation[(int)startIndex + 1], colorScale);
+            else
+            {
+                particle.Color = renderer.material.color;
+            }
         }
 
     }

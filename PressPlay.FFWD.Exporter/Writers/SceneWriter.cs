@@ -392,6 +392,13 @@ namespace PressPlay.FFWD.Exporter.Writers
                     {
                         writer.WriteElementString("color", ToString(mat.color));
                     }
+                    else
+                    {
+                        if (mat.HasProperty("_TintColor"))
+                        {
+                            writer.WriteElementString("color", ToString(mat.GetColor("_TintColor")));
+                        }
+                    }
                     if (mat.mainTexture != null)
                     {
                         writer.WriteElementString("mainTexture", mat.mainTexture.name);

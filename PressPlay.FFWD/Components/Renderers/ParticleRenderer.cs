@@ -68,7 +68,7 @@ namespace PressPlay.FFWD.Components
             {
                 effect.TextureEnabled = true;
                 effect.Texture = materials[0].texture;
-                device.BlendState = materials[0].blendState;
+                device.BlendState =  materials[0].blendState;
             }
             effect.VertexColorEnabled = true;
 
@@ -85,10 +85,6 @@ namespace PressPlay.FFWD.Components
                 {
                     RenderParticle(particlesRendered * 4, particlesRendered * 6, ref emitter.particles[i]);
                     particlesRendered++;
-                    if (particlesRendered == 1)
-                    {
-                        Debug.Display("First part at " + ToString(), emitter.particles[i].Position);
-                    }
                 }
             }
 
