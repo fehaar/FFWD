@@ -102,7 +102,6 @@ namespace PressPlay.FFWD
 
             if (currentClipValue == clip)
             {
-                Debug.Log(currentClipValue.name + " already started");
                 return;
             }
 
@@ -111,8 +110,6 @@ namespace PressPlay.FFWD
             state.time = 0.0f;
             state.enabled = true;
 
-            Debug.Log(currentClipValue.name + " start " + clip.name + " at " + state.startTime + " with length " + state.length);
-        
             currentTimeValue = TimeSpan.FromSeconds(state.time);
 
             currentKeyframe = 0;

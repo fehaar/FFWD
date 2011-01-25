@@ -61,6 +61,7 @@ public class ExportSceneWizard : ScriptableWizard {
     public string audioDir = @"PressPlay.Tentacles.Win\PressPlay.Tentacles.WinContent\Sounds";
     public string meshDir = @"PressPlay.Tentacles.Win\PressPlay.Tentacles.WinContent\Models";
     public string configSource = @"Editor\FFWD\PressPlay.FFWD.Exporter.dll.config";
+    public bool showComponentsNotWritten = true;
     public bool flipYInTransforms = true;
 
     public string[] scenes = { 
@@ -93,6 +94,15 @@ public class ExportSceneWizard : ScriptableWizard {
 
         Debug.Log("Start scene export of " + Path.GetFileName(EditorApplication.currentScene));
         scene.Write(Path.ChangeExtension(Path.GetFileName(EditorApplication.currentScene), "xml"));
+
+        if (showComponentsNotWritten)
+        {
+            foreach (string item in scene.componentsNotWritten)
+            {
+                Debug.Log("Skipped component: " + item);
+            }
+        }
+        scene.componentsNotWritten.Clear();
         Debug.Log("End scene export of " + Path.GetFileName(EditorApplication.currentScene));
     }
 

@@ -15,9 +15,7 @@ namespace PressPlay.FFWD
             }
             set 
             { 
-                
                 time = value * length;
-                Debug.Display("normalized time", value);
             }
         }
 
