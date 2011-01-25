@@ -178,7 +178,7 @@ namespace PressPlay.FFWD.Components
                                             Random.Range(-rndVelocity.y, rndVelocity.y),
                                             Random.Range(-rndVelocity.z, rndVelocity.z)) / 2;
 
-            Vector3 localVel = transform.forward * localVelocity;
+            Vector3 localVel = -Microsoft.Xna.Framework.Vector3.Transform(localVelocity, transform.rotation);
             particles[index].Velocity = emitterVelocity + worldVelocity + localVel + randomVel;
             Debug.Log("Part " + index + " from " + ToString() + " : " + particles[index].Velocity);
 
