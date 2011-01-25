@@ -126,10 +126,7 @@ namespace PressPlay.FFWD.Components
             {
                 return;
             }
-            if (String.IsNullOrEmpty(clip.name))
-            {
-                clip.name = newName;
-            }
+            clip.name = newName;
             clips[newName] = clip;
             states[newName] = new AnimationState() { length = clip.length, wrapMode = clip.wrapMode };
             if (String.IsNullOrEmpty(animationIndex))
@@ -140,10 +137,9 @@ namespace PressPlay.FFWD.Components
 
         public void AddClip(AnimationClip clip, string newName, int firstFrame, int lastFrame)
         {
-            AddClip(clip, newName);
-            states[newName].firstFrame = firstFrame;
-            states[newName].lastFrame = lastFrame;
-            states[newName].length = (lastFrame - firstFrame) / 30.0f;
+            AnimationClip newClip = new AnimationClip(clip, newName, firstFrame, lastFrame);
+            AddClip(newClip, newName);
+            states[newName].length = (float)newClip.Duration.TotalSeconds;
         }
 
         public void AddClip(AnimationClip clip, string newName, int firstFrame, int lastFrame, bool addLoopFrame)
@@ -220,7 +216,7 @@ namespace PressPlay.FFWD.Components
         {
             if (animationPlayer != null)
             {
-                animationPlayer.Update(true, Matrix.Identity);
+                animationPlayer.Update(Matrix.Identity);
             }
         }
 

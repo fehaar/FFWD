@@ -20,6 +20,30 @@ namespace PressPlay.FFWD
     /// </summary>
     public class AnimationClip
     {
+        internal AnimationClip(AnimationClip clip, string newName, int firstFrame, int lastFrame)
+        {
+            this.name = newName;
+            if (firstFrame < 0)
+            {
+                firstFrame = 0;
+            }
+            double startTime = firstFrame * (1.0 / 30.0);
+            double endTime = lastFrame * (1.0 / 30.0);
+            if (clip.Keyframes != null)
+            {
+                Keyframes = new List<Keyframe>();
+                foreach (Keyframe frame in clip.Keyframes)
+                {
+                    double keySecs = frame.Time.TotalSeconds;
+                    if (keySecs >= startTime && keySecs < endTime)
+                    {
+                        Keyframes.Add(new Keyframe(frame.Bone, TimeSpan.FromSeconds(keySecs - startTime), frame.Transform));
+                    }
+                }
+            }
+            this.Duration = TimeSpan.FromSeconds(endTime - startTime);
+        }
+
         [ContentSerializerIgnore]
         public float length
         {

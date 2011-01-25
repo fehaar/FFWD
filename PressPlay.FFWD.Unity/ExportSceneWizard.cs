@@ -7,6 +7,19 @@ using UnityEngine;
 public class ExportSceneWizard : ScriptableWizard {
     public ExportSceneWizard()
     {
+        if (EditorPrefs.HasKey("FFWD configSource"))
+        {
+            configSource = EditorPrefs.GetString("FFWD configSource");
+        }
+        if (EditorPrefs.HasKey("FFWD XNA dir"))
+        {
+            xnaDir = EditorPrefs.GetString("FFWD XNA dir");
+        }
+        if (EditorPrefs.HasKey("FFWD scenes"))
+        {
+            scenes = EditorPrefs.GetString("FFWD scenes").Split(';');
+        }
+
         string configPath = Path.Combine(Application.dataPath, configSource);
 
         if (File.Exists(configPath))
@@ -40,8 +53,6 @@ public class ExportSceneWizard : ScriptableWizard {
         wiz.ExportResource(((Transform)command.context).gameObject);
     }
 
-    private bool hasLoadedPrefs = false;
-
     public string scriptNamespace = @"PressPlay.Tentacles.Scripts";
     public string xnaDir = @"C:\Projects\PressPlay\Tentacles\XNA";
     public string exportDir = @"PressPlay.Tentacles.XmlContent";
@@ -68,28 +79,9 @@ public class ExportSceneWizard : ScriptableWizard {
 
     public void OnWizardUpdate()
     {
-        if (!hasLoadedPrefs)
-        {
-            if (EditorPrefs.HasKey("FFWD configSource"))
-            {
-                configSource = EditorPrefs.GetString("FFWD configSource");
-            }
-            if (EditorPrefs.HasKey("FFWD XNA dir"))
-            {
-                xnaDir = EditorPrefs.GetString("FFWD XNA dir");
-            }
-            if (EditorPrefs.HasKey("FFWD scenes"))
-            {
-                scenes = EditorPrefs.GetString("FFWD scenes").Split(';');
-            }
-            hasLoadedPrefs = true;
-        }
-        else
-        {
-            EditorPrefs.SetString("FFWD XNA dir", xnaDir);
-            EditorPrefs.SetString("FFWD configSource", configSource);
-            EditorPrefs.SetString("FFWD scenes", string.Join(";", scenes));
-        }
+        EditorPrefs.SetString("FFWD XNA dir", xnaDir);
+        EditorPrefs.SetString("FFWD configSource", configSource);
+        EditorPrefs.SetString("FFWD scenes", string.Join(";", scenes));
     }
 
     public void OnWizardCreate()  
