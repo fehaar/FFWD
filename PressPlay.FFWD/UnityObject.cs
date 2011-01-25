@@ -124,6 +124,9 @@ namespace PressPlay.FFWD
             Dictionary<int, UnityObject> idMap = new Dictionary<int, UnityObject>();
             clone.SetNewId(idMap);
             clone.FixReferences(idMap);
+
+            Application.AwakeNewComponents();
+
             return idMap[original.GetInstanceID()];
         }
 
