@@ -55,6 +55,17 @@ namespace PressPlay.FFWD
         }
 
         /// <summary>
+        /// NOTE: This is a bad implementation of this as we statistically get more points on certain areas of the sphere.
+        /// </summary>
+        public static Vector3 onUnitSphere
+        {
+            get
+            {
+                return insideUnitSphere.normalized;
+            }
+        }
+
+        /// <summary>
         /// NOTE: This is a bad implementation of this as we statistically get more points on the outside of the circle.
         /// </summary>
         public static Vector2 insideUnitCircle

@@ -86,7 +86,6 @@ namespace PressPlay.FFWD
                 body = body.GetNext();
             }
 
-
             world.Step(elapsedTime, velocityIterations, positionIterations);
 
             // Sync positions of game objects
