@@ -7,7 +7,13 @@ using UnityEngine;
 public class ExportSceneWizard : ScriptableWizard {
     public ExportSceneWizard()
     {
-        resolver = TypeResolver.ReadConfiguration(configSource);
+        string configPath = Path.Combine(Application.dataPath, configSource);
+
+        if (File.Exists(configPath))
+        {
+            resolver = TypeResolver.ReadConfiguration(configPath);
+        }
+
         if (resolver == null)
         {
             Debug.LogWarning("We have no TypeResolver so we will not export any components");
@@ -43,7 +49,7 @@ public class ExportSceneWizard : ScriptableWizard {
     public string textureDir = @"PressPlay.Tentacles.Win\PressPlay.Tentacles.WinContent\Textures";
     public string audioDir = @"PressPlay.Tentacles.Win\PressPlay.Tentacles.WinContent\Sounds";
     public string meshDir = @"PressPlay.Tentacles.Win\PressPlay.Tentacles.WinContent\Models";
-    public string configSource = @"C:\Projects\PressPlay\Tentacles\Unity\Assets\Editor\FFWD\PressPlay.FFWD.Exporter.dll.config";
+    public string configSource = @"Editor\FFWD\PressPlay.FFWD.Exporter.dll.config";
     public bool flipYInTransforms = true;
 
     public string[] scenes = { 
