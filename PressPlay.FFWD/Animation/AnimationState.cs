@@ -15,9 +15,7 @@ namespace PressPlay.FFWD
             }
             set 
             { 
-                
                 time = value * length;
-                Debug.Display("normalized time", value);
             }
         }
 
@@ -28,8 +26,5 @@ namespace PressPlay.FFWD
         public float speed = 1.0f;
         public float length;
         public WrapMode wrapMode;
-
-        internal int firstFrame = -1;
-        internal int lastFrame = Int32.MaxValue;
     }
 }

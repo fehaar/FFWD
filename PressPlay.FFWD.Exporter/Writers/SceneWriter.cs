@@ -30,6 +30,7 @@ namespace PressPlay.FFWD.Exporter.Writers
 
         private List<GameObject> Prefabs = new List<GameObject>();
         private List<int> writtenIds = new List<int>();
+        public List<string> componentsNotWritten = new List<string>();
 
         public void Write(string path)
         {
@@ -235,18 +236,24 @@ namespace PressPlay.FFWD.Exporter.Writers
                 }
                 catch
                 {
-                    Debug.Log("Exception when writing " + component.GetType() + " on " + component.name + " under " + component.transform.root.name);
-                    throw;
+                    Debug.Log("Exception when writing " + component.GetType() + " on " + component.name + " under " + component.transform.root.name, component);
+                }
+            }
+            else
+            {
+                if (!componentsNotWritten.Contains(type.FullName))
+                {
+                    componentsNotWritten.Add(type.FullName);
                 }
             }
             return false;
         }
 
-        internal void WriteTexture(Texture texture)
-        {
-            writer.WriteElementString("texture", texture.name);
-            assetHelper.ExportTexture(texture as Texture2D);
-        }
+        //internal void WriteTexture(Texture texture)
+        //{
+        //    writer.WriteElementString("texture", texture.name);
+        //    assetHelper.ExportTexture(texture as Texture2D);
+        //}
 
         internal void WriteScript(MonoBehaviour component, bool overwrite)
         {
@@ -411,7 +418,15 @@ namespace PressPlay.FFWD.Exporter.Writers
                         writer.WriteElementString("mainTexture", mat.mainTexture.name);
                         writer.WriteElementString("mainTextureOffset", ToString(mat.mainTextureOffset));
                         writer.WriteElementString("mainTextureScale", ToString(mat.mainTextureScale));
-                        assetHelper.ExportTexture(mat.mainTexture as Texture2D);
+                        try
+                        {
+                            assetHelper.ExportTexture(mat.mainTexture as Texture2D);
+                        }
+                        catch (UnityException ex)
+                        {
+                            Debug.Log("Error when exporting texture in Material " + mat.name, mat);
+                            throw;
+                        }
                     }
                     writer.WriteEndElement();
                     return;
