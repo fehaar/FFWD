@@ -17,9 +17,9 @@ namespace PressPlay.FFWD
             prefabs = new List<GameObject>();
         }
 
-        [ContentSerializer(FlattenContent = true, CollectionItemName = "gameObject")]
+        [ContentSerializer(FlattenContent = true, CollectionItemName = "go")]
         public List<GameObject> gameObjects { get; set; }
-        [ContentSerializer(FlattenContent = true, CollectionItemName = "prefab")]
+        [ContentSerializer(FlattenContent = true, CollectionItemName = "p")]
         public List<GameObject> prefabs { get; set; }
 
         public void AfterLoad(Dictionary<int, UnityObject> idMap)

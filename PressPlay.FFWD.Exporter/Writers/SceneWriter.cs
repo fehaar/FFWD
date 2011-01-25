@@ -64,7 +64,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                 writer.WriteStartElement("XnaContent");
                 writer.WriteStartElement("Asset");
                 writer.WriteAttributeString("Type", resolver.DefaultNamespace + ".Scene");
-                writer.WriteStartElement("gameObject");
+                writer.WriteStartElement("go");
                 WriteGameObject(go);
                 writer.WriteEndElement();
                 WritePrefabs();
@@ -99,7 +99,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                 {
                     continue;
                 }
-                writer.WriteStartElement("gameObject");
+                writer.WriteStartElement("go");
                 WriteGameObject(go);
                 writer.WriteEndElement();
             }
@@ -114,7 +114,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                     continue;
                 }
                 writtenIds.Add(Prefabs[i].GetInstanceID());
-                writer.WriteStartElement("prefab");
+                writer.WriteStartElement("p");
                 WriteGameObject(Prefabs[i]);
                 writer.WriteEndElement();
             }
@@ -128,7 +128,7 @@ namespace PressPlay.FFWD.Exporter.Writers
             writer.WriteElementString("layer", ToString(go.layer));
             writer.WriteElementString("active", ToString(go.active));
             writer.WriteElementString("tag", go.tag);
-            writer.WriteStartElement("components");
+            writer.WriteStartElement("cs");
             Component[] comps = go.GetComponents(typeof(Component));
             for (int i = 0; i < comps.Length; i++)
             {
@@ -154,7 +154,7 @@ namespace PressPlay.FFWD.Exporter.Writers
             }
             if (!isPrefab)
             {
-                writer.WriteStartElement("component");
+                writer.WriteStartElement("c");
                 writer.WriteAttributeString("Type", "PressPlay.FFWD.Transform");
             }
             writer.WriteElementString("id", transform.GetInstanceID().ToString());
@@ -162,19 +162,26 @@ namespace PressPlay.FFWD.Exporter.Writers
             {
                 writer.WriteElementString("isPrefab", ToString(true));
             }
-            writer.WriteElementString("localPosition", ToString(pos));
-            writer.WriteElementString("localScale", ToString(transform.localScale));
-            writer.WriteElementString("localRotation", ToString(transform.localRotation));
             if (!isPrefab && transform.childCount > 0)
             {
-                writer.WriteStartElement("children");
                 for (int i = 0; i < transform.childCount; i++)
                 {
-                    writer.WriteStartElement("child");
+                    writer.WriteStartElement("go");
                     WriteGameObject(transform.GetChild(i).gameObject);
                     writer.WriteEndElement();
                 }
-                writer.WriteEndElement();
+            }
+            if (pos != Vector3.zero)
+            {
+                writer.WriteElementString("p", ToString(pos));
+            }
+            if (transform.localScale != Vector3.one)
+            {
+                writer.WriteElementString("s", ToString(transform.localScale));
+            }
+            if (transform.localRotation != Quaternion.identity)
+            {
+                writer.WriteElementString("r", ToString(transform.localRotation));
             }
             if (!isPrefab)
             {
@@ -211,7 +218,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                     writtenIds.Add(component.GetInstanceID());
                     if (!isPrefab)
                     {
-                        writer.WriteStartElement("component");
+                        writer.WriteStartElement("c");
                         writer.WriteAttributeString("Type", resolver.ResolveTypeName(component));
                     }
                     writer.WriteElementString("id", component.GetInstanceID().ToString());

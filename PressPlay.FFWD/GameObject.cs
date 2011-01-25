@@ -137,7 +137,7 @@ namespace PressPlay.FFWD
         #endregion
 
         //public String prefab { get; set; }
-        [ContentSerializer(CollectionItemName = "component", Optional = true)]
+        [ContentSerializer(ElementName = "cs", CollectionItemName = "c", Optional = true)]
         private List<Component> components { get; set; }
 
         internal override void AfterLoad(Dictionary<int, UnityObject> idMap)

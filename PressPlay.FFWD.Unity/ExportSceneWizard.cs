@@ -17,14 +17,14 @@ public class ExportSceneWizard : ScriptableWizard {
         assets.TextureDir = Path.Combine(xnaDir, textureDir);
         assets.ScriptDir = Path.Combine(xnaDir, scriptDir);
         assets.MeshDir = Path.Combine(xnaDir, meshDir);
-        assets.AudioDir = Path.Combine(xnaDir, audioDir);
+        assets.AudioDir = Path.Combine(xnaDir, audioDir);        
     }
     
 
     [MenuItem("Press Play/FFWD/Export Scene")]
     static void CreateWizard()
     {
-        ScriptableWizard.DisplayWizard("Export Scene to XNA", typeof(ExportSceneWizard), "Execute");
+        ScriptableWizard.DisplayWizard("Export Scene to XNA", typeof(ExportSceneWizard), "Open scene", "Selected scenes");
     }
 
     [MenuItem("CONTEXT/Transform/FFWD Export Resource")]
@@ -33,6 +33,8 @@ public class ExportSceneWizard : ScriptableWizard {
         ExportSceneWizard wiz = new ExportSceneWizard();
         wiz.ExportResource(((Transform)command.context).gameObject);
     }
+
+    private bool hasLoadedPrefs = false;
 
     public string scriptNamespace = @"PressPlay.Tentacles.Scripts";
     public string xnaDir = @"C:\Projects\PressPlay\Tentacles\XNA";
@@ -44,8 +46,45 @@ public class ExportSceneWizard : ScriptableWizard {
     public string configSource = @"C:\Projects\PressPlay\Tentacles\Unity\Assets\Editor\FFWD\PressPlay.FFWD.Exporter.dll.config";
     public bool flipYInTransforms = true;
 
+    public string[] scenes = { 
+        @"Assets\Levels (Scenes)\Build Levels\Green_intro.unity",
+        @"Assets\Levels (Scenes)\Build Levels\petridish_tutorial.unity",
+        @"Assets\Levels (Scenes)\Build Levels\Green_currentsAndTiming.unity",
+        @"Assets\Levels (Scenes)\Build Levels\INTESTINES_FirstMovingSpikesEasy.unity",
+        @"Assets\Levels (Scenes)\Build Levels\VEIN_SuperEasy.unity",
+        @"Assets\Levels (Scenes)\Build Levels\Green_VeryEasy_OnlySpikes.unity",
+        @"Assets\Levels (Scenes)\Base Scenes\Preloader.unity"
+    };
+
+
     private TypeResolver resolver;
     private AssetHelper assets;
+
+    public void OnWizardUpdate()
+    {
+        if (!hasLoadedPrefs)
+        {
+            if (EditorPrefs.HasKey("FFWD configSource"))
+            {
+                configSource = EditorPrefs.GetString("FFWD configSource");
+            }
+            if (EditorPrefs.HasKey("FFWD XNA dir"))
+            {
+                xnaDir = EditorPrefs.GetString("FFWD XNA dir");
+            }
+            if (EditorPrefs.HasKey("FFWD scenes"))
+            {
+                scenes = EditorPrefs.GetString("FFWD scenes").Split(';');
+            }
+            hasLoadedPrefs = true;
+        }
+        else
+        {
+            EditorPrefs.SetString("FFWD XNA dir", xnaDir);
+            EditorPrefs.SetString("FFWD configSource", configSource);
+            EditorPrefs.SetString("FFWD scenes", string.Join(";", scenes));
+        }
+    }
 
     public void OnWizardCreate()  
     {
@@ -57,6 +96,21 @@ public class ExportSceneWizard : ScriptableWizard {
         Debug.Log("Start scene export of " + Path.GetFileName(EditorApplication.currentScene));
         scene.Write(Path.ChangeExtension(Path.GetFileName(EditorApplication.currentScene), "xml"));
         Debug.Log("End scene export of " + Path.GetFileName(EditorApplication.currentScene));
+    }
+
+    public void OnWizardOtherButton()
+    {
+        foreach (string name in scenes)
+        {
+            if (EditorApplication.OpenScene(name))
+            {
+                OnWizardCreate();
+            }
+            else
+            {
+                Debug.Log("Could not open scene " + name);
+            }
+        }
     }
 
     public void ExportResource(GameObject go)

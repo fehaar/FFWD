@@ -19,7 +19,12 @@ namespace PressPlay.FFWD
         #endregion
 
         #region Properties
+        [ContentSerializer(Optional = true, CollectionItemName = "go", FlattenContent = true)]
+        private List<GameObject> children { get; set; }
+
+        [ContentSerializer(ElementName = "p", Optional = true)]
         private Vector3 _localPosition;
+        [ContentSerializerIgnore]
         public Vector3 localPosition
         {
             get
@@ -39,7 +44,9 @@ namespace PressPlay.FFWD
             }
         }
 
-        private Vector3 _localScale;
+        [ContentSerializer(ElementName = "s", Optional = true)]
+        private Vector3 _localScale = Vector3.one;
+        [ContentSerializerIgnore]
         public Vector3 localScale
         {
             get
@@ -53,7 +60,9 @@ namespace PressPlay.FFWD
             }
         }
 
-        private Quaternion _localRotation;
+        [ContentSerializer(ElementName = "r", Optional = true)]
+        private Quaternion _localRotation = Quaternion.identity;
+        [ContentSerializerIgnore]
         public Quaternion localRotation
         {
             get
@@ -102,9 +111,6 @@ namespace PressPlay.FFWD
                 hasDirtyWorld = true;
             }
         }
-
-        [ContentSerializer(Optional = true, CollectionItemName = "child")]
-        private List<GameObject> children { get; set; }
 
         private Matrix _world = Matrix.Identity;
 
