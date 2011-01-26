@@ -105,19 +105,19 @@ namespace PressPlay.FFWD.Components
         public void PlayQueued(string name, QueueMode mode)
         {
             // TODO : Add implementation of method
-            throw new NotImplementedException("Method not implemented.");
+            //throw new NotImplementedException("Method not implemented.");
         }
 
         public void Stop()
         {
             // TODO : Add implementation of method
-            throw new NotImplementedException("Method not implemented.");
+            //throw new NotImplementedException("Method not implemented.");
         }
 
         public void Stop(string name)
         {
             // TODO : Add implementation of method
-            throw new NotImplementedException("Method not implemented.");
+            //throw new NotImplementedException("Method not implemented.");
         }
 	
         public void AddClip(AnimationClip clip, string newName)
@@ -172,7 +172,7 @@ namespace PressPlay.FFWD.Components
         public void CrossFade(string name, float fadeLength)
         {
             // TODO : Add implementation of method
-            throw new NotImplementedException("Method not implemented.");
+            //throw new NotImplementedException("Method not implemented.");
 
         }
 
