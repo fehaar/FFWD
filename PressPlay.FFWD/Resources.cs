@@ -15,13 +15,13 @@ namespace PressPlay.FFWD
         public static UnityObject Load(string name)
         {
             Application.loadingScene = true;
-            GameObject go = AssetHelper.Load<GameObject>(Path.Combine("Resources", name));
-            go.AfterLoad(null);
-            go.SetNewId(null);
+            Scene scene = AssetHelper.Load<Scene>(Path.Combine("Resources", name));
+            scene.AfterLoad(null);
+            scene.Initialize();
             Application.loadingScene = false;
             Application.LoadNewAssets();
 
-            return go;
+            return scene.gameObjects[0];
         }
     }
 }

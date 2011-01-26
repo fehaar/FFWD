@@ -223,6 +223,7 @@
     <Compile Include="Physics\Collision.cs" />
     <Compile Include="Physics\ContactPoint.cs" />
     <Compile Include="Physics\LayerMask.cs" />
+    <Compile Include="Physics\LayerMaskOperations.cs" />
     <Compile Include="Physics\Physics.cs" />
     <Compile Include="Physics\RaycastHelper.cs" />
     <Compile Include="Physics\RaycastHit.cs" />
@@ -268,6 +269,9 @@
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(SolutionDir)PressPlay.FFWD.Exporter.dll.config" "$(SolutionDir)..\Unity\Assets\Editor\FFWD\"</PostBuildEvent>
+  </PropertyGroup>
   <!--
       To modify your build process, add your task inside one of the targets below and uncomment it. 
       Other similar extension points exist, see Microsoft.Common.targets.

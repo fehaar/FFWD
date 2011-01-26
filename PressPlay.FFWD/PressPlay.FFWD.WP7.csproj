@@ -155,6 +155,7 @@
     <Compile Include="Components\ParticleEmitter.cs" />
     <Compile Include="Components\Renderers\ParticleRenderer.cs" />
     <Compile Include="Components\Renderers\TextRenderer.cs" />
+    <Compile Include="Physics\LayerMaskOperations.cs" />
     <Compile Include="Ray.cs" />
     <Compile Include="Color.cs" />
     <Compile Include="Component.cs" />

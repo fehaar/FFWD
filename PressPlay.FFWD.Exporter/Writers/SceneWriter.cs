@@ -30,6 +30,7 @@ namespace PressPlay.FFWD.Exporter.Writers
 
         private List<GameObject> Prefabs = new List<GameObject>();
         private List<int> writtenIds = new List<int>();
+        public List<string> componentsNotWritten = new List<string>();
 
         public void Write(string path)
         {
@@ -63,8 +64,11 @@ namespace PressPlay.FFWD.Exporter.Writers
                 writer.WriteStartDocument();
                 writer.WriteStartElement("XnaContent");
                 writer.WriteStartElement("Asset");
-                writer.WriteAttributeString("Type", resolver.DefaultNamespace + ".GameObject");
+                writer.WriteAttributeString("Type", resolver.DefaultNamespace + ".Scene");
+                writer.WriteStartElement("go");
                 WriteGameObject(go);
+                writer.WriteEndElement();
+                WritePrefabs();
                 writer.WriteEndElement();
                 writer.WriteEndElement();
             }
@@ -96,7 +100,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                 {
                     continue;
                 }
-                writer.WriteStartElement("gameObject");
+                writer.WriteStartElement("go");
                 WriteGameObject(go);
                 writer.WriteEndElement();
             }
@@ -111,7 +115,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                     continue;
                 }
                 writtenIds.Add(Prefabs[i].GetInstanceID());
-                writer.WriteStartElement("prefab");
+                writer.WriteStartElement("p");
                 WriteGameObject(Prefabs[i]);
                 writer.WriteEndElement();
             }
@@ -125,7 +129,7 @@ namespace PressPlay.FFWD.Exporter.Writers
             writer.WriteElementString("layer", ToString(go.layer));
             writer.WriteElementString("active", ToString(go.active));
             writer.WriteElementString("tag", go.tag);
-            writer.WriteStartElement("components");
+            writer.WriteStartElement("cs");
             Component[] comps = go.GetComponents(typeof(Component));
             for (int i = 0; i < comps.Length; i++)
             {
@@ -151,7 +155,7 @@ namespace PressPlay.FFWD.Exporter.Writers
             }
             if (!isPrefab)
             {
-                writer.WriteStartElement("component");
+                writer.WriteStartElement("c");
                 writer.WriteAttributeString("Type", "PressPlay.FFWD.Transform");
             }
             writer.WriteElementString("id", transform.GetInstanceID().ToString());
@@ -159,19 +163,26 @@ namespace PressPlay.FFWD.Exporter.Writers
             {
                 writer.WriteElementString("isPrefab", ToString(true));
             }
-            writer.WriteElementString("localPosition", ToString(pos));
-            writer.WriteElementString("localScale", ToString(transform.localScale));
-            writer.WriteElementString("localRotation", ToString(transform.localRotation));
             if (!isPrefab && transform.childCount > 0)
             {
-                writer.WriteStartElement("children");
                 for (int i = 0; i < transform.childCount; i++)
                 {
-                    writer.WriteStartElement("child");
+                    writer.WriteStartElement("go");
                     WriteGameObject(transform.GetChild(i).gameObject);
                     writer.WriteEndElement();
                 }
-                writer.WriteEndElement();
+            }
+            if (pos != Vector3.zero)
+            {
+                writer.WriteElementString("p", ToString(pos));
+            }
+            if (transform.localScale != Vector3.one)
+            {
+                writer.WriteElementString("s", ToString(transform.localScale));
+            }
+            if (transform.localRotation != Quaternion.identity)
+            {
+                writer.WriteElementString("r", ToString(transform.localRotation));
             }
             if (!isPrefab)
             {
@@ -208,7 +219,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                     writtenIds.Add(component.GetInstanceID());
                     if (!isPrefab)
                     {
-                        writer.WriteStartElement("component");
+                        writer.WriteStartElement("c");
                         writer.WriteAttributeString("Type", resolver.ResolveTypeName(component));
                     }
                     writer.WriteElementString("id", component.GetInstanceID().ToString());
@@ -225,18 +236,24 @@ namespace PressPlay.FFWD.Exporter.Writers
                 }
                 catch
                 {
-                    Debug.Log("Exception when writing " + component.GetType() + " on " + component.name + " under " + component.transform.root.name);
-                    throw;
+                    Debug.Log("Exception when writing " + component.GetType() + " on " + component.name + " under " + component.transform.root.name, component);
+                }
+            }
+            else
+            {
+                if (!componentsNotWritten.Contains(type.FullName))
+                {
+                    componentsNotWritten.Add(type.FullName);
                 }
             }
             return false;
         }
 
-        internal void WriteTexture(Texture texture)
-        {
-            writer.WriteElementString("texture", texture.name);
-            assetHelper.ExportTexture(texture as Texture2D);
-        }
+        //internal void WriteTexture(Texture texture)
+        //{
+        //    writer.WriteElementString("texture", texture.name);
+        //    assetHelper.ExportTexture(texture as Texture2D);
+        //}
 
         internal void WriteScript(MonoBehaviour component, bool overwrite)
         {
@@ -389,12 +406,27 @@ namespace PressPlay.FFWD.Exporter.Writers
                     {
                         writer.WriteElementString("color", ToString(mat.color));
                     }
+                    else
+                    {
+                        if (mat.HasProperty("_TintColor"))
+                        {
+                            writer.WriteElementString("color", ToString(mat.GetColor("_TintColor")));
+                        }
+                    }
                     if (mat.mainTexture != null)
                     {
                         writer.WriteElementString("mainTexture", mat.mainTexture.name);
                         writer.WriteElementString("mainTextureOffset", ToString(mat.mainTextureOffset));
                         writer.WriteElementString("mainTextureScale", ToString(mat.mainTextureScale));
-                        assetHelper.ExportTexture(mat.mainTexture as Texture2D);
+                        try
+                        {
+                            assetHelper.ExportTexture(mat.mainTexture as Texture2D);
+                        }
+                        catch (UnityException ex)
+                        {
+                            Debug.Log("Error when exporting texture in Material " + mat.name, mat);
+                            throw;
+                        }
                     }
                     writer.WriteEndElement();
                     return;

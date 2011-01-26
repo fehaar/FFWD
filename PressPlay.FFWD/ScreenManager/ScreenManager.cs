@@ -297,6 +297,22 @@ namespace PressPlay.FFWD.ScreenManager
             TouchPanel.EnabledGestures = screen.EnabledGestures;
         }
 
+        /// <summary>
+        /// Adds a new screen to the screen manager below the current one.
+        /// </summary>
+        public void AddScreenBelow(GameScreen screen, PlayerIndex? controllingPlayer)
+        {
+            screen.ControllingPlayer = controllingPlayer;
+            screen.ScreenManager = this;
+            screen.IsExiting = false;
+
+            // If we have a graphics device, tell the screen to load content.
+            if (isInitialized)
+            {
+                screen.LoadContent();
+            }
+            screens.Insert(Math.Max(0, screens.Count - 1), screen);
+        }
 
         /// <summary>
         /// Removes a screen from the screen manager. You should normally

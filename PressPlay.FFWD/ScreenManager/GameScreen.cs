@@ -229,7 +229,7 @@ namespace PressPlay.FFWD.ScreenManager
 
         bool isSerializable = true;
 
-
+        public bool isLoading = false;
         #endregion
 
         #region Initialization

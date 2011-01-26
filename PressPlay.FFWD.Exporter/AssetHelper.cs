@@ -61,6 +61,7 @@ namespace PressPlay.FFWD.Exporter
             catch (UnityException ue)
             {
                 Debug.Log(ue.ToString());
+                throw;
             }
         }
 
@@ -117,6 +118,7 @@ namespace PressPlay.FFWD.Exporter
             catch (Exception ex)
             {
                 Debug.Log("Could not copy mesh '" + path + "' for " + mesh.name + ". " + ex.Message, mesh);
+                throw;
             }
         }
 
@@ -136,6 +138,7 @@ namespace PressPlay.FFWD.Exporter
             catch (UnityException ue)
             {
                 Debug.Log(ue.ToString());
+                throw;
             }
 
         }

@@ -100,13 +100,16 @@ namespace PressPlay.FFWD
             if (clip == null)
                 throw new ArgumentNullException("clip");
 
+            if (currentClipValue == clip)
+            {
+                return;
+            }
+
             currentClipValue = clip;
             currentStateValue = state;
-            state.startTime = state.firstFrame / 30;
-            state.time = state.startTime;
-            state.length = (state.lastFrame - state.firstFrame) / 30;
+            state.time = 0.0f;
             state.enabled = true;
-        
+
             currentTimeValue = TimeSpan.FromSeconds(state.time);
 
             currentKeyframe = 0;
@@ -118,9 +121,9 @@ namespace PressPlay.FFWD
         /// <summary>
         /// Advances the current animation position.
         /// </summary>
-        public void Update(bool relativeToCurrentTime, Matrix rootTransform)
+        public void Update(Matrix rootTransform)
         {
-            UpdateBoneTransforms(TimeSpan.FromSeconds(Time.deltaTime * currentStateValue.speed), relativeToCurrentTime);
+            UpdateBoneTransforms(TimeSpan.FromSeconds(Time.deltaTime * currentStateValue.speed));
             UpdateWorldTransforms(rootTransform);
             UpdateSkinTransforms();
         }
@@ -128,7 +131,7 @@ namespace PressPlay.FFWD
         /// <summary>
         /// Helper used by the Update method to refresh the BoneTransforms data.
         /// </summary>
-        public void UpdateBoneTransforms(TimeSpan time, bool relativeToCurrentTime)
+        public void UpdateBoneTransforms(TimeSpan time)
         {
             if (currentClipValue == null)
                 throw new InvalidOperationException("AnimationPlayer.Update was called before StartClip");
@@ -140,39 +143,30 @@ namespace PressPlay.FFWD
 
             //set the current time of the animation, to what is set in the current AnimationState. This is how we scrub through animations
             currentTimeValue = TimeSpan.FromSeconds(currentStateValue.time);
-
-            // Update the animation position.
-            if (relativeToCurrentTime)
-            {
-                time += currentTimeValue;
-
-                // If we reached the end, loop back to the start.
-                while (time >= currentClipValue.Duration)
-                    time -= currentClipValue.Duration;
-            }
-
-            if ((time < TimeSpan.Zero) || (time >= currentClipValue.Duration))
-                throw new ArgumentOutOfRangeException("time");
+            time += currentTimeValue;
 
             // See if we should terminate
-            if (time.TotalSeconds > (currentStateValue.length + currentStateValue.startTime))
+            if (time.TotalSeconds > currentStateValue.length)
             {
-                if (currentStateValue.wrapMode == WrapMode.Once)
+                switch (currentStateValue.wrapMode)
                 {
-                    currentStateValue.enabled = false;
-                    return;
-                }
-                if (currentStateValue.wrapMode == WrapMode.Loop)
-                {
-                    time = TimeSpan.FromSeconds(currentStateValue.startTime);
-                }
-                if (currentStateValue.wrapMode == WrapMode.PingPong)
-                {
-                    currentStateValue.speed *= -1;
-                }
-                if (currentStateValue.wrapMode == WrapMode.Default)
-                {
-                    throw new NotImplementedException("What to do here?");
+                    case WrapMode.Once:
+                        currentStateValue.enabled = false;
+                        return;
+                    case WrapMode.Loop:
+                        time = TimeSpan.FromSeconds(currentStateValue.startTime);
+                        break;
+                    case WrapMode.PingPong:
+                        currentStateValue.speed *= -1;
+                        break;
+                    case WrapMode.Default:
+                        break;
+                    case WrapMode.Clamp:
+                        time = TimeSpan.FromSeconds(currentStateValue.length);
+                        break;
+                    default:
+                        throw new NotImplementedException("What to do here?");
+                        break;
                 }
             }
 
@@ -196,14 +190,16 @@ namespace PressPlay.FFWD
 
                 // Stop when we've read up to the current time position.
                 if (keyframe.Time > currentTimeValue)
+                {
                     break;
+                }
 
                 // Use this keyframe.
                 boneTransforms[keyframe.Bone] = keyframe.Transform;
 
                 currentKeyframe++;
             }
-
+            //Debug.Log(currentClipValue.name + ": Stop at keyframe " + currentKeyframe + " with time " + keyframes[currentKeyframe].Time + " on " + currentTimeValue);
             
         }
         

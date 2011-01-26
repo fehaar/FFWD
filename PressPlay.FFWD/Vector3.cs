@@ -276,10 +276,10 @@ namespace PressPlay.FFWD
             throw new NotImplementedException();
         }
 
-        //TODO
-        public static Vector3 Angle(Vector3 from, Vector3 to)
+        //TODO TEST THIS
+        public static float Angle(Vector3 from, Vector3 to)
         {
-            throw new NotImplementedException();
+            return (float)Math.Acos((double)Vector3.Dot(from, to));
         }
 
         public static float Distance(Vector3 a, Vector3 b)

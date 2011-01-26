@@ -172,6 +172,10 @@ namespace PressPlay.FFWD
             {
                 Camera lineCam = (String.IsNullOrEmpty(ApplicationSettings.DebugLineCamera)) ? Camera.main : Camera.FindByName(ApplicationSettings.DebugLineCamera);
                 Debug.DrawLines(GraphicsDevice, lineCam);
+                if (lineCam != null)
+                {
+                    Debug.Display(lineCam.name, lineCam.transform.position);
+                }
             }
             if (ApplicationSettings.ShowFPSCounter)
             {
@@ -226,33 +230,7 @@ namespace PressPlay.FFWD
             sceneToLoad = "";
             loadingScene = false;
 
-            Dictionary<int, UnityObject> idMap = new Dictionary<int, UnityObject>();
-            scene.AfterLoad(idMap);            
-            // Remove placeholder references and replace them with live ones
-            List<IdMap> idMaps = new List<IdMap>();
-            for (int i = 0; i < newComponents.Count; i++)
-            {
-                newComponents[i].FixReferences(idMap);
-                if (newComponents[i] is IdMap)
-                {
-                    idMaps.Add(newComponents[i] as IdMap);
-                }
-            }
-            idMap.Clear();
-            // Issue new ids to all objects from a scene now that references have been fixed
-            for (int i = 0; i < scene.gameObjects.Count; i++)
-            {
-                scene.gameObjects[i].SetNewId(idMap);
-            }
-            for (int i = 0; i < scene.prefabs.Count; i++)
-            {
-                scene.prefabs[i].SetNewId(idMap);
-            }
-            for (int i = 0; i < idMaps.Count; i++)
-            {
-                idMaps[i].UpdateIdReferences(idMap);
-                newComponents.Remove(idMaps[i]);
-            }
+            scene.Initialize();
             GC.Collect();
         }
 

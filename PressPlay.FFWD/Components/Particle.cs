@@ -13,5 +13,6 @@ namespace PressPlay.FFWD.Components
         public float Energy;
         public float StartingEnergy;
         public float Size;
+        public Color Color;
     }
 }

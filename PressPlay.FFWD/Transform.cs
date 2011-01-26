@@ -19,7 +19,12 @@ namespace PressPlay.FFWD
         #endregion
 
         #region Properties
+        [ContentSerializer(Optional = true, CollectionItemName = "go", FlattenContent = true)]
+        private List<GameObject> children { get; set; }
+
+        [ContentSerializer(ElementName = "p", Optional = true)]
         private Vector3 _localPosition;
+        [ContentSerializerIgnore]
         public Vector3 localPosition
         {
             get
@@ -28,12 +33,20 @@ namespace PressPlay.FFWD
             }
             set
             {
+                if (float.IsNaN(value.x) || float.IsNaN(value.y) || float.IsNaN(value.z))
+                {
+                    Debug.Log("Trying to set local position to NaN!!!");
+                    return;
+                }
+
                 _localPosition = value;
                 hasDirtyWorld = true;
             }
         }
 
-        private Vector3 _localScale;
+        [ContentSerializer(ElementName = "s", Optional = true)]
+        private Vector3 _localScale = Vector3.one;
+        [ContentSerializerIgnore]
         public Vector3 localScale
         {
             get
@@ -47,7 +60,9 @@ namespace PressPlay.FFWD
             }
         }
 
-        private Quaternion _localRotation;
+        [ContentSerializer(ElementName = "r", Optional = true)]
+        private Quaternion _localRotation = Quaternion.identity;
+        [ContentSerializerIgnore]
         public Quaternion localRotation
         {
             get
@@ -97,20 +112,21 @@ namespace PressPlay.FFWD
             }
         }
 
-        [ContentSerializer(Optional = true, CollectionItemName = "child")]
-        private List<GameObject> children { get; set; }
-
         private Matrix _world = Matrix.Identity;
 
         private bool _hasDirtyWorld = true;
-        private bool hasDirtyWorld
+        internal bool hasDirtyWorld
         {
             get
             {
                 return _hasDirtyWorld;
             }
-            set
+            private set
             {
+                if (gameObject != null)
+                {
+                    gameObject.isStatic = false;
+                }
                 _hasDirtyWorld = value;
                 if (children != null)
                 {
@@ -140,10 +156,22 @@ namespace PressPlay.FFWD
         {
             get
             {
+                //Vector3 pos = world.Translation;
+                //if (float.IsNaN(pos.x) || float.IsNaN(pos.y) || float.IsNaN(pos.z))
+                //{
+                //    //Debug.Log("Trying to set position to NaN!!!");
+                //    return pos;
+                //}
                 return world.Translation;
             }
             set
             {
+                if (float.IsNaN(value.x) || float.IsNaN(value.y) || float.IsNaN(value.z))
+                {
+                    //Debug.Log("Trying to set position to NaN!!!");
+                    return;
+                }
+
                 if (parent == null)
                 {
                     localPosition = value;
@@ -153,10 +181,17 @@ namespace PressPlay.FFWD
                     Vector3 trans = Microsoft.Xna.Framework.Vector3.Transform(value, Matrix.Invert(parent.world));
                     localPosition = trans;
                 }
+
+                
+
                 if (rigidbody != null)
                 {
                     rigidbody.MovePosition(position);
                 }
+                /*else if (collider != null)
+                {
+                    collider.MovePosition(position);
+                }*/
             }
         }
 
@@ -242,7 +277,7 @@ namespace PressPlay.FFWD
         {
             get
             {
-                return -Microsoft.Xna.Framework.Vector3.Normalize(world.Right);
+                return Microsoft.Xna.Framework.Vector3.Normalize(world.Right);
             }
         }
 
@@ -501,6 +536,8 @@ namespace PressPlay.FFWD
 
         public void LookAt(Vector3 worldPosition, Vector3 worldUp)
         {
+            if (worldPosition == position) { return; }
+
             Matrix m = Matrix.CreateWorld(position, worldPosition - position, worldUp);
             Microsoft.Xna.Framework.Vector3 scale;
             Microsoft.Xna.Framework.Quaternion rot;
