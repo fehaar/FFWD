@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using PressPlay.FFWD.ScreenManager;
 using Microsoft.Xna.Framework.Input.Touch;
+using Microsoft.Xna.Framework.Input;
 
 namespace PressPlay.FFWD.UI.Controls
 {
@@ -42,8 +43,23 @@ namespace PressPlay.FFWD.UI.Controls
 
         public override void HandleInput(InputState input)
         {
+ 
             base.HandleInput(input);
 
+#if WINDOWS
+            KeyboardState ks = Keyboard.GetState();
+            if (ks.IsKeyDown(Keys.Up))
+            {
+                Debug.Log("Key is up!!");
+                scrollTracker.MoveScrollTracker(+30);
+            }
+            else if (ks.IsKeyDown(Keys.Down))
+            {
+                scrollTracker.MoveScrollTracker(-30);
+            }
+#endif
+
+#if WINDOWS_PHONE
             bool doScrollInput = false;
             for (int i = 0; i < input.TouchState.Count; i++)
             {
@@ -59,6 +75,7 @@ namespace PressPlay.FFWD.UI.Controls
                 //Debug.Log("Updating scrollbar: " + scrollTracker.ViewRect.Y);
                 scrollTracker.HandleInput(input);
             }
+#endif
 
             if (hasScrolled && children != null)
             {
