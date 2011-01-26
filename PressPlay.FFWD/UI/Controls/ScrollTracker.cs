@@ -103,6 +103,10 @@ namespace PressPlay.FFWD.UI.Controls
         // This must be called manually each tick that the ScrollTracker is active.
         public void Update()
         {
+#if WINDOWS
+
+            return;
+#endif
             // Apply velocity and clamping
             float dt = Time.deltaTime;
 
@@ -128,6 +132,11 @@ namespace PressPlay.FFWD.UI.Controls
             ViewRect.Y = (int)ViewOrigin.y;
 
             //Debug.Log("ViewRect: "+ViewRect+" CanvasRect: "+CanvasRect+" ViewMin: "+viewMin+" ViewMax: "+viewMax);
+        }
+
+        public void MoveScrollTracker(float value)
+        {
+            ViewRect.Y += (int)value;
         }
 
         // This must be called manually each tick that the ScrollTracker is active.
