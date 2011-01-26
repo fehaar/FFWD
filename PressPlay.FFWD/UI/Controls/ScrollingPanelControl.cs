@@ -50,7 +50,6 @@ namespace PressPlay.FFWD.UI.Controls
             KeyboardState ks = Keyboard.GetState();
             if (ks.IsKeyDown(Keys.Up))
             {
-                Debug.Log("Key is up!!");
                 scrollTracker.MoveScrollTracker(+30);
             }
             else if (ks.IsKeyDown(Keys.Down))
