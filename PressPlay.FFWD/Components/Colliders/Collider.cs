@@ -81,5 +81,22 @@ namespace PressPlay.FFWD.Components
                 Physics.RemoveStays(this);
             }
         }
+
+        public bool Raycast(Ray ray, out RaycastHit hitInfo, float distance)
+        {
+            //TODO: optimize this to only raycast to the relevant body. The current implementation is VERY VERY SLOW
+            RaycastHit[] hits = Physics.RaycastAll(ray.origin,ray.direction,distance);
+
+            foreach (RaycastHit hit in hits)
+            {
+                if (hit.collider == this)
+                {
+                    hitInfo = hit;
+                    return true;
+                }
+            }
+            hitInfo = new RaycastHit();
+            return false;
+        }
     }
 }
