@@ -464,6 +464,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                     {
                         writer.WriteElementString("id", go.GetInstanceID().ToString());
                         writer.WriteElementString("isPrefab", ToString(true));
+                        AddPrefab(go);
                     }
                     writer.WriteEndElement();
                     return;
