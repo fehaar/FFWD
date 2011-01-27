@@ -146,7 +146,7 @@ namespace PressPlay.FFWD.Components
         public void Blend(string name, float weight, float length)
         {
             // TODO : Add implementation of method
-            throw new NotImplementedException("Method not implemented.");
+            //throw new NotImplementedException("Method not implemented.");
         }
 
         public void CrossFade(string name)
