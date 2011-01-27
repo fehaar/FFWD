@@ -468,12 +468,12 @@ namespace PressPlay.FFWD.Exporter.Writers
                     Component theObject = (obj as Component);
                     writer.WriteStartElement(name);
 
-                    if ((theObject != null) && (obj is MonoBehaviour) && obj.GetType() != elementType)
-                    {
+                    if ((theObject != null) && (obj.GetType() != elementType))
+                    {   
                         writer.WriteAttributeString("Type", resolver.ResolveTypeName(obj));
                     }
                    
-                    if (theObject == null || !WriteComponent(theObject as Component, true))
+                    if (theObject == null || !WriteComponent(theObject, true))
                     {
                         writer.WriteAttributeString("Null", ToString(true));
                         writer.WriteEndElement();
