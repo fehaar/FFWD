@@ -17,14 +17,13 @@ namespace PressPlay.FFWD.Components
             base.Awake();
             // Create animation players/clips for the rigid model
             animation = GetComponentInParents<Animation>();
-            if ((sharedMesh.skinnedModel != null) && (sharedMesh.skinnedModel.SkinningData != null))
-            {
-                if (sharedMesh.skinnedModel.SkinningData.AnimationClips != null)
-                {
-                    animation.Initialize(sharedMesh.skinnedModel.SkinningData);
-                }
-            }
-
+            //if ((sharedMesh.skinnedModel != null) && (sharedMesh.skinnedModel.SkinningData != null))
+            //{
+            //    if (sharedMesh.skinnedModel.SkinningData.AnimationClips != null)
+            //    {
+            //        animation.Initialize(sharedMesh.skinnedModel.SkinningData);
+            //    }
+            //}
         }
 
         #region IRenderable Members

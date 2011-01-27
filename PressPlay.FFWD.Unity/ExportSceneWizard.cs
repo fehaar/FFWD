@@ -3,8 +3,17 @@ using PressPlay.FFWD.Exporter;
 using PressPlay.FFWD.Exporter.Writers;
 using UnityEditor;
 using UnityEngine;
+using System.Collections.Generic;
 
-public class ExportSceneWizard : ScriptableWizard {
+public class ExportSceneWizard : ScriptableWizard
+{
+
+    private List<string> allComponentsNotWritten = new List<string>();
+    private List<string> allowedSkippedComponents = new List<string>(new string[]{"PPMetrics", "PPCommunicator", "CheatManager", "UIManager", "DamageVisualizer", "SnapToAxis", "SnapToYAxis",
+    	"PoolableTrailRenderer", "UnityEngine.MeshCollider", "LoadPreloaderFirst", "DrawIcon", "DoNotRenderAtRuntime", "MetricDataHandler", "XNAEllipsoidParticleEmitter", 
+		"UnityEngine.ConfigurableJoint", "LemmySquishedTester", "GameObjectPreloader", "SpriteText", "ReturnPoolableObject", "GameObjectPreloaderSet", 
+		"SnapLocalPosition", "InputRayPlaneHandler"});
+
     public ExportSceneWizard()
     {
         if (EditorPrefs.HasKey("FFWD configSource"))
@@ -36,9 +45,9 @@ public class ExportSceneWizard : ScriptableWizard {
         assets.TextureDir = Path.Combine(xnaDir, textureDir);
         assets.ScriptDir = Path.Combine(xnaDir, scriptDir);
         assets.MeshDir = Path.Combine(xnaDir, meshDir);
-        assets.AudioDir = Path.Combine(xnaDir, audioDir);        
+        assets.AudioDir = Path.Combine(xnaDir, audioDir);
     }
-    
+
 
     [MenuItem("Press Play/FFWD/Export Scene")]
     static void CreateWizard()
@@ -85,29 +94,44 @@ public class ExportSceneWizard : ScriptableWizard {
         EditorPrefs.SetString("FFWD scenes", string.Join(";", scenes));
     }
 
-    public void OnWizardCreate()  
+    public void OnWizardCreate()
     {
         SceneWriter scene = new SceneWriter(resolver, assets);
         scene.ExportDir = Path.Combine(Path.Combine(xnaDir, exportDir), "Scenes");
         scene.FlipYInTransforms = flipYInTransforms;
         ScriptTranslator.ScriptNamespace = scriptNamespace;
 
-        Debug.Log("Start scene export of " + Path.GetFileName(EditorApplication.currentScene));
+        Debug.Log("----------------------- " + Path.GetFileName(EditorApplication.currentScene) + " -------------------------Start scene export");
         scene.Write(Path.ChangeExtension(Path.GetFileName(EditorApplication.currentScene), "xml"));
 
         if (showComponentsNotWritten)
         {
+            string skippedComponents = "";
             foreach (string item in scene.componentsNotWritten)
             {
-                Debug.Log("Skipped component: " + item);
+                if (allowedSkippedComponents.Contains(item)) { continue; }
+
+                if (!allComponentsNotWritten.Contains(item))
+                {
+                    allComponentsNotWritten.Add(item);
+                }
+                skippedComponents += item + ", ";
+            }
+            if (skippedComponents != "")
+            {
+                Debug.Log("Skipped component: " + skippedComponents);
             }
         }
         scene.componentsNotWritten.Clear();
-        Debug.Log("End scene export of " + Path.GetFileName(EditorApplication.currentScene));
+        //Debug.Log("---End scene export of " + Path.GetFileName(EditorApplication.currentScene));
     }
 
     public void OnWizardOtherButton()
     {
+        allComponentsNotWritten.Clear();
+
+        Debug.Log("******************************* START LEVEL EXPORT ***************************************");
+
         foreach (string name in scenes)
         {
             if (EditorApplication.OpenScene(name))
@@ -119,6 +143,14 @@ public class ExportSceneWizard : ScriptableWizard {
                 Debug.Log("Could not open scene " + name);
             }
         }
+
+        string notWritten = "";
+        foreach (string item in allComponentsNotWritten)
+        {
+            notWritten += item + ", ";
+        }
+
+        Debug.Log(notWritten);
     }
 
     public void ExportResource(GameObject go)

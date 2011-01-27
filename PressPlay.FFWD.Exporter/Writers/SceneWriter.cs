@@ -318,6 +318,11 @@ namespace PressPlay.FFWD.Exporter.Writers
                     writer.WriteElementString(name, ToString((Boolean)obj));
                     return;
                 }
+                if (obj is bool[])
+                {
+                    writer.WriteElementString(name, ToString(obj as bool[]));
+                    return;
+                }
                 if (obj is int)
                 {
                     writer.WriteElementString(name, obj.ToString());
@@ -548,6 +553,17 @@ namespace PressPlay.FFWD.Exporter.Writers
         }
 
         #region ToString methods
+        private string ToString(bool[] array)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (bool item in array)
+            {
+                sb.Append(ToString(item));
+                sb.Append(" ");
+            }
+            return sb.ToString();
+        }
+
         private string ToString(int[] array)
         {
             StringBuilder sb = new StringBuilder();

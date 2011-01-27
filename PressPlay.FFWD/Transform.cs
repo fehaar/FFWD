@@ -156,19 +156,12 @@ namespace PressPlay.FFWD
         {
             get
             {
-                //Vector3 pos = world.Translation;
-                //if (float.IsNaN(pos.x) || float.IsNaN(pos.y) || float.IsNaN(pos.z))
-                //{
-                //    //Debug.Log("Trying to set position to NaN!!!");
-                //    return pos;
-                //}
                 return world.Translation;
             }
             set
             {
                 if (float.IsNaN(value.x) || float.IsNaN(value.y) || float.IsNaN(value.z))
                 {
-                    //Debug.Log("Trying to set position to NaN!!!");
                     return;
                 }
 
@@ -181,17 +174,10 @@ namespace PressPlay.FFWD
                     Vector3 trans = Microsoft.Xna.Framework.Vector3.Transform(value, Matrix.Invert(parent.world));
                     localPosition = trans;
                 }
-
-                
-
                 if (rigidbody != null)
                 {
                     rigidbody.MovePosition(position);
                 }
-                /*else if (collider != null)
-                {
-                    collider.MovePosition(position);
-                }*/
             }
         }
 
