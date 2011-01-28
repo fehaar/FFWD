@@ -103,6 +103,11 @@ namespace PressPlay.FFWD.UI.Controls
 
         override public Vector2 ComputeSize()
         {
+            if (font == null)
+            {
+                return Vector2.zero;
+            }
+
             return font.MeasureString(text);
         }
     }
