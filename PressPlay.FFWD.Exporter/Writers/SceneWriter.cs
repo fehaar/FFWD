@@ -318,6 +318,11 @@ namespace PressPlay.FFWD.Exporter.Writers
                     writer.WriteElementString(name, ToString((Boolean)obj));
                     return;
                 }
+                if (obj is bool[])
+                {
+                    writer.WriteElementString(name, ToString(obj as bool[]));
+                    return;
+                }
                 if (obj is int)
                 {
                     writer.WriteElementString(name, obj.ToString());
@@ -459,6 +464,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                     {
                         writer.WriteElementString("id", go.GetInstanceID().ToString());
                         writer.WriteElementString("isPrefab", ToString(true));
+                        AddPrefab(go);
                     }
                     writer.WriteEndElement();
                     return;
@@ -468,12 +474,12 @@ namespace PressPlay.FFWD.Exporter.Writers
                     Component theObject = (obj as Component);
                     writer.WriteStartElement(name);
 
-                    if ((theObject != null) && (obj is MonoBehaviour) && obj.GetType() != elementType)
-                    {
+                    if ((theObject != null) && (obj.GetType() != elementType))
+                    {   
                         writer.WriteAttributeString("Type", resolver.ResolveTypeName(obj));
                     }
                    
-                    if (theObject == null || !WriteComponent(theObject as Component, true))
+                    if (theObject == null || !WriteComponent(theObject, true))
                     {
                         writer.WriteAttributeString("Null", ToString(true));
                         writer.WriteEndElement();
@@ -548,6 +554,17 @@ namespace PressPlay.FFWD.Exporter.Writers
         }
 
         #region ToString methods
+        private string ToString(bool[] array)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (bool item in array)
+            {
+                sb.Append(ToString(item));
+                sb.Append(" ");
+            }
+            return sb.ToString();
+        }
+
         private string ToString(int[] array)
         {
             StringBuilder sb = new StringBuilder();

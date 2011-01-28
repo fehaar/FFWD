@@ -34,27 +34,12 @@ namespace PressPlay.FFWD.Components
 
         public override void Awake()
         {
-            MeshFilter filter = GetComponentInChildren<MeshFilter>();
-            if (filter != null)
+            SkinnedMeshRenderer smr = GetComponentInChildren<SkinnedMeshRenderer>();
+            if ((smr != null) && (smr.sharedMesh != null) && (smr.sharedMesh.skinnedModel != null))
             {
-                if (filter.sharedMesh.model != null)
+                if (smr.sharedMesh.skinnedModel.SkinningData.AnimationClips != null)
                 {
-                    GameObjectAnimationData data = filter.sharedMesh.model.Tag as GameObjectAnimationData;
-                    if (data != null)
-                    {
-                        InitializeChildAnimation(data);
-                    }
-                }
-            }
-            else
-            {
-                SkinnedMeshRenderer smr = GetComponentInChildren<SkinnedMeshRenderer>();
-                if (smr.sharedMesh != null && smr.sharedMesh.skinnedModel != null)
-                {
-                    if (smr.sharedMesh.skinnedModel.SkinningData.AnimationClips != null)
-                    {
-                        Initialize(smr.sharedMesh.skinnedModel.SkinningData);
-                    }
+                    Initialize(smr.sharedMesh.skinnedModel.SkinningData, smr.sharedMesh.skinnedModel.BakedTransform);
                 }
             }
         }
@@ -105,19 +90,19 @@ namespace PressPlay.FFWD.Components
         public void PlayQueued(string name, QueueMode mode)
         {
             // TODO : Add implementation of method
-            throw new NotImplementedException("Method not implemented.");
+            //throw new NotImplementedException("Method not implemented.");
         }
 
         public void Stop()
         {
             // TODO : Add implementation of method
-            throw new NotImplementedException("Method not implemented.");
+            //throw new NotImplementedException("Method not implemented.");
         }
 
         public void Stop(string name)
         {
             // TODO : Add implementation of method
-            throw new NotImplementedException("Method not implemented.");
+            //throw new NotImplementedException("Method not implemented.");
         }
 	
         public void AddClip(AnimationClip clip, string newName)
@@ -161,7 +146,7 @@ namespace PressPlay.FFWD.Components
         public void Blend(string name, float weight, float length)
         {
             // TODO : Add implementation of method
-            throw new NotImplementedException("Method not implemented.");
+            //throw new NotImplementedException("Method not implemented.");
         }
 
         public void CrossFade(string name)
@@ -172,39 +157,17 @@ namespace PressPlay.FFWD.Components
         public void CrossFade(string name, float fadeLength)
         {
             // TODO : Add implementation of method
-            throw new NotImplementedException("Method not implemented.");
+            //throw new NotImplementedException("Method not implemented.");
 
         }
 
-        internal void InitializeChildAnimation(GameObjectAnimationData modelData)
-        {
-            Transform[] children = GetComponentsInChildren<Transform>();
-            foreach (string name in modelData.AnimationClips.Keys)
-            {
-                for (int i = 0; i < children.Length; i++)
-                {
-                    if (children[i].gameObject == gameObject)
-                    {
-                        continue;
-                    }
-                    if (name.Contains(children[i].gameObject.name + ":"))
-                    {
-                        TransformAnimation anim = children[i].gameObject.AddComponent<TransformAnimation>();
-                        anim.BaseTransform = Matrix.Invert(modelData.ChildAbsoluteTransforms[children[i].gameObject.name]);
-                        anim.AddClip(modelData.AnimationClips[name], name.Replace(anim.gameObject.name + ":", ""));
-                        break;
-                    }
-                }
-            }
-        }
-
-        internal void Initialize(SkinningData modelData)
+        internal void Initialize(SkinningData modelData, Matrix bakedTransform)
         {
             foreach (string name in modelData.AnimationClips.Keys)
             {
                 AddClip(modelData.AnimationClips[name], name);
             }
-            animationPlayer = new SkinnedAnimationPlayer(modelData);
+            animationPlayer = new SkinnedAnimationPlayer(modelData, bakedTransform);
             if (playAutomatically)
             {
                 animationPlayer.StartClip(clip, states[clip.name]);
@@ -217,6 +180,22 @@ namespace PressPlay.FFWD.Components
             if (animationPlayer != null)
             {
                 animationPlayer.Update(Matrix.Identity);
+
+                // Update child gameobject world positions
+                foreach (var item in transform.GetComponentsInChildren<Transform>())
+	            {
+                    Matrix boneTransform;
+                    if (animationPlayer.WorldTransformForBone(item.name, out boneTransform))
+                    {
+                        if (name == "harmless_door")
+                        {
+                            //m.Translation = -m.Translation;
+                            Debug.Log("Set value for " + item.name + " pos before " + item.position + " anim " + boneTransform.Translation);
+                            item.SetLocalTransform(Matrix.Invert(boneTransform));
+                            Debug.Log("Set value for " + item.name + " pos after " + item.position + " anim " + boneTransform.Translation);
+                        }
+                    }
+	            } 
             }
         }
 
@@ -240,6 +219,7 @@ namespace PressPlay.FFWD.Components
             base.AfterLoad(idMap);
             foreach (string item in animations)
             {
+                // TODO: Why are we doing this when we are using non-existing data?!?!?!
                 AddClip(new AnimationClip(new TimeSpan(), null), item);
             }
         }

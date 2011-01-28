@@ -130,6 +130,11 @@ namespace PressPlay.FFWD
         internal override void FixReferences(Dictionary<int, UnityObject> idMap)
         {
             base.FixReferences(idMap);
+            if (gameObject == null)
+            {
+                return;
+            }
+
             // We find all fields only - not properties as they cannot be set as references in Unity
             FieldInfo[] memInfo = this.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
             for (int i = 0; i < memInfo.Length; i++)
@@ -137,7 +142,7 @@ namespace PressPlay.FFWD
                 if (typeof(UnityObject).IsAssignableFrom(memInfo[i].FieldType))
                 {
                     UnityObject val = (memInfo[i].GetValue(this) as UnityObject);
-                    if (val == null)
+                    if (val == null || !val.isPrefab)
 	                {
                         continue;
 	                }
@@ -146,6 +151,23 @@ namespace PressPlay.FFWD
                         if (val != idMap[val.GetInstanceID()])
                         {
                             memInfo[i].SetValue(this, idMap[val.GetInstanceID()]);
+                        }
+                    }
+                }
+                if (memInfo[i].FieldType.IsArray && typeof(UnityObject).IsAssignableFrom(memInfo[i].FieldType.GetElementType()))
+                {
+                    UnityObject[] arr = (memInfo[i].GetValue(this) as UnityObject[]);
+                    for (int j = 0; j < arr.Length; j++)
+                    {
+                        if ((arr[j] != null) && (arr[j].isPrefab))
+                        {
+                            if (idMap.ContainsKey(arr[j].GetInstanceID()))
+                            {
+                                if (arr[j] != idMap[arr[j].GetInstanceID()])
+                                {
+                                    arr[j] = idMap[arr[j].GetInstanceID()];
+                                }
+                            }
                         }
                     }
                 }

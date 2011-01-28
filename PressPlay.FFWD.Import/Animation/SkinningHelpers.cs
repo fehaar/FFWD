@@ -50,18 +50,25 @@ namespace PressPlay.FFWD.Import.Animation
             List<Matrix> inverseBindPose = new List<Matrix>();
             List<int> skeletonHierarchy = new List<int>();
 
-            foreach (BoneContent bone in bones)
+            // Build up a table mapping bone names to indices.
+            Dictionary<string, int> boneMap = new Dictionary<string, int>();
+
+            for (int i = 0; i < bones.Count; i++)
             {
-                bindPose.Add(bone.Transform);
-                inverseBindPose.Add(Matrix.Invert(bone.AbsoluteTransform));
-                skeletonHierarchy.Add(bones.IndexOf(bone.Parent as BoneContent));
+                string boneName = bones[i].Name;
+                bindPose.Add(bones[i].Transform);
+                inverseBindPose.Add(Matrix.Invert(bones[i].AbsoluteTransform));
+                skeletonHierarchy.Add(bones.IndexOf(bones[i].Parent as BoneContent));
+
+                if (!string.IsNullOrEmpty(boneName))
+                    boneMap.Add(boneName, i);
             }
 
             // Convert animation data to our runtime format.
             Dictionary<string, AnimationClip> animationClips;
-            animationClips = ProcessAnimations(skeleton.Animations, bones);
+            animationClips = ProcessAnimations(skeleton.Animations, bones, boneMap);
 
-            return new SkinningData(animationClips, bindPose, inverseBindPose, skeletonHierarchy);
+            return new SkinningData(animationClips, bindPose, inverseBindPose, skeletonHierarchy, boneMap);
         }
 
 
@@ -69,6 +76,9 @@ namespace PressPlay.FFWD.Import.Animation
         {
             AnimationContentDictionary dict = new AnimationContentDictionary();
             Dictionary<string, Matrix> childAbsoluteTransforms = new Dictionary<string, Matrix>();
+
+            // Build up a table mapping bone names to indices.
+            Dictionary<string, int> boneMap = new Dictionary<string, int>();
 
             List<BoneContent> bones = new List<BoneContent>();
             for (int i = 0; i < input.Children.Count; i++)
@@ -85,9 +95,10 @@ namespace PressPlay.FFWD.Import.Animation
                 {
                     dict.Add(child.Name + ":" + item.Key, item.Value);
                 }
+                boneMap.Add(child.Name, i);
             }
 
-            Dictionary<string, AnimationClip> animationClips = ProcessAnimations(dict, bones);
+            Dictionary<string, AnimationClip> animationClips = ProcessAnimations(dict, bones, boneMap);
 
             return new GameObjectAnimationData(animationClips, childAbsoluteTransforms);
         }
@@ -96,19 +107,8 @@ namespace PressPlay.FFWD.Import.Animation
         /// Converts an intermediate format content pipeline AnimationContentDictionary
         /// object to our runtime AnimationClip format.
         /// </summary>
-        static Dictionary<string, AnimationClip> ProcessAnimations(AnimationContentDictionary animations, IList<BoneContent> bones)
+        static Dictionary<string, AnimationClip> ProcessAnimations(AnimationContentDictionary animations, IList<BoneContent> bones, Dictionary<string, int> boneMap)
         {
-            // Build up a table mapping bone names to indices.
-            Dictionary<string, int> boneMap = new Dictionary<string, int>();
-
-            for (int i = 0; i < bones.Count; i++)
-            {
-                string boneName = bones[i].Name;
-
-                if (!string.IsNullOrEmpty(boneName))
-                    boneMap.Add(boneName, i);
-            }
-
             // Convert each animation in turn.
             Dictionary<string, AnimationClip> animationClips;
             animationClips = new Dictionary<string, AnimationClip>();

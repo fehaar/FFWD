@@ -118,6 +118,7 @@ namespace PressPlay.FFWD
             else if (original is GameObject)
             {
                 GameObject toClone = (original as GameObject).transform.root.gameObject;
+                //GameObject toClone = original as GameObject;
                 clone = toClone.Clone() as GameObject;
             }
             // NOTE: It is very important that this is done at the end otherwise we cannot find the correct object to return.

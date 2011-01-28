@@ -32,7 +32,8 @@ namespace PressPlay.FFWD
         private Matrix[] boneTransforms;
         private Matrix[] worldTransforms;
         private Matrix[] skinTransforms;
-        
+        private Matrix bakedTransform;
+
         // Backlink to the bind pose and skeleton hierarchy data.
         private SkinningData skinningDataValue;
         
@@ -80,7 +81,7 @@ namespace PressPlay.FFWD
         /// <summary>
         /// Constructs a new animation player.
         /// </summary>
-        public SkinnedAnimationPlayer(SkinningData skinningData)
+        public SkinnedAnimationPlayer(SkinningData skinningData, Matrix bakedTransform)
         {
             if (skinningData == null)
                 throw new ArgumentNullException("skinningData");
@@ -90,6 +91,7 @@ namespace PressPlay.FFWD
             boneTransforms = new Matrix[skinningData.BindPose.Count];
             worldTransforms = new Matrix[skinningData.BindPose.Count];
             skinTransforms = new Matrix[skinningData.BindPose.Count];
+            this.bakedTransform = bakedTransform;
         }
 
         /// <summary>
@@ -229,6 +231,22 @@ namespace PressPlay.FFWD
             {
                 skinTransforms[bone] = skinningDataValue.InverseBindPose[bone] * worldTransforms[bone];
             }
+        }
+
+        internal bool WorldTransformForBone(string boneName, out Matrix m)
+        {
+            if (currentClipValue != null)
+            {
+                if (skinningDataValue.BoneMap.ContainsKey(boneName))
+                {
+                    m = worldTransforms[skinningDataValue.BoneMap[boneName]];
+                    // TODO: This is a very brutal hardcoded hack as the animation does not work very well with hiearchical scales
+                    m.Translation = m.Translation * 0.01f;
+                    return true;
+                }
+            }
+            m = Matrix.Identity;
+            return false;
         }
     }
 }

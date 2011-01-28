@@ -50,16 +50,23 @@ namespace PressPlay.FFWD
         public List<int> SkeletonHierarchy { get; private set; }
 
         /// <summary>
+        /// Gets a map of indexes to bones, we need this in the animation player to move the Unity objects.
+        /// </summary>
+        [ContentSerializer]
+        public Dictionary<string, int> BoneMap { get; private set; }
+
+        /// <summary>
         /// Constructs a new skinning data object.
         /// </summary>
         public SkinningData(Dictionary<string, AnimationClip> animationClips,
                             List<Matrix> bindPose, List<Matrix> inverseBindPose,
-                            List<int> skeletonHierarchy)
+                            List<int> skeletonHierarchy, Dictionary<string, int> boneMap)
         {
             AnimationClips = animationClips;
             BindPose = bindPose;
             InverseBindPose = inverseBindPose;
             SkeletonHierarchy = skeletonHierarchy;
+            BoneMap = boneMap;
         }
 
         /// <summary>

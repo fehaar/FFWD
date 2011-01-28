@@ -158,10 +158,6 @@
     <Compile Include="Vector3TypeSerializer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PressPlay.Tentacles.Scripts\PressPlay.Tentacles.Scripts.csproj">
-      <Project>{C7620F77-0746-417F-B44F-C44527E0CE46}</Project>
-      <Name>PressPlay.Tentacles.Scripts</Name>
-    </ProjectReference>
     <ProjectReference Include="..\PressPlay.FFWD\PressPlay.FFWD.csproj">
       <Project>{A02BD389-79AE-4975-9A5E-DEDC66B8A0CB}</Project>
       <Name>PressPlay.FFWD</Name>
