@@ -50,6 +50,7 @@ namespace PressPlay.FFWD.UI.Controls
                 if (_font != value)
                 {
                     _font = value;
+                    textRenderer.font = value;
                     InvalidateAutoSize();
                 }
             }
