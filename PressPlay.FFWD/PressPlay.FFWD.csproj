@@ -204,6 +204,7 @@
     <Compile Include="Components\Renderers\Renderer.cs" />
     <Compile Include="Components\Renderers\SkinnedMeshRenderer.cs" />
     <Compile Include="Components\Renderers\SpriteRenderer.cs" />
+    <Compile Include="Components\Renderers\StaticBatchRenderer.cs" />
     <Compile Include="Components\Renderers\TextRenderer.cs" />
     <Compile Include="Gestures.cs" />
     <Compile Include="Material.cs" />
