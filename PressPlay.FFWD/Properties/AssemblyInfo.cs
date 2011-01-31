@@ -24,6 +24,7 @@ using System.Runtime.InteropServices;
 // title storage container when deploying this assembly to the device.
 [assembly: Guid("6f826f77-77da-43ef-83d9-410818ae4a51")]
 [assembly: InternalsVisibleTo("PressPlay.FFWD.Test")]
+[assembly: InternalsVisibleTo("PressPlay.FFWD.Import")]
 // Version information for an assembly consists of the following four values:
 //
 //      Major Version

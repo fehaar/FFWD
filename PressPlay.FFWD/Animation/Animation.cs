@@ -70,8 +70,7 @@ namespace PressPlay.FFWD.Components
 
         public void Play()
         {
-            // TODO : Add implementation of method
-            throw new NotImplementedException("Method not implemented.");
+            Play(animations[0]);
         }
 
         public void Play(string name)
@@ -95,14 +94,18 @@ namespace PressPlay.FFWD.Components
 
         public void Stop()
         {
-            // TODO : Add implementation of method
-            //throw new NotImplementedException("Method not implemented.");
+            foreach (AnimationState state in states.Values)
+            {
+                state.enabled = false;
+            }
         }
 
         public void Stop(string name)
         {
-            // TODO : Add implementation of method
-            //throw new NotImplementedException("Method not implemented.");
+            if (states.ContainsKey(name))
+            {
+                states[name].enabled = false;
+            }
         }
 	
         public void AddClip(AnimationClip clip, string newName)
@@ -156,9 +159,7 @@ namespace PressPlay.FFWD.Components
 
         public void CrossFade(string name, float fadeLength)
         {
-            // TODO : Add implementation of method
-            //throw new NotImplementedException("Method not implemented.");
-
+            Play(name);
         }
 
         internal void Initialize(SkinningData modelData, Matrix bakedTransform)
@@ -201,7 +202,6 @@ namespace PressPlay.FFWD.Components
 
         public void LateUpdate()
         {
-
         }
         #endregion
 
