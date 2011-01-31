@@ -102,7 +102,7 @@ namespace PressPlay.FFWD
             {
                 lines = new List<Line>();
             }
-            lines.Add(new Line(start, start + (direction * 10000f), color));
+            lines.Add(new Line(start, start + direction, color));
         }
 
         private static BasicEffect effect;
