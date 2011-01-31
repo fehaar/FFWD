@@ -10,7 +10,7 @@ namespace PressPlay.FFWD.UI
 {
     public class UITextRenderer : UIRenderer
     {
-        private SpriteFont font;
+        public SpriteFont font;
         private Vector2 renderPosition = Vector2.zero;
         private Vector2 textSize = Vector2.zero;
 
@@ -31,7 +31,10 @@ namespace PressPlay.FFWD.UI
                 if (value != _text)
                 {
                     _text = value.Replace("”", "");
-                    textSize = font.MeasureString(_text);
+                    if (font != null)
+                    {
+                        textSize = font.MeasureString(_text);
+                    }
                 }
             }
         }
@@ -48,11 +51,16 @@ namespace PressPlay.FFWD.UI
 
         public override void Draw(GraphicsDevice device, Camera cam)
         {
+            if (font == null)
+            {
+                return;
+            }
+            
             //UIRenderer.batch.DrawString(font, text, transform.position, material.color);
             float depth = 1 - ((float)transform.position / 10000f);
 
             //UIRenderer.batch.DrawString(font, text, transform.position, material.color, 0, Microsoft.Xna.Framework.Vector2.Zero, transform.localScale, effects, depth);
-            UIRenderer.batch.DrawString(font, WordWrap(text, control.bounds.Width, font), transform.position, material.color, 0, Microsoft.Xna.Framework.Vector2.Zero, transform.lossyScale, effects, depth);
+            UIRenderer.batch.DrawString(font, WordWrap(text, control.bounds.Width, font), transform.position, material.color, transform.rotation.eulerAngles.y, Microsoft.Xna.Framework.Vector2.Zero, transform.lossyScale, effects, depth);
         }
 
         protected static char[] splitTokens = { ' ', '-' };
@@ -64,6 +72,11 @@ namespace PressPlay.FFWD.UI
         /// </summary>
         protected string WordWrap(string input, int width, SpriteFont font)
         {
+            if (font == null)
+            {
+                return input;
+            }
+            
             StringBuilder output = new StringBuilder();
             output.Length = 0;
 
