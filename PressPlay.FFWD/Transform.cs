@@ -272,7 +272,7 @@ namespace PressPlay.FFWD
         {
             get
             {
-                return Microsoft.Xna.Framework.Vector3.Normalize(world.Forward);
+                return -Microsoft.Xna.Framework.Vector3.Normalize(world.Forward);
             }
         }
 
@@ -281,7 +281,7 @@ namespace PressPlay.FFWD
         {
             get
             {
-                return Microsoft.Xna.Framework.Vector3.Normalize(world.Up);
+                return -Microsoft.Xna.Framework.Vector3.Normalize(world.Up);
             }
         }
 
@@ -689,6 +689,13 @@ namespace PressPlay.FFWD
                     children[i].BroadcastMessage(methodName, value, sendMessageOptions);
                 }
             }
+        }
+
+        public void DebugDrawLocal()
+        {
+            Debug.DrawRay(position, forward, Color.blue);
+            Debug.DrawRay(position, right, Color.red);
+            Debug.DrawRay(position, up, Color.green);
         }
     }
 }
