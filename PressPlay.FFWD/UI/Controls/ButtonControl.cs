@@ -92,7 +92,7 @@ namespace PressPlay.FFWD.UI.Controls
         /// Method for raising the Selected event.
         /// </summary>
         protected virtual void OnClickMethod()
-        {
+        {            
             if (OnClickEvent != null)
             {
                 OnClickEvent(this, new ButtonControlEventArgs(link));
