@@ -22,9 +22,26 @@ namespace PressPlay.FFWD.Exporter.Writers.Components.Extensions
                 throw new Exception("XNAMeshCollider needs a MeshCollider on the same object");
             }
             ColliderWriter writer = new ColliderWriter();
+
+            Quaternion yNeutralRotation = Quaternion.Euler(collider.transform.rotation.eulerAngles.x, 0, collider.transform.rotation.eulerAngles.z);
+
+            Transform meshOrigin = new GameObject().transform;
+            Transform verticePosition = new GameObject().transform;
+            verticePosition.parent = meshOrigin;
+            Vector3[] rotatedVertices = new Vector3[collider.sharedMesh.vertices.Length];
+
+            meshOrigin.transform.rotation = yNeutralRotation;
+
+            for (int i = 0; i < rotatedVertices.Length; i++)
+            {
+                verticePosition.localPosition = collider.sharedMesh.vertices[i];
+                rotatedVertices[i] = verticePosition.position;
+            }
+
             writer.Write(scene, collider);
+
             scene.WriteElement("triangles", collider.sharedMesh.triangles);
-            scene.WriteElement("vertices", collider.sharedMesh.vertices);
+            scene.WriteElement("vertices", rotatedVertices);
         }
         #endregion
     }

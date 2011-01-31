@@ -215,6 +215,8 @@
     <Compile Include="Time.cs" />
     <Compile Include="Transform.cs" />
     <Compile Include="UI\Controls\ButtonControl.cs" />
+    <Compile Include="UI\Controls\ButtonControlOld.cs" />
+    <Compile Include="UI\Controls\ButtonStyle.cs" />
     <Compile Include="UI\Controls\Control.cs" />
     <Compile Include="UI\Controls\Events\LevelSelectEventArgs.cs" />
     <Compile Include="UI\Controls\ImageControl.cs" />
