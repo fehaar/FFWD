@@ -61,7 +61,7 @@ namespace PressPlay.FFWD.Components
 
             RasterizerState oldrasterizerState = device.RasterizerState;
             RasterizerState rasterizerState = new RasterizerState();
-            rasterizerState.CullMode = CullMode.None;
+            rasterizerState.CullMode = CullMode.CullCounterClockwiseFace;
             device.RasterizerState = rasterizerState;
 
             effect.World = Matrix.Identity;
