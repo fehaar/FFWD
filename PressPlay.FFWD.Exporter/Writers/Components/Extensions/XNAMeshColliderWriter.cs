@@ -42,6 +42,7 @@ namespace PressPlay.FFWD.Exporter.Writers.Components.Extensions
 
             scene.WriteElement("triangles", collider.sharedMesh.triangles);
             scene.WriteElement("vertices", rotatedVertices);
+            GameObject.DestroyImmediate(meshOrigin.gameObject);
         }
         #endregion
     }

@@ -21,17 +21,6 @@ namespace PressPlay.FFWD.Components
         private IndexBuffer indexBuffer;
         private BasicEffect effect;
 
-        public override void Awake()
-        {
-            base.Awake();
-
-            MeshRenderer[] renderers = GetComponentsInChildren<MeshRenderer>();
-            for (int i = 0; i < renderers.Length; i++)
-            {
-                Destroy(renderers[i].gameObject);
-            }
-        }
-
         public override void Draw(GraphicsDevice device, Camera cam)
         {
             if (vertexBuffer == null)

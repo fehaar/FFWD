@@ -64,6 +64,14 @@ namespace PressPlay.FFWD
             }
         }
 
+        internal int ComponentCount
+        {
+            get
+            {
+                return components.Count;
+            }
+        }
+
         #region Component shortcut methods
         private Rigidbody _rigidbody;
         [ContentSerializerIgnore]

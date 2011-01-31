@@ -150,6 +150,7 @@
     <Compile Include="Animation\CpuSkinningContentData.cs" />
     <Compile Include="Animation\GpuSkinnedModelProcessor.cs" />
     <Compile Include="Animation\SkinningHelpers.cs" />
+    <Compile Include="SceneProcessor.cs" />
     <Compile Include="Vector2TypeSerializer.cs" />
     <Compile Include="QuaternionTypeSerializer.cs" />
     <Compile Include="Vector3ArrayTypeSerializer.cs" />
