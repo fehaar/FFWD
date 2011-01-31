@@ -36,6 +36,53 @@ namespace PressPlay.FFWD.ScreenManager
 
         public readonly bool[] GamePadWasConnected;
 
+        private bool isMousePressed = false;
+        private bool isMouseReleased = true;
+
+        private bool _isMouseDown = false;
+        private bool _isMouseUp = false;
+
+        public bool isMouseDown
+        {
+            get
+            {
+                bool val = _isMouseDown;
+                _isMouseDown = false;
+                return val;
+            }
+            set
+            {
+                _isMouseDown = value;
+            }
+        }
+        public bool isMouseUp
+        {
+            get
+            {
+                bool val = _isMouseUp;
+                _isMouseUp = false;
+                return val;
+            }
+            set
+            {
+                _isMouseUp = value;
+            }
+        }
+
+        private Vector2 _mousePosition = Vector2.zero;
+        public Vector2 mousePosition
+        {
+            get
+            {
+                if (_mousePosition.x != CurrentMouseState.X || _mousePosition.y != CurrentMouseState.Y)
+                {
+                    _mousePosition = new Vector2(CurrentMouseState.X, CurrentMouseState.Y);
+                }
+
+                return _mousePosition;
+            }
+        }
+        public MouseState CurrentMouseState;
         public TouchCollection TouchState;
 
         public readonly List<GestureSample> Gestures = new List<GestureSample>();
@@ -86,7 +133,36 @@ namespace PressPlay.FFWD.ScreenManager
                 }
             }
 
+            CurrentMouseState = Mouse.GetState();
             TouchState = TouchPanel.GetState();
+
+            if (CurrentMouseState.LeftButton == ButtonState.Pressed)
+            {
+                if (isMousePressed)
+                {
+                    isMouseDown = false;
+                }
+                else
+                {
+                    isMouseDown = true;
+                    isMousePressed = true;
+                    isMouseReleased = false;
+                }
+            }
+
+            if (CurrentMouseState.LeftButton == ButtonState.Released)
+            {
+                if (isMouseReleased)
+                {
+                    isMouseUp = false;
+                }
+                else
+                {
+                    isMouseUp = true;
+                    isMouseReleased = true;
+                    isMousePressed = false;
+                }
+            }
 
             Gestures.Clear();
             while (TouchPanel.IsGestureAvailable)

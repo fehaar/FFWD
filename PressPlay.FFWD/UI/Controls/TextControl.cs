@@ -50,6 +50,7 @@ namespace PressPlay.FFWD.UI.Controls
                 if (_font != value)
                 {
                     _font = value;
+                    textRenderer.font = value;
                     InvalidateAutoSize();
                 }
             }
@@ -102,6 +103,11 @@ namespace PressPlay.FFWD.UI.Controls
 
         override public Vector2 ComputeSize()
         {
+            if (font == null)
+            {
+                return Vector2.zero;
+            }
+
             return font.MeasureString(text);
         }
     }

@@ -177,16 +177,32 @@ namespace PressPlay.FFWD.UI.Controls
             }
         }
 
-        protected virtual bool isInputWithinBounds(InputState input)
+        protected virtual bool isMouseWithinBounds(InputState input)
         {
-            return isInputWithinBounds(input, bounds);
+            return isMouseWithinBounds(input, bounds);
         }
 
-        protected virtual bool isInputWithinBounds(InputState input, Rectangle box)
+        protected virtual bool isMouseWithinBounds(InputState input, Rectangle box)
+        {
+            Vector2 mousePos = input.mousePosition;
+
+            if (box.Contains((int)mousePos.x, (int)mousePos.y))
+            {
+                return true;
+            }
+            
+            return false;
+        }
+
+        protected virtual bool isTouchWithinBounds(InputState input)
+        {
+            return isTouchWithinBounds(input, bounds);
+        }
+
+        protected virtual bool isTouchWithinBounds(InputState input, Rectangle box)
         {
             for (int i = 0; i < input.TouchState.Count; i++)
             {
-                //Debug.Log("bounds: " + box + " input.TouchState[" + i + "]: " + input.TouchState[i].Position);
                 if (box.Contains((int)input.TouchState[i].Position.X, (int)input.TouchState[i].Position.Y))
                 {
                     return true;
@@ -209,6 +225,21 @@ namespace PressPlay.FFWD.UI.Controls
             {
                 children[i].DoTransition(transitionTime);
             }
+        }
+
+        public void AlignCenter()
+        {
+            AlignCenter(Vector2.zero);
+        }
+
+        public void AlignCenter(Vector2 offset)
+        {
+            if (parent == null)
+            {
+                return;
+            }
+
+            transform.localPosition = new Vector3(offset.x + (parent.bounds.Width / 2) - (bounds.Width / 2), transform.localPosition.y, offset.y + (parent.bounds.Height / 2) - (bounds.Height / 2));
         }
 
         #region IUpdateable Members

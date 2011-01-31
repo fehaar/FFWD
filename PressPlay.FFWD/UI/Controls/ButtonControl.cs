@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using PressPlay.FFWD;
 using PressPlay.FFWD.ScreenManager;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
@@ -36,31 +37,33 @@ namespace PressPlay.FFWD.UI.Controls
 
 
     }
-    
+
+    public enum ButtonControlStates
+    {
+        hover,
+        normal,
+        pressed,
+        disabled
+    }
+
     public class ButtonControl : Control
     {
-
         public TextControl textControl;
+        public AudioClip buttonSound;
+        private ImageControl background;
+        private ButtonStyle buttonStyle;
 
-        public ButtonControl(Texture2D texture, string link)
-            : this(texture, link, "", null, Vector2.zero)
+        private ButtonControlStates previousState = ButtonControlStates.normal;
+        private ButtonControlStates _state = ButtonControlStates.normal;
+        public ButtonControlStates state
         {
-
-        }
-
-        public ButtonControl(Texture2D texture, string link, string text, SpriteFont font, Vector2 textPosition)
-        {
-            gameObject.name = "ButtonControl";
-
-            this.link = link;
-
-            AddChild(new ImageControl(texture));
-
-            if (text != "" && font != null)
+            get
             {
-                textControl = new TextControl(text, font, Color.white, textPosition);
-                AddChild(textControl);
-                //t.transform.localPosition += new Vector3(0,100,0);
+                return _state;
+            }
+            set
+            {
+
             }
         }
 
@@ -83,12 +86,12 @@ namespace PressPlay.FFWD.UI.Controls
         /// <summary>
         /// Event raised when the menu entry is selected.
         /// </summary>
-        public event EventHandler<ButtonControlEventArgs> OnClickEvent;
+        public event EventHandler<EventArgs> OnClickEvent;
 
         /// <summary>
         /// Method for raising the Selected event.
         /// </summary>
-        protected internal virtual void OnClickMethod()
+        protected virtual void OnClickMethod()
         {
             if (OnClickEvent != null)
             {
@@ -96,58 +99,121 @@ namespace PressPlay.FFWD.UI.Controls
             }
         }
 
+        public ButtonControl(ButtonStyle buttonStyle, string link)
+        {
+            gameObject.name = "ButtonControl";
+
+            this.buttonStyle = buttonStyle;
+            this.link = link;
+
+            background = new ImageControl(buttonStyle.texture, buttonStyle[ButtonControlStates.normal]);
+            AddChild(background);
+
+            textControl = new TextControl();
+            AddChild(textControl);
+        }
+
+        private void ChangeState(ButtonControlStates newState)
+        {
+            switch(newState){
+                case ButtonControlStates.normal:
+                    
+                    break;
+                case ButtonControlStates.pressed:
+                    break;
+                case ButtonControlStates.hover:
+                    break;
+                case ButtonControlStates.disabled:
+                    break;
+            }
+
+            // we get and set the correct texture
+            ButtonTexture bt = buttonStyle.GetButtonTexture(newState);
+            
+            ((UISpriteRenderer)background.renderer).texture = bt.texture;
+            ((UISpriteRenderer)background.renderer).sourceRect = bt.sourceRect;
+
+            previousState = _state;
+            _state = newState;
+        }
+
+        public void ScaleTextToFit()
+        {
+            // TODO This needs to able to scale the text to fit
+            // Something is broken with the size / bounds logic after scaling
+            textControl.transform.localScale = new Vector3(background.size.x / textControl.size.x);
+        }
+
         public override void HandleInput(InputState input)
         {
             base.HandleInput(input);
 
-#if WINDOWS_PHONE
-            if(isInputWithinBounds(input)){
-                foreach (GestureSample sample in input.Gestures)
+            if (isMouseWithinBounds(input))
+            {
+                if (input.isMouseDown)
                 {
-                    switch (sample.GestureType)
+                    if (state != ButtonControlStates.pressed)
                     {
-                        case GestureType.Tap:
-                            OnClickMethod();
-
-                            break;
+                        ChangeState(ButtonControlStates.pressed);
                     }
                 }
-            }
-#else
-            MouseState ms = Mouse.GetState(); 
-            
-            if (ms.LeftButton == ButtonState.Pressed && IsMouseClickWithinBounds(new Point(ms.X, ms.Y)))
-            {
-                OnClickMethod();
-            }
-
-#endif
-        }
-
-        protected bool IsMouseClickWithinBounds(Point p)
-        {
-            if (useCustomClickRect)
-            {
-                return clickRect.Contains(p);
+                else if(input.isMouseUp)
+                {
+                    if (state == ButtonControlStates.pressed)
+                    {
+                        OnClickMethod();
+                        ChangeState(ButtonControlStates.normal);
+                    }
+                }
+                else if (state != ButtonControlStates.pressed && state != ButtonControlStates.hover)
+                {
+                    ChangeState(ButtonControlStates.hover);
+                }
             }
             else
             {
-                return bounds.Contains(p);
+                if (state == ButtonControlStates.hover || state == ButtonControlStates.pressed)
+                {
+                    ChangeState(ButtonControlStates.normal);
+                }
             }
+
+            //if (input.isMouseDown && IsMouseClickWithinBounds(new Point(ms.X, ms.Y)))
+            //{
+
+            //    if (onClickSourceRect != Rectangle.Empty)
+            //    {
+            //        background.sourceRect = onClickSourceRect;
+            //    }
+
+            //    isPressed = true;
+            //}
+
+            //if (input.isMouseUp && isPressed)
+            //{
+
+            //    if (IsMouseClickWithinBounds(new Point(ms.X, ms.Y)))
+            //    {
+            //        OnClickMethod();
+            //    }
+            //    else
+            //    {
+            //        background.sourceRect = sourceRect;
+            //    }
+
+            //    isPressed = false;
+            //}
         }
 
-        protected override bool isInputWithinBounds(PressPlay.FFWD.ScreenManager.InputState input)
+        protected override bool isMouseWithinBounds(InputState input)
         {
-
-            //return base.isInputWithinBounds(input);
-
             if (useCustomClickRect)
             {
-                return isInputWithinBounds(input, clickRect);
+                return isMouseWithinBounds(input, clickRect);
             }
             else
             {
-                return base.isInputWithinBounds(input);
+                return base.isMouseWithinBounds(input);
             }
         }
     }

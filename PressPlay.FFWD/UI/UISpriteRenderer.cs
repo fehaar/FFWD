@@ -124,7 +124,7 @@ namespace PressPlay.FFWD.UI
 
         public override void Draw(GraphicsDevice device, Camera cam)
         {
-            if (texture.IsDisposed || texture == null)
+            if (texture == null || texture.IsDisposed)
             {
                 return;
             }
