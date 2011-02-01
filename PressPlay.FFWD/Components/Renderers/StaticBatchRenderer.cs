@@ -14,7 +14,7 @@ namespace PressPlay.FFWD.Components
 
         public short[] triangles;
         public float[] vertices;
-        public float[] normals;
+        //public float[] normals;
         public float[] uv;
 
         private VertexBuffer vertexBuffer;
