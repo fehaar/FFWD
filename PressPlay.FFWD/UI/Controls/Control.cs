@@ -244,7 +244,7 @@ namespace PressPlay.FFWD.UI.Controls
 
         public void AlignCenter(Rectangle alignBounds)
         {
-            transform.localPosition = new Vector3((alignBounds.Width / 2) - (bounds.Width / 2), transform.localPosition.y, (alignBounds.Height / 2) - (bounds.Height / 2));
+            transform.localPosition = new Vector3(alignBounds.X + (alignBounds.Width / 2) - (bounds.Width / 2), transform.localPosition.y, alignBounds.Y + (alignBounds.Height / 2) - (bounds.Height / 2));
         }
 
         #region IUpdateable Members
