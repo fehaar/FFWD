@@ -237,7 +237,7 @@ namespace PressPlay.FFWD.Components
                     // It is acceptable behaviour.
                     continue;
                 }
-                if (renderQueue[i].gameObject.active)
+                if (renderQueue[i].gameObject.active && renderQueue[i].enabled)
                 {
                     renderQueue[i].Draw(device, this);
                 }
