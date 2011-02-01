@@ -29,7 +29,8 @@ namespace PressPlay.FFWD
 #if DEBUG
         private Stopwatch scripts = new Stopwatch();
         private Stopwatch physics = new Stopwatch();
-        private Stopwatch graphics = new Stopwatch();
+        private Stopwatch graphics = new Stopwatch(); 
+        public static Stopwatch raycastTimer = new Stopwatch();
 #endif
 
         public static ScreenManager.ScreenManager screenManager;
@@ -176,6 +177,11 @@ namespace PressPlay.FFWD
                 {
                     Debug.Display(lineCam.name, lineCam.transform.position);
                 }
+            }
+            if (ApplicationSettings.ShowRaycastTime)
+            {
+                Debug.Display("Raycasts ms", Application.raycastTimer.ElapsedMilliseconds);
+                raycastTimer.Reset();
             }
             if (ApplicationSettings.ShowFPSCounter)
             {
