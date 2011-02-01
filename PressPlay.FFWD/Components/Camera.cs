@@ -292,16 +292,7 @@ namespace PressPlay.FFWD.Components
             {
                 return 0;
             }
-            float q = renderer.material.renderQueue;
-            if (renderer.material.blendState == BlendState.AlphaBlend)
-            {
-                return q + 0.1f;
-            }
-            if (renderer.material.blendState == BlendState.Additive)
-            {
-                return q + 0.1f;
-            }
-            return q;
+            return renderer.material.CalculateRenderQueue();
         }
         #endregion
 
