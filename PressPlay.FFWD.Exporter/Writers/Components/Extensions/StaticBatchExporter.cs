@@ -28,9 +28,9 @@ namespace PressPlay.FFWD.Exporter.Writers.Components.Extensions
             writer.WriteElement("materials", mr.sharedMaterials);
             writer.WriteElement("triangles", mesh.triangles);
             writer.WriteElement("vertices", mesh.vertices);
-            writer.WriteElement("normals", mesh.normals);
+            //writer.WriteElement("normals", mesh.normals);
             writer.WriteElement("uv", mesh.uv);
-            Debug.Log(script.name + " batched " + combine.Length + " objects into a mesh of " + mesh.triangles.Length + " tris and " + mesh.vertices.Length + " verts.");
+            Debug.Log(script.name + " batched " + combine.Length + " objects into a mesh of " + (mesh.triangles.Length / 3) + " triangles and " + mesh.vertices.Length + " vertices.");
         }
         #endregion
     }
