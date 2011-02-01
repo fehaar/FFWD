@@ -41,27 +41,27 @@ namespace PressPlay.FFWD
             }
 
             // NOTE: We have hardcoded shader values here that should be configurable in some other way
+            blendState = BlendState.Opaque;
             if (shader == "iPhone/Particles/Additive Culled")
             {
                 // HACK : Fix color for Additive shader to disallow alpha
                 color = new Color(color.r, color.g, color.b, 1.0f);
                 blendState = BlendState.Additive;
-            }
-            if (renderQueue == 3000 || shader == "TransperantNoLight")
+            } 
+            else if (renderQueue == 3000 || shader == "TransperantNoLight")
             {
                 blendState = BlendState.AlphaBlend;
             }
         }
 
         [ContentSerializerIgnore]
-        public BlendState blendState = BlendState.Opaque;
+        public BlendState blendState { get; private set; }
 
         internal void SetBlendState(GraphicsDevice device)
         {
-            BlendState newState = blendState;
-            if (device.BlendState != newState)
+            if (device.BlendState != blendState)
             {
-                device.BlendState = newState;
+                device.BlendState = blendState;
             }
         }
 

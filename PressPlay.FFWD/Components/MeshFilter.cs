@@ -11,6 +11,7 @@ namespace PressPlay.FFWD.Components
 
         private BasicEffect effect;
         private BoundingSphere boundingSphere = new BoundingSphere();
+        private VertexPositionTexture[] data = new VertexPositionTexture[0];
 
         internal bool CanDraw()
         {
@@ -65,13 +66,15 @@ namespace PressPlay.FFWD.Components
             effect.Alpha = 1.0f;
 
             // TODO: This can be optimized by not recreating data every time
-            VertexPositionNormalTexture[] data = new VertexPositionNormalTexture[sharedMesh.vertices.Length];
+            if (data.Length < sharedMesh.vertices.Length)
+            {
+                data = new VertexPositionTexture[sharedMesh.vertices.Length];
+            }
             for (int i = 0; i < sharedMesh.vertices.Length; i++)
             {
-                data[i] = new VertexPositionNormalTexture()
+                data[i] = new VertexPositionTexture()
                 {
                     Position = sharedMesh.vertices[i],
-                    Normal = sharedMesh.normals[i],
                     TextureCoordinate = sharedMesh.uv[i]
                 };
             }
@@ -79,7 +82,7 @@ namespace PressPlay.FFWD.Components
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
-                device.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(
+                device.DrawUserIndexedPrimitives<VertexPositionTexture>(
                     PrimitiveType.TriangleList,
                     data,
                     0,
