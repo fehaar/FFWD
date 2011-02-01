@@ -9,7 +9,7 @@ using PressPlay.FFWD.Components;
 
 namespace PressPlay.FFWD
 {
-    internal class Scene
+    public class Scene
     {
         internal Scene()
         {

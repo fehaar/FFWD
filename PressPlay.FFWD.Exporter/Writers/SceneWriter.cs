@@ -346,6 +346,11 @@ namespace PressPlay.FFWD.Exporter.Writers
                     writer.WriteElementString(name, ToString((Vector2)obj));
                     return;
                 }
+                if (obj is Vector2[])
+                {
+                    writer.WriteElementString(name, ToString(obj as Vector2[]));
+                    return;
+                }
                 if (obj is Vector3)
                 {
                     writer.WriteElementString(name, ToString((Vector3)obj));
@@ -571,6 +576,17 @@ namespace PressPlay.FFWD.Exporter.Writers
             foreach (int item in array)
             {
                 sb.Append(item);
+                sb.Append(" ");
+            }
+            return sb.ToString();
+        }
+
+        private string ToString(Vector2[] array)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (Vector2 item in array)
+            {
+                sb.Append(ToString(item));
                 sb.Append(" ");
             }
             return sb.ToString();

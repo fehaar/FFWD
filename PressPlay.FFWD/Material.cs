@@ -66,5 +66,14 @@ namespace PressPlay.FFWD
                 texture = assetHelper.Load<Texture2D>("Textures/" + mainTexture);
             }
         }
+
+        internal void SetBlendState(GraphicsDevice device)
+        {
+            BlendState newState = blendState;
+            if (device.BlendState != newState)
+            {
+                device.BlendState = newState;
+            }
+        }
     }
 }

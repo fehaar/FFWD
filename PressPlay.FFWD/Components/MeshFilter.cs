@@ -59,7 +59,7 @@ namespace PressPlay.FFWD.Components
             {
                 effect.TextureEnabled = true;
                 effect.Texture = materials[0].texture;
-                device.BlendState = materials[0].blendState;
+                materials[0].SetBlendState(device);
             }
             effect.VertexColorEnabled = false;
             effect.Alpha = 1.0f;

@@ -83,7 +83,7 @@ namespace PressPlay.FFWD.Components
         {
             _view = Matrix.CreateLookAt(
                 transform.position,
-                transform.position - transform.forward,
+                transform.position + transform.forward,
                 transform.up);
             return _view;            
         }
