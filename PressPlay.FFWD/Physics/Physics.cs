@@ -237,6 +237,9 @@ namespace PressPlay.FFWD
 
         public static bool Raycast(Vector2 origin, Vector2 direction, float distance, int layerMask)
         {
+#if DEBUG
+            Application.raycastTimer.Start();
+#endif
             RaycastHelper helper = new RaycastHelper(distance, true, layerMask);
             Vector2 pt2 = origin + (direction * distance);
             if (pt2 == origin)
@@ -244,6 +247,9 @@ namespace PressPlay.FFWD
                 return false;
             }
             world.RayCast(helper.rayCastCallback, origin, pt2);
+#if DEBUG
+            Application.raycastTimer.Stop();
+#endif
             return (helper.HitCount > 0);
         }
 
@@ -264,6 +270,9 @@ namespace PressPlay.FFWD
 
         public static bool Raycast(Vector2 origin, Vector2 direction, out RaycastHit hitInfo, float distance, int layerMask)
         {
+#if DEBUG
+            Application.raycastTimer.Start();
+#endif
             RaycastHelper helper = new RaycastHelper(distance, true, layerMask);
             Vector2 pt2 = origin + (direction * distance);
             if (pt2 == origin)
@@ -273,6 +282,10 @@ namespace PressPlay.FFWD
             }
             world.RayCast(helper.rayCastCallback, origin, pt2);
             hitInfo = helper.ClosestHit();
+
+#if DEBUG
+            Application.raycastTimer.Stop();
+#endif
             return (helper.HitCount > 0);
         }
 
@@ -333,6 +346,10 @@ namespace PressPlay.FFWD
 
         public static RaycastHit[] RaycastAll(Vector2 origin, Vector2 direction, float distance, int layerMask)
         {
+#if DEBUG
+            Application.raycastTimer.Start();
+#endif
+
             RaycastHelper helper = new RaycastHelper(distance, false, layerMask);
             Vector2 pt2 = origin + (direction * distance);
             if (pt2 == origin)
@@ -340,6 +357,9 @@ namespace PressPlay.FFWD
                 return new RaycastHit[0];
             }
             world.RayCast(helper.rayCastCallback, origin, pt2);
+#if DEBUG
+            Application.raycastTimer.Stop();
+#endif
             return helper.Hits;
         }
 
@@ -367,6 +387,10 @@ namespace PressPlay.FFWD
 
         public static bool Pointcast(Vector2 point, int layerMask)
         {
+#if DEBUG
+            Application.raycastTimer.Start();
+#endif
+
             RaycastHelper helper = new RaycastHelper(float.MaxValue, true, layerMask);
             AABB aabb = new AABB() { lowerBound = new Vector2(point.x - float.Epsilon, point.y - float.Epsilon), upperBound = new Vector2(point.x + float.Epsilon, point.y + float.Epsilon) };
             world.QueryAABB(helper.pointCastCallback, ref aabb);
@@ -380,17 +404,26 @@ namespace PressPlay.FFWD
 
         public static bool Pointcast(Vector2 point, out RaycastHit hitInfo, int layerMask)
         {
+#if DEBUG
+            Application.raycastTimer.Start();
+#endif
             RaycastHelper helper = new RaycastHelper(float.MaxValue, true, layerMask);
             AABB aabb = new AABB() { lowerBound = new Vector2(point.x - float.Epsilon, point.y - float.Epsilon), upperBound = new Vector2(point.x + float.Epsilon, point.y + float.Epsilon) };
             world.QueryAABB(helper.pointCastCallback, ref aabb);
             if (helper.HitCount > 0)
             {
                 hitInfo = helper.Hits[0];
+#if DEBUG
+                Application.raycastTimer.Stop();
+#endif
                 return true;
             }
             else
             {
                 hitInfo = new RaycastHit();
+#if DEBUG
+                Application.raycastTimer.Stop();
+#endif
                 return false;
             }
         }
@@ -399,6 +432,10 @@ namespace PressPlay.FFWD
         #region Linecast methods
         public static bool Linecast(Vector3 start, Vector3 end, out RaycastHit hitInfo, int layerMask)
         {
+
+#if DEBUG
+            Application.raycastTimer.Start();
+#endif
             Vector2 pt2 = end;
             Vector2 origin = start;
             RaycastHelper helper = new RaycastHelper((origin - pt2).magnitude, true, layerMask);
@@ -409,6 +446,9 @@ namespace PressPlay.FFWD
             }
             world.RayCast(helper.rayCastCallback, origin, pt2);
             hitInfo = helper.ClosestHit();
+#if DEBUG
+            Application.raycastTimer.Stop();
+#endif
             return (helper.HitCount > 0);
         }
         public static bool Linecast(Vector3 start, Vector3 end, out RaycastHit hitInfo)
@@ -425,8 +465,14 @@ namespace PressPlay.FFWD
 
         public static bool CheckCapsule(Vector3 start, Vector3 end, float radius, LayerMask layermask)
         {
+#if DEBUG
+            Application.raycastTimer.Start();
+#endif
             //TODO: implement this
 
+#if DEBUG
+            Application.raycastTimer.Stop();
+#endif
             return false;
         }
         #endregion
