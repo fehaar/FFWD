@@ -145,10 +145,6 @@ namespace PressPlay.FFWD
                     (activeComponents[i] as PressPlay.FFWD.Interfaces.IUpdateable).Update();
                     lateUpdates.Add((activeComponents[i] as PressPlay.FFWD.Interfaces.IUpdateable));
                 }
-                if ((activeComponents[i] is Renderer))
-                {
-                    Camera.AddRenderer(activeComponents[i] as Renderer);
-                }
                 if ((activeComponents[i] is MonoBehaviour))
                 {
                     (activeComponents[i] as MonoBehaviour).UpdateInvokeCalls();
@@ -351,6 +347,10 @@ namespace PressPlay.FFWD
                     if (!cmp.isPrefab)
                     {
                         activeComponents.Add(cmp);
+                        if (cmp is Renderer)
+                        {
+                            Camera.AddRenderer(cmp as Renderer);
+                        }
                     }
                     if (!objects.ContainsKey(cmp.gameObject.GetInstanceID()))
                     {
@@ -402,12 +402,17 @@ namespace PressPlay.FFWD
 
                 if (markedForDestruction[i] is Component)
 	            {
-                    if (markedForDestruction[i] is Camera)
+                    Component cmp = (markedForDestruction[i] as Component);
+                    if (cmp is Renderer)
                     {
-                        ((Camera)markedForDestruction[i]).Destroy();
+                        Camera.RemoveRenderer(cmp as Renderer);
                     }
 
-                    Component cmp = (markedForDestruction[i] as Component);
+                    if (cmp is Camera)
+                    {
+                        Camera.RemoveCamera(cmp as Camera);
+                    }
+
                     if (cmp.gameObject != null)
                     {
                         cmp.gameObject.RemoveComponent(cmp);

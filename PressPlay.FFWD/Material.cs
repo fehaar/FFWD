@@ -21,41 +21,15 @@ namespace PressPlay.FFWD
         [ContentSerializerIgnore]
         public Texture2D texture;
 
-        //public void PrepareLoadContent()
-        //{
-        //    ContentHelper.LoadTexture(mainTexture);
-        //}
-
-        //public void EndLoadContent()
-        //{
-        //    if (texture == null)
-        //    {
-        //        texture = ContentHelper.GetTexture(mainTexture);
-        //    }
-        //}
-
         public void SetColor(string name, Color color)
         {
-            this.color = color;
-        }
-
-        [ContentSerializerIgnore]
-        public BlendState blendState
-        {
-            get
+            if (blendState == BlendState.Additive)
             {
-                // NOTE: We have hardcoded shader values here that should be configurable in some other way
-                if (shader == "iPhone/Particles/Additive Culled")
-                {
-                    // HACK : Fix color for Additive shader to disallow alpha
-                    color = new Color(color.r, color.g, color.b, 1.0f);
-                    return BlendState.Additive;
-                }
-                if (renderQueue == 3000 || shader == "TransperantNoLight")
-                {
-                    return BlendState.AlphaBlend;
-                }
-                return BlendState.Opaque;
+                this.color = new Color(color.r, color.g, color.b, 1.0f);
+            }
+            else
+            {
+                this.color = color;
             }
         }
 
@@ -65,15 +39,48 @@ namespace PressPlay.FFWD
             {
                 texture = assetHelper.Load<Texture2D>("Textures/" + mainTexture);
             }
+
+            // NOTE: We have hardcoded shader values here that should be configurable in some other way
+            blendState = BlendState.Opaque;
+            if (shader == "iPhone/Particles/Additive Culled")
+            {
+                // HACK : Fix color for Additive shader to disallow alpha
+                color = new Color(color.r, color.g, color.b, 1.0f);
+                blendState = BlendState.Additive;
+            } 
+            else if (renderQueue == 3000 || shader == "TransperantNoLight")
+            {
+                blendState = BlendState.AlphaBlend;
+            }
         }
+
+        [ContentSerializerIgnore]
+        public BlendState blendState { get; private set; }
 
         internal void SetBlendState(GraphicsDevice device)
         {
-            BlendState newState = blendState;
-            if (device.BlendState != newState)
+            if (device.BlendState != blendState)
             {
-                device.BlendState = newState;
+                device.BlendState = blendState;
             }
+        }
+
+        private float finalRenderQueue = float.MinValue;
+        internal float CalculateRenderQueue()
+        {
+            if (finalRenderQueue < renderQueue)
+            {
+                finalRenderQueue = renderQueue;
+                if (blendState == BlendState.AlphaBlend)
+                {
+                    finalRenderQueue += 0.1f;
+                }
+                if (blendState == BlendState.Additive)
+                {
+                    finalRenderQueue += 0.2f;
+                }
+            }
+            return finalRenderQueue;
         }
     }
 }
