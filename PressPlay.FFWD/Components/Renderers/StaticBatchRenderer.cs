@@ -21,8 +21,9 @@ namespace PressPlay.FFWD.Components
         private IndexBuffer indexBuffer;
         private BasicEffect effect;
 
-        public override void Draw(GraphicsDevice device, Camera cam)
+        public override void Awake()
         {
+            base.Awake();
             if (vertexBuffer == null)
             {
                 buffer = new VertexPositionNormalTexture[vertices.Length / 3];
@@ -37,17 +38,19 @@ namespace PressPlay.FFWD.Components
                         );
                 }
 
-                vertexBuffer = new VertexBuffer(device, typeof(VertexPositionNormalTexture), buffer.Length, BufferUsage.WriteOnly);
-                vertexBuffer.SetData(buffer);
-                indexBuffer = new IndexBuffer(device, IndexElementSize.SixteenBits, triangles.Length, BufferUsage.WriteOnly);
-                indexBuffer.SetData(triangles);
+                //vertexBuffer = new VertexBuffer(Application.screenManager.GraphicsDevice, typeof(VertexPositionNormalTexture), buffer.Length, BufferUsage.WriteOnly);
+                //vertexBuffer.SetData(buffer);
+                //indexBuffer = new IndexBuffer(Application.screenManager.GraphicsDevice, IndexElementSize.SixteenBits, triangles.Length, BufferUsage.WriteOnly);
+                //indexBuffer.SetData(triangles);
             }
-
             if (effect == null)
             {
-                effect = new BasicEffect(device);
+                effect = new BasicEffect(Application.screenManager.GraphicsDevice);
             }
+        }
 
+        public override void Draw(GraphicsDevice device, Camera cam)
+        {
             RasterizerState oldrasterizerState = device.RasterizerState;
             RasterizerState rasterizerState = new RasterizerState();
             rasterizerState.CullMode = CullMode.CullCounterClockwiseFace;
@@ -69,14 +72,23 @@ namespace PressPlay.FFWD.Components
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
-                device.DrawIndexedPrimitives(
+                device.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(
                     PrimitiveType.TriangleList,
+                    buffer,
                     0,
+                    buffer.Length,
+                    triangles,
                     0,
-                    vertexBuffer.VertexCount,
-                    0,
-                    indexBuffer.IndexCount
+                    triangles.Length / 3
                 );
+                //device.DrawIndexedPrimitives(
+                //    PrimitiveType.TriangleList,
+                //    0,
+                //    0,
+                //    vertexBuffer.VertexCount,
+                //    0,
+                //    indexBuffer.IndexCount
+                //);
             }
 
             device.RasterizerState = oldrasterizerState;
