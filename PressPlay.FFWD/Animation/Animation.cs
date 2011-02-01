@@ -191,9 +191,8 @@ namespace PressPlay.FFWD.Components
                         if (name == "harmless_door")
                         {
                             //m.Translation = -m.Translation;
-                            Debug.Log("Set value for " + item.name + " pos before " + item.position + " anim " + boneTransform.Translation);
                             item.SetLocalTransform(Matrix.Invert(boneTransform));
-                            Debug.Log("Set value for " + item.name + " pos after " + item.position + " anim " + boneTransform.Translation);
+                            
                         }
                     }
 	            } 

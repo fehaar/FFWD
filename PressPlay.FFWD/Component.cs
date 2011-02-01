@@ -35,8 +35,7 @@ namespace PressPlay.FFWD
         {
             get
             {
-                // TODO: Objects should be destroyed after Update but before Rendering
-                throw new NotImplementedException("Method not implemented.");
+                return gameObject.tag;
             }
         }
 
