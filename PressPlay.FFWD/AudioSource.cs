@@ -55,9 +55,15 @@ namespace PressPlay.FFWD
             }
             set
             {
+                if (soundEffect != null && soundEffect.IsDisposed)
+                {
+                    soundEffect = null;
+                }
+
                 _volume = Mathf.Clamp01(value);
                 _volume = Mathf.Max(_volume, minVolume);
                 _volume = Mathf.Min(_volume, maxVolume);
+
 
                 if (soundEffect != null)
                 {
