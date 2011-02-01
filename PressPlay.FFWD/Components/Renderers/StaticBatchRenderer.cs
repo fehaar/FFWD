@@ -10,7 +10,7 @@ namespace PressPlay.FFWD.Components
 {
     public class StaticBatchRenderer : Renderer
     {
-        internal VertexPositionNormalTexture[] buffer { private get; set; }
+        internal VertexPositionTexture[] buffer { private get; set; }
 
         public short[] triangles;
         public float[] vertices;
@@ -26,22 +26,21 @@ namespace PressPlay.FFWD.Components
             base.Awake();
             if (vertexBuffer == null)
             {
-                buffer = new VertexPositionNormalTexture[vertices.Length / 3];
+                buffer = new VertexPositionTexture[vertices.Length / 3];
                 for (int i = 0; i < vertices.Length / 3; i++)
                 {
                     int vertexIndex = i * 3;
                     int texCoordIndex = i * 2;
-                    buffer[i] = new VertexPositionNormalTexture(
+                    buffer[i] = new VertexPositionTexture(
                         new Microsoft.Xna.Framework.Vector3(vertices[vertexIndex], -vertices[vertexIndex + 1], vertices[vertexIndex + 2]),
-                        new Microsoft.Xna.Framework.Vector3(normals[vertexIndex], normals[vertexIndex + 1], normals[vertexIndex + 2]),
                         new Microsoft.Xna.Framework.Vector2(uv[texCoordIndex], 1 - uv[texCoordIndex + 1])
                         );
                 }
 
-                //vertexBuffer = new VertexBuffer(Application.screenManager.GraphicsDevice, typeof(VertexPositionNormalTexture), buffer.Length, BufferUsage.WriteOnly);
-                //vertexBuffer.SetData(buffer);
-                //indexBuffer = new IndexBuffer(Application.screenManager.GraphicsDevice, IndexElementSize.SixteenBits, triangles.Length, BufferUsage.WriteOnly);
-                //indexBuffer.SetData(triangles);
+                vertexBuffer = new VertexBuffer(Application.screenManager.GraphicsDevice, typeof(VertexPositionTexture), buffer.Length, BufferUsage.WriteOnly);
+                vertexBuffer.SetData(buffer);
+                indexBuffer = new IndexBuffer(Application.screenManager.GraphicsDevice, IndexElementSize.SixteenBits, triangles.Length, BufferUsage.WriteOnly);
+                indexBuffer.SetData(triangles);
             }
             if (effect == null)
             {
@@ -72,23 +71,14 @@ namespace PressPlay.FFWD.Components
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
-                device.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(
+                device.DrawIndexedPrimitives(
                     PrimitiveType.TriangleList,
-                    buffer,
                     0,
-                    buffer.Length,
-                    triangles,
                     0,
-                    triangles.Length / 3
+                    vertexBuffer.VertexCount,
+                    0,
+                    indexBuffer.IndexCount / 3
                 );
-                //device.DrawIndexedPrimitives(
-                //    PrimitiveType.TriangleList,
-                //    0,
-                //    0,
-                //    vertexBuffer.VertexCount,
-                //    0,
-                //    indexBuffer.IndexCount
-                //);
             }
 
             device.RasterizerState = oldrasterizerState;

@@ -52,7 +52,6 @@ namespace PressPlay.FFWD.ScreenManager
         bool isInitialized;
 
         bool traceEnabled;
-
         #endregion
 
         #region Properties

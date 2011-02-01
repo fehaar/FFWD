@@ -202,6 +202,9 @@ namespace PressPlay.FFWD
 
                 spriteBatch.End();
             }
+            //scripts.Reset();
+            //physics.Reset();
+            //graphics.Reset();
 #endif
         }
 

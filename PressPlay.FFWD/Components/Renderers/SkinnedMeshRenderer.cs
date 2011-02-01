@@ -41,8 +41,7 @@ namespace PressPlay.FFWD.Components
             {
                 device.RasterizerState = new RasterizerState() { FillMode = oldRaster.FillMode, CullMode = CullMode.CullClockwiseFace };
             }
-            device.RasterizerState = new RasterizerState() { FillMode = oldRaster.FillMode, CullMode = CullMode.None };
-            device.BlendState = material.blendState;
+            material.SetBlendState(device);
 
             // Draw the model.
             CpuSkinnedModelPart modelPart = sharedMesh.GetSkinnedModelPart();
