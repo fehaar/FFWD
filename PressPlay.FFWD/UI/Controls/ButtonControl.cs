@@ -63,7 +63,6 @@ namespace PressPlay.FFWD.UI.Controls
             }
             set
             {
-                Debug.Log("Changing state through setter");
                 ChangeState(value);
             }
         }
@@ -116,8 +115,6 @@ namespace PressPlay.FFWD.UI.Controls
 
         private void ChangeState(ButtonControlStates newState)
         {
-            Debug.Log("ChangeState. CurrentState: "+_state+" NewState: "+newState);
-            
             switch(newState){
                 case ButtonControlStates.normal:
                     break;
@@ -126,7 +123,6 @@ namespace PressPlay.FFWD.UI.Controls
                 case ButtonControlStates.hover:
                     break;
                 case ButtonControlStates.disabled:
-                    Debug.Log("Disabling button!");
                     break;
             }
 
