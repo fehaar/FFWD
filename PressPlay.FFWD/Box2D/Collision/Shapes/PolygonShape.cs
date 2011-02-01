@@ -350,7 +350,7 @@ namespace Box2D.XNA
                     }
                 }
 
-                Debug.Assert(0.0f <= lower && lower <= input.maxFraction);
+                //Debug.Assert(0.0f <= lower && lower <= input.maxFraction);
 
                 if (index >= 0)
                 {
