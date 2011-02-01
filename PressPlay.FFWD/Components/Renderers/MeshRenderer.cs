@@ -34,18 +34,18 @@ namespace PressPlay.FFWD.Components
             //    return;
             //}
 
-            // Do we have negative scale - if so, switch culling
-            RasterizerState oldRaster = device.RasterizerState;
-            if (transform.lossyScale.x < 0 || transform.lossyScale.y < 0 || transform.lossyScale.z < 0)
-            {
-                device.RasterizerState = new RasterizerState() { FillMode = oldRaster.FillMode, CullMode = CullMode.CullClockwiseFace };
-            }
-            device.BlendState = material.blendState;
-
             // Draw the model.
             ModelMesh mesh = filter.GetModelMesh();
             if (mesh != null)
             {
+                // Do we have negative scale - if so, switch culling
+                RasterizerState oldRaster = device.RasterizerState;
+                if (transform.lossyScale.x < 0 || transform.lossyScale.y < 0 || transform.lossyScale.z < 0)
+                {
+                    device.RasterizerState = new RasterizerState() { FillMode = oldRaster.FillMode, CullMode = CullMode.CullClockwiseFace };
+                }
+                material.SetBlendState(device);
+
                 for (int e = 0; e < mesh.Effects.Count; e++)
                 {
                     BasicEffect effect = mesh.Effects[e] as BasicEffect;
@@ -71,12 +71,13 @@ namespace PressPlay.FFWD.Components
                     }
                     mesh.Draw();
                 }
+
+                if (transform.lossyScale.x < 0 || transform.lossyScale.y < 0 || transform.lossyScale.z < 0)
+                {
+                    device.RasterizerState = oldRaster;
+                }
             }
 
-            if (transform.lossyScale.x < 0 || transform.lossyScale.y < 0 || transform.lossyScale.z < 0)
-            {
-                device.RasterizerState = oldRaster;
-            }
         }
         #endregion
     }

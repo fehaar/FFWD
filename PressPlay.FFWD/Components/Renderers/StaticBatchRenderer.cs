@@ -10,7 +10,7 @@ namespace PressPlay.FFWD.Components
 {
     public class StaticBatchRenderer : Renderer
     {
-        internal VertexPositionNormalTexture[] buffer { private get; set; }
+        internal VertexPositionTexture[] buffer { private get; set; }
 
         public short[] triangles;
         public float[] vertices;
@@ -21,33 +21,35 @@ namespace PressPlay.FFWD.Components
         private IndexBuffer indexBuffer;
         private BasicEffect effect;
 
-        public override void Draw(GraphicsDevice device, Camera cam)
+        public override void Awake()
         {
+            base.Awake();
             if (vertexBuffer == null)
             {
-                buffer = new VertexPositionNormalTexture[vertices.Length / 3];
+                buffer = new VertexPositionTexture[vertices.Length / 3];
                 for (int i = 0; i < vertices.Length / 3; i++)
                 {
                     int vertexIndex = i * 3;
                     int texCoordIndex = i * 2;
-                    buffer[i] = new VertexPositionNormalTexture(
+                    buffer[i] = new VertexPositionTexture(
                         new Microsoft.Xna.Framework.Vector3(vertices[vertexIndex], -vertices[vertexIndex + 1], vertices[vertexIndex + 2]),
-                        new Microsoft.Xna.Framework.Vector3(normals[vertexIndex], normals[vertexIndex + 1], normals[vertexIndex + 2]),
                         new Microsoft.Xna.Framework.Vector2(uv[texCoordIndex], 1 - uv[texCoordIndex + 1])
                         );
                 }
 
-                vertexBuffer = new VertexBuffer(device, typeof(VertexPositionNormalTexture), buffer.Length, BufferUsage.WriteOnly);
+                vertexBuffer = new VertexBuffer(Application.screenManager.GraphicsDevice, typeof(VertexPositionTexture), buffer.Length, BufferUsage.WriteOnly);
                 vertexBuffer.SetData(buffer);
-                indexBuffer = new IndexBuffer(device, IndexElementSize.SixteenBits, triangles.Length, BufferUsage.WriteOnly);
+                indexBuffer = new IndexBuffer(Application.screenManager.GraphicsDevice, IndexElementSize.SixteenBits, triangles.Length, BufferUsage.WriteOnly);
                 indexBuffer.SetData(triangles);
             }
-
             if (effect == null)
             {
-                effect = new BasicEffect(device);
+                effect = new BasicEffect(Application.screenManager.GraphicsDevice);
             }
+        }
 
+        public override void Draw(GraphicsDevice device, Camera cam)
+        {
             RasterizerState oldrasterizerState = device.RasterizerState;
             RasterizerState rasterizerState = new RasterizerState();
             rasterizerState.CullMode = CullMode.CullCounterClockwiseFace;
@@ -75,7 +77,7 @@ namespace PressPlay.FFWD.Components
                     0,
                     vertexBuffer.VertexCount,
                     0,
-                    indexBuffer.IndexCount
+                    indexBuffer.IndexCount / 3
                 );
             }
 
