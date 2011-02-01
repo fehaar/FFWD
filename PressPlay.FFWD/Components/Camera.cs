@@ -57,7 +57,7 @@ namespace PressPlay.FFWD.Components
 
             for (int i = nonAssignedRenderers.Count - 1; i >= 0; i--)
             {
-                if (addRenderer(nonAssignedRenderers[i]))
+                if (nonAssignedRenderers[i] == null || nonAssignedRenderers[i].gameObject == null || addRenderer(nonAssignedRenderers[i]))
                 {
                     nonAssignedRenderers.RemoveAt(i);
                 }
