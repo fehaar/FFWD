@@ -54,16 +54,25 @@ namespace PressPlay.FFWD.Components
         {
             _allCameras.Add(this);
             _allCameras.Sort(this);
-            if (gameObject.CompareTag("MainCamera"))
+
+            for (int i = nonAssignedRenderers.Count - 1; i >= 0; i--)
+            {
+                if (addRenderer(nonAssignedRenderers[i]))
+                {
+                    nonAssignedRenderers.RemoveAt(i);
+                }
+            }
+
+            if (gameObject.CompareTag("MainCamera") && (main == null))
             {
                 main = this;
             }
         }
-        public void Destroy()
-        {
-            _allCameras.Remove(this);
-        }
 
+        public static void RemoveCamera(Camera cam)
+        {
+            _allCameras.Remove(cam);
+        }
 
         private static List<Camera> _allCameras = new List<Camera>();
         public static IEnumerable<Camera> allCameras
@@ -128,49 +137,74 @@ namespace PressPlay.FFWD.Components
             return new BoundingFrustum(_view * projectionMatrix);
         }
 
-        private static List<UIRenderer> uiRenderQueue = new List<UIRenderer>();
+        internal static List<Renderer> nonAssignedRenderers = new List<Renderer>();
         internal static void AddRenderer(Renderer renderer)
         {
-            if (!renderer.enabled)
-            {
-                return;
-            }
-
             // Tag UI renderes og gem dem i en liste. Returner så kameraerne ikke f'r den
             if (renderer is UIRenderer)
             {
-                uiRenderQueue.Add((UIRenderer)renderer);
+                UIRenderer.AddRenderer(renderer as UIRenderer);
+                return;
+            }
+
+            bool isAdded = false;
+            for (int i = 0; i < _allCameras.Count; i++)
+            {
+                isAdded |= _allCameras[i].addRenderer(renderer);
+            }
+            if (!isAdded)
+            {
+                nonAssignedRenderers.Add(renderer);
+            }
+        }
+
+        List<Renderer> renderQueue = new List<Renderer>();
+        bool isRenderQueueSorted = true;
+        private bool addRenderer(Renderer renderer)
+        {
+            if ((cullingMask & (1 << renderer.gameObject.layer)) > 0)
+            {
+                renderQueue.Add(renderer);
+                isRenderQueueSorted = false;
+                return true;
+            }
+            return false;
+        }
+
+        internal static void RemoveRenderer(Renderer renderer)
+        {
+            if (renderer is UIRenderer)
+            {
+                UIRenderer.RemoveRenderer(renderer as UIRenderer);
                 return;
             }
 
             for (int i = 0; i < _allCameras.Count; i++)
             {
-                _allCameras[i].addRenderer(renderer);
+                _allCameras[i].removeRenderer(renderer);
             }
         }
 
-        List<Renderer> renderQueue = new List<Renderer>();
-        private void addRenderer(Renderer renderer)
-        {            
-            if ((cullingMask & (1 << renderer.gameObject.layer)) > 0)
-            {
-                renderQueue.Add(renderer);
-            }
+        private void removeRenderer(Renderer renderer)
+        {
+            renderQueue.Remove(renderer);
         }
 
         internal static void DoRender(GraphicsDevice device)
         {
-            if (device != null)
+            if (device == null)
             {
-                device.BlendState = BlendState.Opaque;
-                device.DepthStencilState = DepthStencilState.Default;
-                device.SamplerStates[0] = SamplerState.LinearClamp;
-                if (wireframeRender)
-                {
-                    RasterizerState state = new RasterizerState();
-                    state.FillMode = FillMode.WireFrame;
-                    device.RasterizerState = state;
-                }
+                return;
+            }
+
+            device.BlendState = BlendState.Opaque;
+            device.DepthStencilState = DepthStencilState.Default;
+            device.SamplerStates[0] = SamplerState.LinearClamp;
+            if (wireframeRender)
+            {
+                RasterizerState state = new RasterizerState();
+                state.FillMode = FillMode.WireFrame;
+                device.RasterizerState = state;
             }
 
             for (int i = 0; i < _allCameras.Count; i++)
@@ -182,30 +216,19 @@ namespace PressPlay.FFWD.Components
             {
                 device.RasterizerState = RasterizerState.CullCounterClockwise;
             }
-            if (UIRenderer.batch == null)
-            {
-                UIRenderer.SetSpriteBatch(device);
-            }
-            UIRenderer.batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-            for (int i = 0; i < uiRenderQueue.Count; i++)
-            {
-                if (uiRenderQueue[i].gameObject == null)
-                {
-                    // This will happen if the game object has been destroyed in update.
-                    // It is acceptable behaviour.
-                    continue;
-                }                
-                uiRenderQueue[i].Draw(device, null);
-            }
-            UIRenderer.batch.End();
-            uiRenderQueue.Clear();
+
+            UIRenderer.doRender(device);
         }
 
         internal void doRender(GraphicsDevice device)
         {
             Clear(device);
 
-            renderQueue.Sort(this);
+            if (!isRenderQueueSorted)
+            {
+                renderQueue.Sort(this);
+                isRenderQueueSorted = true;
+            }
             for (int i = 0; i < renderQueue.Count; i++)
             {
                 if (renderQueue[i].gameObject == null)
@@ -219,7 +242,6 @@ namespace PressPlay.FFWD.Components
                     renderQueue[i].Draw(device, this);
                 }
             }
-            renderQueue.Clear();
         }
 
         private void Clear(GraphicsDevice device)
@@ -270,16 +292,7 @@ namespace PressPlay.FFWD.Components
             {
                 return 0;
             }
-            float q = renderer.material.renderQueue;
-            if (renderer.material.blendState == BlendState.AlphaBlend)
-            {
-                return q + 0.1f;
-            }
-            if (renderer.material.blendState == BlendState.Additive)
-            {
-                return q + 0.1f;
-            }
-            return q;
+            return renderer.material.CalculateRenderQueue();
         }
         #endregion
 
