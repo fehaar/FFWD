@@ -63,7 +63,8 @@ namespace PressPlay.FFWD.UI.Controls
             }
             set
             {
-
+                Debug.Log("Changing state through setter");
+                ChangeState(value);
             }
         }
 
@@ -115,15 +116,17 @@ namespace PressPlay.FFWD.UI.Controls
 
         private void ChangeState(ButtonControlStates newState)
         {
+            Debug.Log("ChangeState. CurrentState: "+_state+" NewState: "+newState);
+            
             switch(newState){
                 case ButtonControlStates.normal:
-                    
                     break;
                 case ButtonControlStates.pressed:
                     break;
                 case ButtonControlStates.hover:
                     break;
                 case ButtonControlStates.disabled:
+                    Debug.Log("Disabling button!");
                     break;
             }
 
@@ -146,6 +149,11 @@ namespace PressPlay.FFWD.UI.Controls
 
         public override void HandleInput(InputState input)
         {
+            if (state == ButtonControlStates.disabled)
+            {
+                return;
+            }
+            
             base.HandleInput(input);
 
             if (isMouseWithinBounds(input))
@@ -161,8 +169,8 @@ namespace PressPlay.FFWD.UI.Controls
                 {
                     if (state == ButtonControlStates.pressed)
                     {
-                        OnClickMethod();
                         ChangeState(ButtonControlStates.normal);
+                        OnClickMethod();
                     }
                 }
                 else if (state != ButtonControlStates.pressed && state != ButtonControlStates.hover)
@@ -177,32 +185,6 @@ namespace PressPlay.FFWD.UI.Controls
                     ChangeState(ButtonControlStates.normal);
                 }
             }
-
-            //if (input.isMouseDown && IsMouseClickWithinBounds(new Point(ms.X, ms.Y)))
-            //{
-
-            //    if (onClickSourceRect != Rectangle.Empty)
-            //    {
-            //        background.sourceRect = onClickSourceRect;
-            //    }
-
-            //    isPressed = true;
-            //}
-
-            //if (input.isMouseUp && isPressed)
-            //{
-
-            //    if (IsMouseClickWithinBounds(new Point(ms.X, ms.Y)))
-            //    {
-            //        OnClickMethod();
-            //    }
-            //    else
-            //    {
-            //        background.sourceRect = sourceRect;
-            //    }
-
-            //    isPressed = false;
-            //}
         }
 
         protected override bool isMouseWithinBounds(InputState input)

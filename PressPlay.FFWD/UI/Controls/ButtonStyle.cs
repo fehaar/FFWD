@@ -17,6 +17,10 @@ namespace PressPlay.FFWD.UI.Controls
             {
                 return sources[state];
             }
+            set
+            {
+                sources[state] = value;
+            }
         }
 
         public ButtonStyle(Texture2D texture)

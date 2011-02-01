@@ -309,7 +309,11 @@ namespace PressPlay.FFWD.UI.Controls
         public void RemoveChild(Control child)
         {
             if (child.parent != this)
+            {
+                Debug.Log("Parent: " + child.parent.gameObject.GetInstanceID());
+                Debug.Log("This: " + gameObject.GetInstanceID());
                 throw new InvalidOperationException();
+            }
 
             RemoveChildAt(children.IndexOf(child));
         }
