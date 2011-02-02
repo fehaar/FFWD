@@ -148,7 +148,7 @@ namespace PressPlay.FFWD
         {
             Vector2 center = aabb.GetCenter();
             Vector2 size = aabb.GetExtents();
-            return new Bounds(new Vector3(center.x, 0, center.y),new Vector3(size.x, width, size.y));
+            return new Bounds(new Vector3(center.x, 0, center.y),new Vector3(size.x*2, width, size.y*2));
         }
 
         public static Body AddBody()
