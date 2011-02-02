@@ -647,7 +647,7 @@ namespace PressPlay.FFWD
             {
                 for (int childIndex = 0; childIndex < children.Count; childIndex++)
                 {
-                    list.AddRange(children[childIndex].GetComponentsInChildren(type));
+                    children[childIndex].GetComponentsInChildren(type, list);
                 }
             }
         }
@@ -658,7 +658,7 @@ namespace PressPlay.FFWD
             {
                 for (int childIndex = 0; childIndex < children.Count; childIndex++)
                 {
-                    list.AddRange(children[childIndex].GetComponentsInChildren<T>());
+                    children[childIndex].GetComponentsInChildren<T>(list);
                 }
             }
         }
