@@ -109,6 +109,17 @@ namespace PressPlay.FFWD
 
         }
 
+        public void DebugDraw()
+        {
+            Vector3 width = new Vector3(size.x, 0, 0);
+            Vector3 height = new Vector3(size.z, 0, 0);
+
+            Debug.DrawLine(center + width * 0.5f, center + height * 0.5f, Color.gray);
+            Debug.DrawLine(center + width * 0.5f, center - height * 0.5f, Color.gray);
+            Debug.DrawLine(center - width * 0.5f, center - height * 0.5f, Color.gray);
+            Debug.DrawLine(center - width * 0.5f, center + height * 0.5f, Color.gray);
+        }
+
         public override string ToString()
         {
             return box.ToString();
