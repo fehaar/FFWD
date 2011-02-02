@@ -31,6 +31,12 @@ namespace PressPlay.FFWD.Exporter.Writers.Components.Extensions
             //writer.WriteElement("normals", mesh.normals);
             writer.WriteElement("uv", mesh.uv);
             Debug.Log(script.name + " batched " + combine.Length + " objects into a mesh of " + (mesh.triangles.Length / 3) + " triangles and " + mesh.vertices.Length + " vertices.");
+
+            if (mesh.vertices.Length > short.MaxValue)
+            {
+                Debug.LogWarning("BATCHED TOO MANY TRIANGLES!!");
+            }
+
         }
         #endregion
     }
