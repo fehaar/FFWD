@@ -63,7 +63,7 @@ namespace PressPlay.FFWD.UI.Controls
             }
             set
             {
-
+                ChangeState(value);
             }
         }
 
@@ -117,7 +117,6 @@ namespace PressPlay.FFWD.UI.Controls
         {
             switch(newState){
                 case ButtonControlStates.normal:
-                    
                     break;
                 case ButtonControlStates.pressed:
                     break;
@@ -146,6 +145,11 @@ namespace PressPlay.FFWD.UI.Controls
 
         public override void HandleInput(InputState input)
         {
+            if (state == ButtonControlStates.disabled)
+            {
+                return;
+            }
+            
             base.HandleInput(input);
 
             if (isMouseWithinBounds(input))
@@ -161,8 +165,8 @@ namespace PressPlay.FFWD.UI.Controls
                 {
                     if (state == ButtonControlStates.pressed)
                     {
-                        OnClickMethod();
                         ChangeState(ButtonControlStates.normal);
+                        OnClickMethod();
                     }
                 }
                 else if (state != ButtonControlStates.pressed && state != ButtonControlStates.hover)
@@ -177,32 +181,6 @@ namespace PressPlay.FFWD.UI.Controls
                     ChangeState(ButtonControlStates.normal);
                 }
             }
-
-            //if (input.isMouseDown && IsMouseClickWithinBounds(new Point(ms.X, ms.Y)))
-            //{
-
-            //    if (onClickSourceRect != Rectangle.Empty)
-            //    {
-            //        background.sourceRect = onClickSourceRect;
-            //    }
-
-            //    isPressed = true;
-            //}
-
-            //if (input.isMouseUp && isPressed)
-            //{
-
-            //    if (IsMouseClickWithinBounds(new Point(ms.X, ms.Y)))
-            //    {
-            //        OnClickMethod();
-            //    }
-            //    else
-            //    {
-            //        background.sourceRect = sourceRect;
-            //    }
-
-            //    isPressed = false;
-            //}
         }
 
         protected override bool isMouseWithinBounds(InputState input)

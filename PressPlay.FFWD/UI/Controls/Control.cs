@@ -242,6 +242,11 @@ namespace PressPlay.FFWD.UI.Controls
             transform.localPosition = new Vector3(offset.x + (parent.bounds.Width / 2) - (bounds.Width / 2), transform.localPosition.y, offset.y + (parent.bounds.Height / 2) - (bounds.Height / 2));
         }
 
+        public void AlignCenter(Rectangle alignBounds)
+        {
+            transform.localPosition = new Vector3(alignBounds.X + (alignBounds.Width / 2) - (bounds.Width / 2), transform.localPosition.y, alignBounds.Y + (alignBounds.Height / 2) - (bounds.Height / 2));
+        }
+
         #region IUpdateable Members
 
         public virtual void Update()
@@ -309,7 +314,9 @@ namespace PressPlay.FFWD.UI.Controls
         public void RemoveChild(Control child)
         {
             if (child.parent != this)
+            {
                 throw new InvalidOperationException();
+            }
 
             RemoveChildAt(children.IndexOf(child));
         }
