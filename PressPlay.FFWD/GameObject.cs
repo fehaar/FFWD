@@ -369,6 +369,18 @@ namespace PressPlay.FFWD
             return list.ToArray();
         }
 
+        internal void GetComponentsInChildren(Type type, List<Component> list)
+        {
+            for (int i = 0; i < components.Count; i++)
+            {
+                if (type.IsAssignableFrom(components[i].GetType()))
+                {
+                    list.Add(components[i]);
+                }
+            }
+            transform.GetComponentsInChildrenInt(type, list);
+        }
+
         public T[] GetComponentsInChildren<T>() where T: Component
         {
             List<T> list = new List<T>();
@@ -382,6 +394,19 @@ namespace PressPlay.FFWD
             }
             transform.GetComponentsInChildrenInt<T>(list);
             return list.ToArray();
+        }
+
+        internal void GetComponentsInChildren<T>(List<T> list) where T : Component
+        {
+            for (int i = 0; i < components.Count; i++)
+            {
+                T cmp = components[i] as T;
+                if (cmp != null)
+                {
+                    list.Add(cmp);
+                }
+            }
+            transform.GetComponentsInChildrenInt<T>(list);
         }
 
         public Component GetComponentInChildren(Type type)

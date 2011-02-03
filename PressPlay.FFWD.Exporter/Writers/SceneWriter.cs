@@ -179,6 +179,11 @@ namespace PressPlay.FFWD.Exporter.Writers
             if (transform.localScale != Vector3.one)
             {
                 writer.WriteElementString("s", ToString(transform.localScale));
+                if (transform.localScale.x < 0 || transform.localScale.y < 0 || transform.localScale.z < 0)
+                {
+                    Debug.LogWarning("Transform with negative scale, this could cause trouble in FFWD", transform);
+                }
+
             }
             if (transform.localRotation != Quaternion.identity)
             {

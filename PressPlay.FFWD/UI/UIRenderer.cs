@@ -37,8 +37,9 @@ namespace PressPlay.FFWD.UI
 
         internal static SpriteBatch batch;
         private static List<UIRenderer> uiRenderQueue = new List<UIRenderer>();
-        internal static void doRender(GraphicsDevice device)
+        internal static int doRender(GraphicsDevice device)
         {
+            int estDrawCalls = 0;
             if (batch == null)
             {
                 batch = new SpriteBatch(device);
@@ -52,9 +53,15 @@ namespace PressPlay.FFWD.UI
                     // It is acceptable behaviour.
                     continue;
                 }
+                if (!uiRenderQueue[i].enabled || !uiRenderQueue[i].gameObject.active)
+                {
+                    continue;
+                }
+                estDrawCalls++;
                 uiRenderQueue[i].Draw(device, null);
             }
             batch.End();
+            return estDrawCalls;
         }
 
         internal static void AddRenderer(UIRenderer renderer)

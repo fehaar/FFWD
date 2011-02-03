@@ -20,16 +20,17 @@ namespace PressPlay.FFWD
         private int meshIndex;
 
         [ContentSerializerIgnore]
-        public Vector3[] vertices { get; set; }
+        public Microsoft.Xna.Framework.Vector3[] vertices;
         [ContentSerializerIgnore]
-        public Vector3[] normals { get; set; }
+        public Microsoft.Xna.Framework.Vector3[] normals;
         [ContentSerializerIgnore]
-        public Vector2[] uv { get; set; }
+        public Microsoft.Xna.Framework.Vector2[] uv;
         [ContentSerializerIgnore]
-        public short[] triangles { get; set; }
+        public short[] triangles;
 
         internal override void LoadAsset(AssetHelper assetHelper)
         {
+            // TODO: Optimize this by bundling everything into the same structure.
             if (!String.IsNullOrEmpty(asset))
             {
                 skinnedModel = assetHelper.Load<CpuSkinnedModel>("Models/" + asset);
@@ -56,6 +57,26 @@ namespace PressPlay.FFWD
                                 meshIndex = i;
                                 break;
                             }
+                        }
+                    }
+                    else
+                    {
+                        MeshDataContent data = assetHelper.Load<MeshDataContent>("Models/" + asset);
+                        if (data != null)
+                        {
+                            vertices = data.vertices;
+                            triangles = new short[6] { 2, 0, 1, 3, 2, 1 };
+                            uv = uv = new Microsoft.Xna.Framework.Vector2[4] {
+                                new Microsoft.Xna.Framework.Vector2(0, 1),
+                                new Microsoft.Xna.Framework.Vector2(0, 0),
+                                new Microsoft.Xna.Framework.Vector2(1, 1),
+                                new Microsoft.Xna.Framework.Vector2(1, 0)
+                            };
+                            normals = data.normals;
+                        }
+                        else
+                        {
+                            Debug.LogWarning("Cannot find a way to load the mesh " + asset);
                         }
                     }
                 }

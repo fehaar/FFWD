@@ -34,6 +34,10 @@ namespace PressPlay.FFWD.Components
 
         public static bool wireframeRender = false;
 
+        private static int estimatedDrawCalls = 0;
+
+        private static DynamicBatchRenderer dynamicBatchRenderer;
+
         private Color _backgroundColor = Color.black;
         public Color backgroundColor
         { 
@@ -192,6 +196,12 @@ namespace PressPlay.FFWD.Components
 
         internal static void DoRender(GraphicsDevice device)
         {
+            if (dynamicBatchRenderer == null)
+            {
+                dynamicBatchRenderer = new DynamicBatchRenderer(device);
+            }
+
+            estimatedDrawCalls = 0;
             if (device == null)
             {
                 return;
@@ -217,7 +227,8 @@ namespace PressPlay.FFWD.Components
                 device.RasterizerState = RasterizerState.CullCounterClockwise;
             }
 
-            UIRenderer.doRender(device);
+            estimatedDrawCalls += UIRenderer.doRender(device);
+            Debug.Display("Estimated Draw calls", estimatedDrawCalls);
         }
 
         internal void doRender(GraphicsDevice device)
@@ -239,9 +250,11 @@ namespace PressPlay.FFWD.Components
                 }
                 if (renderQueue[i].gameObject.active && renderQueue[i].enabled)
                 {
+                    estimatedDrawCalls++;
                     renderQueue[i].Draw(device, this);
                 }
             }
+            dynamicBatchRenderer.DoDraw(device, this);
         }
 
         private void Clear(GraphicsDevice device)
@@ -306,6 +319,11 @@ namespace PressPlay.FFWD.Components
                 }
             }
             return null;
+        }
+
+        internal void BatchRender(MeshFilter filter, Material material, Transform transform)
+        {
+            dynamicBatchRenderer.Draw(this, material, filter, transform);
         }
     }
 }

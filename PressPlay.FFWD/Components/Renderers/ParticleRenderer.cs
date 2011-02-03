@@ -56,10 +56,10 @@ namespace PressPlay.FFWD.Components
                 effect = new BasicEffect(device);
             }
 
-            RasterizerState oldrasterizerState = device.RasterizerState;
-            RasterizerState rasterizerState = new RasterizerState();
-            rasterizerState.CullMode = CullMode.None;
-            device.RasterizerState = rasterizerState;
+            //RasterizerState oldrasterizerState = device.RasterizerState;
+            //RasterizerState rasterizerState = new RasterizerState();
+            //rasterizerState.CullMode = CullMode.None;
+            //device.RasterizerState = rasterizerState;
 
             effect.World = Matrix.Identity;
             effect.View = cam.View();
@@ -68,7 +68,7 @@ namespace PressPlay.FFWD.Components
             {
                 effect.TextureEnabled = true;
                 effect.Texture = materials[0].texture;
-                device.BlendState =  materials[0].blendState;
+                materials[0].SetBlendState(device);
             }
             effect.VertexColorEnabled = true;
 
@@ -102,7 +102,7 @@ namespace PressPlay.FFWD.Components
                 );
             }
 
-            device.RasterizerState = oldrasterizerState;
+            //device.RasterizerState = oldrasterizerState;
         }
 
         private void RenderParticle(int vertexIndex, int triangleIndex, ref Particle particle)
@@ -113,29 +113,22 @@ namespace PressPlay.FFWD.Components
             {
                 pos += transform.position;
             }
-            vertices[vertexIndex] = new VertexPositionColorTexture() { 
-                TextureCoordinate = new Microsoft.Xna.Framework.Vector2(0, 1),
-                Position = pos + (Vector3)new Vector2(-size, size),
-                Color = particle.Color
-            };
-            vertices[vertexIndex + 1] = new VertexPositionColorTexture()
-            {
-                TextureCoordinate = new Microsoft.Xna.Framework.Vector2(0, 0),
-                Position = pos + (Vector3)new Vector2(-size, -size),
-                Color = particle.Color
-            };
-            vertices[vertexIndex + 2] = new VertexPositionColorTexture()
-            {
-                TextureCoordinate = new Microsoft.Xna.Framework.Vector2(1, 1),
-                Position = pos + (Vector3)new Vector2(size, size),
-                Color = particle.Color
-            };
-            vertices[vertexIndex + 3] = new VertexPositionColorTexture()
-            {
-                TextureCoordinate = new Microsoft.Xna.Framework.Vector2(1, 0),
-                Position = pos + (Vector3)new Vector2(size, -size),
-                Color = particle.Color
-            };
+            vertices[vertexIndex].TextureCoordinate = new Microsoft.Xna.Framework.Vector2(0, 1);
+            vertices[vertexIndex].Position = pos + (Vector3)new Vector2(-size, size);
+            vertices[vertexIndex].Color = particle.Color;
+
+            vertices[vertexIndex + 1].TextureCoordinate = new Microsoft.Xna.Framework.Vector2(0, 0);
+            vertices[vertexIndex + 1].Position = pos + (Vector3)new Vector2(-size, -size);
+            vertices[vertexIndex + 1].Color = particle.Color;
+
+            vertices[vertexIndex + 2].TextureCoordinate = new Microsoft.Xna.Framework.Vector2(1, 1);
+            vertices[vertexIndex + 2].Position = pos + (Vector3)new Vector2(size, size);
+            vertices[vertexIndex + 2].Color = particle.Color;
+
+            vertices[vertexIndex + 3].TextureCoordinate = new Microsoft.Xna.Framework.Vector2(1, 0);
+            vertices[vertexIndex + 3].Position = pos + (Vector3)new Vector2(size, -size);
+            vertices[vertexIndex + 3].Color = particle.Color;
+
             triangles[triangleIndex] = (short)vertexIndex;
             triangles[triangleIndex + 1] = (short)(vertexIndex + 1);
             triangles[triangleIndex + 2] = (short)(vertexIndex + 2);
