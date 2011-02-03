@@ -169,7 +169,7 @@ namespace PressPlay.FFWD
 
         public void Update()
         {
-            if (soundEffect != null && soundEffect.State == SoundState.Playing)
+            if (soundEffect != null && !soundEffect.IsDisposed && soundEffect.State == SoundState.Playing)
             {
                 time += Time.deltaTime;
                 if (time > clip.length)
