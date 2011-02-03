@@ -24,7 +24,27 @@ namespace PressPlay.FFWD.Components
             }
         }
 
-        public float drag { get; set; }
+        private float _drag;
+        public float drag {
+            get 
+            {
+                if (body != null)
+                {
+                    _drag = body._linearDamping; 
+                    
+                }
+
+                return _drag; 
+            }
+            set 
+            {
+                _drag = value;
+                if (body != null)
+                {
+                    body._linearDamping = value;
+                }
+            } 
+        }
         public float angularDrag { get; set; }
         public bool isKinematic { get; set; }
         public bool freezeRotation { get; set; }
