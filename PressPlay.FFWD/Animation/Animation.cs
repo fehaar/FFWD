@@ -23,6 +23,10 @@ namespace PressPlay.FFWD.Components
         {
             get
             {
+                if (clips.Count == 0)
+                {
+                    return null;
+                }
                 return clips[animationIndex];
             }
         }
