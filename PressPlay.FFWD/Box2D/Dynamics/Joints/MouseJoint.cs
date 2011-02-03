@@ -19,7 +19,7 @@
 * misrepresented as being the original software. 
 * 3. This notice may not be removed or altered from any source distribution. 
 */
-
+using System;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
 
@@ -139,10 +139,10 @@ public class MouseJoint : Joint
 	internal MouseJoint(MouseJointDef def)
         : base(def)
     {
-        Debug.Assert(def.target.IsValid());
-        Debug.Assert(MathUtils.IsValid(def.maxForce) && def.maxForce >= 0.0f);
-        Debug.Assert(MathUtils.IsValid(def.frequencyHz) && def.frequencyHz >= 0.0f);
-        Debug.Assert(MathUtils.IsValid(def.dampingRatio) && def.dampingRatio >= 0.0f);
+        if(!(def.target.IsValid())) { throw new InvalidOperationException(); }
+        if(!(MathUtils.IsValid(def.maxForce) && def.maxForce >= 0.0f)) { throw new InvalidOperationException(); }
+        if(!(MathUtils.IsValid(def.frequencyHz) && def.frequencyHz >= 0.0f)) { throw new InvalidOperationException(); }
+        if (!(MathUtils.IsValid(def.dampingRatio) && def.dampingRatio >= 0.0f)) { throw new InvalidOperationException(); }
 
         Transform xf1;
         _bodyB.GetTransform(out xf1);
@@ -178,7 +178,7 @@ public class MouseJoint : Joint
 	    // magic formulas
 	    // gamma has units of inverse mass.
 	    // beta has units of inverse time.
-	    Debug.Assert(d + step.dt * k > Settings.b2_epsilon);
+        if (!(d + step.dt * k > Settings.b2_epsilon)) { throw new InvalidOperationException(); }
 
         _gamma = step.dt * (d + step.dt * k);
         if (_gamma != 0.0f)

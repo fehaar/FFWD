@@ -49,6 +49,7 @@ namespace PressPlay.FFWD.Components
                 };
                 tris.Add(tri);
             }
+
             connectedBody = Physics.AddMesh(body, isTrigger, tris, mass);
         }
 

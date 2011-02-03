@@ -131,7 +131,7 @@ namespace Box2D.XNA
         /// Get a vertex by index. Used by b2Distance.
         public override Vector2 GetVertex(int index)
         {
-            Debug.Assert(index == 0);
+            if (!(index == 0)) { throw new InvalidOperationException(); }
             return _p;
         }
 

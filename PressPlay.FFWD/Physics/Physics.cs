@@ -246,10 +246,21 @@ namespace PressPlay.FFWD
             {
                 return false;
             }
-            world.RayCast(helper.rayCastCallback, origin, pt2);
+            try
+            {
+                world.RayCast(helper.rayCastCallback, origin, pt2);
+            }
+            catch (InvalidOperationException)
+            {
+                Debug.Log("RAYCAST THREW InvalidOperationException");
+                return false;
+            }
+            finally
+            {
 #if DEBUG
-            Application.raycastTimer.Stop();
+                Application.raycastTimer.Stop();
 #endif
+            }
             return (helper.HitCount > 0);
         }
 
@@ -273,6 +284,7 @@ namespace PressPlay.FFWD
 #if DEBUG
             Application.raycastTimer.Start();
 #endif
+            
             RaycastHelper helper = new RaycastHelper(distance, true, layerMask);
             Vector2 pt2 = origin + (direction * distance);
             if (pt2 == origin)
@@ -280,12 +292,23 @@ namespace PressPlay.FFWD
                 hitInfo = new RaycastHit();
                 return false;
             }
-            world.RayCast(helper.rayCastCallback, origin, pt2);
-            hitInfo = helper.ClosestHit();
-
+            try
+            {
+                world.RayCast(helper.rayCastCallback, origin, pt2);
+                hitInfo = helper.ClosestHit();
+            }
+            catch (InvalidOperationException)
+            {
+                hitInfo = new RaycastHit();
+                Debug.Log("RAYCAST THREW InvalidOperationException");
+                return false;
+            }
+            finally
+            {
 #if DEBUG
-            Application.raycastTimer.Stop();
+                Application.raycastTimer.Stop();
 #endif
+            }
             return (helper.HitCount > 0);
         }
 

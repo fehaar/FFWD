@@ -55,7 +55,7 @@ namespace Box2D.XNA
 		        break;
 
 	        default:
-		        Debug.Assert(false);
+                if (!(false)) { throw new InvalidOperationException(); }
                 break;
 	        }
 
@@ -106,7 +106,7 @@ namespace Box2D.XNA
 	    /// Get a vertex by index. Used by b2Distance.
 	    public Vector2 GetVertex(int index)
         {
-            Debug.Assert(0 <= index && index < _count);
+            if (!(0 <= index && index < _count)) { throw new InvalidOperationException(); }
             return _vertices[index];
         }
 
@@ -164,7 +164,7 @@ namespace Box2D.XNA
 					    ref DistanceProxy proxyA, ref Transform transformA,
                         ref DistanceProxy proxyB, ref Transform transformB)
 	    {
-		    Debug.Assert(cache.count <= 3);
+            if (!(cache.count <= 3)) { throw new InvalidOperationException(); }
     		
 		    // Copy data from cache.
 		    _count = cache.count;
@@ -246,7 +246,7 @@ namespace Box2D.XNA
 			    }
 
 		    default:
-			    Debug.Assert(false);
+                if (!(false)) { throw new InvalidOperationException(); }
 			    return Vector2.Zero;
 		    }
 	    }
@@ -256,7 +256,7 @@ namespace Box2D.XNA
 		    switch (_count)
 		    {
 		    case 0:
-			    Debug.Assert(false);
+			    if(!(false)) { throw new InvalidOperationException(); }
 			    return Vector2.Zero;
 
 		    case 1:
@@ -269,7 +269,7 @@ namespace Box2D.XNA
 			    return Vector2.Zero;
 
 		    default:
-			    Debug.Assert(false);
+                if (!(false)) { throw new InvalidOperationException(); }
 			    return Vector2.Zero;
 		    }
 	    }
@@ -281,7 +281,7 @@ namespace Box2D.XNA
 		    case 0:
                 pA = Vector2.Zero;
                 pB = Vector2.Zero;
-			    Debug.Assert(false);
+                if (!(false)) { throw new InvalidOperationException(); }
 			    break;
 
 		    case 1:
@@ -309,7 +309,7 @@ namespace Box2D.XNA
 		    switch (_count)
 		    {
 		    case 0:
-			    Debug.Assert(false);
+			    if(!(false)) { throw new InvalidOperationException(); }
 			    return 0.0f;
 
 		    case 1:
@@ -322,7 +322,7 @@ namespace Box2D.XNA
 			    return MathUtils.Cross(_v[1].w - _v[0].w, _v[2].w - _v[0].w);
 
 		    default:
-			    Debug.Assert(false);
+                if (!(false)) { throw new InvalidOperationException(); }
 			    return 0.0f;
 		    }
 	    }
@@ -587,7 +587,7 @@ namespace Box2D.XNA
 			        break;
 
 		        default:
-			        Debug.Assert(false);
+                    if (!(false)) { throw new InvalidOperationException(); }
                     break;
 		        }
 

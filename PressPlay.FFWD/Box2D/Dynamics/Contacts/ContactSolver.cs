@@ -97,7 +97,7 @@ namespace Box2D.XNA
 		        float wA = bodyA._angularVelocity;
 		        float wB = bodyB._angularVelocity;
 
-		        Debug.Assert(manifold._pointCount > 0);
+		        if(!(manifold._pointCount > 0)) { throw new InvalidOperationException(); }
 
 		        WorldManifold worldManifold = new WorldManifold(ref manifold, ref bodyA._xf, radiusA, ref bodyB._xf, radiusB);
 
@@ -139,7 +139,7 @@ namespace Box2D.XNA
 
 			        float kNormal = bodyA._invMass + bodyB._invMass + bodyA._invI * rnA + bodyB._invI * rnB;
 
-			        Debug.Assert(kNormal > Settings.b2_epsilon);
+                    if (!(kNormal > Settings.b2_epsilon)) { throw new InvalidOperationException(); }
 			        ccp.normalMass = 1.0f / kNormal;
 
 #if MATH_OVERLOADS
@@ -157,7 +157,7 @@ namespace Box2D.XNA
                     rtB *= rtB;
 			        float kTangent = bodyA._invMass + bodyB._invMass + bodyA._invI * rtA + bodyB._invI * rtB;
 
-			        Debug.Assert(kTangent > Settings.b2_epsilon);
+			        if(!(kTangent > Settings.b2_epsilon)) { throw new InvalidOperationException(); }
 			        ccp.tangentMass = 1.0f /  kTangent;
 
 			        // Setup a velocity bias for restitution.
@@ -282,7 +282,7 @@ namespace Box2D.XNA
 #endif
 		        float friction = c.friction;
 
-		        Debug.Assert(c.pointCount == 1 || c.pointCount == 2);
+		        if(!(c.pointCount == 1 || c.pointCount == 2)) { throw new InvalidOperationException(); }
 
 		        // Solve tangent constraints
 		        for (int j = 0; j < c.pointCount; ++j)
@@ -420,7 +420,7 @@ namespace Box2D.XNA
 			        ContactConstraintPoint cp2 = c.points[1];
 
 			        Vector2 a = new Vector2(cp1.normalImpulse, cp2.normalImpulse);
-			        Debug.Assert(a.X >= 0.0f && a.Y >= 0.0f);
+                    if (!(a.X >= 0.0f && a.Y >= 0.0f)) { throw new InvalidOperationException(); }
 
 #if MATH_OVERLOADS
 			        // Relative velocity at contact
@@ -507,8 +507,8 @@ namespace Box2D.XNA
 					        vn1 = Vector2.Dot(dv1, normal);
 					        vn2 = Vector2.Dot(dv2, normal);
 
-					        Debug.Assert(MathUtils.Abs(vn1 - cp1.velocityBias) < k_errorTol);
-					        Debug.Assert(MathUtils.Abs(vn2 - cp2.velocityBias) < k_errorTol);
+					        if(!(MathUtils.Abs(vn1 - cp1.velocityBias) < k_errorTol);
+					        if(!(MathUtils.Abs(vn2 - cp2.velocityBias) < k_errorTol);
 #endif
                             break;
 				        }
@@ -566,7 +566,7 @@ namespace Box2D.XNA
 					        // Compute normal velocity
 					        vn1 = Vector2.Dot(dv1, normal);
 
-					        Debug.Assert(MathUtils.Abs(vn1 - cp1.velocityBias) < k_errorTol);
+					        if(!(MathUtils.Abs(vn1 - cp1.velocityBias) < k_errorTol);
         #endif
 					        break;
 				        }
@@ -625,7 +625,7 @@ namespace Box2D.XNA
 					        // Compute normal velocity
 					        vn2 = Vector2.Dot(dv2, normal);
 
-					        Debug.Assert(MathUtils.Abs(vn2 - cp2.velocityBias) < k_errorTol);
+					        if(!(MathUtils.Abs(vn2 - cp2.velocityBias) < k_errorTol);
         #endif
 					        break;
 				        }
@@ -800,7 +800,7 @@ namespace Box2D.XNA
     {
         internal PositionSolverManifold(ref ContactConstraint cc, int index)
         {
-	        Debug.Assert(cc.pointCount > 0);
+            if (!(cc.pointCount > 0)) { throw new InvalidOperationException(); }
 
 	        switch (cc.type)
 	        {

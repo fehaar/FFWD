@@ -254,7 +254,7 @@ namespace Box2D.XNA
 	    /// Set the joint limits, usually in meters.
 	    public void SetLimits(float lower, float upper)
         {
-	        Debug.Assert(lower <= upper);
+            if (!(lower <= upper)) { throw new InvalidOperationException(); }
 	        _bodyA.SetAwake(true);
 	        _bodyB.SetAwake(true);
 	        _lowerTranslation = lower;

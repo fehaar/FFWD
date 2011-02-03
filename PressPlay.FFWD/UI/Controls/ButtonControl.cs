@@ -67,7 +67,7 @@ namespace PressPlay.FFWD.UI.Controls
             }
         }
 
-        private string link;
+        public string link;
         private bool useCustomClickRect = false;
         private Rectangle _clickRect;
         public Rectangle clickRect
@@ -128,7 +128,9 @@ namespace PressPlay.FFWD.UI.Controls
 
             // we get and set the correct texture
             ButtonTexture bt = buttonStyle.GetButtonTexture(newState);
-            
+
+            //Debug.Log("ButtonControl: changing sourcerect from " + ((UISpriteRenderer)background.renderer).sourceRect + " to " + bt.sourceRect);
+
             ((UISpriteRenderer)background.renderer).texture = bt.texture;
             ((UISpriteRenderer)background.renderer).sourceRect = bt.sourceRect;
 
@@ -152,12 +154,17 @@ namespace PressPlay.FFWD.UI.Controls
             
             base.HandleInput(input);
 
+            //Debug.Log("buttonControl handle input!");
+
             if (isMouseWithinBounds(input))
             {
                 if (input.isMouseDown)
                 {
+
+                    //Debug.Log("buttonControl: mouse is down");
                     if (state != ButtonControlStates.pressed)
                     {
+                        //Debug.Log("buttonControl: changing state to ButtonControlStates.pressed");
                         ChangeState(ButtonControlStates.pressed);
                     }
                 }

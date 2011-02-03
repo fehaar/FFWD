@@ -109,8 +109,8 @@ namespace Box2D.XNA
 	    /// Destroy a proxy. This asserts if the id is invalid.
 	    public void DestroyProxy(int proxyId)
         {
-	        Debug.Assert(0 <= proxyId && proxyId < _nodeCapacity);
-	        Debug.Assert(_nodes[proxyId].IsLeaf());
+	        if(!(0 <= proxyId && proxyId < _nodeCapacity)) { throw new InvalidOperationException(); }
+            if (!(_nodes[proxyId].IsLeaf())) { throw new InvalidOperationException(); }
 
 	        RemoveLeaf(proxyId);
 	        FreeNode(proxyId);
@@ -122,9 +122,9 @@ namespace Box2D.XNA
         /// @return true if the proxy was re-inserted.
 	    public bool MoveProxy(int proxyId, ref AABB aabb, Vector2 displacement)
         {
-	        Debug.Assert(0 <= proxyId && proxyId < _nodeCapacity);
+	        if(!(0 <= proxyId && proxyId < _nodeCapacity)) { throw new InvalidOperationException(); }
 
-	        Debug.Assert(_nodes[proxyId].IsLeaf());
+            if (!(_nodes[proxyId].IsLeaf())) { throw new InvalidOperationException(); }
 
 	        if (_nodes[proxyId].aabb.Contains(ref aabb))
 	        {
@@ -197,14 +197,14 @@ namespace Box2D.XNA
 	    /// @return the proxy user data or 0 if the id is invalid.
 	    public object GetUserData(int proxyId)
         {
-	        Debug.Assert(0 <= proxyId && proxyId < _nodeCapacity);
+            if (!(0 <= proxyId && proxyId < _nodeCapacity)) { throw new InvalidOperationException(); }
 		    return _nodes[proxyId].userData;
         }
         
 	    /// Get the fat AABB for a proxy.
         public void GetFatAABB(int proxyId, out AABB fatAABB)
         {
-	        Debug.Assert(0 <= proxyId && proxyId < _nodeCapacity);
+            if (!(0 <= proxyId && proxyId < _nodeCapacity)) { throw new InvalidOperationException(); }
 	        fatAABB = _nodes[proxyId].aabb;
         }
 
@@ -272,7 +272,7 @@ namespace Box2D.XNA
 	        Vector2 p1 = input.p1;
 	        Vector2 p2 = input.p2;
 	        Vector2 r = p2 - p1;
-	        Debug.Assert(r.LengthSquared() > 0.0f);
+            if (!(r.LengthSquared() > 0.0f)) { throw new InvalidOperationException(); }
 	        r.Normalize();
 
 	        // v is perpendicular to the segment.
@@ -364,7 +364,7 @@ namespace Box2D.XNA
 	        // Expand the node pool as needed.
 	        if (_freeList == NullNode)
 	        {
-		        Debug.Assert(_nodeCount == _nodeCapacity);
+                if (!(_nodeCount == _nodeCapacity)) { throw new InvalidOperationException(); }
 
 		        // The free list is empty. Rebuild a bigger pool.
 		        DynamicTreeNode[] oldNodes = _nodes;
@@ -394,8 +394,8 @@ namespace Box2D.XNA
 
         private void FreeNode(int nodeId)
         {
-	        Debug.Assert(0 <= nodeId && nodeId < _nodeCapacity);
-	        Debug.Assert(0 < _nodeCount);
+	        if(!(0 <= nodeId && nodeId < _nodeCapacity)) { throw new InvalidOperationException(); }
+            if (!(0 < _nodeCount)) { throw new InvalidOperationException(); }
             _nodes[nodeId].parentOrNext = _freeList;
 	        _freeList = nodeId;
 	        --_nodeCount;
@@ -550,7 +550,7 @@ namespace Box2D.XNA
 		        return 0;
 	        }
 
-	        Debug.Assert(0 <= nodeId && nodeId < _nodeCapacity);
+            if (!(0 <= nodeId && nodeId < _nodeCapacity)) { throw new InvalidOperationException(); }
 	        DynamicTreeNode node = _nodes[nodeId];
 	        int height1 = ComputeHeight(node.child1);
 	        int height2 = ComputeHeight(node.child2);
