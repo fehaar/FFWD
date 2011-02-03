@@ -268,8 +268,6 @@ namespace PressPlay.FFWD
 
         internal void OnCollisionEnter(Collision collision)
         {
-            Debug.DrawRay(this._collider.transform.position, collision.contacts[0].normal, Color.white);
-
             for (int i = 0; i < components.Count; i++)
             {
                 if (components[i] is MonoBehaviour)
@@ -281,8 +279,6 @@ namespace PressPlay.FFWD
 
         internal void OnCollisionStay(Collision collision)
         {
-            Debug.DrawRay(this._collider.transform.position, collision.contacts[0].normal, Color.grey);
-
             for (int i = 0; i < components.Count; i++)
             {
                 if (components[i] is MonoBehaviour)
