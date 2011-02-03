@@ -27,6 +27,7 @@ namespace PressPlay.FFWD
         private static string sceneToLoad = "";
 
 #if DEBUG
+        private Stopwatch frameTime = new Stopwatch();
         private Stopwatch scripts = new Stopwatch();
         private Stopwatch physics = new Stopwatch();
         private Stopwatch graphics = new Stopwatch(); 
@@ -74,7 +75,6 @@ namespace PressPlay.FFWD
                 base.Game.Exit();
                 return;
             }
-
 
             base.Update(gameTime);
             Time.Update((float)gameTime.ElapsedGameTime.TotalSeconds, (float)gameTime.TotalGameTime.TotalSeconds);
@@ -181,11 +181,15 @@ namespace PressPlay.FFWD
             }
             if (ApplicationSettings.ShowFPSCounter)
             {
-                Debug.Display("FPS", frameRate);
+                Debug.Display("FPS", String.Format("{0} ms {1}", frameRate, frameTime.ElapsedMilliseconds));
+                //Debug.Display("frame time", frameTime.ElapsedMilliseconds);
+                frameTime.Reset();
+                frameTime.Start();
             }
             if (ApplicationSettings.ShowPerformanceBreakdown)
             {
-                Debug.Display("S | P | G", String.Format("{0:P1} | {1:P1} | {2:P1}", scripts.Elapsed.TotalSeconds / total, physics.Elapsed.TotalSeconds / total, graphics.Elapsed.TotalSeconds / total));
+                Debug.Display("% S | P | G", String.Format("{0:P1} | {1:P1} | {2:P1}", scripts.Elapsed.TotalSeconds / total, physics.Elapsed.TotalSeconds / total, graphics.Elapsed.TotalSeconds / total));
+                Debug.Display("ms S | P | G", String.Format("{0}ms | {1}ms | {2}ms", scripts.Elapsed.Milliseconds, physics.Elapsed.Milliseconds, graphics.Elapsed.Milliseconds));
             }
             if (ApplicationSettings.ShowDebugDisplays)
 	        {
@@ -204,9 +208,9 @@ namespace PressPlay.FFWD
 
                 spriteBatch.End();
             }
-            //scripts.Reset();
-            //physics.Reset();
-            //graphics.Reset();
+            scripts.Reset();
+            physics.Reset();
+            graphics.Reset();
 #endif
         }
 

@@ -148,7 +148,7 @@ namespace PressPlay.FFWD
         {
             Vector2 center = aabb.GetCenter();
             Vector2 size = aabb.GetExtents();
-            return new Bounds(new Vector3(center.x, 0, center.y),new Vector3(size.x, width, size.y));
+            return new Bounds(new Vector3(center.x, 0, center.y),new Vector3(size.x*2, width, size.y*2));
         }
 
         public static Body AddBody()
@@ -180,7 +180,7 @@ namespace PressPlay.FFWD
             {
                 throw new InvalidOperationException("You have to Initialize the Physics system before adding bodies");
             }
-            CircleShape shp = new CircleShape() { _radius = radius };
+            CircleShape shp = new CircleShape() { _radius = radius, _p = position };
             Fixture fix = body.CreateFixture(shp, density);
             fix.SetSensor(isTrigger);
             return body;
@@ -465,15 +465,19 @@ namespace PressPlay.FFWD
 
         public static bool CheckCapsule(Vector3 start, Vector3 end, float radius, LayerMask layermask)
         {
-#if DEBUG
-            Application.raycastTimer.Start();
-#endif
-            //TODO: implement this
+            //TODO an actual capsule check.. not just a raycasts
+         
+            Vector3 forward = (end - start).normalized;
+            Vector3 right = new Vector3(forward.z,0,-forward.x);
 
-#if DEBUG
-            Application.raycastTimer.Stop();
-#endif
-            return false;
+            Ray middleRay = new Ray(start, forward);
+            Ray rightRay = new Ray(start + right * radius + forward * radius, forward);
+            Ray leftRay = new Ray(start - right * radius + forward * radius, forward);
+
+            float middleLength = (end - start).magnitude;
+            float sidesLength = middleLength - radius * 2;
+
+            return (Raycast(middleRay, middleLength, layermask) || Raycast(rightRay, sidesLength, layermask) || Raycast(leftRay, sidesLength, layermask));
         }
         #endregion
 

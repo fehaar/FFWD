@@ -111,13 +111,14 @@ namespace PressPlay.FFWD
 
         public void DebugDraw()
         {
-            Vector3 width = new Vector3(size.x, 0, 0);
-            Vector3 height = new Vector3(size.z, 0, 0);
+            Vector3 width = new Vector3(size.x, 0, 0) * 0.5f;
+            Vector3 height = new Vector3( 0, 0, size.z ) * 0.5f;
 
-            Debug.DrawLine(center + width * 0.5f, center + height * 0.5f, Color.gray);
-            Debug.DrawLine(center + width * 0.5f, center - height * 0.5f, Color.gray);
-            Debug.DrawLine(center - width * 0.5f, center - height * 0.5f, Color.gray);
-            Debug.DrawLine(center - width * 0.5f, center + height * 0.5f, Color.gray);
+            Debug.DrawLine(center + width + height, center + width - height, Color.gray);
+            Debug.DrawLine(center - width + height, center - width - height, Color.gray);
+           
+            Debug.DrawLine(center + width + height, center - width + height, Color.gray);
+            Debug.DrawLine(center + width - height, center - width - height, Color.gray);
         }
 
         public override string ToString()

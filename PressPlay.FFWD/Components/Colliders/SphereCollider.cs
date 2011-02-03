@@ -28,7 +28,7 @@ namespace PressPlay.FFWD.Components
                 lastResizeScale = new Vector3(float.NaN, float.NaN, float.NaN);
             } //HACK!!!! to test rescaling of meshes
 
-            connectedBody = Physics.AddCircle(body, isTrigger, rad, center, -MathHelper.ToRadians(transform.rotation.eulerAngles.y), mass);
+            connectedBody = Physics.AddCircle(body, isTrigger, rad, center * transform.lossyScale, -MathHelper.ToRadians(transform.rotation.eulerAngles.y), mass);
         }
 
         /*internal override void ResizeConnectedBody(Vector3 _scale)

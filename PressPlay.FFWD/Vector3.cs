@@ -278,7 +278,12 @@ namespace PressPlay.FFWD
 
         public static float Angle(Vector3 from, Vector3 to)
         {
-            return MathHelper.ToDegrees((float)Math.Acos((double)Vector3.Dot(from.normalized, to.normalized)));
+
+            float dot = Vector3.Dot(from.normalized, to.normalized);
+
+            if (dot >= 1 || dot <= -1) { return 0; }
+
+            return MathHelper.ToDegrees((float)Math.Acos((double)dot));
         }
 
         public static float Distance(Vector3 a, Vector3 b)
