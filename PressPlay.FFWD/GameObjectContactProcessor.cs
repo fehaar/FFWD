@@ -9,23 +9,39 @@ namespace PressPlay.FFWD
     {
         private struct Stay
         {
-            public Stay(Collider a, Collider b)
-            {
-                collA = a;
-                collB = b;
-                collision = null;
+            public bool collision {
+                get { return collisionAToB != null; }
             }
 
-            public Stay(Collider a, Collider b, Collision coll)
+
+            public Stay(Collider colliderToTriggerA, Collider colliderToTriggerB, GameObject gameObjectA, GameObject gameObjectB)
             {
-                collA = a;
-                collB = b;
-                collision = coll;
+                this.colliderToTriggerA = colliderToTriggerA;
+                this.colliderToTriggerB = colliderToTriggerB;
+                this.gameObjectA = gameObjectA;
+                this.gameObjectB = gameObjectB;
+                collisionAToB = null;
+                collisionBToA = null;
             }
 
-            public Collider collA;
-            public Collider collB;
-            public Collision collision;
+            public Stay(Collision collisionAToB, Collision collisionBToA, GameObject gameObjectA, GameObject gameObjectB)
+            {
+                this.collisionAToB = collisionAToB;
+                this.collisionBToA = collisionBToA;
+                colliderToTriggerA = collisionAToB.collider;
+                colliderToTriggerB = collisionBToA.collider;
+                this.gameObjectA = gameObjectA;
+                this.gameObjectB = gameObjectB;
+            }
+
+            public Collider colliderToTriggerA;
+            public Collider colliderToTriggerB;
+            public Collision collisionAToB;
+            public Collision collisionBToA;
+            public GameObject gameObjectA;
+            public GameObject gameObjectB;
+
+                 
         }
 
         #region IContactListener Members
@@ -117,22 +133,22 @@ namespace PressPlay.FFWD
 
             for (int i = staying.Count - 1; i >= 0; i--)
             {
-                if (staying[i].collA.gameObject == null || staying[i].collB.gameObject == null || !staying[i].collA.gameObject.active || !staying[i].collB.gameObject.active)
+                if (staying[i].colliderToTriggerA.gameObject == null || staying[i].colliderToTriggerB.gameObject == null || !staying[i].colliderToTriggerA.gameObject.active || !staying[i].colliderToTriggerB.gameObject.active)
                 {
                     staying.RemoveAt(i);
                 }
-                else if (staying[i].collision == null)
+                else if (!staying[i].collision)
                 {
-                    staying[i].collA.gameObject.OnTriggerStay(staying[i].collB);
-                    staying[i].collB.gameObject.OnTriggerStay(staying[i].collA);
+                    staying[i].gameObjectA.OnTriggerStay(staying[i].colliderToTriggerA);
+                    staying[i].gameObjectB.OnTriggerStay(staying[i].colliderToTriggerB);
                 }
                 else
                 {
-                    Collision coll = staying[i].collision;
-                    coll.SetColliders(staying[i].collA, staying[i].collB);
-                    staying[i].collA.gameObject.OnCollisionStay(coll);
-                    coll.SetColliders(staying[i].collB, staying[i].collA);
-                    staying[i].collB.gameObject.OnCollisionStay(coll);
+                    //Collision coll = staying[i].collision;
+                    //coll.SetColliders(staying[i].collA, staying[i].collB);
+                    staying[i].gameObjectA.OnCollisionStay(staying[i].collisionBToA);
+                    //coll.SetColliders(staying[i].collB, staying[i].collA);
+                    staying[i].gameObjectB.OnCollisionStay(staying[i].collisionAToB);
                 }
             }
 
@@ -160,7 +176,7 @@ namespace PressPlay.FFWD
                 }
                 if (fixtureA.IsSensor() || fixtureB.IsSensor())
                 {
-                    staying.Add(new Stay(compA.collider, compB.collider));
+                    staying.Add(new Stay(compB.collider, compA.collider, compA.gameObject, compB.gameObject ));
                     compA.gameObject.OnTriggerEnter(compB.collider);
                     compB.gameObject.OnTriggerEnter(compA.collider);
                 }
@@ -176,26 +192,40 @@ namespace PressPlay.FFWD
                     }
                     WorldManifold wManifold;
                     contact.GetWorldManifold(out wManifold);
-                    Collision coll = new Collision()
+                    Collision collisionBToA = new Collision()
                     {
                         collider = compB.collider,
                         relativeVelocity = ((compA.rigidbody != null) ? compA.rigidbody.velocity : Vector3.zero) - ((compB.rigidbody != null) ? compB.rigidbody.velocity : Vector3.zero),
                         contacts = new ContactPoint[contact._manifold._pointCount]
                     };
-                    for (int j = 0; j < coll.contacts.Length; j++)
+                    Collision collisionAToB = new Collision()
                     {
-                        coll.contacts[j].thisCollider = compA.collider;
-                        coll.contacts[j].otherCollider = compB.collider;
-                        coll.contacts[j].point = wManifold._points[j];
-                        coll.contacts[j].normal = wManifold._normal;
+                        collider = compA.collider,
+                        relativeVelocity = ((compB.rigidbody != null) ? compB.rigidbody.velocity : Vector3.zero) - ((compA.rigidbody != null) ? compA.rigidbody.velocity : Vector3.zero),
+                        contacts = new ContactPoint[contact._manifold._pointCount]
+                    };
+                    for (int j = 0; j < collisionBToA.contacts.Length; j++)
+                    {
+                        collisionBToA.contacts[j].thisCollider = compB.collider;
+                        collisionBToA.contacts[j].otherCollider = compA.collider;
+                        collisionBToA.contacts[j].point = wManifold._points[j];
+                        collisionBToA.contacts[j].normal = -wManifold._normal;
+
+                        collisionAToB.contacts[j].thisCollider = compA.collider;
+                        collisionAToB.contacts[j].otherCollider = compB.collider;
+                        collisionAToB.contacts[j].point = wManifold._points[j];
+                        collisionAToB.contacts[j].normal = wManifold._normal;
                     }
-                    staying.Add(new Stay(compA.collider, compB.collider, coll));
-                    compA.gameObject.OnCollisionEnter(coll);
-                    coll.SetColliders(compB.collider, compA.collider);
-                    compB.gameObject.OnCollisionEnter(coll);
+                    Stay s = new Stay(collisionAToB, collisionBToA, compA.gameObject, compB.gameObject);
+                    staying.Add(s);
+                    s.gameObjectA.OnCollisionEnter(s.collisionBToA);
+                    //coll.SetColliders(staying[i].collB, staying[i].collA);
+                    s.gameObjectB.OnCollisionEnter(s.collisionAToB);
+
+                    //compA.gameObject.OnCollisionEnter(collisionBToA);
+                    //compB.gameObject.OnCollisionEnter(collisionAToB);
                 }
             }
-
 
             //for (int i = 0; i < preSolveContacts.Count; ++i)
             //{
@@ -231,7 +261,7 @@ namespace PressPlay.FFWD
         {
             for (int i = staying.Count - 1; i >= 0; i--)
             {
-                if (staying[i].collA == compA && staying[i].collB == compB)
+                if ((staying[i].colliderToTriggerA == compA && staying[i].colliderToTriggerB == compB) || (staying[i].colliderToTriggerA == compB && staying[i].colliderToTriggerB == compA))
                 {
                     staying.RemoveAt(i);
                 }
@@ -242,7 +272,7 @@ namespace PressPlay.FFWD
         {
             for (int i = staying.Count - 1; i >= 0; i--)
             {
-                if (staying[i].collA == collider || staying[i].collB == collider)
+                if (staying[i].colliderToTriggerA == collider || staying[i].colliderToTriggerB == collider)
                 {
                     staying.RemoveAt(i);
                 }

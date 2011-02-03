@@ -41,5 +41,14 @@ namespace PressPlay.FFWD
                 contacts[j].otherCollider = b;
             }
         }
+
+        /*internal void ReverseNormals()
+        {
+            for (int j = 0; j < contacts.Length; j++)
+            {
+                contacts[j].normal = -contacts[j].normal;
+
+            }
+        }*/
     }
 }
