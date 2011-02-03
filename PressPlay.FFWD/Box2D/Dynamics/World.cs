@@ -98,7 +98,7 @@ namespace Box2D.XNA
 	    /// @warning This function is locked during callbacks.
 	    public Body CreateBody(BodyDef def)
         {
-            Debug.Assert(!IsLocked);
+            if (!(!IsLocked)) { throw new InvalidOperationException(); }
 	        if (IsLocked)
 	        {
 		        return null;
@@ -125,8 +125,8 @@ namespace Box2D.XNA
 	    /// @warning This function is locked during callbacks.
 	    public void DestroyBody(Body b)
         {
-            Debug.Assert(_bodyCount > 0);
-	        Debug.Assert(!IsLocked);
+            if (!(_bodyCount > 0)) { throw new InvalidOperationException(); }
+	        if(!(!IsLocked)) { throw new InvalidOperationException(); }
 	        if (IsLocked)
 	        {
 		        return;
@@ -200,7 +200,7 @@ namespace Box2D.XNA
 	    /// @warning This function is locked during callbacks.
 	    public Joint CreateJoint(JointDef def)
         {
-	        Debug.Assert(!IsLocked);
+            if (!(!IsLocked)) { throw new InvalidOperationException(); }
 	        if (IsLocked)
 	        {
 		        return null;
@@ -271,7 +271,7 @@ namespace Box2D.XNA
 	    /// @warning This function is locked during callbacks.
 	    public void DestroyJoint(Joint j)
         {
-	        Debug.Assert(!IsLocked);
+	        if(!(!IsLocked)) { throw new InvalidOperationException(); }
 	        if (IsLocked)
 	        {
 		        return;
@@ -341,7 +341,7 @@ namespace Box2D.XNA
 	        j._edgeB.Prev = null;
 	        j._edgeB.Next = null;
 
-	        Debug.Assert(_jointCount > 0);
+            if (!(_jointCount > 0)) { throw new InvalidOperationException(); }
 	        --_jointCount;
 
 	        // If the joint prevents collisions, then flag any contacts for filtering.
@@ -777,7 +777,7 @@ namespace Box2D.XNA
 		        {
 			        // Grab the next body off the stack and add it to the island.
 			        Body b = stack[--stackCount];
-                    Debug.Assert(b.IsActive() == true);
+                    if(!(b.IsActive() == true)) { throw new InvalidOperationException(); }
 			        _island.Add(b);
 
 			        // Make sure the body is awake.
@@ -826,7 +826,7 @@ namespace Box2D.XNA
 					        continue;
 				        }
 
-				        Debug.Assert(stackCount < stackSize);
+				        if(!(stackCount < stackSize)) { throw new InvalidOperationException(); }
 				        stack[stackCount++] = other;
 				        other._flags |= BodyFlags.Island;
 			        }
@@ -855,7 +855,7 @@ namespace Box2D.XNA
 					        continue;
 				        }
 
-				        Debug.Assert(stackCount < stackSize);
+                        if (!(stackCount < stackSize)) { throw new InvalidOperationException(); }
 				        stack[stackCount++] = other;
 				        other._flags |= BodyFlags.Island;
 			        }
@@ -1201,7 +1201,7 @@ namespace Box2D.XNA
 		        {
 			        PolygonShape poly = (PolygonShape)fixture.GetShape();
 			        int vertexCount = poly._vertexCount;
-			        Debug.Assert(vertexCount <= Settings.b2_maxPolygonVertices);
+                    if (!(vertexCount <= Settings.b2_maxPolygonVertices)) { throw new InvalidOperationException(); }
 			        FixedArray8<Vector2> vertices = new FixedArray8<Vector2>();
 
 			        for (int i = 0; i < vertexCount; ++i)

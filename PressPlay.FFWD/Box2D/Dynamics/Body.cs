@@ -175,7 +175,7 @@ namespace Box2D.XNA
 	    /// @warning This function is locked during callbacks.
 	    public Fixture CreateFixture(FixtureDef def)
         {
-            Debug.Assert(_world.IsLocked == false);
+            if (!(_world.IsLocked == false)) { throw new InvalidOperationException(); }
 	        if (_world.IsLocked == true)
 	        {
 		        return null;
@@ -235,16 +235,16 @@ namespace Box2D.XNA
 	    /// @warning This function is locked during callbacks.
 	    public void DestroyFixture(Fixture fixture)
         {
-            Debug.Assert(_world.IsLocked == false);
+            if(!(_world.IsLocked == false)) { throw new InvalidOperationException(); }
 	        if (_world.IsLocked == true)
 	        {
 		        return;
 	        }
 
-	        Debug.Assert(fixture._body == this);
+	        if(!(fixture._body == this)) { throw new InvalidOperationException(); }
 
 	        // Remove the fixture from this body's singly linked list.
-	        Debug.Assert(_fixtureCount > 0);
+	        if(!(_fixtureCount > 0)) { throw new InvalidOperationException(); }
 	        Fixture node = _fixtureList;
 	        bool found = false;
 	        while (node != null)
@@ -260,7 +260,7 @@ namespace Box2D.XNA
 	        }
 
 	        // You tried to remove a shape that is not attached to this body.
-	        Debug.Assert(found);
+            if (!(found)) { throw new InvalidOperationException(); }
 
 	        // Destroy any contacts associated with the fixture.
 	        ContactEdge edge = _contactList;
@@ -282,14 +282,14 @@ namespace Box2D.XNA
 
             if ((_flags & BodyFlags.Active) == BodyFlags.Active)
             {
-                Debug.Assert(fixture._proxyId != BroadPhase.NullProxy);
+                if(!(fixture._proxyId != BroadPhase.NullProxy)) { throw new InvalidOperationException(); }
 
                 BroadPhase broadPhase = _world._contactManager._broadPhase;
                 fixture.DestroyProxy(broadPhase);
             }
             else
             {
-                Debug.Assert(fixture._proxyId == BroadPhase.NullProxy);
+                if(!(fixture._proxyId == BroadPhase.NullProxy)) { throw new InvalidOperationException(); }
             }
 
 	        fixture.Destroy();
@@ -308,7 +308,7 @@ namespace Box2D.XNA
 	    /// @param angle the world rotation in radians.
 	    public void SetTransform(Vector2 position, float angle)
         {
-            Debug.Assert(_world.IsLocked == false);
+            if (!(_world.IsLocked == false)) { throw new InvalidOperationException(); }
 	        if (_world.IsLocked == true)
 	        {
 		        return;
@@ -513,7 +513,7 @@ namespace Box2D.XNA
         /// @param massData the mass properties.
         public void SetMassData(ref MassData massData)
         {
-	        Debug.Assert(_world.IsLocked == false);
+	        if(!(_world.IsLocked == false)) { throw new InvalidOperationException(); }
 	        if (_world.IsLocked == true)
 	        {
 		        return;
@@ -541,7 +541,7 @@ namespace Box2D.XNA
 	        if (massData.I > 0.0f && (_flags & BodyFlags.FixedRotation) == 0)
 	        {
 		        _I = massData.I - _mass * Vector2.Dot(massData.center, massData.center);
-                Debug.Assert(_I > 0.0f);
+                if (!(_I > 0.0f)) { throw new InvalidOperationException(); }
 		        _invI = 1.0f / _I;
 	        }
 
@@ -573,7 +573,7 @@ namespace Box2D.XNA
                 return;
             }
 
-            Debug.Assert(_type == BodyType.Dynamic);
+            if(!(_type == BodyType.Dynamic)) { throw new InvalidOperationException(); }
 
             // Accumulate mass over all fixtures.
 	        Vector2 center = Vector2.Zero;
@@ -609,7 +609,7 @@ namespace Box2D.XNA
 		        // Center the inertia about the center of mass.
 		        _I -= _mass * Vector2.Dot(center, center);
 
-		        Debug.Assert(_I > 0.0f);
+                if (!(_I > 0.0f)) { throw new InvalidOperationException(); }
 		        _invI = 1.0f / _I;
 	        }
 	        else
@@ -920,13 +920,13 @@ namespace Box2D.XNA
 
         internal Body(BodyDef bd, World world)
         {
-            Debug.Assert(bd.position.IsValid());
-            Debug.Assert(bd.linearVelocity.IsValid());
-            Debug.Assert(MathUtils.IsValid(bd.angle));
-            Debug.Assert(MathUtils.IsValid(bd.angularVelocity));
-            Debug.Assert(MathUtils.IsValid(bd.inertiaScale) && bd.inertiaScale >= 0.0f);
-            Debug.Assert(MathUtils.IsValid(bd.angularDamping) && bd.angularDamping >= 0.0f);
-            Debug.Assert(MathUtils.IsValid(bd.linearDamping) && bd.linearDamping >= 0.0f);
+            if(!(bd.position.IsValid())) { throw new InvalidOperationException(); }
+            if(!(bd.linearVelocity.IsValid())) { throw new InvalidOperationException(); }
+            if(!(MathUtils.IsValid(bd.angle))) { throw new InvalidOperationException(); }
+            if(!(MathUtils.IsValid(bd.angularVelocity))) { throw new InvalidOperationException(); }
+            if(!(MathUtils.IsValid(bd.inertiaScale) && bd.inertiaScale >= 0.0f)) { throw new InvalidOperationException(); }
+            if(!(MathUtils.IsValid(bd.angularDamping) && bd.angularDamping >= 0.0f)) { throw new InvalidOperationException(); }
+            if (!(MathUtils.IsValid(bd.linearDamping) && bd.linearDamping >= 0.0f)) { throw new InvalidOperationException(); }
 
 
 	        if (bd.bullet)

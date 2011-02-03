@@ -19,7 +19,7 @@
 * misrepresented as being the original software. 
 * 3. This notice may not be removed or altered from any source distribution. 
 */
-
+using System;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
 
@@ -244,7 +244,7 @@ namespace Box2D.XNA
                 break;
                 
 	        default:
-		        Debug.Assert(false);
+                if (!(false)) { throw new InvalidOperationException(); }
 		        break;
 	        }
 
@@ -253,7 +253,7 @@ namespace Box2D.XNA
 
 	    protected Joint(JointDef def)
         {
-            Debug.Assert(def.bodyA != def.bodyB);
+            if (!(def.bodyA != def.bodyB)) { throw new InvalidOperationException(); }
 
 	        _type = def.type;
 	        _bodyA = def.bodyA;

@@ -21,6 +21,7 @@
 */
 
 using System.Diagnostics;
+using System;
 using Microsoft.Xna.Framework;
 
 namespace Box2D.XNA
@@ -95,7 +96,7 @@ namespace Box2D.XNA
 
         public void SetRatio(float ratio)
         {
-            Debug.Assert(MathUtils.IsValid(ratio));
+            if (!(MathUtils.IsValid(ratio))) { throw new InvalidOperationException(); }
             _ratio = ratio;
         }
 
@@ -105,10 +106,10 @@ namespace Box2D.XNA
 	        JointType type1 = def.joint1.JointType;
             JointType type2 = def.joint2.JointType;
 
-	        Debug.Assert(type1 == JointType.Revolute || type1 == JointType.Prismatic);
-	        Debug.Assert(type2 == JointType.Revolute || type2 == JointType.Prismatic);
-	        Debug.Assert(def.joint1.GetBodyA().GetType() == BodyType.Static);
-            Debug.Assert(def.joint2.GetBodyA().GetType() == BodyType.Static);
+	        if(!(type1 == JointType.Revolute || type1 == JointType.Prismatic)) { throw new InvalidOperationException(); }
+	        if(!(type2 == JointType.Revolute || type2 == JointType.Prismatic)) { throw new InvalidOperationException(); }
+            if (!(def.joint1.GetBodyA().GetType() == BodyType.Static)) { throw new InvalidOperationException(); }
+            if(!(def.joint2.GetBodyA().GetType() == BodyType.Static)) { throw new InvalidOperationException(); }
 
 	        _revolute1 = null;
 	        _prismatic1 = null;
@@ -207,7 +208,7 @@ namespace Box2D.XNA
 	        }
 
 	        // Compute effective mass.
-	        Debug.Assert(K > 0.0f);
+            if (!(K > 0.0f)) { throw new InvalidOperationException(); }
             _mass = K > 0.0f ? 1.0f / K : 0.0f;
 
 	        if (step.warmStarting)

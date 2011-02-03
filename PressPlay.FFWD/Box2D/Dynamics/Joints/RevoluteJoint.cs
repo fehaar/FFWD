@@ -167,7 +167,7 @@ namespace Box2D.XNA
 	    /// Set the joint limits in radians.
 	    public void SetLimits(float lower, float upper)
         {
-	        Debug.Assert(lower <= upper);
+            if (!(lower <= upper)) { throw new InvalidOperationException(); }
 	        _bodyA.SetAwake(true);
 	        _bodyB.SetAwake(true);
 	        _lowerAngle = lower;
@@ -244,7 +244,7 @@ namespace Box2D.XNA
 	        {
 		        // You cannot create a rotation limit between bodies that
 		        // both have fixed rotation.
-		        Debug.Assert(b1._invI > 0.0f || b2._invI > 0.0f);
+                if (!(b1._invI > 0.0f || b2._invI > 0.0f)) { throw new InvalidOperationException(); }
 	        }
 
 	        // Compute the effective mass matrix.
@@ -528,7 +528,7 @@ namespace Box2D.XNA
 			        // Use a particle solution (no rotation).
 			        Vector2 u = C; u.Normalize();
 			        float k = invMass1 + invMass2;
-			        Debug.Assert(k > Settings.b2_epsilon);
+                    if (!(k > Settings.b2_epsilon)) { throw new InvalidOperationException(); }
 			        float m = 1.0f / k;
 			        Vector2 impulse2 = m * (-C);
 			        const float k_beta = 0.5f;

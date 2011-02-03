@@ -739,7 +739,7 @@ namespace Box2D.XNA
 	        int count1 = poly1._vertexCount;
 	        int count2 = poly2._vertexCount;
 
-	        Debug.Assert(0 <= edge1 && edge1 < count1);
+            if (!(0 <= edge1 && edge1 < count1)) { throw new InvalidOperationException(); }
 
 	        // Convert normal from poly1's frame into poly2's frame.
 #if MATH_OVERLOADS
@@ -882,7 +882,7 @@ namespace Box2D.XNA
 	        int count1 = poly1._vertexCount;
 	        int count2 = poly2._vertexCount;
 
-	        Debug.Assert(0 <= edge1 && edge1 < count1);
+            if (!(0 <= edge1 && edge1 < count1)) { throw new InvalidOperationException(); }
 
 	        // Get the normal of the reference edge in poly2's frame.
 	        Vector2 normal1 = MathUtils.MultiplyT(ref xf2.R, MathUtils.Multiply(ref xf1.R, poly1._normals[edge1]));

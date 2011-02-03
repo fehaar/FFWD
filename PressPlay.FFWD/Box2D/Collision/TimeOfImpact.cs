@@ -68,7 +68,7 @@ namespace Box2D.XNA
             _proxyA = proxyA;
             _proxyB = proxyB;
 		    int count = cache.count;
-		    Debug.Assert(0 < count && count < 3);
+            if (!(0 < count && count < 3)) { throw new InvalidOperationException(); }
 
             _sweepA = sweepA;
             _sweepB = sweepB;
@@ -201,7 +201,7 @@ namespace Box2D.XNA
 			    }
 
 		        default:
-			        Debug.Assert(false);
+                if (!(false)) { throw new InvalidOperationException(); }
 			        indexA = -1;
 			        indexB = -1;
 			        return 0.0f;
@@ -260,7 +260,7 @@ namespace Box2D.XNA
 			    }
 
 		    default:
-			    Debug.Assert(false);
+                if (!(false)) { throw new InvalidOperationException(); }
 			    return 0.0f;
 		    }
 	    }
@@ -299,7 +299,7 @@ namespace Box2D.XNA
 
             float target = Settings.b2_linearSlop;
             float tolerance = 0.25f * Settings.b2_linearSlop;
-            Debug.Assert(target > tolerance);
+            if (!(target > tolerance)) { throw new InvalidOperationException(); }
 
             float t1 = 0.0f;
 	        const int k_maxIterations = 1000;

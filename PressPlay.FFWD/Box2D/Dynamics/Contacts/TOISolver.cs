@@ -42,7 +42,7 @@ namespace Box2D.XNA
     {
         public TOISolverManifold(ref TOIConstraint cc, int index)
 	    {
-		    Debug.Assert(cc.pointCount > 0);
+            if (!(cc.pointCount > 0)) { throw new InvalidOperationException(); }
 
 		    switch (cc.type)
 		    {
@@ -129,7 +129,7 @@ namespace Box2D.XNA
                 Manifold manifold;
                 contact.GetManifold(out manifold);
 
-                Debug.Assert(manifold._pointCount > 0);
+                if (!(manifold._pointCount > 0)) { throw new InvalidOperationException(); }
 
                 TOIConstraint constraint = _constraints[i];
                 constraint.bodyA = bodyA;

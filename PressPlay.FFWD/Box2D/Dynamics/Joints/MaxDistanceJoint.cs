@@ -191,7 +191,7 @@ namespace Box2D.XNA
 	        float cr1u = MathUtils.Cross(r1, _u);
 	        float cr2u = MathUtils.Cross(r2, _u);
 	        float invMass = b1._invMass + b1._invI * cr1u * cr1u + b2._invMass + b2._invI * cr2u * cr2u;
-	        Debug.Assert(invMass > Settings.b2_epsilon);
+            if (!(invMass > Settings.b2_epsilon)) { throw new InvalidOperationException(); }
             _mass = invMass != 0.0f ? 1.0f / invMass : 0.0f;
 
 	        if (_frequencyHz > 0.0f)
