@@ -401,6 +401,8 @@ namespace PressPlay.FFWD.ScreenManager
         public virtual void OnTransitionOnComplete(){ }
         public virtual void OnTransitionOffBegin() { }
         public virtual void OnTransitionOffComplete(){ }
+        public virtual void OnActivated() { }
+        public virtual void OnDeactivated() { }
 
         #endregion
     }
