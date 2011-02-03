@@ -273,6 +273,7 @@ namespace PressPlay.FFWD
 #if DEBUG
             Application.raycastTimer.Start();
 #endif
+            
             RaycastHelper helper = new RaycastHelper(distance, true, layerMask);
             Vector2 pt2 = origin + (direction * distance);
             if (pt2 == origin)
@@ -282,7 +283,6 @@ namespace PressPlay.FFWD
             }
             world.RayCast(helper.rayCastCallback, origin, pt2);
             hitInfo = helper.ClosestHit();
-
 #if DEBUG
             Application.raycastTimer.Stop();
 #endif

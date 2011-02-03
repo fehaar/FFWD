@@ -54,7 +54,7 @@ namespace Box2D.XNA
 	    /// It is assumed that the exterior is the the right of each edge.
         public void Set(PressPlay.FFWD.Vector2[] vertices, int count)
         {
-            Debug.Assert(2 <= count && count <= Settings.b2_maxPolygonVertices);
+            if (!(2 <= count && count <= Settings.b2_maxPolygonVertices)) { throw new InvalidOperationException(); }
             _vertexCount = count;
 
             // Copy vertices.
@@ -101,7 +101,7 @@ namespace Box2D.XNA
 		            // Your polygon is non-convex (it has an indentation) or
 		            // has colinear edges.
 		            float s = MathUtils.Cross(edge, r);
-		            Debug.Assert(s > 0.0f);
+		            if(!(s > 0.0f);
 	            }
             }
         #endif
@@ -112,7 +112,7 @@ namespace Box2D.XNA
 
         static Vector2 ComputeCentroid(ref FixedArray8<Vector2> vs, int count)
         {
-	        Debug.Assert(count >= 2);
+	        if(!(count >= 2)) { throw new InvalidOperationException(); }
 
 	        Vector2 c = new Vector2(0.0f, 0.0f);
 	        float area = 0.0f;
@@ -158,7 +158,7 @@ namespace Box2D.XNA
 
 	        // Centroid
             area = Math.Abs(area);
-	        Debug.Assert(area > Settings.b2_epsilon);
+            if (!(area > Settings.b2_epsilon)) { throw new InvalidOperationException(); }
 	        c *= 1.0f / area;
 	        return c;
         }
@@ -350,7 +350,7 @@ namespace Box2D.XNA
                     }
                 }
 
-                //Debug.Assert(0.0f <= lower && lower <= input.maxFraction);
+                //if(!(0.0f <= lower && lower <= input.maxFraction);
 
                 if (index >= 0)
                 {
@@ -409,7 +409,7 @@ namespace Box2D.XNA
 	        //
 	        // The rest of the derivation is handled by computer algebra.
 
-	        Debug.Assert(_vertexCount >= 2);
+            if (!(_vertexCount >= 2)) { throw new InvalidOperationException(); }
 
             // A line segment has zero mass.
             if (_vertexCount == 2)
@@ -462,7 +462,7 @@ namespace Box2D.XNA
 	        massData.mass = density * area;
 
 	        // Center of mass
-	        Debug.Assert(area > Settings.b2_epsilon);
+	        if(!(area > Settings.b2_epsilon)) { throw new InvalidOperationException(); }
 	        center *= 1.0f / area;
 	        massData.center = center;
 
@@ -512,7 +512,7 @@ namespace Box2D.XNA
 	    /// Get a vertex by index.
         public override Vector2 GetVertex(int index)
         {
-	        Debug.Assert(0 <= index && index < _vertexCount);
+            if (!(0 <= index && index < _vertexCount)) { throw new InvalidOperationException(); }
 	        return _vertices[index];
         }
 

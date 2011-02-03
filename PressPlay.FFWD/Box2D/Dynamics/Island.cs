@@ -241,20 +241,20 @@ namespace Box2D.XNA
 
 	    public void Add(Body body)
 	    {
-		    Debug.Assert(_bodyCount < _bodyCapacity);
+            if (!(_bodyCount < _bodyCapacity)) { throw new InvalidOperationException(); }
 		    body._islandIndex = _bodyCount;
 		    _bodies[_bodyCount++] = body;
 	    }
 
 	    public void Add(Contact contact)
 	    {
-            Debug.Assert(_contactCount < _contactCapacity);
+            if (!(_contactCount < _contactCapacity)) { throw new InvalidOperationException(); }
             _contacts[_contactCount++] = contact;
         }
 
 	    public void Add(Joint joint)
 	    {
-		    Debug.Assert(_jointCount < _jointCapacity);
+            if (!(_jointCount < _jointCapacity)) { throw new InvalidOperationException(); }
 		    _joints[_jointCount++] = joint;
 	    }
 

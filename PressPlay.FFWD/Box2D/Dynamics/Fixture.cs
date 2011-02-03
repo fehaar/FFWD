@@ -181,7 +181,7 @@ namespace Box2D.XNA
 
         public void SetDensity(float density)
         {
-	        Debug.Assert(MathUtils.IsValid(density) && density >= 0.0f);
+            if (!(MathUtils.IsValid(density) && density >= 0.0f)) { throw new InvalidOperationException(); }
 	        _density = density;
         }
 
@@ -283,7 +283,7 @@ namespace Box2D.XNA
 	    internal void Destroy()
         {
             // The proxy must be destroyed before calling this.
-	        Debug.Assert(_proxyId == BroadPhase.NullProxy);
+            if (!(_proxyId == BroadPhase.NullProxy)) { throw new InvalidOperationException(); }
 
             _shape = null;
         }
@@ -291,7 +291,7 @@ namespace Box2D.XNA
         // These support body activation/deactivation.
 	    internal void CreateProxy(BroadPhase broadPhase, ref Transform xf)
         {
-        	Debug.Assert(_proxyId == BroadPhase.NullProxy);
+            if (!(_proxyId == BroadPhase.NullProxy)) { throw new InvalidOperationException(); }
 
 	        // Create proxy in the broad-phase.
 	        _shape.ComputeAABB(out _aabb, ref xf);

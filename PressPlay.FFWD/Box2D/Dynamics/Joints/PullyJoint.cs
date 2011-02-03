@@ -65,7 +65,7 @@ namespace Box2D.XNA
 	        Vector2 d2 = anchor2 - ga2;
 	        lengthB = d2.Length();
 	        ratio = r;
-	        Debug.Assert(ratio > Settings.b2_epsilon);
+            if (!(ratio > Settings.b2_epsilon)) { throw new InvalidOperationException(); }
 	        float C = lengthA + ratio * lengthB;
 	        maxLengthA = C - ratio * b2_minPulleyLength;
 	        maxLengthB = (C - b2_minPulleyLength) / ratio;
@@ -172,7 +172,7 @@ namespace Box2D.XNA
 	        _localAnchor1 = def.localAnchorA;
 	        _localAnchor2 = def.localAnchorB;
 
-	        Debug.Assert(def.ratio != 0.0f);
+            if (!(def.ratio != 0.0f)) { throw new InvalidOperationException(); }
 	        _ratio = def.ratio;
 
 	        _ant = def.lengthA + _ratio * def.lengthB;
@@ -266,9 +266,9 @@ namespace Box2D.XNA
 	        _limitMass1 = b1._invMass + b1._invI * cr1u1 * cr1u1;
 	        _limitMass2 = b2._invMass + b2._invI * cr2u2 * cr2u2;
 	        _pulleyMass = _limitMass1 + _ratio * _ratio * _limitMass2;
-	        Debug.Assert(_limitMass1 > Settings.b2_epsilon);
-	        Debug.Assert(_limitMass2 > Settings.b2_epsilon);
-	        Debug.Assert(_pulleyMass > Settings.b2_epsilon);
+	        if(!(_limitMass1 > Settings.b2_epsilon)) { throw new InvalidOperationException(); }
+	        if(!(_limitMass2 > Settings.b2_epsilon)) { throw new InvalidOperationException(); }
+            if (!(_pulleyMass > Settings.b2_epsilon)) { throw new InvalidOperationException(); }
 	        _limitMass1 = 1.0f / _limitMass1;
 	        _limitMass2 = 1.0f / _limitMass2;
 	        _pulleyMass = 1.0f / _pulleyMass;
