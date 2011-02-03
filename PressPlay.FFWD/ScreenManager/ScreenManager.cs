@@ -364,6 +364,22 @@ namespace PressPlay.FFWD.ScreenManager
             spriteBatch.End();
         }
 
+        public void OnActivated()
+        {
+            foreach (GameScreen s in screens)
+            {
+                s.OnActivated();
+            }
+        }
+
+        public void OnDeactivated()
+        {
+            foreach (GameScreen s in screens)
+            {
+                s.OnDeactivated();
+            }
+        }
+
         /// <summary>
         /// Informs the screen manager to serialize its state to disk.
         /// </summary>
