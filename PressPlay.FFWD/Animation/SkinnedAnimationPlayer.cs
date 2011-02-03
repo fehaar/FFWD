@@ -242,6 +242,7 @@ namespace PressPlay.FFWD
                     m = worldTransforms[skinningDataValue.BoneMap[boneName]];
                     // TODO: This is a very brutal hardcoded hack as the animation does not work very well with hiearchical scales
                     m.Translation = m.Translation * 0.01f;
+                    
                     return true;
                 }
             }
