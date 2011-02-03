@@ -82,5 +82,7 @@ namespace PressPlay.FFWD
             }
             return finalRenderQueue;
         }
+
+        public static readonly Material Default = new Material();
     }
 }

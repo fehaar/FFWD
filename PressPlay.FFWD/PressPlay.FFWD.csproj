@@ -199,6 +199,7 @@
     <Compile Include="Components\Particle.cs" />
     <Compile Include="Components\ParticleAnimator.cs" />
     <Compile Include="Components\ParticleEmitter.cs" />
+    <Compile Include="Components\Renderers\DynamicBatchRenderer.cs" />
     <Compile Include="Components\Renderers\ParticleRenderer.cs" />
     <Compile Include="Components\Renderers\MeshRenderer.cs" />
     <Compile Include="Components\Renderers\Renderer.cs" />
@@ -213,6 +214,7 @@
     <Compile Include="Input.cs" />
     <Compile Include="Mathf.cs" />
     <Compile Include="Mesh.cs" />
+    <Compile Include="MeshDataContent.cs" />
     <Compile Include="MonoBehaviour.cs" />
     <Compile Include="ContentHelper.cs" />
     <Compile Include="Debug.cs" />

@@ -20,9 +20,9 @@ namespace PressPlay.FFWD.Components
             {                
                 return;
             }
-            if (filter.CanDraw())
+            if (filter.CanBatch())
             {
-                filter.Draw(device, cam, materials);
+                cam.BatchRender(filter, material, transform);
                 return;
             }
 
@@ -38,12 +38,6 @@ namespace PressPlay.FFWD.Components
             ModelMesh mesh = filter.GetModelMesh();
             if (mesh != null)
             {
-                // Do we have negative scale - if so, switch culling
-                RasterizerState oldRaster = device.RasterizerState;
-                if (transform.lossyScale.x < 0 || transform.lossyScale.y < 0 || transform.lossyScale.z < 0)
-                {
-                    device.RasterizerState = new RasterizerState() { FillMode = oldRaster.FillMode, CullMode = CullMode.CullClockwiseFace };
-                }
                 material.SetBlendState(device);
 
                 for (int e = 0; e < mesh.Effects.Count; e++)
@@ -70,11 +64,6 @@ namespace PressPlay.FFWD.Components
                         effect.DiffuseColor = (Vector3)material.color;
                     }
                     mesh.Draw();
-                }
-
-                if (transform.lossyScale.x < 0 || transform.lossyScale.y < 0 || transform.lossyScale.z < 0)
-                {
-                    device.RasterizerState = oldRaster;
                 }
             }
 
