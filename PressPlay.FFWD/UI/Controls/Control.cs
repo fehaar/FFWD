@@ -163,17 +163,34 @@ namespace PressPlay.FFWD.UI.Controls
             }
             else
             {
-                Vector2 childBounds = children[0].position + children[0].size;
-                //Debug.Log("childBounds" + childBounds);
-                for (int i = 1; i < children.Count; i++)
+                if (name == "ScrollingPanelControl")
                 {
-                    Vector2 corner = children[i].position + children[i].size;
-                    //Debug.Log("children[" + i + "]" + corner);
-                    childBounds.x = Math.Max(childBounds.x, corner.x);
-                    childBounds.y = Math.Max(childBounds.y, corner.y);
-                }
+                    Vector2 topLeft = new Vector2(float.MaxValue, float.MaxValue);
+                    Vector2 bottomRight = new Vector2(float.MinValue, float.MinValue);
+                    for (int i = 0; i < children.Count; i++)
+                    {
+                        topLeft.x = Math.Min(topLeft.x, children[i].position.x);
+                        topLeft.y = Math.Min(topLeft.y, children[i].position.y);
 
-                return childBounds;
+                        bottomRight.x = Math.Max(bottomRight.x, children[i].position.x + children[i].size.x);
+                        bottomRight.y = Math.Max(bottomRight.y, children[i].position.y + children[i].size.y);
+                    }
+                    return bottomRight - topLeft;
+                }
+                else
+                {
+                    Vector2 childBounds = children[0].position + children[0].size;
+                    //Debug.Log("childBounds" + childBounds);
+                    for (int i = 1; i < children.Count; i++)
+                    {
+                        Vector2 corner = children[i].position + children[i].size;
+                        //Debug.Log("children[" + i + "]" + corner);
+                        childBounds.x = Math.Max(childBounds.x, corner.x);
+                        childBounds.y = Math.Max(childBounds.y, corner.y);
+                    }
+
+                    return childBounds;
+                }
             }
         }
 

@@ -115,6 +115,8 @@ namespace PressPlay.FFWD.UI.Controls
             viewMax.x = Math.Max(viewMin.x, viewMax.x);
             viewMax.y = Math.Max(viewMin.y, viewMax.y);
 
+            Debug.Display("ViewMax", viewMax);
+
             if (IsTracking)
             {
                 // ViewOrigin is a soft-clamped version of UnclampedOffset
