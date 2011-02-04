@@ -110,19 +110,25 @@ namespace PressPlay.FFWD
             Vector3 width = new Vector3(size.x, 0, 0) * 0.5f;
             Vector3 height = new Vector3(0, 0, size.z) * 0.5f;
 
-            Debug.DrawLine(center + width + height, center + width - height, color);
-            Debug.DrawLine(center + width + height, center - width + height, color);
+            //Debug.DrawLine(center + width + height, center + width - height, color);
+            //Debug.DrawLine(center + width + height, center - width + height, color);
 
             for (int i = 0; i < 20; i++)
             {
-                Vector3 tmpWidth = Vector3.Lerp(width, -width, i / 20);
+                Vector3 tmpWidth = Vector3.Lerp(width, -width, (float)i / 20f);
 
                 Debug.DrawLine(center + tmpWidth + height, center + tmpWidth - height, color);
             }
 
+            for (int i = 0; i < 20; i++)
+            {
+                Vector3 tmpHeight = Vector3.Lerp(height, -height, (float)i / 20f);
 
-            Debug.DrawLine(center - width + height, center - width - height, color);
-            Debug.DrawLine(center + width - height, center - width - height, color);
+                Debug.DrawLine(center + width + tmpHeight, center -width + tmpHeight, color);
+            }
+
+            //Debug.DrawLine(center - width + height, center - width - height, color);
+            //Debug.DrawLine(center + width - height, center - width - height, color);
         }
 
         public static void DrawBox(Vector3 upperLeft, Vector3 upperRight, Vector3 lowerLeft, Vector3 lowerRight, Color color)
