@@ -163,8 +163,12 @@ namespace PressPlay.FFWD.UI.Controls
             }
             else
             {
-                if (name == "ScrollingPanelControl")
+                if (this is ScrollingPanelControl)
                 {
+                    // TODO: This code handles the sizing of children properly - but it does not take
+                    // the control itself into account. So if we are a button that has its own size with a background
+                    // and some children we need to add the local size as well.
+
                     Vector2 topLeft = new Vector2(float.MaxValue, float.MaxValue);
                     Vector2 bottomRight = new Vector2(float.MinValue, float.MinValue);
                     for (int i = 0; i < children.Count; i++)
