@@ -56,9 +56,6 @@ namespace PressPlay.FFWD.Components
 
         public override void Awake()
         {
-            _allCameras.Add(this);
-            _allCameras.Sort(this);
-
             for (int i = nonAssignedRenderers.Count - 1; i >= 0; i--)
             {
                 if (nonAssignedRenderers[i] == null || nonAssignedRenderers[i].gameObject == null || addRenderer(nonAssignedRenderers[i]))
@@ -66,6 +63,15 @@ namespace PressPlay.FFWD.Components
                     nonAssignedRenderers.RemoveAt(i);
                 }
             }
+            for (int i = 0; i < _allCameras.Count; i++)
+            {
+                for (int j = 0; j < _allCameras[i].renderQueue.Count; j++)
+                {
+                    addRenderer(_allCameras[i].renderQueue[j]);
+                }
+            }
+            _allCameras.Add(this);
+            _allCameras.Sort(this);
 
             if (gameObject.CompareTag("MainCamera") && (main == null))
             {
@@ -219,7 +225,10 @@ namespace PressPlay.FFWD.Components
 
             for (int i = 0; i < _allCameras.Count; i++)
             {
-                _allCameras[i].doRender(device);
+                if (_allCameras[i].gameObject.active)
+                {
+                    _allCameras[i].doRender(device);
+                }
             }
 
             if (wireframeRender)
