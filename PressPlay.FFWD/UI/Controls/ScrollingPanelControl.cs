@@ -89,6 +89,11 @@ namespace PressPlay.FFWD.UI.Controls
             hasScrolled = scrollTracker.IsMoving;
         }
 
+        public void Init()
+        {
+            PositionChildControls(new Vector2(0, -scrollTracker.ViewRect.Y));
+        }
+
         private void PositionChildControls(Vector2 topPosition)
         {
             if (children != null || children.Count > 0)

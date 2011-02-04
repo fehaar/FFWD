@@ -35,6 +35,7 @@ namespace PressPlay.FFWD.UI.Controls
                 if (_text != value)
                 {
                     _text = value;
+                    _text = _text.Replace("”", "");
                     textRenderer.text = _text;
                     InvalidateAutoSize();
                 }
