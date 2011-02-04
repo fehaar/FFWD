@@ -105,6 +105,34 @@ namespace PressPlay.FFWD
             lines.Add(new Line(start, start + direction, color));
         }
 
+        public static void DrawFilledBox(Vector3 center, Vector3 size, Color color)
+        {
+            Vector3 width = new Vector3(size.x, 0, 0) * 0.5f;
+            Vector3 height = new Vector3(0, 0, size.z) * 0.5f;
+
+            Debug.DrawLine(center + width + height, center + width - height, color);
+            Debug.DrawLine(center + width + height, center - width + height, color);
+
+            for (int i = 0; i < 20; i++)
+            {
+                Vector3 tmpWidth = Vector3.Lerp(width, -width, i / 20);
+
+                Debug.DrawLine(center + tmpWidth + height, center + tmpWidth - height, color);
+            }
+
+
+            Debug.DrawLine(center - width + height, center - width - height, color);
+            Debug.DrawLine(center + width - height, center - width - height, color);
+        }
+
+        public static void DrawBox(Vector3 upperLeft, Vector3 upperRight, Vector3 lowerLeft, Vector3 lowerRight, Color color)
+        {
+            Debug.DrawLine(upperLeft, upperRight, color);
+            Debug.DrawLine(upperRight, lowerRight, color);
+            Debug.DrawLine(lowerRight, lowerLeft, color);
+            Debug.DrawLine(lowerLeft, upperLeft, color);
+        }
+
         private static BasicEffect effect;
         internal static void DrawLines(GraphicsDevice device, Camera cam)
         {
