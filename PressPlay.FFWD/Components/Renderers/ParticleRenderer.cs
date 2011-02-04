@@ -56,11 +56,6 @@ namespace PressPlay.FFWD.Components
                 effect = new BasicEffect(device);
             }
 
-            //RasterizerState oldrasterizerState = device.RasterizerState;
-            //RasterizerState rasterizerState = new RasterizerState();
-            //rasterizerState.CullMode = CullMode.None;
-            //device.RasterizerState = rasterizerState;
-
             effect.World = Matrix.Identity;
             effect.View = cam.View();
             effect.Projection = cam.projectionMatrix;
@@ -101,8 +96,6 @@ namespace PressPlay.FFWD.Components
                     particlesRendered * 2
                 );
             }
-
-            //device.RasterizerState = oldrasterizerState;
         }
 
         private void RenderParticle(int vertexIndex, int triangleIndex, ref Particle particle)
@@ -130,10 +123,10 @@ namespace PressPlay.FFWD.Components
             vertices[vertexIndex + 3].Color = particle.Color;
 
             triangles[triangleIndex] = (short)vertexIndex;
-            triangles[triangleIndex + 1] = (short)(vertexIndex + 1);
-            triangles[triangleIndex + 2] = (short)(vertexIndex + 2);
-            triangles[triangleIndex + 3] = (short)(vertexIndex + 2);
-            triangles[triangleIndex + 4] = (short)(vertexIndex + 1);
+            triangles[triangleIndex + 1] = (short)(vertexIndex + 2);
+            triangles[triangleIndex + 2] = (short)(vertexIndex + 1);
+            triangles[triangleIndex + 3] = (short)(vertexIndex + 1);
+            triangles[triangleIndex + 4] = (short)(vertexIndex + 2);
             triangles[triangleIndex + 5] = (short)(vertexIndex + 3);
         }
 
