@@ -312,7 +312,7 @@ namespace PressPlay.FFWD
             List<UnityObject> list = new List<UnityObject>();
             foreach (UnityObject obj in objects.Values)
             {
-                if (obj.GetType() == type)
+                if (obj.GetType() == type && !obj.isPrefab)
                 {
                     list.Add(obj);
                 }
@@ -324,7 +324,7 @@ namespace PressPlay.FFWD
         {
             foreach (UnityObject obj in objects.Values)
             {
-                if (obj.GetType() == type)
+                if (obj.GetType() == type && !obj.isPrefab)
                 {
                     return obj;
                 }
