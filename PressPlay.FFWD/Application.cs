@@ -428,7 +428,7 @@ namespace PressPlay.FFWD
             lateUpdates.Clear();
         }
 
-        public static string loadedLevelName { get; private set; }
+        public static string loadedLevelName { get; set; }
 
         internal static void DontDestroyOnLoad(UnityObject target)
         {
