@@ -65,12 +65,12 @@ namespace PressPlay.FFWD
                         if (data != null)
                         {
                             vertices = data.vertices;
-                            triangles = new short[6] { 2, 0, 1, 3, 2, 1 };
-                            uv = uv = new Microsoft.Xna.Framework.Vector2[4] {
-                                new Microsoft.Xna.Framework.Vector2(0, 1),
+                            triangles = data.triangles;
+                            uv = new Microsoft.Xna.Framework.Vector2[4] {
                                 new Microsoft.Xna.Framework.Vector2(0, 0),
-                                new Microsoft.Xna.Framework.Vector2(1, 1),
-                                new Microsoft.Xna.Framework.Vector2(1, 0)
+                                new Microsoft.Xna.Framework.Vector2(1, 0),
+                                new Microsoft.Xna.Framework.Vector2(0, 1),
+                                new Microsoft.Xna.Framework.Vector2(1, 1)
                             };
                             normals = data.normals;
                         }

@@ -63,8 +63,8 @@ namespace PressPlay.FFWD.Import
             tris.Add((short)input.Geometry[0].Vertices.PositionIndices[2]);
             for (int i = 3; i < input.Geometry[0].Vertices.PositionIndices.Count; i++)
             {
-                tris.Add((short)input.Geometry[0].Vertices.PositionIndices[i - 3]);
                 tris.Add((short)input.Geometry[0].Vertices.PositionIndices[i]);
+                tris.Add((short)input.Geometry[0].Vertices.PositionIndices[i - 3]);
                 tris.Add((short)input.Geometry[0].Vertices.PositionIndices[i - 1]);
             }
 
