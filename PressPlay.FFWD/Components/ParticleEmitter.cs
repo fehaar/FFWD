@@ -152,7 +152,7 @@ namespace PressPlay.FFWD.Components
                     {
                         numToEmit--;
                         particleCount++;
-                        SetNewParticleAt(i);
+                        EmitNewParticleAt(i);
                     }
                 }
                 if (particlesToCheck == 0 && numToEmit == 0)
@@ -162,12 +162,12 @@ namespace PressPlay.FFWD.Components
             }
         }
 
-        private void SetNewParticleAt(int index)
+        private void EmitNewParticleAt(int index)
         {
             particles[index].Energy = particles[index].StartingEnergy = Random.Range(minEnergy, maxEnergy);
 
             Vector3 pointInUnitSphere = Random.insideUnitSphere;
-            particles[index].Position = ellipsoid * pointInUnitSphere.x;
+            particles[index].Position = Microsoft.Xna.Framework.Vector3.Transform(ellipsoid, transform.rotation) * pointInUnitSphere.x;
 
             Vector3 emitterVelocity = Vector3.zero;
             if (gameObject.rigidbody != null && emitterVelocityScale > 0 && useWorldSpace)
@@ -205,11 +205,6 @@ namespace PressPlay.FFWD.Components
                 }
                 particleCount = 0;
             }
-        }
-
-        public void SetElipsoid(Vector3 _ellipsoid)
-        {
-            ellipsoid = _ellipsoid;
         }
     }
 }
