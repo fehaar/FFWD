@@ -54,7 +54,7 @@ namespace PressPlay.FFWD.Components
         }
 
         protected SpriteBatch batch;
-        public override void Draw(GraphicsDevice device, Camera cam)
+        public override int Draw(GraphicsDevice device, Camera cam)
         {
             if (batch == null)
             {
@@ -62,6 +62,7 @@ namespace PressPlay.FFWD.Components
             }
 
             batch.DrawString(font, text, Position, material.color);
+            return 0;
         }
     }
 }

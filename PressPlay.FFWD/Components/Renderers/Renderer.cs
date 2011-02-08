@@ -52,7 +52,13 @@ namespace PressPlay.FFWD.Components
         }
 
         #region IRenderable Members
-        public abstract void Draw(GraphicsDevice device, Camera cam);
+        /// <summary>
+        /// Draw the actual thing that we want to render
+        /// </summary>
+        /// <param name="device"></param>
+        /// <param name="cam"></param>
+        /// <returns>Returns an estimated number of draw calls that we make in the draw routine.</returns>
+        public abstract int Draw(GraphicsDevice device, Camera cam);
         #endregion
 
     }

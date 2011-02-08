@@ -164,7 +164,7 @@ namespace PressPlay.FFWD
             device.RasterizerState = rasterizerState;
 
             effect.World = Matrix.Identity;
-            effect.View = cam.View();
+            effect.View = cam.view;
             effect.Projection = cam.projectionMatrix;
             effect.VertexColorEnabled = true;
             effect.Alpha = 1.0f;

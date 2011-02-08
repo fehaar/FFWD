@@ -25,16 +25,32 @@ namespace PressPlay.FFWD.Import.Animation
         public SkinningData SkinningData;
         public float Scale = 1.0f;
         public Microsoft.Xna.Framework.Vector3 Rotation = Microsoft.Xna.Framework.Vector3.Zero;
+        public BoundingSphere BoundingSphere;
 
         public void AddModelPart(
             string name,
             int triangleCount,
             IndexCollection indexCollection,
             CpuVertex[] vertices,
-            BasicMaterialContent material)
+            BasicMaterialContent material,
+            BoundingSphere boundingSphere)
         {
             if (material == null)
                 throw new ArgumentNullException("material");
+
+            if (boundingSphere != null)
+            {
+                boundingSphere.Radius *= Scale;
+
+                if (BoundingSphere.Radius == 0)
+                {
+                    BoundingSphere = boundingSphere;
+                }
+                else
+                {
+                    BoundingSphere = BoundingSphere.CreateMerged(BoundingSphere, boundingSphere);
+                }
+            }
 
             ModelParts.Add(new CpuSkinnedModelPartContent
             {

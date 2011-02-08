@@ -97,15 +97,8 @@ namespace PressPlay.FFWD.Components
 
         public static Viewport FullScreen;
 
-        private Matrix _view;
-        public Matrix View()
-        {
-            _view = Matrix.CreateLookAt(
-                transform.position,
-                transform.position + transform.forward,
-                transform.up);
-            return _view;            
-        }
+        public Matrix view { get; private set; }
+        public BoundingFrustum frustum { get; private set; }
 
         [ContentSerializerIgnore]
         public Viewport viewPort 
@@ -132,19 +125,14 @@ namespace PressPlay.FFWD.Components
 
         public Ray ScreenPointToRay(Vector2 screen)
         {
-            Vector3 near = viewPort.Unproject(new Vector3(screen.x, screen.y, 0), projectionMatrix, View(), Matrix.Identity);
-            Vector3 far = viewPort.Unproject(new Vector3(screen.x, screen.y, 1), projectionMatrix, View(), Matrix.Identity);
+            Vector3 near = viewPort.Unproject(new Vector3(screen.x, screen.y, 0), projectionMatrix, view, Matrix.Identity);
+            Vector3 far = viewPort.Unproject(new Vector3(screen.x, screen.y, 1), projectionMatrix, view, Matrix.Identity);
             return new Ray(near, (far - near).normalized);
         }
 
         public Vector3 WorldToViewportPoint(Vector3 position)
         {
-            return viewPort.Project(position, projectionMatrix, View(), Matrix.Identity);
-        }
-
-        internal BoundingFrustum GetBoundingFrustum()
-        {
-            return new BoundingFrustum(_view * projectionMatrix);
+            return viewPort.Project(position, projectionMatrix, view, Matrix.Identity);
         }
 
         internal static List<Renderer> nonAssignedRenderers = new List<Renderer>();
@@ -249,6 +237,13 @@ namespace PressPlay.FFWD.Components
                 renderQueue.Sort(this);
                 isRenderQueueSorted = true;
             }
+
+            view = Matrix.CreateLookAt(
+                transform.position,
+                transform.position + transform.forward,
+                transform.up);
+            frustum = new BoundingFrustum(view * projectionMatrix);
+
             for (int i = 0; i < renderQueue.Count; i++)
             {
                 if (renderQueue[i].gameObject == null)
@@ -259,11 +254,10 @@ namespace PressPlay.FFWD.Components
                 }
                 if (renderQueue[i].gameObject.active && renderQueue[i].enabled)
                 {
-                    estimatedDrawCalls++;
-                    renderQueue[i].Draw(device, this);
+                    estimatedDrawCalls += renderQueue[i].Draw(device, this);
                 }
             }
-            dynamicBatchRenderer.DoDraw(device, this);
+            estimatedDrawCalls += dynamicBatchRenderer.DoDraw(device, this);
         }
 
         private void Clear(GraphicsDevice device)
@@ -330,9 +324,20 @@ namespace PressPlay.FFWD.Components
             return null;
         }
 
-        internal void BatchRender(MeshFilter filter, Material material, Transform transform)
+        internal int BatchRender(MeshFilter filter, Material material, Transform transform)
         {
-            dynamicBatchRenderer.Draw(this, material, filter, transform);
+            return dynamicBatchRenderer.Draw(this, material, filter, transform);
+        }
+
+        internal bool DoFrustumCulling(ref BoundingSphere sphere)
+        {
+            ContainmentType contain;
+            frustum.Contains(ref sphere, out contain);
+            if (contain == ContainmentType.Disjoint)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

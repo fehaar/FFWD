@@ -28,6 +28,8 @@ namespace PressPlay.FFWD
         [ContentSerializerIgnore]
         public short[] triangles;
 
+        internal BoundingSphere boundingSphere;
+
         internal override void LoadAsset(AssetHelper assetHelper)
         {
             // TODO: Optimize this by bundling everything into the same structure.
@@ -36,6 +38,7 @@ namespace PressPlay.FFWD
                 skinnedModel = assetHelper.Load<CpuSkinnedModel>("Models/" + asset);
                 if (skinnedModel != null)
                 {
+                    boundingSphere = skinnedModel.BoundingSphere;
                     for (int i = 0; i < skinnedModel.Parts.Count; i++)
                     {
                         if (skinnedModel.Parts[i].name == name)
@@ -55,6 +58,7 @@ namespace PressPlay.FFWD
                             if (model.Meshes[i].Name == name)
                             {
                                 meshIndex = i;
+                                boundingSphere = model.Meshes[i].BoundingSphere;
                                 break;
                             }
                         }
@@ -64,7 +68,9 @@ namespace PressPlay.FFWD
                         MeshDataContent data = assetHelper.Load<MeshDataContent>("Models/" + asset);
                         if (data != null)
                         {
+                            // This is hardcoded to make it work. The uvs and tris from the Mesh seems broken. Uhh...
                             vertices = data.vertices;
+                            //triangles = new short[6] { 2, 0, 1, 2, 1, 3 };
                             triangles = data.triangles;
                             uv = new Microsoft.Xna.Framework.Vector2[4] {
                                 new Microsoft.Xna.Framework.Vector2(0, 0),

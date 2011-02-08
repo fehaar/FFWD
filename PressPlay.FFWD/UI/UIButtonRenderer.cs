@@ -60,11 +60,11 @@ namespace PressPlay.FFWD.UI
         }
 
         #region IRenderable Members
-        public override void Draw(GraphicsDevice device, Camera cam)
+        public override int Draw(GraphicsDevice device, Camera cam)
         {
             base.Draw(device, cam);
 
-            if (font == null || text == "") return;
+            if (font == null || text == "") return 0;
 
             if (textHasChanged)
             {
@@ -72,9 +72,10 @@ namespace PressPlay.FFWD.UI
                 textHasChanged = false;
             }
 
-            batch.Begin();
+            //batch.Begin();
             //batch.DrawString(font, ((upperCase) ? _text.ToUpper() : _text), new Vector2(transform.localPosition.x + material.texture.Width / 2 - textSize.x / 2 + textOffset.x, transform.localPosition.y + bounds.Height / 2 - textSize.y / 2 + textOffset.y), textColor);
-            batch.End();
+            //batch.End();
+            return 0;
         }
         #endregion
     }

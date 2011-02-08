@@ -122,11 +122,11 @@ namespace PressPlay.FFWD.UI
 
         #region IRenderable Members
 
-        public override void Draw(GraphicsDevice device, Camera cam)
+        public override int Draw(GraphicsDevice device, Camera cam)
         {
             if (texture == null || texture.IsDisposed)
             {
-                return;
+                return 0;
             }
 
             Rectangle bounds;
@@ -144,6 +144,7 @@ namespace PressPlay.FFWD.UI
             float depth = 1 - ((float)transform.position / 10000f);
 
             UIRenderer.batch.Draw(texture, bounds, sourceRect, material.color, transform.eulerAngles.y, origin, effects, depth);
+            return 0;
         }
         #endregion
     }

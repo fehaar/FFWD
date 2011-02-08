@@ -97,11 +97,11 @@ namespace PressPlay.FFWD.Components
 
         #region IRenderable Members
         protected SpriteBatch batch;
-        public override void Draw(GraphicsDevice device, Camera cam)
+        public override int Draw(GraphicsDevice device, Camera cam)
         {
             if (texture == null)
             {
-                return;
+                return 0;
             }
 
             if (batch == null)
@@ -114,6 +114,7 @@ namespace PressPlay.FFWD.Components
             batch.Begin();
             batch.Draw(texture, Position, bounds, material.color, transform.eulerAngles.y, Origin, Scale, Effects, LayerDepth);
             batch.End();
+            return 1;
         }
         #endregion
     }

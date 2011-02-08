@@ -47,9 +47,9 @@ namespace PressPlay.FFWD.Components
             return visible;
         }
 
-        public override void Draw(GraphicsDevice device, Camera cam)
+        public override int Draw(GraphicsDevice device, Camera cam)
         {
-            if (emitter.particles == null || emitter.particleCount == 0) return;
+            if (emitter.particles == null || emitter.particleCount == 0) return 0;
 
             if (effect == null)
             {
@@ -57,7 +57,7 @@ namespace PressPlay.FFWD.Components
             }
 
             effect.World = Matrix.Identity;
-            effect.View = cam.View();
+            effect.View = cam.view;
             effect.Projection = cam.projectionMatrix;
             if (materials != null && materials.Length > 0 && materials[0].texture != null)
             {
@@ -96,6 +96,7 @@ namespace PressPlay.FFWD.Components
                     particlesRendered * 2
                 );
             }
+            return 1;
         }
 
         private void RenderParticle(int vertexIndex, int triangleIndex, ref Particle particle)

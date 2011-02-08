@@ -27,20 +27,26 @@ namespace PressPlay.FFWD.Components
         }
 
         #region IRenderable Members
-        public override void Draw(GraphicsDevice device, Camera cam)
+        public override int Draw(GraphicsDevice device, Camera cam)
         {
             if (sharedMesh == null || sharedMesh.skinnedModel == null)
             {
-                return;
+                return 0;
             }
-            
+
+            // Check the frustum of the camera
+            BoundingSphere sphere = new BoundingSphere(transform.position, sharedMesh.boundingSphere.Radius);
+            if (cam.DoFrustumCulling(ref sphere))
+            {
+                return 0;
+            }
 
             // Do we have negative scale - if so, switch culling
-            RasterizerState oldRaster = device.RasterizerState;
-            if (transform.lossyScale.x < 0 || transform.lossyScale.y < 0 || transform.lossyScale.z < 0)
-            {
-                device.RasterizerState = new RasterizerState() { FillMode = oldRaster.FillMode, CullMode = CullMode.CullClockwiseFace };
-            }
+            //RasterizerState oldRaster = device.RasterizerState;
+            //if (transform.lossyScale.x < 0 || transform.lossyScale.y < 0 || transform.lossyScale.z < 0)
+            //{
+            //    device.RasterizerState = new RasterizerState() { FillMode = oldRaster.FillMode, CullMode = CullMode.CullClockwiseFace };
+            //}
             material.SetBlendState(device);
 
             // Draw the model.
@@ -48,7 +54,7 @@ namespace PressPlay.FFWD.Components
             modelPart.SetBones(animation.GetTransforms());
 
             modelPart.Effect.World = sharedMesh.skinnedModel.BakedTransform * transform.world;
-            modelPart.Effect.View = cam.View();
+            modelPart.Effect.View = cam.view;
             modelPart.Effect.Projection = cam.projectionMatrix;
             if (material.texture != null)
             {
@@ -62,11 +68,11 @@ namespace PressPlay.FFWD.Components
 
             modelPart.Draw();
 
-            device.RasterizerState = oldRaster;
-            if (transform.lossyScale.x < 0 || transform.lossyScale.y < 0 || transform.lossyScale.z < 0)
-            {
-                device.RasterizerState = oldRaster;
-            }
+            //if (transform.lossyScale.x < 0 || transform.lossyScale.y < 0 || transform.lossyScale.z < 0)
+            //{
+            //    device.RasterizerState = oldRaster;
+            //}
+            return 1;
         }
         #endregion
     }

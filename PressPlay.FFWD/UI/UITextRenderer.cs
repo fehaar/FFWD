@@ -49,11 +49,11 @@ namespace PressPlay.FFWD.UI
             this.text = text;
         }
 
-        public override void Draw(GraphicsDevice device, Camera cam)
+        public override int Draw(GraphicsDevice device, Camera cam)
         {
             if (font == null)
             {
-                return;
+                return 0;
             }
             
             //UIRenderer.batch.DrawString(font, text, transform.position, material.color);
@@ -61,6 +61,7 @@ namespace PressPlay.FFWD.UI
 
             //UIRenderer.batch.DrawString(font, text, transform.position, material.color, 0, Microsoft.Xna.Framework.Vector2.Zero, transform.localScale, effects, depth);
             UIRenderer.batch.DrawString(font, WordWrap(text, control.bounds.Width, font), transform.position, material.color, transform.rotation.eulerAngles.y, Microsoft.Xna.Framework.Vector2.Zero, transform.lossyScale, effects, depth);
+            return 0;
         }
 
         protected static char[] splitTokens = { ' ', '-' };

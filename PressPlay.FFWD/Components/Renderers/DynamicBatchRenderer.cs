@@ -47,16 +47,16 @@ namespace PressPlay.FFWD.Components
         /// <param name="material"></param>
         /// <param name="filter"></param>
         /// <returns></returns>
-        internal bool Draw(Camera cam, Material material, MeshFilter filter, Transform transform)
+        internal int Draw(Camera cam, Material material, MeshFilter filter, Transform transform)
         {
-            bool hasDrawn = false;
+            int drawCalls = 0;
             if (currentMaterial.name != material.name)
             {
-                hasDrawn = DoDraw(device, cam);
+                drawCalls = DoDraw(device, cam);
                 currentMaterial = material;
             }            
             Add(filter, transform);
-            return hasDrawn;
+            return drawCalls;
         }
 
         private void EndBatch()
@@ -87,11 +87,11 @@ namespace PressPlay.FFWD.Components
             data = newData;
         }
 
-        internal bool DoDraw(GraphicsDevice device, Camera cam)
+        internal int DoDraw(GraphicsDevice device, Camera cam)
         {
             if (currentBatchIndex == 0)
             {
-                return false;
+                return 0;
             }
 
             PrepareData();
@@ -104,7 +104,7 @@ namespace PressPlay.FFWD.Components
                 effect.LightingEnabled = false;
             }
 
-            effect.View = cam.View();
+            effect.View = cam.view;
             effect.Projection = cam.projectionMatrix;
             currentMaterial.SetBlendState(device);
 
@@ -128,7 +128,7 @@ namespace PressPlay.FFWD.Components
             }
 
             EndBatch();
-            return true;
+            return 1;
         }
 
         private void PrepareData()

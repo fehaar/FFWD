@@ -49,7 +49,7 @@ namespace PressPlay.FFWD.Components
             }
         }
 
-        public override void Draw(GraphicsDevice device, Camera cam)
+        public override int Draw(GraphicsDevice device, Camera cam)
         {
             RasterizerState oldrasterizerState = device.RasterizerState;
             RasterizerState rasterizerState = new RasterizerState();
@@ -57,7 +57,7 @@ namespace PressPlay.FFWD.Components
             device.RasterizerState = rasterizerState;
 
             effect.World = Matrix.Identity;
-            effect.View = cam.View();
+            effect.View = cam.view;
             effect.Projection = cam.projectionMatrix;
             if (materials != null && materials.Length > 0 && materials[0].texture != null)
             {
@@ -83,7 +83,7 @@ namespace PressPlay.FFWD.Components
             }
 
             device.RasterizerState = oldrasterizerState;
-            
+            return 1;
         }
     }
 }

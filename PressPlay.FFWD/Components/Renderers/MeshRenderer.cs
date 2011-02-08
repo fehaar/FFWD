@@ -14,25 +14,24 @@ namespace PressPlay.FFWD.Components
         }
 
         #region IRenderable Members
-        public override void Draw(GraphicsDevice device, Camera cam)
+        public override int Draw(GraphicsDevice device, Camera cam)
         {
             if (filter == null)
             {                
-                return;
+                return 0;
             }
             if (filter.CanBatch())
             {
-                cam.BatchRender(filter, material, transform);
-                return;
+                return cam.BatchRender(filter, material, transform);
             }
 
             Matrix world = transform.world;
 
-            //viewport culling
-            //if (!filter.IsInBoundingFrustrum(cam.GetBoundingFrustum(), world))
-            //{
-            //    return;
-            //}
+            BoundingSphere sphere = new BoundingSphere(transform.position, filter.boundingSphere.Radius);
+            if (cam.DoFrustumCulling(ref sphere))
+            {
+                return 0;
+            }
 
             // Draw the model.
             ModelMesh mesh = filter.GetModelMesh();
@@ -51,7 +50,7 @@ namespace PressPlay.FFWD.Components
                     {
                         effect.World = world;
                     }
-                    effect.View = cam.View();
+                    effect.View = cam.view;
                     effect.Projection = cam.projectionMatrix;
                     effect.LightingEnabled = false;
                     if (material.texture != null)
@@ -66,7 +65,7 @@ namespace PressPlay.FFWD.Components
                     mesh.Draw();
                 }
             }
-
+            return 1;
         }
         #endregion
     }

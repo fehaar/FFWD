@@ -29,6 +29,7 @@ namespace PressPlay.FFWD.Import.Animation
             Matrix m = Matrix.CreateScale(value.Scale) * Matrix.CreateFromQuaternion(rotation);
 
             output.Write(m);
+            output.WriteObject<BoundingSphere>(value.BoundingSphere);
         }
 
         public override string GetRuntimeType(TargetPlatform targetPlatform)

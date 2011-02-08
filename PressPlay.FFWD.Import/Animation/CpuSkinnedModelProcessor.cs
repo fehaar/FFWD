@@ -56,9 +56,9 @@ namespace PressPlay.FFWD.Import.Animation
             outputModel = new CpuSkinnedModelContent();
 
             // cpu skinning can support any number of bones, so we'll just use int.MaxValue as our limit.
-            outputModel.SkinningData = SkinningHelpers.GetSkinningData(input, context, int.MaxValue);
             outputModel.Scale = Scale;
             outputModel.Rotation = new Vector3(RotationX, RotationY, RotationZ);
+            outputModel.SkinningData = SkinningHelpers.GetSkinningData(input, context, int.MaxValue);
 
             ProcessNode(input);
 
@@ -131,11 +131,13 @@ namespace PressPlay.FFWD.Import.Animation
                 };
             }
 
+            BoundingSphere sphere = BoundingSphere.CreateFromPoints(geometry.Vertices.Positions);
+
             // Convert the input material.
             MaterialContent material = ProcessMaterial(geometry.Material);
 
             // Add the new piece of geometry to our output model.
-            outputModel.AddModelPart(name, triangleCount, geometry.Indices, vertices, material as BasicMaterialContent);
+            outputModel.AddModelPart(name, triangleCount, geometry.Indices, vertices, material as BasicMaterialContent, sphere);
         }
 
         static void ProcessWeightsChannel(GeometryContent geometry, int vertexChannelIndex)
