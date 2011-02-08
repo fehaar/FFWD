@@ -239,7 +239,10 @@ namespace PressPlay.FFWD
             sceneToLoad = "";
             loadingScene = false;
 
-            scene.Initialize();
+            if (scene != null)
+            {
+                scene.Initialize();
+            }
             GC.Collect();
         }
 
@@ -428,7 +431,7 @@ namespace PressPlay.FFWD
             lateUpdates.Clear();
         }
 
-        public static string loadedLevelName { get; set; }
+        public static string loadedLevelName { get; private set; }
 
         internal static void DontDestroyOnLoad(UnityObject target)
         {

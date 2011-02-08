@@ -67,6 +67,21 @@ namespace PressPlay.FFWD.Import
                 tris.Add((short)input.Geometry[0].Vertices.PositionIndices[i - 3]);
                 tris.Add((short)input.Geometry[0].Vertices.PositionIndices[i - 1]);
             }
+            //for (int i = 3; i < input.Geometry[0].Vertices.PositionIndices.Count; i++)
+            //{
+            //    if ((i % 2) == 1)
+            //    {
+            //        tris.Add((short)input.Geometry[0].Vertices.PositionIndices[i - 1]);
+            //        tris.Add((short)input.Geometry[0].Vertices.PositionIndices[i - 2]);
+            //        tris.Add((short)input.Geometry[0].Vertices.PositionIndices[i]);
+            //    }
+            //    else
+            //    {
+            //        tris.Add((short)input.Geometry[0].Vertices.PositionIndices[i - 2]);
+            //        tris.Add((short)input.Geometry[0].Vertices.PositionIndices[i - 1]);
+            //        tris.Add((short)input.Geometry[0].Vertices.PositionIndices[i]);
+            //    }
+            //}
 
             mesh.triangles = tris.ToArray();
 
