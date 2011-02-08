@@ -23,6 +23,7 @@ namespace PressPlay.FFWD.Components
         private ParticleEmitter emitter;
         private bool hasHadParticles = false;
 
+
         public override void Awake()
         {
             base.Awake();
@@ -32,6 +33,12 @@ namespace PressPlay.FFWD.Components
 
         public void FixedUpdate()
         {
+            bool hasDamping = (damping != 1);
+            bool hasForces = (force != Vector3.zero || rndForce != Vector3.zero);
+            bool hasRotation = true;
+            bool hasSizing = (sizeGrow != 0);
+            bool hasTangentForces = (emitter.tangentVelocity != Vector3.zero);
+
             bool destroy = hasHadParticles;
             int particlesToCheck = emitter.particleCount;
             for (int i = 0; i < emitter.particles.Length; i++)
@@ -40,17 +47,42 @@ namespace PressPlay.FFWD.Components
                 {
                     hasHadParticles = true;
                     destroy = false;
+                    // Move particle
                     emitter.particles[i].Position += emitter.particles[i].Velocity * Time.deltaTime;
-                    emitter.particles[i].Velocity *= 1 - ((1 - damping) * Time.deltaTime);
-                    Vector3 RandomForce = Random.insideUnitSphere * rndForce / 2;
-                    emitter.particles[i].Velocity += (force + RandomForce) * Time.deltaTime;
-                    if (emitter.tangentVelocity != Vector3.zero)
+
+                    if (hasDamping)
                     {
+                        // Apply damping to velocity
+                        emitter.particles[i].Velocity *= (1 - (1 - damping) * Time.deltaTime); // (1 – c ⋅ dt) ⋅ vold
+                    }
+
+                    if (hasForces)
+                    {
+                        // TODO: The forces clearly affect particles too much! Maybe that the order in which we do damping/forces could have significance.
+                        Vector3 RandomForce = Random.insideUnitSphere * rndForce / 2;
+                        emitter.particles[i].Velocity += (force + RandomForce) * Time.deltaTime;
+                    }
+
+                    if (hasTangentForces)
+                    {
+                        // Apply tangent forces
                         Vector3 v = Vector3.Cross(transform.up, emitter.particles[i].Velocity);
                         emitter.particles[i].Velocity += (v * emitter.tangentVelocity) * Time.deltaTime;
                     }
-                    emitter.particles[i].Size += sizeGrow * Time.deltaTime;
+
+                    if (hasRotation)
+                    {
+                        // Rotate the particles
+                    }
+
+                    if (hasSizing)
+                    {
+                        // Update size of particle
+                        emitter.particles[i].Size += sizeGrow * Time.deltaTime;
+                    }
+
                     UpdateParticleColor(ref emitter.particles[i]);
+
                     if (--particlesToCheck == 0)
                     {
                         break;
