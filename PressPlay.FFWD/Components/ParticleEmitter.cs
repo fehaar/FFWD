@@ -110,6 +110,11 @@ namespace PressPlay.FFWD.Components
                 return;
             }
 
+#if DEBUG
+            Application.particleAnimTimer.Start();
+#endif
+
+
             int numToEmit = 0;
             if (emit)
             {
@@ -160,6 +165,10 @@ namespace PressPlay.FFWD.Components
                     break;
                 }
             }
+
+#if DEBUG
+            Application.particleAnimTimer.Stop();
+#endif
         }
 
         private void EmitNewParticleAt(int index)

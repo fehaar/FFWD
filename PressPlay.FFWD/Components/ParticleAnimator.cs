@@ -33,6 +33,9 @@ namespace PressPlay.FFWD.Components
 
         public void FixedUpdate()
         {
+#if DEBUG
+            Application.particleAnimTimer.Start();
+#endif
             bool hasDamping = (damping != 1);
             bool hasForces = (force != Vector3.zero || rndForce != Vector3.zero);
             bool hasRotation = true;
@@ -94,6 +97,10 @@ namespace PressPlay.FFWD.Components
             {
                 Destroy(gameObject);
             }
+
+#if DEBUG
+            Application.particleAnimTimer.Stop();
+#endif
         }
 
         public void UpdateParticleColor(ref Particle particle)

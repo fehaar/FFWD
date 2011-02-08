@@ -30,8 +30,9 @@ namespace PressPlay.FFWD
         private Stopwatch frameTime = new Stopwatch();
         private Stopwatch scripts = new Stopwatch();
         private Stopwatch physics = new Stopwatch();
-        private Stopwatch graphics = new Stopwatch(); 
+        private Stopwatch graphics = new Stopwatch();
         public static Stopwatch raycastTimer = new Stopwatch();
+        public static Stopwatch particleAnimTimer = new Stopwatch();
 #endif
 
         public static ScreenManager.ScreenManager screenManager;
@@ -178,6 +179,11 @@ namespace PressPlay.FFWD
             {
                 Debug.Display("Raycasts ms", Application.raycastTimer.ElapsedMilliseconds);
                 raycastTimer.Reset();
+            }
+            if (ApplicationSettings.ShowParticleAnimTime)
+            {
+                Debug.Display("Particle Anim ms", Application.particleAnimTimer.ElapsedMilliseconds);
+                particleAnimTimer.Reset();
             }
             if (ApplicationSettings.ShowFPSCounter)
             {
