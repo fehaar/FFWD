@@ -87,14 +87,15 @@ namespace PressPlay.FFWD.Components
             //TODO: optimize this to only raycast to the relevant body. The current implementation is VERY VERY SLOW
             RaycastHit[] hits = Physics.RaycastAll(ray.origin,ray.direction,distance);
 
-            foreach (RaycastHit hit in hits)
+            for (int i = 0; i < hits.Length; i++)
             {
-                if (hit.collider == this)
+                if (hits[i].collider == this)
                 {
-                    hitInfo = hit;
+                    hitInfo = hits[i];
                     return true;
                 }
             }
+
             hitInfo = new RaycastHit();
             return false;
         }
