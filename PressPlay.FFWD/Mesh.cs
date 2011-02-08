@@ -20,8 +20,7 @@ namespace PressPlay.FFWD
         private int meshIndex;
 
         [ContentSerializerIgnore]
-        public Microsoft.Xna.Framework.Vector3[] vertices;
-        [ContentSerializerIgnore]
+        public Microsoft.Xna.Framework.Vector3[] vertices;        [ContentSerializerIgnore]
         public Microsoft.Xna.Framework.Vector3[] normals;
         [ContentSerializerIgnore]
         public Microsoft.Xna.Framework.Vector2[] uv;
@@ -79,6 +78,7 @@ namespace PressPlay.FFWD
                                 new Microsoft.Xna.Framework.Vector2(1, 1)
                             };
                             normals = data.normals;
+                            boundingSphere = BoundingSphere.CreateFromPoints(vertices);
                         }
                         else
                         {

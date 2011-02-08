@@ -331,6 +331,11 @@ namespace PressPlay.FFWD.Components
 
         internal bool DoFrustumCulling(ref BoundingSphere sphere)
         {
+            if (sphere.Radius == 0)
+            {
+                return false;
+            }
+
             ContainmentType contain;
             frustum.Contains(ref sphere, out contain);
             if (contain == ContainmentType.Disjoint)

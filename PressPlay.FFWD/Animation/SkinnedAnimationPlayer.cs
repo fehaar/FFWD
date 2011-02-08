@@ -33,6 +33,7 @@ namespace PressPlay.FFWD
         private Matrix[] worldTransforms;
         private Matrix[] skinTransforms;
         private Matrix bakedTransform;
+        private Transform[] transforms;
 
         // Backlink to the bind pose and skeleton hierarchy data.
         private SkinningData skinningDataValue;
@@ -91,6 +92,7 @@ namespace PressPlay.FFWD
             boneTransforms = new Matrix[skinningData.BindPose.Count];
             worldTransforms = new Matrix[skinningData.BindPose.Count];
             skinTransforms = new Matrix[skinningData.BindPose.Count];
+            transforms = new Transform[worldTransforms.Length];
             this.bakedTransform = bakedTransform;
         }
 
@@ -219,7 +221,13 @@ namespace PressPlay.FFWD
                 int parentBone = skinningDataValue.SkeletonHierarchy[bone];
 
                 worldTransforms[bone] = boneTransforms[bone] * worldTransforms[parentBone];
+                // Move transforms according to bone
+                if (transforms[bone] != null)
+                {
+                    transforms[bone].localPosition = Matrix.Invert(worldTransforms[bone]).Translation * 0.01f;
+                }
             }
+
         }
         
         /// <summary>
@@ -233,21 +241,32 @@ namespace PressPlay.FFWD
             }
         }
 
-        internal bool WorldTransformForBone(string boneName, out Matrix m)
-        {
-            if (currentClipValue != null)
-            {
-                if (skinningDataValue.BoneMap.ContainsKey(boneName))
-                {
-                    m = worldTransforms[skinningDataValue.BoneMap[boneName]];
-                    // TODO: This is a very brutal hardcoded hack as the animation does not work very well with hiearchical scales
-                    m.Translation = m.Translation * 0.01f;
+        //internal bool WorldTransformForBone(string boneName, out Matrix m)
+        //{
+        //    if (currentClipValue != null)
+        //    {
+        //        if (skinningDataValue.BoneMap.ContainsKey(boneName))
+        //        {
+        //            m = worldTransforms[skinningDataValue.BoneMap[boneName]];
+        //            // TODO: This is a very brutal hardcoded hack as the animation does not work very well with hiearchical scales
+        //            m.Translation = m.Translation * 0.01f;
                     
-                    return true;
+        //            return true;
+        //        }
+        //    }
+        //    m = Matrix.Identity;
+        //    return false;
+        //}
+
+        internal void SetTransforms(Transform[] transform)
+        {
+            for (int i = 0; i < transform.Length; i++)
+            {
+                if (skinningDataValue.BoneMap.ContainsKey(transform[i].name))
+                {
+                    transforms[skinningDataValue.BoneMap[transform[i].name]] = transform[i];
                 }
             }
-            m = Matrix.Identity;
-            return false;
         }
     }
 }

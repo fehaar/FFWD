@@ -50,6 +50,14 @@ namespace PressPlay.FFWD.Components
         internal int Draw(Camera cam, Material material, MeshFilter filter, Transform transform)
         {
             int drawCalls = 0;
+
+            // Do frustum culling
+            BoundingSphere sphere = new BoundingSphere(transform.position, filter.boundingSphere.Radius);
+            if (cam.DoFrustumCulling(ref sphere))
+            {
+                return 0;
+            }
+
             if (currentMaterial.name != material.name)
             {
                 drawCalls = DoDraw(device, cam);
