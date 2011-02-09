@@ -582,10 +582,13 @@ namespace PressPlay.FFWD
                 }
                 hadListener = cmp.SendMessage(methodName, value);
             }
+#if DEBUG
             if (sendMessageOptions == SendMessageOptions.RequireReceiver && !hadListener)
             {
                 Debug.Log("There were no listeners to the message " + methodName + " on " + this.ToString());
             }
+#endif
+
         }
 
         public void BroadcastMessage(string methodName)

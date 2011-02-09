@@ -54,7 +54,10 @@ namespace PressPlay.FFWD
 
         public static void Destroy(UnityObject obj, float time)
         {
-            obj.Destroy();
+            if (obj != null)
+            {
+                obj.Destroy();
+            }
         }
 
         protected virtual void Destroy()

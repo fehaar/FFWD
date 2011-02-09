@@ -32,6 +32,9 @@ namespace PressPlay.FFWD.Components
         public float aspect { get; set; }
         public int cullingMask { get; set; }
 
+        [ContentSerializerIgnore]
+        public BoundingFrustum frustum { get; private set; }
+
         public static bool wireframeRender = false;
 
         private static int estimatedDrawCalls = 0;
@@ -56,6 +59,7 @@ namespace PressPlay.FFWD.Components
 
         public override void Awake()
         {
+            frustum = new BoundingFrustum(view * projectionMatrix);
             for (int i = nonAssignedRenderers.Count - 1; i >= 0; i--)
             {
                 if (nonAssignedRenderers[i] == null || nonAssignedRenderers[i].gameObject == null || addRenderer(nonAssignedRenderers[i]))
@@ -98,7 +102,6 @@ namespace PressPlay.FFWD.Components
         public static Viewport FullScreen;
 
         public Matrix view { get; private set; }
-        public BoundingFrustum frustum { get; private set; }
 
         [ContentSerializerIgnore]
         public Viewport viewPort 
@@ -242,7 +245,7 @@ namespace PressPlay.FFWD.Components
                 transform.position,
                 transform.position + transform.forward,
                 transform.up);
-            frustum = new BoundingFrustum(view * projectionMatrix);
+            frustum.Matrix = view * projectionMatrix;
 
             for (int i = 0; i < renderQueue.Count; i++)
             {

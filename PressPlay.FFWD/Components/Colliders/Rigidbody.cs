@@ -68,7 +68,9 @@ namespace PressPlay.FFWD.Components
             }
             else
             {
+#if DEBUG
                 Debug.LogWarning("No collider set on this rigid body " + ToString());
+#endif
             }
         }
 

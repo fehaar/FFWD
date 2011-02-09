@@ -36,7 +36,9 @@ namespace PressPlay.FFWD
                 }
                 catch
                 {
+#if DEBUG
                     Debug.Log("Asset not found. " + typeof(T).Name + " at " + contentPath);
+#endif
                     return default(T);
                 }
             }
@@ -76,9 +78,10 @@ namespace PressPlay.FFWD
             return contentManagers[category];
         }
 
-        public static void AddStaticAsset(string name)
+        public void Preload<T>(string name)
         {
             staticAssets.Add(name);
+            //Load<T>(name);
         }
     }
 }

@@ -123,9 +123,9 @@ namespace PressPlay.FFWD
             {
                 fileName = Path.GetFileNameWithoutExtension(fileName);
             }
-
+#if DEBUG
             Debug.Log("Textures\\" + fileName);
-
+#endif
             try
             {
                 Textures.Add(name, Content.Load<Texture2D>("Textures\\" + fileName));

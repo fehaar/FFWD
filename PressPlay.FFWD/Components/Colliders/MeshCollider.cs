@@ -40,7 +40,9 @@ namespace PressPlay.FFWD.Components
             {
                 if (vertices[triangles[i]].y + vertices[triangles[i + 1]].y + vertices[triangles[i + 2]].y > 1)
                 {
+#if DEBUG
                     Debug.Log(" Warning: " + ToString() + " has non zero Y in collider");
+#endif
                 }
                 Vector2[] tri = new Vector2[] { 
                     new Vector2(vertices[triangles[i]].x * transform.lossyScale.x, vertices[triangles[i]].z * transform.lossyScale.z),
