@@ -81,7 +81,7 @@ namespace PressPlay.FFWD
         public void Preload<T>(string name)
         {
             staticAssets.Add(name);
-            Load<T>(name);
+            //Load<T>(name);
         }
     }
 }
