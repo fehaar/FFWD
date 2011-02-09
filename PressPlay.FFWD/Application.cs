@@ -468,5 +468,10 @@ namespace PressPlay.FFWD
         {
             quitNextUpdate = true;
         }
+
+        public static void Preload<T>(string name)
+        {
+            assetHelper.Preload<T>(name);
+        }
     }
 }

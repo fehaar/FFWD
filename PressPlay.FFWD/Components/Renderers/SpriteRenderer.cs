@@ -108,9 +108,9 @@ namespace PressPlay.FFWD.Components
             {
                 batch = new SpriteBatch(device);
             }
-
+#if DEBUG
             Debug.Log("I want to render SpriteRender");
-
+#endif
             batch.Begin();
             batch.Draw(texture, Position, bounds, material.color, transform.eulerAngles.y, Origin, Scale, Effects, LayerDepth);
             batch.End();

@@ -1475,7 +1475,7 @@ namespace PressPlay.FFWD
             args["type"] = "move";
             args["method"] = "to";
 
-            Debug.Log("iTween Calling MoveTo");
+            //Debug.Log("iTween Calling MoveTo");
 
             Launch(target, args);
         }
@@ -3409,7 +3409,7 @@ namespace PressPlay.FFWD
 
         void GenerateColorTargets()
         {
-            Debug.Log("GenerateColorTargets from: " + (Color)tweenArguments["from"] + " to: " + (Color)tweenArguments["to"]);
+            //Debug.Log("GenerateColorTargets from: " + (Color)tweenArguments["from"] + " to: " + (Color)tweenArguments["to"]);
             
             //values holder [0] from, [1] to, [2] calculated value from ease equation:
             colors = new Color[1, 3];
@@ -5240,7 +5240,7 @@ namespace PressPlay.FFWD
         /// </param>
         public static void ColorUpdate(GameObject target, Dictionary<string, object> args)
         {
-            Debug.Log("iTween ColorUpdate");
+            //Debug.Log("iTween ColorUpdate");
             
             CleanArgs(args);
 
@@ -7280,7 +7280,7 @@ namespace PressPlay.FFWD
             }
             tweens.Insert(0, args);
 
-            Debug.Log("iTween Calling Launch. Type: " + args["type"] + " method: " + args["method"] + " #tweens: " + tweens.Count);
+            //Debug.Log("iTween Calling Launch. Type: " + args["type"] + " method: " + args["method"] + " #tweens: " + tweens.Count);
 
             target.AddComponent(new iTween());
         }
@@ -7358,7 +7358,7 @@ namespace PressPlay.FFWD
             type = (string)tweenArguments["type"];
             method = (string)tweenArguments["method"];
 
-            Debug.Log("Retrieving arguments for type: "+type);
+            //Debug.Log("Retrieving arguments for type: "+type);
 
             if (tweenArguments.ContainsKey("time"))
             {
