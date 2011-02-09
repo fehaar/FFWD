@@ -314,6 +314,12 @@ namespace Box2D.XNA
 		        return;
 	        }
 
+
+            if (float.IsNaN(position.X) || float.IsNaN(position.Y) || float.IsNaN(angle))
+            {
+                throw new InvalidOperationException();
+            }
+
 	        _xf.R.Set(angle);
 	        _xf.Position = position;
 
