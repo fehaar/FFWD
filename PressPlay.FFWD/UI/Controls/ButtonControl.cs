@@ -142,7 +142,7 @@ namespace PressPlay.FFWD.UI.Controls
         {
             // TODO This needs to able to scale the text to fit
             // Something is broken with the size / bounds logic after scaling
-            textControl.transform.localScale = new Vector3(background.size.x / textControl.size.x);
+            textControl.transform.localScale = new Vector3(background.size.x / (textControl.size.x*1.15f));
         }
 
         public override void HandleInput(InputState input)

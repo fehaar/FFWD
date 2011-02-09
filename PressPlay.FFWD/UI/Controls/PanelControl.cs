@@ -26,7 +26,7 @@ namespace PressPlay.FFWD.UI.Controls
         }
 
         // Position child components in a column, with the given spacing between components
-        public void LayoutColumn(float xMargin, float yMargin, float ySpacing)
+        public virtual void LayoutColumn(float xMargin, float yMargin, float ySpacing)
         {
             this.xMargin = xMargin;
             this.yMargin = yMargin;
@@ -36,7 +36,9 @@ namespace PressPlay.FFWD.UI.Controls
             Vector2 offset = transform.position;
 
             float y = yMargin + offset.y;
-            
+
+            //Debug.Log("Column size before layout: " + bounds);
+
             for (int i = 0; i < childCount; i++)
             {
                 Control child = this[i];
@@ -46,10 +48,12 @@ namespace PressPlay.FFWD.UI.Controls
 
                 Debug.Log(i + " : " + child.transform.localPosition);
 
-                y += size.y + ySpacing;
+                y += child.size.y + ySpacing;
             }
 
             InvalidateAutoSize();
+
+            //Debug.Log("Column size after layout: "+bounds);
         }
 
         public void LayoutRow()
@@ -58,7 +62,7 @@ namespace PressPlay.FFWD.UI.Controls
         }
 
         // Position child components in a row, with the given spacing between components
-        public void LayoutRow(float xMargin, float yMargin, float xSpacing)
+        public virtual void LayoutRow(float xMargin, float yMargin, float xSpacing)
         {
             this.xMargin = xMargin;
             this.yMargin = yMargin;
@@ -79,8 +83,6 @@ namespace PressPlay.FFWD.UI.Controls
                 child.transform.localPosition = new Vector2 { x = x, y = offset.y + yMargin };
 
                 //Debug.Log("x: " + x + " child.bounds.Width: " + child.bounds.Width);
-
-                //x += child.bounds.Width * (1.09f + 1 - child.transform.lossyScale.x) + xSpacing;
                 x += child.size.x + xSpacing;
             }
 
@@ -91,7 +93,7 @@ namespace PressPlay.FFWD.UI.Controls
 
 
         // Position child components in a row, with the given spacing between components
-        public void LayoutRowCentered(float xMargin, float yMargin, float xSpacing)
+        public virtual void LayoutRowCentered(float xMargin, float yMargin, float xSpacing)
         {
             this.xMargin = xMargin;
             this.yMargin = yMargin;
