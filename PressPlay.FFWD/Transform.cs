@@ -54,6 +54,11 @@ namespace PressPlay.FFWD
             }
             set
             {
+                if (float.IsNaN(value.x) || float.IsNaN(value.y) || float.IsNaN(value.z))
+                {
+                    throw new InvalidOperationException();
+                }
+
                 _localScale = value;
                 hasDirtyWorld = true;
             }
@@ -70,6 +75,11 @@ namespace PressPlay.FFWD
             }
             set
             {
+                if (float.IsNaN(value.x) || float.IsNaN(value.y) || float.IsNaN(value.z) || float.IsNaN(value.w))
+                {
+                    throw new InvalidOperationException();
+                }
+
                 _localRotation = value;
                 hasDirtyWorld = true;
             }
@@ -161,7 +171,7 @@ namespace PressPlay.FFWD
             {
                 if (float.IsNaN(value.x) || float.IsNaN(value.y) || float.IsNaN(value.z))
                 {
-                    return;
+                    throw new InvalidOperationException();
                 }
 
                 if (parent == null)
@@ -220,6 +230,11 @@ namespace PressPlay.FFWD
             }
             set
             {
+                if (float.IsNaN(value.x) || float.IsNaN(value.y) || float.IsNaN(value.z) || float.IsNaN(value.w))
+                {
+                    throw new InvalidOperationException();
+                }
+
                 if (parent == null)
                 {
                     localRotation = value;
@@ -240,6 +255,11 @@ namespace PressPlay.FFWD
             }
             set
             {
+                if (float.IsNaN(value.x) || float.IsNaN(value.y) || float.IsNaN(value.z))
+                {
+                    throw new InvalidOperationException();
+                }
+
                 rotation = Quaternion.Euler(value);
             }
         }
@@ -253,6 +273,11 @@ namespace PressPlay.FFWD
             }
             set
             {
+                if (float.IsNaN(value.x) || float.IsNaN(value.y) || float.IsNaN(value.z))
+                {
+                    throw new InvalidOperationException();
+                }
+
                 localRotation = Quaternion.Euler(value);
             }
         }
