@@ -36,8 +36,10 @@ namespace PressPlay.FFWD
                 }
                 catch
                 {
+#if DEBUG
                     Debug.Log("Asset not found. " + typeof(T).Name + " at " + contentPath);
                     return default(T);
+#endif
                 }
             }
             else

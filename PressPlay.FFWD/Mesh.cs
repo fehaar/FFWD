@@ -20,7 +20,8 @@ namespace PressPlay.FFWD
         private int meshIndex;
 
         [ContentSerializerIgnore]
-        public Microsoft.Xna.Framework.Vector3[] vertices;        [ContentSerializerIgnore]
+        public Microsoft.Xna.Framework.Vector3[] vertices;
+        [ContentSerializerIgnore]
         public Microsoft.Xna.Framework.Vector3[] normals;
         [ContentSerializerIgnore]
         public Microsoft.Xna.Framework.Vector2[] uv;
@@ -80,10 +81,12 @@ namespace PressPlay.FFWD
                             normals = data.normals;
                             boundingSphere = BoundingSphere.CreateFromPoints(vertices);
                         }
+#if DEBUG
                         else
                         {
                             Debug.LogWarning("Cannot find a way to load the mesh " + asset);
                         }
+#endif
                     }
                 }
             }

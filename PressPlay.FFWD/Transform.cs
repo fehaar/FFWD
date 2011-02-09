@@ -35,8 +35,7 @@ namespace PressPlay.FFWD
             {
                 if (float.IsNaN(value.x) || float.IsNaN(value.y) || float.IsNaN(value.z))
                 {
-                    Debug.Log("Trying to set local position to NaN!!!");
-                    return;
+                    throw new InvalidOperationException();
                 }
 
                 _localPosition = value;
