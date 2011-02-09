@@ -15,7 +15,7 @@ namespace PressPlay.FFWD.Components
         public float maxParticleSize;
         public Vector3 uvAnimation;
 
-        private BasicEffect effect;
+        private static BasicEffect effect;
         private ParticleEmitter emitter;
         private VertexPositionColorTexture[] vertices;
         private short[] triangles;
