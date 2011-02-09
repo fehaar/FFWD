@@ -215,5 +215,10 @@ namespace PressPlay.FFWD.Components
                 particleCount = 0;
             }
         }
+
+        public void SetEllipsoid(Vector3 _ellipsoid)
+        {
+            ellipsoid = _ellipsoid;
+        }
     }
 }

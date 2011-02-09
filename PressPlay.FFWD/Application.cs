@@ -28,6 +28,7 @@ namespace PressPlay.FFWD
 
 #if DEBUG
         private Stopwatch frameTime = new Stopwatch();
+        private Stopwatch timeUpdateEndUpdateStart = new Stopwatch();
         private Stopwatch scripts = new Stopwatch();
         private Stopwatch physics = new Stopwatch();
         private Stopwatch graphics = new Stopwatch();
@@ -71,11 +72,16 @@ namespace PressPlay.FFWD
 
         public override void Update(GameTime gameTime)
         {
+#if DEBUG
+            timeUpdateEndUpdateStart.Stop(); //measure time since last draw ended to try and measure graphics performance
+#endif
             if (Application.quitNextUpdate)
             {
                 base.Game.Exit();
                 return;
             }
+            
+
 
             base.Update(gameTime);
             Time.Update((float)gameTime.ElapsedGameTime.TotalSeconds, (float)gameTime.TotalGameTime.TotalSeconds);
@@ -185,6 +191,11 @@ namespace PressPlay.FFWD
                 Debug.Display("Particle Anim ms", Application.particleAnimTimer.ElapsedMilliseconds);
                 particleAnimTimer.Reset();
             }
+            if (ApplicationSettings.ShowTimeBetweenUpdates)
+            {
+                Debug.Display("TimeBetweenUpdates", timeUpdateEndUpdateStart.ElapsedMilliseconds);
+            }
+            
             if (ApplicationSettings.ShowFPSCounter)
             {
                 Debug.Display("FPS", String.Format("{0} ms {1}", frameRate, frameTime.ElapsedMilliseconds));
@@ -217,6 +228,8 @@ namespace PressPlay.FFWD
             scripts.Reset();
             physics.Reset();
             graphics.Reset();
+
+            timeUpdateEndUpdateStart.Restart(); //measure time from draw ended to beginning of Update, to try and measure graphics performance
 #endif
         }
 
