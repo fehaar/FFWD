@@ -56,7 +56,8 @@ namespace PressPlay.FFWD.Components
                     if (hasDamping)
                     {
                         // Apply damping to velocity
-                        emitter.particles[i].Velocity *= (1 - (1 - damping) * Time.deltaTime); // (1 – c ⋅ dt) ⋅ vold
+                        //emitter.particles[i].Velocity *= (1 - (1 - damping) * Time.deltaTime); // (1 – c ⋅ dt) ⋅ vold
+                        emitter.particles[i].Velocity *= Mathf.Pow(damping, Time.deltaTime); // (1 – c ⋅ dt) ⋅ vold
                     }
 
                     if (hasForces)
@@ -66,12 +67,12 @@ namespace PressPlay.FFWD.Components
                         emitter.particles[i].Velocity += (force + RandomForce) * Time.deltaTime;
                     }
 
-                    if (hasTangentForces)
-                    {
-                        // Apply tangent forces
-                        Vector3 v = Vector3.Cross(transform.up, emitter.particles[i].Velocity);
-                        emitter.particles[i].Velocity += (v * emitter.tangentVelocity) * Time.deltaTime;
-                    }
+                    //if (hasTangentForces)
+                    //{
+                    //    // Apply tangent forces
+                    //    Vector3 v = Vector3.Cross(transform.up, emitter.particles[i].Velocity);
+                    //    emitter.particles[i].Velocity += (v * emitter.tangentVelocity) * Time.deltaTime;
+                    //}
 
                     if (hasRotation)
                     {
