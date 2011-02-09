@@ -19,15 +19,31 @@ namespace PressPlay.FFWD.Components
         private ParticleEmitter emitter;
         private VertexPositionColorTexture[] vertices;
         private short[] triangles;
-        
+
+        private DynamicVertexBuffer vertexBuffer;
+        private IndexBuffer indexBuffer;
+
         [ContentSerializerIgnore]
         public Rectangle ParticleBounds;
 
         public override void Awake()
         {
-            base.Awake();
-
             emitter = gameObject.GetComponent<ParticleEmitter>();
+            CreateBuffers();
+        }
+
+        public override void Start()
+        {
+            CreateBuffers();
+        }
+
+        private void CreateBuffers()
+        {
+            if (vertexBuffer == null && (emitter.particles != null))
+            {
+                vertexBuffer = new DynamicVertexBuffer(Application.screenManager.GraphicsDevice, typeof(VertexPositionColorTexture), emitter.particles.Length * 4, BufferUsage.WriteOnly);
+                indexBuffer = new DynamicIndexBuffer(Application.screenManager.GraphicsDevice, IndexElementSize.SixteenBits, emitter.particles.Length * 6, BufferUsage.WriteOnly);
+            }
         }
 
         public Rectangle GetSourceRect()
@@ -82,20 +98,26 @@ namespace PressPlay.FFWD.Components
                     particlesRendered++;
                 }
             }
+            vertexBuffer.SetData(vertices, 0, particlesRendered * 4);
+            indexBuffer.SetData(triangles, 0, particlesRendered * 6);
 
+            device.Indices = indexBuffer;
+            device.SetVertexBuffer(vertexBuffer);
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
-                device.DrawUserIndexedPrimitives<VertexPositionColorTexture>(
+                device.DrawIndexedPrimitives(
                     PrimitiveType.TriangleList,
-                    vertices,
+                    0,
                     0,
                     particlesRendered * 4,
-                    triangles,
                     0,
                     particlesRendered * 2
                 );
             }
+            device.Indices = null;
+            device.SetVertexBuffer(null);
+
             return 1;
         }
 

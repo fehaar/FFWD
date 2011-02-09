@@ -73,10 +73,8 @@ namespace PressPlay.FFWD.Components
         internal bool yLimit = false;
         internal float fadeBelow = 0;
         
-        public override void Start()
+        public override void Awake()
         {
-            base.Start();
-
             if (oneShot)
             {
                 int parts = Mathf.FloorToInt(maxEmission);
