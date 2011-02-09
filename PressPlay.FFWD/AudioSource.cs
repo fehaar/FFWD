@@ -183,5 +183,14 @@ namespace PressPlay.FFWD
         {
  
         }
+
+        protected override void Destroy()
+        {
+            base.Destroy();
+            if (soundEffect != null)
+            {
+                soundEffect.Dispose();
+            }
+        }
     }
 }
