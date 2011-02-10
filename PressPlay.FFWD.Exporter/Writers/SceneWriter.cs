@@ -371,6 +371,11 @@ namespace PressPlay.FFWD.Exporter.Writers
                     writer.WriteElementString(name, ToString((Color)obj));
                     return;
                 }
+                if (obj is Color[])
+                {
+                    writer.WriteElementString(name, ToString(obj as Color[]));
+                    return;
+                }
                 if (obj is Rect)
                 {
                     writer.WriteElementString(name, ToString((Rect)obj));
@@ -601,6 +606,17 @@ namespace PressPlay.FFWD.Exporter.Writers
         {
             StringBuilder sb = new StringBuilder();
             foreach (Vector3 item in array)
+            {
+                sb.Append(ToString(item));
+                sb.Append(" ");
+            }
+            return sb.ToString();
+        }
+
+        private string ToString(Color[] array)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (Color item in array)
             {
                 sb.Append(ToString(item));
                 sb.Append(" ");
