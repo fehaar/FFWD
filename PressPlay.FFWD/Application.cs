@@ -194,6 +194,7 @@ namespace PressPlay.FFWD
             if (ApplicationSettings.ShowTimeBetweenUpdates)
             {
                 Debug.Display("TimeBetweenUpdates", timeUpdateEndUpdateStart.ElapsedMilliseconds);
+                timeUpdateEndUpdateStart.Reset();
             }
             
             if (ApplicationSettings.ShowFPSCounter)
@@ -229,7 +230,7 @@ namespace PressPlay.FFWD
             physics.Reset();
             graphics.Reset();
 
-            timeUpdateEndUpdateStart.Restart(); //measure time from draw ended to beginning of Update, to try and measure graphics performance
+            timeUpdateEndUpdateStart.Start(); //measure time from draw ended to beginning of Update, to try and measure graphics performance
 #endif
         }
 
