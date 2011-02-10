@@ -18,7 +18,37 @@ namespace PressPlay.FFWD.Components
         public Vector3 force;
         public float damping;
         public bool autodestruct;
-        public Color[] colorAnimation;
+
+        private Microsoft.Xna.Framework.Color[] _colorAnimation;
+        public Color[] colorAnimation
+        {
+            get
+            {
+                if (_colorAnimation == null)
+                {
+                    return null;
+                }
+                Color[] anim = new Color[_colorAnimation.Length];
+                for (int i = 0; i < _colorAnimation.Length; i++)
+                {
+                    anim[i] = _colorAnimation[i];
+                }
+                return anim;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    _colorAnimation = null;
+                    return;
+                }
+                _colorAnimation = new Microsoft.Xna.Framework.Color[value.Length];
+                for (int i = 0; i < value.Length; i++)
+                {
+                    _colorAnimation[i] = value[i];
+                }
+            }
+        }
 
         private ParticleEmitter emitter;
         private bool hasHadParticles = false;
@@ -114,7 +144,7 @@ namespace PressPlay.FFWD.Components
                     startIndex = 3;
                 }
                 colorScale = startIndex - (int)startIndex;
-                particle.Color = Color.Lerp(colorAnimation[(int)startIndex], colorAnimation[(int)startIndex + 1], colorScale);
+                particle.Color = Microsoft.Xna.Framework.Color.Lerp(_colorAnimation[(int)startIndex], _colorAnimation[(int)startIndex + 1], colorScale);
             }
             else
             {
