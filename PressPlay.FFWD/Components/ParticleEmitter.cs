@@ -109,7 +109,7 @@ namespace PressPlay.FFWD.Components
             }
 
 #if DEBUG
-            Application.particleAnimTimer.Start();
+            Application.particleEmitTimer.Start();
 #endif
 
 
@@ -165,7 +165,7 @@ namespace PressPlay.FFWD.Components
             }
 
 #if DEBUG
-            Application.particleAnimTimer.Stop();
+            Application.particleEmitTimer.Stop();
 #endif
         }
 

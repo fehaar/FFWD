@@ -7043,6 +7043,9 @@ namespace PressPlay.FFWD
 
         public override void Update()
         {
+#if DEBUG
+            Application.iTweenUpdateTime.Start();
+#endif
 
             if (isRunning && !physics)
             {
@@ -7069,11 +7072,19 @@ namespace PressPlay.FFWD
                     }
                 }
             }
+
+#if DEBUG
+            Application.iTweenUpdateTime.Stop();
+#endif
         }
 
         //physics
         public override void  FixedUpdate()
         {
+#if DEBUG
+            Application.iTweenUpdateTime.Start();
+#endif
+
             if (isRunning && physics)
             {
                 if (!reverse)
@@ -7099,10 +7110,18 @@ namespace PressPlay.FFWD
                     }
                 }
             }
+
+#if DEBUG
+            Application.iTweenUpdateTime.Stop();
+#endif
         }
 
         public override void  LateUpdate()
         {
+#if DEBUG
+            Application.iTweenUpdateTime.Start();
+#endif
+
  	        base.LateUpdate();
 
             //look applications:
@@ -7113,6 +7132,10 @@ namespace PressPlay.FFWD
                     LookUpdate(gameObject, tweenArguments);
                 }
             }
+
+#if DEBUG
+            Application.iTweenUpdateTime.Stop();
+#endif
         }
 
         void OnEnable()

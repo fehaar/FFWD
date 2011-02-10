@@ -32,8 +32,10 @@ namespace PressPlay.FFWD
         private Stopwatch scripts = new Stopwatch();
         private Stopwatch physics = new Stopwatch();
         private Stopwatch graphics = new Stopwatch();
+        public static Stopwatch iTweenUpdateTime = new Stopwatch();
         public static Stopwatch raycastTimer = new Stopwatch();
         public static Stopwatch particleAnimTimer = new Stopwatch();
+        public static Stopwatch particleEmitTimer = new Stopwatch();
 #endif
 
         public static ScreenManager.ScreenManager screenManager;
@@ -181,6 +183,11 @@ namespace PressPlay.FFWD
                     Debug.Display(lineCam.name, lineCam.transform.position);
                 }
             }
+            if (ApplicationSettings.ShowiTweenUpdateTime)
+            {
+                Debug.Display("iTween UpdateTime ms", Application.iTweenUpdateTime.ElapsedMilliseconds);
+                iTweenUpdateTime.Reset();
+            }
             if (ApplicationSettings.ShowRaycastTime)
             {
                 Debug.Display("Raycasts ms", Application.raycastTimer.ElapsedMilliseconds);
@@ -190,6 +197,8 @@ namespace PressPlay.FFWD
             {
                 Debug.Display("Particle Anim ms", Application.particleAnimTimer.ElapsedMilliseconds);
                 particleAnimTimer.Reset();
+                Debug.Display("Particle Emit ms", Application.particleEmitTimer.ElapsedMilliseconds);
+                particleEmitTimer.Reset();
             }
             if (ApplicationSettings.ShowTimeBetweenUpdates)
             {
