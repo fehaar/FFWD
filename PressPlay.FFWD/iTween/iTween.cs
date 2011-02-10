@@ -6896,6 +6896,8 @@ namespace PressPlay.FFWD
         /// </summary>
         public static void Stop(GameObject target)
         {
+            //Debug.Log("Stopping iTween. target.name:"+target.name+" instance ID: "+ target.GetInstanceID());
+
             Component[] tweens = target.GetComponents(typeof(iTween));
             foreach (iTween item in tweens)
             {
@@ -7030,6 +7032,7 @@ namespace PressPlay.FFWD
 
         public override void Awake()
         {
+
             RetrieveArgs();
             lastRealTime = Time.realtimeSinceStartup; // Added by PressPlay
         }
@@ -7278,7 +7281,10 @@ namespace PressPlay.FFWD
             {
                 args["target"] = target;
             }
+
             tweens.Insert(0, args);
+
+            Debug.Log("Launching iTween for target: " + target.name + " targetId: " + target.GetInstanceID()+" number of tweens: "+tweens.Count);
 
             //Debug.Log("iTween Calling Launch. Type: " + args["type"] + " method: " + args["method"] + " #tweens: " + tweens.Count);
 
@@ -7344,21 +7350,23 @@ namespace PressPlay.FFWD
 
             foreach (Dictionary<string, object> item in tweens)
             {
-                if ((GameObject)item["target"] == gameObject && !item.ContainsKey("hasBeenAdded"))
+                if ((GameObject)item["target"] == gameObject)
                 {
-                    // We add a bool to make sure, that we don't add the same tween twice.
-                    // This is because we don't awake tweens instantly but do it collectively before an update
-                    item.Add("hasBeenAdded", true);
-                    tweenArguments = item;
-                    break;
+
+                    if (!item.ContainsKey("hasBeenAdded"))
+                    {
+                        // We add a bool to make sure, that we don't add the same tween twice.
+                        // This is because we don't awake tweens instantly but do it collectively before an update
+                        item.Add("hasBeenAdded", true);
+                        tweenArguments = item;
+                        break;
+                    }
                 }
             }
 
             id = (string)tweenArguments["id"];
             type = (string)tweenArguments["type"];
             method = (string)tweenArguments["method"];
-
-            //Debug.Log("Retrieving arguments for type: "+type);
 
             if (tweenArguments.ContainsKey("time"))
             {
@@ -7654,16 +7662,42 @@ namespace PressPlay.FFWD
             }
         }
 
+        void Dispose(string tempId)
+        {
+            for (int i = 0; i < tweens.Count; i++)
+            {
+                Dictionary<string, object> tweenEntry = (Dictionary<string, object>)tweens[i];
+                if ((string)tweenEntry["id"] == tempId)
+                {
+                    tweens.RemoveAt(i);
+
+                    //Debug.Log("Disposing iTween. GameObject: " + ((GameObject)tweenEntry["target"]).name + " ID: " + ((GameObject)tweenEntry["target"]).GetInstanceID() + " tweens.count: " + tweens.Count);
+                    break;
+                }
+            }
+            Destroy(this);
+        }
+
         void Dispose()
         {
             for (int i = 0; i < tweens.Count; i++)
             {
                 Dictionary<string, object> tweenEntry = (Dictionary<string, object>)tweens[i];
-                if ((string)tweenEntry["id"] == id)
+                if ((GameObject)tweenEntry["target"] == gameObject)
                 {
                     tweens.RemoveAt(i);
+
+                    Debug.Log("Disposing iTween. GameObject: " + ((GameObject)tweenEntry["target"]).name + " ID: " + ((GameObject)tweenEntry["target"]).GetInstanceID() + " tweens.count: " + tweens.Count);
                     break;
-                }
+                }                
+                
+                //if ((string)tweenEntry["id"] == id)
+                //{
+                //    tweens.RemoveAt(i);
+
+                //    Debug.Log("Disposing iTween. GameObject: " + ((GameObject)tweenEntry["target"]).name + " ID: " + ((GameObject)tweenEntry["target"]).GetInstanceID() + " tweens.count: " + tweens.Count);
+                //    break;
+                //}
             }
             Destroy(this);
         }

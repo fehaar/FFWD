@@ -444,7 +444,14 @@ namespace PressPlay.FFWD
                     {
                         cmp.gameObject.RemoveComponent(cmp);
                     }
+
+                    if (newComponents.Contains(cmp))
+                    {
+                        newComponents.Remove(cmp);
+                    }
+
                     activeComponents.Remove(cmp);
+
 	            }
             }
             markedForDestruction.Clear();
