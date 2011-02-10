@@ -13,7 +13,9 @@ namespace PressPlay.FFWD.Components
             billboard
         }
 
-        public RenderMethod renderMethod = RenderMethod.billboard;
+        public RenderMethod renderMethod = RenderMethod.normal;
+
+        public Color color = Color.white;
 
         private string _text;
         public string text
@@ -70,17 +72,18 @@ namespace PressPlay.FFWD.Components
             }
             else
             {
-                throw new NotImplementedException("This function is not yet implemented");
-                basicEffect.World = Matrix.CreateScale(1, -1, 1) * Matrix.CreateTranslation(transform.position);
+                //throw new NotImplementedException("This function is not yet implemented");
+                basicEffect.World = Matrix.CreateConstrainedBillboard(transform.position, transform.position - cam.transform.forward.normalized, transform.forward * -1, null, null);
+                //basicEffect.World = Matrix.CreateScale(1, -1, 1) * Matrix.CreateTranslation(transform.position);
             }
             basicEffect.View = cam.view;
             basicEffect.Projection = cam.projectionMatrix;
 
             Vector2 textOrigin = font.MeasureString(text) / 2;
-            const float textSize = 0.005f;
+            const float textSize = 0.03f;
 
             batch.Begin(0, null, null, DepthStencilState.DepthRead, RasterizerState.CullNone, basicEffect);
-            batch.DrawString(font, text, Vector2.zero, Color.white, 0, textOrigin, textSize, 0, 0);
+            batch.DrawString(font, text, Vector2.zero, color, 0, textOrigin, textSize, 0, 0);
             batch.End();
 
             device.BlendState = BlendState.Opaque;
