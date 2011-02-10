@@ -6896,7 +6896,7 @@ namespace PressPlay.FFWD
         /// </summary>
         public static void Stop(GameObject target)
         {
-            Debug.Log("Stopping iTween. target.name:"+target.name+" instance ID: "+ target.GetInstanceID());
+            //Debug.Log("Stopping iTween. target.name:"+target.name+" instance ID: "+ target.GetInstanceID());
 
             Component[] tweens = target.GetComponents(typeof(iTween));
             foreach (iTween item in tweens)
@@ -7284,7 +7284,7 @@ namespace PressPlay.FFWD
 
             tweens.Insert(0, args);
 
-            // Debug.Log("Launching iTween for target: " + target.name + " targetId: " + target.GetInstanceID()+" number of tweens: "+tweens.Count);
+            Debug.Log("Launching iTween for target: " + target.name + " targetId: " + target.GetInstanceID()+" number of tweens: "+tweens.Count);
 
             //Debug.Log("iTween Calling Launch. Type: " + args["type"] + " method: " + args["method"] + " #tweens: " + tweens.Count);
 
@@ -7662,18 +7662,42 @@ namespace PressPlay.FFWD
             }
         }
 
+        void Dispose(string tempId)
+        {
+            for (int i = 0; i < tweens.Count; i++)
+            {
+                Dictionary<string, object> tweenEntry = (Dictionary<string, object>)tweens[i];
+                if ((string)tweenEntry["id"] == tempId)
+                {
+                    tweens.RemoveAt(i);
+
+                    //Debug.Log("Disposing iTween. GameObject: " + ((GameObject)tweenEntry["target"]).name + " ID: " + ((GameObject)tweenEntry["target"]).GetInstanceID() + " tweens.count: " + tweens.Count);
+                    break;
+                }
+            }
+            Destroy(this);
+        }
+
         void Dispose()
         {
             for (int i = 0; i < tweens.Count; i++)
             {
                 Dictionary<string, object> tweenEntry = (Dictionary<string, object>)tweens[i];
-                if ((string)tweenEntry["id"] == id)
+                if ((GameObject)tweenEntry["target"] == gameObject)
                 {
                     tweens.RemoveAt(i);
 
                     Debug.Log("Disposing iTween. GameObject: " + ((GameObject)tweenEntry["target"]).name + " ID: " + ((GameObject)tweenEntry["target"]).GetInstanceID() + " tweens.count: " + tweens.Count);
                     break;
-                }
+                }                
+                
+                //if ((string)tweenEntry["id"] == id)
+                //{
+                //    tweens.RemoveAt(i);
+
+                //    Debug.Log("Disposing iTween. GameObject: " + ((GameObject)tweenEntry["target"]).name + " ID: " + ((GameObject)tweenEntry["target"]).GetInstanceID() + " tweens.count: " + tweens.Count);
+                //    break;
+                //}
             }
             Destroy(this);
         }
