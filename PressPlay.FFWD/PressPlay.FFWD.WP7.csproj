@@ -148,6 +148,7 @@
     <Compile Include="Box2D\Dynamics\World.cs" />
     <Compile Include="Box2D\Dynamics\WorldCallbacks.cs" />
     <Compile Include="CachedContent.cs" />
+    <Compile Include="ComponentProfiler.cs" />
     <Compile Include="Components\Colliders\CapsuleCollider.cs" />
     <Compile Include="Components\IdMap.cs" />
     <Compile Include="Components\Particle.cs" />

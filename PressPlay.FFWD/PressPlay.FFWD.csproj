@@ -186,6 +186,7 @@
     <Compile Include="CachedContent.cs" />
     <Compile Include="Color.cs" />
     <Compile Include="Component.cs" />
+    <Compile Include="ComponentProfiler.cs" />
     <Compile Include="Components\Camera.cs" />
     <Compile Include="Components\Colliders\BoxCollider.cs" />
     <Compile Include="Components\Colliders\CapsuleCollider.cs" />

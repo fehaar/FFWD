@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define COMPONENT_PROFILE
+
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -27,6 +29,8 @@ namespace PressPlay.FFWD
         private static string sceneToLoad = "";
 
 #if DEBUG
+        private ComponentProfiler componentProfiler = new ComponentProfiler();
+
         private Stopwatch frameTime = new Stopwatch();
         private Stopwatch timeUpdateEndUpdateStart = new Stopwatch();
         private Stopwatch updateTime = new Stopwatch();
@@ -83,6 +87,9 @@ namespace PressPlay.FFWD
 #if DEBUG
             timeUpdateEndUpdateStart.Stop(); //measure time since last draw ended to try and measure graphics performance
 #endif
+#if DEBUG && COMPONENT_PROFILE
+            componentProfiler.FlushData();
+#endif
             if (Application.quitNextUpdate)
             {
                 base.Game.Exit();
@@ -120,7 +127,13 @@ namespace PressPlay.FFWD
                 }
                 if (activeComponents[i] is IFixedUpdateable)
                 {
+#if DEBUG && COMPONENT_PROFILE
+                    componentProfiler.StartFixedUpdateCall(activeComponents[i]);
+#endif
                     (activeComponents[i] as IFixedUpdateable).FixedUpdate();
+#if DEBUG && COMPONENT_PROFILE
+                    componentProfiler.EndFixedUpdateCall();
+#endif
                 }
             }
 #if DEBUG
@@ -157,7 +170,14 @@ namespace PressPlay.FFWD
                 }
                 if (activeComponents[i] is PressPlay.FFWD.Interfaces.IUpdateable)
                 {
+#if DEBUG && COMPONENT_PROFILE
+                    componentProfiler.StartUpdateCall(activeComponents[i]);
+#endif
                     (activeComponents[i] as PressPlay.FFWD.Interfaces.IUpdateable).Update();
+
+#if DEBUG && COMPONENT_PROFILE
+                    componentProfiler.EndUpdateCall();
+#endif
                     lateUpdates.Add((activeComponents[i] as PressPlay.FFWD.Interfaces.IUpdateable));
                 }
                 if ((activeComponents[i] is MonoBehaviour))
@@ -171,7 +191,7 @@ namespace PressPlay.FFWD
 #endif
             for (int i = 0; i < lateUpdates.Count; i++)
             {
-                lateUpdates[i].LateUpdate();
+                    lateUpdates[i].LateUpdate();
             }
 
             CleanUp();
@@ -194,7 +214,8 @@ namespace PressPlay.FFWD
             }
             if (ApplicationSettings.ShowiTweenUpdateTime)
             {
-                Debug.Display("iTween UpdateTime ms", Application.iTweenUpdateTime.ElapsedMilliseconds);
+                componentProfiler.Sort();
+                Debug.Display("GetWorst()", componentProfiler.GetWorst());
                 iTweenUpdateTime.Reset();
             }
             if (ApplicationSettings.ShowRaycastTime)
