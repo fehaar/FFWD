@@ -247,6 +247,29 @@ namespace PressPlay.FFWD.Components
                 transform.up);
             frustum.Matrix = view * projectionMatrix;
 
+            #region TextRenderer3D batching start
+            // We are making sure, that we have the necessary elements to draw 3D text
+            if (TextRenderer3D.basicEffect == null)
+            {
+                TextRenderer3D.basicEffect = new BasicEffect(device)
+                {
+                    TextureEnabled = true,
+                    VertexColorEnabled = true,
+                };
+            }
+
+            TextRenderer3D.basicEffect.World = TextRenderer3D.invertY;
+            TextRenderer3D.basicEffect.View = Matrix.Identity;
+
+            if (TextRenderer3D.batch == null)
+            {
+                TextRenderer3D.batch = new SpriteBatch(device);
+            }
+
+            // We are beginning the batching of TextRenderer3D calls
+            TextRenderer3D.batch.Begin(0, null, null, DepthStencilState.Default, RasterizerState.CullNone, TextRenderer3D.basicEffect);
+            #endregion
+
             for (int i = 0; i < renderQueue.Count; i++)
             {
                 if (renderQueue[i].gameObject == null)
@@ -260,6 +283,10 @@ namespace PressPlay.FFWD.Components
                     estimatedDrawCalls += renderQueue[i].Draw(device, this);
                 }
             }
+            
+            // We are ending the batching of TextRenderer3D calls
+            TextRenderer3D.batch.End(); 
+
             estimatedDrawCalls += dynamicBatchRenderer.DoDraw(device, this);
         }
 

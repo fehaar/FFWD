@@ -15,8 +15,6 @@ namespace PressPlay.FFWD.Components
 
         public RenderMethod renderMethod = RenderMethod.normal;
 
-        public Color color = Color.white;
-
         private string _text;
         public string text
         {
@@ -31,7 +29,10 @@ namespace PressPlay.FFWD.Components
             set { _font = value; }
         }
 
-        private BasicEffect basicEffect;
+        public static SpriteBatch batch;
+        public static BasicEffect basicEffect;
+        public static Matrix invertY = Matrix.CreateScale(1, -1, 1);
+
         private Vector3 cameraFront = new Vector3(0, 0, -1);
 
         public TextRenderer3D(SpriteFont font)
@@ -43,52 +44,58 @@ namespace PressPlay.FFWD.Components
         {
             this.font = font;
             this.text = text;
+            material = new Material();
+            material.color = Color.white;
         }
-
-        protected SpriteBatch batch;
+        
         public override int Draw(GraphicsDevice device, Camera cam)
         {
-            if (batch == null)
-            {
-                batch = new SpriteBatch(device);
-            }
 
-            if (basicEffect == null)
-            {
-                basicEffect = new BasicEffect(device)
-                {
-                    TextureEnabled = true,
-                    VertexColorEnabled = true,
-                };
-            }
-
-            //Debug.Log("DRAWING TextRenderer3D: "+text+" On position: "+transform.position);
-
-            //Vector3 textPosition = new Vector3(0, 45, 0);
-
-            if (renderMethod == RenderMethod.billboard)
-            {
-                basicEffect.World = Matrix.CreateConstrainedBillboard(transform.position, transform.position - cam.transform.forward.normalized, cam.transform.up * -1, null, null);
-            }
-            else
-            {
-                //throw new NotImplementedException("This function is not yet implemented");
-                basicEffect.World = Matrix.CreateConstrainedBillboard(transform.position, transform.position - cam.transform.forward.normalized, transform.forward * -1, null, null);
-                //basicEffect.World = Matrix.CreateScale(1, -1, 1) * Matrix.CreateTranslation(transform.position);
-            }
-            basicEffect.View = cam.view;
-            basicEffect.Projection = cam.projectionMatrix;
+            TextRenderer3D.basicEffect.Projection = cam.projectionMatrix;
+            Vector3 viewSpaceTextPosition = Microsoft.Xna.Framework.Vector3.Transform(transform.position, cam.view * invertY);
 
             Vector2 textOrigin = font.MeasureString(text) / 2;
             const float textSize = 0.03f;
 
-            batch.Begin(0, null, null, DepthStencilState.DepthRead, RasterizerState.CullNone, basicEffect);
-            batch.DrawString(font, text, Vector2.zero, color, 0, textOrigin, textSize, 0, 0);
-            batch.End();
+            batch.DrawString(font, text, new Vector2(viewSpaceTextPosition.x, viewSpaceTextPosition.y), material.color, 0, textOrigin, textSize, 0, viewSpaceTextPosition.z);
+            
+            //if (batch == null)
+            //{
+            //    batch = new SpriteBatch(device);
+            //}
 
-            device.BlendState = BlendState.Opaque;
-            device.DepthStencilState = DepthStencilState.Default;
-            device.SamplerStates[0] = SamplerState.LinearClamp;
+            //if (basicEffect == null)
+            //{
+            //    basicEffect = new BasicEffect(device)
+            //    {
+            //        TextureEnabled = true,
+            //        VertexColorEnabled = true,
+            //    };
+            //}
+
+            //if (renderMethod == RenderMethod.billboard)
+            //{
+            //    TextRenderer3D.basicEffect.World = Matrix.CreateConstrainedBillboard(transform.position, transform.position - cam.transform.forward.normalized, cam.transform.up * -1, null, null);
+            //}
+            //else
+            //{
+            //    //throw new NotImplementedException("This function is not yet implemented");
+            //    TextRenderer3D.basicEffect.World = Matrix.CreateConstrainedBillboard(transform.position, transform.position - cam.transform.forward.normalized, transform.forward * -1, null, null);
+            //    //basicEffect.World = Matrix.CreateScale(1, -1, 1) * Matrix.CreateTranslation(transform.position);
+            //}
+            //TextRenderer3D.basicEffect.View = cam.view;
+            //TextRenderer3D.basicEffect.Projection = cam.projectionMatrix;
+
+            //Vector2 textOrigin = font.MeasureString(text) / 2;
+            //const float textSize = 0.03f;
+
+            //batch.Begin(0, null, null, DepthStencilState.DepthRead, RasterizerState.CullNone, basicEffect);
+            //batch.DrawString(font, text, Vector2.zero, color, 0, textOrigin, textSize, 0, 0);
+            //batch.End();
+
+            //device.BlendState = BlendState.Opaque;
+            //device.DepthStencilState = DepthStencilState.Default;
+            //device.SamplerStates[0] = SamplerState.LinearClamp;
 
             return 0;
         }        
