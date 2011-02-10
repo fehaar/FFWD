@@ -18,11 +18,24 @@ namespace PressPlay.FFWD
             this.layerMask = layerMask;
         }
 
-        private bool findClosest = false;
+        private bool findClosest;
         private float distance;
         private int layerMask;
         private List<RaycastHit> _hits = new List<RaycastHit>();
+        private RaycastHit _hit;
         private float nearest = float.PositiveInfinity;
+        private bool didHit = false;
+
+        public void SetValues(float distance, bool findClosest, int layerMask)
+        {
+            this.distance = distance;
+            this.findClosest = findClosest;
+            this.layerMask = layerMask;
+
+            _hits.Clear();
+            nearest = float.PositiveInfinity;
+            didHit = false;;
+        }
 
         internal float rayCastCallback(Fixture fixture, PressPlay.FFWD.Vector2 point, PressPlay.FFWD.Vector2 normal, float fraction)
         {
@@ -40,8 +53,8 @@ namespace PressPlay.FFWD
                     if (dist < nearest)
                     {
                         nearest = dist;
-                        _hits.Clear();
-                        _hits.Add(new RaycastHit() { body = fixture.GetBody(), point = point, normal = normal, distance = dist, collider = coll });
+                        _hit = new RaycastHit() { body = fixture.GetBody(), point = point, normal = normal, distance = dist, collider = coll };
+                        didHit = true;
                     }
                     return fraction;
                 }
@@ -58,6 +71,11 @@ namespace PressPlay.FFWD
         {
             get
             {
+                if (findClosest && didHit)
+                {
+                    return 1;
+                }
+
                 return _hits.Count;
             }
         }
@@ -72,7 +90,7 @@ namespace PressPlay.FFWD
 
         internal RaycastHit ClosestHit()
         {
-            return _hits.LastOrDefault();
+            return _hit;
         }
 
         public bool pointCastCallback(Fixture fixture)
@@ -85,7 +103,8 @@ namespace PressPlay.FFWD
             }
             if ((coll != null) && (coll.gameObject != null) && (layerMask & (1 << coll.gameObject.layer)) > 0)
             {
-                _hits.Add(new RaycastHit() { body = fixture.GetBody(), collider = coll });
+                didHit = true;
+                _hit = new RaycastHit() { body = fixture.GetBody(), collider = coll };
             }
             return true;
         }

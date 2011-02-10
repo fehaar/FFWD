@@ -77,7 +77,8 @@ namespace PressPlay.FFWD.Components
         {
             if (connectedBody != null && connectedBody.GetType() != BodyType.Static)
             {
-                connectedBody.SetTransform(position, connectedBody.GetAngle());
+                //connectedBody.SetTransform(position, connectedBody.GetAngle());
+                connectedBody.SetTransformIgnoreContacts(position, connectedBody.GetAngle());
                 Physics.RemoveStays(this);
             }
         }

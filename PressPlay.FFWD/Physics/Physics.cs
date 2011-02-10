@@ -30,6 +30,8 @@ namespace PressPlay.FFWD
 
         public const int kDefaultRaycastLayers = -5;
 
+        private static RaycastHelper raycastHelper;
+
         private static bool isPaused = false;
         private static IContactProcessor contactProcessor;
         public static int velocityIterations = 3;
@@ -75,7 +77,8 @@ namespace PressPlay.FFWD
                         float rad = -MathHelper.ToRadians(comp.transform.eulerAngles.y);
                         if (body.Position != (Microsoft.Xna.Framework.Vector2)comp.transform.position || body.Rotation != rad)
                         {
-                            body.SetTransform(comp.transform.position, rad);
+                            //body.SetTransform(comp.transform.position, rad);
+                            body.SetTransformIgnoreContacts(comp.transform.position, rad);
                         }
 
                         //TODO: Resize body shape to the current transform.scale of the components game object. Maybe this should be done before physics update. It should only be hard coded in AddCollider in static objects
@@ -240,7 +243,17 @@ namespace PressPlay.FFWD
 #if DEBUG
             Application.raycastTimer.Start();
 #endif
-            RaycastHelper helper = new RaycastHelper(distance, true, layerMask);
+            if (raycastHelper == null)
+            {
+                raycastHelper = new RaycastHelper(distance, true, layerMask);
+            }
+            else
+            {
+                raycastHelper.SetValues(distance, true, layerMask);
+            }
+            //raycastHelper = new RaycastHelper(distance, true, layerMask);
+
+
             Vector2 pt2 = origin + (direction * distance);
             if (pt2 == origin)
             {
@@ -248,7 +261,7 @@ namespace PressPlay.FFWD
             }
             try
             {
-                world.RayCast(helper.rayCastCallback, origin, pt2);
+                world.RayCast(raycastHelper.rayCastCallback, origin, pt2);
             }
             catch (InvalidOperationException)
             {
@@ -261,7 +274,7 @@ namespace PressPlay.FFWD
                 Application.raycastTimer.Stop();
 #endif
             }
-            return (helper.HitCount > 0);
+            return (raycastHelper.HitCount > 0);
         }
 
         public static bool Raycast(Vector3 origin, Vector3 direction)
@@ -284,8 +297,16 @@ namespace PressPlay.FFWD
 #if DEBUG
             Application.raycastTimer.Start();
 #endif
-            
-            RaycastHelper helper = new RaycastHelper(distance, true, layerMask);
+            if (raycastHelper == null)
+            {
+                raycastHelper = new RaycastHelper(distance, true, layerMask);
+            }
+            else
+            {
+                raycastHelper.SetValues(distance, true, layerMask);
+            }
+            //raycastHelper = new RaycastHelper(distance, true, layerMask);
+
             Vector2 pt2 = origin + (direction * distance);
             if (pt2 == origin)
             {
@@ -294,8 +315,8 @@ namespace PressPlay.FFWD
             }
             try
             {
-                world.RayCast(helper.rayCastCallback, origin, pt2);
-                hitInfo = helper.ClosestHit();
+                world.RayCast(raycastHelper.rayCastCallback, origin, pt2);
+                hitInfo = raycastHelper.ClosestHit();
             }
             catch (InvalidOperationException)
             {
@@ -309,7 +330,7 @@ namespace PressPlay.FFWD
                 Application.raycastTimer.Stop();
 #endif
             }
-            return (helper.HitCount > 0);
+            return (raycastHelper.HitCount > 0);
         }
 
         public static bool Raycast(Vector3 origin, Vector3 direction, out RaycastHit hitInfo)
@@ -373,17 +394,25 @@ namespace PressPlay.FFWD
             Application.raycastTimer.Start();
 #endif
 
-            RaycastHelper helper = new RaycastHelper(distance, false, layerMask);
+            if (raycastHelper == null)
+            {
+                raycastHelper = new RaycastHelper(distance, false, layerMask);
+            }
+            else
+            {
+                raycastHelper.SetValues(distance, false, layerMask);
+            }
+
             Vector2 pt2 = origin + (direction * distance);
             if (pt2 == origin)
             {
                 return new RaycastHit[0];
             }
-            world.RayCast(helper.rayCastCallback, origin, pt2);
+            world.RayCast(raycastHelper.rayCastCallback, origin, pt2);
 #if DEBUG
             Application.raycastTimer.Stop();
 #endif
-            return helper.Hits;
+            return raycastHelper.Hits;
         }
 
         public static RaycastHit[] RaycastAll(Vector3 origin, Vector3 direction)
@@ -414,10 +443,20 @@ namespace PressPlay.FFWD
             Application.raycastTimer.Start();
 #endif
 
-            RaycastHelper helper = new RaycastHelper(float.MaxValue, true, layerMask);
+            //RaycastHelper helper = new RaycastHelper(float.MaxValue, true, layerMask);
+            if (raycastHelper == null)
+            {
+                raycastHelper = new RaycastHelper(float.MaxValue, true, layerMask);
+            }
+            else
+            {
+                raycastHelper.SetValues(float.MaxValue, true, layerMask);
+            }
+
+
             AABB aabb = new AABB() { lowerBound = new Vector2(point.x - float.Epsilon, point.y - float.Epsilon), upperBound = new Vector2(point.x + float.Epsilon, point.y + float.Epsilon) };
-            world.QueryAABB(helper.pointCastCallback, ref aabb);
-            return helper.HitCount > 0;
+            world.QueryAABB(raycastHelper.pointCastCallback, ref aabb);
+            return raycastHelper.HitCount > 0;
         }
 
         public static bool Pointcast(Vector2 point, out RaycastHit hitInfo)
@@ -430,12 +469,20 @@ namespace PressPlay.FFWD
 #if DEBUG
             Application.raycastTimer.Start();
 #endif
-            RaycastHelper helper = new RaycastHelper(float.MaxValue, true, layerMask);
-            AABB aabb = new AABB() { lowerBound = new Vector2(point.x - float.Epsilon, point.y - float.Epsilon), upperBound = new Vector2(point.x + float.Epsilon, point.y + float.Epsilon) };
-            world.QueryAABB(helper.pointCastCallback, ref aabb);
-            if (helper.HitCount > 0)
+            if (raycastHelper == null)
             {
-                hitInfo = helper.Hits[0];
+                raycastHelper = new RaycastHelper(float.MaxValue, true, layerMask);
+            }
+            else
+            {
+                raycastHelper.SetValues(float.MaxValue, true, layerMask);
+            }
+
+            AABB aabb = new AABB() { lowerBound = new Vector2(point.x - float.Epsilon, point.y - float.Epsilon), upperBound = new Vector2(point.x + float.Epsilon, point.y + float.Epsilon) };
+            world.QueryAABB(raycastHelper.pointCastCallback, ref aabb);
+            if (raycastHelper.HitCount > 0)
+            {
+                hitInfo = raycastHelper.ClosestHit();
 #if DEBUG
                 Application.raycastTimer.Stop();
 #endif
