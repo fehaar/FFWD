@@ -243,5 +243,24 @@ namespace PressPlay.FFWD
         {
             return new Color(Microsoft.Xna.Framework.MathHelper.Lerp(a.r, b.r, t), Microsoft.Xna.Framework.MathHelper.Lerp(a.g, b.g, t), Microsoft.Xna.Framework.MathHelper.Lerp(a.b, b.b, t), Microsoft.Xna.Framework.MathHelper.Lerp(a.a, b.a, t));
         }
+
+        public static Color Parse(string s)
+        {
+            Color c = new Color();
+            if (s.Length == 8)
+            {
+                c.a = ParseHexData(s, 0);
+                s = s.Substring(2);
+            }
+            c.r = ParseHexData(s, 0);
+            c.g = ParseHexData(s, 2);
+            c.b = ParseHexData(s, 4);
+            return c;
+        }
+
+        private static float ParseHexData(string s, int start)
+        {
+            return ((float)Int32.Parse(s.Substring(start, 2), System.Globalization.NumberStyles.HexNumber)) / 255f;
+        }
     }
 }
