@@ -109,7 +109,7 @@ namespace PressPlay.FFWD.Components
             }
 
 #if DEBUG
-            if (true)
+            if (false)
             {
                 return;
             }

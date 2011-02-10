@@ -79,10 +79,6 @@ namespace PressPlay.FFWD.Components
         public override int Draw(GraphicsDevice device, Camera cam)
         {
 #if DEBUG
-            if (true)
-            {
-                return 1;
-            }
             Application.particleDrawTimer.Start();
 #endif
 

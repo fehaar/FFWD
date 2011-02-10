@@ -29,11 +29,16 @@ namespace PressPlay.FFWD
 #if DEBUG
         private Stopwatch frameTime = new Stopwatch();
         private Stopwatch timeUpdateEndUpdateStart = new Stopwatch();
-        private Stopwatch scripts = new Stopwatch();
+        private Stopwatch updateTime = new Stopwatch();
+        private Stopwatch fixedUpdateTime = new Stopwatch();
+        private Stopwatch lateUpdateTime = new Stopwatch();
+        //private Stopwatch awakeTime = new Stopwatch();
+        //private Stopwatch startTime = new Stopwatch();
         private Stopwatch physics = new Stopwatch();
         private Stopwatch graphics = new Stopwatch();
         public static Stopwatch iTweenUpdateTime = new Stopwatch();
         public static Stopwatch raycastTimer = new Stopwatch();
+        public static Stopwatch lemmyStuffTimer = new Stopwatch();
         public static Stopwatch particleAnimTimer = new Stopwatch();
         public static Stopwatch particleEmitTimer = new Stopwatch();
         public static Stopwatch particleDrawTimer = new Stopwatch();
@@ -99,7 +104,7 @@ namespace PressPlay.FFWD
             LoadNewAssets();
 
 #if DEBUG
-            scripts.Start();
+            fixedUpdateTime.Start();
 #endif
             AwakeNewComponents();
             for (int i = 0; i < activeComponents.Count; i++)
@@ -119,7 +124,7 @@ namespace PressPlay.FFWD
                 }
             }
 #if DEBUG
-            scripts.Stop();
+            fixedUpdateTime.Stop();
             physics.Start();
 #endif
             //Physics.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
@@ -136,7 +141,7 @@ namespace PressPlay.FFWD
 
             frameCounter++;
 #if DEBUG
-            scripts.Start();
+            updateTime.Start();
 #endif
             
             for (int i = 0; i < activeComponents.Count; i++)
@@ -160,7 +165,10 @@ namespace PressPlay.FFWD
                     (activeComponents[i] as MonoBehaviour).UpdateInvokeCalls();
                 }
             }
-
+#if DEBUG
+            updateTime.Stop();
+            lateUpdateTime.Start();
+#endif
             for (int i = 0; i < lateUpdates.Count; i++)
             {
                 lateUpdates[i].LateUpdate();
@@ -168,13 +176,13 @@ namespace PressPlay.FFWD
 
             CleanUp();
 #if DEBUG
-            scripts.Stop();
+            lateUpdateTime.Stop();
             graphics.Start();
 #endif
             Camera.DoRender(GraphicsDevice);
 #if DEBUG
             graphics.Stop();
-            double total = scripts.Elapsed.TotalSeconds + graphics.Elapsed.TotalSeconds + physics.Elapsed.TotalSeconds;
+            double total = fixedUpdateTime.Elapsed.TotalSeconds + lateUpdateTime.Elapsed.TotalSeconds + updateTime.Elapsed.TotalSeconds + graphics.Elapsed.TotalSeconds + physics.Elapsed.TotalSeconds;
             if (ApplicationSettings.ShowDebugLines)
             {
                 Camera lineCam = (String.IsNullOrEmpty(ApplicationSettings.DebugLineCamera)) ? Camera.main : Camera.FindByName(ApplicationSettings.DebugLineCamera);
@@ -193,6 +201,11 @@ namespace PressPlay.FFWD
             {
                 Debug.Display("Raycasts ms", Application.raycastTimer.ElapsedMilliseconds);
                 raycastTimer.Reset();
+            }
+            if (ApplicationSettings.ShowRaycastTime)
+            {
+                Debug.Display("Lemmystuff ms", Application.lemmyStuffTimer.ElapsedMilliseconds);
+                lemmyStuffTimer.Reset();
             }
             if (ApplicationSettings.ShowParticleAnimTime)
             {
@@ -218,8 +231,8 @@ namespace PressPlay.FFWD
             }
             if (ApplicationSettings.ShowPerformanceBreakdown)
             {
-                Debug.Display("% S | P | G", String.Format("{0:P1} | {1:P1} | {2:P1}", scripts.Elapsed.TotalSeconds / total, physics.Elapsed.TotalSeconds / total, graphics.Elapsed.TotalSeconds / total));
-                Debug.Display("ms S | P | G", String.Format("{0}ms | {1}ms | {2}ms", scripts.Elapsed.Milliseconds, physics.Elapsed.Milliseconds, graphics.Elapsed.Milliseconds));
+                //Debug.Display("% S | P | G", String.Format("{0:P1} | {1:P1} | {2:P1}", scripts.Elapsed.TotalSeconds / total, physics.Elapsed.TotalSeconds / total, graphics.Elapsed.TotalSeconds / total));
+                Debug.Display("ms U | P | G", String.Format("{0}ms | {1}ms | {2}ms", updateTime.Elapsed.Milliseconds + fixedUpdateTime.Elapsed.Milliseconds + lateUpdateTime.Elapsed.Milliseconds, physics.Elapsed.Milliseconds, graphics.Elapsed.Milliseconds));
             }
             if (ApplicationSettings.ShowDebugDisplays)
 	        {
@@ -238,7 +251,9 @@ namespace PressPlay.FFWD
 
                 spriteBatch.End();
             }
-            scripts.Reset();
+            updateTime.Reset();
+            lateUpdateTime.Reset();
+            fixedUpdateTime.Reset();
             physics.Reset();
             graphics.Reset();
 

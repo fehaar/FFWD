@@ -7306,11 +7306,6 @@ namespace PressPlay.FFWD
             }
 
             tweens.Insert(0, args);
-
-            Debug.Log("Launching iTween for target: " + target.name + " targetId: " + target.GetInstanceID()+" number of tweens: "+tweens.Count);
-
-            //Debug.Log("iTween Calling Launch. Type: " + args["type"] + " method: " + args["method"] + " #tweens: " + tweens.Count);
-
             target.AddComponent(new iTween());
         }
 
@@ -7709,8 +7704,6 @@ namespace PressPlay.FFWD
                 if ((GameObject)tweenEntry["target"] == gameObject)
                 {
                     tweens.RemoveAt(i);
-
-                    Debug.Log("Disposing iTween. GameObject: " + ((GameObject)tweenEntry["target"]).name + " ID: " + ((GameObject)tweenEntry["target"]).GetInstanceID() + " tweens.count: " + tweens.Count);
                     break;
                 }                
                 

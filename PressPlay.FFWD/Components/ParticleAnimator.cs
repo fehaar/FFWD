@@ -65,14 +65,8 @@ namespace PressPlay.FFWD.Components
 
         public void FixedUpdate()
         {
-#if DEBUG           
-            if (true)
-            {
-                return;
-            }
-
+#if DEBUG     
             Application.particleAnimTimer.Start();
-
 #endif
             bool hasDamping = (damping != 1);
             bool hasForces = (force != Vector3.zero || rndForce != Vector3.zero);
@@ -124,7 +118,7 @@ namespace PressPlay.FFWD.Components
                         emitter.particles[i].Size += sizeGrow * Time.deltaTime;
                     }
 
-                    UpdateParticleColor(ref emitter.particles[i]);
+                    //UpdateParticleColor(ref emitter.particles[i]);
 
                     if (--particlesToCheck == 0)
                     {
