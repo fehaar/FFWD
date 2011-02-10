@@ -319,6 +319,10 @@ namespace PressPlay.FFWD
 
         public static Quaternion LookRotation(Vector3 forward, Vector3 up)
         {
+            if (forward == Vector3.zero)
+            {
+                return Quaternion.identity;
+            }
             return new Quaternion(Microsoft.Xna.Framework.Quaternion.CreateFromRotationMatrix(Microsoft.Xna.Framework.Matrix.CreateWorld(Microsoft.Xna.Framework.Vector3.Zero, forward, up)));
         }
         #endregion
