@@ -87,6 +87,8 @@ namespace Box2D.XNA
 		        return;
 	        }
 
+            if (fixtureA.GetShape() == null || fixtureB.GetShape() == null) return;
+
 	        // Call the factory.
 	        Contact c = Contact.Create(fixtureA, fixtureB);
 

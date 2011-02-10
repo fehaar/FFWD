@@ -302,6 +302,27 @@ namespace Box2D.XNA
             ResetMassData();
         }
 
+        public void SetTransformIgnoreContacts(Vector2 position, float angle)
+        {
+            //   Debug.Assert(_world.IsLocked == false);
+            if (_world.IsLocked == true)
+            {
+                return;
+            }
+
+            _xf.R.Set(angle);
+            _xf.Position = position;
+
+            _sweep.c0 = _sweep.c = MathUtils.Multiply(ref _xf, _sweep.localCenter);
+            _sweep.a0 = _sweep.a = angle;
+
+            BroadPhase broadPhase = _world._contactManager._broadPhase;
+            for (Fixture f = _fixtureList; f != null; f = f._next)
+            {
+                f.Synchronize(broadPhase, ref _xf, ref _xf);
+            }
+        }
+
 	    /// Set the position of the body's origin and rotation.
 	    /// This breaks any contacts and wakes the other bodies.
 	    /// @param position the world position of the body's local origin.
@@ -1045,7 +1066,8 @@ namespace Box2D.XNA
             }
             set
             {
-                SetTransform(value, Rotation);
+                //SetTransform(value, Rotation);
+                SetTransformIgnoreContacts(value, Rotation);
             }
         }
 
@@ -1061,7 +1083,8 @@ namespace Box2D.XNA
             }
             set
             {
-                SetTransform(Position, value);
+//                SetTransform(Position, value);
+                SetTransformIgnoreContacts(Position, value);
             }
         }
 

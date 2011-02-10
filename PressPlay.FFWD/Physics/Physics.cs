@@ -77,7 +77,8 @@ namespace PressPlay.FFWD
                         float rad = -MathHelper.ToRadians(comp.transform.eulerAngles.y);
                         if (body.Position != (Microsoft.Xna.Framework.Vector2)comp.transform.position || body.Rotation != rad)
                         {
-                            body.SetTransform(comp.transform.position, rad);
+                            //body.SetTransform(comp.transform.position, rad);
+                            body.SetTransformIgnoreContacts(comp.transform.position, rad);
                         }
 
                         //TODO: Resize body shape to the current transform.scale of the components game object. Maybe this should be done before physics update. It should only be hard coded in AddCollider in static objects
