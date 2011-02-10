@@ -16,21 +16,7 @@ namespace PressPlay.FFWD.Import
             {
                 throw new Exception("Color string must either be AARRGGBB or RRGGBB. Was: " + s);
             }
-            Color c = new Color();
-            if (s.Length == 8)
-            {
-                c.a = ParseHexData(s, 0);
-                s = s.Substring(2);
-            }
-            c.r = ParseHexData(s, 0);
-            c.g = ParseHexData(s, 2);
-            c.b = ParseHexData(s, 4);
-            return c;
-        }
-
-        private float ParseHexData(string s, int start)
-        {
-            return ((float)Int32.Parse(s.Substring(start, 2), System.Globalization.NumberStyles.HexNumber)) / 255f;
+            return Color.Parse(s);
         }
 
         protected override void Serialize(IntermediateWriter output, Color value, Microsoft.Xna.Framework.Content.ContentSerializerAttribute format)

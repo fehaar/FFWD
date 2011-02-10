@@ -18,7 +18,39 @@ namespace PressPlay.FFWD.Components
         public Vector3 force;
         public float damping;
         public bool autodestruct;
-        public Color[] colorAnimation;
+
+        [ContentSerializer(ElementName="colorAnimation")]
+        private Microsoft.Xna.Framework.Color[] _colorAnimation;
+        [ContentSerializerIgnore]
+        public Color[] colorAnimation
+        {
+            get
+            {
+                if (_colorAnimation == null)
+                {
+                    return null;
+                }
+                Color[] anim = new Color[_colorAnimation.Length];
+                for (int i = 0; i < _colorAnimation.Length; i++)
+                {
+                    anim[i] = _colorAnimation[i];
+                }
+                return anim;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    _colorAnimation = null;
+                    return;
+                }
+                _colorAnimation = new Microsoft.Xna.Framework.Color[value.Length];
+                for (int i = 0; i < value.Length; i++)
+                {
+                    _colorAnimation[i] = value[i];
+                }
+            }
+        }
 
         private ParticleEmitter emitter;
         private bool hasHadParticles = false;
@@ -56,7 +88,8 @@ namespace PressPlay.FFWD.Components
                     if (hasDamping)
                     {
                         // Apply damping to velocity
-                        emitter.particles[i].Velocity *= (1 - (1 - damping) * Time.deltaTime); // (1 – c ⋅ dt) ⋅ vold
+                        //emitter.particles[i].Velocity *= (1 - (1 - damping) * Time.deltaTime); // (1 – c ⋅ dt) ⋅ vold
+                        emitter.particles[i].Velocity *= Mathf.Pow(damping, Time.deltaTime); // (1 – c ⋅ dt) ⋅ vold
                     }
 
                     if (hasForces)
@@ -66,12 +99,12 @@ namespace PressPlay.FFWD.Components
                         emitter.particles[i].Velocity += (force + RandomForce) * Time.deltaTime;
                     }
 
-                    if (hasTangentForces)
-                    {
-                        // Apply tangent forces
-                        Vector3 v = Vector3.Cross(transform.up, emitter.particles[i].Velocity);
-                        emitter.particles[i].Velocity += (v * emitter.tangentVelocity) * Time.deltaTime;
-                    }
+                    //if (hasTangentForces)
+                    //{
+                    //    // Apply tangent forces
+                    //    Vector3 v = Vector3.Cross(transform.up, emitter.particles[i].Velocity);
+                    //    emitter.particles[i].Velocity += (v * emitter.tangentVelocity) * Time.deltaTime;
+                    //}
 
                     if (hasRotation)
                     {
@@ -114,7 +147,7 @@ namespace PressPlay.FFWD.Components
                     startIndex = 3;
                 }
                 colorScale = startIndex - (int)startIndex;
-                particle.Color = Color.Lerp(colorAnimation[(int)startIndex], colorAnimation[(int)startIndex + 1], colorScale);
+                particle.Color = Microsoft.Xna.Framework.Color.Lerp(_colorAnimation[(int)startIndex], _colorAnimation[(int)startIndex + 1], colorScale);
             }
             else
             {

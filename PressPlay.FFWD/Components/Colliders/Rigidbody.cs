@@ -134,7 +134,8 @@ namespace PressPlay.FFWD.Components
         {
             if (body != null)
             {
-                body.SetTransform(position, body.GetAngle());
+//                body.SetTransform(position, body.GetAngle());
+                body.SetTransformIgnoreContacts(position, body.GetAngle());
                 Physics.RemoveStays(collider);
             }
         }

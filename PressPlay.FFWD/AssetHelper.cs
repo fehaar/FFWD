@@ -38,8 +38,8 @@ namespace PressPlay.FFWD
                 {
 #if DEBUG
                     Debug.Log("Asset not found. " + typeof(T).Name + " at " + contentPath);
-                    return default(T);
 #endif
+                    return default(T);
                 }
             }
             else
@@ -81,7 +81,7 @@ namespace PressPlay.FFWD
         public void Preload<T>(string name)
         {
             staticAssets.Add(name);
-            Load<T>(name);
+            //Load<T>(name);
         }
     }
 }
