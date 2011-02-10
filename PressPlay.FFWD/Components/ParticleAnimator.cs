@@ -19,7 +19,9 @@ namespace PressPlay.FFWD.Components
         public float damping;
         public bool autodestruct;
 
+        [ContentSerializer(ElementName="colorAnimation")]
         private Microsoft.Xna.Framework.Color[] _colorAnimation;
+        [ContentSerializerIgnore]
         public Color[] colorAnimation
         {
             get
