@@ -65,8 +65,14 @@ namespace PressPlay.FFWD.Components
 
         public void FixedUpdate()
         {
-#if DEBUG
+#if DEBUG           
+            if (true)
+            {
+                return;
+            }
+
             Application.particleAnimTimer.Start();
+
 #endif
             bool hasDamping = (damping != 1);
             bool hasForces = (force != Vector3.zero || rndForce != Vector3.zero);
@@ -88,8 +94,9 @@ namespace PressPlay.FFWD.Components
                     if (hasDamping)
                     {
                         // Apply damping to velocity
+                        emitter.particles[i].Velocity *= (1 - (1 - damping) * 0.0015f); // (1 – c ⋅ dt) ⋅ vold hacked to fixed update
                         //emitter.particles[i].Velocity *= (1 - (1 - damping) * Time.deltaTime); // (1 – c ⋅ dt) ⋅ vold
-                        emitter.particles[i].Velocity *= Mathf.Pow(damping, Time.deltaTime); // (1 – c ⋅ dt) ⋅ vold
+                        //emitter.particles[i].Velocity *= Mathf.Pow(damping, Time.deltaTime); // (1 – c ⋅ dt) ⋅ vold
                     }
 
                     if (hasForces)

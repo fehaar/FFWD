@@ -36,6 +36,7 @@ namespace PressPlay.FFWD
         public static Stopwatch raycastTimer = new Stopwatch();
         public static Stopwatch particleAnimTimer = new Stopwatch();
         public static Stopwatch particleEmitTimer = new Stopwatch();
+        public static Stopwatch particleDrawTimer = new Stopwatch();
 #endif
 
         public static ScreenManager.ScreenManager screenManager;
@@ -199,6 +200,8 @@ namespace PressPlay.FFWD
                 particleAnimTimer.Reset();
                 Debug.Display("Particle Emit ms", Application.particleEmitTimer.ElapsedMilliseconds);
                 particleEmitTimer.Reset();
+                Debug.Display("Particle Draw ms", Application.particleDrawTimer.ElapsedMilliseconds);
+                particleDrawTimer.Reset();
             }
             if (ApplicationSettings.ShowTimeBetweenUpdates)
             {

@@ -78,6 +78,14 @@ namespace PressPlay.FFWD.Components
 
         public override int Draw(GraphicsDevice device, Camera cam)
         {
+#if DEBUG
+            if (true)
+            {
+                return 1;
+            }
+            Application.particleDrawTimer.Start();
+#endif
+
             if (emitter.particles == null || emitter.particleCount == 0) return 0;
 
             if (effect == null)
@@ -129,6 +137,9 @@ namespace PressPlay.FFWD.Components
             device.Indices = null;
             device.SetVertexBuffer(null);
 
+#if DEBUG
+            Application.particleDrawTimer.Stop();
+#endif
             return 1;
         }
 

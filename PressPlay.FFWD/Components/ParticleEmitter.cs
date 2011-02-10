@@ -109,6 +109,10 @@ namespace PressPlay.FFWD.Components
             }
 
 #if DEBUG
+            if (true)
+            {
+                return;
+            }
             Application.particleEmitTimer.Start();
 #endif
 
@@ -176,19 +180,28 @@ namespace PressPlay.FFWD.Components
             Vector3 pointInUnitSphere = Random.insideUnitSphere;
             particles[index].Position = Microsoft.Xna.Framework.Vector3.Transform(ellipsoid, transform.rotation) * pointInUnitSphere.x;
 
-            Vector3 emitterVelocity = Vector3.zero;
-            if (gameObject.rigidbody != null && emitterVelocityScale > 0 && useWorldSpace)
+            Vector3 velocity = Vector3.zero;
+            
+            if (useWorldSpace && gameObject.rigidbody != null && emitterVelocityScale > 0)
             {
-                emitterVelocity = gameObject.rigidbody.velocity * emitterVelocityScale;
+                velocity += gameObject.rigidbody.velocity * emitterVelocityScale;
             }
-            Vector3 randomVel = new Vector3(Random.Range(-rndVelocity.x, rndVelocity.x),
-                                            Random.Range(-rndVelocity.y, rndVelocity.y),
-                                            Random.Range(-rndVelocity.z, rndVelocity.z)) / 2;
+            
+            if (rndVelocity.x != 0 || rndVelocity.y != 0 || rndVelocity.z != 0)
+            {
+                velocity += Random.onUnitSphere * rndVelocity;
+            }
 
-            Vector3 emitterTangentVelocity = Random.onUnitSphere * tangentVelocity;
+            if (tangentVelocity.x != 0 || tangentVelocity.y != 0 || tangentVelocity.z != 0)
+            {
+                velocity += Random.onUnitSphere * tangentVelocity;
+            }
+            if (localVelocity.x != 0 || localVelocity.y != 0 || localVelocity.z != 0)
+            {
+                velocity += (Vector3)(-Microsoft.Xna.Framework.Vector3.Transform(localVelocity, transform.rotation));
+            }
 
-            Vector3 localVel = -Microsoft.Xna.Framework.Vector3.Transform(localVelocity, transform.rotation);
-            particles[index].Velocity = emitterVelocity + worldVelocity + localVel + randomVel + emitterTangentVelocity;
+            particles[index].Velocity = velocity;
 
             if (useWorldSpace)
             {
