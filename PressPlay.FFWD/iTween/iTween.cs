@@ -27,7 +27,7 @@ namespace PressPlay.FFWD
         public iTween.EaseType easeType;
         public float time, delay;
         public LoopType loopType;
-        public bool isRunning, isPaused;
+        public bool isRunning, isPaused, isDelayed;
 
         //private members:
         private float runningTime, percentage;
@@ -5042,7 +5042,28 @@ namespace PressPlay.FFWD
         */
 
         void TweenUpdate()
-        {            
+        {
+            if (isDelayed)
+            {
+                // Added by PressPlay   
+                if (useRealTime)
+                {
+                    runningTime += (Time.realtimeSinceStartup - lastRealTime);
+                }
+                else
+                {
+                    runningTime += Time.deltaTime;
+                }
+
+                if (runningTime > delay)
+                {
+                    isDelayed = false;
+                    runningTime = 0;
+                }
+
+                return;
+            }
+            
             apply();
             CallBack("onupdate");
             UpdatePercentage();
@@ -7418,6 +7439,11 @@ namespace PressPlay.FFWD
             else
             {
                 delay = Defaults.delay;
+            }
+
+            if (delay > 0)
+            {
+                isDelayed = true;
             }
 
             if (tweenArguments.ContainsKey("namedcolorvalue"))
