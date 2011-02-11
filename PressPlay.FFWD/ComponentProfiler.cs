@@ -178,7 +178,7 @@ namespace PressPlay.FFWD
         {
             if (name == null)
             {
-                return "null " + totalTicks.ToString();
+                return "null " + totalMilliseconds.ToString();
             }
 
             return name + " " + totalMilliseconds.ToString() + " ms";

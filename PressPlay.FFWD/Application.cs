@@ -98,8 +98,6 @@ namespace PressPlay.FFWD
                 return;
             }
             
-
-
             base.Update(gameTime);
             Time.Update((float)gameTime.ElapsedGameTime.TotalSeconds, (float)gameTime.TotalGameTime.TotalSeconds);
             UpdateFPS(gameTime);
