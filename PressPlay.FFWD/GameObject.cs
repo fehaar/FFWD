@@ -610,7 +610,7 @@ namespace PressPlay.FFWD
 
         public override string ToString()
         {
-            return name + "(" + GetInstanceID() + ")";
+            return name + "(" + GetInstanceID() + ") " + active;
         }
     }
 }

@@ -49,6 +49,11 @@ namespace PressPlay.FFWD.Components
 
         public override int Draw(GraphicsDevice device, Camera cam)
         {
+#if DEBUG
+            Application.particleDrawTimer.Start();
+            Application.particleDraws++;
+#endif
+
             if (emitter.particles == null || emitter.particleCount == 0) return 0;
 
             if (effect == null)
@@ -96,15 +101,17 @@ namespace PressPlay.FFWD.Components
                     particlesRendered * 2
                 );
             }
+
+#if DEBUG
+            Application.particleDrawTimer.Stop();
+#endif
+
             return 1;
         }
 
         private void RenderParticle(int vertexIndex, int triangleIndex, ref Particle particle)
         {
-#if DEBUG
-            Application.particleDrawTimer.Start();
-            Application.particleDraws++;
-#endif
+
 
             Vector3 pos = particle.Position;
             float size = particle.Size / 2;
@@ -134,10 +141,6 @@ namespace PressPlay.FFWD.Components
             triangles[triangleIndex + 3] = (short)(vertexIndex + 1);
             triangles[triangleIndex + 4] = (short)(vertexIndex + 2);
             triangles[triangleIndex + 5] = (short)(vertexIndex + 3);
-
-#if DEBUG
-            Application.particleDrawTimer.Stop();
-#endif
         }
 
     }

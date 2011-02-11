@@ -13,12 +13,19 @@ namespace PressPlay.FFWD
         
         private Stopwatch stopwatch = new Stopwatch();
 
+        public long totalTicks = 0;
+        public float totalMilliseconds {
+            get {
+                return (totalTicks / Stopwatch.Frequency) * 1000f;
+            }
+        }
+
         private ComponentUpdateProfile GetComponentProfileFromList(Component _component)
         {
             ComponentUpdateProfile updateProfile = new ComponentUpdateProfile(_component);
             for (int i = 0; i < componentUpdateProfiles.Count; i++)
             {
-                if (componentUpdateProfiles[i].name == _component.name)
+                if (componentUpdateProfiles[i].component == _component)
                 {
                     return componentUpdateProfiles[i];
                 }
@@ -57,6 +64,7 @@ namespace PressPlay.FFWD
         {
             stopwatch.Stop();
             currentUpdateProfile.updateTotalTicks += stopwatch.ElapsedTicks;
+            totalTicks += stopwatch.ElapsedTicks;
             stopwatch.Reset();
         }
 
@@ -64,6 +72,7 @@ namespace PressPlay.FFWD
         {
             stopwatch.Stop();
             currentUpdateProfile.fixedUpdateTotalTicks += stopwatch.ElapsedTicks;
+            totalTicks += stopwatch.ElapsedTicks;
             stopwatch.Reset();
         }
 
@@ -71,17 +80,19 @@ namespace PressPlay.FFWD
         {
             stopwatch.Stop();
             currentUpdateProfile.lateUpdateTotalTicks += stopwatch.ElapsedTicks;
+            totalTicks += stopwatch.ElapsedTicks;
             stopwatch.Reset();
         }
 
         public void FlushData()
         {
+            totalTicks = 0;
             componentUpdateProfiles.Clear();
         }
 
         public List<ComponentUpdateProfile> Sort()
         {
-            componentUpdateProfiles.Sort();
+            //componentUpdateProfiles.Sort();
 
             return componentUpdateProfiles;
         }
@@ -90,20 +101,20 @@ namespace PressPlay.FFWD
         {
             ComponentUpdateProfile worst = new ComponentUpdateProfile(null);
 
-            for (int i = 0; i < componentUpdateProfiles.Count; i++)
+            /*for (int i = 0; i < componentUpdateProfiles.Count; i++)
             {
                 if (componentUpdateProfiles[i].totalTicks > worst.totalTicks)
                 {
                     worst = componentUpdateProfiles[i];
                 }
-            }
+            }*/
 
             //if (worst.name == null)
             //{
             //    Debug.Log("whuaa");
             //}
-
-            return worst;
+            if (componentUpdateProfiles.Count == 0) { return new ComponentUpdateProfile(); }
+            return componentUpdateProfiles[0];
         }
     }
 
@@ -122,11 +133,17 @@ namespace PressPlay.FFWD
         public int updateCalls;
         public int lateUpdateCalls;
         public int fixedUpdateCalls;
-        public float updateTotalTicks;
-        public float lateUpdateTotalTicks;
-        public float fixedUpdateTotalTicks;
+        public long updateTotalTicks;
+        public long lateUpdateTotalTicks;
+        public long fixedUpdateTotalTicks;
 
-        public float totalTicks 
+        public float totalMilliseconds {
+            get {
+                return (totalTicks / Stopwatch.Frequency) * 1000f;
+            }
+        }
+
+        public long totalTicks 
         {
             get { return updateTotalTicks + lateUpdateTotalTicks + fixedUpdateTotalTicks; }
         }
@@ -141,8 +158,6 @@ namespace PressPlay.FFWD
             lateUpdateTotalTicks = 0;
             fixedUpdateTotalTicks = 0;
         }
-
-
 
         public void Flush()
         {
@@ -166,7 +181,7 @@ namespace PressPlay.FFWD
                 return "null " + totalTicks.ToString();
             }
 
-            return name + " "+totalTicks.ToString()+" ticks";
+            return name + " " + totalMilliseconds.ToString() + " ms";
         }
     }
 }

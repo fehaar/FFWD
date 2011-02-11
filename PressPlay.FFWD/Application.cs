@@ -218,6 +218,7 @@ namespace PressPlay.FFWD
             {
                 componentProfiler.Sort();
                 Debug.Display("GetWorst()", componentProfiler.GetWorst());
+                Debug.Display("total component update time recorded", componentProfiler.totalMilliseconds);
                 iTweenUpdateTime.Reset();
             }
             if (ApplicationSettings.ShowRaycastTime)
