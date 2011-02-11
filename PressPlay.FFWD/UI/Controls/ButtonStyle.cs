@@ -41,6 +41,12 @@ namespace PressPlay.FFWD.UI.Controls
 
         }
 
+        public ButtonStyle(Texture2D texture, Rectangle normal, Rectangle pressed, Rectangle hover)
+            : this(texture, normal, pressed, hover, normal)
+        {
+
+        }
+
         public ButtonStyle(Texture2D texture, Rectangle normal, Rectangle pressed, Rectangle hover, Rectangle disabled)
         {
             this.texture = texture;
