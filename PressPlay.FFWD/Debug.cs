@@ -38,7 +38,11 @@ namespace PressPlay.FFWD
         public static void Log(params object[] message)
         {
 #if DEBUG
+#if WINDOWS
             logBuilder.Clear();
+#else
+            logBuilder = new StringBuilder();
+#endif
             for (int i = 0; i < message.Length; i++)
             {
                 if (message[i] == null)
@@ -50,7 +54,9 @@ namespace PressPlay.FFWD
                     logBuilder.Append(message[i].ToString());
                 }
             }
+#if WINDOWS
             System.Diagnostics.Debug.WriteLine(logBuilder.ToString());
+#endif
             if (DisplayLog)
             {
                 Display("Log", logBuilder.ToString());
@@ -61,9 +67,15 @@ namespace PressPlay.FFWD
         public static void LogFormat(string format, params object[] args)
         {
 #if DEBUG
+#if WINDOWS
             logBuilder.Clear();
+#else
+            logBuilder = new StringBuilder();
+#endif
             logBuilder.AppendFormat(format, args);
+#if WINDOWS
             System.Diagnostics.Debug.WriteLine(logBuilder.ToString());
+#endif
             if (DisplayLog)
             {
                 Display("Log", logBuilder.ToString());
