@@ -1,4 +1,4 @@
-﻿#define COMPONENT_PROFILE
+﻿//#define COMPONENT_PROFILE
 
 using System;
 using System.Linq;
@@ -43,9 +43,11 @@ namespace PressPlay.FFWD
         public static Stopwatch iTweenUpdateTime = new Stopwatch();
         public static Stopwatch raycastTimer = new Stopwatch();
         public static Stopwatch lemmyStuffTimer = new Stopwatch();
+        public static Stopwatch turnOffTimer = new Stopwatch();
         public static Stopwatch particleAnimTimer = new Stopwatch();
         public static Stopwatch particleEmitTimer = new Stopwatch();
         public static Stopwatch particleDrawTimer = new Stopwatch();
+        public static int particleDraws = 0;
 #endif
 
         public static ScreenManager.ScreenManager screenManager;
@@ -228,6 +230,11 @@ namespace PressPlay.FFWD
                 Debug.Display("Lemmystuff ms", Application.lemmyStuffTimer.ElapsedMilliseconds);
                 lemmyStuffTimer.Reset();
             }
+            if (ApplicationSettings.ShowTurnOffTime)
+            {
+                Debug.Display("TurnOffTime ms", Application.turnOffTimer.ElapsedMilliseconds);
+                turnOffTimer.Reset();
+            }
             if (ApplicationSettings.ShowParticleAnimTime)
             {
                 Debug.Display("Particle Anim ms", Application.particleAnimTimer.ElapsedMilliseconds);
@@ -236,6 +243,8 @@ namespace PressPlay.FFWD
                 particleEmitTimer.Reset();
                 Debug.Display("Particle Draw ms", Application.particleDrawTimer.ElapsedMilliseconds);
                 particleDrawTimer.Reset();
+                Debug.Display("Particle Draw calls", Application.particleDraws);
+                Application.particleDraws = 0;
             }
             if (ApplicationSettings.ShowTimeBetweenUpdates)
             {

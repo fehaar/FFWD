@@ -166,8 +166,7 @@ namespace PressPlay.FFWD
                 return "null " + totalTicks.ToString();
             }
 
-            return name + " "+totalTicks.ToString();
+            return name + " "+totalTicks.ToString()+" ticks";
         }
     }
-
 }
