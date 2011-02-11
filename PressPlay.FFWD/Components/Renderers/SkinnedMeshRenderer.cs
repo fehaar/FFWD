@@ -51,9 +51,11 @@ namespace PressPlay.FFWD.Components
 
             // Draw the model.
             CpuSkinnedModelPart modelPart = sharedMesh.GetSkinnedModelPart();
-            modelPart.SetBones(animation.GetTransforms());
+            modelPart.SetBones(animation.GetTransforms(), ref sharedMesh.skinnedModel.BakedTransform);
 
-            modelPart.Effect.World = sharedMesh.skinnedModel.BakedTransform * transform.world;
+            
+
+            modelPart.Effect.World = transform.world;
             modelPart.Effect.View = cam.view;
             modelPart.Effect.Projection = cam.projectionMatrix;
             if (material.texture != null)

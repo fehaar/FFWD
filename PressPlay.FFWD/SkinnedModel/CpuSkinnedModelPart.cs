@@ -19,7 +19,7 @@ namespace PressPlay.FFWD.SkinnedModel
         private readonly int triangleCount;
         private readonly int vertexCount;
         private readonly CpuVertex[] cpuVertices;
-        private readonly VertexPositionNormalTexture[] gpuVertices;
+        internal readonly VertexPositionNormalTexture[] gpuVertices;
 
         private readonly DynamicVertexBuffer vertexBuffer;
         private readonly IndexBuffer indexBuffer;
@@ -45,7 +45,7 @@ namespace PressPlay.FFWD.SkinnedModel
             }
         }
 
-        public void SetBones(Matrix[] bones)
+        public void SetBones(Matrix[] bones, ref Matrix bakedTransform)
         {
             // skin all of the vertices
             for (int i = 0; i < vertexCount; i++)
@@ -54,6 +54,7 @@ namespace PressPlay.FFWD.SkinnedModel
                     bones,
                     ref cpuVertices[i].Position,
                     ref cpuVertices[i].Normal,
+                    ref bakedTransform,
                     ref cpuVertices[i].BlendIndices,
                     ref cpuVertices[i].BlendWeights,
                     out gpuVertices[i].Position,
