@@ -113,6 +113,14 @@ namespace PressPlay.FFWD.Components
                     particlesRendered++;
                 }
             }
+
+#if DEBUG
+            if (Camera.logRenderCalls)
+            {
+                Debug.LogFormat("Particle: {0} on {1}. Count {2}", gameObject, cam.gameObject, particlesRendered);
+            }
+#endif
+
             vertexBuffer.SetData(vertices, 0, particlesRendered * 4);
 
             device.Indices = indexBuffer;

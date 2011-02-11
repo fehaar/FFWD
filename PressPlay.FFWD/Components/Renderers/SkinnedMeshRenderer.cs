@@ -38,44 +38,21 @@ namespace PressPlay.FFWD.Components
             BoundingSphere sphere = new BoundingSphere(transform.position, sharedMesh.boundingSphere.Radius);
             if (cam.DoFrustumCulling(ref sphere))
             {
+#if DEBUG
+                if (Camera.logRenderCalls)
+                {
+                    Debug.LogFormat("VP cull {0} with radius {1} pos {2} cam {3} at {4}", gameObject, sharedMesh.boundingSphere.Radius, transform.position, cam.gameObject, cam.transform.position);
+                }
+#endif
                 return 0;
             }
-
-            // Do we have negative scale - if so, switch culling
-            //RasterizerState oldRaster = device.RasterizerState;
-            //if (transform.lossyScale.x < 0 || transform.lossyScale.y < 0 || transform.lossyScale.z < 0)
-            //{
-            //    device.RasterizerState = new RasterizerState() { FillMode = oldRaster.FillMode, CullMode = CullMode.CullClockwiseFace };
-            //}
-            material.SetBlendState(device);
 
             // Draw the model.
             CpuSkinnedModelPart modelPart = sharedMesh.GetSkinnedModelPart();
             Matrix world = sharedMesh.skinnedModel.BakedTransform * transform.world;
             modelPart.SetBones(animation.GetTransforms(), ref world);
 
-            cam.BatchRender(modelPart, sharedMaterial, transform);
-
-            //modelPart.Effect.World = transform.world;
-            //modelPart.Effect.View = cam.view;
-            //modelPart.Effect.Projection = cam.projectionMatrix;
-            //if (material.texture != null)
-            //{
-            //    modelPart.Effect.TextureEnabled = true;
-            //    modelPart.Effect.Texture = material.texture;
-            //}
-            //else
-            //{
-            //    modelPart.Effect.DiffuseColor = material.color;
-            //}
-
-            //modelPart.Draw();
-
-            //if (transform.lossyScale.x < 0 || transform.lossyScale.y < 0 || transform.lossyScale.z < 0)
-            //{
-            //    device.RasterizerState = oldRaster;
-            //}
-            return 1;
+            return cam.BatchRender(modelPart, sharedMaterial, transform);
         }
         #endregion
     }

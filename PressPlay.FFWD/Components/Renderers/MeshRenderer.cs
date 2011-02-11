@@ -24,6 +24,12 @@ namespace PressPlay.FFWD.Components
             BoundingSphere sphere = new BoundingSphere(transform.position, filter.boundingSphere.Radius);
             if (cam.DoFrustumCulling(ref sphere))
             {
+#if DEBUG
+                if (Camera.logRenderCalls)
+                {
+                    Debug.LogFormat("VP cull {0} with radius {1} pos {2} cam {3} at {4}", gameObject, filter.boundingSphere.Radius, transform.position, cam.gameObject, cam.transform.position);
+                }
+#endif
                 return 0;
             }
 
@@ -38,6 +44,13 @@ namespace PressPlay.FFWD.Components
             ModelMesh mesh = filter.GetModelMesh();
             if (mesh != null)
             {
+#if DEBUG
+                if (Camera.logRenderCalls)
+                {
+                    Debug.LogFormat("Mesh: {0} on {1}", gameObject, cam.gameObject);
+                }
+#endif
+
                 material.SetBlendState(device);
 
                 for (int e = 0; e < mesh.Effects.Count; e++)
@@ -65,8 +78,9 @@ namespace PressPlay.FFWD.Components
                     }
                     mesh.Draw();
                 }
+                return 1;
             }
-            return 1;
+            return 0;
         }
         #endregion
     }

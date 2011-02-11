@@ -191,12 +191,16 @@ namespace PressPlay.FFWD.Components
             renderQueue.Remove(renderer);
         }
 
+#if DEBUG
+        internal static bool logRenderCalls = false;
+#endif
+
         internal static void DoRender(GraphicsDevice device)
         {
 #if DEBUG && WINDOWS
             if (Input.GetMouseButtonUp(2))
             {
-                dynamicBatchRenderer.logRenderCalls = true;
+                logRenderCalls = true;
                 Debug.Log("----------- Render log begin ---------------", Time.realtimeSinceStartup);
             }
 #endif
@@ -238,7 +242,7 @@ namespace PressPlay.FFWD.Components
             Debug.Display("Estimated Draw calls", estimatedDrawCalls);
 
 #if DEBUG
-            dynamicBatchRenderer.logRenderCalls = false;
+            logRenderCalls = false;
 #endif
         }
 
@@ -367,6 +371,12 @@ namespace PressPlay.FFWD.Components
 
         internal int BatchRender<T>(T data, Material material, Transform transform)
         {
+#if DEBUG
+            if (Camera.logRenderCalls)
+            {
+                Debug.LogFormat("Dyn batch: {0} on {1}", transform.gameObject, gameObject);
+            }
+#endif
             return dynamicBatchRenderer.Draw(this, material, data, transform);
         }
 

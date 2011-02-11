@@ -18,10 +18,6 @@ namespace PressPlay.FFWD.Components
         public static int InitialBatchSize = 20;
         public static int BatchExpansion = 5;
 
-#if DEBUG
-        internal bool logRenderCalls = false;
-#endif
-
         private Material currentMaterial = Material.Default;
 
         private GraphicsDevice device;
@@ -121,12 +117,6 @@ namespace PressPlay.FFWD.Components
 
             if (currentIndexIndex == 0)
             {
-#if DEBUG
-                if (logRenderCalls)
-                {
-                    Debug.Log("Dropping rendering of the material ", currentMaterial.mainTexture, " on ", cam.gameObject.ToString());
-                }
-#endif
                 return 0;
             }
 
@@ -143,9 +133,9 @@ namespace PressPlay.FFWD.Components
             currentMaterial.SetBlendState(device);
 
 #if DEBUG
-            if (logRenderCalls)
+            if (Camera.logRenderCalls)
             {
-                Debug.LogFormat("Batch: {0} on {1} batched {2}, verts {3}, indices {4}", currentMaterial.mainTexture, cam.gameObject, currentBatchIndex, currentVertexIndex, currentIndexIndex);
+                Debug.LogFormat("Dyn batch draw: {0} on {1} batched {2}, verts {3}, indices {4}", currentMaterial.mainTexture, cam.gameObject, currentBatchIndex, currentVertexIndex, currentIndexIndex);
             }
 #endif
 
@@ -206,11 +196,6 @@ namespace PressPlay.FFWD.Components
 
         private void PrepareVerts(CpuSkinnedModelPart model, ref Matrix transform)
         {
-            if (positionData.Length < model.gpuVertices.Length)
-            {
-                positionData = new Microsoft.Xna.Framework.Vector3[model.gpuVertices.Length];
-            }
-
             model.gpuVertices.CopyTo(vertexData, currentVertexIndex);
             for (int t = 0; t < model.indices.Length; t++)
             {
