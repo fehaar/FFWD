@@ -28,6 +28,19 @@ namespace PressPlay.FFWD.Components
             base.Awake();
 
             emitter = gameObject.GetComponent<ParticleEmitter>();
+
+            // Create all triangles as they will not change
+            triangles = new short[emitter.particles.Length * 6];
+            int j = 0;
+            for (int i = 0; i < emitter.particles.Length * 6; i += 6, j += 4)
+            {
+                triangles[i] = (short)j;
+                triangles[i + 1] = (short)(j + 2);
+                triangles[i + 2] = (short)(j + 1);
+                triangles[i + 3] = (short)(j + 1);
+                triangles[i + 4] = (short)(j + 2);
+                triangles[i + 5] = (short)(j + 3);
+            }
         }
 
         public Rectangle GetSourceRect()
@@ -75,7 +88,6 @@ namespace PressPlay.FFWD.Components
             if (vertices == null)
 	        {
                 vertices = new VertexPositionColorTexture[emitter.particles.Length * 4];
-                triangles = new short[emitter.particles.Length * 6];
 	        }
 
             int particlesRendered = 0;
@@ -134,13 +146,6 @@ namespace PressPlay.FFWD.Components
             vertices[vertexIndex + 3].TextureCoordinate = new Microsoft.Xna.Framework.Vector2(1, 0);
             vertices[vertexIndex + 3].Position = pos + (Vector3)new Vector2(size, -size);
             vertices[vertexIndex + 3].Color = particle.Color;
-
-            triangles[triangleIndex] = (short)vertexIndex;
-            triangles[triangleIndex + 1] = (short)(vertexIndex + 2);
-            triangles[triangleIndex + 2] = (short)(vertexIndex + 1);
-            triangles[triangleIndex + 3] = (short)(vertexIndex + 1);
-            triangles[triangleIndex + 4] = (short)(vertexIndex + 2);
-            triangles[triangleIndex + 5] = (short)(vertexIndex + 3);
         }
 
     }
