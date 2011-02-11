@@ -93,7 +93,7 @@ namespace PressPlay.FFWD.Components
                 data[currentBatchIndex].mesh = null;
                 data[currentBatchIndex].model = part;
                 batchVertexSize += part.gpuVertices.Length;
-                batchIndexSize += part.indices.Length;
+                batchIndexSize += part.indices.Length + 3;
             }
 
             currentBatchIndex++;
@@ -128,6 +128,11 @@ namespace PressPlay.FFWD.Components
                 effect.LightingEnabled = false;
             }
 
+            RasterizerState oldRaster = device.RasterizerState;
+            RasterizerState rasterizerState = new RasterizerState();
+            rasterizerState.CullMode = CullMode.None;
+            device.RasterizerState = rasterizerState;
+            
             effect.View = cam.view;
             effect.Projection = cam.projectionMatrix;
             currentMaterial.SetBlendState(device);
@@ -154,7 +159,7 @@ namespace PressPlay.FFWD.Components
             {
                 pass.Apply();
                 device.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(
-                    PrimitiveType.TriangleList,
+                    PrimitiveType.LineList,
                     vertexData,
                     0,
                     currentVertexIndex,
@@ -163,6 +168,7 @@ namespace PressPlay.FFWD.Components
                     currentIndexIndex / 3
                 );
             }
+            device.RasterizerState = oldRaster;
 
             EndBatch();
             return 1;
@@ -197,6 +203,16 @@ namespace PressPlay.FFWD.Components
         private void PrepareVerts(CpuSkinnedModelPart model, ref Matrix transform)
         {
             model.gpuVertices.CopyTo(vertexData, currentVertexIndex);
+
+            // Add degenerate triangles to move to the next model
+            //if (currentIndexIndex > 0)
+            //{
+            //    indexData[currentIndexIndex] = indexData[currentIndexIndex - 1];
+            //    indexData[currentIndexIndex + 1] = indexData[currentIndexIndex - 1];
+            //    indexData[currentIndexIndex + 2] = indexData[currentIndexIndex - 1];
+            //    currentIndexIndex += 3;
+            //}
+
             for (int t = 0; t < model.indices.Length; t++)
             {
                 indexData[currentIndexIndex + t] = (short)(model.indices[t] + currentVertexIndex);
@@ -231,6 +247,14 @@ namespace PressPlay.FFWD.Components
                     vertexData[currentVertexIndex + v].Normal = mesh.normals[v];
                 }
             }
+
+            // Add degenerate triangles to move to the next model
+            //if (currentIndexIndex > 0)
+            //{
+            //    indexData[currentIndexIndex] = indexData[currentIndexIndex - 1];
+            //    indexData[currentIndexIndex + 1] = indexData[currentIndexIndex - 1];
+            //    currentIndexIndex += 2;
+            //}
 
             for (int t = 0; t < mesh.triangles.Length; t++)
             {
