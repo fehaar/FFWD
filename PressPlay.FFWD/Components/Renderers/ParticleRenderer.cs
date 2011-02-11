@@ -19,44 +19,15 @@ namespace PressPlay.FFWD.Components
         private ParticleEmitter emitter;
         private VertexPositionColorTexture[] vertices;
         private short[] triangles;
-
-        private DynamicVertexBuffer vertexBuffer;
-        private IndexBuffer indexBuffer;
-
+        
         [ContentSerializerIgnore]
         public Rectangle ParticleBounds;
 
         public override void Awake()
         {
+            base.Awake();
+
             emitter = gameObject.GetComponent<ParticleEmitter>();
-            CreateBuffers();
-        }
-
-        public override void Start()
-        {
-            CreateBuffers();
-        }
-
-        private void CreateBuffers()
-        {
-            if (vertexBuffer == null && (emitter.particles != null))
-            {
-                vertexBuffer = new DynamicVertexBuffer(Application.screenManager.GraphicsDevice, typeof(VertexPositionColorTexture), emitter.particles.Length * 4, BufferUsage.WriteOnly);
-                indexBuffer = new IndexBuffer(Application.screenManager.GraphicsDevice, IndexElementSize.SixteenBits, emitter.particles.Length * 6, BufferUsage.WriteOnly);
-
-                triangles = new short[emitter.particles.Length * 6];
-                int j = 0;
-                for (int i = 0; i < emitter.particles.Length * 6; i += 6, j += 4)
-                {
-                    triangles[i] = (short)j;
-                    triangles[i + 1] = (short)(j + 2);
-                    triangles[i + 2] = (short)(j + 1);
-                    triangles[i + 3] = (short)(j + 1);
-                    triangles[i + 4] = (short)(j + 2);
-                    triangles[i + 5] = (short)(j + 3);
-                }
-                indexBuffer.SetData(triangles, 0, triangles.Length);
-            }
         }
 
         public Rectangle GetSourceRect()
@@ -78,11 +49,6 @@ namespace PressPlay.FFWD.Components
 
         public override int Draw(GraphicsDevice device, Camera cam)
         {
-#if DEBUG
-            Application.particleDrawTimer.Start();
-            Application.particleDraws++;
-#endif
-
             if (emitter.particles == null || emitter.particleCount == 0) return 0;
 
             if (effect == null)
@@ -104,6 +70,7 @@ namespace PressPlay.FFWD.Components
             if (vertices == null)
 	        {
                 vertices = new VertexPositionColorTexture[emitter.particles.Length * 4];
+                triangles = new short[emitter.particles.Length * 6];
 	        }
 
             int particlesRendered = 0;
@@ -115,55 +82,62 @@ namespace PressPlay.FFWD.Components
                     particlesRendered++;
                 }
             }
-            vertexBuffer.SetData(vertices, 0, particlesRendered * 4);
 
-            device.Indices = indexBuffer;
-            device.SetVertexBuffer(vertexBuffer);
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
-                device.DrawIndexedPrimitives(
+                device.DrawUserIndexedPrimitives<VertexPositionColorTexture>(
                     PrimitiveType.TriangleList,
-                    0,
+                    vertices,
                     0,
                     particlesRendered * 4,
+                    triangles,
                     0,
                     particlesRendered * 2
                 );
             }
-            device.Indices = null;
-            device.SetVertexBuffer(null);
-
-#if DEBUG
-            Application.particleDrawTimer.Stop();
-#endif
             return 1;
         }
 
         private void RenderParticle(int vertexIndex, int triangleIndex, ref Particle particle)
         {
+#if DEBUG
+            Application.particleDrawTimer.Start();
+            Application.particleDraws++;
+#endif
+
             Vector3 pos = particle.Position;
             float size = particle.Size / 2;
             if (!emitter.useWorldSpace)
             {
                 pos += transform.position;
             }
-            // NOTE: Implies that y is depth
             vertices[vertexIndex].TextureCoordinate = new Microsoft.Xna.Framework.Vector2(0, 1);
-            vertices[vertexIndex].Position = new Microsoft.Xna.Framework.Vector3(pos.x - size, pos.y, pos.z + size);
+            vertices[vertexIndex].Position = pos + (Vector3)new Vector2(-size, size);
             vertices[vertexIndex].Color = particle.Color;
 
             vertices[vertexIndex + 1].TextureCoordinate = new Microsoft.Xna.Framework.Vector2(0, 0);
-            vertices[vertexIndex + 1].Position = new Microsoft.Xna.Framework.Vector3(pos.x - size, pos.y, pos.z - size);
+            vertices[vertexIndex + 1].Position = pos + (Vector3)new Vector2(-size, -size);
             vertices[vertexIndex + 1].Color = particle.Color;
 
             vertices[vertexIndex + 2].TextureCoordinate = new Microsoft.Xna.Framework.Vector2(1, 1);
-            vertices[vertexIndex + 2].Position = new Microsoft.Xna.Framework.Vector3(pos.x + size, pos.y, pos.z + size);
+            vertices[vertexIndex + 2].Position = pos + (Vector3)new Vector2(size, size);
             vertices[vertexIndex + 2].Color = particle.Color;
 
             vertices[vertexIndex + 3].TextureCoordinate = new Microsoft.Xna.Framework.Vector2(1, 0);
-            vertices[vertexIndex + 3].Position = new Microsoft.Xna.Framework.Vector3(pos.x + size, pos.y, pos.z - size);
+            vertices[vertexIndex + 3].Position = pos + (Vector3)new Vector2(size, -size);
             vertices[vertexIndex + 3].Color = particle.Color;
+
+            triangles[triangleIndex] = (short)vertexIndex;
+            triangles[triangleIndex + 1] = (short)(vertexIndex + 2);
+            triangles[triangleIndex + 2] = (short)(vertexIndex + 1);
+            triangles[triangleIndex + 3] = (short)(vertexIndex + 1);
+            triangles[triangleIndex + 4] = (short)(vertexIndex + 2);
+            triangles[triangleIndex + 5] = (short)(vertexIndex + 3);
+
+#if DEBUG
+            Application.particleDrawTimer.Stop();
+#endif
         }
 
     }
