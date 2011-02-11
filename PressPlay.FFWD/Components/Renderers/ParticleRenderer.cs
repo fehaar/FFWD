@@ -81,7 +81,6 @@ namespace PressPlay.FFWD.Components
 #if DEBUG
             Application.particleDrawTimer.Start();
 #endif
-
             if (emitter.particles == null || emitter.particleCount == 0) return 0;
 
             if (effect == null)

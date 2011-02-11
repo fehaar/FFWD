@@ -20,6 +20,7 @@ namespace PressPlay.FFWD.SkinnedModel
         private readonly int vertexCount;
         private readonly CpuVertex[] cpuVertices;
         internal readonly VertexPositionNormalTexture[] gpuVertices;
+        internal readonly short[] indices;
 
         private readonly DynamicVertexBuffer vertexBuffer;
         private readonly IndexBuffer indexBuffer;
@@ -37,6 +38,9 @@ namespace PressPlay.FFWD.SkinnedModel
             // create our GPU resources
             gpuVertices = new VertexPositionNormalTexture[cpuVertices.Length];
             vertexBuffer = new DynamicVertexBuffer(indexBuffer.GraphicsDevice, typeof(VertexPositionNormalTexture), cpuVertices.Length, BufferUsage.WriteOnly);
+
+            indices = new short[indexBuffer.IndexCount];
+            indexBuffer.GetData<short>(indices);
 
             // copy texture coordinates once since they don't change with skinnning
             for (int i = 0; i < cpuVertices.Length; i++)

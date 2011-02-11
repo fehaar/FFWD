@@ -20,18 +20,19 @@ namespace PressPlay.FFWD.Components
             {                
                 return 0;
             }
-            if (filter.CanBatch())
-            {
-                return cam.BatchRender(filter, material, transform);
-            }
-
-            Matrix world = transform.world;
 
             BoundingSphere sphere = new BoundingSphere(transform.position, filter.boundingSphere.Radius);
             if (cam.DoFrustumCulling(ref sphere))
             {
                 return 0;
             }
+
+            if (filter.CanBatch())
+            {
+                return cam.BatchRender(filter, material, transform);
+            }
+
+            Matrix world = transform.world;
 
             // Draw the model.
             ModelMesh mesh = filter.GetModelMesh();

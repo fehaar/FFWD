@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.Xna.Framework.Graphics;
 using PressPlay.FFWD.Components;
 using Microsoft.Xna.Framework;
+using System.Text;
 
 namespace PressPlay.FFWD
 {
@@ -29,13 +30,45 @@ namespace PressPlay.FFWD
 
         public static bool DisplayLog = false;
 
-        public static void Log(object message)
+#if DEBUG
+        private static StringBuilder logBuilder = new StringBuilder();
+#endif
+
+
+        public static void Log(params object[] message)
         {
-            System.Diagnostics.Debug.WriteLine(message.ToString());
+#if DEBUG
+            logBuilder.Clear();
+            for (int i = 0; i < message.Length; i++)
+            {
+                if (message[i] == null)
+                {
+                    logBuilder.Append("[null]");
+                }
+                else
+                {
+                    logBuilder.Append(message[i].ToString());
+                }
+            }
+            System.Diagnostics.Debug.WriteLine(logBuilder.ToString());
             if (DisplayLog)
             {
-                Display("Log", message);
+                Display("Log", logBuilder.ToString());
             }
+#endif
+        }
+
+        public static void LogFormat(string format, params object[] args)
+        {
+#if DEBUG
+            logBuilder.Clear();
+            logBuilder.AppendFormat(format, args);
+            System.Diagnostics.Debug.WriteLine(logBuilder.ToString());
+            if (DisplayLog)
+            {
+                Display("Log", logBuilder.ToString());
+            }
+#endif
         }
 
         public static void LogError(string message)

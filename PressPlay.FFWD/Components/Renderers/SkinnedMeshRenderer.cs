@@ -51,24 +51,25 @@ namespace PressPlay.FFWD.Components
 
             // Draw the model.
             CpuSkinnedModelPart modelPart = sharedMesh.GetSkinnedModelPart();
-            modelPart.SetBones(animation.GetTransforms(), ref sharedMesh.skinnedModel.BakedTransform);
+            Matrix world = sharedMesh.skinnedModel.BakedTransform * transform.world;
+            modelPart.SetBones(animation.GetTransforms(), ref world);
 
-            
+            cam.BatchRender(modelPart, sharedMaterial, transform);
 
-            modelPart.Effect.World = transform.world;
-            modelPart.Effect.View = cam.view;
-            modelPart.Effect.Projection = cam.projectionMatrix;
-            if (material.texture != null)
-            {
-                modelPart.Effect.TextureEnabled = true;
-                modelPart.Effect.Texture = material.texture;
-            }
-            else
-            {
-                modelPart.Effect.DiffuseColor = material.color;
-            }
+            //modelPart.Effect.World = transform.world;
+            //modelPart.Effect.View = cam.view;
+            //modelPart.Effect.Projection = cam.projectionMatrix;
+            //if (material.texture != null)
+            //{
+            //    modelPart.Effect.TextureEnabled = true;
+            //    modelPart.Effect.Texture = material.texture;
+            //}
+            //else
+            //{
+            //    modelPart.Effect.DiffuseColor = material.color;
+            //}
 
-            modelPart.Draw();
+            //modelPart.Draw();
 
             //if (transform.lossyScale.x < 0 || transform.lossyScale.y < 0 || transform.lossyScale.z < 0)
             //{
