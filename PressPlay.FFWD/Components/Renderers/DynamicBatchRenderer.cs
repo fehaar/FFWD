@@ -159,7 +159,7 @@ namespace PressPlay.FFWD.Components
             {
                 pass.Apply();
                 device.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(
-                    PrimitiveType.LineList,
+                    PrimitiveType.TriangleList,
                     vertexData,
                     0,
                     currentVertexIndex,
