@@ -546,9 +546,19 @@ namespace PressPlay.FFWD
             quitNextUpdate = true;
         }
 
+        public static T Load<T>(string name)
+        {
+            return assetHelper.Load<T>(name);
+        }
+
         public static void Preload<T>(string name)
         {
             assetHelper.Preload<T>(name);
+        }
+
+        public static void PreloadInstant<T>(string name)
+        {
+            assetHelper.PreloadInstant<T>(name);
         }
     }
 }

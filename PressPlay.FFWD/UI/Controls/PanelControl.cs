@@ -48,7 +48,7 @@ namespace PressPlay.FFWD.UI.Controls
 
                 //Debug.Log(i + " : " + child.transform.localPosition);
 
-                y += child.size.y + ySpacing;
+                y += child.bounds.Height + ySpacing;
             }
 
             InvalidateAutoSize();

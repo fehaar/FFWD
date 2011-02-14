@@ -14,6 +14,7 @@ namespace PressPlay.FFWD.UI.Controls
         private Vector2 _size;
         private bool sizeValid = false;
         private bool autoSize = true;
+        public bool ignoreSize = false;
         protected List<Control> children = null;
         public Vector2 drawOffset = Vector2.zero;
         /// <summary>
@@ -173,6 +174,11 @@ namespace PressPlay.FFWD.UI.Controls
                     Vector2 bottomRight = new Vector2(float.MinValue, float.MinValue);
                     for (int i = 0; i < children.Count; i++)
                     {
+                        if (children[i].ignoreSize)
+                        {
+                            continue;
+                        }
+                        
                         topLeft.x = Math.Min(topLeft.x, children[i].position.x);
                         topLeft.y = Math.Min(topLeft.y, children[i].position.y);
 
@@ -187,6 +193,11 @@ namespace PressPlay.FFWD.UI.Controls
                     //Debug.Log("childBounds" + childBounds);
                     for (int i = 1; i < children.Count; i++)
                     {
+                        if (children[i].ignoreSize)
+                        {
+                            continue;
+                        }                        
+                        
                         Vector2 corner = children[i].position + children[i].size;
                         //Debug.Log("children[" + i + "]" + corner);
                         childBounds.x = Math.Max(childBounds.x, corner.x);
@@ -260,7 +271,17 @@ namespace PressPlay.FFWD.UI.Controls
                 return;
             }
 
+            // This makes the parent ignore the size of this control in its size
+            ignoreSize = true;
+
+            // We want to make sure, that the parent recalculates its size
+            InvalidateAutoSize();
+
+            //transform.localPosition = new Vector3((parent.bounds.Width / 2) - (bounds.Width / 2), transform.localPosition.y, transform.localPosition.z);
             transform.localPosition = new Vector3(offset.x + (parent.bounds.Width / 2) - (bounds.Width / 2), transform.localPosition.y, offset.y + (parent.bounds.Height / 2) - (bounds.Height / 2));
+
+            ignoreSize = false;
+            InvalidateAutoSize();
         }
 
         public void AlignCenter(Rectangle alignBounds)
