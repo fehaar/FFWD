@@ -198,7 +198,8 @@ namespace PressPlay.FFWD.Components
             }
             if (localVelocity.x != 0 || localVelocity.y != 0 || localVelocity.z != 0)
             {
-                velocity += (Vector3)(-Microsoft.Xna.Framework.Vector3.Transform(localVelocity, transform.rotation));
+                //velocity += (Vector3)(-Microsoft.Xna.Framework.Vector3.Transform(localVelocity, transform.rotation));
+                velocity += (Vector3)(Microsoft.Xna.Framework.Vector3.Transform(localVelocity, transform.rotation));
             }
 
             particles[index].Velocity = velocity;
