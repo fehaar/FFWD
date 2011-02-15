@@ -397,6 +397,7 @@ namespace PressPlay.FFWD.ScreenManager
             }
         }
 
+        public virtual void OnNotifyCallback() { }
         public virtual void OnTransitionOnBegin() { }
         public virtual void OnTransitionOnComplete(){ }
         public virtual void OnTransitionOffBegin() { }

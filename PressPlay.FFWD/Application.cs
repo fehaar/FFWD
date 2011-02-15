@@ -55,11 +55,20 @@ namespace PressPlay.FFWD
         private static Dictionary<int, UnityObject> objects = new Dictionary<int, UnityObject>();
         internal static List<Component> newComponents = new List<Component>();
         internal static List<Asset> newAssets = new List<Asset>();
+
         private static List<Component> activeComponents = new List<Component>();
         internal static List<UnityObject> markedForDestruction = new List<UnityObject>();
         internal static List<GameObject> dontDestroyOnLoad = new List<GameObject>();
         private static List<Interfaces.IUpdateable> lateUpdates = new List<Interfaces.IUpdateable>();
+
         internal static bool loadingScene = false;
+
+        // Lists and variables used for loading a scene
+        internal static bool isLoadingAssetBeforeSceneInitialize = false;
+        private static Scene scene;
+        private static Stopwatch stopWatch = new Stopwatch();
+        internal static List<Component> tempComponents = new List<Component>();
+        internal static List<Asset> tempAssets = new List<Asset>();
 
         private static AssetHelper assetHelper = new AssetHelper();
 
@@ -101,6 +110,14 @@ namespace PressPlay.FFWD
             base.Update(gameTime);
             Time.Update((float)gameTime.ElapsedGameTime.TotalSeconds, (float)gameTime.TotalGameTime.TotalSeconds);
             UpdateFPS(gameTime);
+
+            if (isLoadingAssetBeforeSceneInitialize)
+            {
+                LoadSceneAssets();
+                return;
+            }
+
+            //Debug.Log("Updating after loading scene");
 
             if (!String.IsNullOrEmpty(sceneToLoad))
             {
@@ -304,16 +321,64 @@ namespace PressPlay.FFWD
 
         private void DoSceneLoad()
         {
+            Debug.Log("DoSceneLoad");            
+            
             if (!String.IsNullOrEmpty(loadedLevelName))
             {
                 assetHelper.Unload(loadedLevelName);
             }
 
             loadingScene = true;
+            isLoadingAssetBeforeSceneInitialize = true;
             loadedLevelName = sceneToLoad.Contains('/') ? sceneToLoad.Substring(sceneToLoad.LastIndexOf('/') + 1) : sceneToLoad;
-            Scene scene = assetHelper.Load<Scene>(sceneToLoad);
+            scene = assetHelper.Load<Scene>(sceneToLoad);
             sceneToLoad = "";
+        }
+
+        private void LoadSceneAssets()
+        {
+            //Debug.Log("Application > LoadSceneAssets. Assets left to load: "+tempAssets.Count);
+
+            stopWatch.Start();
+
+            int count = 0;
+
+            for (int i = tempAssets.Count - 1; i >= 0; i--)
+            {
+                //Debug.Log("Assets left: "+tempAssets.Count+" Elapsed time: " + stopWatch.ElapsedMilliseconds);
+
+                if (stopWatch.ElapsedTicks > ApplicationSettings.AssetLoadInterval)
+                {
+                    //Debug.Log("Application > Chewing asset loading. Assets left to load: " + tempAssets.Count);
+                    stopWatch.Stop();
+                    stopWatch.Reset();
+                    return;
+                }
+
+                //Debug.Log("Assets left: " + tempAssets.Count + " Elapsed time: " + stopWatch.ElapsedMilliseconds);
+
+                tempAssets[i].LoadAsset(assetHelper);
+                tempAssets.RemoveAt(i);
+                count++;
+            }
+
+            //Debug.Log("Finished asset loading. Elapsed time: " + stopWatch.ElapsedTicks + " count: " + count);
+
+            OnSceneLoadComplete();
+        }
+
+        private void OnSceneLoadComplete()
+        {
+            Debug.Log("OnSceneLoadComplete");
+            
+            stopWatch.Stop();
+            stopWatch.Reset();
+
+            newComponents.AddRange(tempComponents);
+            tempComponents.Clear();
+
             loadingScene = false;
+            isLoadingAssetBeforeSceneInitialize = false;
 
             if (scene != null)
             {
@@ -461,12 +526,29 @@ namespace PressPlay.FFWD
 
         internal static void AddNewComponent(Component component)
         {
-            newComponents.Add(component);
+
+            if (isLoadingAssetBeforeSceneInitialize)
+            {
+                tempComponents.Add(component);
+            }
+            else
+            {
+                newComponents.Add(component);
+            }
         }
 
         internal static void AddNewAsset(Asset asset)
         {
             newAssets.Add(asset);
+
+            if (isLoadingAssetBeforeSceneInitialize)
+            {
+                tempAssets.Add(asset);
+            }
+            else
+            {
+                newAssets.Add(asset);
+            }
         }
 
         internal static void Reset()
@@ -546,9 +628,19 @@ namespace PressPlay.FFWD
             quitNextUpdate = true;
         }
 
+        public static T Load<T>(string name)
+        {
+            return assetHelper.Load<T>(name);
+        }
+
         public static void Preload<T>(string name)
         {
             assetHelper.Preload<T>(name);
+        }
+
+        public static void PreloadInstant<T>(string name)
+        {
+            assetHelper.PreloadInstant<T>(name);
         }
     }
 }

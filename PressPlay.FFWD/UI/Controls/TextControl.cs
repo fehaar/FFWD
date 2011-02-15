@@ -86,6 +86,16 @@ namespace PressPlay.FFWD.UI.Controls
             //this.Color = color;
         }
 
+        public void ScaleTextToFit(Rectangle rect, float margin)
+        {
+            if (bounds.Width < rect.Width - margin)
+            {
+                return;
+            }
+            transform.localScale = new Vector3((rect.Width - margin) / (bounds.Width));
+            InvalidateAutoSize();
+        }
+
         public void CenterTextWithinBounds(Rectangle rect)
         {
             Vector2 pos = Vector2.zero;

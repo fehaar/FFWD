@@ -23,7 +23,7 @@ namespace PressPlay.FFWD
         public List<GameObject> prefabs { get; set; }
 
         public void AfterLoad(Dictionary<int, UnityObject> idMap)
-        {
+        {            
             for (int i = 0; i < gameObjects.Count; i++)
             {
                 gameObjects[i].AfterLoad(idMap);
@@ -32,6 +32,7 @@ namespace PressPlay.FFWD
             {
                 prefabs[i].isPrefab = true;
                 prefabs[i].AfterLoad(idMap);
+                //Debug.Log("Prefab name: "+prefabs[i].name+" prefab: "+prefabs[i]);
             }
         }
 
