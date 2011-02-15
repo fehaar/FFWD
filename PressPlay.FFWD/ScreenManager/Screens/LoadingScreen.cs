@@ -61,7 +61,6 @@ namespace PressPlay.FFWD.ScreenManager
             TransitionOnTime = TimeSpan.FromSeconds(0.5);
         }
 
-
         /// <summary>
         /// Activates the loading screen.
         /// </summary>
@@ -78,6 +77,9 @@ namespace PressPlay.FFWD.ScreenManager
                                                             loadingIsSlow,
                                                             screensToLoad);
 
+            //loadingScreen.TransitionOnTime = TimeSpan.FromSeconds(0.5);
+            //loadingScreen.TransitionOffTime = TimeSpan.FromSeconds(0.5);
+
             screenManager.AddScreen(loadingScreen, controllingPlayer);
         }
 
@@ -86,6 +88,14 @@ namespace PressPlay.FFWD.ScreenManager
 
         #region Update and Draw
 
+        public override void OnNotifyCallback()
+        {
+            base.OnNotifyCallback();
+
+            Debug.Log("Notifying LoadingScreen");
+
+            ExitScreen();
+        }
 
         /// <summary>
         /// Updates the loading screen.
@@ -99,13 +109,14 @@ namespace PressPlay.FFWD.ScreenManager
             // off, it is time to actually perform the load.
             if (otherScreensAreGone)
             {
-                ScreenManager.RemoveScreen(this);
+                //ScreenManager.RemoveScreen(this);
 
                 foreach (GameScreen screen in screensToLoad)
                 {
                     if (screen != null)
                     {
-                        ScreenManager.AddScreen(screen, ControllingPlayer);
+                        //ScreenManager.AddScreen(screen, ControllingPlayer);
+                        ScreenManager.AddScreenBelow(screen, ControllingPlayer);
                     }
                 }
 
@@ -115,7 +126,6 @@ namespace PressPlay.FFWD.ScreenManager
                 ScreenManager.Game.ResetElapsedTime();
             }
         }
-
 
         /// <summary>
         /// Draws the loading screen.
@@ -162,7 +172,6 @@ namespace PressPlay.FFWD.ScreenManager
                 spriteBatch.End();
             }
         }
-
 
         #endregion
     }

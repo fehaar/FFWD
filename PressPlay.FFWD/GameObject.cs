@@ -151,6 +151,7 @@ namespace PressPlay.FFWD
         internal override void AfterLoad(Dictionary<int, UnityObject> idMap)
         {
             base.AfterLoad(idMap);
+
             for (int j = 0; j < components.Count; j++)
             {
                 components[j].isPrefab = isPrefab;

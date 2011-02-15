@@ -338,6 +338,33 @@ namespace PressPlay.FFWD.ScreenManager
             }
         }
 
+        public void NotifyOtherScreens(GameScreen self)
+        {
+            for (int i = 0; i < screens.Count; i++)
+            {
+                if (screens[i] == self)
+                {
+                    continue;
+                }
+
+                screens[i].OnNotifyCallback();       
+            }
+        }
+
+        public void RemoveAllOtherScreens(GameScreen self)
+        {
+           
+            for (int i = screens.Count - 1; i >= 0; i--)
+            {
+                if (screens[i] == self)
+                {
+                    continue;
+                }
+
+                RemoveScreen(screens[i]);
+            }
+        }
+
         /// <summary>
         /// Expose an array holding all the screens. We return a copy rather
         /// than the real master list, because screens should only ever be added

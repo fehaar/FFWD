@@ -16,7 +16,9 @@ namespace PressPlay.FFWD
         {
             Application.loadingScene = true;
             Scene scene = AssetHelper.Load<Scene>(Path.Combine("Resources", name));
-            scene.AfterLoad(null);
+
+            // This is removed here. It is called in scene.Initialize just below.
+            //scene.AfterLoad(null); 
             scene.Initialize();
             Application.loadingScene = false;
             Application.LoadNewAssets();
