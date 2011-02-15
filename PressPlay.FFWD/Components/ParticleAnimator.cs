@@ -88,9 +88,9 @@ namespace PressPlay.FFWD.Components
                     if (hasDamping)
                     {
                         // Apply damping to velocity
-                        emitter.particles[i].Velocity *= (1 - (1 - damping) * 0.0015f); // (1 – c ⋅ dt) ⋅ vold hacked to fixed update
+                        //emitter.particles[i].Velocity *= (1 - (1 - damping) * 0.015f); // (1 – c ⋅ dt) ⋅ vold hacked to fixed update
                         //emitter.particles[i].Velocity *= (1 - (1 - damping) * Time.deltaTime); // (1 – c ⋅ dt) ⋅ vold
-                        //emitter.particles[i].Velocity *= Mathf.Pow(damping, Time.deltaTime); // (1 – c ⋅ dt) ⋅ vold
+                        emitter.particles[i].Velocity *= Mathf.Pow(damping, Time.deltaTime); // (1 – c ⋅ dt) ⋅ vold
                     }
 
                     if (hasForces)

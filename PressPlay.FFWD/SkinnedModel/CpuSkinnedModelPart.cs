@@ -34,10 +34,13 @@ namespace PressPlay.FFWD.SkinnedModel
             this.vertexCount = vertices.Length;
             this.cpuVertices = vertices;
             this.indexBuffer = indexBuffer;
-       
+
+            indices = new short[indexBuffer.IndexCount];
+            indexBuffer.GetData<short>(indices);
+
             // create our GPU resources
             gpuVertices = new VertexPositionNormalTexture[cpuVertices.Length];
-            vertexBuffer = new DynamicVertexBuffer(indexBuffer.GraphicsDevice, typeof(VertexPositionNormalTexture), cpuVertices.Length, BufferUsage.WriteOnly);
+            //vertexBuffer = new DynamicVertexBuffer(indexBuffer.GraphicsDevice, typeof(VertexPositionNormalTexture), cpuVertices.Length, BufferUsage.WriteOnly);
 
             indices = new short[indexBuffer.IndexCount];
             indexBuffer.GetData<short>(indices);
@@ -66,7 +69,7 @@ namespace PressPlay.FFWD.SkinnedModel
             }
 
             // put the vertices into our vertex buffer
-            vertexBuffer.SetData(gpuVertices, 0, vertexCount, SetDataOptions.Discard);
+            //vertexBuffer.SetData(gpuVertices, 0, vertexCount, SetDataOptions.Discard);
         }
 
         public void Draw()
@@ -74,17 +77,31 @@ namespace PressPlay.FFWD.SkinnedModel
             GraphicsDevice graphics = Effect.GraphicsDevice;
 
             // set our buffers on the device
-            graphics.Indices = indexBuffer;
-            graphics.SetVertexBuffer(vertexBuffer);
+            //graphics.Indices = indexBuffer;
+            //graphics.SetVertexBuffer(vertexBuffer);
+
+            //foreach (EffectPass pass in Effect.CurrentTechnique.Passes)
+            //{
+            //    pass.Apply();
+            //    graphics.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, vertexCount, 0, triangleCount);
+            //}
+
+            //graphics.Indices = null;
+            //graphics.SetVertexBuffer(null);
 
             foreach (EffectPass pass in Effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
-                graphics.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, vertexCount, 0, triangleCount);
+                graphics.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(
+                    PrimitiveType.TriangleList,
+                    gpuVertices,
+                    0,
+                    vertexCount,
+                    indices,
+                    0,
+                    triangleCount
+                );
             }
-
-            graphics.Indices = null;
-            graphics.SetVertexBuffer(null);
         }
     }
 }

@@ -45,7 +45,7 @@ namespace PressPlay.FFWD
             if (shader == "iPhone/Particles/Additive Culled")
             {
                 // HACK : Fix color for Additive shader to disallow alpha
-                color = new Color(color.r, color.g, color.b, 1.0f);
+                color = new Color(color.r, color.g, color.b, Mathf.Clamp01(color.a * 3));
                 blendState = BlendState.Additive;
             } 
             else if (renderQueue == 3000 || shader == "TransperantNoLight")

@@ -247,7 +247,7 @@ namespace PressPlay.FFWD
             {
                 return GetType().Name + " (" + GetInstanceID() + ") on its own";
             }
-            return GetType().Name + " (" + GetInstanceID() + ") on " + gameObject.name + " (" + gameObject.GetInstanceID() + ")";
+            return GetType().Name + " (" + GetInstanceID() + ") on " + gameObject.name + " (" + gameObject.GetInstanceID() + ") active: "+gameObject.active;
         }
         #endregion
 
