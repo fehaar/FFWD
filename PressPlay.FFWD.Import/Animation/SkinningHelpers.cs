@@ -202,7 +202,10 @@ namespace PressPlay.FFWD.Import.Animation
                         "Mesh {0} has no skinning information, so it has been deleted.",
                         mesh.Name);
 
-                    mesh.Parent.Children.Remove(mesh);
+                    if (mesh.Parent != null)
+                    {
+                        mesh.Parent.Children.Remove(mesh);
+                    }
                     return;
                 }
             }

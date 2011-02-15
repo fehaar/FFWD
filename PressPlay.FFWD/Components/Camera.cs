@@ -191,8 +191,19 @@ namespace PressPlay.FFWD.Components
             renderQueue.Remove(renderer);
         }
 
+#if DEBUG
+        internal static bool logRenderCalls = false;
+#endif
+
         internal static void DoRender(GraphicsDevice device)
         {
+#if DEBUG && WINDOWS
+            if (Input.GetMouseButtonUp(2))
+            {
+                logRenderCalls = true;
+                Debug.Log("----------- Render log begin ---------------", Time.realtimeSinceStartup);
+            }
+#endif
             if (dynamicBatchRenderer == null)
             {
                 dynamicBatchRenderer = new DynamicBatchRenderer(device);
@@ -229,6 +240,10 @@ namespace PressPlay.FFWD.Components
 
             estimatedDrawCalls += UIRenderer.doRender(device);
             Debug.Display("Estimated Draw calls", estimatedDrawCalls);
+
+#if DEBUG
+            logRenderCalls = false;
+#endif
         }
 
         internal void doRender(GraphicsDevice device)
@@ -354,9 +369,15 @@ namespace PressPlay.FFWD.Components
             return null;
         }
 
-        internal int BatchRender(MeshFilter filter, Material material, Transform transform)
+        internal int BatchRender<T>(T data, Material material, Transform transform, Matrix[] animations)
         {
-            return dynamicBatchRenderer.Draw(this, material, filter, transform);
+#if DEBUG
+            if (Camera.logRenderCalls)
+            {
+                Debug.LogFormat("Dyn batch: {0} on {1} at {2}", transform.gameObject, gameObject, transform.position);
+            }
+#endif
+            return dynamicBatchRenderer.Draw(this, material, data, transform, animations);
         }
 
         internal bool DoFrustumCulling(ref BoundingSphere sphere)

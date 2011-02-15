@@ -19,12 +19,11 @@ namespace PressPlay.FFWD.SkinnedModel
         private readonly int triangleCount;
         private readonly int vertexCount;
         private readonly CpuVertex[] cpuVertices;
-        private readonly VertexPositionNormalTexture[] gpuVertices;
+        internal readonly VertexPositionNormalTexture[] gpuVertices;
+        internal readonly short[] indices;
 
         private readonly DynamicVertexBuffer vertexBuffer;
         private readonly IndexBuffer indexBuffer;
-
-        private readonly short[] indices;
 
         public BasicEffect Effect { get; internal set; }
         
@@ -43,6 +42,9 @@ namespace PressPlay.FFWD.SkinnedModel
             gpuVertices = new VertexPositionNormalTexture[cpuVertices.Length];
             //vertexBuffer = new DynamicVertexBuffer(indexBuffer.GraphicsDevice, typeof(VertexPositionNormalTexture), cpuVertices.Length, BufferUsage.WriteOnly);
 
+            indices = new short[indexBuffer.IndexCount];
+            indexBuffer.GetData<short>(indices);
+
             // copy texture coordinates once since they don't change with skinnning
             for (int i = 0; i < cpuVertices.Length; i++)
             {
@@ -50,7 +52,7 @@ namespace PressPlay.FFWD.SkinnedModel
             }
         }
 
-        public void SetBones(Matrix[] bones)
+        public void SetBones(Matrix[] bones, ref Matrix world)
         {
             // skin all of the vertices
             for (int i = 0; i < vertexCount; i++)
@@ -59,6 +61,7 @@ namespace PressPlay.FFWD.SkinnedModel
                     bones,
                     ref cpuVertices[i].Position,
                     ref cpuVertices[i].Normal,
+                    ref world,
                     ref cpuVertices[i].BlendIndices,
                     ref cpuVertices[i].BlendWeights,
                     out gpuVertices[i].Position,

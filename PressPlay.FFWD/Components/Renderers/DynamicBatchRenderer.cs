@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using PressPlay.FFWD.SkinnedModel;
 
 namespace PressPlay.FFWD.Components
 {
@@ -26,6 +27,8 @@ namespace PressPlay.FFWD.Components
         {
             internal Matrix world;
             internal Mesh mesh;
+            internal CpuSkinnedModelPart model;
+            internal Matrix[] animations;
         }
 
         private int currentBatchIndex = 0;
@@ -35,7 +38,7 @@ namespace PressPlay.FFWD.Components
         private int currentVertexIndex = 0;
         private int currentIndexIndex = 0;
 
-        private VertexPositionTexture[] vertexData = new VertexPositionTexture[0];
+        private VertexPositionNormalTexture[] vertexData = new VertexPositionNormalTexture[0];
         private Microsoft.Xna.Framework.Vector3[] positionData = new Microsoft.Xna.Framework.Vector3[0];
         private short[] indexData = new short[0];
 
@@ -47,23 +50,16 @@ namespace PressPlay.FFWD.Components
         /// <param name="material"></param>
         /// <param name="filter"></param>
         /// <returns></returns>
-        internal int Draw(Camera cam, Material material, MeshFilter filter, Transform transform)
+        internal int Draw<T>(Camera cam, Material material, T verts, Transform transform, Matrix[] animations)
         {
             int drawCalls = 0;
-
-            // Do frustum culling
-            BoundingSphere sphere = new BoundingSphere(transform.position, filter.boundingSphere.Radius);
-            if (cam.DoFrustumCulling(ref sphere))
-            {
-                return 0;
-            }
 
             if (currentMaterial.name != material.name)
             {
                 drawCalls = DoDraw(device, cam);
                 currentMaterial = material;
             }            
-            Add(filter, transform);
+            Add(verts, transform, animations);
             return drawCalls;
         }
 
@@ -75,16 +71,34 @@ namespace PressPlay.FFWD.Components
             batchIndexSize = 0;
         }
 
-        private void Add(MeshFilter filter, Transform transform)
+        private void Add<T>(T model, Transform transform, Matrix[] animations)
         {
             if (currentBatchIndex == data.Length)
             {
                 ExpandData();
             }
-            data[currentBatchIndex].mesh = filter.sharedMesh;
+
             data[currentBatchIndex].world = (transform != null) ? transform.world : Matrix.Identity;
-            batchVertexSize += filter.sharedMesh.vertices.Length;
-            batchIndexSize += filter.sharedMesh.triangles.Length;
+            MeshFilter filter = model as MeshFilter;
+            if (filter != null)
+            {
+                data[currentBatchIndex].mesh = filter.sharedMesh;
+                data[currentBatchIndex].model = null;
+                data[currentBatchIndex].animations = null;
+                batchVertexSize += filter.sharedMesh.vertices.Length;
+                batchIndexSize += filter.sharedMesh.triangles.Length;
+            }
+
+            CpuSkinnedModelPart part = model as CpuSkinnedModelPart;
+            if (part != null)
+            {
+                data[currentBatchIndex].mesh = null;
+                data[currentBatchIndex].model = part;
+                data[currentBatchIndex].animations = animations;
+                batchVertexSize += part.gpuVertices.Length;
+                batchIndexSize += part.indices.Length + 3;
+            }
+
             currentBatchIndex++;
         }
 
@@ -104,6 +118,11 @@ namespace PressPlay.FFWD.Components
 
             PrepareData();
 
+            if (currentIndexIndex == 0)
+            {
+                return 0;
+            }
+
             if (effect == null)
             {
                 effect = new BasicEffect(device);
@@ -112,19 +131,37 @@ namespace PressPlay.FFWD.Components
                 effect.LightingEnabled = false;
             }
 
+            RasterizerState oldRaster = device.RasterizerState;
+            RasterizerState rasterizerState = new RasterizerState();
+            rasterizerState.CullMode = CullMode.None;
+            device.RasterizerState = rasterizerState;
+            
             effect.View = cam.view;
             effect.Projection = cam.projectionMatrix;
             currentMaterial.SetBlendState(device);
+
+#if DEBUG
+            if (Camera.logRenderCalls)
+            {
+                Debug.LogFormat("Dyn batch draw: {0} on {1} batched {2}, verts {3}, indices {4}", currentMaterial.mainTexture, cam.gameObject, currentBatchIndex, currentVertexIndex, currentIndexIndex);
+            }
+#endif
 
             if (currentMaterial.texture != null)
             {
                 effect.TextureEnabled = true;
                 effect.Texture = currentMaterial.texture;
+                effect.DiffuseColor = Color.white;
             }
+            else
+            {
+                effect.DiffuseColor = currentMaterial.color;
+            }
+
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
-                device.DrawUserIndexedPrimitives<VertexPositionTexture>(
+                device.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(
                     PrimitiveType.TriangleList,
                     vertexData,
                     0,
@@ -134,6 +171,7 @@ namespace PressPlay.FFWD.Components
                     currentIndexIndex / 3
                 );
             }
+            device.RasterizerState = oldRaster;
 
             EndBatch();
             return 1;
@@ -143,7 +181,7 @@ namespace PressPlay.FFWD.Components
         {
             if (vertexData.Length < batchVertexSize)
             {
-                vertexData = new VertexPositionTexture[batchVertexSize];
+                vertexData = new VertexPositionNormalTexture[batchVertexSize];
             }
             if (indexData.Length < batchIndexSize)
             {
@@ -154,36 +192,81 @@ namespace PressPlay.FFWD.Components
             currentIndexIndex = 0;
             for (int i = 0; i < currentBatchIndex; i++)
             {
-                Mesh mesh = data[i].mesh;
-
-                if (positionData.Length < mesh.vertices.Length)
+                if (data[i].mesh != null)
                 {
-                    positionData = new Microsoft.Xna.Framework.Vector3[mesh.vertices.Length];
+                    PrepareMesh(data[i].mesh, ref data[i].world);
                 }
-
-                if (data[i].world != Matrix.Identity )
+                if (data[i].model != null)
                 {
-                    Microsoft.Xna.Framework.Vector3.Transform(mesh.vertices, ref data[i].world, positionData);
+                    PrepareVerts(data[i].model, ref data[i].world, data[i].animations);
                 }
-                else
-                {
-                    mesh.vertices.CopyTo(positionData, 0);
-                }
-
-                for (int v = 0; v < mesh.vertices.Length; v++)
-                {
-                    vertexData[currentVertexIndex + v].Position = positionData[v];
-                    vertexData[currentVertexIndex + v].TextureCoordinate = mesh.uv[v];
-                }
-
-                for (int t = 0; t < mesh.triangles.Length; t++)
-                {
-                    indexData[currentIndexIndex + t] = (short)(mesh.triangles[t] + currentVertexIndex);
-                }
-
-                currentVertexIndex += mesh.vertices.Length;
-                currentIndexIndex += mesh.triangles.Length;
             }
+        }
+
+        private void PrepareVerts(CpuSkinnedModelPart model, ref Matrix transform, Matrix[] animations)
+        {
+            model.SetBones(animations, ref transform);
+            model.gpuVertices.CopyTo(vertexData, currentVertexIndex);
+
+            // Add degenerate triangles to move to the next model
+            //if (currentIndexIndex > 0)
+            //{
+            //    indexData[currentIndexIndex] = indexData[currentIndexIndex - 1];
+            //    indexData[currentIndexIndex + 1] = indexData[currentIndexIndex - 1];
+            //    indexData[currentIndexIndex + 2] = indexData[currentIndexIndex - 1];
+            //    currentIndexIndex += 3;
+            //}
+
+            for (int t = 0; t < model.indices.Length; t++)
+            {
+                indexData[currentIndexIndex + t] = (short)(model.indices[t] + currentVertexIndex);
+            }
+
+            currentVertexIndex += model.gpuVertices.Length;
+            currentIndexIndex += model.indices.Length;
+        }
+
+        private void PrepareMesh(Mesh mesh, ref Matrix transform)
+        {
+            if (positionData.Length < mesh.vertices.Length)
+            {
+                positionData = new Microsoft.Xna.Framework.Vector3[mesh.vertices.Length];
+            }
+
+            if (transform != Matrix.Identity)
+            {
+                Microsoft.Xna.Framework.Vector3.Transform(mesh.vertices, ref transform, positionData);
+            }
+            else
+            {
+                mesh.vertices.CopyTo(positionData, 0);
+            }
+
+            for (int v = 0; v < mesh.vertices.Length; v++)
+            {
+                vertexData[currentVertexIndex + v].Position = positionData[v];
+                vertexData[currentVertexIndex + v].TextureCoordinate = mesh.uv[v];
+                if (mesh.normals != null)
+                {
+                    vertexData[currentVertexIndex + v].Normal = mesh.normals[v];
+                }
+            }
+
+            // Add degenerate triangles to move to the next model
+            //if (currentIndexIndex > 0)
+            //{
+            //    indexData[currentIndexIndex] = indexData[currentIndexIndex - 1];
+            //    indexData[currentIndexIndex + 1] = indexData[currentIndexIndex - 1];
+            //    currentIndexIndex += 2;
+            //}
+
+            for (int t = 0; t < mesh.triangles.Length; t++)
+            {
+                indexData[currentIndexIndex + t] = (short)(mesh.triangles[t] + currentVertexIndex);
+            }
+
+            currentVertexIndex += mesh.vertices.Length;
+            currentIndexIndex += mesh.triangles.Length;
         }
     }
 }

@@ -125,10 +125,10 @@ namespace PressPlay.FFWD
         /// <summary>
         /// Advances the current animation position.
         /// </summary>
-        public void Update(Matrix rootTransform)
+        public void Update()
         {
             UpdateBoneTransforms(TimeSpan.FromSeconds(Time.deltaTime * currentStateValue.speed));
-            UpdateWorldTransforms(rootTransform);
+            UpdateWorldTransforms(bakedTransform);
             UpdateSkinTransforms();
         }
 
