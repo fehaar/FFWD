@@ -49,10 +49,7 @@ namespace PressPlay.FFWD.Components
 
             // Draw the model.
             CpuSkinnedModelPart modelPart = sharedMesh.GetSkinnedModelPart();
-            Matrix world = sharedMesh.skinnedModel.BakedTransform * transform.world;
-            modelPart.SetBones(animation.GetTransforms(), ref world);
-
-            return cam.BatchRender(modelPart, sharedMaterial, transform);
+            return cam.BatchRender(modelPart, sharedMaterial, transform, animation.GetTransforms());
         }
         #endregion
     }

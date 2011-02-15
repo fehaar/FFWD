@@ -188,7 +188,7 @@ namespace PressPlay.FFWD.Components
 		{
 			if (animationPlayer != null)
 			{
-				animationPlayer.Update(Matrix.Identity);
+				animationPlayer.Update();
 
 				// Update child gameobject world positions
 				//foreach (var item in transform.GetComponentsInChildren<Transform>())

@@ -35,7 +35,7 @@ namespace PressPlay.FFWD.Components
 
             if (filter.CanBatch())
             {
-                return cam.BatchRender(filter, material, transform);
+                return cam.BatchRender(filter, material, transform, null);
             }
 
             Matrix world = transform.world;

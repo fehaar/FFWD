@@ -46,12 +46,12 @@ namespace PressPlay.FFWD.SkinnedModel
         /// <summary>
         /// Sets the bone matrices for all model parts.
         /// </summary>
-        public void SetBones(Matrix[] bones)
-        {
-            foreach (var part in modelParts)
-            {
-                part.SetBones(bones, ref BakedTransform);
-            }
-        }
+        //public void SetBones(Matrix[] bones)
+        //{
+        //    foreach (var part in modelParts)
+        //    {
+        //        part.SetBones(bones, ref BakedTransform);
+        //    }
+        //}
     }
 }

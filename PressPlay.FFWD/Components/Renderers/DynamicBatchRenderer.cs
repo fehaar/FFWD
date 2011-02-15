@@ -28,6 +28,7 @@ namespace PressPlay.FFWD.Components
             internal Matrix world;
             internal Mesh mesh;
             internal CpuSkinnedModelPart model;
+            internal Matrix[] animations;
         }
 
         private int currentBatchIndex = 0;
@@ -49,7 +50,7 @@ namespace PressPlay.FFWD.Components
         /// <param name="material"></param>
         /// <param name="filter"></param>
         /// <returns></returns>
-        internal int Draw<T>(Camera cam, Material material, T verts, Transform transform)
+        internal int Draw<T>(Camera cam, Material material, T verts, Transform transform, Matrix[] animations)
         {
             int drawCalls = 0;
 
@@ -58,7 +59,7 @@ namespace PressPlay.FFWD.Components
                 drawCalls = DoDraw(device, cam);
                 currentMaterial = material;
             }            
-            Add(verts, transform);
+            Add(verts, transform, animations);
             return drawCalls;
         }
 
@@ -70,7 +71,7 @@ namespace PressPlay.FFWD.Components
             batchIndexSize = 0;
         }
 
-        private void Add<T>(T model, Transform transform)
+        private void Add<T>(T model, Transform transform, Matrix[] animations)
         {
             if (currentBatchIndex == data.Length)
             {
@@ -83,6 +84,7 @@ namespace PressPlay.FFWD.Components
             {
                 data[currentBatchIndex].mesh = filter.sharedMesh;
                 data[currentBatchIndex].model = null;
+                data[currentBatchIndex].animations = null;
                 batchVertexSize += filter.sharedMesh.vertices.Length;
                 batchIndexSize += filter.sharedMesh.triangles.Length;
             }
@@ -92,6 +94,7 @@ namespace PressPlay.FFWD.Components
             {
                 data[currentBatchIndex].mesh = null;
                 data[currentBatchIndex].model = part;
+                data[currentBatchIndex].animations = animations;
                 batchVertexSize += part.gpuVertices.Length;
                 batchIndexSize += part.indices.Length + 3;
             }
@@ -195,13 +198,14 @@ namespace PressPlay.FFWD.Components
                 }
                 if (data[i].model != null)
                 {
-                    PrepareVerts(data[i].model, ref data[i].world);
+                    PrepareVerts(data[i].model, ref data[i].world, data[i].animations);
                 }
             }
         }
 
-        private void PrepareVerts(CpuSkinnedModelPart model, ref Matrix transform)
+        private void PrepareVerts(CpuSkinnedModelPart model, ref Matrix transform, Matrix[] animations)
         {
+            model.SetBones(animations, ref transform);
             model.gpuVertices.CopyTo(vertexData, currentVertexIndex);
 
             // Add degenerate triangles to move to the next model

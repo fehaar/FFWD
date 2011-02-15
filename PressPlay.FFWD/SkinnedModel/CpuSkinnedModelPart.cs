@@ -52,7 +52,7 @@ namespace PressPlay.FFWD.SkinnedModel
             }
         }
 
-        public void SetBones(Matrix[] bones, ref Matrix bakedTransform)
+        public void SetBones(Matrix[] bones, ref Matrix world)
         {
             // skin all of the vertices
             for (int i = 0; i < vertexCount; i++)
@@ -61,7 +61,7 @@ namespace PressPlay.FFWD.SkinnedModel
                     bones,
                     ref cpuVertices[i].Position,
                     ref cpuVertices[i].Normal,
-                    ref bakedTransform,
+                    ref world,
                     ref cpuVertices[i].BlendIndices,
                     ref cpuVertices[i].BlendWeights,
                     out gpuVertices[i].Position,
