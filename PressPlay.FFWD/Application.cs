@@ -205,7 +205,9 @@ namespace PressPlay.FFWD
             double total = fixedUpdateTime.Elapsed.TotalSeconds + lateUpdateTime.Elapsed.TotalSeconds + updateTime.Elapsed.TotalSeconds + graphics.Elapsed.TotalSeconds + physics.Elapsed.TotalSeconds;
             if (ApplicationSettings.ShowDebugLines)
             {
-                Camera lineCam = (String.IsNullOrEmpty(ApplicationSettings.DebugLineCamera)) ? Camera.main : Camera.FindByName(ApplicationSettings.DebugLineCamera);
+                //Camera lineCam = (String.IsNullOrEmpty(ApplicationSettings.DebugLineCamera)) ? Camera.main : Camera.FindByName(ApplicationSettings.DebugLineCamera);
+                Camera lineCam = ApplicationSettings.DebugCamera;
+                
                 Debug.DrawLines(GraphicsDevice, lineCam);
                 if (lineCam != null)
                 {
