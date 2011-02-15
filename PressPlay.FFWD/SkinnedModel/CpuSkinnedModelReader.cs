@@ -33,6 +33,7 @@ namespace PressPlay.FFWD.SkinnedModel
             CpuSkinnedModel model = new CpuSkinnedModel(modelParts, skinningData);
             model.BakedTransform = input.ReadMatrix();
             model.BoundingSphere = input.ReadObject<BoundingSphere>();
+
             return model;
         }
     }

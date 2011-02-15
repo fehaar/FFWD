@@ -27,7 +27,7 @@ namespace PressPlay.FFWD.SkinnedModel
         /// <summary>
         /// The baked transform in terms of scale and rotation
         /// </summary>
-        public Matrix BakedTransform { get; set; }
+        public Matrix BakedTransform;
 
         public BoundingSphere BoundingSphere { get; internal set; }
 
@@ -46,12 +46,12 @@ namespace PressPlay.FFWD.SkinnedModel
         /// <summary>
         /// Sets the bone matrices for all model parts.
         /// </summary>
-        public void SetBones(Matrix[] bones)
-        {
-            foreach (var part in modelParts)
-            {
-                part.SetBones(bones);
-            }
-        }
+        //public void SetBones(Matrix[] bones)
+        //{
+        //    foreach (var part in modelParts)
+        //    {
+        //        part.SetBones(bones, ref BakedTransform);
+        //    }
+        //}
     }
 }

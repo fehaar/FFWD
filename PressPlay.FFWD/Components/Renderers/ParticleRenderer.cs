@@ -66,7 +66,6 @@ namespace PressPlay.FFWD.Components
             Application.particleDrawTimer.Start();
             Application.particleDraws++;
 #endif
-
             if (emitter.particles == null || emitter.particleCount == 0) return 0;
 
             if (effect == null)
@@ -99,6 +98,13 @@ namespace PressPlay.FFWD.Components
                     particlesRendered++;
                 }
             }
+
+#if DEBUG
+            if (Camera.logRenderCalls)
+            {
+                Debug.LogFormat("Particle: {0} on {1}. Count {2}", gameObject, cam.gameObject, particlesRendered);
+            }
+#endif
 
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {

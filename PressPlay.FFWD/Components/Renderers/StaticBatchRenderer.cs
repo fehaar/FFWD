@@ -56,6 +56,13 @@ namespace PressPlay.FFWD.Components
             rasterizerState.CullMode = CullMode.CullCounterClockwiseFace;
             device.RasterizerState = rasterizerState;
 
+#if DEBUG
+            if (Camera.logRenderCalls)
+            {
+                Debug.LogFormat("Static batch: {0} on {1}", gameObject, cam.gameObject);
+            }
+#endif
+
             effect.World = Matrix.Identity;
             effect.View = cam.view;
             effect.Projection = cam.projectionMatrix;
