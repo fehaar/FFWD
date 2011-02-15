@@ -23,5 +23,7 @@ namespace PressPlay.FFWD
         //public static string DebugLineCamera = "";
         public static Camera DebugCamera;
         public static SpriteFont DebugFont;
+
+        public static int AssetLoadInterval = 40; // In Ticks
     }
 }

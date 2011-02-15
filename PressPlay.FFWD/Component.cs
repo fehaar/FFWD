@@ -129,6 +129,7 @@ namespace PressPlay.FFWD
         internal override void FixReferences(Dictionary<int, UnityObject> idMap)
         {
             base.FixReferences(idMap);
+            
             if (gameObject == null)
             {
                 return;
