@@ -35,51 +35,55 @@ namespace PressPlay.FFWD
             // TODO: Optimize this by bundling everything into the same structure.
             if (!String.IsNullOrEmpty(asset))
             {
-                skinnedModel = assetHelper.Load<CpuSkinnedModel>("Models/" + asset);
-                if (skinnedModel != null)
+                MeshData data = assetHelper.Load<MeshData>("Models/" + asset);
+                if (data != null)
                 {
-                    boundingSphere = skinnedModel.BoundingSphere;
-                    for (int i = 0; i < skinnedModel.Parts.Count; i++)
+                    skinnedModel = data.skinnedModel;
+                    if (data.vertices != null)
                     {
-                        if (skinnedModel.Parts[i].name == name)
-                        {
-                            meshIndex = i;
-                            break;
-                        }
+                        // This is hardcoded to make it work. The uvs and tris from the Mesh seems broken. Uhh...
+                        vertices = data.vertices;
+                        //triangles = new short[6] { 2, 0, 1, 2, 1, 3 };
+                        triangles = data.triangles;
+                        uv = new Microsoft.Xna.Framework.Vector2[4] {
+                            new Microsoft.Xna.Framework.Vector2(0, 0),
+                            new Microsoft.Xna.Framework.Vector2(1, 0),
+                            new Microsoft.Xna.Framework.Vector2(0, 1),
+                            new Microsoft.Xna.Framework.Vector2(1, 1)
+                        };
+                        normals = data.normals;
+                        boundingSphere = BoundingSphere.CreateFromPoints(vertices);
                     }
                 }
                 else
-                {
-                    model = assetHelper.Load<Model>("Models/" + asset);
-                    if (model != null)
+	            {
+                    skinnedModel = assetHelper.Load<CpuSkinnedModel>("Models/" + asset);
+                    if (skinnedModel != null)
                     {
-                        for (int i = 0; i < model.Meshes.Count; i++)
+                        boundingSphere = skinnedModel.BoundingSphere;
+                        for (int i = 0; i < skinnedModel.Parts.Count; i++)
                         {
-                            if (model.Meshes[i].Name == name)
+                            if (skinnedModel.Parts[i].name == name)
                             {
                                 meshIndex = i;
-                                boundingSphere = model.Meshes[i].BoundingSphere;
                                 break;
                             }
                         }
                     }
                     else
                     {
-                        MeshData data = assetHelper.Load<MeshData>("Models/" + asset);
-                        if (data != null)
+                        model = assetHelper.Load<Model>("Models/" + asset);
+                        if (model != null)
                         {
-                            // This is hardcoded to make it work. The uvs and tris from the Mesh seems broken. Uhh...
-                            vertices = data.vertices;
-                            //triangles = new short[6] { 2, 0, 1, 2, 1, 3 };
-                            triangles = data.triangles;
-                            uv = new Microsoft.Xna.Framework.Vector2[4] {
-                                new Microsoft.Xna.Framework.Vector2(0, 0),
-                                new Microsoft.Xna.Framework.Vector2(1, 0),
-                                new Microsoft.Xna.Framework.Vector2(0, 1),
-                                new Microsoft.Xna.Framework.Vector2(1, 1)
-                            };
-                            normals = data.normals;
-                            boundingSphere = BoundingSphere.CreateFromPoints(vertices);
+                            for (int i = 0; i < model.Meshes.Count; i++)
+                            {
+                                if (model.Meshes[i].Name == name)
+                                {
+                                    meshIndex = i;
+                                    boundingSphere = model.Meshes[i].BoundingSphere;
+                                    break;
+                                }
+                            }
                         }
 #if DEBUG
                         else

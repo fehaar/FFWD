@@ -6,17 +6,22 @@ using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using System.ComponentModel;
 using Microsoft.Xna.Framework;
+using PressPlay.FFWD.Import.Animation;
 
 namespace PressPlay.FFWD.Import
 {
     [ContentProcessor(DisplayName = "FFWD - Mesh processor")]
-    class MeshProcessor : ContentProcessor<MeshContent, MeshDataContent>
+    class MeshProcessor : ContentProcessor<NodeContent, MeshDataContent>
     {
         public MeshProcessor()
         {
             ReadNormals = true;
             ReadUVs = true;
         }
+
+        [DefaultValue(true)]
+        [Description("Shall we write this as an FBX model or as mesh data.")]
+        public bool WriteAsModel { get; set; }
 
         [DefaultValue(true)]
         [Description("Shall we read the normals of the model.")]
@@ -44,10 +49,32 @@ namespace PressPlay.FFWD.Import
         public float RotationZ { get; set; }
 
 
-        public override MeshDataContent Process(MeshContent input, ContentProcessorContext context)
+        public override MeshDataContent Process(NodeContent input, ContentProcessorContext context)
         {
             MeshDataContent mesh = new MeshDataContent();
 
+            if (SkinningHelpers.ValidateMesh(input, context, null))
+            {
+                // This is a skinned model, so treat is as one
+                CpuSkinnedModelProcessor proc = new CpuSkinnedModelProcessor();
+                proc.RotationX = this.RotationX;
+                proc.RotationY = this.RotationY;
+                proc.RotationZ = this.RotationZ;
+                proc.Scale = this.Scale;
+                mesh.skinnedModel = proc.Process(input, context);
+            }
+            else
+            {
+                if (input is MeshContent)
+                {
+                    ProcessMesh(mesh, input as MeshContent);
+                }
+            }
+            return mesh;
+        }
+
+        private void ProcessMesh(MeshDataContent mesh, MeshContent input)
+        {
             Microsoft.Xna.Framework.Quaternion rotation = Microsoft.Xna.Framework.Quaternion.CreateFromYawPitchRoll(MathHelper.ToRadians(RotationY), MathHelper.ToRadians(RotationX), MathHelper.ToRadians(RotationZ));
             Matrix m = Matrix.CreateScale(Scale) * Matrix.CreateFromQuaternion(rotation);
 
@@ -96,7 +123,6 @@ namespace PressPlay.FFWD.Import
                 VertexChannel<Microsoft.Xna.Framework.Vector2> uv = input.Geometry[0].Vertices.Channels.Get<Microsoft.Xna.Framework.Vector2>(VertexChannelNames.TextureCoordinate(0));
                 mesh.uv = uv.Select(v => new Microsoft.Xna.Framework.Vector2(v.X, v.Y)).ToArray();
             }
-            return mesh;
         }
     }
 }
