@@ -18,6 +18,7 @@ namespace PressPlay.FFWD.Import
             output.WriteObject(value.triangles);
             output.WriteObject(value.uv);
             output.WriteObject(value.normals);
+            output.WriteObject(value.boundingSphere);
         }
 
         public override string GetRuntimeType(TargetPlatform targetPlatform)

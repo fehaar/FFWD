@@ -19,6 +19,7 @@ namespace PressPlay.FFWD
             data.triangles = input.ReadObject<short[]>();
             data.uv = input.ReadObject<Microsoft.Xna.Framework.Vector2[]>();
             data.normals = input.ReadObject<Microsoft.Xna.Framework.Vector3[]>();
+            data.boundingSphere = input.ReadObject<Microsoft.Xna.Framework.BoundingSphere>();
             return data;
         }
     }

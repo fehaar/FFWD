@@ -12,9 +12,11 @@ namespace PressPlay.FFWD.Import
         internal CpuSkinnedModelContent skinnedModel;
         internal ModelContent model;
 
-        internal Microsoft.Xna.Framework.Vector3[] vertices { get; set; }
-        internal Microsoft.Xna.Framework.Vector3[] normals { get; set; }
-        internal Microsoft.Xna.Framework.Vector2[] uv { get; set; }
-        internal short[] triangles { get; set; }
+        internal Microsoft.Xna.Framework.Vector3[] vertices;
+        internal Microsoft.Xna.Framework.Vector3[] normals;
+        internal Microsoft.Xna.Framework.Vector2[] uv;
+        internal short[] triangles;
+
+        internal Microsoft.Xna.Framework.BoundingSphere boundingSphere;
     }
 }

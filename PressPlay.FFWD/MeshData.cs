@@ -5,6 +5,7 @@ using System.Text;
 using PressPlay.FFWD.SkinnedModel;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework;
 
 namespace PressPlay.FFWD
 {
@@ -13,9 +14,11 @@ namespace PressPlay.FFWD
         internal CpuSkinnedModel skinnedModel;
         internal Model model;
 
-        internal Microsoft.Xna.Framework.Vector3[] vertices { get; set; }
-        internal Microsoft.Xna.Framework.Vector3[] normals { get; set; }
-        internal Microsoft.Xna.Framework.Vector2[] uv { get; set; }
-        internal short[] triangles { get; set; }
+        internal Microsoft.Xna.Framework.Vector3[] vertices;
+        internal Microsoft.Xna.Framework.Vector3[] normals;
+        internal Microsoft.Xna.Framework.Vector2[] uv;
+        internal short[] triangles;
+
+        internal BoundingSphere boundingSphere;
     }
 }   

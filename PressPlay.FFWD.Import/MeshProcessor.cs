@@ -62,6 +62,7 @@ namespace PressPlay.FFWD.Import
                 proc.RotationZ = this.RotationZ;
                 proc.Scale = this.Scale;
                 mesh.skinnedModel = proc.Process(input, context);
+                mesh.boundingSphere = mesh.skinnedModel.BoundingSphere;
             }
             else
             {
@@ -123,6 +124,7 @@ namespace PressPlay.FFWD.Import
                 VertexChannel<Microsoft.Xna.Framework.Vector2> uv = input.Geometry[0].Vertices.Channels.Get<Microsoft.Xna.Framework.Vector2>(VertexChannelNames.TextureCoordinate(0));
                 mesh.uv = uv.Select(v => new Microsoft.Xna.Framework.Vector2(v.X, v.Y)).ToArray();
             }
+            mesh.boundingSphere = BoundingSphere.CreateFromPoints(mesh.vertices);
         }
     }
 }

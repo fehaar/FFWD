@@ -39,6 +39,17 @@ namespace PressPlay.FFWD
                 if (data != null)
                 {
                     skinnedModel = data.skinnedModel;
+                    if (skinnedModel != null)
+                    {
+                        for (int i = 0; i < skinnedModel.Parts.Count; i++)
+                        {
+                            if (skinnedModel.Parts[i].name == name)
+                            {
+                                meshIndex = i;
+                                break;
+                            }
+                        }
+                    }
                     if (data.vertices != null)
                     {
                         // This is hardcoded to make it work. The uvs and tris from the Mesh seems broken. Uhh...
@@ -52,26 +63,12 @@ namespace PressPlay.FFWD
                             new Microsoft.Xna.Framework.Vector2(1, 1)
                         };
                         normals = data.normals;
-                        boundingSphere = BoundingSphere.CreateFromPoints(vertices);
+                        //boundingSphere = BoundingSphere.CreateFromPoints(vertices);
                     }
+                    boundingSphere = data.boundingSphere;
                 }
                 else
 	            {
-                    skinnedModel = assetHelper.Load<CpuSkinnedModel>("Models/" + asset);
-                    if (skinnedModel != null)
-                    {
-                        boundingSphere = skinnedModel.BoundingSphere;
-                        for (int i = 0; i < skinnedModel.Parts.Count; i++)
-                        {
-                            if (skinnedModel.Parts[i].name == name)
-                            {
-                                meshIndex = i;
-                                break;
-                            }
-                        }
-                    }
-                    else
-                    {
                         model = assetHelper.Load<Model>("Models/" + asset);
                         if (model != null)
                         {
@@ -91,7 +88,6 @@ namespace PressPlay.FFWD
                             Debug.LogWarning("Cannot find a way to load the mesh " + asset);
                         }
 #endif
-                    }
                 }
             }
         } 
