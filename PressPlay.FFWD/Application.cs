@@ -223,6 +223,10 @@ namespace PressPlay.FFWD
             if (ApplicationSettings.ShowDebugLines)
             {
                 //Camera lineCam = (String.IsNullOrEmpty(ApplicationSettings.DebugLineCamera)) ? Camera.main : Camera.FindByName(ApplicationSettings.DebugLineCamera);
+                Camera lineCam = ApplicationSettings.DebugCamera;
+                
+                Debug.DrawLines(GraphicsDevice, lineCam);
+                if (lineCam != null)
                //Camera lineCam = ApplicationSettings.DebugCamera;
 
                 /*if (ApplicationSettings.DebugCamera == null)

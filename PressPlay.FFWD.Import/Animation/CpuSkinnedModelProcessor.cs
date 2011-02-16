@@ -17,8 +17,7 @@ using System.ComponentModel;
 
 namespace PressPlay.FFWD.Import.Animation
 {
-    [ContentProcessor(DisplayName = "CPU Skinned Model")]
-    class CpuSkinnedModelProcessor : ContentProcessor<NodeContent, CpuSkinnedModelContent>
+    internal class CpuSkinnedModelProcessor : ContentProcessor<NodeContent, CpuSkinnedModelContent>
     {
         public CpuSkinnedModelProcessor()
         {
