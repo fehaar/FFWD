@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using PressPlay.FFWD.Components;
 using PressPlay.FFWD.Interfaces;
+using System.Text;
 
 namespace PressPlay.FFWD
 {
@@ -65,6 +66,18 @@ namespace PressPlay.FFWD
 
         // Lists and variables used for loading a scene
         internal static bool isLoadingAssetBeforeSceneInitialize = false;
+        internal static bool loadIsComplete = false;
+        private static int totalNumberOfAssetsToLoad = 0;
+        private static int numberOfAssetsLoaded = 0;
+        internal static StringBuilder progressString = new StringBuilder();
+        internal static float _loadingProgess = 0;
+        public static float loadingProgress
+        {
+            get
+            {
+                return _loadingProgess;
+            }
+        }
         private static Scene scene;
         private static Stopwatch stopWatch = new Stopwatch();
         internal static List<Component> tempComponents = new List<Component>();
@@ -113,8 +126,15 @@ namespace PressPlay.FFWD
 
             if (isLoadingAssetBeforeSceneInitialize)
             {
-                LoadSceneAssets();
-                return;
+                if (loadIsComplete)
+                {
+                    OnSceneLoadComplete();
+                }
+                else
+                {
+                    LoadSceneAssets();
+                    CalculateLoadingProgress();
+                }
             }
 
             //Debug.Log("Updating after loading scene");
@@ -330,9 +350,15 @@ namespace PressPlay.FFWD
 
             loadingScene = true;
             isLoadingAssetBeforeSceneInitialize = true;
+            loadIsComplete = false;
+
             loadedLevelName = sceneToLoad.Contains('/') ? sceneToLoad.Substring(sceneToLoad.LastIndexOf('/') + 1) : sceneToLoad;
             scene = assetHelper.Load<Scene>(sceneToLoad);
             sceneToLoad = "";
+
+            totalNumberOfAssetsToLoad = tempAssets.Count;
+            numberOfAssetsLoaded = 0;
+            //Debug.Log("TempAssets.Count: "+tempAssets.Count);
         }
 
         private void LoadSceneAssets()
@@ -355,22 +381,35 @@ namespace PressPlay.FFWD
                     return;
                 }
 
-                //Debug.Log("Assets left: " + tempAssets.Count + " Elapsed time: " + stopWatch.ElapsedMilliseconds);
-
                 tempAssets[i].LoadAsset(assetHelper);
                 tempAssets.RemoveAt(i);
+                numberOfAssetsLoaded++;
                 count++;
             }
 
             //Debug.Log("Finished asset loading. Elapsed time: " + stopWatch.ElapsedTicks + " count: " + count);
 
-            OnSceneLoadComplete();
+            //OnSceneLoadComplete();
+            loadIsComplete = true;
+        }
+
+        private void CalculateLoadingProgress()
+        {
+            if (totalNumberOfAssetsToLoad == 0)
+            {
+                _loadingProgess = 1;
+            }
+            else
+            {
+                _loadingProgess = ((float)numberOfAssetsLoaded / (float)totalNumberOfAssetsToLoad);
+            }
         }
 
         private void OnSceneLoadComplete()
         {
-            Debug.Log("OnSceneLoadComplete");
             
+            Debug.Log("OnSceneLoadComplete");
+
             stopWatch.Stop();
             stopWatch.Reset();
 
@@ -379,11 +418,15 @@ namespace PressPlay.FFWD
 
             loadingScene = false;
             isLoadingAssetBeforeSceneInitialize = false;
+            loadIsComplete = false;
 
             if (scene != null)
             {
                 scene.Initialize();
             }
+
+            _loadingProgess = 0;
+
             GC.Collect();
         }
 
