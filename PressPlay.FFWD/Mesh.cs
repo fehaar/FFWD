@@ -38,6 +38,8 @@ namespace PressPlay.FFWD
                 MeshData data = assetHelper.Load<MeshData>("Models/" + asset);
                 if (data != null)
                 {
+                    boundingSphere = data.boundingSphere;
+
                     skinnedModel = data.skinnedModel;
                     if (skinnedModel != null)
                     {
@@ -50,6 +52,20 @@ namespace PressPlay.FFWD
                             }
                         }
                     }
+                    model = data.model;
+                    if (model != null)
+                    {
+                        for (int i = 0; i < model.Meshes.Count; i++)
+                        {
+                            if (model.Meshes[i].Name == name)
+                            {
+                                meshIndex = i;
+                                boundingSphere = model.Meshes[i].BoundingSphere;
+                                break;
+                            }
+                        }
+                    }
+
                     if (data.vertices != null)
                     {
                         // This is hardcoded to make it work. The uvs and tris from the Mesh seems broken. Uhh...
@@ -63,32 +79,14 @@ namespace PressPlay.FFWD
                             new Microsoft.Xna.Framework.Vector2(1, 1)
                         };
                         normals = data.normals;
-                        //boundingSphere = BoundingSphere.CreateFromPoints(vertices);
                     }
-                    boundingSphere = data.boundingSphere;
                 }
-                else
-	            {
-                        model = assetHelper.Load<Model>("Models/" + asset);
-                        if (model != null)
-                        {
-                            for (int i = 0; i < model.Meshes.Count; i++)
-                            {
-                                if (model.Meshes[i].Name == name)
-                                {
-                                    meshIndex = i;
-                                    boundingSphere = model.Meshes[i].BoundingSphere;
-                                    break;
-                                }
-                            }
-                        }
 #if DEBUG
-                        else
-                        {
-                            Debug.LogWarning("Cannot find a way to load the mesh " + asset);
-                        }
-#endif
+                else
+                {
+                    Debug.LogWarning("Cannot find a way to load the mesh " + asset);
                 }
+#endif
             }
         } 
 

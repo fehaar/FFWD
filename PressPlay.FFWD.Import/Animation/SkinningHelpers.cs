@@ -223,6 +223,25 @@ namespace PressPlay.FFWD.Import.Animation
             return true;
         }
 
+        public static bool MeshHasSkinning(NodeContent node)
+        {
+            if (node is MeshContent)
+            {
+                return MeshHasSkinning(node as MeshContent);
+            }
+            else
+            {
+                foreach (NodeContent child in node.Children)
+                {
+                    if (MeshHasSkinning(child))
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+
         /// <summary>
         /// Checks whether a mesh contains skininng information.
         /// </summary>

@@ -226,7 +226,7 @@ namespace PressPlay.FFWD
                 Camera lineCam = ApplicationSettings.DebugCamera;
                 
                 Debug.DrawLines(GraphicsDevice, lineCam);
-                if (lineCam != null)
+                if (lineCam != null && (bool)lineCam)
                 {
                     Debug.Display(lineCam.name, lineCam.transform.position);
                 }

@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using System.ComponentModel;
 using Microsoft.Xna.Framework;
 using PressPlay.FFWD.Import.Animation;
+using Microsoft.Xna.Framework.Content.Pipeline.Processors;
 
 namespace PressPlay.FFWD.Import
 {
@@ -17,6 +18,7 @@ namespace PressPlay.FFWD.Import
         {
             ReadNormals = true;
             ReadUVs = true;
+            WriteAsModel = true;
         }
 
         [DefaultValue(true)]
@@ -53,7 +55,7 @@ namespace PressPlay.FFWD.Import
         {
             MeshDataContent mesh = new MeshDataContent();
 
-            if (SkinningHelpers.ValidateMesh(input, context, null))
+            if (SkinningHelpers.MeshHasSkinning(input))
             {
                 // This is a skinned model, so treat is as one
                 CpuSkinnedModelProcessor proc = new CpuSkinnedModelProcessor();
@@ -66,9 +68,21 @@ namespace PressPlay.FFWD.Import
             }
             else
             {
-                if (input is MeshContent)
+                if (WriteAsModel)
                 {
-                    ProcessMesh(mesh, input as MeshContent);
+                    ModelProcessor proc = new ModelProcessor();
+                    proc.RotationX = this.RotationX;
+                    proc.RotationY = this.RotationY;
+                    proc.RotationZ = this.RotationZ;
+                    proc.Scale = this.Scale;
+                    mesh.model = proc.Process(input, context);
+                }
+                else
+                {
+                    if (input is MeshContent)
+                    {
+                        ProcessMesh(mesh, input as MeshContent);
+                    }
                 }
             }
             return mesh;
