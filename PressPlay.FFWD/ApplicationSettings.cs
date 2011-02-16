@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
+using PressPlay.FFWD.Components;
 
 namespace PressPlay.FFWD
 {
@@ -19,7 +20,8 @@ namespace PressPlay.FFWD
         public static bool ShowFPSCounter = true;
         public static bool ShowDebugDisplays = true;
         public static bool ShowDebugLines = true;
-        public static string DebugLineCamera = "";
+        //public static string DebugLineCamera = "";
+        public static Camera DebugCamera;
         public static SpriteFont DebugFont;
 
         public static int AssetLoadInterval = 40; // In Ticks
