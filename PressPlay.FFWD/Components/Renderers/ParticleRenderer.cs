@@ -129,8 +129,6 @@ namespace PressPlay.FFWD.Components
 
         private void RenderParticle(int vertexIndex, int triangleIndex, ref Particle particle)
         {
-
-
             Vector3 pos = particle.Position;
             float size = particle.Size / 2;
             if (!emitter.useWorldSpace)

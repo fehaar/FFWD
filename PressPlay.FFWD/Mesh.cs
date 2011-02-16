@@ -65,7 +65,7 @@ namespace PressPlay.FFWD
                     }
                     else
                     {
-                        MeshDataContent data = assetHelper.Load<MeshDataContent>("Models/" + asset);
+                        MeshData data = assetHelper.Load<MeshData>("Models/" + asset);
                         if (data != null)
                         {
                             // This is hardcoded to make it work. The uvs and tris from the Mesh seems broken. Uhh...
