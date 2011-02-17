@@ -48,6 +48,9 @@ namespace PressPlay.FFWD
                             if (skinnedModel.Parts[i].name == name)
                             {
                                 meshIndex = i;
+
+                                skinnedModel.Parts[i].SetMesh(this);
+
                                 break;
                             }
                         }
