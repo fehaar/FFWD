@@ -107,7 +107,7 @@ namespace PressPlay.FFWD
             return null;
         }
 
-        internal CpuSkinnedModelPart GetSkinnedModelPart()
+        public CpuSkinnedModelPart GetSkinnedModelPart()
         {
             if (skinnedModel != null)
             {
