@@ -199,7 +199,8 @@ namespace PressPlay.FFWD.Components
                 if (data[i].model != null)
                 {
                     data[i].model.SetBones(data[i].animations, ref data[i].world);
-                    PrepareMesh(data[i].model.mesh, ref data[i].world);
+                    Matrix m = Matrix.Identity;
+                    PrepareMesh(data[i].model.mesh, ref m);
                 }
             }
         }
