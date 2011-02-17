@@ -136,8 +136,9 @@ namespace PressPlay.FFWD
                     if (hasDrawBeenCalled)
                     {
                         LoadSceneAssets();
-                        CalculateLoadingProgress();
                     }
+
+                    CalculateLoadingProgress();
                 }
             }
 
@@ -418,7 +419,7 @@ namespace PressPlay.FFWD
             }
             else
             {
-                _loadingProgess = ((float)numberOfAssetsLoaded / (float)totalNumberOfAssetsToLoad);
+                _loadingProgess = Mathf.Clamp01(((float)numberOfAssetsLoaded / (float)totalNumberOfAssetsToLoad));
             }
 
             Debug.Log("Application.loadingProgress: " + loadingProgress);
