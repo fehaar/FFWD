@@ -11,6 +11,8 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using PressPlay.FFWD.UI.Controls;
+using System.Collections.Generic;
 #endregion
 
 namespace PressPlay.FFWD.ScreenManager
@@ -35,6 +37,9 @@ namespace PressPlay.FFWD.ScreenManager
 
         bool loadingIsSlow;
         bool otherScreensAreGone;
+        bool hasAddedScreens = false;
+        protected List<Control> controls = new List<Control>();
+        protected Control rootControl;
 
         GameScreen[] screensToLoad;
 
@@ -47,7 +52,7 @@ namespace PressPlay.FFWD.ScreenManager
         /// The constructor is private: loading screens should
         /// be activated via the static Load method instead.
         /// </summary>
-        private LoadingScreen(ScreenManager screenManager, bool loadingIsSlow,
+        protected LoadingScreen(ScreenManager screenManager, bool loadingIsSlow,
                               GameScreen[] screensToLoad)
         {
             this.loadingIsSlow = loadingIsSlow;
@@ -64,6 +69,8 @@ namespace PressPlay.FFWD.ScreenManager
         /// <summary>
         /// Activates the loading screen.
         /// </summary>
+        ///
+        /*
         public static void Load(ScreenManager screenManager, bool loadingIsSlow,
                                 PlayerIndex? controllingPlayer,
                                 params GameScreen[] screensToLoad)
@@ -82,7 +89,7 @@ namespace PressPlay.FFWD.ScreenManager
 
             screenManager.AddScreen(loadingScreen, controllingPlayer);
         }
-
+        */
 
         #endregion
 
@@ -107,7 +114,7 @@ namespace PressPlay.FFWD.ScreenManager
 
             // If all the previous screens have finished transitioning
             // off, it is time to actually perform the load.
-            if (otherScreensAreGone)
+            if (otherScreensAreGone && !hasAddedScreens)
             {
                 //ScreenManager.RemoveScreen(this);
 
@@ -116,9 +123,12 @@ namespace PressPlay.FFWD.ScreenManager
                     if (screen != null)
                     {
                         //ScreenManager.AddScreen(screen, ControllingPlayer);
+                        Debug.Log("Add LoadSceneScreen");
                         ScreenManager.AddScreenBelow(screen, ControllingPlayer);
                     }
                 }
+
+                hasAddedScreens = true;
 
                 // Once the load has finished, we use ResetElapsedTime to tell
                 // the  game timing mechanism that we have just finished a very
@@ -156,7 +166,7 @@ namespace PressPlay.FFWD.ScreenManager
                 SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
                 SpriteFont font = ScreenManager.Font;
 
-                const string message = "Loading...";
+                string message = "Loading...(" + (Application.loadingProgress * 100) + ")";
 
                 // Center the text in the viewport.
                 Viewport viewport = ScreenManager.Viewport;
@@ -170,6 +180,10 @@ namespace PressPlay.FFWD.ScreenManager
                 spriteBatch.Begin();
                 spriteBatch.DrawString(font, message, textPosition, color);
                 spriteBatch.End();
+            }
+            else
+            {
+                Debug.Log("LoadingScreen. Loading is not slow!");
             }
         }
 

@@ -272,7 +272,12 @@ namespace PressPlay.FFWD.UI.Controls
             }
 
             // This makes the parent ignore the size of this control in its size
-            ignoreSize = true;
+            bool hasIgnoredSize = false;
+            if (!ignoreSize)
+            {
+                ignoreSize = true;
+                hasIgnoredSize = true;
+            }
 
             // We want to make sure, that the parent recalculates its size
             InvalidateAutoSize();
@@ -280,7 +285,10 @@ namespace PressPlay.FFWD.UI.Controls
             //transform.localPosition = new Vector3((parent.bounds.Width / 2) - (bounds.Width / 2), transform.localPosition.y, transform.localPosition.z);
             transform.localPosition = new Vector3(offset.x + (parent.bounds.Width / 2) - (bounds.Width / 2), transform.localPosition.y, offset.y + (parent.bounds.Height / 2) - (bounds.Height / 2));
 
-            ignoreSize = false;
+            if (hasIgnoredSize)
+            {
+                ignoreSize = false;
+            }
             InvalidateAutoSize();
         }
 

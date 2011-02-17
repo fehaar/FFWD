@@ -55,9 +55,10 @@ namespace PressPlay.FFWD
                     logBuilder.Append(" ");
                 }
             }
-#if WINDOWS
+//#if WINDOWS
             System.Diagnostics.Debug.WriteLine(logBuilder.ToString());
-#endif
+
+//#endif
             if (DisplayLog)
             {
                 Display("Log", logBuilder.ToString());
