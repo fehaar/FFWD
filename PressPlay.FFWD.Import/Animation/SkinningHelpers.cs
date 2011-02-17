@@ -181,7 +181,7 @@ namespace PressPlay.FFWD.Import.Animation
         /// <summary>
         /// Makes sure this mesh contains the kind of data we know how to animate.
         /// </summary>
-        static void ValidateMesh(NodeContent node, ContentProcessorContext context, string parentBoneName)
+        internal static bool ValidateMesh(NodeContent node, ContentProcessorContext context, string parentBoneName)
         {
             MeshContent mesh = node as MeshContent;
 
@@ -206,7 +206,7 @@ namespace PressPlay.FFWD.Import.Animation
                     {
                         mesh.Parent.Children.Remove(mesh);
                     }
-                    return;
+                    return false;
                 }
             }
             else if (node is BoneContent)
@@ -219,6 +219,27 @@ namespace PressPlay.FFWD.Import.Animation
             // because validating children may delete some of them).
             foreach (NodeContent child in new List<NodeContent>(node.Children))
                 ValidateMesh(child, context, parentBoneName);
+
+            return true;
+        }
+
+        public static bool MeshHasSkinning(NodeContent node)
+        {
+            if (node is MeshContent)
+            {
+                return MeshHasSkinning(node as MeshContent);
+            }
+            else
+            {
+                foreach (NodeContent child in node.Children)
+                {
+                    if (MeshHasSkinning(child))
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
         }
 
         /// <summary>

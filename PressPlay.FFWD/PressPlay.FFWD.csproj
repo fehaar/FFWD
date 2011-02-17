@@ -216,7 +216,8 @@
     <Compile Include="Input.cs" />
     <Compile Include="Mathf.cs" />
     <Compile Include="Mesh.cs" />
-    <Compile Include="MeshDataContent.cs" />
+    <Compile Include="MeshData.cs" />
+    <Compile Include="MeshDataReader.cs" />
     <Compile Include="MonoBehaviour.cs" />
     <Compile Include="ContentHelper.cs" />
     <Compile Include="Debug.cs" />

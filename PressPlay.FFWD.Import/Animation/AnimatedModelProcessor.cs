@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace PressPlay.FFWD.Import.Animation
 {
-    [ContentProcessor(DisplayName = "Animated Non Skinned Model")]
+    //[ContentProcessor(DisplayName = "Animated Non Skinned Model")]
     public class AnimatedModelProcessor : ModelProcessor
     {
         /// <summary>

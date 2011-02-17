@@ -19,8 +19,8 @@ namespace PressPlay.FFWD.Import.Animation
     /// Custom processor extends the builtin framework ModelProcessor class,
     /// adding animation support.
     /// </summary>
-    [ContentProcessor(DisplayName = "GPU Skinned Model")]
-    public class GpuSkinnedModelProcessor : ModelProcessor
+    //[ContentProcessor(DisplayName = "GPU Skinned Model")]
+    internal class GpuSkinnedModelProcessor : ModelProcessor
     {
         /// <summary>
         /// The main Process method converts an intermediate format content pipeline

@@ -35,22 +35,24 @@ namespace PressPlay.FFWD
             // TODO: Optimize this by bundling everything into the same structure.
             if (!String.IsNullOrEmpty(asset))
             {
-                skinnedModel = assetHelper.Load<CpuSkinnedModel>("Models/" + asset);
-                if (skinnedModel != null)
+                MeshData data = assetHelper.Load<MeshData>("Models/" + asset);
+                if (data != null)
                 {
-                    boundingSphere = skinnedModel.BoundingSphere;
-                    for (int i = 0; i < skinnedModel.Parts.Count; i++)
+                    boundingSphere = data.boundingSphere;
+
+                    skinnedModel = data.skinnedModel;
+                    if (skinnedModel != null)
                     {
-                        if (skinnedModel.Parts[i].name == name)
+                        for (int i = 0; i < skinnedModel.Parts.Count; i++)
                         {
-                            meshIndex = i;
-                            break;
+                            if (skinnedModel.Parts[i].name == name)
+                            {
+                                meshIndex = i;
+                                break;
+                            }
                         }
                     }
-                }
-                else
-                {
-                    model = assetHelper.Load<Model>("Models/" + asset);
+                    model = data.model;
                     if (model != null)
                     {
                         for (int i = 0; i < model.Meshes.Count; i++)
@@ -63,32 +65,28 @@ namespace PressPlay.FFWD
                             }
                         }
                     }
-                    else
+
+                    if (data.vertices != null)
                     {
-                        MeshDataContent data = assetHelper.Load<MeshDataContent>("Models/" + asset);
-                        if (data != null)
-                        {
-                            // This is hardcoded to make it work. The uvs and tris from the Mesh seems broken. Uhh...
-                            vertices = data.vertices;
-                            //triangles = new short[6] { 2, 0, 1, 2, 1, 3 };
-                            triangles = data.triangles;
-                            uv = new Microsoft.Xna.Framework.Vector2[4] {
-                                new Microsoft.Xna.Framework.Vector2(0, 0),
-                                new Microsoft.Xna.Framework.Vector2(1, 0),
-                                new Microsoft.Xna.Framework.Vector2(0, 1),
-                                new Microsoft.Xna.Framework.Vector2(1, 1)
-                            };
-                            normals = data.normals;
-                            boundingSphere = BoundingSphere.CreateFromPoints(vertices);
-                        }
-#if DEBUG
-                        else
-                        {
-                            Debug.LogWarning("Cannot find a way to load the mesh " + asset);
-                        }
-#endif
+                        // This is hardcoded to make it work. The uvs and tris from the Mesh seems broken. Uhh...
+                        vertices = data.vertices;
+                        //triangles = new short[6] { 2, 0, 1, 2, 1, 3 };
+                        triangles = data.triangles;
+                        uv = new Microsoft.Xna.Framework.Vector2[4] {
+                            new Microsoft.Xna.Framework.Vector2(0, 0),
+                            new Microsoft.Xna.Framework.Vector2(1, 0),
+                            new Microsoft.Xna.Framework.Vector2(0, 1),
+                            new Microsoft.Xna.Framework.Vector2(1, 1)
+                        };
+                        normals = data.normals;
                     }
                 }
+#if DEBUG
+                else
+                {
+                    Debug.LogWarning("Cannot find a way to load the mesh " + asset);
+                }
+#endif
             }
         } 
 

@@ -7413,6 +7413,14 @@ namespace PressPlay.FFWD
                 }
             }
 
+            // HACK: Something wierd is going on here. This should never be possible
+            if (tweenArguments == null)
+            {
+                Debug.Log("Exited iTween on ", gameObject, " as tween arguments had been added.");
+                Destroy(this);
+                return;
+            }
+
             id = (string)tweenArguments["id"];
             type = (string)tweenArguments["type"];
             method = (string)tweenArguments["method"];
@@ -7689,6 +7697,14 @@ namespace PressPlay.FFWD
 
         void CallBack(string callbackType)
         {
+            // HACK: Something wierd is going on here. This should never be possible
+            if (tweenArguments == null)
+            {
+                Debug.Log("Destroy tween without callback arguments");
+                Destroy(this);
+                return;
+            }
+
             if (tweenArguments.ContainsKey(callbackType) && !tweenArguments.ContainsKey("ischild"))
             {
                 //establish target:
@@ -7745,7 +7761,7 @@ namespace PressPlay.FFWD
                 else if (item.isRunning && item.type == type)
                 {
                     //step 1: check for length first since it's the fastest:
-                    if (item.tweenArguments.Count != tweenArguments.Count)
+                    if (item.tweenArguments == null || (item.tweenArguments.Count != tweenArguments.Count))
                     {
                         item.Dispose();
                         return;

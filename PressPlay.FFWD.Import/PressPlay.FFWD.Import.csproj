@@ -151,6 +151,8 @@
     <Compile Include="Animation\GpuSkinnedModelProcessor.cs" />
     <Compile Include="Animation\SkinningHelpers.cs" />
     <Compile Include="ColorArrayTypeSerializer.cs" />
+    <Compile Include="MeshDataContent.cs" />
+    <Compile Include="MeshDataContentWriter.cs" />
     <Compile Include="MeshProcessor.cs" />
     <Compile Include="SceneProcessor.cs" />
     <Compile Include="Vector2TypeSerializer.cs" />
