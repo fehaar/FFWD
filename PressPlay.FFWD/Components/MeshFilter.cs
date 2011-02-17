@@ -9,6 +9,24 @@ namespace PressPlay.FFWD.Components
         [ContentSerializer(ElementName="mesh", Optional=true)]
         public Mesh sharedMesh { get; set; }
 
+        private Mesh _mesh;
+        [ContentSerializerIgnore]
+        public Mesh mesh 
+        { 
+            get
+            {
+                if (_mesh == null)
+                {
+                    _mesh = (Mesh)sharedMesh.Clone();
+                }
+                return _mesh;
+            }
+            set
+            {
+                _mesh = value;
+            }
+        }
+
         private BasicEffect effect;
         public BoundingSphere boundingSphere
         {

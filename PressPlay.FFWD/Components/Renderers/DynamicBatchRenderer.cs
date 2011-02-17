@@ -82,11 +82,11 @@ namespace PressPlay.FFWD.Components
             MeshFilter filter = model as MeshFilter;
             if (filter != null)
             {
-                data[currentBatchIndex].mesh = filter.sharedMesh;
+                data[currentBatchIndex].mesh = filter.mesh;
                 data[currentBatchIndex].model = null;
                 data[currentBatchIndex].animations = null;
-                batchVertexSize += filter.sharedMesh.vertices.Length;
-                batchIndexSize += filter.sharedMesh.triangles.Length;
+                batchVertexSize += filter.mesh.vertices.Length;
+                batchIndexSize += filter.mesh.triangles.Length;
             }
 
             CpuSkinnedModelPart part = model as CpuSkinnedModelPart;
