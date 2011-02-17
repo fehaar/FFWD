@@ -23,14 +23,14 @@ namespace PressPlay.FFWD
 
         public void SetColor(string name, Color color)
         {
-            if (blendState == BlendState.Additive)
-            {
-                this.color = new Color(color.r, color.g, color.b, 1.0f);
-            }
-            else
-            {
+            //if (blendState == BlendState.Additive)
+            //{
+            //    this.color = new Color(color.r, color.g, color.b, 1.0f);
+            //}
+            //else
+            //{
                 this.color = color;
-            }
+            //}
         }
 
         internal override void LoadAsset(AssetHelper assetHelper)

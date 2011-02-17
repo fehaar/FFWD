@@ -7,7 +7,6 @@ namespace PressPlay.FFWD.Components
 {
     public class SkinnedMeshRenderer : Renderer
     {
-
         public Mesh sharedMesh { get; set; }
 
         private Animation animation;
@@ -15,15 +14,7 @@ namespace PressPlay.FFWD.Components
         public override void Awake()
         {
             base.Awake();
-            // Create animation players/clips for the rigid model
             animation = GetComponentInParents<Animation>();
-            //if ((sharedMesh.skinnedModel != null) && (sharedMesh.skinnedModel.SkinningData != null))
-            //{
-            //    if (sharedMesh.skinnedModel.SkinningData.AnimationClips != null)
-            //    {
-            //        animation.Initialize(sharedMesh.skinnedModel.SkinningData);
-            //    }
-            //}
         }
 
         #region IRenderable Members
@@ -48,6 +39,7 @@ namespace PressPlay.FFWD.Components
             }
 
             // Draw the model.
+            // TODO: This can be simplified greatly if the batch renderer is changed to store the data automatically
             CpuSkinnedModelPart modelPart = sharedMesh.GetSkinnedModelPart();
             return cam.BatchRender(modelPart, sharedMaterial, transform, animation.GetTransforms());
         }

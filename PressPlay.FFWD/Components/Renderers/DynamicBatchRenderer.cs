@@ -82,11 +82,11 @@ namespace PressPlay.FFWD.Components
             MeshFilter filter = model as MeshFilter;
             if (filter != null)
             {
-                data[currentBatchIndex].mesh = filter.sharedMesh;
+                data[currentBatchIndex].mesh = filter.mesh;
                 data[currentBatchIndex].model = null;
                 data[currentBatchIndex].animations = null;
-                batchVertexSize += filter.sharedMesh.vertices.Length;
-                batchIndexSize += filter.sharedMesh.triangles.Length;
+                batchVertexSize += filter.mesh.vertices.Length;
+                batchIndexSize += filter.mesh.triangles.Length;
             }
 
             CpuSkinnedModelPart part = model as CpuSkinnedModelPart;
@@ -95,8 +95,8 @@ namespace PressPlay.FFWD.Components
                 data[currentBatchIndex].mesh = null;
                 data[currentBatchIndex].model = part;
                 data[currentBatchIndex].animations = animations;
-                batchVertexSize += part.gpuVertices.Length;
-                batchIndexSize += part.indices.Length + 3;
+                batchVertexSize += part.mesh.vertices.Length;
+                batchIndexSize += part.mesh.triangles.Length + 3;
             }
 
             currentBatchIndex++;
@@ -198,32 +198,11 @@ namespace PressPlay.FFWD.Components
                 }
                 if (data[i].model != null)
                 {
-                    PrepareVerts(data[i].model, ref data[i].world, data[i].animations);
+                    data[i].model.SetBones(data[i].animations, ref data[i].world);
+                    Matrix m = Matrix.Identity;
+                    PrepareMesh(data[i].model.mesh, ref m);
                 }
             }
-        }
-
-        private void PrepareVerts(CpuSkinnedModelPart model, ref Matrix transform, Matrix[] animations)
-        {
-            model.SetBones(animations, ref transform);
-            model.gpuVertices.CopyTo(vertexData, currentVertexIndex);
-
-            // Add degenerate triangles to move to the next model
-            //if (currentIndexIndex > 0)
-            //{
-            //    indexData[currentIndexIndex] = indexData[currentIndexIndex - 1];
-            //    indexData[currentIndexIndex + 1] = indexData[currentIndexIndex - 1];
-            //    indexData[currentIndexIndex + 2] = indexData[currentIndexIndex - 1];
-            //    currentIndexIndex += 3;
-            //}
-
-            for (int t = 0; t < model.indices.Length; t++)
-            {
-                indexData[currentIndexIndex + t] = (short)(model.indices[t] + currentVertexIndex);
-            }
-
-            currentVertexIndex += model.gpuVertices.Length;
-            currentIndexIndex += model.indices.Length;
         }
 
         private void PrepareMesh(Mesh mesh, ref Matrix transform)

@@ -52,6 +52,7 @@ namespace PressPlay.FFWD
                 else
                 {
                     logBuilder.Append(message[i].ToString());
+                    logBuilder.Append(" ");
                 }
             }
 //#if WINDOWS

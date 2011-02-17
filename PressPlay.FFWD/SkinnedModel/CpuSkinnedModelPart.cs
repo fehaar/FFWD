@@ -19,11 +19,10 @@ namespace PressPlay.FFWD.SkinnedModel
         private readonly int triangleCount;
         private readonly int vertexCount;
         private readonly CpuVertex[] cpuVertices;
-        internal readonly VertexPositionNormalTexture[] gpuVertices;
-        internal readonly short[] indices;
+        //internal readonly VertexPositionNormalTexture[] gpuVertices;
+        //internal readonly short[] indices;
 
-        private readonly DynamicVertexBuffer vertexBuffer;
-        private readonly IndexBuffer indexBuffer;
+        internal Mesh mesh;
 
         public BasicEffect Effect { get; internal set; }
         
@@ -33,23 +32,28 @@ namespace PressPlay.FFWD.SkinnedModel
             this.triangleCount = triangleCount;
             this.vertexCount = vertices.Length;
             this.cpuVertices = vertices;
-            this.indexBuffer = indexBuffer;
 
-            indices = new short[indexBuffer.IndexCount];
-            indexBuffer.GetData<short>(indices);
-
-            // create our GPU resources
-            gpuVertices = new VertexPositionNormalTexture[cpuVertices.Length];
-            //vertexBuffer = new DynamicVertexBuffer(indexBuffer.GraphicsDevice, typeof(VertexPositionNormalTexture), cpuVertices.Length, BufferUsage.WriteOnly);
-
-            indices = new short[indexBuffer.IndexCount];
-            indexBuffer.GetData<short>(indices);
+            mesh = new Mesh();
+            mesh.vertices = new Microsoft.Xna.Framework.Vector3[cpuVertices.Length];
+            mesh.normals = new Microsoft.Xna.Framework.Vector3[cpuVertices.Length];
+            mesh.uv = new Microsoft.Xna.Framework.Vector2[cpuVertices.Length];
+            mesh.triangles = new short[indexBuffer.IndexCount];
+            indexBuffer.GetData<short>(mesh.triangles);
 
             // copy texture coordinates once since they don't change with skinnning
             for (int i = 0; i < cpuVertices.Length; i++)
             {
-                gpuVertices[i].TextureCoordinate = cpuVertices[i].TextureCoordinate;
+                mesh.uv[i] = cpuVertices[i].TextureCoordinate;
             }
+        }
+
+        internal void SetMesh(Mesh newMesh)
+        {
+            newMesh.vertices = mesh.vertices;
+            newMesh.normals = mesh.normals;
+            newMesh.uv = mesh.uv;
+            newMesh.triangles = mesh.triangles;
+            mesh = newMesh;
         }
 
         public void SetBones(Matrix[] bones, ref Matrix world)
@@ -64,44 +68,12 @@ namespace PressPlay.FFWD.SkinnedModel
                     ref world,
                     ref cpuVertices[i].BlendIndices,
                     ref cpuVertices[i].BlendWeights,
-                    out gpuVertices[i].Position,
-                    out gpuVertices[i].Normal);
+                    out mesh.vertices[i],
+                    out mesh.normals[i]);
             }
 
             // put the vertices into our vertex buffer
             //vertexBuffer.SetData(gpuVertices, 0, vertexCount, SetDataOptions.Discard);
-        }
-
-        public void Draw()
-        {
-            GraphicsDevice graphics = Effect.GraphicsDevice;
-
-            // set our buffers on the device
-            //graphics.Indices = indexBuffer;
-            //graphics.SetVertexBuffer(vertexBuffer);
-
-            //foreach (EffectPass pass in Effect.CurrentTechnique.Passes)
-            //{
-            //    pass.Apply();
-            //    graphics.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, vertexCount, 0, triangleCount);
-            //}
-
-            //graphics.Indices = null;
-            //graphics.SetVertexBuffer(null);
-
-            foreach (EffectPass pass in Effect.CurrentTechnique.Passes)
-            {
-                pass.Apply();
-                graphics.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(
-                    PrimitiveType.TriangleList,
-                    gpuVertices,
-                    0,
-                    vertexCount,
-                    indices,
-                    0,
-                    triangleCount
-                );
-            }
         }
     }
 }
