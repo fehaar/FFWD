@@ -285,6 +285,7 @@ namespace PressPlay.FFWD.Components
             TextRenderer3D.batch.Begin(0, null, null, DepthStencilState.Default, RasterizerState.CullNone, TextRenderer3D.basicEffect);
             #endregion
 
+            int q = 0;
             for (int i = 0; i < renderQueue.Count; i++)
             {
                 if (renderQueue[i].gameObject == null)
@@ -293,6 +294,15 @@ namespace PressPlay.FFWD.Components
                     // It is acceptable behaviour.
                     continue;
                 }
+                if (renderQueue[i].material.renderQueue != q)
+                {
+                    if (q > 0)
+                    {
+                        estimatedDrawCalls += dynamicBatchRenderer.DoDraw(device, this);
+                    }
+                    q = renderQueue[i].material.renderQueue;
+                }
+
                 if (renderQueue[i].gameObject.active && renderQueue[i].enabled)
                 {
                     estimatedDrawCalls += renderQueue[i].Draw(device, this);
