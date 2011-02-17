@@ -137,8 +137,6 @@ namespace PressPlay.FFWD
                 }
             }
 
-            //Debug.Log("Updating after loading scene");
-
             if (!String.IsNullOrEmpty(sceneToLoad))
             {
                 CleanUp();
@@ -414,6 +412,8 @@ namespace PressPlay.FFWD
             {
                 _loadingProgess = ((float)numberOfAssetsLoaded / (float)totalNumberOfAssetsToLoad);
             }
+
+            Debug.Log("Application.loadingProgress: " + loadingProgress);
         }
 
         private void OnSceneLoadComplete()

@@ -69,6 +69,8 @@ namespace PressPlay.FFWD.ScreenManager
         /// <summary>
         /// Activates the loading screen.
         /// </summary>
+        ///
+        /*
         public static void Load(ScreenManager screenManager, bool loadingIsSlow,
                                 PlayerIndex? controllingPlayer,
                                 params GameScreen[] screensToLoad)
@@ -87,7 +89,7 @@ namespace PressPlay.FFWD.ScreenManager
 
             screenManager.AddScreen(loadingScreen, controllingPlayer);
         }
-
+        */
 
         #endregion
 
@@ -164,7 +166,7 @@ namespace PressPlay.FFWD.ScreenManager
                 SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
                 SpriteFont font = ScreenManager.Font;
 
-                string message = "Loading...("+(Application.loadingProgress*100)+")";
+                string message = "Loading...(" + (Application.loadingProgress * 100) + ")";
 
                 // Center the text in the viewport.
                 Viewport viewport = ScreenManager.Viewport;
@@ -178,6 +180,10 @@ namespace PressPlay.FFWD.ScreenManager
                 spriteBatch.Begin();
                 spriteBatch.DrawString(font, message, textPosition, color);
                 spriteBatch.End();
+            }
+            else
+            {
+                Debug.Log("LoadingScreen. Loading is not slow!");
             }
         }
 
