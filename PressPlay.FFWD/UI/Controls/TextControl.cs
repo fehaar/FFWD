@@ -19,6 +19,24 @@ namespace PressPlay.FFWD.UI.Controls
     public class TextControl : Control
     {
 
+        public enum TextOrigin
+        {
+            normal,
+            center
+        }
+
+        public TextOrigin textOrigin
+        {
+            get
+            {
+                return textRenderer.textOrigin;
+            }
+            set
+            {
+                textRenderer.textOrigin = value;
+            }
+        }
+
         private UITextRenderer textRenderer;
 
         private SpriteFont _font;

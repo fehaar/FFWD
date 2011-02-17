@@ -13,6 +13,7 @@ namespace PressPlay.FFWD.UI
         public SpriteFont font;
         private Vector2 renderPosition = Vector2.zero;
         private Vector2 textSize = Vector2.zero;
+        public TextControl.TextOrigin textOrigin = TextControl.TextOrigin.normal;
 
         public Vector2 textOffset = Vector2.zero;
         public Color color = Color.white;
@@ -60,8 +61,19 @@ namespace PressPlay.FFWD.UI
             float depth = 1 - ((float)transform.position / 10000f);
 
             //UIRenderer.batch.DrawString(font, text, transform.position, material.color, 0, Microsoft.Xna.Framework.Vector2.Zero, transform.localScale, effects, depth);
-            UIRenderer.batch.DrawString(font, WordWrap(text, control.bounds.Width, font), transform.position, material.color, transform.rotation.eulerAngles.y, Microsoft.Xna.Framework.Vector2.Zero, transform.lossyScale, effects, depth);
+            //UIRenderer.batch.DrawString(font, WordWrap(text, control.bounds.Width, font), transform.position, material.color, transform.rotation.eulerAngles.y, Microsoft.Xna.Framework.Vector2.Zero, transform.lossyScale, effects, depth);
+            UIRenderer.batch.DrawString(font, WordWrap(text, control.bounds.Width, font), transform.position, material.color, transform.rotation.eulerAngles.y, GetOrigin(), transform.lossyScale, effects, depth);
             return 0;
+        }
+
+        protected Microsoft.Xna.Framework.Vector2 GetOrigin(){
+            
+            switch(textOrigin){
+                case TextControl.TextOrigin.center:
+                    return new Microsoft.Xna.Framework.Vector2(control.bounds.Width / 2, 0);
+            }
+            
+            return Microsoft.Xna.Framework.Vector2.Zero;
         }
 
         protected static char[] splitTokens = { ' ', '-' };
