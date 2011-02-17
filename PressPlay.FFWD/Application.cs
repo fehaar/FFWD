@@ -67,6 +67,7 @@ namespace PressPlay.FFWD
         // Lists and variables used for loading a scene
         internal static bool isLoadingAssetBeforeSceneInitialize = false;
         internal static bool loadIsComplete = false;
+        internal static bool hasDrawBeenCalled = false;
         private static int totalNumberOfAssetsToLoad = 0;
         private static int numberOfAssetsLoaded = 0;
         internal static StringBuilder progressString = new StringBuilder();
@@ -132,8 +133,11 @@ namespace PressPlay.FFWD
                 }
                 else
                 {
-                    LoadSceneAssets();
-                    CalculateLoadingProgress();
+                    if (hasDrawBeenCalled)
+                    {
+                        LoadSceneAssets();
+                        CalculateLoadingProgress();
+                    }
                 }
             }
 
@@ -180,12 +184,16 @@ namespace PressPlay.FFWD
 #if DEBUG
             physics.Stop();
 #endif
+
+            hasDrawBeenCalled = false;
         }
 
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
             Time.Draw();
+
+            hasDrawBeenCalled = true;
 
             frameCounter++;
 #if DEBUG

@@ -14,7 +14,7 @@ namespace PressPlay.FFWD
         public string asset { get; set; }
 
         [ContentSerializerIgnore]
-        public Model model;
+        public Model model; 
         [ContentSerializerIgnore]
         public CpuSkinnedModel skinnedModel;
         private int meshIndex;
