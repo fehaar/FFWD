@@ -352,7 +352,7 @@ namespace PressPlay.FFWD
 
         private void DoSceneLoad()
         {
-            Debug.Log("DoSceneLoad");            
+            Debug.Log("DoSceneLoad: " + sceneToLoad);
             
             if (!String.IsNullOrEmpty(loadedLevelName))
             {
