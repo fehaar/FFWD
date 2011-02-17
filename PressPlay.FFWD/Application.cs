@@ -226,10 +226,19 @@ namespace PressPlay.FFWD
                 Camera lineCam = ApplicationSettings.DebugCamera;
                 
                 Debug.DrawLines(GraphicsDevice, lineCam);
-                if (lineCam != null && (bool)lineCam)
+                if (lineCam != null)
+               //Camera lineCam = ApplicationSettings.DebugCamera;
+
+                /*if (ApplicationSettings.DebugCamera == null)
+                {
+                    ApplicationSettings.DebugCamera = LevelHandler.Instance.cam.GUICamera;
+                }*/
+
+                Debug.DrawLines(GraphicsDevice, ApplicationSettings.DebugCamera);
+                /*if (lineCam != null)
                 {
                     Debug.Display(lineCam.name, lineCam.transform.position);
-                }
+                }*/
             }
             if (ApplicationSettings.ShowiTweenUpdateTime)
             {

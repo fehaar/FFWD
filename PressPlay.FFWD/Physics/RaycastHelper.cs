@@ -42,6 +42,7 @@ namespace PressPlay.FFWD
             float dist = distance * fraction;
             UnityObject uo = fixture.GetBody().GetUserData() as UnityObject;
             Collider coll = uo as Collider;
+
             if (coll == null && (uo is Rigidbody))
             {
                 coll = (uo as Rigidbody).collider;
