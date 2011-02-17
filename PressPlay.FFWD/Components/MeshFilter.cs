@@ -43,7 +43,7 @@ namespace PressPlay.FFWD.Components
 
         internal bool CanBatch()
         {
-            return (sharedMesh != null && sharedMesh.vertices != null);
+            return (mesh != null && mesh.vertices != null);
         }
 
         public ModelMesh GetModelMesh()
