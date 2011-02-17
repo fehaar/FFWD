@@ -131,10 +131,10 @@ namespace PressPlay.FFWD.Components
                 effect.LightingEnabled = false;
             }
 
-            RasterizerState oldRaster = device.RasterizerState;
-            RasterizerState rasterizerState = new RasterizerState();
-            rasterizerState.CullMode = CullMode.None;
-            device.RasterizerState = rasterizerState;
+            //RasterizerState oldRaster = device.RasterizerState;
+            //RasterizerState rasterizerState = new RasterizerState();
+            //rasterizerState.CullMode = CullMode.None;
+            //device.RasterizerState = rasterizerState;
             
             effect.View = cam.view;
             effect.Projection = cam.projectionMatrix;
@@ -155,6 +155,7 @@ namespace PressPlay.FFWD.Components
             }
             else
             {
+                effect.TextureEnabled = false;
                 effect.DiffuseColor = currentMaterial.color;
             }
 
@@ -171,7 +172,7 @@ namespace PressPlay.FFWD.Components
                     currentIndexIndex / 3
                 );
             }
-            device.RasterizerState = oldRaster;
+            //device.RasterizerState = oldRaster;
 
             EndBatch();
             return 1;

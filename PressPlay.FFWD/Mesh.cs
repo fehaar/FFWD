@@ -9,7 +9,7 @@ using PressPlay.FFWD.SkinnedModel;
 
 namespace PressPlay.FFWD
 {
-    public class Mesh : Asset, ICloneable
+    public class Mesh : Asset
     {
         public string asset { get; set; }
 
@@ -120,14 +120,14 @@ namespace PressPlay.FFWD
         }
 
         #region ICloneable Members
-        public new object Clone()
+        internal override UnityObject Clone()
         {
             Mesh clone = new Mesh();
             clone.skinnedModel = skinnedModel;
             clone.model = model;
 
             if (vertices != null)
-	        {
+            {
                 clone.vertices = (Microsoft.Xna.Framework.Vector3[])vertices.Clone();
                 clone.triangles = (short[])triangles.Clone();
                 clone.uv = (Microsoft.Xna.Framework.Vector2[])uv.Clone();
