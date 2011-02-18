@@ -363,6 +363,8 @@ namespace PressPlay.FFWD
             
             if (!String.IsNullOrEmpty(loadedLevelName))
             {
+                UnloadCurrentLevel();
+                CleanUp();
                 assetHelper.Unload(loadedLevelName);
             }
 
@@ -377,6 +379,11 @@ namespace PressPlay.FFWD
             totalNumberOfAssetsToLoad = tempAssets.Count;
             numberOfAssetsLoaded = 0;
             //Debug.Log("TempAssets.Count: "+tempAssets.Count);
+
+            if (scene == null)
+            {
+                OnSceneLoadComplete();
+            }
         }
 
         private void LoadSceneAssets()

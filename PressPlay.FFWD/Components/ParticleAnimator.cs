@@ -118,7 +118,7 @@ namespace PressPlay.FFWD.Components
                         emitter.particles[i].Size += sizeGrow * Time.deltaTime;
                     }
 
-                    //UpdateParticleColor(ref emitter.particles[i]);
+                    UpdateParticleColor(ref emitter.particles[i]);
 
                     if (--particlesToCheck == 0)
                     {
