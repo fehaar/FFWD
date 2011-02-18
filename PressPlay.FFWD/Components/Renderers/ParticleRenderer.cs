@@ -136,19 +136,20 @@ namespace PressPlay.FFWD.Components
                 pos += transform.position;
             }
             vertices[vertexIndex].TextureCoordinate = new Microsoft.Xna.Framework.Vector2(0, 1);
-            vertices[vertexIndex].Position = pos + (Vector3)new Vector2(-size, size);
+            vertices[vertexIndex].Position = pos + new Vector3(-size, vertexIndex * 0.0001f, size);
+
             vertices[vertexIndex].Color = particle.Color;
 
             vertices[vertexIndex + 1].TextureCoordinate = new Microsoft.Xna.Framework.Vector2(0, 0);
-            vertices[vertexIndex + 1].Position = pos + (Vector3)new Vector2(-size, -size);
+            vertices[vertexIndex + 1].Position = pos + new Vector3(-size, vertexIndex * 0.0001f, -size);
             vertices[vertexIndex + 1].Color = particle.Color;
 
             vertices[vertexIndex + 2].TextureCoordinate = new Microsoft.Xna.Framework.Vector2(1, 1);
-            vertices[vertexIndex + 2].Position = pos + (Vector3)new Vector2(size, size);
+            vertices[vertexIndex + 2].Position = pos + new Vector3(size, vertexIndex * 0.0001f, size);
             vertices[vertexIndex + 2].Color = particle.Color;
 
             vertices[vertexIndex + 3].TextureCoordinate = new Microsoft.Xna.Framework.Vector2(1, 0);
-            vertices[vertexIndex + 3].Position = pos + (Vector3)new Vector2(size, -size);
+            vertices[vertexIndex + 3].Position = pos + new Vector3(size, vertexIndex * 0.0001f, -size);
             vertices[vertexIndex + 3].Color = particle.Color;
         }
 
