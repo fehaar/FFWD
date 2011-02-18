@@ -469,23 +469,13 @@ namespace PressPlay.FFWD
         {
             foreach (UnityObject obj in objects.Values)
             {
-                if (obj is Component)
-                {
-                    GameObject gObj = ((Component)obj).gameObject;
-
-                    if (!dontDestroyOnLoad.Contains(gObj))
-                    {
-                        markedForDestruction.Add(obj);
-                    }
-                }
-
                 if (obj is GameObject)
                 {
                     GameObject gObj = (GameObject)obj;
 
                     if (!dontDestroyOnLoad.Contains(gObj))
                     {
-                        markedForDestruction.Add(obj);
+                        UnityObject.Destroy(gObj);
                     }
                 }
             }
