@@ -110,6 +110,7 @@ namespace PressPlay.FFWD.UI.Controls
             AddChild(background);
 
             textControl = new TextControl();
+            textControl.ignoreSize = true;
             AddChild(textControl);
         }
 

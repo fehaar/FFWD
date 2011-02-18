@@ -35,9 +35,9 @@ namespace PressPlay.FFWD.ScreenManager
     {
         #region Fields
 
-        bool loadingIsSlow;
-        bool otherScreensAreGone;
-        bool hasAddedScreens = false;
+        protected bool loadingIsSlow;
+        protected bool otherScreensAreGone;
+        protected bool hasAddedScreens = false;
         protected List<Control> controls = new List<Control>();
         protected Control rootControl;
 
@@ -151,39 +151,6 @@ namespace PressPlay.FFWD.ScreenManager
                 (ScreenManager.GetScreens().Length == 1))
             {
                 otherScreensAreGone = true;
-            }
-
-            // The gameplay screen takes a while to load, so we display a loading
-            // message while that is going on, but the menus load very quickly, and
-            // it would look silly if we flashed this up for just a fraction of a
-            // second while returning from the game to the menus. This parameter
-            // tells us how long the loading is going to take, so we know whether
-            // to bother drawing the message.
-            if (loadingIsSlow)
-            {
-                ScreenManager.FadeBackBufferToBlack(1.0f);
-
-                SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
-                SpriteFont font = ScreenManager.Font;
-
-                string message = "Loading...(" + (Application.loadingProgress * 100) + ")";
-
-                // Center the text in the viewport.
-                Viewport viewport = ScreenManager.Viewport;
-                Vector2 viewportSize = new Vector2(viewport.Width, viewport.Height);
-                Vector2 textSize = font.MeasureString(message);
-                Vector2 textPosition = (viewportSize - textSize) / 2;
-
-                Color color = Color.white * TransitionAlpha;
-
-                // Draw the text.
-                spriteBatch.Begin();
-                spriteBatch.DrawString(font, message, textPosition, color);
-                spriteBatch.End();
-            }
-            else
-            {
-                Debug.Log("LoadingScreen. Loading is not slow!");
             }
         }
 
