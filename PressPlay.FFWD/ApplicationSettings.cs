@@ -24,6 +24,10 @@ namespace PressPlay.FFWD
         public static Camera DebugCamera;
         public static SpriteFont DebugFont;
 
+#if WINDOWS
+        public static int AssetLoadInterval = 100; // In Ticks
+#else
         public static int AssetLoadInterval = 40; // In Ticks
+#endif
     }
 }

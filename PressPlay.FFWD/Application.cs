@@ -422,7 +422,7 @@ namespace PressPlay.FFWD
                 _loadingProgess = Mathf.Clamp01(((float)numberOfAssetsLoaded / (float)totalNumberOfAssetsToLoad));
             }
 
-            Debug.Log("Application.loadingProgress: " + loadingProgress);
+            //Debug.Log("Application.loadingProgress: " + loadingProgress);
         }
 
         private void OnSceneLoadComplete()
