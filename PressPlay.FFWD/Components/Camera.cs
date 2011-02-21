@@ -390,7 +390,7 @@ namespace PressPlay.FFWD.Components
             return null;
         }
 
-        internal int BatchRender<T>(T data, Material material, Transform transform, Matrix[] animations)
+        internal int BatchRender<T>(T data, Material material, Transform transform)
         {
 #if DEBUG
             if (Camera.logRenderCalls)
@@ -398,7 +398,7 @@ namespace PressPlay.FFWD.Components
                 Debug.LogFormat("Dyn batch: {0} on {1} at {2}", transform.gameObject, gameObject, transform.position);
             }
 #endif
-            return dynamicBatchRenderer.Draw(this, material, data, transform, animations);
+            return dynamicBatchRenderer.Draw(this, material, data, transform);
         }
 
         internal bool DoFrustumCulling(ref BoundingSphere sphere)
