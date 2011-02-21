@@ -282,7 +282,7 @@ namespace PressPlay.FFWD.Components
             }
 
             // We are beginning the batching of TextRenderer3D calls
-            TextRenderer3D.batch.Begin(0, null, null, DepthStencilState.Default, RasterizerState.CullNone, TextRenderer3D.basicEffect);
+            TextRenderer3D.batch.Begin(SpriteSortMode.Deferred, null, null, DepthStencilState.Default, RasterizerState.CullNone, TextRenderer3D.basicEffect);
             #endregion
 
             int q = 0;

@@ -54,6 +54,8 @@ namespace PressPlay.FFWD
                                 break;
                             }
                         }
+                        // HACK : We should do something else to get the correct sphere size.
+                        boundingSphere.Radius *= 3.5f;
                     }
                     model = data.model;
                     if (model != null)

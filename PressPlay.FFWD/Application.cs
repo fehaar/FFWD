@@ -363,6 +363,8 @@ namespace PressPlay.FFWD
             
             if (!String.IsNullOrEmpty(loadedLevelName))
             {
+                UnloadCurrentLevel();
+                CleanUp();
                 assetHelper.Unload(loadedLevelName);
             }
 
@@ -377,6 +379,11 @@ namespace PressPlay.FFWD
             totalNumberOfAssetsToLoad = tempAssets.Count;
             numberOfAssetsLoaded = 0;
             //Debug.Log("TempAssets.Count: "+tempAssets.Count);
+
+            if (scene == null)
+            {
+                OnSceneLoadComplete();
+            }
         }
 
         private void LoadSceneAssets()
@@ -469,23 +476,13 @@ namespace PressPlay.FFWD
         {
             foreach (UnityObject obj in objects.Values)
             {
-                if (obj is Component)
-                {
-                    GameObject gObj = ((Component)obj).gameObject;
-
-                    if (!dontDestroyOnLoad.Contains(gObj))
-                    {
-                        markedForDestruction.Add(obj);
-                    }
-                }
-
                 if (obj is GameObject)
                 {
                     GameObject gObj = (GameObject)obj;
 
                     if (!dontDestroyOnLoad.Contains(gObj))
                     {
-                        markedForDestruction.Add(obj);
+                        UnityObject.Destroy(gObj);
                     }
                 }
             }

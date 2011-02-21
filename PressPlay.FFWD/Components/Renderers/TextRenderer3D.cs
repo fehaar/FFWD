@@ -58,45 +58,6 @@ namespace PressPlay.FFWD.Components
             const float textSize = 0.03f;
 
             batch.DrawString(font, text, new Vector2(viewSpaceTextPosition.x, viewSpaceTextPosition.y), material.color, 0, textOrigin, textSize, 0, viewSpaceTextPosition.z);
-            
-            //if (batch == null)
-            //{
-            //    batch = new SpriteBatch(device);
-            //}
-
-            //if (basicEffect == null)
-            //{
-            //    basicEffect = new BasicEffect(device)
-            //    {
-            //        TextureEnabled = true,
-            //        VertexColorEnabled = true,
-            //    };
-            //}
-
-            //if (renderMethod == RenderMethod.billboard)
-            //{
-            //    TextRenderer3D.basicEffect.World = Matrix.CreateConstrainedBillboard(transform.position, transform.position - cam.transform.forward.normalized, cam.transform.up * -1, null, null);
-            //}
-            //else
-            //{
-            //    //throw new NotImplementedException("This function is not yet implemented");
-            //    TextRenderer3D.basicEffect.World = Matrix.CreateConstrainedBillboard(transform.position, transform.position - cam.transform.forward.normalized, transform.forward * -1, null, null);
-            //    //basicEffect.World = Matrix.CreateScale(1, -1, 1) * Matrix.CreateTranslation(transform.position);
-            //}
-            //TextRenderer3D.basicEffect.View = cam.view;
-            //TextRenderer3D.basicEffect.Projection = cam.projectionMatrix;
-
-            //Vector2 textOrigin = font.MeasureString(text) / 2;
-            //const float textSize = 0.03f;
-
-            //batch.Begin(0, null, null, DepthStencilState.DepthRead, RasterizerState.CullNone, basicEffect);
-            //batch.DrawString(font, text, Vector2.zero, color, 0, textOrigin, textSize, 0, 0);
-            //batch.End();
-
-            //device.BlendState = BlendState.Opaque;
-            //device.DepthStencilState = DepthStencilState.Default;
-            //device.SamplerStates[0] = SamplerState.LinearClamp;
-
             return 0;
         }        
     }
