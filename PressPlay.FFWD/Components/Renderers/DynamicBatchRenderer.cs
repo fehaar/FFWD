@@ -69,6 +69,8 @@ namespace PressPlay.FFWD.Components
             currentBatchIndex = 0;
             batchVertexSize = 0;
             batchIndexSize = 0;
+            currentVertexIndex = 0;
+            currentIndexIndex = 0;
         }
 
         private void Add<T>(T model, Transform transform, Matrix[] animations)
@@ -78,36 +80,35 @@ namespace PressPlay.FFWD.Components
                 ExpandData();
             }
 
+            Matrix world = (transform != null) ? transform.world : Matrix.Identity;
             data[currentBatchIndex].world = (transform != null) ? transform.world : Matrix.Identity;
             MeshFilter filter = model as MeshFilter;
             if (filter != null)
             {
-                data[currentBatchIndex].mesh = filter.mesh;
-                data[currentBatchIndex].model = null;
-                data[currentBatchIndex].animations = null;
-                batchVertexSize += filter.mesh.vertices.Length;
-                batchIndexSize += filter.mesh.triangles.Length;
+                PrepareMesh(filter.mesh, ref world);
+                //data[currentBatchIndex].mesh = filter.mesh;
+                //data[currentBatchIndex].model = null;
+                //data[currentBatchIndex].animations = null;
             }
 
             Mesh mesh = model as Mesh;
             if (mesh != null)
             {
-                data[currentBatchIndex].mesh = mesh;
-                data[currentBatchIndex].model = null;
-                data[currentBatchIndex].animations = null;
-                batchVertexSize += mesh.vertices.Length;
-                batchIndexSize += mesh.triangles.Length;
+                PrepareMesh(mesh, ref world);
+                //data[currentBatchIndex].mesh = mesh;
+                //data[currentBatchIndex].model = null;
+                //data[currentBatchIndex].animations = null;
             }
 
-            CpuSkinnedModelPart part = model as CpuSkinnedModelPart;
-            if (part != null)
-            {
-                data[currentBatchIndex].mesh = null;
-                data[currentBatchIndex].model = part;
-                data[currentBatchIndex].animations = animations;
-                batchVertexSize += part.mesh.vertices.Length;
-                batchIndexSize += part.mesh.triangles.Length + 3;
-            }
+            //CpuSkinnedModelPart part = model as CpuSkinnedModelPart;
+            //if (part != null)
+            //{
+            //    data[currentBatchIndex].mesh = null;
+            //    data[currentBatchIndex].model = part;
+            //    data[currentBatchIndex].animations = animations;
+            //    batchVertexSize += part.mesh.vertices.Length;
+            //    batchIndexSize += part.mesh.triangles.Length + 3;
+            //}
 
             currentBatchIndex++;
         }
@@ -126,7 +127,7 @@ namespace PressPlay.FFWD.Components
                 return 0;
             }
 
-            PrepareData();
+            //PrepareData();
 
             if (currentIndexIndex == 0)
             {
@@ -218,6 +219,21 @@ namespace PressPlay.FFWD.Components
 
         private void PrepareMesh(Mesh mesh, ref Matrix transform)
         {
+            batchVertexSize += mesh.vertices.Length;
+            if (vertexData.Length < batchVertexSize)
+            {
+                VertexPositionNormalTexture[] newVertexData = new VertexPositionNormalTexture[batchVertexSize];
+                vertexData.CopyTo(newVertexData, 0);
+                vertexData = newVertexData;
+            }
+            batchIndexSize += mesh.triangles.Length;
+            if (indexData.Length < batchIndexSize)
+            {
+                short[] newIndexData = new short[batchIndexSize];
+                indexData.CopyTo(newIndexData, 0);
+                indexData = newIndexData;
+            }
+
             if (positionData.Length < mesh.vertices.Length)
             {
                 positionData = new Microsoft.Xna.Framework.Vector3[mesh.vertices.Length];
