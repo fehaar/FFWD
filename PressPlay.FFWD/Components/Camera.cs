@@ -282,7 +282,18 @@ namespace PressPlay.FFWD.Components
             }
 
             // We are beginning the batching of TextRenderer3D calls
-            TextRenderer3D.batch.Begin(SpriteSortMode.Deferred, null, null, DepthStencilState.Default, RasterizerState.CullNone, TextRenderer3D.basicEffect);
+            if (wireframeRender)
+            {
+                RasterizerState state = new RasterizerState();
+                state.FillMode = FillMode.WireFrame;
+                state.CullMode = CullMode.None;
+                TextRenderer3D.batch.Begin(SpriteSortMode.Deferred, null, null, DepthStencilState.Default, state, TextRenderer3D.basicEffect);
+            }
+            else
+            {
+                TextRenderer3D.batch.Begin(SpriteSortMode.Deferred, null, null, DepthStencilState.Default, RasterizerState.CullNone, TextRenderer3D.basicEffect);
+
+            }
             #endregion
 
             int q = 0;

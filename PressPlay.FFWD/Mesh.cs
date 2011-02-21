@@ -49,7 +49,7 @@ namespace PressPlay.FFWD
                             {
                                 meshIndex = i;
 
-                                skinnedModel.Parts[i].SetMesh(this);
+                                skinnedModel.Parts[i].InitializeMesh(this);
 
                                 break;
                             }

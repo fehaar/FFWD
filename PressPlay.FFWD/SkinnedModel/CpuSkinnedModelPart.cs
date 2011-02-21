@@ -47,16 +47,15 @@ namespace PressPlay.FFWD.SkinnedModel
             }
         }
 
-        internal void SetMesh(Mesh newMesh)
+        internal void InitializeMesh(Mesh newMesh)
         {
             newMesh.vertices = mesh.vertices;
             newMesh.normals = mesh.normals;
             newMesh.uv = mesh.uv;
             newMesh.triangles = mesh.triangles;
-            mesh = newMesh;
         }
 
-        public void SetBones(Matrix[] bones, ref Matrix world)
+        public void SetBones(Matrix[] bones, ref Matrix world, Mesh mesh)
         {
             // skin all of the vertices
             for (int i = 0; i < vertexCount; i++)

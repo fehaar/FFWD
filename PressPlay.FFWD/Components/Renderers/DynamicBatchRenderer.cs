@@ -89,6 +89,16 @@ namespace PressPlay.FFWD.Components
                 batchIndexSize += filter.mesh.triangles.Length;
             }
 
+            Mesh mesh = model as Mesh;
+            if (mesh != null)
+            {
+                data[currentBatchIndex].mesh = mesh;
+                data[currentBatchIndex].model = null;
+                data[currentBatchIndex].animations = null;
+                batchVertexSize += mesh.vertices.Length;
+                batchIndexSize += mesh.triangles.Length;
+            }
+
             CpuSkinnedModelPart part = model as CpuSkinnedModelPart;
             if (part != null)
             {
@@ -199,7 +209,7 @@ namespace PressPlay.FFWD.Components
                 }
                 if (data[i].model != null)
                 {
-                    data[i].model.SetBones(data[i].animations, ref data[i].world);
+                    data[i].model.SetBones(data[i].animations, ref data[i].world, null);
                     Matrix m = Matrix.Identity;
                     PrepareMesh(data[i].model.mesh, ref m);
                 }

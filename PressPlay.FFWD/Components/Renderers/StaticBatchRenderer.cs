@@ -51,10 +51,10 @@ namespace PressPlay.FFWD.Components
 
         public override int Draw(GraphicsDevice device, Camera cam)
         {
-            RasterizerState oldrasterizerState = device.RasterizerState;
-            RasterizerState rasterizerState = new RasterizerState();
-            rasterizerState.CullMode = CullMode.CullCounterClockwiseFace;
-            device.RasterizerState = rasterizerState;
+            //RasterizerState oldrasterizerState = device.RasterizerState;
+            //RasterizerState rasterizerState = new RasterizerState();
+            //rasterizerState.CullMode = CullMode.CullCounterClockwiseFace;
+            //device.RasterizerState = rasterizerState;
 
 #if DEBUG
             if (Camera.logRenderCalls)
@@ -89,7 +89,7 @@ namespace PressPlay.FFWD.Components
                 );
             }
 
-            device.RasterizerState = oldrasterizerState;
+            //device.RasterizerState = oldrasterizerState;
             return 1;
         }
     }
