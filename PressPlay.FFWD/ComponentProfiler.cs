@@ -92,7 +92,7 @@ namespace PressPlay.FFWD
 
         public List<ComponentUpdateProfile> Sort()
         {
-            //componentUpdateProfiles.Sort();
+            componentUpdateProfiles.Sort();
 
             return componentUpdateProfiles;
         }
@@ -181,7 +181,7 @@ namespace PressPlay.FFWD
                 return "null " + totalMilliseconds.ToString();
             }
 
-            return name + " " + totalMilliseconds.ToString() + " ms";
+            return name + " " + totalMilliseconds.ToString() + " ms  " + totalTicks + " ticks";
         }
     }
 }
