@@ -15,24 +15,11 @@ namespace PressPlay.FFWD.Components
             this.device = device;
         }
 
-        public static int InitialBatchSize = 20;
-        public static int BatchExpansion = 5;
-
         private Material currentMaterial = Material.Default;
 
         private GraphicsDevice device;
         private BasicEffect effect;
 
-        private struct BatchData
-        {
-            internal Matrix world;
-            internal Mesh mesh;
-            internal CpuSkinnedModelPart model;
-            internal Matrix[] animations;
-        }
-
-        private int currentBatchIndex = 0;
-        private BatchData[] data = new BatchData[InitialBatchSize];
         private int batchVertexSize = 0;
         private int batchIndexSize = 0;
         private int currentVertexIndex = 0;
@@ -50,7 +37,7 @@ namespace PressPlay.FFWD.Components
         /// <param name="material"></param>
         /// <param name="filter"></param>
         /// <returns></returns>
-        internal int Draw<T>(Camera cam, Material material, T verts, Transform transform, Matrix[] animations)
+        internal int Draw<T>(Camera cam, Material material, T verts, Transform transform)
         {
             int drawCalls = 0;
 
@@ -59,65 +46,37 @@ namespace PressPlay.FFWD.Components
                 drawCalls = DoDraw(device, cam);
                 currentMaterial = material;
             }            
-            Add(verts, transform, animations);
+            Add(verts, transform);
             return drawCalls;
         }
 
         private void EndBatch()
         {
             currentMaterial = Material.Default;
-            currentBatchIndex = 0;
             batchVertexSize = 0;
             batchIndexSize = 0;
+            currentVertexIndex = 0;
+            currentIndexIndex = 0;
         }
 
-        private void Add<T>(T model, Transform transform, Matrix[] animations)
+        private void Add<T>(T model, Transform transform)
         {
-            if (currentBatchIndex == data.Length)
-            {
-                ExpandData();
-            }
-
-            data[currentBatchIndex].world = (transform != null) ? transform.world : Matrix.Identity;
+            Matrix world = (transform != null) ? transform.world : Matrix.Identity;
             MeshFilter filter = model as MeshFilter;
             if (filter != null)
             {
-                data[currentBatchIndex].mesh = filter.mesh;
-                data[currentBatchIndex].model = null;
-                data[currentBatchIndex].animations = null;
-                batchVertexSize += filter.mesh.vertices.Length;
-                batchIndexSize += filter.mesh.triangles.Length;
+                PrepareMesh(filter.mesh, ref world);
             }
 
-            CpuSkinnedModelPart part = model as CpuSkinnedModelPart;
-            if (part != null)
+            Mesh mesh = model as Mesh;
+            if (mesh != null)
             {
-                data[currentBatchIndex].mesh = null;
-                data[currentBatchIndex].model = part;
-                data[currentBatchIndex].animations = animations;
-                batchVertexSize += part.mesh.vertices.Length;
-                batchIndexSize += part.mesh.triangles.Length + 3;
+                PrepareMesh(mesh, ref world);
             }
-
-            currentBatchIndex++;
-        }
-
-        private void ExpandData()
-        {
-            BatchData[] newData = new BatchData[data.Length + BatchExpansion];
-            data.CopyTo(newData, 0);
-            data = newData;
         }
 
         internal int DoDraw(GraphicsDevice device, Camera cam)
         {
-            if (currentBatchIndex == 0)
-            {
-                return 0;
-            }
-
-            PrepareData();
-
             if (currentIndexIndex == 0)
             {
                 return 0;
@@ -131,11 +90,6 @@ namespace PressPlay.FFWD.Components
                 effect.LightingEnabled = false;
             }
 
-            //RasterizerState oldRaster = device.RasterizerState;
-            //RasterizerState rasterizerState = new RasterizerState();
-            //rasterizerState.CullMode = CullMode.None;
-            //device.RasterizerState = rasterizerState;
-            
             effect.View = cam.view;
             effect.Projection = cam.projectionMatrix;
             currentMaterial.SetBlendState(device);
@@ -143,7 +97,7 @@ namespace PressPlay.FFWD.Components
 #if DEBUG
             if (Camera.logRenderCalls)
             {
-                Debug.LogFormat("Dyn batch draw: {0} on {1} batched {2}, verts {3}, indices {4}", currentMaterial.mainTexture, cam.gameObject, currentBatchIndex, currentVertexIndex, currentIndexIndex);
+                Debug.LogFormat("Dyn batch draw: {0} on {1} verts {2}, indices {3}", currentMaterial.mainTexture, cam.gameObject, currentVertexIndex, currentIndexIndex);
             }
 #endif
 
@@ -172,42 +126,28 @@ namespace PressPlay.FFWD.Components
                     currentIndexIndex / 3
                 );
             }
-            //device.RasterizerState = oldRaster;
 
             EndBatch();
             return 1;
         }
 
-        private void PrepareData()
-        {
-            if (vertexData.Length < batchVertexSize)
-            {
-                vertexData = new VertexPositionNormalTexture[batchVertexSize];
-            }
-            if (indexData.Length < batchIndexSize)
-            {
-                indexData = new short[batchIndexSize];
-            }
-
-            currentVertexIndex = 0;
-            currentIndexIndex = 0;
-            for (int i = 0; i < currentBatchIndex; i++)
-            {
-                if (data[i].mesh != null)
-                {
-                    PrepareMesh(data[i].mesh, ref data[i].world);
-                }
-                if (data[i].model != null)
-                {
-                    data[i].model.SetBones(data[i].animations, ref data[i].world);
-                    Matrix m = Matrix.Identity;
-                    PrepareMesh(data[i].model.mesh, ref m);
-                }
-            }
-        }
-
         private void PrepareMesh(Mesh mesh, ref Matrix transform)
         {
+            batchVertexSize += mesh.vertices.Length;
+            if (vertexData.Length < batchVertexSize)
+            {
+                VertexPositionNormalTexture[] newVertexData = new VertexPositionNormalTexture[batchVertexSize];
+                vertexData.CopyTo(newVertexData, 0);
+                vertexData = newVertexData;
+            }
+            batchIndexSize += mesh.triangles.Length;
+            if (indexData.Length < batchIndexSize)
+            {
+                short[] newIndexData = new short[batchIndexSize];
+                indexData.CopyTo(newIndexData, 0);
+                indexData = newIndexData;
+            }
+
             if (positionData.Length < mesh.vertices.Length)
             {
                 positionData = new Microsoft.Xna.Framework.Vector3[mesh.vertices.Length];

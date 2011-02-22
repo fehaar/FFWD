@@ -26,7 +26,7 @@ namespace PressPlay.FFWD.Components
             }
 
             // Check the frustum of the camera
-            BoundingSphere sphere = new BoundingSphere(transform.position, sharedMesh.boundingSphere.Radius);
+            BoundingSphere sphere = new BoundingSphere(transform.position, sharedMesh.boundingSphere.Radius * transform.lossyScale.sqrMagnitude);
             if (cam.DoFrustumCulling(ref sphere))
             {
 #if DEBUG
@@ -41,7 +41,9 @@ namespace PressPlay.FFWD.Components
             // Draw the model.
             // TODO: This can be simplified greatly if the batch renderer is changed to store the data automatically
             CpuSkinnedModelPart modelPart = sharedMesh.GetSkinnedModelPart();
-            return cam.BatchRender(modelPart, sharedMaterial, transform, animation.GetTransforms());
+            Matrix world = transform.world;
+            modelPart.SetBones(animation.GetTransforms(), ref world, sharedMesh);
+            return cam.BatchRender(sharedMesh, sharedMaterial, null);
         }
         #endregion
     }

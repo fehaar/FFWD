@@ -91,13 +91,13 @@ namespace PressPlay.FFWD
         }
 
         /// <summary>
-        /// This is not used at the moment as we do not treat meshes in the same way as Unity and have no notion of shared vs. normal meshes.
+        /// Return a CLone of the original mesh
         /// </summary>
         /// <param name="original">The original mesh</param>
         /// <returns></returns>
         public static Mesh Instantiate(Mesh original)
         {
-            return original;
+            return (Mesh)original.Clone();
         }
 
         /// <summary>

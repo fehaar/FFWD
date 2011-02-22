@@ -282,7 +282,18 @@ namespace PressPlay.FFWD.Components
             }
 
             // We are beginning the batching of TextRenderer3D calls
-            TextRenderer3D.batch.Begin(SpriteSortMode.Deferred, null, null, DepthStencilState.Default, RasterizerState.CullNone, TextRenderer3D.basicEffect);
+            if (wireframeRender)
+            {
+                RasterizerState state = new RasterizerState();
+                state.FillMode = FillMode.WireFrame;
+                state.CullMode = CullMode.None;
+                TextRenderer3D.batch.Begin(SpriteSortMode.Deferred, null, null, DepthStencilState.Default, state, TextRenderer3D.basicEffect);
+            }
+            else
+            {
+                TextRenderer3D.batch.Begin(SpriteSortMode.Deferred, null, null, DepthStencilState.Default, RasterizerState.CullNone, TextRenderer3D.basicEffect);
+
+            }
             #endregion
 
             int q = 0;
@@ -379,15 +390,15 @@ namespace PressPlay.FFWD.Components
             return null;
         }
 
-        internal int BatchRender<T>(T data, Material material, Transform transform, Matrix[] animations)
+        internal int BatchRender<T>(T data, Material material, Transform transform)
         {
 #if DEBUG
             if (Camera.logRenderCalls)
             {
-                Debug.LogFormat("Dyn batch: {0} on {1} at {2}", transform.gameObject, gameObject, transform.position);
+                Debug.LogFormat("Dyn batch: {0} on {1} at {2}", transform.gameObject, gameObject, (transform != null) ? transform.position : Vector3.zero);
             }
 #endif
-            return dynamicBatchRenderer.Draw(this, material, data, transform, animations);
+            return dynamicBatchRenderer.Draw(this, material, data, transform);
         }
 
         internal bool DoFrustumCulling(ref BoundingSphere sphere)

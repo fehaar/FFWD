@@ -15,7 +15,7 @@ namespace PressPlay.FFWD.Components
         { 
             get
             {
-                if (_mesh == null)
+                if ((_mesh == null) && (sharedMesh != null))
                 {
                     _mesh = (Mesh)sharedMesh.Clone();
                 }

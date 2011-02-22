@@ -17,5 +17,10 @@ namespace PressPlay.FFWD
         public string name { get; set; }
 
         internal abstract void LoadAsset(AssetHelper assetHelper);
+
+        public override string ToString()
+        {
+            return String.Format("{0} ({1})", GetType().Name, GetInstanceID());
+        }
     }
 }
