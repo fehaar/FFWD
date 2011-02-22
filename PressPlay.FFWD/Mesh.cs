@@ -131,6 +131,7 @@ namespace PressPlay.FFWD
             Mesh clone = new Mesh();
             clone.skinnedModel = skinnedModel;
             clone.model = model;
+            clone.meshIndex = meshIndex;
 
             if (vertices != null)
             {
