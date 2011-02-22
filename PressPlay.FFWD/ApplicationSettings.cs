@@ -13,9 +13,9 @@ namespace PressPlay.FFWD
         public static To2dMode to2dMode = To2dMode.DropY;
         public static bool ShowComponentProfile = false;
         public static bool ShowiTweenUpdateTime = false;
-        public static bool ShowTurnOffTime = true;
-        public static bool ShowTimeBetweenUpdates = true;
-        public static bool ShowRaycastTime = true;
+        public static bool ShowTurnOffTime = false;
+        public static bool ShowTimeBetweenUpdates = false;
+        public static bool ShowRaycastTime = false;
         public static bool ShowParticleAnimTime = false;
         public static bool ShowPerformanceBreakdown = true;
         public static bool ShowFPSCounter = true;

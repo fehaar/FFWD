@@ -546,15 +546,14 @@ namespace PressPlay.FFWD
 
         public void LookAt(Vector3 worldPosition, Vector3 worldUp)
         {
-            if ((worldPosition - position).sqrMagnitude < float.Epsilon) { return; }
+            if (worldPosition == position) { return; }
 
             Matrix m = Matrix.CreateWorld(position, worldPosition - position, worldUp);
             Microsoft.Xna.Framework.Vector3 scale;
             Microsoft.Xna.Framework.Quaternion rot;
             Microsoft.Xna.Framework.Vector3 pos;
 
-            //if (m.Decompose(out scale, out rot, out pos) && !float.IsNaN(rot.W))
-            if (m.Decompose(out scale, out rot, out pos))
+            if (m.Decompose(out scale, out rot, out pos) && !float.IsNaN(rot.W))
             {
                 localRotation = new Quaternion(rot);
                 if (rigidbody != null)

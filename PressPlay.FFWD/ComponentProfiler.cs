@@ -11,7 +11,7 @@ namespace PressPlay.FFWD
 
         private ComponentUpdateProfile currentUpdateProfile;
         
-        private Stopwatch stopwatch = new Stopwatch();
+        
 
         public long totalTicks = 0;
         public float totalMilliseconds {
@@ -22,16 +22,15 @@ namespace PressPlay.FFWD
 
         private ComponentUpdateProfile GetComponentProfileFromList(Component _component)
         {
-            ComponentUpdateProfile updateProfile = new ComponentUpdateProfile(_component);
             for (int i = 0; i < componentUpdateProfiles.Count; i++)
             {
-                if (componentUpdateProfiles[i].component == _component)
+                if (componentUpdateProfiles[i].component.GetType() == _component.GetType())
                 {
                     return componentUpdateProfiles[i];
                 }
             }
-            
-            componentUpdateProfiles.Add(currentUpdateProfile);
+            ComponentUpdateProfile updateProfile = new ComponentUpdateProfile(_component);
+            componentUpdateProfiles.Add(updateProfile);
             
             return updateProfile;
         }
@@ -40,8 +39,8 @@ namespace PressPlay.FFWD
         {
             currentUpdateProfile = GetComponentProfileFromList(_component);
             currentUpdateProfile.updateCalls++;
-            
-            stopwatch.Start();
+
+            currentUpdateProfile.updateStopwatch.Start();
         }
 
         public void StartFixedUpdateCall(Component _component)
@@ -49,7 +48,7 @@ namespace PressPlay.FFWD
             currentUpdateProfile = GetComponentProfileFromList(_component);
             currentUpdateProfile.fixedUpdateCalls++;
 
-            stopwatch.Start();
+            currentUpdateProfile.updateStopwatch.Start();
         }
 
         public void StartLateUpdateCall(Component _component)
@@ -57,31 +56,22 @@ namespace PressPlay.FFWD
             currentUpdateProfile = GetComponentProfileFromList(_component);
             currentUpdateProfile.lateUpdateCalls++;
 
-            stopwatch.Start();
+            currentUpdateProfile.updateStopwatch.Start();
         }
 
         public void EndUpdateCall()
         {
-            stopwatch.Stop();
-            currentUpdateProfile.updateTotalTicks += stopwatch.ElapsedTicks;
-            totalTicks += stopwatch.ElapsedTicks;
-            stopwatch.Reset();
+            currentUpdateProfile.updateStopwatch.Stop();
         }
 
         public void EndFixedUpdateCall()
         {
-            stopwatch.Stop();
-            currentUpdateProfile.fixedUpdateTotalTicks += stopwatch.ElapsedTicks;
-            totalTicks += stopwatch.ElapsedTicks;
-            stopwatch.Reset();
+            currentUpdateProfile.updateStopwatch.Stop();
         }
 
         public void EndLateUpdateCall()
         {
-            stopwatch.Stop();
-            currentUpdateProfile.lateUpdateTotalTicks += stopwatch.ElapsedTicks;
-            totalTicks += stopwatch.ElapsedTicks;
-            stopwatch.Reset();
+            currentUpdateProfile.updateStopwatch.Stop();
         }
 
         public void FlushData()
@@ -133,10 +123,9 @@ namespace PressPlay.FFWD
         public int updateCalls;
         public int lateUpdateCalls;
         public int fixedUpdateCalls;
-        public long updateTotalTicks;
-        public long lateUpdateTotalTicks;
-        public long fixedUpdateTotalTicks;
 
+        public Stopwatch updateStopwatch;
+        
         public float totalMilliseconds {
             get {
                 return (totalTicks / Stopwatch.Frequency) * 1000f;
@@ -145,7 +134,14 @@ namespace PressPlay.FFWD
 
         public long totalTicks 
         {
-            get { return updateTotalTicks + lateUpdateTotalTicks + fixedUpdateTotalTicks; }
+            get {
+                if (updateStopwatch == null)
+                {
+                    return 0;
+                }
+
+                return updateStopwatch.ElapsedTicks; 
+            }
         }
 
         public ComponentUpdateProfile(Component component)
@@ -154,9 +150,7 @@ namespace PressPlay.FFWD
             updateCalls = 0;
             lateUpdateCalls = 0;
             fixedUpdateCalls = 0;
-            updateTotalTicks = 0;
-            lateUpdateTotalTicks = 0;
-            fixedUpdateTotalTicks = 0;
+            updateStopwatch = new Stopwatch();
         }
 
         public void Flush()
@@ -164,9 +158,7 @@ namespace PressPlay.FFWD
             updateCalls = 0;
             lateUpdateCalls = 0;
             fixedUpdateCalls = 0;
-            updateTotalTicks = 0;
-            lateUpdateTotalTicks = 0;
-            fixedUpdateTotalTicks = 0;
+            updateStopwatch.Reset();
         }
 
         public int CompareTo(ComponentUpdateProfile other)

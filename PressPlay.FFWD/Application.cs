@@ -112,9 +112,6 @@ namespace PressPlay.FFWD
 #if DEBUG
             timeUpdateEndUpdateStart.Stop(); //measure time since last draw ended to try and measure graphics performance
 #endif
-#if DEBUG && COMPONENT_PROFILE
-            componentProfiler.FlushData();
-#endif
             if (Application.quitNextUpdate)
             {
                 base.Game.Exit();
@@ -269,7 +266,6 @@ namespace PressPlay.FFWD
             }
             if (ApplicationSettings.ShowiTweenUpdateTime)
             {
-                componentProfiler.Sort();
                 Debug.Display("iTweenUpdateTime", iTweenUpdateTime.ElapsedMilliseconds);
                 iTweenUpdateTime.Reset();
             }
@@ -278,6 +274,7 @@ namespace PressPlay.FFWD
                 componentProfiler.Sort();
                 Debug.Display("GetWorst()", componentProfiler.GetWorst());
                 Debug.Display("total component update time recorded", componentProfiler.totalMilliseconds);
+                componentProfiler.FlushData();
             }
 
             if (ApplicationSettings.ShowRaycastTime)
