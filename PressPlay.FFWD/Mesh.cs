@@ -71,19 +71,23 @@ namespace PressPlay.FFWD
                         }
                     }
 
-                    if (data.vertices != null)
+                    if (data.meshParts.Count > 0)
                     {
-                        // This is hardcoded to make it work. The uvs and tris from the Mesh seems broken. Uhh...
-                        vertices = data.vertices;
-                        //triangles = new short[6] { 2, 0, 1, 2, 1, 3 };
-                        triangles = data.triangles;
-                        uv = new Microsoft.Xna.Framework.Vector2[4] {
-                            new Microsoft.Xna.Framework.Vector2(0, 0),
-                            new Microsoft.Xna.Framework.Vector2(1, 0),
-                            new Microsoft.Xna.Framework.Vector2(0, 1),
-                            new Microsoft.Xna.Framework.Vector2(1, 1)
-                        };
-                        normals = data.normals;
+                        MeshDataPart part = data.meshParts[name];
+                        if (part != null)
+                        {
+                            // This is hardcoded to make it work. The uvs and tris from the Mesh seems broken. Uhh...
+                            vertices = part.vertices;
+                            //triangles = new short[6] { 2, 0, 1, 2, 1, 3 };
+                            triangles = part.triangles;
+                            uv = new Microsoft.Xna.Framework.Vector2[4] {
+                                new Microsoft.Xna.Framework.Vector2(0, 0),
+                                new Microsoft.Xna.Framework.Vector2(1, 0),
+                                new Microsoft.Xna.Framework.Vector2(0, 1),
+                                new Microsoft.Xna.Framework.Vector2(1, 1)
+                            };
+                            normals = part.normals;
+                        }
                     }
                 }
 #if DEBUG

@@ -14,10 +14,7 @@ namespace PressPlay.FFWD
         internal CpuSkinnedModel skinnedModel;
         internal Model model;
 
-        internal Microsoft.Xna.Framework.Vector3[] vertices;
-        internal Microsoft.Xna.Framework.Vector3[] normals;
-        internal Microsoft.Xna.Framework.Vector2[] uv;
-        internal short[] triangles;
+        internal Dictionary<string, MeshDataPart> meshParts;
 
         internal BoundingSphere boundingSphere;
     }

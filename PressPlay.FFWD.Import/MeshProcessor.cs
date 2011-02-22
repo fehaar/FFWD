@@ -81,17 +81,19 @@ namespace PressPlay.FFWD.Import
                 {
                     if (input is MeshContent)
                     {
-                        ProcessMesh(mesh, input as MeshContent);
+                        ProcessSpriteSquareMesh(mesh, input as MeshContent);
                     }
                 }
             }
             return mesh;
         }
 
-        private void ProcessMesh(MeshDataContent mesh, MeshContent input)
+        private void ProcessSpriteSquareMesh(MeshDataContent meshData, MeshContent input)
         {
             Microsoft.Xna.Framework.Quaternion rotation = Microsoft.Xna.Framework.Quaternion.CreateFromYawPitchRoll(MathHelper.ToRadians(RotationY), MathHelper.ToRadians(RotationX), MathHelper.ToRadians(RotationZ));
             Matrix m = Matrix.CreateScale(Scale) * Matrix.CreateFromQuaternion(rotation);
+
+            MeshDataPart mesh = new MeshDataPart();
 
             Microsoft.Xna.Framework.Vector3[] verts = new Microsoft.Xna.Framework.Vector3[input.Positions.Count];
             mesh.vertices = new Microsoft.Xna.Framework.Vector3[input.Positions.Count];
@@ -139,6 +141,8 @@ namespace PressPlay.FFWD.Import
                 mesh.uv = uv.Select(v => new Microsoft.Xna.Framework.Vector2(v.X, v.Y)).ToArray();
             }
             mesh.boundingSphere = BoundingSphere.CreateFromPoints(mesh.vertices);
+
+            meshData.meshParts.Add(input.Name, mesh);
         }
     }
 }

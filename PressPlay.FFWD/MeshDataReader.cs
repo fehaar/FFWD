@@ -15,10 +15,7 @@ namespace PressPlay.FFWD
             MeshData data = new MeshData();
             data.skinnedModel = input.ReadObject<CpuSkinnedModel>();
             data.model = input.ReadObject<Model>();
-            data.vertices = input.ReadObject<Microsoft.Xna.Framework.Vector3[]>();
-            data.triangles = input.ReadObject<short[]>();
-            data.uv = input.ReadObject<Microsoft.Xna.Framework.Vector2[]>();
-            data.normals = input.ReadObject<Microsoft.Xna.Framework.Vector3[]>();
+            data.meshParts = input.ReadObject<Dictionary<string, MeshDataPart>>();
             data.boundingSphere = input.ReadObject<Microsoft.Xna.Framework.BoundingSphere>();
             return data;
         }
