@@ -81,6 +81,10 @@ namespace PressPlay.FFWD.Import
                 {
                     if (input is MeshContent)
                     {
+                        if (input.Name == "sprite_square")
+                        {
+
+                        }
                         ProcessSpriteSquareMesh(mesh, input as MeshContent);
                     }
                 }
