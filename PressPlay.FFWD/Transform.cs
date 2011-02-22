@@ -546,7 +546,7 @@ namespace PressPlay.FFWD
 
         public void LookAt(Vector3 worldPosition, Vector3 worldUp)
         {
-            if (worldPosition == position) { return; }
+            if (worldPosition - position == Vector3.zero) { return; }
 
             Matrix m = Matrix.CreateWorld(position, worldPosition - position, worldUp);
             Microsoft.Xna.Framework.Vector3 scale;
