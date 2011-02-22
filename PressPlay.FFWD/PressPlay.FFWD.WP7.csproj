@@ -111,6 +111,7 @@
     <Compile Include="ApplicationSettings.cs" />
     <Compile Include="Asset.cs" />
     <Compile Include="AssetHelper.cs" />
+    <Compile Include="Attributes\FixReferencesAttribute.cs" />
     <Compile Include="AudioClip.cs" />
     <Compile Include="AudioSource.cs" />
     <Compile Include="Behaviour.cs" />

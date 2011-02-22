@@ -39,7 +39,6 @@ namespace PressPlay.FFWD.Components
             }
 
             // Draw the model.
-            // TODO: This can be simplified greatly if the batch renderer is changed to store the data automatically
             CpuSkinnedModelPart modelPart = sharedMesh.GetSkinnedModelPart();
             Matrix world = transform.world;
             modelPart.SetBones(animation.GetTransforms(), ref world, sharedMesh);
