@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.Xna.Framework.Content;
 using PressPlay.FFWD.Components;
+using PressPlay.FFWD.Attributes;
 
 namespace PressPlay.FFWD
 {
@@ -126,37 +127,30 @@ namespace PressPlay.FFWD
             return obj;
         }
 
-        internal override void FixReferences(Dictionary<int, UnityObject> idMap)
+        private void DoFixReferences(object objectToFix, Dictionary<int, UnityObject> idMap)
         {
-            base.FixReferences(idMap);
-            
-            if (gameObject == null)
-            {
-                return;
-            }
-
             // We find all fields only - not properties as they cannot be set as references in Unity
-            FieldInfo[] memInfo = this.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
+            FieldInfo[] memInfo = objectToFix.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
             for (int i = 0; i < memInfo.Length; i++)
             {
                 if (typeof(UnityObject).IsAssignableFrom(memInfo[i].FieldType))
                 {
-                    UnityObject val = (memInfo[i].GetValue(this) as UnityObject);
+                    UnityObject val = (memInfo[i].GetValue(objectToFix) as UnityObject);
                     if (val == null || !val.isPrefab)
-	                {
+                    {
                         continue;
-	                }
+                    }
                     if (idMap.ContainsKey(val.GetInstanceID()))
                     {
                         if (val != idMap[val.GetInstanceID()])
                         {
-                            memInfo[i].SetValue(this, idMap[val.GetInstanceID()]);
+                            memInfo[i].SetValue(objectToFix, idMap[val.GetInstanceID()]);
                         }
                     }
                 }
                 if (memInfo[i].FieldType.IsArray && typeof(UnityObject).IsAssignableFrom(memInfo[i].FieldType.GetElementType()))
                 {
-                    UnityObject[] arr = (memInfo[i].GetValue(this) as UnityObject[]);
+                    UnityObject[] arr = (memInfo[i].GetValue(objectToFix) as UnityObject[]);
                     for (int j = 0; j < arr.Length; j++)
                     {
                         if ((arr[j] != null) && (arr[j].isPrefab))
@@ -171,7 +165,23 @@ namespace PressPlay.FFWD
                         }
                     }
                 }
+                if (memInfo[i].FieldType.GetCustomAttributes(typeof(FixReferencesAttribute), true).Length > 0)
+                {
+                    DoFixReferences(memInfo[i].GetValue(objectToFix), idMap);
+                }
             }
+        }
+
+        internal override void FixReferences(Dictionary<int, UnityObject> idMap)
+        {
+            base.FixReferences(idMap);
+            
+            if (gameObject == null)
+            {
+                return;
+            }
+
+            DoFixReferences(this, idMap);
         }
         #endregion
 
