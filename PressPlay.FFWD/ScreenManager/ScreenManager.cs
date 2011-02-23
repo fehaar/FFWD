@@ -108,7 +108,7 @@ namespace PressPlay.FFWD.ScreenManager
             // we don't assume the game wants to read them.
             TouchPanel.EnabledGestures = GestureType.None;
             UpdateOrder = 0;
-            DrawOrder = 0;
+            DrawOrder = 1;
             Viewport = game.GraphicsDevice.Viewport;
             Application.screenManager = this;
         }

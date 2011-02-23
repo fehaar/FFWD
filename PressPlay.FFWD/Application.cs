@@ -17,7 +17,7 @@ namespace PressPlay.FFWD
             : base(game)
         {
             UpdateOrder = 1;
-            DrawOrder = 1;
+            DrawOrder = 0;
         }
 
         private SpriteBatch spriteBatch;
@@ -63,7 +63,7 @@ namespace PressPlay.FFWD
         internal static bool loadingScene = false;
 
         // Lists and variables used for loading a scene
-        internal static bool isLoadingAssetBeforeSceneInitialize = false;
+        public static bool isLoadingAssetBeforeSceneInitialize = false;
         internal static bool loadIsComplete = false;
         internal static bool hasDrawBeenCalled = false;
         private static int totalNumberOfAssetsToLoad = 0;
@@ -361,7 +361,9 @@ namespace PressPlay.FFWD
         private void DoSceneLoad()
         {
             Debug.Log("DoSceneLoad: " + sceneToLoad);
-            
+
+            _loadingProgess = 0;
+
             if (!String.IsNullOrEmpty(loadedLevelName))
             {
                 UnloadCurrentLevel();
@@ -383,6 +385,7 @@ namespace PressPlay.FFWD
 
             if (scene == null)
             {
+                Debug.Log("Scene is NULL. Completing load!");
                 OnSceneLoadComplete();
             }
         }
@@ -453,7 +456,7 @@ namespace PressPlay.FFWD
                 scene.Initialize();
             }
 
-            _loadingProgess = 0;
+            //_loadingProgess = 0;
 
             GC.Collect();
         }
@@ -600,7 +603,7 @@ namespace PressPlay.FFWD
 
         internal static void AddNewAsset(Asset asset)
         {
-            newAssets.Add(asset);
+            //newAssets.Add(asset);
 
             if (isLoadingAssetBeforeSceneInitialize)
             {
