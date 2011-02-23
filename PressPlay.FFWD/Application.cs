@@ -1,6 +1,4 @@
-﻿//#define COMPONENT_PROFILE
-
-using System;
+﻿using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -264,18 +262,18 @@ namespace PressPlay.FFWD
                     Debug.Display(lineCam.name, lineCam.transform.position);
                 }*/
             }
+
+#if COMPONENT_PROFILE
+            componentProfiler.Sort();
+            Debug.Display("GetWorst()", componentProfiler.GetWorst());
+            componentProfiler.FlushData();
+#endif
             if (ApplicationSettings.ShowiTweenUpdateTime)
             {
                 Debug.Display("iTweenUpdateTime", iTweenUpdateTime.ElapsedMilliseconds);
                 iTweenUpdateTime.Reset();
             }
-            if (ApplicationSettings.ShowComponentProfile)
-            {
-                componentProfiler.Sort();
-                Debug.Display("GetWorst()", componentProfiler.GetWorst());
-                Debug.Display("total component update time recorded", componentProfiler.totalMilliseconds);
-                componentProfiler.FlushData();
-            }
+
 
             if (ApplicationSettings.ShowRaycastTime)
             {

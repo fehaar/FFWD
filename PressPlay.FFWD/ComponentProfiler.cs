@@ -10,15 +10,6 @@ namespace PressPlay.FFWD
         private List<ComponentUpdateProfile> componentUpdateProfiles = new List<ComponentUpdateProfile>();
 
         private ComponentUpdateProfile currentUpdateProfile;
-        
-        
-
-        public long totalTicks = 0;
-        public float totalMilliseconds {
-            get {
-                return (totalTicks / Stopwatch.Frequency) * 1000f;
-            }
-        }
 
         private ComponentUpdateProfile GetComponentProfileFromList(Component _component)
         {
@@ -76,7 +67,6 @@ namespace PressPlay.FFWD
 
         public void FlushData()
         {
-            totalTicks = 0;
             componentUpdateProfiles.Clear();
         }
 
