@@ -19,10 +19,10 @@ namespace PressPlay.FFWD.Import
         {
             ReadNormals = true;
             ReadUVs = true;
-            WriteAsModel = true;
+            WriteAsModel = false;
         }
 
-        [DefaultValue(true)]
+        [DefaultValue(false)]
         [Description("Shall we write this as an FBX model or as mesh data.")]
         public bool WriteAsModel { get; set; }
 
@@ -156,17 +156,23 @@ namespace PressPlay.FFWD.Import
         {
             MeshDataPart mesh = new MeshDataPart();
 
-            // retrieve the four vertex channels we need
             string normalName = VertexChannelNames.EncodeName(VertexElementUsage.Normal, 0);
             string texCoordName = VertexChannelNames.EncodeName(VertexElementUsage.TextureCoordinate, 0);
-
-            VertexChannel<Microsoft.Xna.Framework.Vector3> normals = geometry.Vertices.Channels[normalName] as VertexChannel<Microsoft.Xna.Framework.Vector3>;
-            VertexChannel<Microsoft.Xna.Framework.Vector2> texCoords = geometry.Vertices.Channels[texCoordName] as VertexChannel<Microsoft.Xna.Framework.Vector2>;
-
-            mesh.normals = new Microsoft.Xna.Framework.Vector3[normals.Count];
-            normals.CopyTo(mesh.normals, 0);
-            mesh.uv = new Microsoft.Xna.Framework.Vector2[texCoords.Count];
-            texCoords.CopyTo(mesh.uv, 0);
+            foreach (var channel in geometry.Vertices.Channels)
+            {
+                if (channel.Name == normalName)
+                {
+                    VertexChannel<Microsoft.Xna.Framework.Vector3> normals = channel as VertexChannel<Microsoft.Xna.Framework.Vector3>;
+                    mesh.normals = new Microsoft.Xna.Framework.Vector3[normals.Count];
+                    normals.CopyTo(mesh.normals, 0);
+                }
+                if (channel.Name == texCoordName)
+                {
+                    VertexChannel<Microsoft.Xna.Framework.Vector2> texCoords = channel as VertexChannel<Microsoft.Xna.Framework.Vector2>;
+                    mesh.uv = new Microsoft.Xna.Framework.Vector2[texCoords.Count];
+                    texCoords.CopyTo(mesh.uv, 0);
+                }
+            }
 
             Microsoft.Xna.Framework.Vector3[] verts = new Microsoft.Xna.Framework.Vector3[geometry.Vertices.Positions.Count];
             mesh.vertices = new Microsoft.Xna.Framework.Vector3[geometry.Vertices.Positions.Count];
