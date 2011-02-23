@@ -589,7 +589,6 @@ namespace PressPlay.FFWD
                 Debug.Log("There were no listeners to the message " + methodName + " on " + this.ToString());
             }
 #endif
-
         }
 
         public void BroadcastMessage(string methodName)

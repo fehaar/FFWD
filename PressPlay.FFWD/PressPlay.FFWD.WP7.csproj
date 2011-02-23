@@ -84,6 +84,33 @@
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release all levels unlocked|Windows Phone'">
+    <OutputPath>bin\Windows Phone\Release all levels unlocked\</OutputPath>
+    <DefineConstants>TRACE;WINDOWS_PHONE</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <LangVersion>3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug - component profiler|Windows Phone'">
+    <OutputPath>bin\Windows Phone\Debug - component profiler\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug- component profiler|Windows Phone'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Windows Phone\Debug- component profiler\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;WINDOWS_PHONE</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <LangVersion>3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
+  </PropertyGroup>
   <ItemGroup>
     <None Include="Background.png">
       <XnaPlatformSpecific>true</XnaPlatformSpecific>
@@ -111,6 +138,7 @@
     <Compile Include="ApplicationSettings.cs" />
     <Compile Include="Asset.cs" />
     <Compile Include="AssetHelper.cs" />
+    <Compile Include="Attributes\FixReferencesAttribute.cs" />
     <Compile Include="AudioClip.cs" />
     <Compile Include="AudioSource.cs" />
     <Compile Include="Behaviour.cs" />

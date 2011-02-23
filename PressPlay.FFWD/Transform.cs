@@ -105,6 +105,8 @@ namespace PressPlay.FFWD
                 }
                 Vector3 pos = position;
                 Quaternion rot = rotation;
+                //Vector3 scale = lossyScale;
+
                 _parent = value;
                 if (_parent == null)
                 {
@@ -552,7 +554,8 @@ namespace PressPlay.FFWD
             Microsoft.Xna.Framework.Vector3 scale;
             Microsoft.Xna.Framework.Quaternion rot;
             Microsoft.Xna.Framework.Vector3 pos;
-            if (m.Decompose(out scale, out rot, out pos))
+
+            if (m.Decompose(out scale, out rot, out pos) && !float.IsNaN(rot.W))
             {
                 localRotation = new Quaternion(rot);
                 if (rigidbody != null)

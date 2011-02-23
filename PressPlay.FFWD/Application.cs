@@ -1,6 +1,4 @@
-﻿//#define COMPONENT_PROFILE
-
-using System;
+﻿using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -111,9 +109,6 @@ namespace PressPlay.FFWD
         {
 #if DEBUG
             timeUpdateEndUpdateStart.Stop(); //measure time since last draw ended to try and measure graphics performance
-#endif
-#if DEBUG && COMPONENT_PROFILE
-            componentProfiler.FlushData();
 #endif
             if (Application.quitNextUpdate)
             {
@@ -267,13 +262,19 @@ namespace PressPlay.FFWD
                     Debug.Display(lineCam.name, lineCam.transform.position);
                 }*/
             }
+
+#if COMPONENT_PROFILE
+            componentProfiler.Sort();
+            Debug.Display("GetWorst()", componentProfiler.GetWorst());
+            componentProfiler.FlushData();
+#endif
             if (ApplicationSettings.ShowiTweenUpdateTime)
             {
-                componentProfiler.Sort();
-                Debug.Display("GetWorst()", componentProfiler.GetWorst());
-                Debug.Display("total component update time recorded", componentProfiler.totalMilliseconds);
+                Debug.Display("iTweenUpdateTime", iTweenUpdateTime.ElapsedMilliseconds);
                 iTweenUpdateTime.Reset();
             }
+
+
             if (ApplicationSettings.ShowRaycastTime)
             {
                 Debug.Display("Raycasts ms", Application.raycastTimer.ElapsedMilliseconds);
