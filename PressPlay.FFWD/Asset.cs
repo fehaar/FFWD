@@ -16,7 +16,18 @@ namespace PressPlay.FFWD
 
         public string name { get; set; }
 
-        internal abstract void LoadAsset(AssetHelper assetHelper);
+        private bool _isLoaded = false;
+
+        internal void LoadAsset(AssetHelper assetHelper)
+        {
+            if (!_isLoaded)
+            {
+                DoLoadAsset(assetHelper);
+                _isLoaded = true;
+            }
+        }
+
+        protected abstract void DoLoadAsset(AssetHelper assetHelper);
 
         public override string ToString()
         {
