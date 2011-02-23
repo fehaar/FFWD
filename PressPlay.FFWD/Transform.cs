@@ -105,6 +105,8 @@ namespace PressPlay.FFWD
                 }
                 Vector3 pos = position;
                 Quaternion rot = rotation;
+                //Vector3 scale = lossyScale;
+
                 _parent = value;
                 if (_parent == null)
                 {
