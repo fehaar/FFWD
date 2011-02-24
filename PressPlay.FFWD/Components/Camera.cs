@@ -395,7 +395,7 @@ namespace PressPlay.FFWD.Components
 #if DEBUG
             if (Camera.logRenderCalls)
             {
-                Debug.LogFormat("Dyn batch: {0} on {1} at {2}", transform.gameObject, gameObject, (transform != null) ? transform.position : Vector3.zero);
+                Debug.LogFormat("Dyn batch: {0} on {1} at {2}", data, gameObject, (transform != null) ? transform.position : Vector3.zero);
             }
 #endif
             return dynamicBatchRenderer.Draw(this, material, data, transform);
