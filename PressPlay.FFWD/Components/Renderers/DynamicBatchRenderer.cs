@@ -165,10 +165,21 @@ namespace PressPlay.FFWD.Components
             for (int v = 0; v < mesh.vertices.Length; v++)
             {
                 vertexData[currentVertexIndex + v].Position = positionData[v];
-                vertexData[currentVertexIndex + v].TextureCoordinate = mesh.uv[v];
+                if (mesh.uv != null)
+                {
+                    vertexData[currentVertexIndex + v].TextureCoordinate = mesh.uv[v];
+                }
+                else
+                {
+                    vertexData[currentVertexIndex + v].TextureCoordinate = Microsoft.Xna.Framework.Vector2.Zero;
+                }
                 if (mesh.normals != null)
                 {
                     vertexData[currentVertexIndex + v].Normal = mesh.normals[v];
+                }
+                else
+                {
+                    vertexData[currentVertexIndex + v].Normal = Microsoft.Xna.Framework.Vector3.Zero;
                 }
             }
 

@@ -9,13 +9,15 @@ namespace PressPlay.FFWD.Import
 {
     class MeshDataContent
     {
+        public MeshDataContent()
+        {
+            meshParts = new Dictionary<string, MeshDataPart>();
+        }
+
         internal CpuSkinnedModelContent skinnedModel;
         internal ModelContent model;
 
-        internal Microsoft.Xna.Framework.Vector3[] vertices;
-        internal Microsoft.Xna.Framework.Vector3[] normals;
-        internal Microsoft.Xna.Framework.Vector2[] uv;
-        internal short[] triangles;
+        internal Dictionary<string, MeshDataPart> meshParts;
 
         internal Microsoft.Xna.Framework.BoundingSphere boundingSphere;
     }

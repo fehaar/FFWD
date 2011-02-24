@@ -30,7 +30,7 @@ namespace PressPlay.FFWD
 
         internal BoundingSphere boundingSphere;
 
-        internal override void LoadAsset(AssetHelper assetHelper)
+        protected override void DoLoadAsset(AssetHelper assetHelper)
         {
             // TODO: Optimize this by bundling everything into the same structure.
             if (!String.IsNullOrEmpty(asset))
@@ -60,6 +60,7 @@ namespace PressPlay.FFWD
                     model = data.model;
                     if (model != null)
                     {
+                        Debug.Log("Non batchable mesh:", asset, name);
                         for (int i = 0; i < model.Meshes.Count; i++)
                         {
                             if (model.Meshes[i].Name == name)
@@ -71,19 +72,20 @@ namespace PressPlay.FFWD
                         }
                     }
 
-                    if (data.vertices != null)
+                    if (data.meshParts.Count > 0)
                     {
-                        // This is hardcoded to make it work. The uvs and tris from the Mesh seems broken. Uhh...
-                        vertices = data.vertices;
-                        //triangles = new short[6] { 2, 0, 1, 2, 1, 3 };
-                        triangles = data.triangles;
-                        uv = new Microsoft.Xna.Framework.Vector2[4] {
-                            new Microsoft.Xna.Framework.Vector2(0, 0),
-                            new Microsoft.Xna.Framework.Vector2(1, 0),
-                            new Microsoft.Xna.Framework.Vector2(0, 1),
-                            new Microsoft.Xna.Framework.Vector2(1, 1)
-                        };
-                        normals = data.normals;
+                        MeshDataPart part = data.meshParts[name];
+                        if (part != null)
+                        {
+                            vertices = (Microsoft.Xna.Framework.Vector3[])part.vertices.Clone();
+                            triangles = (short[])part.triangles.Clone();
+                            uv = (Microsoft.Xna.Framework.Vector2[])part.uv.Clone();
+                            if (part.normals != null)
+                            {
+                                normals = (Microsoft.Xna.Framework.Vector3[])part.normals.Clone();
+                            }
+                            boundingSphere = part.boundingSphere;
+                        }
                     }
                 }
 #if DEBUG
@@ -142,5 +144,10 @@ namespace PressPlay.FFWD
             return clone;
         }
         #endregion
+
+        public override string ToString()
+        {
+            return String.Format("{0} - {1} ({2})", GetType().Name, asset, GetInstanceID());
+        }
     }
 }

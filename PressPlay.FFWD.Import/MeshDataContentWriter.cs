@@ -14,10 +14,7 @@ namespace PressPlay.FFWD.Import
         {
             output.WriteObject(value.skinnedModel);
             output.WriteObject(value.model);
-            output.WriteObject(value.vertices);
-            output.WriteObject(value.triangles);
-            output.WriteObject(value.uv);
-            output.WriteObject(value.normals);
+            output.WriteObject(value.meshParts);
             output.WriteObject(value.boundingSphere);
         }
 
