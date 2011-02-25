@@ -151,21 +151,23 @@ namespace PressPlay.FFWD
             AwakeNewComponents();
             for (int i = 0; i < activeComponents.Count; i++)
             {
-                if (!activeComponents[i].isStarted)
+                Component cmp = activeComponents[i];
+                if (!cmp.isStarted)
                 {
-                    activeComponents[i].Start();
-                    activeComponents[i].isStarted = true;
+                    cmp.Start();
+                    cmp.isStarted = true;
                 }
-                if (activeComponents[i].gameObject == null || !activeComponents[i].gameObject.active)
+                if (cmp.gameObject == null || !cmp.gameObject.active)
                 {
+                    // NOTE: Here we should remove the component...
                     continue;
                 }
-                if (activeComponents[i] is IFixedUpdateable)
+                if (cmp is IFixedUpdateable)
                 {
 #if DEBUG && COMPONENT_PROFILE
                     componentProfiler.StartFixedUpdateCall(activeComponents[i]);
 #endif
-                    (activeComponents[i] as IFixedUpdateable).FixedUpdate();
+                    (cmp as IFixedUpdateable).FixedUpdate();
 #if DEBUG && COMPONENT_PROFILE
                     componentProfiler.EndFixedUpdateCall();
 #endif
@@ -198,30 +200,31 @@ namespace PressPlay.FFWD
             
             for (int i = 0; i < activeComponents.Count; i++)
             {
-                if (!activeComponents[i].isStarted)
+                Component cmp = activeComponents[i];
+                if (!cmp.isStarted)
                 {
-                    activeComponents[i].Start();
-                    activeComponents[i].isStarted = true;
+                    cmp.Start();
+                    cmp.isStarted = true;
                 }
-                if (activeComponents[i].gameObject == null || !activeComponents[i].gameObject.active)
+                if (cmp.gameObject == null || !cmp.gameObject.active)
                 {
                     continue;
                 }
-                if (activeComponents[i] is PressPlay.FFWD.Interfaces.IUpdateable)
+                if (cmp is PressPlay.FFWD.Interfaces.IUpdateable)
                 {
 #if DEBUG && COMPONENT_PROFILE
                     componentProfiler.StartUpdateCall(activeComponents[i]);
 #endif
-                    (activeComponents[i] as PressPlay.FFWD.Interfaces.IUpdateable).Update();
+                    (cmp as PressPlay.FFWD.Interfaces.IUpdateable).Update();
 
 #if DEBUG && COMPONENT_PROFILE
                     componentProfiler.EndUpdateCall();
 #endif
-                    lateUpdates.Add((activeComponents[i] as PressPlay.FFWD.Interfaces.IUpdateable));
-                }
-                if ((activeComponents[i] is MonoBehaviour))
-                {
-                    (activeComponents[i] as MonoBehaviour).UpdateInvokeCalls();
+                    lateUpdates.Add((cmp as PressPlay.FFWD.Interfaces.IUpdateable));
+                    if ((cmp is MonoBehaviour))
+                    {
+                        (cmp as MonoBehaviour).UpdateInvokeCalls();
+                    }
                 }
             }
 #if DEBUG
