@@ -27,7 +27,6 @@ namespace PressPlay.FFWD.Components
             }
         }
 
-        private BasicEffect effect;
         public BoundingSphere boundingSphere
         {
             get

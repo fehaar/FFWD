@@ -51,14 +51,16 @@ namespace PressPlay.FFWD
 
         public static ScreenManager.ScreenManager screenManager;
 
-        private static Dictionary<int, UnityObject> objects = new Dictionary<int, UnityObject>();
-        internal static List<Component> newComponents = new List<Component>();
-        internal static List<Asset> newAssets = new List<Asset>();
+        private static readonly Dictionary<int, UnityObject> objects = new Dictionary<int, UnityObject>();
+        internal static readonly List<Asset> newAssets = new List<Asset>();
 
-        private static List<Component> activeComponents = new List<Component>();
-        internal static List<UnityObject> markedForDestruction = new List<UnityObject>();
-        internal static List<GameObject> dontDestroyOnLoad = new List<GameObject>();
-        private static List<Interfaces.IUpdateable> lateUpdates = new List<Interfaces.IUpdateable>();
+        internal static readonly List<Component> newComponents = new List<Component>();
+        private static readonly List<Component> componentsToStart = new List<Component>();
+        private static readonly List<Component> activeComponents = new List<Component>();
+        private static readonly List<Component> componentsChangingActivity = new List<Component>();
+
+        internal static readonly List<UnityObject> markedForDestruction = new List<UnityObject>();
+        internal static readonly List<GameObject> dontDestroyOnLoad = new List<GameObject>();
 
         internal static bool loadingScene = false;
 
@@ -79,8 +81,8 @@ namespace PressPlay.FFWD
         }
         private static Scene scene;
         private static Stopwatch stopWatch = new Stopwatch();
-        internal static List<Component> tempComponents = new List<Component>();
-        internal static List<Asset> tempAssets = new List<Asset>();
+        internal static readonly List<Component> tempComponents = new List<Component>();
+        internal static readonly List<Asset> tempAssets = new List<Asset>();
 
         private static AssetHelper assetHelper = new AssetHelper();
 
@@ -103,6 +105,30 @@ namespace PressPlay.FFWD
         private ContentManager CreateContentManager()
         {
             return new ContentManager(Game.Services, Game.Content.RootDirectory);
+        }
+
+        private void StartComponents()
+        {
+            for (int i = 0; i < componentsToStart.Count; i++)
+            {
+                Component cmp = componentsToStart[i];
+                cmp.Start();
+                if (cmp.gameObject.active)
+                {
+                    if ((cmp is PressPlay.FFWD.Interfaces.IUpdateable) || ((cmp is PressPlay.FFWD.Interfaces.IFixedUpdateable)))
+                    {
+                        if (!activeComponents.Contains(cmp))
+                        {
+                            activeComponents.Add(cmp);
+                        }
+                    }
+                    if (cmp is Renderer)
+                    {
+                        Camera.AddRenderer(cmp as Renderer);
+                    }
+                }
+            }
+            componentsToStart.Clear();
         }
 
         public override void Update(GameTime gameTime)
@@ -149,17 +175,13 @@ namespace PressPlay.FFWD
             fixedUpdateTime.Start();
 #endif
             AwakeNewComponents();
+            StartComponents();
+            ChangeComponentActivity();
             for (int i = 0; i < activeComponents.Count; i++)
             {
                 Component cmp = activeComponents[i];
-                if (!cmp.isStarted)
+                if (!cmp.gameObject.active)
                 {
-                    cmp.Start();
-                    cmp.isStarted = true;
-                }
-                if (cmp.gameObject == null || !cmp.gameObject.active)
-                {
-                    // NOTE: Here we should remove the component...
                     continue;
                 }
                 if (cmp is IFixedUpdateable)
@@ -173,6 +195,7 @@ namespace PressPlay.FFWD
 #endif
                 }
             }
+            ChangeComponentActivity();
 #if DEBUG
             fixedUpdateTime.Stop();
             physics.Start();
@@ -197,16 +220,12 @@ namespace PressPlay.FFWD
 #if DEBUG
             updateTime.Start();
 #endif
-            
+            StartComponents();
+            ChangeComponentActivity();
             for (int i = 0; i < activeComponents.Count; i++)
             {
                 Component cmp = activeComponents[i];
-                if (!cmp.isStarted)
-                {
-                    cmp.Start();
-                    cmp.isStarted = true;
-                }
-                if (cmp.gameObject == null || !cmp.gameObject.active)
+                if (!cmp.gameObject.active)
                 {
                     continue;
                 }
@@ -220,21 +239,26 @@ namespace PressPlay.FFWD
 #if DEBUG && COMPONENT_PROFILE
                     componentProfiler.EndUpdateCall();
 #endif
-                    lateUpdates.Add((cmp as PressPlay.FFWD.Interfaces.IUpdateable));
                     if ((cmp is MonoBehaviour))
                     {
                         (cmp as MonoBehaviour).UpdateInvokeCalls();
                     }
                 }
             }
+            ChangeComponentActivity();
 #if DEBUG
             updateTime.Stop();
             lateUpdateTime.Start();
 #endif
-            for (int i = 0; i < lateUpdates.Count; i++)
+            for (int i = 0; i < activeComponents.Count; i++)
             {
-                    lateUpdates[i].LateUpdate();
+                Component cmp = activeComponents[i];
+                if (cmp is PressPlay.FFWD.Interfaces.IUpdateable)
+                {
+                    (activeComponents[i] as PressPlay.FFWD.Interfaces.IUpdateable).LateUpdate();
+                }
             }
+            ChangeComponentActivity();
 
             CleanUp();
 #if DEBUG
@@ -321,6 +345,7 @@ namespace PressPlay.FFWD
             {
                 //Debug.Display("% S | P | G", String.Format("{0:P1} | {1:P1} | {2:P1}", scripts.Elapsed.TotalSeconds / total, physics.Elapsed.TotalSeconds / total, graphics.Elapsed.TotalSeconds / total));
                 Debug.Display("ms U | P | G", String.Format("{0}ms | {1}ms | {2}ms", updateTime.Elapsed.Milliseconds + fixedUpdateTime.Elapsed.Milliseconds + lateUpdateTime.Elapsed.Milliseconds, physics.Elapsed.Milliseconds, graphics.Elapsed.Milliseconds));
+                Debug.Display("Active comps", activeComponents.Count);
             }
             if (ApplicationSettings.ShowDebugDisplays)
 	        {
@@ -558,11 +583,7 @@ namespace PressPlay.FFWD
 
                     if (!cmp.isPrefab)
                     {
-                        activeComponents.Add(cmp);
-                        if (cmp is Renderer)
-                        {
-                            Camera.AddRenderer(cmp as Renderer);
-                        }
+                        componentsToStart.Add(cmp);
                     }
                     if (!objects.ContainsKey(cmp.gameObject.GetInstanceID()))
                     {
@@ -575,9 +596,10 @@ namespace PressPlay.FFWD
             newComponents.Clear();
             for (int i = 0; i < componentsToAwake.Length; i++)
             {
-                if (!componentsToAwake[i].isPrefab)
+                Component cmp = componentsToAwake[i];
+                if (!cmp.isPrefab)
                 {
-                    componentsToAwake[i].Awake();
+                    cmp.Awake();
                 }
             }
             // Do a recursive awake to awake components instantiated in the previous awake.
@@ -590,7 +612,6 @@ namespace PressPlay.FFWD
 
         internal static void AddNewComponent(Component component)
         {
-
             if (isLoadingAssetBeforeSceneInitialize)
             {
                 tempComponents.Add(component);
@@ -603,8 +624,6 @@ namespace PressPlay.FFWD
 
         internal static void AddNewAsset(Asset asset)
         {
-            newAssets.Add(asset);
-
             if (isLoadingAssetBeforeSceneInitialize)
             {
                 tempAssets.Add(asset);
@@ -620,7 +639,6 @@ namespace PressPlay.FFWD
             objects.Clear();
             activeComponents.Clear();
             markedForDestruction.Clear();
-            lateUpdates.Clear();
         }
 
         internal static void CleanUp()
@@ -652,12 +670,19 @@ namespace PressPlay.FFWD
                         newComponents.Remove(cmp);
                     }
 
-                    activeComponents.Remove(cmp);
+                    if (componentsToStart.Contains(cmp))
+                    {
+                        componentsToStart.Remove(cmp);
+                    }
+
+                    if (activeComponents.Contains(cmp))
+                    {
+                        activeComponents.Remove(cmp);
+                    }
 
 	            }
             }
             markedForDestruction.Clear();
-            lateUpdates.Clear();
         }
 
         public static string loadedLevelName { get; private set; }
@@ -680,7 +705,6 @@ namespace PressPlay.FFWD
                 }
             }
         }
-
 
         private static bool quitNextUpdate = false;
         
@@ -705,6 +729,45 @@ namespace PressPlay.FFWD
         public static void PreloadInstant<T>(string name)
         {
             assetHelper.PreloadInstant<T>(name);
+        }
+
+        internal static void UpdateGameObjectActive(List<Component> components)
+        {
+            componentsChangingActivity.AddRange(components);
+        }
+
+        private static void ChangeComponentActivity()
+        {
+            for (int i = 0; i < componentsChangingActivity.Count; i++)
+            {
+                Component cmp = componentsChangingActivity[i];
+                if (cmp.gameObject.active)
+                {
+                    if ((cmp is PressPlay.FFWD.Interfaces.IUpdateable) || ((cmp is PressPlay.FFWD.Interfaces.IFixedUpdateable)))
+                    {
+                        if (!activeComponents.Contains(cmp))
+                        {
+                            activeComponents.Add(cmp);
+                        }
+                    }
+                    if (cmp is Renderer)
+                    {
+                        Camera.AddRenderer(cmp as Renderer);
+                    }
+                }
+                else
+                {
+                    if (activeComponents.Contains(cmp))
+                    {
+                        activeComponents.Remove(cmp);
+                    }
+                    if (cmp is Renderer)
+                    {
+                        Camera.RemoveRenderer(cmp as Renderer);
+                    }
+                }
+            }
+            componentsChangingActivity.Clear();
         }
     }
 }

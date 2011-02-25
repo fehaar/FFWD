@@ -109,10 +109,6 @@ namespace PressPlay.FFWD.Components
             }
 
 #if DEBUG
-            if (false)
-            {
-                return;
-            }
             Application.particleEmitTimer.Start();
 #endif
 

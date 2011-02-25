@@ -153,7 +153,7 @@ namespace PressPlay.FFWD.Components
             {
                 isAdded |= _allCameras[i].addRenderer(renderer);
             }
-            if (!isAdded)
+            if (!isAdded && !nonAssignedRenderers.Contains(renderer))
             {
                 nonAssignedRenderers.Add(renderer);
             }
@@ -163,6 +163,10 @@ namespace PressPlay.FFWD.Components
         bool isRenderQueueSorted = true;
         private bool addRenderer(Renderer renderer)
         {
+            if (renderQueue.Contains(renderer))
+            {
+                return true;
+            }
             if ((cullingMask & (1 << renderer.gameObject.layer)) > 0)
             {
                 renderQueue.Add(renderer);

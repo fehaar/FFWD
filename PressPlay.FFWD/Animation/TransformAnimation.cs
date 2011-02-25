@@ -23,7 +23,6 @@ namespace PressPlay.FFWD
 	        {
                 player.StartClip(clips[key]);
 	        }
-            int i = 0;
         }
 
         #region IUpdateable Members

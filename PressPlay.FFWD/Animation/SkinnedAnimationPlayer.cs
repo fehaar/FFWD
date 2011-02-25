@@ -170,7 +170,6 @@ namespace PressPlay.FFWD
                         break;
                     default:
                         throw new NotImplementedException("What to do here?");
-                        break;
                 }
             }
 

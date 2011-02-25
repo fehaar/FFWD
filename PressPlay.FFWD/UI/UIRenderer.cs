@@ -66,12 +66,18 @@ namespace PressPlay.FFWD.UI
 
         internal static void AddRenderer(UIRenderer renderer)
         {
-            uiRenderQueue.Add(renderer);
+            if (!uiRenderQueue.Contains(renderer))
+            {
+                uiRenderQueue.Add(renderer);
+            }
         }
 
         internal static void RemoveRenderer(UIRenderer renderer)
         {
-            uiRenderQueue.Remove(renderer);
+            if (uiRenderQueue.Contains(renderer))
+            {
+                uiRenderQueue.Remove(renderer);
+            }
         }
     }
 }
