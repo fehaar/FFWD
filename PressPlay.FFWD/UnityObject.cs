@@ -129,6 +129,8 @@ namespace PressPlay.FFWD
             clone.SetNewId(idMap);
             clone.FixReferences(idMap);
 
+
+            // HACK THIS NEEDS TO BE REWORKED. DANGER DANGER!
             Application.AwakeNewComponents();
 
             return idMap[original.GetInstanceID()];

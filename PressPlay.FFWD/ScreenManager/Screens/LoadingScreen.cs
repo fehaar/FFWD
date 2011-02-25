@@ -114,7 +114,7 @@ namespace PressPlay.FFWD.ScreenManager
 
             // If all the previous screens have finished transitioning
             // off, it is time to actually perform the load.
-            if (otherScreensAreGone && !hasAddedScreens)
+            if (otherScreensAreGone && !hasAddedScreens && screensToLoad != null)
             {
                 //ScreenManager.RemoveScreen(this);
 
