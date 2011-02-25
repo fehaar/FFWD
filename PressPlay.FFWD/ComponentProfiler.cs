@@ -73,7 +73,6 @@ namespace PressPlay.FFWD
         public List<ComponentUpdateProfile> Sort()
         {
             componentUpdateProfiles.Sort();
-
             return componentUpdateProfiles;
         }
 
