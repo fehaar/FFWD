@@ -177,7 +177,8 @@ namespace PressPlay.FFWD
             AwakeNewComponents();
             StartComponents();
             ChangeComponentActivity();
-            for (int i = 0; i < activeComponents.Count; i++)
+            int count = activeComponents.Count;
+            for (int i = 0; i < count; i++)
             {
                 Component cmp = activeComponents[i];
                 if (!cmp.gameObject.active)
@@ -222,7 +223,8 @@ namespace PressPlay.FFWD
 #endif
             StartComponents();
             ChangeComponentActivity();
-            for (int i = 0; i < activeComponents.Count; i++)
+            int count = activeComponents.Count;
+            for (int i = 0; i < count; i++)
             {
                 Component cmp = activeComponents[i];
                 if (!cmp.gameObject.active)
@@ -250,12 +252,13 @@ namespace PressPlay.FFWD
             updateTime.Stop();
             lateUpdateTime.Start();
 #endif
-            for (int i = 0; i < activeComponents.Count; i++)
+            count = activeComponents.Count;
+            for (int i = 0; i < count; i++)
             {
                 Component cmp = activeComponents[i];
                 if (cmp is PressPlay.FFWD.Interfaces.IUpdateable)
                 {
-                    (activeComponents[i] as PressPlay.FFWD.Interfaces.IUpdateable).LateUpdate();
+                    (cmp as PressPlay.FFWD.Interfaces.IUpdateable).LateUpdate();
                 }
             }
             ChangeComponentActivity();
