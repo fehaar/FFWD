@@ -23,7 +23,6 @@ namespace PressPlay.FFWD
             {
                 AddComponent(new Transform());
             }
-            active = true;
         }
 
         internal GameObject(bool isPrefab)
@@ -32,7 +31,6 @@ namespace PressPlay.FFWD
             this.isPrefab = isPrefab;
             components = new List<Component>();
             AddComponent(new Transform());
-            active = true;
         }
 
         public GameObject(string name) : this()
@@ -41,17 +39,33 @@ namespace PressPlay.FFWD
         }
 
         [ContentSerializer(Optional = true)]
-        public string name { get; set; }
+        public string name;
         [ContentSerializer(Optional = true)]
-        public int layer { get; set; }
-        [ContentSerializer(Optional = true)]
-        public bool active { get; set; }
-        [ContentSerializer(Optional = true)]
-        public string tag { get; set; }
+        public int layer;
 
-        private bool _isStatic = true;
+        [ContentSerializer(ElementName = "active", Optional = true)]
+        private bool _active = true;
+        [ContentSerializerIgnore]
+        public bool active 
+        { 
+            get
+            {
+                return _active;
+            }
+            set
+            {
+                _active = value;
+                Application.UpdateGameObjectActive(components);
+            }
+        }
         [ContentSerializer(Optional = true)]
-        public bool isStatic { 
+        public string tag;
+
+        [ContentSerializer(ElementName = "isStatic", Optional = true)]
+        private bool _isStatic = true;
+        [ContentSerializerIgnore]
+        public bool isStatic
+        { 
             get{return _isStatic;} 
             set
             {
@@ -64,6 +78,7 @@ namespace PressPlay.FFWD
             }
         }
 
+        [ContentSerializerIgnore]
         internal int ComponentCount
         {
             get
@@ -144,9 +159,8 @@ namespace PressPlay.FFWD
         }
         #endregion
 
-        //public String prefab { get; set; }
         [ContentSerializer(ElementName = "cs", CollectionItemName = "c", Optional = true)]
-        private List<Component> components { get; set; }
+        private List<Component> components;
 
         internal override void AfterLoad(Dictionary<int, UnityObject> idMap)
         {
@@ -196,7 +210,6 @@ namespace PressPlay.FFWD
         {
             GameObject obj = base.Clone() as GameObject;
             obj.name = name + "(Clone)";
-            obj.active = true;
             obj.isPrefab = false;
 
             // Reset lazy shortcut properties
@@ -211,6 +224,7 @@ namespace PressPlay.FFWD
             {
                 obj.AddComponent(components[i].Clone() as Component);
             }
+            obj.active = true;
             return obj;
         }
 

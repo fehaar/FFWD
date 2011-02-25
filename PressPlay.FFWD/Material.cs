@@ -33,7 +33,7 @@ namespace PressPlay.FFWD
             //}
         }
 
-        internal override void LoadAsset(AssetHelper assetHelper)
+        protected override void DoLoadAsset(AssetHelper assetHelper)
         {
             if (mainTexture != null)
             {

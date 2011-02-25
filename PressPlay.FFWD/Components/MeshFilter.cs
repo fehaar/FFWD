@@ -27,11 +27,14 @@ namespace PressPlay.FFWD.Components
             }
         }
 
-        private BasicEffect effect;
         public BoundingSphere boundingSphere
         {
             get
             {
+                if (_mesh != null)
+                {
+                    return _mesh.boundingSphere;
+                }
                 if (sharedMesh != null)
                 {
                     return sharedMesh.boundingSphere;

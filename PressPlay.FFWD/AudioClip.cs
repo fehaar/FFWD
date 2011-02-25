@@ -36,7 +36,7 @@ namespace PressPlay.FFWD
             this.sound = sound;
         }
 
-        internal override void LoadAsset(AssetHelper assetHelper)
+        protected override void DoLoadAsset(AssetHelper assetHelper)
         {
             if (sound == null)
             {

@@ -244,8 +244,7 @@ namespace Box2D.XNA
                 break;
                 
 	        default:
-                if (!(false)) { throw new InvalidOperationException(); }
-		        break;
+                throw new InvalidOperationException();
 	        }
 
 	        return joint;
