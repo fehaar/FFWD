@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using PressPlay.FFWD.Components;
 using PressPlay.FFWD.Interfaces;
 using System.Text;
+using System.Reflection;
 
 namespace PressPlay.FFWD
 {
@@ -52,6 +53,7 @@ namespace PressPlay.FFWD
         public static ScreenManager.ScreenManager screenManager;
 
         private static readonly Dictionary<int, UnityObject> objects = new Dictionary<int, UnityObject>();
+        private static readonly Dictionary<Type, bool> isUpdateable = new Dictionary<Type, bool>();
         internal static readonly List<Asset> newAssets = new List<Asset>();
 
         internal static readonly List<Component> newComponents = new List<Component>();
@@ -112,21 +114,8 @@ namespace PressPlay.FFWD
             for (int i = 0; i < componentsToStart.Count; i++)
             {
                 Component cmp = componentsToStart[i];
+                componentsChangingActivity.Add(cmp);
                 cmp.Start();
-                if (cmp.gameObject.active)
-                {
-                    if ((cmp is PressPlay.FFWD.Interfaces.IUpdateable) || ((cmp is PressPlay.FFWD.Interfaces.IFixedUpdateable)))
-                    {
-                        if (!activeComponents.Contains(cmp))
-                        {
-                            activeComponents.Add(cmp);
-                        }
-                    }
-                    if (cmp is Renderer)
-                    {
-                        Camera.AddRenderer(cmp as Renderer);
-                    }
-                }
             }
             componentsToStart.Clear();
         }
@@ -746,7 +735,7 @@ namespace PressPlay.FFWD
                 Component cmp = componentsChangingActivity[i];
                 if (cmp.gameObject.active)
                 {
-                    if ((cmp is PressPlay.FFWD.Interfaces.IUpdateable) || ((cmp is PressPlay.FFWD.Interfaces.IFixedUpdateable)))
+                    if (IsComponentUpdateable(cmp))
                     {
                         if (!activeComponents.Contains(cmp))
                         {
@@ -771,6 +760,16 @@ namespace PressPlay.FFWD
                 }
             }
             componentsChangingActivity.Clear();
+        }
+
+        private static bool IsComponentUpdateable(Component cmp)
+        {
+            Type tp = cmp.GetType();
+            if (!isUpdateable.ContainsKey(tp))
+            {
+                MethodInfo info = tp.GetMethod("Update");
+            }
+            return isUpdateable[tp];
         }
     }
 }
