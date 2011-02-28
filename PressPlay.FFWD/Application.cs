@@ -53,13 +53,18 @@ namespace PressPlay.FFWD
         public static ScreenManager.ScreenManager screenManager;
 
         private static readonly Dictionary<int, UnityObject> objects = new Dictionary<int, UnityObject>();
-        private static readonly Dictionary<Type, bool> isUpdateable = new Dictionary<Type, bool>();
         internal static readonly List<Asset> newAssets = new List<Asset>();
 
         internal static readonly List<Component> newComponents = new List<Component>();
         private static readonly List<Component> componentsToStart = new List<Component>();
-        private static readonly List<Component> activeComponents = new List<Component>();
+        private static readonly List<PressPlay.FFWD.Interfaces.IUpdateable> updateComponents = new List<PressPlay.FFWD.Interfaces.IUpdateable>();
+        private static readonly List<PressPlay.FFWD.Interfaces.IFixedUpdateable> fixedUpdateComponents = new List<PressPlay.FFWD.Interfaces.IFixedUpdateable>();
+        private static readonly List<PressPlay.FFWD.Interfaces.IUpdateable> lateUpdateComponents = new List<PressPlay.FFWD.Interfaces.IUpdateable>();
         private static readonly List<Component> componentsChangingActivity = new List<Component>();
+
+        private static readonly TypeSet isUpdateable = new TypeSet();
+        private static readonly TypeSet isFixedUpdateable = new TypeSet();
+        private static readonly TypeSet isLateUpdateable = new TypeSet();
 
         internal static readonly List<UnityObject> markedForDestruction = new List<UnityObject>();
         internal static readonly List<GameObject> dontDestroyOnLoad = new List<GameObject>();
@@ -166,31 +171,27 @@ namespace PressPlay.FFWD
             AwakeNewComponents();
             StartComponents();
             ChangeComponentActivity();
-            int count = activeComponents.Count;
+            int count = fixedUpdateComponents.Count;
             for (int i = 0; i < count; i++)
             {
-                Component cmp = activeComponents[i];
+                IFixedUpdateable cmp = fixedUpdateComponents[i];
                 if (!cmp.gameObject.active)
                 {
                     continue;
                 }
-                if (cmp is IFixedUpdateable)
-                {
 #if DEBUG && COMPONENT_PROFILE
-                    componentProfiler.StartFixedUpdateCall(activeComponents[i]);
+                componentProfiler.StartFixedUpdateCall(fixedUpdateComponents[i] as Component);
 #endif
-                    (cmp as IFixedUpdateable).FixedUpdate();
+                cmp.FixedUpdate();
 #if DEBUG && COMPONENT_PROFILE
-                    componentProfiler.EndFixedUpdateCall();
+                componentProfiler.EndFixedUpdateCall();
 #endif
-                }
             }
             ChangeComponentActivity();
 #if DEBUG
             fixedUpdateTime.Stop();
             physics.Start();
 #endif
-            //Physics.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
             Physics.Update(Time.deltaTime);
 #if DEBUG
             physics.Stop();
@@ -212,28 +213,25 @@ namespace PressPlay.FFWD
 #endif
             StartComponents();
             ChangeComponentActivity();
-            int count = activeComponents.Count;
+            int count = updateComponents.Count;
             for (int i = 0; i < count; i++)
             {
-                Component cmp = activeComponents[i];
+                PressPlay.FFWD.Interfaces.IUpdateable cmp = updateComponents[i];
                 if (!cmp.gameObject.active)
                 {
                     continue;
                 }
-                if (cmp is PressPlay.FFWD.Interfaces.IUpdateable)
-                {
 #if DEBUG && COMPONENT_PROFILE
-                    componentProfiler.StartUpdateCall(activeComponents[i]);
+                componentProfiler.StartUpdateCall(updateComponents[i] as Component);
 #endif
-                    (cmp as PressPlay.FFWD.Interfaces.IUpdateable).Update();
+                cmp.Update();
 
 #if DEBUG && COMPONENT_PROFILE
-                    componentProfiler.EndUpdateCall();
+                componentProfiler.EndUpdateCall();
 #endif
-                    if ((cmp is MonoBehaviour))
-                    {
-                        (cmp as MonoBehaviour).UpdateInvokeCalls();
-                    }
+                if ((cmp is MonoBehaviour))
+                {
+                    (cmp as MonoBehaviour).UpdateInvokeCalls();
                 }
             }
             ChangeComponentActivity();
@@ -241,14 +239,10 @@ namespace PressPlay.FFWD
             updateTime.Stop();
             lateUpdateTime.Start();
 #endif
-            count = activeComponents.Count;
+            count = lateUpdateComponents.Count;
             for (int i = 0; i < count; i++)
             {
-                Component cmp = activeComponents[i];
-                if (cmp is PressPlay.FFWD.Interfaces.IUpdateable)
-                {
-                    (cmp as PressPlay.FFWD.Interfaces.IUpdateable).LateUpdate();
-                }
+                lateUpdateComponents[i].LateUpdate();
             }
             ChangeComponentActivity();
 
@@ -261,7 +255,7 @@ namespace PressPlay.FFWD
 #if DEBUG
             graphics.Stop();
             double total = fixedUpdateTime.Elapsed.TotalSeconds + lateUpdateTime.Elapsed.TotalSeconds + updateTime.Elapsed.TotalSeconds + graphics.Elapsed.TotalSeconds + physics.Elapsed.TotalSeconds;
-            if (ApplicationSettings.ShowDebugLines)
+            if (ApplicationSettings.LogActivatedComponents)
             {
                 //Camera lineCam = (String.IsNullOrEmpty(ApplicationSettings.DebugLineCamera)) ? Camera.main : Camera.FindByName(ApplicationSettings.DebugLineCamera);
                 Camera lineCam = ApplicationSettings.DebugCamera;
@@ -337,7 +331,7 @@ namespace PressPlay.FFWD
             {
                 //Debug.Display("% S | P | G", String.Format("{0:P1} | {1:P1} | {2:P1}", scripts.Elapsed.TotalSeconds / total, physics.Elapsed.TotalSeconds / total, graphics.Elapsed.TotalSeconds / total));
                 Debug.Display("ms U | P | G", String.Format("{0}ms | {1}ms | {2}ms", updateTime.Elapsed.Milliseconds + fixedUpdateTime.Elapsed.Milliseconds + lateUpdateTime.Elapsed.Milliseconds, physics.Elapsed.Milliseconds, graphics.Elapsed.Milliseconds));
-                Debug.Display("Active comps", activeComponents.Count);
+                Debug.Display("Active comps U | F | L", String.Format("{0} | {1} | {2}", updateComponents.Count, fixedUpdateComponents.Count, lateUpdateComponents.Count));
             }
             if (ApplicationSettings.ShowDebugDisplays)
 	        {
@@ -400,6 +394,13 @@ namespace PressPlay.FFWD
             totalNumberOfAssetsToLoad = tempAssets.Count;
             numberOfAssetsLoaded = 0;
             //Debug.Log("TempAssets.Count: "+tempAssets.Count);
+
+            if (scene != null)
+            {
+                isUpdateable.AddRange(scene.isUpdateable);
+                isFixedUpdateable.AddRange(scene.isFixedUpdateable);
+                isLateUpdateable.AddRange(scene.isLateUpdateable);
+            }
 
             if (scene == null)
             {
@@ -629,7 +630,9 @@ namespace PressPlay.FFWD
         internal static void Reset()
         {
             objects.Clear();
-            activeComponents.Clear();
+            updateComponents.Clear();
+            fixedUpdateComponents.Clear();
+            lateUpdateComponents.Clear();
             markedForDestruction.Clear();
         }
 
@@ -667,9 +670,25 @@ namespace PressPlay.FFWD
                         componentsToStart.Remove(cmp);
                     }
 
-                    if (activeComponents.Contains(cmp))
+                    if (cmp is PressPlay.FFWD.Interfaces.IUpdateable)
                     {
-                        activeComponents.Remove(cmp);
+                        PressPlay.FFWD.Interfaces.IUpdateable upd = cmp as PressPlay.FFWD.Interfaces.IUpdateable;
+                        if (updateComponents.Contains(upd))
+                        {
+                            updateComponents.Remove(upd);
+                        }
+                        if (lateUpdateComponents.Contains(upd))
+                        {
+                            lateUpdateComponents.Remove(upd);
+                        }
+                    }
+
+                    if (cmp is IFixedUpdateable)
+                    {
+                        if (fixedUpdateComponents.Contains(cmp as IFixedUpdateable))
+                        {
+                            fixedUpdateComponents.Remove(cmp as IFixedUpdateable);
+                        }
                     }
 
 	            }
@@ -733,13 +752,46 @@ namespace PressPlay.FFWD
             for (int i = 0; i < componentsChangingActivity.Count; i++)
             {
                 Component cmp = componentsChangingActivity[i];
+                Type tp = cmp.GetType();
                 if (cmp.gameObject.active)
                 {
-                    if (IsComponentUpdateable(cmp))
+                    if (isUpdateable.Contains(tp))
                     {
-                        if (!activeComponents.Contains(cmp))
+                        if (!updateComponents.Contains(cmp as PressPlay.FFWD.Interfaces.IUpdateable))
                         {
-                            activeComponents.Add(cmp);
+                            updateComponents.Add(cmp as PressPlay.FFWD.Interfaces.IUpdateable);
+#if DEBUG
+                            if (ApplicationSettings.LogActivatedComponents)
+                            {
+                                Debug.Log("Added to update: " + cmp);
+                            }
+#endif
+                        }
+                    }
+                    if (isLateUpdateable.Contains(tp))
+                    {
+                        if (!lateUpdateComponents.Contains(cmp as PressPlay.FFWD.Interfaces.IUpdateable))
+                        {
+                            lateUpdateComponents.Add(cmp as PressPlay.FFWD.Interfaces.IUpdateable);
+#if DEBUG
+                            if (ApplicationSettings.LogActivatedComponents)
+                            {
+                                Debug.Log("Added to lateupdate: " + cmp);
+                            }
+#endif
+                        }
+                    }
+                    if (isFixedUpdateable.Contains(tp))
+                    {
+                        if (!fixedUpdateComponents.Contains(cmp as PressPlay.FFWD.Interfaces.IFixedUpdateable))
+                        {
+                            fixedUpdateComponents.Add(cmp as PressPlay.FFWD.Interfaces.IFixedUpdateable);
+#if DEBUG
+                            if (ApplicationSettings.LogActivatedComponents)
+                            {
+                                Debug.Log("Added to fixedupdate: " + cmp);
+                            }
+#endif
                         }
                     }
                     if (cmp is Renderer)
@@ -749,9 +801,26 @@ namespace PressPlay.FFWD
                 }
                 else
                 {
-                    if (activeComponents.Contains(cmp))
+                    if (isUpdateable.Contains(tp))
                     {
-                        activeComponents.Remove(cmp);
+                        if (updateComponents.Contains(cmp as PressPlay.FFWD.Interfaces.IUpdateable))
+                        {
+                            updateComponents.Remove(cmp as PressPlay.FFWD.Interfaces.IUpdateable);
+                        }
+                    }
+                    if (isLateUpdateable.Contains(tp))
+                    {
+                        if (lateUpdateComponents.Contains(cmp as PressPlay.FFWD.Interfaces.IUpdateable))
+                        {
+                            lateUpdateComponents.Remove(cmp as PressPlay.FFWD.Interfaces.IUpdateable);
+                        }
+                    }
+                    if (isFixedUpdateable.Contains(tp))
+                    {
+                        if (fixedUpdateComponents.Contains(cmp as PressPlay.FFWD.Interfaces.IFixedUpdateable))
+                        {
+                            fixedUpdateComponents.Remove(cmp as PressPlay.FFWD.Interfaces.IFixedUpdateable);
+                        }
                     }
                     if (cmp is Renderer)
                     {
@@ -762,14 +831,5 @@ namespace PressPlay.FFWD
             componentsChangingActivity.Clear();
         }
 
-        private static bool IsComponentUpdateable(Component cmp)
-        {
-            Type tp = cmp.GetType();
-            if (!isUpdateable.ContainsKey(tp))
-            {
-                MethodInfo info = tp.GetMethod("Update");
-            }
-            return isUpdateable[tp];
-        }
     }
 }

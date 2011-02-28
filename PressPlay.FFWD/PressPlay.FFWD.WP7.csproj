@@ -248,6 +248,7 @@
     <Compile Include="SkinnedModel\CpuVertex.cs" />
     <Compile Include="Time.cs" />
     <Compile Include="Transform.cs" />
+    <Compile Include="TypeSet.cs" />
     <Compile Include="UI\Controls\ButtonControl.cs" />
     <Compile Include="UI\Controls\ButtonControlOld.cs" />
     <Compile Include="UI\Controls\ButtonStyle.cs" />

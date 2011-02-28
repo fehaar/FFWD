@@ -7,6 +7,8 @@ namespace PressPlay.FFWD.Interfaces
 {
     public interface IFixedUpdateable
     {
+        GameObject gameObject { get; }
+
         void FixedUpdate();
     }
 }

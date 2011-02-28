@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using PressPlay.FFWD.Components;
+using System.Reflection;
 
 namespace PressPlay.FFWD.Import
 {
@@ -11,6 +12,8 @@ namespace PressPlay.FFWD.Import
     public class SceneProcessor : ContentProcessor<Scene, Scene>
     {
         private Scene scene;
+
+        private HashSet<Type> hasProcessedType = new HashSet<Type>();
 
         public override Scene Process(Scene input, ContentProcessorContext context)
         {
@@ -22,7 +25,38 @@ namespace PressPlay.FFWD.Import
                 PurgeStaticallyBatchedRenderers(go);
             }
 
+            foreach (Component cmp in Application.newComponents)
+            {
+                AddBehaviourTypeProperties(cmp);
+            }
+
             return input;
+        }
+
+        private void AddBehaviourTypeProperties(Component cmp)
+        {
+            Type tp = cmp.GetType();
+            if (!hasProcessedType.Contains(tp))
+            {
+                hasProcessedType.Add(tp);
+                MethodInfo info = tp.GetMethod("Update");
+                if (info != null && info.DeclaringType != typeof(MonoBehaviour))
+                {
+                    scene.isUpdateable.Add(tp.AssemblyQualifiedName);
+                }
+
+                info = tp.GetMethod("LateUpdate");
+                if (info != null && info.DeclaringType != typeof(MonoBehaviour))
+                {
+                    scene.isLateUpdateable.Add(tp.AssemblyQualifiedName);
+                }
+
+                info = tp.GetMethod("FixedUpdate");
+                if (info != null && info.DeclaringType != typeof(MonoBehaviour))
+                {
+                    scene.isFixedUpdateable.Add(tp.AssemblyQualifiedName);
+                }
+            }
         }
 
         private void PurgeStaticallyBatchedRenderers(GameObject go)
