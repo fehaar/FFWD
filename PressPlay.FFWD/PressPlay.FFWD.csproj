@@ -237,6 +237,7 @@
     <Compile Include="Components\Renderers\StaticBatchRenderer.cs" />
     <Compile Include="Components\Renderers\TextRenderer.cs" />
     <Compile Include="Gestures.cs" />
+    <Compile Include="InvokeCall.cs" />
     <Compile Include="Material.cs" />
     <Compile Include="Extensions\PlaneExtensions.cs" />
     <Compile Include="iTween\iTween.cs" />

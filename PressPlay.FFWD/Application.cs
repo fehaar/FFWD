@@ -19,6 +19,9 @@ namespace PressPlay.FFWD
         {
             UpdateOrder = 1;
             DrawOrder = 1;
+            isUpdateable.Add(typeof(iTween));
+            isLateUpdateable.Add(typeof(iTween));
+            isFixedUpdateable.Add(typeof(iTween));
         }
 
         private SpriteBatch spriteBatch;
@@ -65,6 +68,8 @@ namespace PressPlay.FFWD
         private static readonly TypeSet isUpdateable = new TypeSet();
         private static readonly TypeSet isFixedUpdateable = new TypeSet();
         private static readonly TypeSet isLateUpdateable = new TypeSet();
+
+        private static readonly List<InvokeCall> invokeCalls = new List<InvokeCall>();
 
         internal static readonly List<UnityObject> markedForDestruction = new List<UnityObject>();
         internal static readonly List<GameObject> dontDestroyOnLoad = new List<GameObject>();
@@ -229,12 +234,9 @@ namespace PressPlay.FFWD
 #if DEBUG && COMPONENT_PROFILE
                 componentProfiler.EndUpdateCall();
 #endif
-                if ((cmp is MonoBehaviour))
-                {
-                    (cmp as MonoBehaviour).UpdateInvokeCalls();
-                }
             }
             ChangeComponentActivity();
+            UpdateInvokeCalls();
 #if DEBUG
             updateTime.Stop();
             lateUpdateTime.Start();
@@ -691,6 +693,13 @@ namespace PressPlay.FFWD
                         }
                     }
 
+                    for (int j = invokeCalls.Count - 1; j >= 0; j--)
+                    {
+                        if (invokeCalls[j].behaviour == cmp)
+                        {
+                            invokeCalls.RemoveAt(j);
+                        }
+                    }
 	            }
             }
             markedForDestruction.Clear();
@@ -829,6 +838,40 @@ namespace PressPlay.FFWD
                 }
             }
             componentsChangingActivity.Clear();
+        }
+
+        internal static void AddInvokeCall(MonoBehaviour behaviour, string methodName, float time, float repeatRate)
+        {
+            invokeCalls.Add(new InvokeCall() { behaviour = behaviour, methodName = methodName, time = time, repeatRate = repeatRate });
+        }
+
+        internal static bool IsInvoking(MonoBehaviour behaviour, string methodName)
+        {
+            for (int i = 0; i < invokeCalls.Count; i++)
+            {
+                if (invokeCalls[i].behaviour == behaviour && invokeCalls[i].methodName == methodName)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        internal static void UpdateInvokeCalls()
+        {
+            for (int i = invokeCalls.Count - 1; i >= 0; i--)
+            {
+                InvokeCall call = invokeCalls[i];
+                if (call.Update(Time.deltaTime))
+                {
+                    call.behaviour.SendMessage(invokeCalls[i].methodName, null);
+                    invokeCalls.RemoveAt(i);
+                }
+                else
+                {
+                    invokeCalls[i] = call;
+                }
+            }
         }
 
     }
