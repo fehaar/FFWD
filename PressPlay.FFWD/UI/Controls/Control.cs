@@ -246,7 +246,7 @@ namespace PressPlay.FFWD.UI.Controls
 
         public virtual void DoTransition(float transitionTime)
         {
-            if (gameObject.renderer != null)
+            if (gameObject != null && gameObject.renderer != null)
             {
                 UIRenderer r = (UIRenderer)gameObject.renderer;
                 
