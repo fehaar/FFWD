@@ -66,7 +66,7 @@ namespace PressPlay.FFWD
         [ContentSerializerIgnore]
         public bool isStatic
         { 
-            get{return _isStatic;} 
+            get {return _isStatic;} 
             set
             {
                 if (value == _isStatic) { return; }

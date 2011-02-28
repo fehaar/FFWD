@@ -72,7 +72,8 @@ namespace PressPlay.FFWD
                 }
                 if (comp != null)
                 {
-                    if (comp.gameObject.active && body.GetType() == BodyType.Kinematic && !comp.gameObject.isStatic && comp.rigidbody == null)
+                    BodyType bodyType = body.GetType();
+                    if (comp.gameObject.active && bodyType == BodyType.Kinematic && !comp.gameObject.isStatic && comp.rigidbody == null)
                     {
                         float rad = -MathHelper.ToRadians(comp.transform.eulerAngles.y);
                         if (body.Position != (Microsoft.Xna.Framework.Vector2)comp.transform.position || body.Rotation != rad)
@@ -84,7 +85,10 @@ namespace PressPlay.FFWD
                         //TODO: Resize body shape to the current transform.scale of the components game object. Maybe this should be done before physics update. It should only be hard coded in AddCollider in static objects
                         //comp.collider.ResizeConnectedBody();
                     }
-                    body.SetActive(comp.gameObject.active);
+                    if (bodyType != BodyType.Static)
+                    {
+                        body.SetActive(comp.gameObject.active);
+                    }
                 }
                 body = body.GetNext();
             }
