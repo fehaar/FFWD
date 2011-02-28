@@ -7,20 +7,26 @@ using Microsoft.Xna.Framework.Content;
 
 namespace PressPlay.FFWD
 {
-    public class TypeSet : ICollection<Type>
+    public class TypeSet : ICollection<string>
     {
-        private Dictionary<Type, short> dict;
+        private Dictionary<int, string> dict;
 
         public TypeSet()
         {
-            dict = new Dictionary<Type, short>();
+            dict = new Dictionary<int, string>();
         }
 
-        public void Add(Type item)
+        public void Add(Type tp)
         {
-            if (!dict.ContainsKey(item))
+            Add(tp.AssemblyQualifiedName);
+        }
+
+        public void Add(string item)
+        {
+            int hash = item.GetHashCode();
+            if (!dict.ContainsKey(hash))
             {
-                dict.Add(item, 0);
+                dict.Add(hash, item);
             }
         }
 
@@ -29,29 +35,34 @@ namespace PressPlay.FFWD
             dict.Clear();
         }
 
-        public bool Contains(Type item)
+        public bool Contains(Type tp)
         {
-            return dict.ContainsKey(item);
+            return Contains(tp.AssemblyQualifiedName);
         }
 
-        public void CopyTo(Type[] array, int arrayIndex)
+        public bool Contains(string item)
+        {
+            return dict.ContainsKey(item.GetHashCode());
+        }
+
+        public void CopyTo(string[] array, int arrayIndex)
         {
             throw new NotImplementedException();
         }
 
-        public bool Remove(Type item)
+        public bool Remove(string item)
         {
-            return dict.Remove(item);
+            return dict.Remove(item.GetHashCode());
         }
 
-        public IEnumerator<Type> GetEnumerator()
+        public IEnumerator<string> GetEnumerator()
         {
-            return dict.Keys.GetEnumerator();
+            return dict.Values.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return dict.Keys.GetEnumerator();
+            return dict.Values.GetEnumerator();
         }
 
         // Properties
@@ -69,7 +80,7 @@ namespace PressPlay.FFWD
         {
             foreach (string item in types)
             {
-                Add(Type.GetType(item));
+                Add(item);
             }
         }
     }

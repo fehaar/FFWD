@@ -19,9 +19,11 @@ namespace PressPlay.FFWD
         {
             UpdateOrder = 1;
             DrawOrder = 1;
+
             isUpdateable.Add(typeof(iTween));
             isLateUpdateable.Add(typeof(iTween));
             isFixedUpdateable.Add(typeof(iTween));
+            isUpdateable.Add(typeof(PressPlay.FFWD.UI.Controls.ScrollingPanelControl));
         }
 
         private SpriteBatch spriteBatch;
