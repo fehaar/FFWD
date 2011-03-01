@@ -42,19 +42,19 @@ namespace PressPlay.FFWD.Import
                 MethodInfo info = tp.GetMethod("Update");
                 if (info != null && info.DeclaringType != typeof(MonoBehaviour))
                 {
-                    scene.isUpdateable.Add(tp.AssemblyQualifiedName);
+                    scene.isUpdateable.Add(tp.Name);
                 }
 
                 info = tp.GetMethod("LateUpdate");
                 if (info != null && info.DeclaringType != typeof(MonoBehaviour))
                 {
-                    scene.isLateUpdateable.Add(tp.AssemblyQualifiedName);
+                    scene.isLateUpdateable.Add(tp.Name);
                 }
 
                 info = tp.GetMethod("FixedUpdate");
                 if (info != null && info.DeclaringType != typeof(MonoBehaviour))
                 {
-                    scene.isFixedUpdateable.Add(tp.AssemblyQualifiedName);
+                    scene.isFixedUpdateable.Add(tp.Name);
                 }
             }
         }

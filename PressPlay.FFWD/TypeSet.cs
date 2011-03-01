@@ -9,24 +9,23 @@ namespace PressPlay.FFWD
 {
     public class TypeSet : ICollection<string>
     {
-        private Dictionary<int, string> dict;
+        private Dictionary<string, short> dict;
 
         public TypeSet()
         {
-            dict = new Dictionary<int, string>();
+            dict = new Dictionary<string, short>();
         }
 
         public void Add(Type tp)
         {
-            Add(tp.AssemblyQualifiedName);
+            Add(tp.Name);
         }
 
         public void Add(string item)
         {
-            int hash = item.GetHashCode();
-            if (!dict.ContainsKey(hash))
+            if (!dict.ContainsKey(item))
             {
-                dict.Add(hash, item);
+                dict.Add(item, 0);
             }
         }
 
@@ -37,12 +36,12 @@ namespace PressPlay.FFWD
 
         public bool Contains(Type tp)
         {
-            return Contains(tp.AssemblyQualifiedName);
+            return Contains(tp.Name);
         }
 
         public bool Contains(string item)
         {
-            return dict.ContainsKey(item.GetHashCode());
+            return dict.ContainsKey(item);
         }
 
         public void CopyTo(string[] array, int arrayIndex)
@@ -52,17 +51,17 @@ namespace PressPlay.FFWD
 
         public bool Remove(string item)
         {
-            return dict.Remove(item.GetHashCode());
+            return dict.Remove(item);
         }
 
         public IEnumerator<string> GetEnumerator()
         {
-            return dict.Values.GetEnumerator();
+            return dict.Keys.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return dict.Values.GetEnumerator();
+            return dict.Keys.GetEnumerator();
         }
 
         // Properties
