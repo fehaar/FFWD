@@ -57,24 +57,24 @@ namespace PressPlay.FFWD
 
         public static ScreenManager.ScreenManager screenManager;
 
-        private static readonly Dictionary<int, UnityObject> objects = new Dictionary<int, UnityObject>();
-        internal static readonly List<Asset> newAssets = new List<Asset>();
+        private static readonly Dictionary<int, UnityObject> objects = new Dictionary<int, UnityObject>(5000);
+        internal static readonly List<Asset> newAssets = new List<Asset>(100);
 
         internal static readonly List<Component> newComponents = new List<Component>();
         private static readonly List<Component> componentsToStart = new List<Component>();
-        private static readonly List<PressPlay.FFWD.Interfaces.IUpdateable> updateComponents = new List<PressPlay.FFWD.Interfaces.IUpdateable>();
-        private static readonly List<PressPlay.FFWD.Interfaces.IFixedUpdateable> fixedUpdateComponents = new List<PressPlay.FFWD.Interfaces.IFixedUpdateable>();
-        private static readonly List<PressPlay.FFWD.Interfaces.IUpdateable> lateUpdateComponents = new List<PressPlay.FFWD.Interfaces.IUpdateable>();
-        private static readonly List<Component> componentsChangingActivity = new List<Component>();
+        private static readonly List<PressPlay.FFWD.Interfaces.IUpdateable> updateComponents = new List<PressPlay.FFWD.Interfaces.IUpdateable>(500);
+        private static readonly List<PressPlay.FFWD.Interfaces.IFixedUpdateable> fixedUpdateComponents = new List<PressPlay.FFWD.Interfaces.IFixedUpdateable>(100);
+        private static readonly List<PressPlay.FFWD.Interfaces.IUpdateable> lateUpdateComponents = new List<PressPlay.FFWD.Interfaces.IUpdateable>(100);
+        private static readonly List<Component> componentsChangingActivity = new List<Component>(50);
 
-        private static readonly TypeSet isUpdateable = new TypeSet();
-        private static readonly TypeSet isFixedUpdateable = new TypeSet();
-        private static readonly TypeSet isLateUpdateable = new TypeSet();
+        private static readonly TypeSet isUpdateable = new TypeSet(100);
+        private static readonly TypeSet isFixedUpdateable = new TypeSet(25);
+        private static readonly TypeSet isLateUpdateable = new TypeSet(25);
 
-        private static readonly List<InvokeCall> invokeCalls = new List<InvokeCall>();
+        private static readonly List<InvokeCall> invokeCalls = new List<InvokeCall>(10);
 
         internal static readonly List<UnityObject> markedForDestruction = new List<UnityObject>();
-        internal static readonly List<GameObject> dontDestroyOnLoad = new List<GameObject>();
+        internal static readonly List<GameObject> dontDestroyOnLoad = new List<GameObject>(50);
 
         internal static bool loadingScene = false;
 

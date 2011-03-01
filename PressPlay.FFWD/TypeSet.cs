@@ -16,6 +16,11 @@ namespace PressPlay.FFWD
             dict = new Dictionary<string, short>();
         }
 
+        public TypeSet(int capacity)
+        {
+            dict = new Dictionary<string, short>(capacity);
+        }
+
         public void Add(Type tp)
         {
             Add(tp.Name);

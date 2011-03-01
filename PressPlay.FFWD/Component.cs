@@ -163,6 +163,7 @@ namespace PressPlay.FFWD
                         }
                     }
                 }
+                // TODO: This is a bad way to do it as it costs massive amounts of memory
                 if (memInfo[i].FieldType.GetCustomAttributes(typeof(FixReferencesAttribute), true).Length > 0)
                 {
                     DoFixReferences(memInfo[i].GetValue(objectToFix), idMap);
