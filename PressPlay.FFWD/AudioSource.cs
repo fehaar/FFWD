@@ -126,7 +126,7 @@ namespace PressPlay.FFWD
 
         public void Play()
         {
-            if (soundEffect == null)
+            if (soundEffect == null || soundEffect.IsDisposed)
             { 
                 return; 
             }
@@ -146,14 +146,14 @@ namespace PressPlay.FFWD
 
         public void Stop()
         {
-            if (soundEffect == null || soundEffect.IsDisposed ) return;
+            if (soundEffect == null || soundEffect.IsDisposed) return;
             soundEffect.Stop();
             time = 0;
         }
 
         public void Pause()
         {
-            if (soundEffect == null && soundEffect.IsDisposed) return;
+            if (soundEffect == null || soundEffect.IsDisposed) return;
             soundEffect.Pause();
         }
 
@@ -187,7 +187,7 @@ namespace PressPlay.FFWD
         protected override void Destroy()
         {
             base.Destroy();
-            if (soundEffect != null)
+            if (soundEffect != null && !soundEffect.IsDisposed)
             {
                 soundEffect.Dispose();
             }
