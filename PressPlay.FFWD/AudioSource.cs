@@ -146,14 +146,14 @@ namespace PressPlay.FFWD
 
         public void Stop()
         {
-            if (soundEffect == null) return;
+            if (soundEffect == null || soundEffect.IsDisposed ) return;
             soundEffect.Stop();
             time = 0;
         }
 
         public void Pause()
         {
-            if (soundEffect == null) return;
+            if (soundEffect == null && soundEffect.IsDisposed) return;
             soundEffect.Pause();
         }
 
