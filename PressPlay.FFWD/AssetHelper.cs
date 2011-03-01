@@ -6,6 +6,25 @@ using Microsoft.Xna.Framework.Content;
 
 namespace PressPlay.FFWD
 {
+    /*
+    public class AssetItem
+    {
+        public string contentPath;
+        public string category;
+        public enum AssetType
+        {
+            texture,
+            soundEffect
+        }
+        public AssetType assetType = AssetType.texture;
+
+        public AssetItem(string contentPath, string category, AssetType assetType)
+        {
+
+        }
+    }
+    */
+    
     public class AssetHelper
     {
         private Dictionary<string, ContentManager> contentManagers = new Dictionary<string, ContentManager>();

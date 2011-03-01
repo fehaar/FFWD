@@ -41,7 +41,7 @@ namespace PressPlay.FFWD.ScreenManager
         protected List<Control> controls = new List<Control>();
         protected Control rootControl;
 
-        GameScreen[] screensToLoad;
+        protected GameScreen[] screensToLoad;
 
         #endregion
 
@@ -111,30 +111,6 @@ namespace PressPlay.FFWD.ScreenManager
                                                        bool coveredByOtherScreen)
         {
             base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
-
-            // If all the previous screens have finished transitioning
-            // off, it is time to actually perform the load.
-            if (otherScreensAreGone && !hasAddedScreens)
-            {
-                //ScreenManager.RemoveScreen(this);
-
-                foreach (GameScreen screen in screensToLoad)
-                {
-                    if (screen != null)
-                    {
-                        //ScreenManager.AddScreen(screen, ControllingPlayer);
-                        Debug.Log("Add LoadSceneScreen");
-                        ScreenManager.AddScreenBelow(screen, ControllingPlayer);
-                    }
-                }
-
-                hasAddedScreens = true;
-
-                // Once the load has finished, we use ResetElapsedTime to tell
-                // the  game timing mechanism that we have just finished a very
-                // long frame, and that it should not try to catch up.
-                ScreenManager.Game.ResetElapsedTime();
-            }
         }
 
         /// <summary>
