@@ -7,16 +7,26 @@ using Microsoft.Xna.Framework.Content;
 
 namespace PressPlay.FFWD
 {
-    public class TypeSet : ICollection<Type>
+    public class TypeSet : ICollection<string>
     {
-        private Dictionary<Type, short> dict;
+        private Dictionary<string, short> dict;
 
         public TypeSet()
         {
-            dict = new Dictionary<Type, short>();
+            dict = new Dictionary<string, short>();
         }
 
-        public void Add(Type item)
+        public TypeSet(int capacity)
+        {
+            dict = new Dictionary<string, short>(capacity);
+        }
+
+        public void Add(Type tp)
+        {
+            Add(tp.Name);
+        }
+
+        public void Add(string item)
         {
             if (!dict.ContainsKey(item))
             {
@@ -29,22 +39,27 @@ namespace PressPlay.FFWD
             dict.Clear();
         }
 
-        public bool Contains(Type item)
+        public bool Contains(Type tp)
+        {
+            return Contains(tp.Name);
+        }
+
+        public bool Contains(string item)
         {
             return dict.ContainsKey(item);
         }
 
-        public void CopyTo(Type[] array, int arrayIndex)
+        public void CopyTo(string[] array, int arrayIndex)
         {
             throw new NotImplementedException();
         }
 
-        public bool Remove(Type item)
+        public bool Remove(string item)
         {
             return dict.Remove(item);
         }
 
-        public IEnumerator<Type> GetEnumerator()
+        public IEnumerator<string> GetEnumerator()
         {
             return dict.Keys.GetEnumerator();
         }
@@ -69,7 +84,7 @@ namespace PressPlay.FFWD
         {
             foreach (string item in types)
             {
-                Add(Type.GetType(item));
+                Add(item);
             }
         }
     }
