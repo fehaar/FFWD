@@ -33,9 +33,11 @@ namespace PressPlay.FFWD
             AddComponent(new Transform());
         }
 
-        public GameObject(string name) : this()
+        public GameObject(string name) : base()
         {
             this.name = name;
+            components = new List<Component>();
+            AddComponent(new Transform());
         }
 
         [ContentSerializer(Optional = true)]

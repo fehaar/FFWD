@@ -152,6 +152,7 @@ namespace PressPlay.FFWD
                 if (loadIsComplete)
                 {
                     OnSceneLoadComplete();
+                    return;
                 }
                 else
                 {

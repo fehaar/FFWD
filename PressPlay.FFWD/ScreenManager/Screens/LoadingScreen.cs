@@ -13,6 +13,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PressPlay.FFWD.UI.Controls;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework.Input.Touch;
 #endregion
 
 namespace PressPlay.FFWD.ScreenManager
@@ -64,6 +65,8 @@ namespace PressPlay.FFWD.ScreenManager
             IsSerializable = false;
 
             TransitionOnTime = TimeSpan.FromSeconds(0.5);
+
+            EnabledGestures = GestureType.Tap;
         }
 
         /// <summary>
