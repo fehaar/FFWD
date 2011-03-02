@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using PressPlay.FFWD.Components;
 using System.Reflection;
+using PressPlay.FFWD.Attributes;
 
 namespace PressPlay.FFWD.Import
 {
@@ -14,6 +15,7 @@ namespace PressPlay.FFWD.Import
         private Scene scene;
 
         private HashSet<Type> hasProcessedType = new HashSet<Type>();
+        private List<Assembly> assembliesUsed = new List<Assembly>();
 
         public override Scene Process(Scene input, ContentProcessorContext context)
         {
@@ -28,6 +30,17 @@ namespace PressPlay.FFWD.Import
             foreach (Component cmp in Application.newComponents)
             {
                 AddBehaviourTypeProperties(cmp);
+            }
+
+            foreach (Assembly ass in assembliesUsed)
+            {
+                foreach (Type type in ass.GetTypes())
+                {
+                    if (type.GetCustomAttributes(typeof(FixReferencesAttribute), true).Length > 0)
+                    {
+                        scene.fixReferences.Add(type.Name);
+                    }
+                }
             }
 
             return input;
@@ -56,6 +69,11 @@ namespace PressPlay.FFWD.Import
                 {
                     scene.isFixedUpdateable.Add(tp.Name);
                 }
+
+                if (!assembliesUsed.Contains(tp.Assembly))
+	            {
+                    assembliesUsed.Add(tp.Assembly);
+	            }
             }
         }
 
