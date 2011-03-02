@@ -42,6 +42,14 @@ namespace PressPlay.FFWD.Components
         private static DynamicBatchRenderer dynamicBatchRenderer;
 
         internal static SpriteBatch spriteBatch;
+        public SpriteBatch SpriteBatch
+        {
+            get
+            {
+                return spriteBatch;
+            }
+        }
+
         internal static BasicEffect effect;
 
         private Color _backgroundColor = Color.black;
@@ -292,7 +300,7 @@ namespace PressPlay.FFWD.Components
                 {
                     // This will happen if the game object has been destroyed in update.
                     // It is acceptable behaviour.
-                    continue;
+                     continue;
                 }
                 if (renderQueue[i].material.renderQueue != q)
                 {

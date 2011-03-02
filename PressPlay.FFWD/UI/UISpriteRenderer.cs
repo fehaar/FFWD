@@ -143,7 +143,7 @@ namespace PressPlay.FFWD.UI
 
             float depth = 1 - ((float)transform.position / 10000f);
 
-            UIRenderer.batch.Draw(texture, bounds, sourceRect, material.color, transform.eulerAngles.y, origin, effects, depth);
+            Camera.spriteBatch.Draw(texture, bounds, sourceRect, material.color, transform.eulerAngles.y, origin, effects, depth);
             return 0;
         }
         #endregion

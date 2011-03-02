@@ -201,10 +201,7 @@ namespace Box2D.XNA
 			    }
 
 		        default:
-                if (!(false)) { throw new InvalidOperationException(); }
-			        indexA = -1;
-			        indexB = -1;
-			        return 0.0f;
+                    throw new InvalidOperationException();
 		    }
 	    }
         
@@ -260,8 +257,7 @@ namespace Box2D.XNA
 			    }
 
 		    default:
-                if (!(false)) { throw new InvalidOperationException(); }
-			    return 0.0f;
+                throw new InvalidOperationException();
 		    }
 	    }
 
