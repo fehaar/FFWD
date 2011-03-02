@@ -105,7 +105,7 @@ namespace PressPlay.FFWD
                 }
                 Vector3 pos = position;
                 Quaternion rot = rotation;
-                //Vector3 scale = lossyScale;
+                Vector3 scale = lossyScale;
 
                 _parent = value;
                 if (_parent == null)
@@ -117,8 +117,12 @@ namespace PressPlay.FFWD
                     _parent.children = new List<GameObject>();
                 }
                 _parent.children.Add(gameObject);
+                
+                //reset transform to match world properties before parent was set
                 position = pos;
                 rotation = rot;
+                //localScale = 
+
                 hasDirtyWorld = true;
             }
         }
