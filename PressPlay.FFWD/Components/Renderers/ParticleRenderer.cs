@@ -15,7 +15,6 @@ namespace PressPlay.FFWD.Components
         public float maxParticleSize;
         public Vector3 uvAnimation;
 
-        private static BasicEffect effect;
         private ParticleEmitter emitter;
         private VertexPositionColorTexture[] vertices;
         private short[] triangles;
@@ -68,21 +67,16 @@ namespace PressPlay.FFWD.Components
 #endif
             if (emitter.particles == null || emitter.particleCount == 0) return 0;
 
-            if (effect == null)
-            {
-                effect = new BasicEffect(device);
-            }
-
-            effect.World = Matrix.Identity;
-            effect.View = cam.view;
-            effect.Projection = cam.projectionMatrix;
+            cam.BasicEffect.World = Matrix.Identity;
+            cam.BasicEffect.View = cam.view;
+            cam.BasicEffect.Projection = cam.projectionMatrix;
             if (materials != null && materials.Length > 0 && materials[0].texture != null)
             {
-                effect.TextureEnabled = true;
-                effect.Texture = materials[0].texture;
+                cam.BasicEffect.TextureEnabled = true;
+                cam.BasicEffect.Texture = materials[0].texture;
                 materials[0].SetBlendState(device);
             }
-            effect.VertexColorEnabled = true;
+            cam.BasicEffect.VertexColorEnabled = true;
 
             if (vertices == null)
 	        {
@@ -106,7 +100,7 @@ namespace PressPlay.FFWD.Components
             }
 #endif
 
-            foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+            foreach (EffectPass pass in cam.BasicEffect.CurrentTechnique.Passes)
             {
                 pass.Apply();
                 device.DrawUserIndexedPrimitives<VertexPositionColorTexture>(
