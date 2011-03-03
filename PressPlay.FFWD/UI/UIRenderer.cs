@@ -28,7 +28,10 @@ namespace PressPlay.FFWD.UI
             {
                 if (_control == null)
                 {
-                    _control = gameObject.GetComponent<Control>();
+                    if (gameObject != null)
+                    {
+                        _control = gameObject.GetComponent<Control>();
+                    }
                 }
 
                 return _control;

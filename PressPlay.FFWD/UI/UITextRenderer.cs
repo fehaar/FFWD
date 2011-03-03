@@ -20,11 +20,17 @@ namespace PressPlay.FFWD.UI
 
         public SpriteEffects effects = new SpriteEffects();
 
+        private bool hasDoneWordWrap = true;
         private string _text = "";
         public string text
         {
             get
             {
+                if (!hasDoneWordWrap && control != null)
+                {
+                    _text = WordWrap(_text, control.bounds.Width, font);
+                    hasDoneWordWrap = true;                    
+                }
                 return _text;
             }
             set
@@ -35,13 +41,22 @@ namespace PressPlay.FFWD.UI
 
                     if (_text != value)
                     {
-                        _text = value;
-
                         if (font != null)
                         {
                             textSize = font.MeasureString(_text);
-
-                            //WordWrap(text, control.bounds.Width, font);
+                            if (control != null)
+                            {
+                                _text = WordWrap(value, control.bounds.Width, font);
+                            }
+                            else
+                            {
+                                _text = value;
+                                hasDoneWordWrap = false;
+                            }
+                        }
+                        else
+                        {
+                            _text = value;
                         }
                     }
                 }
@@ -67,7 +82,7 @@ namespace PressPlay.FFWD.UI
             
             float depth = 1 - ((float)transform.position / 10000f);
 
-            Camera.spriteBatch.DrawString(font, WordWrap(text, control.bounds.Width, font), transform.position, material.color, transform.rotation.eulerAngles.y, GetOrigin(), transform.lossyScale, effects, depth);
+            Camera.spriteBatch.DrawString(font, text, transform.position, material.color, transform.rotation.eulerAngles.y, GetOrigin(), transform.lossyScale, effects, depth);
             return 0;
         }
 

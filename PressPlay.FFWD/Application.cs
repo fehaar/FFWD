@@ -63,6 +63,7 @@ namespace PressPlay.FFWD
         internal static readonly List<Asset> newAssets = new List<Asset>(100);
 
         internal static readonly List<Component> newComponents = new List<Component>();
+        private static Component[] componentsToAwake = new Component[500];
         private static readonly List<Component> componentsToStart = new List<Component>();
         private static readonly List<PressPlay.FFWD.Interfaces.IUpdateable> updateComponents = new List<PressPlay.FFWD.Interfaces.IUpdateable>(500);
         private static readonly List<PressPlay.FFWD.Interfaces.IFixedUpdateable> fixedUpdateComponents = new List<PressPlay.FFWD.Interfaces.IFixedUpdateable>(100);
@@ -616,17 +617,27 @@ namespace PressPlay.FFWD
                     }
                 }
             }
-            // All components will exist to be found before awaking - otherwise we can get issues with instantiating on awake.
-            Component[] componentsToAwake = newComponents.ToArray();
-            newComponents.Clear();
-            for (int i = 0; i < componentsToAwake.Length; i++)
+
+            int componentCount = newComponents.Count;
+            if (componentCount > 0)
             {
-                Component cmp = componentsToAwake[i];
-                if (!cmp.isPrefab)
+                // All components will exist to be found before awaking - otherwise we can get issues with instantiating on awake.
+                if (componentsToAwake.Length < newComponents.Count)
                 {
-                    cmp.Awake();
+                    componentsToAwake = new Component[newComponents.Count];
+                }
+                newComponents.CopyTo(componentsToAwake);
+                newComponents.Clear();
+                for (int i = 0; i < componentCount; i++)
+                {
+                    Component cmp = componentsToAwake[i];
+                    if (!cmp.isPrefab)
+                    {
+                        cmp.Awake();
+                    }
                 }
             }
+
             // Do a recursive awake to awake components instantiated in the previous awake.
             // In this way we will make sure that everything is instantiated before the first run.
             if (newComponents.Count > 0)
@@ -791,7 +802,10 @@ namespace PressPlay.FFWD
 
         internal static void UpdateGameObjectActive(List<Component> components)
         {
-            componentsChangingActivity.AddRange(components);
+            for (int i = 0; i < components.Count; i++)
+            {
+                componentsChangingActivity.Add(components[i]);
+            }
         }
 
         private static void ChangeComponentActivity()
