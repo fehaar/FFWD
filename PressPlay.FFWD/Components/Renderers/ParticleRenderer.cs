@@ -70,13 +70,11 @@ namespace PressPlay.FFWD.Components
             cam.BasicEffect.World = Matrix.Identity;
             cam.BasicEffect.View = cam.view;
             cam.BasicEffect.Projection = cam.projectionMatrix;
-            if (materials != null && materials.Length > 0 && materials[0].texture != null)
-            {
-                cam.BasicEffect.TextureEnabled = true;
-                cam.BasicEffect.Texture = materials[0].texture;
-                materials[0].SetBlendState(device);
-            }
+
             cam.BasicEffect.VertexColorEnabled = true;
+
+            material.SetTextureState(cam.BasicEffect);
+            material.SetBlendState(device);
 
             if (vertices == null)
 	        {
