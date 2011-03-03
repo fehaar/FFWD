@@ -83,6 +83,7 @@ namespace PressPlay.FFWD
 
         // Lists and variables used for loading a scene
         public static bool isLoadingAssetBeforeSceneInitialize = false;
+        private static bool doGarbageCollectAfterAwake = false;
         internal static bool loadIsComplete = false;
         internal static bool hasDrawBeenCalled = false;
         private static int totalNumberOfAssetsToLoad = 0;
@@ -185,7 +186,6 @@ namespace PressPlay.FFWD
             if (!String.IsNullOrEmpty(sceneToLoad))
             {
                 CleanUp();
-                GC.Collect();
                 DoSceneLoad();
             }
             LoadNewAssets();
@@ -502,7 +502,8 @@ namespace PressPlay.FFWD
 
             //_loadingProgess = 0;
 
-            GC.Collect();
+            doGarbageCollectAfterAwake = true;
+            //GC.Collect();
         }
 
         internal static void LoadNewAssets()
@@ -626,6 +627,12 @@ namespace PressPlay.FFWD
             if (newComponents.Count > 0)
             {
                 AwakeNewComponents();
+            }
+
+            if (doGarbageCollectAfterAwake)
+            {
+                GC.Collect();
+                doGarbageCollectAfterAwake = false;
             }
         }
 

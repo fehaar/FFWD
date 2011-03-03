@@ -31,10 +31,18 @@ namespace PressPlay.FFWD.UI
             {
                 if (value != _text)
                 {
-                    _text = value.Replace("”", "");
-                    if (font != null)
+                    value = value.Replace("”", "");
+
+                    if (_text != value)
                     {
-                        textSize = font.MeasureString(_text);
+                        _text = value;
+
+                        if (font != null)
+                        {
+                            textSize = font.MeasureString(_text);
+
+                            //WordWrap(text, control.bounds.Width, font);
+                        }
                     }
                 }
             }
