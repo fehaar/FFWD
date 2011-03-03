@@ -21,7 +21,7 @@ namespace PressPlay.FFWD
         public static bool ShowFPSCounter = true;
         public static bool ShowDebugDisplays = true;
         public static bool ShowDebugLines = true;
-        public static bool LogActivatedComponents = true;
+        public static bool LogActivatedComponents = false;
         //public static string DebugLineCamera = "";
         public static Camera DebugCamera;
         public static SpriteFont DebugFont;
