@@ -186,8 +186,6 @@ namespace PressPlay.FFWD
 
                 currentKeyframe++;
             }
-
-            Debug.Log("Clip " + currentClipValue.name + " at " + currentStateValue.time + " using keyframe " + currentKeyframe);
         }
         
         /// <summary>
