@@ -51,7 +51,15 @@ namespace PressPlay.FFWD.Components
             }
         }
 
-        internal static BasicEffect effect;
+        internal static BasicEffect basicEffect;
+        [ContentSerializerIgnore]
+        public BasicEffect BasicEffect
+        {
+            get
+            {
+                return basicEffect;
+            }
+        }
 
         private Color _backgroundColor = Color.black;
         public Color backgroundColor
