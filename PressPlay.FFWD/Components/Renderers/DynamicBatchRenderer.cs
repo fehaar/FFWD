@@ -83,7 +83,6 @@ namespace PressPlay.FFWD.Components
 
             cam.BasicEffect.VertexColorEnabled = false;
             cam.BasicEffect.World = Matrix.Identity;
-            cam.BasicEffect.LightingEnabled = false;
             cam.BasicEffect.View = cam.view;
             cam.BasicEffect.Projection = cam.projectionMatrix;
             currentMaterial.SetBlendState(device);
