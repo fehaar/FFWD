@@ -32,16 +32,12 @@ namespace PressPlay.FFWD
             if (clip.Keyframes != null)
             {
                 Keyframes = new List<Keyframe>();
-                timeOffset = -1;
+                timeOffset = (float)startTime;
                 foreach (Keyframe frame in clip.Keyframes)
                 {
                     double keySecs = frame.Time.TotalSeconds;
                     if (keySecs >= startTime && keySecs < endTime)
                     {
-                        if (timeOffset == -1)
-	                    {
-                            timeOffset = keySecs - startTime;
-	                    }
                         Keyframes.Add(frame);
                     }
                 }
@@ -60,7 +56,7 @@ namespace PressPlay.FFWD
 
         public string name;
         public WrapMode wrapMode = WrapMode.Once;
-        internal double timeOffset;
+        internal float timeOffset;
 
         /// <summary>
         /// Gets the total length of the model animation clip

@@ -21,7 +21,6 @@ namespace PressPlay.FFWD
 
         public bool enabled = false;
         public float time = 0.0f;
-        internal float startTime = 0.0f;
         
         public float speed = 1.0f;
         public float length;
