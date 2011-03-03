@@ -41,8 +41,8 @@ namespace PressPlay.FFWD.Components
 
         private static DynamicBatchRenderer dynamicBatchRenderer;
 
-<<<<<<< HEAD
         internal static SpriteBatch spriteBatch;
+        [ContentSerializerIgnore]
         public SpriteBatch SpriteBatch
         {
             get
@@ -53,8 +53,6 @@ namespace PressPlay.FFWD.Components
 
         internal static BasicEffect effect;
 
-=======
->>>>>>> parent of 1da48b7... Moved some TextRednerer3D related code
         private Color _backgroundColor = Color.black;
         public Color backgroundColor
         { 
