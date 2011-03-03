@@ -18,7 +18,6 @@ namespace PressPlay.FFWD.Components
         private Material currentMaterial = Material.Default;
 
         private GraphicsDevice device;
-        private BasicEffect effect;
 
         private int batchVertexSize = 0;
         private int batchIndexSize = 0;
@@ -82,16 +81,12 @@ namespace PressPlay.FFWD.Components
                 return 0;
             }
 
-            if (effect == null)
-            {
-                effect = new BasicEffect(device);
-                effect.VertexColorEnabled = false;
-                effect.World = Matrix.Identity;
-                effect.LightingEnabled = false;
-            }
+            cam.BasicEffect.World = Matrix.Identity;
+            cam.BasicEffect.View = cam.view;
+            cam.BasicEffect.Projection = cam.projectionMatrix;
+            cam.BasicEffect.VertexColorEnabled = false;
 
-            effect.View = cam.view;
-            effect.Projection = cam.projectionMatrix;
+            currentMaterial.SetTextureState(cam.BasicEffect);
             currentMaterial.SetBlendState(device);
 
 #if DEBUG
@@ -101,19 +96,7 @@ namespace PressPlay.FFWD.Components
             }
 #endif
 
-            if (currentMaterial.texture != null)
-            {
-                effect.TextureEnabled = true;
-                effect.Texture = currentMaterial.texture;
-                effect.DiffuseColor = Color.white;
-            }
-            else
-            {
-                effect.TextureEnabled = false;
-                effect.DiffuseColor = currentMaterial.color;
-            }
-
-            foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+            foreach (EffectPass pass in cam.BasicEffect.CurrentTechnique.Passes)
             {
                 pass.Apply();
                 device.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(

@@ -26,7 +26,9 @@ namespace PressPlay.FFWD
             isUpdateable.Add(typeof(PressPlay.FFWD.UI.Controls.ScrollingPanelControl));
         }
 
+#if DEBUG
         private SpriteBatch spriteBatch;
+#endif
 
         int frameRate = 0;
         int frameCounter = 0;
@@ -70,6 +72,7 @@ namespace PressPlay.FFWD
         private static readonly TypeSet isUpdateable = new TypeSet(100);
         private static readonly TypeSet isFixedUpdateable = new TypeSet(25);
         private static readonly TypeSet isLateUpdateable = new TypeSet(25);
+        internal static readonly TypeSet fixReferences = new TypeSet(5);
 
         private static readonly List<InvokeCall> invokeCalls = new List<InvokeCall>(10);
 
@@ -80,6 +83,7 @@ namespace PressPlay.FFWD
 
         // Lists and variables used for loading a scene
         public static bool isLoadingAssetBeforeSceneInitialize = false;
+        private static bool doGarbageCollectAfterAwake = false;
         internal static bool loadIsComplete = false;
         internal static bool hasDrawBeenCalled = false;
         private static int totalNumberOfAssetsToLoad = 0;
@@ -112,8 +116,22 @@ namespace PressPlay.FFWD
             Physics.Initialize();
             Time.Reset();
             Input.Initialize();
-            spriteBatch = new SpriteBatch(Game.GraphicsDevice);
             assetHelper.CreateContentManager = CreateContentManager;
+            Camera.spriteBatch = new SpriteBatch(Game.GraphicsDevice);
+            Camera.basicEffect = new BasicEffect(Game.GraphicsDevice);
+            // Note we cannot share this as it is used in between cameras as it is done now
+            TextRenderer3D.basicEffect = new BasicEffect(Game.GraphicsDevice)
+            {
+                TextureEnabled = true,
+                VertexColorEnabled = true,
+                World = TextRenderer3D.invertY,
+                View = Matrix.Identity
+            };
+            TextRenderer3D.batch = new SpriteBatch(Game.GraphicsDevice);
+
+#if DEBUG
+            spriteBatch = new SpriteBatch(Game.GraphicsDevice);
+#endif
         }
 
         private ContentManager CreateContentManager()
@@ -168,7 +186,6 @@ namespace PressPlay.FFWD
             if (!String.IsNullOrEmpty(sceneToLoad))
             {
                 CleanUp();
-                GC.Collect();
                 DoSceneLoad();
             }
             LoadNewAssets();
@@ -412,6 +429,7 @@ namespace PressPlay.FFWD
                 isUpdateable.AddRange(scene.isUpdateable);
                 isFixedUpdateable.AddRange(scene.isFixedUpdateable);
                 isLateUpdateable.AddRange(scene.isLateUpdateable);
+                fixReferences.AddRange(scene.fixReferences);
             }
 
             if (scene == null)
@@ -489,7 +507,8 @@ namespace PressPlay.FFWD
 
             //_loadingProgess = 0;
 
-            GC.Collect();
+            doGarbageCollectAfterAwake = true;
+            //GC.Collect();
         }
 
         internal static void LoadNewAssets()
@@ -580,11 +599,11 @@ namespace PressPlay.FFWD
                 {
                     // TODO: Fix this with a content processor!
                     // Purge superfluous Transforms that is created when GameObjects are imported from the scene
-                    if ((cmp is Transform) && (cmp.gameObject.transform != cmp))
-                    {
-                        cmp.gameObject = null;
-                        continue;
-                    }
+                    //if ((cmp is Transform) && (cmp.gameObject.transform != cmp))
+                    //{
+                    //    cmp.gameObject = null;
+                    //    continue;
+                    //}
                     objects.Add(cmp.GetInstanceID(), cmp);
 
                     if (!cmp.isPrefab)
@@ -613,6 +632,12 @@ namespace PressPlay.FFWD
             if (newComponents.Count > 0)
             {
                 AwakeNewComponents();
+            }
+
+            if (doGarbageCollectAfterAwake)
+            {
+                GC.Collect();
+                doGarbageCollectAfterAwake = false;
             }
         }
 

@@ -35,16 +35,11 @@ namespace PressPlay.FFWD.UI
             }
         }
 
-        internal static SpriteBatch batch;
         private static List<UIRenderer> uiRenderQueue = new List<UIRenderer>();
         internal static int doRender(GraphicsDevice device)
         {
             int estDrawCalls = 0;
-            if (batch == null)
-            {
-                batch = new SpriteBatch(device);
-            }
-            batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+            Camera.spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
             for (int i = 0; i < uiRenderQueue.Count; i++)
             {
                 if (uiRenderQueue[i].gameObject == null)
@@ -60,7 +55,7 @@ namespace PressPlay.FFWD.UI
                 estDrawCalls++;
                 uiRenderQueue[i].Draw(device, null);
             }
-            batch.End();
+            Camera.spriteBatch.End();
             return estDrawCalls;
         }
 

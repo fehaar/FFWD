@@ -31,10 +31,18 @@ namespace PressPlay.FFWD.UI
             {
                 if (value != _text)
                 {
-                    _text = value.Replace("”", "");
-                    if (font != null)
+                    value = value.Replace("”", "");
+
+                    if (_text != value)
                     {
-                        textSize = font.MeasureString(_text);
+                        _text = value;
+
+                        if (font != null)
+                        {
+                            textSize = font.MeasureString(_text);
+
+                            //WordWrap(text, control.bounds.Width, font);
+                        }
                     }
                 }
             }
@@ -57,12 +65,9 @@ namespace PressPlay.FFWD.UI
                 return 0;
             }
             
-            //UIRenderer.batch.DrawString(font, text, transform.position, material.color);
             float depth = 1 - ((float)transform.position / 10000f);
 
-            //UIRenderer.batch.DrawString(font, text, transform.position, material.color, 0, Microsoft.Xna.Framework.Vector2.Zero, transform.localScale, effects, depth);
-            //UIRenderer.batch.DrawString(font, WordWrap(text, control.bounds.Width, font), transform.position, material.color, transform.rotation.eulerAngles.y, Microsoft.Xna.Framework.Vector2.Zero, transform.lossyScale, effects, depth);
-            UIRenderer.batch.DrawString(font, WordWrap(text, control.bounds.Width, font), transform.position, material.color, transform.rotation.eulerAngles.y, GetOrigin(), transform.lossyScale, effects, depth);
+            Camera.spriteBatch.DrawString(font, WordWrap(text, control.bounds.Width, font), transform.position, material.color, transform.rotation.eulerAngles.y, GetOrigin(), transform.lossyScale, effects, depth);
             return 0;
         }
 

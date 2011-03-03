@@ -188,9 +188,11 @@ namespace PressPlay.FFWD.Import.Animation
             for (int i = 0; i < inputWeights.Count; i++)
             {
                 BoneWeight weight = inputWeights[i];
-
-                tempIndices[i] = boneIndices[weight.BoneName];
-                tempWeights[i] = weight.Weight;
+                if (boneIndices.ContainsKey(weight.BoneName))
+                {
+                    tempIndices[i] = boneIndices[weight.BoneName];
+                    tempWeights[i] = weight.Weight;
+                }
             }
 
             // zero out any remaining spaces

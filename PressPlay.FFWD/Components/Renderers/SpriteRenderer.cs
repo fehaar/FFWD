@@ -96,7 +96,6 @@ namespace PressPlay.FFWD.Components
         #endregion
 
         #region IRenderable Members
-        protected SpriteBatch batch;
         public override int Draw(GraphicsDevice device, Camera cam)
         {
             if (texture == null)
@@ -104,16 +103,9 @@ namespace PressPlay.FFWD.Components
                 return 0;
             }
 
-            if (batch == null)
-            {
-                batch = new SpriteBatch(device);
-            }
-#if DEBUG
-            Debug.Log("I want to render SpriteRender");
-#endif
-            batch.Begin();
-            batch.Draw(texture, Position, bounds, material.color, transform.eulerAngles.y, Origin, Scale, Effects, LayerDepth);
-            batch.End();
+            Camera.spriteBatch.Begin();
+            Camera.spriteBatch.Draw(texture, Position, bounds, material.color, transform.eulerAngles.y, Origin, Scale, Effects, LayerDepth);
+            Camera.spriteBatch.End();
             return 1;
         }
         #endregion

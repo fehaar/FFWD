@@ -27,6 +27,8 @@ namespace PressPlay.FFWD
         internal List<string> isFixedUpdateable = new List<string>();
         [ContentSerializer(Optional = true, ElementName = "lup")]
         internal List<string> isLateUpdateable = new List<string>();
+        [ContentSerializer(Optional = true, ElementName = "fix")]
+        internal List<string> fixReferences = new List<string>();
 
         public void AfterLoad(Dictionary<int, UnityObject> idMap)
         {            
