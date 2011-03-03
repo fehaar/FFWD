@@ -55,6 +55,8 @@ namespace Box2D.XNA
             _flags = WorldFlags.ClearForces;
 
             _queryAABBCallbackWrapper = QueryAABBCallbackWrapper;
+
+            Instance = this;
         }
 
         internal static World Instance { get; private set; }
