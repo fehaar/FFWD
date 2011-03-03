@@ -279,25 +279,8 @@ namespace PressPlay.FFWD.Components
             frustum.Matrix = view * projectionMatrix;
 
             #region TextRenderer3D batching start
-            // We are making sure, that we have the necessary elements to draw 3D text
-            if (TextRenderer3D.basicEffect == null)
-            {
-                TextRenderer3D.basicEffect = new BasicEffect(device)
-                {
-                    TextureEnabled = true,
-                    VertexColorEnabled = true,
-                };
-            }
-
-            TextRenderer3D.basicEffect.World = TextRenderer3D.invertY;
-            TextRenderer3D.basicEffect.View = Matrix.Identity;
-
-            if (TextRenderer3D.batch == null)
-            {
-                TextRenderer3D.batch = new SpriteBatch(device);
-            }
-
             // We are beginning the batching of TextRenderer3D calls
+            // TODO: This code is particularly ugly and should be reworked...
             if (wireframeRender)
             {
                 RasterizerState state = new RasterizerState();
@@ -308,7 +291,6 @@ namespace PressPlay.FFWD.Components
             else
             {
                 TextRenderer3D.batch.Begin(SpriteSortMode.Deferred, null, null, DepthStencilState.Default, RasterizerState.CullNone, TextRenderer3D.basicEffect);
-
             }
             #endregion
 
@@ -319,7 +301,7 @@ namespace PressPlay.FFWD.Components
                 {
                     // This will happen if the game object has been destroyed in update.
                     // It is acceptable behaviour.
-                     continue;
+                    continue;
                 }
                 if (renderQueue[i].material.renderQueue != q)
                 {
