@@ -21,6 +21,12 @@ namespace PressPlay.FFWD
         public List<GameObject> gameObjects { get; set; }
         [ContentSerializer(FlattenContent = true, CollectionItemName = "p")]
         public List<GameObject> prefabs { get; set; }
+        [ContentSerializer(Optional = true, ElementName = "up")]
+        internal List<string> isUpdateable = new List<string>();
+        [ContentSerializer(Optional = true, ElementName = "fup")]
+        internal List<string> isFixedUpdateable = new List<string>();
+        [ContentSerializer(Optional = true, ElementName = "lup")]
+        internal List<string> isLateUpdateable = new List<string>();
 
         public void AfterLoad(Dictionary<int, UnityObject> idMap)
         {            

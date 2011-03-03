@@ -10,8 +10,6 @@ namespace PressPlay.FFWD.Components
 {
     public class StaticBatchRenderer : Renderer
     {
-        internal VertexPositionTexture[] buffer { private get; set; }
-
         public short[] triangles;
         public float[] vertices;
         [ContentSerializer(Optional=true)]
@@ -20,14 +18,14 @@ namespace PressPlay.FFWD.Components
 
         private VertexBuffer vertexBuffer;
         private IndexBuffer indexBuffer;
-        private BasicEffect effect;
+        private static BasicEffect effect;
 
         public override void Awake()
         {
             base.Awake();
             if (vertexBuffer == null)
             {
-                buffer = new VertexPositionTexture[vertices.Length / 3];
+                VertexPositionTexture[] buffer = new VertexPositionTexture[vertices.Length / 3];
                 for (int i = 0; i < vertices.Length / 3; i++)
                 {
                     int vertexIndex = i * 3;
@@ -42,6 +40,11 @@ namespace PressPlay.FFWD.Components
                 vertexBuffer.SetData(buffer);
                 indexBuffer = new IndexBuffer(Application.screenManager.GraphicsDevice, IndexElementSize.SixteenBits, triangles.Length, BufferUsage.WriteOnly);
                 indexBuffer.SetData(triangles);
+
+                triangles = null;
+                vertices = null;
+                normals = null;
+                uv = null;
             }
             if (effect == null)
             {

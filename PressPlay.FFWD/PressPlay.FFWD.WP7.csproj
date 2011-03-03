@@ -111,6 +111,26 @@
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
     <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release-LOWDEF|Windows Phone'">
+    <OutputPath>bin\Windows Phone\Release-LOWDEF\</OutputPath>
+    <DefineConstants>TRACE;WINDOWS_PHONE</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Windows Phone\Release\PressPlay.FFWD.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <LangVersion>3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
+  </PropertyGroup>
   <ItemGroup>
     <None Include="Background.png">
       <XnaPlatformSpecific>true</XnaPlatformSpecific>
@@ -187,6 +207,7 @@
     <Compile Include="Components\Renderers\StaticBatchRenderer.cs" />
     <Compile Include="Components\Renderers\TextRenderer.cs" />
     <Compile Include="Components\Renderers\TextRenderer3D.cs" />
+    <Compile Include="InvokeCall.cs" />
     <Compile Include="MeshData.cs" />
     <Compile Include="MeshDataPart.cs" />
     <Compile Include="MeshDataReader.cs" />
@@ -248,6 +269,7 @@
     <Compile Include="SkinnedModel\CpuVertex.cs" />
     <Compile Include="Time.cs" />
     <Compile Include="Transform.cs" />
+    <Compile Include="TypeSet.cs" />
     <Compile Include="UI\Controls\ButtonControl.cs" />
     <Compile Include="UI\Controls\ButtonControlOld.cs" />
     <Compile Include="UI\Controls\ButtonStyle.cs" />

@@ -54,13 +54,18 @@ namespace PressPlay.FFWD
                     if (dist < nearest)
                     {
                         nearest = dist;
-                        _hit = new RaycastHit() { body = fixture.GetBody(), point = point, normal = normal, distance = dist, collider = coll };
+                        _hit.body = fixture.GetBody();
+                        _hit.point = point;
+                        _hit.normal = normal;
+                        _hit.distance = dist;
+                        _hit.collider = coll;
                         didHit = true;
                     }
                     return fraction;
                 }
                 else
                 {
+                    // TODO: Consider making this an array
                     _hits.Add(new RaycastHit() { body = fixture.GetBody(), point = point, normal = normal, distance = dist, collider = coll });
                     return 1;
                 }

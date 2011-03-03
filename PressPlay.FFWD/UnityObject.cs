@@ -131,6 +131,7 @@ namespace PressPlay.FFWD
 
 
             // HACK THIS NEEDS TO BE REWORKED. DANGER DANGER!
+            // NOTE: Actually we could probably call its awake method here as it will not re-awake the component on the next awake new call??? 
             Application.AwakeNewComponents();
 
             return idMap[original.GetInstanceID()];
