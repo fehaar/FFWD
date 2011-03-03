@@ -18,7 +18,6 @@ namespace PressPlay.FFWD.Components
 
         private VertexBuffer vertexBuffer;
         private IndexBuffer indexBuffer;
-        private static BasicEffect effect;
 
         public override void Awake()
         {
@@ -46,10 +45,6 @@ namespace PressPlay.FFWD.Components
                 normals = null;
                 uv = null;
             }
-            if (effect == null)
-            {
-                effect = new BasicEffect(Application.screenManager.GraphicsDevice);
-            }
         }
 
         public override int Draw(GraphicsDevice device, Camera cam)
@@ -66,20 +61,18 @@ namespace PressPlay.FFWD.Components
             }
 #endif
 
-            effect.World = Matrix.Identity;
-            effect.View = cam.view;
-            effect.Projection = cam.projectionMatrix;
-            if (materials != null && materials.Length > 0 && materials[0].texture != null)
-            {
-                effect.TextureEnabled = true;
-                effect.Texture = materials[0].texture;
-                device.BlendState = materials[0].blendState;
-            }
-            effect.VertexColorEnabled = false;
+            cam.BasicEffect.World = Matrix.Identity;
+            cam.BasicEffect.View = cam.view;
+            cam.BasicEffect.Projection = cam.projectionMatrix;
+            cam.BasicEffect.VertexColorEnabled = false;
+
+            material.SetTextureState(cam.BasicEffect);
+            material.SetBlendState(device);
+
             device.SetVertexBuffer(vertexBuffer);
             device.Indices = indexBuffer;
 
-            foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+            foreach (EffectPass pass in cam.BasicEffect.CurrentTechnique.Passes)
             {
                 pass.Apply();
                 device.DrawIndexedPrimitives(

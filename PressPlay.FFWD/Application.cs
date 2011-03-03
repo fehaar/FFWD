@@ -118,7 +118,7 @@ namespace PressPlay.FFWD
             Input.Initialize();
             assetHelper.CreateContentManager = CreateContentManager;
             Camera.spriteBatch = new SpriteBatch(Game.GraphicsDevice);
-            Camera.effect = new BasicEffect(Game.GraphicsDevice);
+            Camera.basicEffect = new BasicEffect(Game.GraphicsDevice);
             // Note we cannot share this as it is used in between cameras as it is done now
             TextRenderer3D.basicEffect = new BasicEffect(Game.GraphicsDevice)
             {
