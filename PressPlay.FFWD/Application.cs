@@ -193,6 +193,8 @@ namespace PressPlay.FFWD
 #if DEBUG
             fixedUpdateTime.Start();
 #endif
+            Time.InitializeDeltaTimeFixedUpdate(); //sets deltaTime to return fixedDeltaTime
+
             AwakeNewComponents();
             StartComponents();
             ChangeComponentActivity();
@@ -236,6 +238,9 @@ namespace PressPlay.FFWD
 #if DEBUG
             updateTime.Start();
 #endif
+
+            Time.InitializeDeltaTimeUpdate((float)gameTime.TotalGameTime.TotalSeconds); //sets deltaTime to return time since last update
+
             StartComponents();
             ChangeComponentActivity();
             int count = updateComponents.Count;

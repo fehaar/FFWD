@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using System.Diagnostics;
 
 namespace PressPlay.FFWD
 {
@@ -16,6 +17,15 @@ namespace PressPlay.FFWD
         public static float timeSinceLastDraw = 0.0f;
         private static float lastDrawCall = 0.0f;
 
+        private static float _fixedDeltaTime = (float)TimeSpan.FromSeconds(1.0 / 30.0).TotalSeconds;
+        public static float fixedDeltaTime{
+            get {
+                return _fixedDeltaTime;
+            }
+        }
+
+        private static float lastUpdateGameTime = 0;
+        
         internal static void Reset()
         {
             time = 0.0f;
@@ -34,11 +44,22 @@ namespace PressPlay.FFWD
         }
 
         internal static void Update(float elapsedSeconds, float totalSeconds)
-        {
-            deltaTime = elapsedSeconds * timeScale;
-            actualDeltaTime = elapsedSeconds;
+        {            
             realtimeSinceStartup = totalSeconds;
             time += deltaTime;
+        }
+
+        internal static void InitializeDeltaTimeUpdate(float totalSeconds)
+        {
+            //actualDeltaTime = totalSeconds - lastUpdateGameTime;
+            float newDeltaTime = actualDeltaTime * timeScale;
+            lastUpdateGameTime = totalSeconds;
+            //Debug.Display("newDeltaTime", newDeltaTime);
+        }
+
+        internal static void InitializeDeltaTimeFixedUpdate()
+        {
+            deltaTime = fixedDeltaTime * timeScale; //set delta time to constant rate when called from a FixedUpdate method
         }
     }
 }
