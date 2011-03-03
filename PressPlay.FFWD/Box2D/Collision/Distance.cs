@@ -55,8 +55,7 @@ namespace Box2D.XNA
 		        break;
 
 	        default:
-                if (!(false)) { throw new InvalidOperationException(); }
-                break;
+                throw new InvalidOperationException();
 	        }
 
         }
@@ -246,8 +245,7 @@ namespace Box2D.XNA
 			    }
 
 		    default:
-                if (!(false)) { throw new InvalidOperationException(); }
-			    return Vector2.Zero;
+                throw new InvalidOperationException();
 		    }
 	    }
 
@@ -256,8 +254,7 @@ namespace Box2D.XNA
 		    switch (_count)
 		    {
 		    case 0:
-			    if(!(false)) { throw new InvalidOperationException(); }
-			    return Vector2.Zero;
+			    throw new InvalidOperationException();
 
 		    case 1:
 			    return _v[0].w;
@@ -269,8 +266,7 @@ namespace Box2D.XNA
 			    return Vector2.Zero;
 
 		    default:
-                if (!(false)) { throw new InvalidOperationException(); }
-			    return Vector2.Zero;
+                throw new InvalidOperationException();
 		    }
 	    }
 
@@ -281,8 +277,7 @@ namespace Box2D.XNA
 		    case 0:
                 pA = Vector2.Zero;
                 pB = Vector2.Zero;
-                if (!(false)) { throw new InvalidOperationException(); }
-			    break;
+                throw new InvalidOperationException();
 
 		    case 1:
 			    pA = _v[0].wA;
@@ -309,8 +304,7 @@ namespace Box2D.XNA
 		    switch (_count)
 		    {
 		    case 0:
-			    if(!(false)) { throw new InvalidOperationException(); }
-			    return 0.0f;
+			    throw new InvalidOperationException();
 
 		    case 1:
 			    return 0.0f;
@@ -322,8 +316,7 @@ namespace Box2D.XNA
 			    return MathUtils.Cross(_v[1].w - _v[0].w, _v[2].w - _v[0].w);
 
 		    default:
-                if (!(false)) { throw new InvalidOperationException(); }
-			    return 0.0f;
+                throw new InvalidOperationException();
 		    }
 	    }
 
@@ -587,8 +580,7 @@ namespace Box2D.XNA
 			        break;
 
 		        default:
-                    if (!(false)) { throw new InvalidOperationException(); }
-                    break;
+                    throw new InvalidOperationException();
 		        }
 
 		        // If we have 3 points, then the origin is in the corresponding triangle.

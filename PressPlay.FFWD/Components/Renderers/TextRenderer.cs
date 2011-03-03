@@ -53,15 +53,9 @@ namespace PressPlay.FFWD.Components
             Position.y = transform.localPosition.y;
         }
 
-        protected SpriteBatch batch;
         public override int Draw(GraphicsDevice device, Camera cam)
         {
-            if (batch == null)
-            {
-                batch = new SpriteBatch(device);
-            }
-
-            batch.DrawString(font, text, Position, material.color);
+            Camera.spriteBatch.DrawString(font, text, Position, material.color);
             return 0;
         }
     }
