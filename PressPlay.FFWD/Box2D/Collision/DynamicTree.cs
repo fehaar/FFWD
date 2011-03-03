@@ -267,7 +267,7 @@ namespace Box2D.XNA
 	    /// number of proxies in the tree.
 	    /// @param input the ray-cast input data. The ray extends from p1 to p1 + maxFraction * (p2 - p1).
 	    /// @param callback a callback class that is called for each proxy that is hit by the ray.
-	    internal void RayCast(RayCastCallbackInternal callback, ref RayCastInput input) 
+	    internal void RayCast(ref RayCastInput input) 
         {
 	        Vector2 p1 = input.p1;
 	        Vector2 p2 = input.p2;
@@ -327,7 +327,7 @@ namespace Box2D.XNA
 			        subInput.p2 = input.p2;
 			        subInput.maxFraction = maxFraction;
 
-		        	float value = callback(ref subInput, nodeId);
+                    float value = World.Instance.RayCastCallbackWrapper(ref subInput, nodeId);
 
 		            if (value == 0.0f)
                     {

@@ -55,8 +55,9 @@ namespace Box2D.XNA
             _flags = WorldFlags.ClearForces;
 
             _queryAABBCallbackWrapper = QueryAABBCallbackWrapper;
-            _rayCastCallbackWrapper = RayCastCallbackWrapper;
         }
+
+        internal static World Instance { get; private set; }
 
 	    /// Register a destruction listener.
 	    public IDestructionListener DestructionListener { get; set; }
@@ -600,22 +601,22 @@ namespace Box2D.XNA
 	    /// @param callback a user implemented callback class.
 	    /// @param point1 the ray starting point
 	    /// @param point2 the ray ending point
-        public void RayCast(RayCastCallback callback, Vector2 point1, Vector2 point2)
+        public void RayCast(Vector2 point1, Vector2 point2)
         {
             RayCastInput input = new RayCastInput();
             input.maxFraction = 1.0f;
             input.p1 = point1;
             input.p2 = point2;
 
-            _rayCastCallback = callback;
-            _contactManager._broadPhase.RayCast(_rayCastCallbackWrapper, ref input);
-            _rayCastCallback = null;
+            //_rayCastCallback = callback;
+            _contactManager._broadPhase.RayCast(ref input);
+            //_rayCastCallback = null;
         }
 
-        RayCastCallback _rayCastCallback;
-        RayCastCallbackInternal _rayCastCallbackWrapper;
+        //RayCastCallback _rayCastCallback;
+        //RayCastCallbackInternal _rayCastCallbackWrapper;
 
-        float RayCastCallbackWrapper(ref RayCastInput input, int proxyId)
+        internal float RayCastCallbackWrapper(ref RayCastInput input, int proxyId)
 	    {
 		    object userData = _contactManager._broadPhase.GetUserData(proxyId);
 		    Fixture fixture = (Fixture)userData;
@@ -626,7 +627,7 @@ namespace Box2D.XNA
 		    {
 			    float fraction = output.fraction;
 			    Vector2 point = (1.0f - fraction) * input.p1 + fraction * input.p2;
-                return _rayCastCallback(fixture, point, output.normal, fraction);
+                return PressPlay.FFWD.RaycastHelper.rayCastCallback(fixture, point, output.normal, fraction);
 		    }
 
 		    return input.maxFraction;
