@@ -189,7 +189,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Animation\AnimatedModelProcessor.cs" />
     <Compile Include="AudioClipSerializer.cs" />
     <Compile Include="ColorTypeSerializer.cs" />
     <Compile Include="Animation\CpuSkinnedModelProcessor.cs" />
