@@ -197,9 +197,9 @@ namespace Box2D.XNA
 	        _tree.Query(callback, ref aabb);
         }
 
-        internal void RayCast(RayCastCallbackInternal callback, ref RayCastInput input)
+        internal void RayCast(ref RayCastInput input)
         {
-	        _tree.RayCast(callback, ref input);
+	        _tree.RayCast(ref input);
         }
 
 	    /// Compute the height of the embedded tree.
