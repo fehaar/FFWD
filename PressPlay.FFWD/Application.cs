@@ -26,9 +26,7 @@ namespace PressPlay.FFWD
             isUpdateable.Add(typeof(PressPlay.FFWD.UI.Controls.ScrollingPanelControl));
         }
 
-#if DEBUG
         private SpriteBatch spriteBatch;
-#endif
 
         int frameRate = 0;
         int frameCounter = 0;
@@ -115,22 +113,8 @@ namespace PressPlay.FFWD
             Physics.Initialize();
             Time.Reset();
             Input.Initialize();
-            assetHelper.CreateContentManager = CreateContentManager;
-            Camera.spriteBatch = new SpriteBatch(Game.GraphicsDevice);
-            Camera.effect = new BasicEffect(Game.GraphicsDevice);
-            // Note we cannot share this as it is used in between cameras as it is done now
-            TextRenderer3D.basicEffect = new BasicEffect(Game.GraphicsDevice)
-            {
-                TextureEnabled = true,
-                VertexColorEnabled = true,
-                World = TextRenderer3D.invertY,
-                View = Matrix.Identity
-            };
-            TextRenderer3D.batch = new SpriteBatch(Game.GraphicsDevice);
-
-#if DEBUG
             spriteBatch = new SpriteBatch(Game.GraphicsDevice);
-#endif
+            assetHelper.CreateContentManager = CreateContentManager;
         }
 
         private ContentManager CreateContentManager()
@@ -593,11 +577,11 @@ namespace PressPlay.FFWD
                 {
                     // TODO: Fix this with a content processor!
                     // Purge superfluous Transforms that is created when GameObjects are imported from the scene
-                    //if ((cmp is Transform) && (cmp.gameObject.transform != cmp))
-                    //{
-                    //    cmp.gameObject = null;
-                    //    continue;
-                    //}
+                    if ((cmp is Transform) && (cmp.gameObject.transform != cmp))
+                    {
+                        cmp.gameObject = null;
+                        continue;
+                    }
                     objects.Add(cmp.GetInstanceID(), cmp);
 
                     if (!cmp.isPrefab)

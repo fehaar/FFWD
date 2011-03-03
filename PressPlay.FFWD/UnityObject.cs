@@ -130,7 +130,8 @@ namespace PressPlay.FFWD
             clone.FixReferences(idMap);
 
 
-            // HACK THIS NEEDS TO BE REWORKED AS IT WILL RESULT IN RECURSIVE AWAKENEWCOMPS CALLS. DANGER DANGER!
+            // HACK THIS NEEDS TO BE REWORKED. DANGER DANGER!
+            // NOTE: Actually we could probably call its awake method here as it will not re-awake the component on the next awake new call??? 
             Application.AwakeNewComponents();
 
             return idMap[original.GetInstanceID()];
