@@ -14,7 +14,6 @@ namespace PressPlay.FFWD.Import
     {
         private Scene scene;
 
-        private HashSet<Type> hasProcessedType = new HashSet<Type>();
         private List<Assembly> assembliesUsed = new List<Assembly>();
 
         public override Scene Process(Scene input, ContentProcessorContext context)
@@ -29,13 +28,18 @@ namespace PressPlay.FFWD.Import
 
             foreach (Component cmp in Application.newComponents)
             {
-                AddBehaviourTypeProperties(cmp);
+                Type tp = cmp.GetType();
+                if (!assembliesUsed.Contains(tp.Assembly))
+                {
+                    assembliesUsed.Add(tp.Assembly);
+                }
             }
 
             foreach (Assembly ass in assembliesUsed)
             {
                 foreach (Type type in ass.GetTypes())
                 {
+                    AddBehaviourTypeProperties(type);
                     if (type.GetCustomAttributes(typeof(FixReferencesAttribute), true).Length > 0)
                     {
                         scene.fixReferences.Add(type.Name);
@@ -46,34 +50,24 @@ namespace PressPlay.FFWD.Import
             return input;
         }
 
-        private void AddBehaviourTypeProperties(Component cmp)
+        private void AddBehaviourTypeProperties(Type tp)
         {
-            Type tp = cmp.GetType();
-            if (!hasProcessedType.Contains(tp))
+            MethodInfo info = tp.GetMethod("Update");
+            if (info != null && info.DeclaringType != typeof(MonoBehaviour))
             {
-                hasProcessedType.Add(tp);
-                MethodInfo info = tp.GetMethod("Update");
-                if (info != null && info.DeclaringType != typeof(MonoBehaviour))
-                {
-                    scene.isUpdateable.Add(tp.Name);
-                }
+                scene.isUpdateable.Add(tp.Name);
+            }
 
-                info = tp.GetMethod("LateUpdate");
-                if (info != null && info.DeclaringType != typeof(MonoBehaviour))
-                {
-                    scene.isLateUpdateable.Add(tp.Name);
-                }
+            info = tp.GetMethod("LateUpdate");
+            if (info != null && info.DeclaringType != typeof(MonoBehaviour))
+            {
+                scene.isLateUpdateable.Add(tp.Name);
+            }
 
-                info = tp.GetMethod("FixedUpdate");
-                if (info != null && info.DeclaringType != typeof(MonoBehaviour))
-                {
-                    scene.isFixedUpdateable.Add(tp.Name);
-                }
-
-                if (!assembliesUsed.Contains(tp.Assembly))
-	            {
-                    assembliesUsed.Add(tp.Assembly);
-	            }
+            info = tp.GetMethod("FixedUpdate");
+            if (info != null && info.DeclaringType != typeof(MonoBehaviour))
+            {
+                scene.isFixedUpdateable.Add(tp.Name);
             }
         }
 
