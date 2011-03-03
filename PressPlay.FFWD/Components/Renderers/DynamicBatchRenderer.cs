@@ -81,10 +81,12 @@ namespace PressPlay.FFWD.Components
                 return 0;
             }
 
-            cam.BasicEffect.VertexColorEnabled = false;
             cam.BasicEffect.World = Matrix.Identity;
             cam.BasicEffect.View = cam.view;
             cam.BasicEffect.Projection = cam.projectionMatrix;
+            cam.BasicEffect.VertexColorEnabled = false;
+
+            currentMaterial.SetTextureState(cam.BasicEffect);
             currentMaterial.SetBlendState(device);
 
 #if DEBUG
@@ -93,18 +95,6 @@ namespace PressPlay.FFWD.Components
                 Debug.LogFormat("Dyn batch draw: {0} on {1} verts {2}, indices {3}", currentMaterial.mainTexture, cam.gameObject, currentVertexIndex, currentIndexIndex);
             }
 #endif
-
-            if (currentMaterial.texture != null)
-            {
-                cam.BasicEffect.TextureEnabled = true;
-                cam.BasicEffect.Texture = currentMaterial.texture;
-                cam.BasicEffect.DiffuseColor = Color.white;
-            }
-            else
-            {
-                cam.BasicEffect.TextureEnabled = false;
-                cam.BasicEffect.DiffuseColor = currentMaterial.color;
-            }
 
             foreach (EffectPass pass in cam.BasicEffect.CurrentTechnique.Passes)
             {

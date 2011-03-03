@@ -23,14 +23,7 @@ namespace PressPlay.FFWD
 
         public void SetColor(string name, Color color)
         {
-            //if (blendState == BlendState.Additive)
-            //{
-            //    this.color = new Color(color.r, color.g, color.b, 1.0f);
-            //}
-            //else
-            //{
-                this.color = color;
-            //}
+            this.color = color;
         }
 
         protected override void DoLoadAsset(AssetHelper assetHelper)
@@ -87,5 +80,20 @@ namespace PressPlay.FFWD
         }
 
         public static readonly Material Default = new Material();
+
+        internal void SetTextureState(BasicEffect basicEffect)
+        {
+            if (texture != null)
+            {
+                basicEffect.TextureEnabled = true;
+                basicEffect.Texture = texture;
+                basicEffect.DiffuseColor = Color.white;
+            }
+            else
+            {
+                basicEffect.TextureEnabled = false;
+                basicEffect.DiffuseColor = color;
+            }
+        }
     }
 }

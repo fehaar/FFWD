@@ -64,19 +64,11 @@ namespace PressPlay.FFWD.Components
             cam.BasicEffect.World = Matrix.Identity;
             cam.BasicEffect.View = cam.view;
             cam.BasicEffect.Projection = cam.projectionMatrix;
-            if (material.texture != null)
-            {
-                cam.BasicEffect.TextureEnabled = true;
-                cam.BasicEffect.Texture = material.texture;
-                cam.BasicEffect.DiffuseColor = Color.white;
-            }
-            else
-            {
-                cam.BasicEffect.TextureEnabled = false;
-                cam.BasicEffect.DiffuseColor = material.color;
-            }
             cam.BasicEffect.VertexColorEnabled = false;
+
+            material.SetTextureState(cam.BasicEffect);
             material.SetBlendState(device);
+
             device.SetVertexBuffer(vertexBuffer);
             device.Indices = indexBuffer;
 
