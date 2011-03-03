@@ -144,6 +144,17 @@ namespace PressPlay.FFWD.UI.Controls
             ScaleTextToFit(0);
         }
 
+        public void ScaleText(float scale)
+        {
+            textControl.transform.localScale = new Vector3(scale);
+            InvalidateAutoSize();
+        }
+
+        public Vector3 GetTextScale()
+        {
+            return textControl.transform.localScale;
+        }
+
         public void ScaleTextToFit(float margin)
         {
             // TODO This needs to able to scale the text to fit
