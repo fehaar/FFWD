@@ -67,7 +67,14 @@ namespace PressPlay.FFWD.UI
             
             float depth = 1 - ((float)transform.position / 10000f);
 
-            Camera.spriteBatch.DrawString(font, WordWrap(text, control.bounds.Width, font), transform.position, material.color, transform.rotation.eulerAngles.y, GetOrigin(), transform.lossyScale, effects, depth);
+            if (((TextControl)control).useWordWrap)
+            {
+                Camera.spriteBatch.DrawString(font, WordWrap(text, control.bounds.Width, font), transform.position, material.color, transform.rotation.eulerAngles.y, GetOrigin(), transform.lossyScale, effects, depth);
+            }
+            else
+            {
+                Camera.spriteBatch.DrawString(font, text, transform.position, material.color, transform.rotation.eulerAngles.y, GetOrigin(), transform.lossyScale, effects, depth);
+            }
             return 0;
         }
 

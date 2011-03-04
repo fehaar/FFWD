@@ -41,6 +41,7 @@ namespace PressPlay.FFWD.UI.Controls
 
         private SpriteFont _font;
         private string _text;
+        public bool useWordWrap = false;
 
         //public Color Color;
 
