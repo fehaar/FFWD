@@ -263,14 +263,13 @@ namespace PressPlay.FFWD
         }
         #endregion
 
-        
         internal bool SendMessage(string methodName, object value)
         {
             Type tp = this.GetType();
             BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.InvokeMethod;
             while (tp != typeof(Component))
             {
-                MethodInfo info = tp.GetMethod(methodName, flags);
+                MethodInfo info = tp.GetCachedMethod(methodName, flags);
                 if (info != null)
                 {
                     info.Invoke(this, (value == null) ? null : new object[1] { value });
