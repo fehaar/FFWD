@@ -158,7 +158,6 @@ namespace PressPlay.FFWD.ScreenManager
             }
         }
 
-
         /// <summary>
         /// Unload your graphics content.
         /// </summary>

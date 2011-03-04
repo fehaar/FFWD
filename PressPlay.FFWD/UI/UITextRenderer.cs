@@ -26,7 +26,7 @@ namespace PressPlay.FFWD.UI
         {
             get
             {
-                if (!hasDoneWordWrap && control != null)
+                if (!hasDoneWordWrap && control != null && ((TextControl)control).useWordWrap)
                 {
                     _text = WordWrap(_text, control.bounds.Width, font);
                     hasDoneWordWrap = true;                    
@@ -44,7 +44,7 @@ namespace PressPlay.FFWD.UI
                         if (font != null)
                         {
                             textSize = font.MeasureString(_text);
-                            if (control != null)
+                            if (control != null && ((TextControl)control).useWordWrap)
                             {
                                 _text = WordWrap(value, control.bounds.Width, font);
                             }
