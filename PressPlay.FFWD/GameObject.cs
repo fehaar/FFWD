@@ -396,7 +396,7 @@ namespace PressPlay.FFWD
 
         public T[] GetComponentsInChildren<T>() where T: Component
         {
-            List<T> list = new List<T>();
+            List<T> list = new List<T>(25);
             for (int i = 0; i < components.Count; i++)
             {
                 T cmp = components[i] as T;
