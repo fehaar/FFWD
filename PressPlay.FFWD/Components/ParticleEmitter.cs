@@ -75,18 +75,8 @@ namespace PressPlay.FFWD.Components
         
         public override void Awake()
         {
-            if (oneShot)
-            {
-                int parts = Mathf.FloorToInt(maxEmission);
-                particles = new Particle[parts];
-                particleCount = 0;
-            }
-            else
-            {
-                int parts = Mathf.CeilToInt(maxEmission) * (int)Math.Max(1, maxEnergy * 2);
-                particles = new Particle[parts];
-                particleCount = 0;
-            }
+            particles = new Particle[particlesToAllocate()];
+            particleCount = 0;
             if (minEmission <= 0)
             {
                 minEmission = 1;
@@ -98,6 +88,18 @@ namespace PressPlay.FFWD.Components
             if (!oneShot)
             {
                 timeToNextEmit = GetNewEmissionTime();
+            }
+        }
+
+        internal int particlesToAllocate()
+        {
+            if (oneShot)
+            {
+                return Mathf.FloorToInt(maxEmission);
+            }
+            else
+            {
+                return Mathf.CeilToInt(maxEmission) * (int)Math.Max(1, maxEnergy * 2);
             }
         }
 

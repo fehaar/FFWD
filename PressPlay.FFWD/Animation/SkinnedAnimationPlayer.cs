@@ -17,7 +17,7 @@ namespace PressPlay.FFWD
     /// The animation player is in charge of decoding bone position
     /// matrices from an animation clip.
     /// 
-    /// This class was taken from the original Skinned Model Sample:
+    /// This class was taken from the original Skinned Model Sample and reworked to fit in the FFWD engine
     /// http://creators.xna.com/en-US/sample/skinnedmodel 
     /// </summary>
     public class SkinnedAnimationPlayer
@@ -64,22 +64,6 @@ namespace PressPlay.FFWD
         }
 
         /// <summary>
-        /// Gets the clip currently being decoded.
-        /// </summary>
-        public AnimationClip CurrentClip
-        {
-            get { return currentClipValue; }
-        }
-
-        /// <summary>
-        /// Gets the current play position.
-        /// </summary>
-        public TimeSpan CurrentTime
-        {
-            get { return currentTimeValue; }
-        }
-
-        /// <summary>
         /// Constructs a new animation player.
         /// </summary>
         public SkinnedAnimationPlayer(SkinningData skinningData, Matrix bakedTransform)
@@ -111,7 +95,7 @@ namespace PressPlay.FFWD
 
             currentClipValue = clip;
             currentStateValue = state;
-            state.time = 0.0f;
+            state.time = clip.timeOffset;
             state.enabled = true;
 
             currentTimeValue = TimeSpan.FromSeconds(state.time);
@@ -150,7 +134,7 @@ namespace PressPlay.FFWD
             time += currentTimeValue;
 
             // See if we should terminate
-            if (time.TotalSeconds > currentStateValue.length)
+            if (time.TotalSeconds > currentStateValue.length + currentClipValue.timeOffset)
             {
                 switch (currentStateValue.wrapMode)
                 {
@@ -158,7 +142,7 @@ namespace PressPlay.FFWD
                         currentStateValue.enabled = false;
                         return;
                     case WrapMode.Loop:
-                        time = TimeSpan.FromSeconds(currentStateValue.startTime);
+                        time = TimeSpan.FromSeconds(currentClipValue.timeOffset);
                         break;
                     case WrapMode.PingPong:
                         currentStateValue.speed *= -1;
@@ -202,8 +186,6 @@ namespace PressPlay.FFWD
 
                 currentKeyframe++;
             }
-            //Debug.Log(currentClipValue.name + ": Stop at keyframe " + currentKeyframe + " with time " + keyframes[currentKeyframe].Time + " on " + currentTimeValue);
-            
         }
         
         /// <summary>
