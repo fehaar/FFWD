@@ -4168,7 +4168,7 @@ namespace PressPlay.FFWD
             vector3s[3] = transform.eulerAngles;
 
             //root:
-            vector3s[0] = transform.position;
+            vector3s[0] = new Vector3(transform.position);
 
             //amount:
             if (tweenArguments.ContainsKey("amount"))
@@ -4198,7 +4198,7 @@ namespace PressPlay.FFWD
             vector3s = new Vector3[3];
 
             //root:
-            vector3s[0] = transform.localScale;
+            vector3s[0] = new Vector3(transform.localScale);
 
             //amount:
             if (tweenArguments.ContainsKey("amount"))
@@ -4228,7 +4228,7 @@ namespace PressPlay.FFWD
             vector3s = new Vector3[3];
 
             //root:
-            vector3s[0] = transform.eulerAngles;
+            vector3s[0] = new Vector3(transform.eulerAngles);
 
             //amount:
             if (tweenArguments.ContainsKey("amount"))
@@ -4733,6 +4733,10 @@ namespace PressPlay.FFWD
 
         void ApplyShakePositionTargets()
         {
+            //dont apply shake if timescale is 0
+            if (Time.timeScale == 0)
+            { return; }
+
             preUpdate = transform.position;
 
             //reset rotation to prevent look interferences as object rotates and attempts to move with translate and record current rotation
@@ -4779,6 +4783,10 @@ namespace PressPlay.FFWD
 
         void ApplyShakeScaleTargets()
         {
+            //dont apply shake if timescale is 0
+            if (Time.timeScale == 0)
+            { return; }
+
             //impact:
             if (percentage == 0)
             {
@@ -4800,6 +4808,10 @@ namespace PressPlay.FFWD
 
         void ApplyShakeRotationTargets()
         {
+            //dont apply shake if timescale is 0
+            if (Time.timeScale == 0)
+            { return; }
+
             preUpdate = transform.eulerAngles;
 
             //impact:

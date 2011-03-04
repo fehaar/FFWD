@@ -104,6 +104,7 @@ namespace PressPlay.FFWD
                     _parent.children.Remove(gameObject);
                 }
                 Vector3 pos = position;
+                //Quaternion rot = new Quaternion(rotation);
                 Quaternion rot = rotation;
                 Vector3 scale = lossyScale;
 
@@ -247,7 +248,7 @@ namespace PressPlay.FFWD
                 }
                 else
                 {
-                    localRotation = value * Quaternion.Inverse(parent.rotation);
+                    localRotation = Quaternion.Inverse(parent.rotation) * value;
                 }
             }
         }
