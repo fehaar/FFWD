@@ -683,7 +683,7 @@ namespace PressPlay.FFWD
             }
         }
 
-        internal void GetComponentsInChildrenInt<T>(List<T> list) where T : Component
+        internal void GetComponentsInChildrenInt<T>(List<Component> list) where T : Component
         {
             if (children != null)
             {
