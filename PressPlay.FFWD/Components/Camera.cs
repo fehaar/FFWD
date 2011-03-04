@@ -263,9 +263,8 @@ namespace PressPlay.FFWD.Components
             }
 
             estimatedDrawCalls += UIRenderer.doRender(device);
-            Debug.Display("Estimated Draw calls", estimatedDrawCalls);
-
 #if DEBUG
+            Debug.Display("Estimated Draw calls", estimatedDrawCalls);
             logRenderCalls = false;
 #endif
         }

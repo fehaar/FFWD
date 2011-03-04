@@ -7394,15 +7394,7 @@ namespace PressPlay.FFWD
         //random ID generator:
         static string GenerateID()
         {
-            int strlen = 15;
-            char[] chars = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8' };
-            int num_chars = chars.Length - 1;
-            string randomChar = "";
-            for (int i = 0; i < strlen; i++)
-            {
-                randomChar += chars[(int)Mathf.Floor(Random.Range(0, num_chars))];
-            }
-            return randomChar;
+            return Guid.NewGuid().ToString();
         }
 
         //grab and set generic, neccesary iTween arguments:
@@ -7722,9 +7714,25 @@ namespace PressPlay.FFWD
             {
                 //establish target:
                 GameObject target;
-                if (tweenArguments.ContainsKey(callbackType + "target"))
+
+                // Optimize to not use string concat.
+                string callbackTargetArgument = String.Empty;
+                switch (callbackType)
                 {
-                    target = (GameObject)tweenArguments[callbackType + "target"];
+                    case "onstart":
+                        callbackTargetArgument = "onstarttarget";
+                        break;
+                    case "onupdate":
+                        callbackTargetArgument = "onupdatetarget";
+                        break;
+                    case "oncomplete":
+                        callbackTargetArgument = "oncompletetarget";
+                        break;
+                }
+
+                if (tweenArguments.ContainsKey(callbackTargetArgument))
+                {
+                    target = (GameObject)tweenArguments[callbackTargetArgument];
                 }
                 else
                 {

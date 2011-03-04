@@ -9,17 +9,17 @@ namespace PressPlay.FFWD.UI.Controls
     {
         public Texture2D texture;
 
-        private Dictionary<ButtonControlStates, Rectangle> sources;
+        private Dictionary<int, Rectangle> sources;
 
         public Rectangle this[ButtonControlStates state]
         {
             get
             {
-                return sources[state];
+                return sources[(int)state];
             }
             set
             {
-                sources[state] = value;
+                sources[(int)state] = value;
             }
         }
 
@@ -51,32 +51,26 @@ namespace PressPlay.FFWD.UI.Controls
         {
             this.texture = texture;
             
-            sources = new Dictionary<ButtonControlStates, Rectangle>();
-            sources.Add(ButtonControlStates.normal, normal);
-            sources.Add(ButtonControlStates.pressed, pressed);
-            sources.Add(ButtonControlStates.hover, hover);
-            sources.Add(ButtonControlStates.disabled, disabled);
+            sources = new Dictionary<int, Rectangle>();
+            sources.Add((int)ButtonControlStates.normal, normal);
+            sources.Add((int)ButtonControlStates.pressed, pressed);
+            sources.Add((int)ButtonControlStates.hover, hover);
+            sources.Add((int)ButtonControlStates.disabled, disabled);
         }
 
-        public ButtonTexture GetButtonTexture(ButtonControlStates state)
+        public Rectangle GetSourceRect(ButtonControlStates state)
         {
-            if (sources[state] != Rectangle.Empty)
+            if (sources[(int)state] != Rectangle.Empty)
             {
-                return new ButtonTexture(texture, sources[state]);
+                return sources[(int)state];
             }
 
-            return new ButtonTexture(texture, sources[ButtonControlStates.normal]);
+            return sources[(int)ButtonControlStates.normal];
         }
     }
 
-    public class ButtonTexture{
+    public struct ButtonTexture{
         public Texture2D texture;
         public Rectangle sourceRect;
-
-        public ButtonTexture(Texture2D texture, Rectangle sourceRect)
-        {
-            this.texture = texture;
-            this.sourceRect = sourceRect;
-        }
     }
 }

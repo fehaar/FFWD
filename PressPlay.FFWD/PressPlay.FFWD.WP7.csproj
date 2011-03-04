@@ -207,6 +207,7 @@
     <Compile Include="Components\Renderers\StaticBatchRenderer.cs" />
     <Compile Include="Components\Renderers\TextRenderer.cs" />
     <Compile Include="Components\Renderers\TextRenderer3D.cs" />
+    <Compile Include="Extensions\SendMessageMethodCache.cs" />
     <Compile Include="InvokeCall.cs" />
     <Compile Include="MeshData.cs" />
     <Compile Include="MeshDataPart.cs" />

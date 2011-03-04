@@ -177,15 +177,11 @@
   <ItemGroup>
     <Compile Include="Animation\Animation.cs" />
     <Compile Include="Animation\AnimationClip.cs" />
-    <Compile Include="Animation\GameObjectAnimationData.cs" />
-    <Compile Include="Animation\GameObjectAnimationPlayer.cs" />
     <Compile Include="Animation\SkinnedAnimationPlayer.cs" />
     <Compile Include="Animation\AnimationState.cs" />
-    <Compile Include="Animation\BaseAnimationPlayer.cs" />
     <Compile Include="Animation\Keyframe.cs" />
     <Compile Include="Animation\QueueMode.cs" />
     <Compile Include="Animation\SkinningData.cs" />
-    <Compile Include="Animation\TransformAnimation.cs" />
     <Compile Include="Animation\WrapMode.cs" />
     <Compile Include="Application.cs" />
     <Compile Include="ApplicationSettings.cs" />
@@ -254,6 +250,7 @@
     <Compile Include="Components\Renderers\SpriteRenderer.cs" />
     <Compile Include="Components\Renderers\StaticBatchRenderer.cs" />
     <Compile Include="Components\Renderers\TextRenderer.cs" />
+    <Compile Include="Extensions\SendMessageMethodCache.cs" />
     <Compile Include="Gestures.cs" />
     <Compile Include="InvokeCall.cs" />
     <Compile Include="Material.cs" />

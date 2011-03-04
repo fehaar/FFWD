@@ -71,37 +71,37 @@ namespace PressPlay.FFWD.Import.Animation
             return new SkinningData(animationClips, bindPose, inverseBindPose, skeletonHierarchy, boneMap);
         }
 
+        // NOTE: This method was part of the non-skinned animation system. It is disabled for now.
+        //internal static GameObjectAnimationData GetGameObjectAnimationData(NodeContent input, ContentProcessorContext context)
+        //{
+        //    AnimationContentDictionary dict = new AnimationContentDictionary();
+        //    Dictionary<string, Matrix> childAbsoluteTransforms = new Dictionary<string, Matrix>();
 
-        internal static GameObjectAnimationData GetGameObjectAnimationData(NodeContent input, ContentProcessorContext context)
-        {
-            AnimationContentDictionary dict = new AnimationContentDictionary();
-            Dictionary<string, Matrix> childAbsoluteTransforms = new Dictionary<string, Matrix>();
+        //    // Build up a table mapping bone names to indices.
+        //    Dictionary<string, int> boneMap = new Dictionary<string, int>();
 
-            // Build up a table mapping bone names to indices.
-            Dictionary<string, int> boneMap = new Dictionary<string, int>();
+        //    List<BoneContent> bones = new List<BoneContent>();
+        //    for (int i = 0; i < input.Children.Count; i++)
+        //    {
+        //        NodeContent child = input.Children[i];
+        //        bones.Add(
+        //            new BoneContent()
+        //            {
+        //                Name = child.Name
+        //            }
+        //        );
+        //        childAbsoluteTransforms.Add(child.Name, child.Transform);
+        //        foreach (var item in child.Animations)
+        //        {
+        //            dict.Add(child.Name + ":" + item.Key, item.Value);
+        //        }
+        //        boneMap.Add(child.Name, i);
+        //    }
 
-            List<BoneContent> bones = new List<BoneContent>();
-            for (int i = 0; i < input.Children.Count; i++)
-            {
-                NodeContent child = input.Children[i];
-                bones.Add(
-                    new BoneContent()
-                    {
-                        Name = child.Name
-                    }
-                );
-                childAbsoluteTransforms.Add(child.Name, child.Transform);
-                foreach (var item in child.Animations)
-                {
-                    dict.Add(child.Name + ":" + item.Key, item.Value);
-                }
-                boneMap.Add(child.Name, i);
-            }
+        //    Dictionary<string, AnimationClip> animationClips = ProcessAnimations(dict, bones, boneMap);
 
-            Dictionary<string, AnimationClip> animationClips = ProcessAnimations(dict, bones, boneMap);
-
-            return new GameObjectAnimationData(animationClips, childAbsoluteTransforms);
-        }
+        //    return new GameObjectAnimationData(animationClips, childAbsoluteTransforms);
+        //}
 
         /// <summary>
         /// Converts an intermediate format content pipeline AnimationContentDictionary
@@ -173,7 +173,7 @@ namespace PressPlay.FFWD.Import.Animation
         /// <summary>
         /// Comparison function for sorting keyframes into ascending time order.
         /// </summary>
-        static int CompareKeyframeTimes(Keyframe a, Keyframe b)
+        private static int CompareKeyframeTimes(Keyframe a, Keyframe b)
         {
             return a.Time.CompareTo(b.Time);
         }

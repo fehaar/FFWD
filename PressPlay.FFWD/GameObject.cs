@@ -318,6 +318,8 @@ namespace PressPlay.FFWD
         #endregion
 
         #region Component locator methods
+        private static List<Component> locatorList = new List<Component>(50);
+
         public T GetComponent<T>() where T : Component
         {
             for (int i = 0; i < components.Count; i++)
@@ -344,42 +346,49 @@ namespace PressPlay.FFWD
 
         public T[] GetComponents<T>() where T : Component
         {
-            List<T> list = new List<T>();
             for (int i = 0; i < components.Count; i++)
             {
                 if (components[i] is T)
                 {
-                    list.Add(components[i] as T);
+                    locatorList.Add(components[i] as T);
                 }
             }
-            return list.ToArray();
+            T[] arr = new T[locatorList.Count];
+            for (int i = 0; i < locatorList.Count; i++)
+            {
+                arr[i] = (T)locatorList[i];
+            }
+            locatorList.Clear();
+            return arr;
         }
 
         public Component[] GetComponents(Type type)
         {
-            List<Component> list = new List<Component>();
             for (int i = 0; i < components.Count; i++)
             {
                 if (type.IsAssignableFrom(components[i].GetType()))
                 {
-                    list.Add(components[i]);
+                    locatorList.Add(components[i]);
                 }
             }
-            return list.ToArray();
+            Component[] arr = locatorList.ToArray();
+            locatorList.Clear();
+            return arr;
         }
 
         public Component[] GetComponentsInChildren(Type type)
         {
-            List<Component> list = new List<Component>();
             for (int i = 0; i < components.Count; i++)
             {
                 if (type.IsAssignableFrom(components[i].GetType()))
                 {
-                    list.Add(components[i]);
+                    locatorList.Add(components[i]);
                 }
             }
-            transform.GetComponentsInChildrenInt(type, list);
-            return list.ToArray();
+            transform.GetComponentsInChildrenInt(type, locatorList);
+            Component[] arr = locatorList.ToArray();
+            locatorList.Clear();
+            return arr;
         }
 
         internal void GetComponentsInChildren(Type type, List<Component> list)
@@ -396,20 +405,26 @@ namespace PressPlay.FFWD
 
         public T[] GetComponentsInChildren<T>() where T: Component
         {
-            List<T> list = new List<T>();
             for (int i = 0; i < components.Count; i++)
             {
                 T cmp = components[i] as T;
                 if (cmp != null)
                 {
-                    list.Add(cmp);
+                    locatorList.Add(cmp);
                 }
             }
-            transform.GetComponentsInChildrenInt<T>(list);
-            return list.ToArray();
+            transform.GetComponentsInChildrenInt<T>(locatorList);
+
+            T[] arr = new T[locatorList.Count];
+            for (int i = 0; i < locatorList.Count; i++)
+            {
+                arr[i] = (T)locatorList[i];
+            }
+            locatorList.Clear();
+            return arr;
         }
 
-        internal void GetComponentsInChildren<T>(List<T> list) where T : Component
+        internal void GetComponentsInChildren<T>(List<Component> list) where T : Component
         {
             for (int i = 0; i < components.Count; i++)
             {
@@ -468,14 +483,19 @@ namespace PressPlay.FFWD
 
         public T[] GetComponentsInParents<T>() where T : Component
         {
-            List<T> list = new List<T>();
             GameObject go = this;
             while (go != null)
             {
-                list.AddRange(go.GetComponents<T>());
+                locatorList.AddRange(go.GetComponents<T>());
                 go = go.GetParent();
             }
-            return list.ToArray();
+            T[] arr = new T[locatorList.Count];
+            for (int i = 0; i < locatorList.Count; i++)
+            {
+                arr[i] = (T)locatorList[i];
+            }
+            locatorList.Clear();
+            return arr;
         }
 
         private GameObject GetParent()

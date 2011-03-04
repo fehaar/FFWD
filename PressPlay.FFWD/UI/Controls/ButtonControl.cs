@@ -116,24 +116,8 @@ namespace PressPlay.FFWD.UI.Controls
 
         private void ChangeState(ButtonControlStates newState)
         {
-            switch(newState){
-                case ButtonControlStates.normal:
-                    break;
-                case ButtonControlStates.pressed:
-                    break;
-                case ButtonControlStates.hover:
-                    break;
-                case ButtonControlStates.disabled:
-                    break;
-            }
-
-            // we get and set the correct texture
-            ButtonTexture bt = buttonStyle.GetButtonTexture(newState);
-
-            //Debug.Log("ButtonControl: changing sourcerect from " + ((UISpriteRenderer)background.renderer).sourceRect + " to " + bt.sourceRect);
-
-            ((UISpriteRenderer)background.renderer).texture = bt.texture;
-            ((UISpriteRenderer)background.renderer).sourceRect = bt.sourceRect;
+            ((UISpriteRenderer)background.renderer).texture = buttonStyle.texture;
+            ((UISpriteRenderer)background.renderer).sourceRect = buttonStyle.GetSourceRect(newState);
 
             previousState = _state;
             _state = newState;
