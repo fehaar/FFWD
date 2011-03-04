@@ -353,7 +353,11 @@ namespace PressPlay.FFWD
                     locatorList.Add(components[i] as T);
                 }
             }
-            T[] arr = locatorList.ConvertAll<T>(c => c as T).ToArray();
+            T[] arr = new T[locatorList.Count];
+            for (int i = 0; i < locatorList.Count; i++)
+            {
+                arr[i] = (T)locatorList[i];
+            }
             locatorList.Clear();
             return arr;
         }
@@ -411,7 +415,11 @@ namespace PressPlay.FFWD
             }
             transform.GetComponentsInChildrenInt<T>(locatorList);
 
-            T[] arr = locatorList.ConvertAll<T>(c => c as T).ToArray();
+            T[] arr = new T[locatorList.Count];
+            for (int i = 0; i < locatorList.Count; i++)
+            {
+                arr[i] = (T)locatorList[i];
+            }
             locatorList.Clear();
             return arr;
         }
@@ -481,7 +489,11 @@ namespace PressPlay.FFWD
                 locatorList.AddRange(go.GetComponents<T>());
                 go = go.GetParent();
             }
-            T[] arr = locatorList.ConvertAll<T>(c => c as T).ToArray();
+            T[] arr = new T[locatorList.Count];
+            for (int i = 0; i < locatorList.Count; i++)
+            {
+                arr[i] = (T)locatorList[i];
+            }
             locatorList.Clear();
             return arr;
         }
