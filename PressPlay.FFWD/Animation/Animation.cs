@@ -16,7 +16,7 @@ namespace PressPlay.FFWD.Components
 
 		// TODO: This should be moved to a content processor!
 		[ContentSerializer]
-		private string[] animations;
+		private string[] animations = null;
 
 		[ContentSerializerIgnore]
 		public AnimationClip clip
