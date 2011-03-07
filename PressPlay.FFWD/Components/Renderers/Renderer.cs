@@ -51,6 +51,8 @@ namespace PressPlay.FFWD.Components
             }
         }
 
+        internal float renderQueue = 0f;
+
         #region IRenderable Members
         /// <summary>
         /// Draw the actual thing that we want to render
@@ -61,5 +63,16 @@ namespace PressPlay.FFWD.Components
         public abstract int Draw(GraphicsDevice device, Camera cam);
         #endregion
 
+        public override void Awake()
+        {
+            if (material == null)
+            {
+                renderQueue = 0;
+            }
+            else
+            {
+                renderQueue = material.finalRenderQueue;
+            }
+        }
     }
 }
