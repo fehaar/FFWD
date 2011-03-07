@@ -179,8 +179,8 @@ namespace PressPlay.FFWD.Components
             }
         }
 
-        List<Renderer> renderQueue = new List<Renderer>();
-        bool isRenderQueueSorted = true;
+        private readonly List<Renderer> renderQueue = new List<Renderer>(50);
+
         private bool addRenderer(Renderer renderer)
         {
             if (renderQueue.Contains(renderer))
@@ -189,8 +189,15 @@ namespace PressPlay.FFWD.Components
             }
             if ((cullingMask & (1 << renderer.gameObject.layer)) > 0)
             {
-                renderQueue.Add(renderer);
-                isRenderQueueSorted = false;
+                int index = renderQueue.BinarySearch(renderer, this);
+                if (index < 0)
+                {
+                    renderQueue.Insert(~index, renderer);
+                }
+                else
+                {
+                    renderQueue.Insert(index, renderer);
+                }
                 return true;
             }
             return false;
@@ -272,12 +279,6 @@ namespace PressPlay.FFWD.Components
         internal void doRender(GraphicsDevice device)
         {
             Clear(device);
-
-            if (!isRenderQueueSorted)
-            {
-                renderQueue.Sort(this);
-                isRenderQueueSorted = true;
-            }
 
             view = Matrix.CreateLookAt(
                 transform.position,
