@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 
 namespace PressPlay.FFWD
 {
@@ -20,6 +21,8 @@ namespace PressPlay.FFWD
 
         [ContentSerializerIgnore]
         public Texture2D texture;
+
+        private static readonly Dictionary<string, int> textureRenderIndexes = new Dictionary<string, int>();
 
         public void SetColor(string name, Color color)
         {
@@ -48,6 +51,7 @@ namespace PressPlay.FFWD
             {
                 color = new Color(color.r, color.g, color.b, 0.5f);
             }
+            CalculateRenderQueue();
         }
 
         [ContentSerializerIgnore]
@@ -61,22 +65,24 @@ namespace PressPlay.FFWD
             }
         }
 
-        private float finalRenderQueue = float.MinValue;
-        internal float CalculateRenderQueue()
+        internal float finalRenderQueue = float.MinValue;
+
+        internal void CalculateRenderQueue()
         {
-            if (finalRenderQueue < renderQueue)
+            finalRenderQueue = renderQueue * 10;
+            if (blendState == BlendState.AlphaBlend)
             {
-                finalRenderQueue = renderQueue;
-                if (blendState == BlendState.AlphaBlend)
-                {
-                    finalRenderQueue += 0.1f;
-                }
-                if (blendState == BlendState.Additive)
-                {
-                    finalRenderQueue += 0.2f;
-                }
+                finalRenderQueue += 1000f;
             }
-            return finalRenderQueue;
+            if (blendState == BlendState.Additive)
+            {
+                finalRenderQueue += 2000f;
+            }
+            if (!textureRenderIndexes.ContainsKey(mainTexture ?? string.Empty))
+            {
+                textureRenderIndexes.Add(mainTexture ?? string.Empty, textureRenderIndexes.Count);
+            }
+            finalRenderQueue += textureRenderIndexes[mainTexture ?? string.Empty];
         }
 
         public static readonly Material Default = new Material();
