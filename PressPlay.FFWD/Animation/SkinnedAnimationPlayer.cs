@@ -109,7 +109,7 @@ namespace PressPlay.FFWD
         /// <summary>
         /// Advances the current animation position.
         /// </summary>
-        public void Update()
+        public void FixedUpdate()
         {
             UpdateBoneTransforms(TimeSpan.FromSeconds(Time.deltaTime * currentStateValue.speed));
             UpdateWorldTransforms(bakedTransform);
