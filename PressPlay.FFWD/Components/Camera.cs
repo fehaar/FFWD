@@ -179,8 +179,8 @@ namespace PressPlay.FFWD.Components
             }
         }
 
-        List<Renderer> renderQueue = new List<Renderer>();
-        bool isRenderQueueSorted = true;
+        private readonly List<Renderer> renderQueue = new List<Renderer>(50);
+
         private bool addRenderer(Renderer renderer)
         {
             if (renderQueue.Contains(renderer))
@@ -189,8 +189,15 @@ namespace PressPlay.FFWD.Components
             }
             if ((cullingMask & (1 << renderer.gameObject.layer)) > 0)
             {
-                renderQueue.Add(renderer);
-                isRenderQueueSorted = false;
+                int index = renderQueue.BinarySearch(renderer, this);
+                if (index < 0)
+                {
+                    renderQueue.Insert(~index, renderer);
+                }
+                else
+                {
+                    renderQueue.Insert(index, renderer);
+                }
                 return true;
             }
             return false;
@@ -273,12 +280,6 @@ namespace PressPlay.FFWD.Components
         {
             Clear(device);
 
-            if (!isRenderQueueSorted)
-            {
-                renderQueue.Sort(this);
-                isRenderQueueSorted = true;
-            }
-
             view = Matrix.CreateLookAt(
                 transform.position,
                 transform.position + transform.forward,
@@ -357,29 +358,7 @@ namespace PressPlay.FFWD.Components
         #region IComparer<IRenderable> Members
         public int Compare(Renderer x, Renderer y)
         {
-            float xRq = GetRenderQueue(x);
-            float yRq = GetRenderQueue(y);
-
-            if (xRq == yRq)
-            {
-                if (xRq == 0)
-                {
-                    return 0;
-                }
-                string xTex = x.material.mainTexture ?? "";
-                string yTex = y.material.mainTexture ?? "";
-                return xTex.CompareTo(yTex);
-            }
-            return xRq.CompareTo(yRq);
-        }
-
-        private float GetRenderQueue(Renderer renderer)
-        {
-            if (renderer.material == null)
-            {
-                return 0;
-            }
-            return renderer.material.CalculateRenderQueue();
+            return x.renderQueue.CompareTo(y.renderQueue);
         }
         #endregion
 

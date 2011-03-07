@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework;
 
 namespace PressPlay.FFWD.Components
 {
-	public class Animation : Behaviour, PressPlay.FFWD.Interfaces.IUpdateable
+	public class Animation : Behaviour, PressPlay.FFWD.Interfaces.IFixedUpdateable
 	{
 
 		public bool playAutomatically;
@@ -189,27 +189,12 @@ namespace PressPlay.FFWD.Components
 		}
 
 		#region IUpdateable Members
-		public void Update()
+		public void FixedUpdate()
 		{
 			if (animationPlayer != null)
 			{
-				animationPlayer.Update();
-
-				// Update child gameobject world positions
-				//foreach (var item in transform.GetComponentsInChildren<Transform>())
-				//{
-				//    Matrix boneTransform;
-				//    if (animationPlayer.WorldTransformForBone(item.name, out boneTransform))
-				//    {
-				//        item.localPosition = Matrix.Invert(boneTransform).Translation;
-				//        //item.SetLocalTransform(Matrix.Invert(boneTransform));
-				//    }
-				//} 
+				animationPlayer.FixedUpdate();
 			}
-		}
-
-		public void LateUpdate()
-		{
 		}
 		#endregion
 
