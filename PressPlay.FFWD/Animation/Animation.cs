@@ -157,6 +157,9 @@ namespace PressPlay.FFWD.Components
 		{
 			// TODO : Add implementation of method
 			//throw new NotImplementedException("Method not implemented.");
+            //Rewind();
+            Stop();
+            Play(name);
 		}
 
 		public void CrossFade(string name)
@@ -166,6 +169,8 @@ namespace PressPlay.FFWD.Components
 
 		public void CrossFade(string name, float fadeLength)
 		{
+            //Rewind();
+            Stop();
 			Play(name);
 		}
 
