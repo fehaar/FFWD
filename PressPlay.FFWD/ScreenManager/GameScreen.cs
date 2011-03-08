@@ -271,6 +271,8 @@ namespace PressPlay.FFWD.ScreenManager
                 {
                     // When the transition finishes, remove the screen.
                     ScreenManager.RemoveScreen(this);
+
+                    OnTransitionExitComplete();
                 }
             }
             else if (coveredByOtherScreen)
@@ -401,7 +403,8 @@ namespace PressPlay.FFWD.ScreenManager
         public virtual void OnTransitionOnBegin() { }
         public virtual void OnTransitionOnComplete(){ }
         public virtual void OnTransitionOffBegin() { }
-        public virtual void OnTransitionOffComplete(){ }
+        public virtual void OnTransitionOffComplete() { }
+        public virtual void OnTransitionExitComplete() { }
         public virtual void OnActivated() { }
         public virtual void OnDeactivated() { }
 
