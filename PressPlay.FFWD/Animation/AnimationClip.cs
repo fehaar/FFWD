@@ -28,8 +28,8 @@ namespace PressPlay.FFWD
                 firstFrame = 0;
             }
 
-            double startTime = firstFrame * (1.0 / 30.0);
-            double endTime = lastFrame * (1.0 / 30.0);
+            float startTime = firstFrame * (1.0f / 30.0f);
+            float endTime = lastFrame * (1.0f / 30.0f);
 
             if (clip.Keyframes != null)
             {
@@ -39,7 +39,7 @@ namespace PressPlay.FFWD
                 for (int i = 0; i < cnt; i++)
                 {
                     Keyframe frame = clip.Keyframes[i];
-                    double keySecs = frame.Time.TotalSeconds;
+                    float keySecs = frame.Time;
                     if (keySecs >= startTime && keySecs < endTime)
                     {
                         Keyframes.Add(frame);

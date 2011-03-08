@@ -25,7 +25,7 @@ namespace PressPlay.FFWD
         // Information about the currently playing animation clip.
         private AnimationClip currentClipValue;
         private AnimationState currentStateValue;
-        private TimeSpan currentTimeValue;
+        private float currentTimeValue;
         private int currentKeyframe;
         
         // Current animation transform matrices.
@@ -98,7 +98,7 @@ namespace PressPlay.FFWD
             state.time = 0;
             state.enabled = true;
 
-            currentTimeValue = TimeSpan.FromSeconds(state.time);
+            currentTimeValue = state.time;
 
             currentKeyframe = 0;
 
@@ -109,7 +109,7 @@ namespace PressPlay.FFWD
         {
             if (currentClipValue.Keyframes.Count > 0)
             {
-                TimeSpan ts = currentClipValue.Keyframes[0].Time;
+                float ts = currentClipValue.Keyframes[0].Time;
                 int index = 0;
                 while (index < currentClipValue.Keyframes.Count)
                 {
@@ -134,7 +134,7 @@ namespace PressPlay.FFWD
         /// </summary>
         public void FixedUpdate()
         {
-            UpdateBoneTransforms(TimeSpan.FromSeconds(Time.deltaTime * currentStateValue.speed));
+            UpdateBoneTransforms(Time.deltaTime * currentStateValue.speed);
             UpdateWorldTransforms(bakedTransform);
             UpdateSkinTransforms();
         }
@@ -142,7 +142,7 @@ namespace PressPlay.FFWD
         /// <summary>
         /// Helper used by the Update method to refresh the BoneTransforms data.
         /// </summary>
-        public void UpdateBoneTransforms(TimeSpan time)
+        public void UpdateBoneTransforms(float time)
         {
             if (currentClipValue == null)
                 throw new InvalidOperationException("AnimationPlayer.Update was called before StartClip");
@@ -153,11 +153,11 @@ namespace PressPlay.FFWD
             }
 
             //set the current time of the animation, to what is set in the current AnimationState. This is how we scrub through animations
-            currentTimeValue = TimeSpan.FromSeconds(currentStateValue.time);
+            currentTimeValue = currentStateValue.time;
             time += currentTimeValue;
 
             // See if we should terminate
-            if (time.TotalSeconds > currentStateValue.length)
+            if (time > currentStateValue.length)
             {
                 switch (currentStateValue.wrapMode)
                 {
@@ -165,7 +165,7 @@ namespace PressPlay.FFWD
                         currentStateValue.enabled = false;
                         return;
                     case WrapMode.Loop:
-                        time = TimeSpan.FromSeconds(0);
+                        time = 0;
                         break;
                     case WrapMode.PingPong:
                         currentStateValue.speed *= -1;
@@ -173,7 +173,7 @@ namespace PressPlay.FFWD
                     case WrapMode.Default:
                         break;
                     case WrapMode.Clamp:
-                        time = TimeSpan.FromSeconds(currentStateValue.length);
+                        time = currentStateValue.length;
                         break;
                     default:
                         throw new NotImplementedException("What to do here?");
@@ -188,9 +188,9 @@ namespace PressPlay.FFWD
             }
 
             //set current time values, both locally and in AnimationState
-            currentStateValue.time = (float)time.TotalSeconds;
+            currentStateValue.time = time;
             // move the current time according to the time offset so keyframes get evaluated correctly
-            currentTimeValue = time + TimeSpan.FromSeconds(currentClipValue.timeOffset);
+            currentTimeValue = time + currentClipValue.timeOffset;
 
             int keyframeCount = currentClipValue.Keyframes.Count;
             while (currentKeyframe < keyframeCount)
