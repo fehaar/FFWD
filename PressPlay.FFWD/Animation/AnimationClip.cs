@@ -27,14 +27,18 @@ namespace PressPlay.FFWD
             {
                 firstFrame = 0;
             }
+
             double startTime = firstFrame * (1.0 / 30.0);
             double endTime = lastFrame * (1.0 / 30.0);
+
             if (clip.Keyframes != null)
             {
                 Keyframes = new List<Keyframe>();
                 timeOffset = (float)startTime;
-                foreach (Keyframe frame in clip.Keyframes)
+                int cnt = clip.Keyframes.Count;
+                for (int i = 0; i < cnt; i++)
                 {
+                    Keyframe frame = clip.Keyframes[i];
                     double keySecs = frame.Time.TotalSeconds;
                     if (keySecs >= startTime && keySecs < endTime)
                     {

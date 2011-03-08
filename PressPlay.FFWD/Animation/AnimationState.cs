@@ -15,7 +15,7 @@ namespace PressPlay.FFWD
             }
             set 
             { 
-                time = value * length;
+                time = Mathf.Clamp01(value) * length;
             }
         }
 

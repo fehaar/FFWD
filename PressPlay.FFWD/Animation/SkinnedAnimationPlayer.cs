@@ -95,15 +95,38 @@ namespace PressPlay.FFWD
 
             currentClipValue = clip;
             currentStateValue = state;
-            state.time = clip.timeOffset;
+            state.time = 0;
             state.enabled = true;
 
             currentTimeValue = TimeSpan.FromSeconds(state.time);
 
             currentKeyframe = 0;
 
-            // Initialize bone transforms to the bind pose.
-            skinningDataValue.BindPose.CopyTo(boneTransforms, 0);
+            ResetAnimation();
+        }
+
+        private void ResetAnimation()
+        {
+            if (currentClipValue.Keyframes.Count > 0)
+            {
+                TimeSpan ts = currentClipValue.Keyframes[0].Time;
+                int index = 0;
+                while (index < currentClipValue.Keyframes.Count)
+                {
+                    Keyframe frame = currentClipValue.Keyframes[index];
+
+                    if (frame.Time != ts)
+                    {
+                        break;
+                    }
+                    boneTransforms[frame.Bone] = frame.Transform;
+                    index++;
+                }
+            }
+            else
+            {
+                skinningDataValue.BindPose.CopyTo(boneTransforms, 0);
+            }
         }
         
         /// <summary>
@@ -134,7 +157,7 @@ namespace PressPlay.FFWD
             time += currentTimeValue;
 
             // See if we should terminate
-            if (time.TotalSeconds > currentStateValue.length + currentClipValue.timeOffset)
+            if (time.TotalSeconds > currentStateValue.length)
             {
                 switch (currentStateValue.wrapMode)
                 {
@@ -142,7 +165,7 @@ namespace PressPlay.FFWD
                         currentStateValue.enabled = false;
                         return;
                     case WrapMode.Loop:
-                        time = TimeSpan.FromSeconds(currentClipValue.timeOffset);
+                        time = TimeSpan.FromSeconds(0);
                         break;
                     case WrapMode.PingPong:
                         currentStateValue.speed *= -1;
@@ -161,19 +184,18 @@ namespace PressPlay.FFWD
             if (time < currentTimeValue)
             {
                 currentKeyframe = 0;
-                skinningDataValue.BindPose.CopyTo(boneTransforms, 0);
+                ResetAnimation();
             }
 
             //set current time values, both locally and in AnimationState
-            currentTimeValue = time;
-            currentStateValue.time = (float)currentTimeValue.TotalSeconds;
+            currentStateValue.time = (float)time.TotalSeconds;
+            // move the current time according to the time offset so keyframes get evaluated correctly
+            currentTimeValue = time + TimeSpan.FromSeconds(currentClipValue.timeOffset);
 
-            // Read keyframe matrices.
-            IList<Keyframe> keyframes = currentClipValue.Keyframes;
-
-            while (currentKeyframe < keyframes.Count)
+            int keyframeCount = currentClipValue.Keyframes.Count;
+            while (currentKeyframe < keyframeCount)
             {
-                Keyframe keyframe = keyframes[currentKeyframe];
+                Keyframe keyframe = currentClipValue.Keyframes[currentKeyframe];
 
                 // Stop when we've read up to the current time position.
                 if (keyframe.Time > currentTimeValue)
