@@ -49,6 +49,11 @@ namespace PressPlay.FFWD
             world.ContinuousPhysics = true;
         }
 
+        public static void SetContactFilter(IContactFilter filter)
+        {
+            world.ContactFilter = filter;
+        }
+
         public static void TogglePause()
         {
             isPaused = !isPaused;
@@ -109,14 +114,6 @@ namespace PressPlay.FFWD
                             body.GetTransform(out t);
                             comp.transform.SetPositionFromPhysics(t.Position, t.GetAngle());
                         }
-                        /*else
-                        {
-                            float rad = -MathHelper.ToRadians(comp.transform.eulerAngles.y);
-                            if (body.Position != (Microsoft.Xna.Framework.Vector2)comp.transform.position || body.Rotation != rad)
-                            {
-                                body.SetTransform(comp.transform.position, rad);
-                            }
-                        }*/
                     }
                 }
                 body = body.GetNext();
