@@ -31,7 +31,7 @@ namespace PressPlay.FFWD
         /// Gets the time offset from the start of the animation to this keyframe.
         /// </summary>
         [ContentSerializer]
-        public TimeSpan Time { get; private set; }
+        public float Time { get; private set; }
 
         /// <summary>
         /// Gets the bone transform for this keyframe.
@@ -45,7 +45,7 @@ namespace PressPlay.FFWD
         public Keyframe(int bone, TimeSpan time, Matrix transform)
         {
             Bone = bone;
-            Time = time;
+            Time = (float)time.TotalSeconds;
             Transform = transform;
         }
         

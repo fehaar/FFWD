@@ -27,15 +27,19 @@ namespace PressPlay.FFWD
             {
                 firstFrame = 0;
             }
-            double startTime = firstFrame * (1.0 / 30.0);
-            double endTime = lastFrame * (1.0 / 30.0);
+
+            float startTime = firstFrame * (1.0f / 30.0f);
+            float endTime = lastFrame * (1.0f / 30.0f);
+
             if (clip.Keyframes != null)
             {
                 Keyframes = new List<Keyframe>();
                 timeOffset = (float)startTime;
-                foreach (Keyframe frame in clip.Keyframes)
+                int cnt = clip.Keyframes.Count;
+                for (int i = 0; i < cnt; i++)
                 {
-                    double keySecs = frame.Time.TotalSeconds;
+                    Keyframe frame = clip.Keyframes[i];
+                    float keySecs = frame.Time;
                     if (keySecs >= startTime && keySecs < endTime)
                     {
                         Keyframes.Add(frame);

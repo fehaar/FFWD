@@ -45,12 +45,9 @@ namespace PressPlay.FFWD
         }
 
         #region IContactListener Members
-        private List<Contact> beginContacts = new List<Contact>();
-        private List<Contact> endContacts = new List<Contact>();
-        private List<Stay> staying = new List<Stay>();
-        //private struct PreSolveContact { public Contact c; public Manifold m;}
-        //private Dictionary<Contact, ContactImpulse> postSolveContacts = new Dictionary<Contact,ContactImpulse>();
-        //private List<PreSolveContact> preSolveContacts = new List<PreSolveContact>();
+        private readonly List<Contact> beginContacts = new List<Contact>();
+        private readonly List<Contact> endContacts = new List<Contact>();
+        private readonly List<Stay> staying = new List<Stay>();
         public void BeginContact(Contact contact)
         {
             beginContacts.Add(contact);
@@ -144,10 +141,7 @@ namespace PressPlay.FFWD
                 }
                 else
                 {
-                    //Collision coll = staying[i].collision;
-                    //coll.SetColliders(staying[i].collA, staying[i].collB);
                     staying[i].gameObjectA.OnCollisionStay(staying[i].collisionBToA);
-                    //coll.SetColliders(staying[i].collB, staying[i].collA);
                     staying[i].gameObjectB.OnCollisionStay(staying[i].collisionAToB);
                 }
             }
@@ -219,11 +213,7 @@ namespace PressPlay.FFWD
                     Stay s = new Stay(collisionAToB, collisionBToA, compA.gameObject, compB.gameObject);
                     staying.Add(s);
                     s.gameObjectA.OnCollisionEnter(s.collisionBToA);
-                    //coll.SetColliders(staying[i].collB, staying[i].collA);
                     s.gameObjectB.OnCollisionEnter(s.collisionAToB);
-
-                    //compA.gameObject.OnCollisionEnter(collisionBToA);
-                    //compB.gameObject.OnCollisionEnter(collisionAToB);
                 }
             }
 

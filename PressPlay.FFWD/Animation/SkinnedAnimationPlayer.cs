@@ -25,7 +25,7 @@ namespace PressPlay.FFWD
         // Information about the currently playing animation clip.
         private AnimationClip currentClipValue;
         private AnimationState currentStateValue;
-        private TimeSpan currentTimeValue;
+        private float currentTimeValue;
         private int currentKeyframe;
         
         // Current animation transform matrices.
@@ -95,15 +95,38 @@ namespace PressPlay.FFWD
 
             currentClipValue = clip;
             currentStateValue = state;
-            state.time = clip.timeOffset;
+            state.time = 0;
             state.enabled = true;
 
-            currentTimeValue = TimeSpan.FromSeconds(state.time);
+            currentTimeValue = state.time;
 
             currentKeyframe = 0;
 
-            // Initialize bone transforms to the bind pose.
-            skinningDataValue.BindPose.CopyTo(boneTransforms, 0);
+            ResetAnimation();
+        }
+
+        private void ResetAnimation()
+        {
+            if (currentClipValue.Keyframes.Count > 0)
+            {
+                float ts = currentClipValue.Keyframes[0].Time;
+                int index = 0;
+                while (index < currentClipValue.Keyframes.Count)
+                {
+                    Keyframe frame = currentClipValue.Keyframes[index];
+
+                    if (frame.Time != ts)
+                    {
+                        break;
+                    }
+                    boneTransforms[frame.Bone] = frame.Transform;
+                    index++;
+                }
+            }
+            else
+            {
+                skinningDataValue.BindPose.CopyTo(boneTransforms, 0);
+            }
         }
         
         /// <summary>
@@ -111,7 +134,7 @@ namespace PressPlay.FFWD
         /// </summary>
         public void FixedUpdate()
         {
-            UpdateBoneTransforms(TimeSpan.FromSeconds(Time.deltaTime * currentStateValue.speed));
+            UpdateBoneTransforms(Time.deltaTime * currentStateValue.speed);
             UpdateWorldTransforms(bakedTransform);
             UpdateSkinTransforms();
         }
@@ -119,7 +142,7 @@ namespace PressPlay.FFWD
         /// <summary>
         /// Helper used by the Update method to refresh the BoneTransforms data.
         /// </summary>
-        public void UpdateBoneTransforms(TimeSpan time)
+        public void UpdateBoneTransforms(float time)
         {
             if (currentClipValue == null)
                 throw new InvalidOperationException("AnimationPlayer.Update was called before StartClip");
@@ -130,11 +153,11 @@ namespace PressPlay.FFWD
             }
 
             //set the current time of the animation, to what is set in the current AnimationState. This is how we scrub through animations
-            currentTimeValue = TimeSpan.FromSeconds(currentStateValue.time);
+            currentTimeValue = currentStateValue.time;
             time += currentTimeValue;
 
             // See if we should terminate
-            if (time.TotalSeconds > currentStateValue.length + currentClipValue.timeOffset)
+            if (time > currentStateValue.length)
             {
                 switch (currentStateValue.wrapMode)
                 {
@@ -142,7 +165,7 @@ namespace PressPlay.FFWD
                         currentStateValue.enabled = false;
                         return;
                     case WrapMode.Loop:
-                        time = TimeSpan.FromSeconds(currentClipValue.timeOffset);
+                        time = 0;
                         break;
                     case WrapMode.PingPong:
                         currentStateValue.speed *= -1;
@@ -150,7 +173,7 @@ namespace PressPlay.FFWD
                     case WrapMode.Default:
                         break;
                     case WrapMode.Clamp:
-                        time = TimeSpan.FromSeconds(currentStateValue.length);
+                        time = currentStateValue.length;
                         break;
                     default:
                         throw new NotImplementedException("What to do here?");
@@ -161,19 +184,18 @@ namespace PressPlay.FFWD
             if (time < currentTimeValue)
             {
                 currentKeyframe = 0;
-                skinningDataValue.BindPose.CopyTo(boneTransforms, 0);
+                ResetAnimation();
             }
 
             //set current time values, both locally and in AnimationState
-            currentTimeValue = time;
-            currentStateValue.time = (float)currentTimeValue.TotalSeconds;
+            currentStateValue.time = time;
+            // move the current time according to the time offset so keyframes get evaluated correctly
+            currentTimeValue = time + currentClipValue.timeOffset;
 
-            // Read keyframe matrices.
-            IList<Keyframe> keyframes = currentClipValue.Keyframes;
-
-            while (currentKeyframe < keyframes.Count)
+            int keyframeCount = currentClipValue.Keyframes.Count;
+            while (currentKeyframe < keyframeCount)
             {
-                Keyframe keyframe = keyframes[currentKeyframe];
+                Keyframe keyframe = currentClipValue.Keyframes[currentKeyframe];
 
                 // Stop when we've read up to the current time position.
                 if (keyframe.Time > currentTimeValue)
