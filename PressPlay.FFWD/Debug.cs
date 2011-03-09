@@ -57,7 +57,6 @@ namespace PressPlay.FFWD
             }
 //#if WINDOWS
             System.Diagnostics.Debug.WriteLine(logBuilder.ToString());
-
 //#endif
             if (DisplayLog)
             {
