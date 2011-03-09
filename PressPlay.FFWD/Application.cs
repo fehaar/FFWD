@@ -63,7 +63,8 @@ namespace PressPlay.FFWD
         internal static readonly List<Asset> newAssets = new List<Asset>(100);
 
         internal static readonly List<Component> newComponents = new List<Component>();
-        private static Component[] componentsToAwake = new Component[500];
+        private static readonly Queue<Component> componentsToAwake = new Queue<Component>(2500);
+        private static readonly Queue<Component> instantiatedComponentsToAwake = new Queue<Component>(50);
         private static readonly List<Component> componentsToStart = new List<Component>();
         private static readonly List<PressPlay.FFWD.Interfaces.IUpdateable> updateComponents = new List<PressPlay.FFWD.Interfaces.IUpdateable>(500);
         private static readonly List<PressPlay.FFWD.Interfaces.IFixedUpdateable> fixedUpdateComponents = new List<PressPlay.FFWD.Interfaces.IFixedUpdateable>(100);
@@ -73,6 +74,7 @@ namespace PressPlay.FFWD
         private static readonly TypeSet isUpdateable = new TypeSet(100);
         private static readonly TypeSet isFixedUpdateable = new TypeSet(25);
         private static readonly TypeSet isLateUpdateable = new TypeSet(25);
+        private static readonly TypeSet hasAwake = new TypeSet(50);
         internal static readonly TypeSet fixReferences = new TypeSet(5);
 
         private static readonly List<InvokeCall> invokeCalls = new List<InvokeCall>(10);
@@ -430,6 +432,7 @@ namespace PressPlay.FFWD
                 isUpdateable.AddRange(scene.isUpdateable);
                 isFixedUpdateable.AddRange(scene.isFixedUpdateable);
                 isLateUpdateable.AddRange(scene.isLateUpdateable);
+                hasAwake.AddRange(scene.hasAwake);
                 fixReferences.AddRange(scene.fixReferences);
             }
 
@@ -591,9 +594,10 @@ namespace PressPlay.FFWD
             return null;
         }
 
-        internal static void AwakeNewComponents()
+        internal static void AwakeNewComponents(bool onInstantiate = false)
         {
-            for (int i = 0; i < newComponents.Count; i++)
+            int componentCount = newComponents.Count;
+            for (int i = 0; i < componentCount; i++)
             {
                 Component cmp = newComponents[i];
                 if (cmp.gameObject != null)
@@ -615,26 +619,35 @@ namespace PressPlay.FFWD
                     {
                         objects.Add(cmp.gameObject.GetInstanceID(), cmp.gameObject);
                     }
+                    if (!cmp.isPrefab && hasAwake.Contains(cmp.GetType()))
+                    {
+                        if (onInstantiate)
+                        {
+                            instantiatedComponentsToAwake.Enqueue(cmp);
+                        }
+                        else
+                        {
+                            componentsToAwake.Enqueue(cmp);
+                        }
+                    }
                 }
             }
+            newComponents.Clear();
 
-            int componentCount = newComponents.Count;
-            if (componentCount > 0)
+            if (onInstantiate)
             {
-                // All components will exist to be found before awaking - otherwise we can get issues with instantiating on awake.
-                if (componentsToAwake.Length < newComponents.Count)
+                while (instantiatedComponentsToAwake.Count > 0)
                 {
-                    componentsToAwake = new Component[newComponents.Count];
+                    Component cmp = instantiatedComponentsToAwake.Dequeue();
+                    cmp.Awake();
                 }
-                newComponents.CopyTo(componentsToAwake);
-                newComponents.Clear();
-                for (int i = 0; i < componentCount; i++)
+            }
+            else
+            {
+                while (componentsToAwake.Count > 0)
                 {
-                    Component cmp = componentsToAwake[i];
-                    if (!cmp.isPrefab)
-                    {
-                        cmp.Awake();
-                    }
+                    Component cmp = componentsToAwake.Dequeue();
+                    cmp.Awake();
                 }
             }
 
@@ -642,10 +655,10 @@ namespace PressPlay.FFWD
             // In this way we will make sure that everything is instantiated before the first run.
             if (newComponents.Count > 0)
             {
-                AwakeNewComponents();
+                AwakeNewComponents(onInstantiate);
             }
 
-            if (doGarbageCollectAfterAwake)
+            if (!onInstantiate && doGarbageCollectAfterAwake)
             {
                 GC.Collect();
                 doGarbageCollectAfterAwake = false;
