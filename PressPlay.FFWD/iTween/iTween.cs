@@ -6962,13 +6962,10 @@ namespace PressPlay.FFWD
         public static void Stop(GameObject target, string type)
         {
             Component[] tweens = target.GetComponents(typeof(iTween));
-            Debug.Log("Stopping tween. Tweens: "+tweens.Length);
 
             foreach (iTween item in tweens)
             {
                 string targetType = item.type + item.method;
-
-                Debug.Log("Tween type"+type+" targetType: "+targetType);
 
                 /*
                 if (type.Length > targetType.Length)
