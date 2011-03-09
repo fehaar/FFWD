@@ -69,6 +69,12 @@ namespace PressPlay.FFWD.Import
             {
                 scene.isFixedUpdateable.Add(tp.Name);
             }
+
+            info = tp.GetMethod("Awake");
+            if (info != null && info.DeclaringType != typeof(Component))
+            {
+                scene.hasAwake.Add(tp.Name);
+            }
         }
 
         private void PurgeStaticallyBatchedRenderers(GameObject go)
