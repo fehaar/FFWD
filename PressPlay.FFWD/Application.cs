@@ -198,7 +198,7 @@ namespace PressPlay.FFWD
 #endif
             Time.InitializeDeltaTimeFixedUpdate(); //sets deltaTime to return fixedDeltaTime
 
-            AwakeNewComponents();
+            AwakeNewComponents(false);
             StartComponents();
             ChangeComponentActivity();
             int count = fixedUpdateComponents.Count;
@@ -594,7 +594,12 @@ namespace PressPlay.FFWD
             return null;
         }
 
-        internal static void AwakeNewComponents(bool onInstantiate = false)
+        internal static void AwakeNewComponents()
+        {
+            AwakeNewComponents(false);
+        }
+
+        internal static void AwakeNewComponents(bool onInstantiate)
         {
             int componentCount = newComponents.Count;
             for (int i = 0; i < componentCount; i++)

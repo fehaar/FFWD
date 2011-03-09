@@ -279,6 +279,12 @@ namespace PressPlay.FFWD.Components
         internal void doRender(GraphicsDevice device)
         {
             Clear(device);
+#if DEBUG
+            if (logRenderCalls)
+            {
+                Debug.Log("**** Camera begin : ", name, "****");
+            }
+#endif
 
             view = Matrix.CreateLookAt(
                 transform.position,

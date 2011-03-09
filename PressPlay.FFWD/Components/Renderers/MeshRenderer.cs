@@ -56,14 +56,7 @@ namespace PressPlay.FFWD.Components
                 for (int e = 0; e < mesh.Effects.Count; e++)
                 {
                     BasicEffect effect = mesh.Effects[e] as BasicEffect;
-                    //if (filter.sharedMesh.model.Tag is GameObjectAnimationData)
-                    //{
-                    //    effect.World = (filter.sharedMesh.model.Tag as GameObjectAnimationData).BakedTransform * world;
-                    //}
-                    //else
-                    //{
-                        effect.World = world;
-                    //}
+                    effect.World = world;
                     effect.View = cam.view;
                     effect.Projection = cam.projectionMatrix;
                     effect.LightingEnabled = false;

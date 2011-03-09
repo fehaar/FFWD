@@ -141,6 +141,7 @@ namespace PressPlay.FFWD
                     clone.normals = (Microsoft.Xna.Framework.Vector3[])normals.Clone();
                 }
             }
+            clone.boundingSphere = boundingSphere;
             return clone;
         }
         #endregion
