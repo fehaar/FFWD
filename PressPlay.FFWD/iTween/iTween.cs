@@ -6962,10 +6962,12 @@ namespace PressPlay.FFWD
         public static void Stop(GameObject target, string type)
         {
             Component[] tweens = target.GetComponents(typeof(iTween));
+
             foreach (iTween item in tweens)
             {
                 string targetType = item.type + item.method;
 
+                /*
                 if (type.Length > targetType.Length)
                 {
                     type = type.Substring(0, targetType.Length);
@@ -6974,6 +6976,7 @@ namespace PressPlay.FFWD
                 {
                     targetType = targetType.Substring(0, type.Length);
                 }
+                */
 
                 if (targetType.ToLower() == type.ToLower())
                 {
