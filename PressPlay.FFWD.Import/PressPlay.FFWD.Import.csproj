@@ -201,6 +201,7 @@
     <Compile Include="MeshDataContentWriter.cs" />
     <Compile Include="MeshProcessor.cs" />
     <Compile Include="SceneProcessor.cs" />
+    <Compile Include="StaticBatchRendererSerializer.cs" />
     <Compile Include="Vector2TypeSerializer.cs" />
     <Compile Include="QuaternionTypeSerializer.cs" />
     <Compile Include="Vector3ArrayTypeSerializer.cs" />

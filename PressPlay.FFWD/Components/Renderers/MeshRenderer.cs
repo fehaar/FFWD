@@ -47,7 +47,7 @@ namespace PressPlay.FFWD.Components
 #if DEBUG
                 if (Camera.logRenderCalls)
                 {
-                    Debug.LogFormat("Mesh: {0} on {1}", gameObject, cam.gameObject);
+                    Debug.LogFormat("Mesh model: {0} on {1}", gameObject, cam.gameObject);
                 }
 #endif
 
@@ -69,7 +69,11 @@ namespace PressPlay.FFWD.Components
                     {
                         effect.DiffuseColor = (Vector3)material.color;
                     }
-                    mesh.Draw();
+                    foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+                    {
+                        pass.Apply();
+                        mesh.Draw();
+                    }
                 }
                 return 1;
             }

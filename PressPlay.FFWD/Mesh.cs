@@ -60,7 +60,6 @@ namespace PressPlay.FFWD
                     model = data.model;
                     if (model != null)
                     {
-                        Debug.Log("Non batchable mesh:", asset, name);
                         for (int i = 0; i < model.Meshes.Count; i++)
                         {
                             if (model.Meshes[i].Name == name)
