@@ -131,7 +131,7 @@ namespace PressPlay.FFWD
 
 
             // HACK THIS NEEDS TO BE REWORKED AS IT WILL RESULT IN RECURSIVE AWAKENEWCOMPS CALLS. DANGER DANGER!
-            Application.AwakeNewComponents();
+            Application.AwakeNewComponents(true);
 
             return idMap[original.GetInstanceID()];
         }
