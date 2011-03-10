@@ -166,14 +166,6 @@ namespace PressPlay.FFWD.Components
                 }
             }
 
-            // Add degenerate triangles to move to the next model
-            //if (currentIndexIndex > 0)
-            //{
-            //    indexData[currentIndexIndex] = indexData[currentIndexIndex - 1];
-            //    indexData[currentIndexIndex + 1] = indexData[currentIndexIndex - 1];
-            //    currentIndexIndex += 2;
-            //}
-
             for (int t = 0; t < mesh.triangles.Length; t++)
             {
                 indexData[currentIndexIndex + t] = (short)(mesh.triangles[t] + currentVertexIndex);

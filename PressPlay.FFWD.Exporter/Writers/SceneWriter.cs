@@ -438,6 +438,10 @@ namespace PressPlay.FFWD.Exporter.Writers
                         writer.WriteElementString("mainTexture", mat.mainTexture.name);
                         writer.WriteElementString("mainTextureOffset", ToString(mat.mainTextureOffset));
                         writer.WriteElementString("mainTextureScale", ToString(mat.mainTextureScale));
+                        if (mat.mainTexture.wrapMode == TextureWrapMode.Repeat)
+                        {
+                            writer.WriteElementString("wrapRepeat", ToString(true));
+                        }
                         try
                         {
                             assetHelper.ExportTexture(mat.mainTexture as Texture2D);

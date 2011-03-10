@@ -7,17 +7,19 @@ namespace PressPlay.FFWD
     public class Material : Asset
     {
         [ContentSerializer]
-        private string shader { get; set; }
+        private string shader;
         [ContentSerializer]
-        public int renderQueue { get; set; }
+        public int renderQueue;
         [ContentSerializer(Optional = true)]
-        public Color color { get; set; }
+        public Color color;
         [ContentSerializer(Optional = true)]
-        public string mainTexture { get; set; }
+        public string mainTexture;
         [ContentSerializer(Optional = true)]
-        public Vector2 mainTextureOffset { get; set; }
+        public Vector2 mainTextureOffset;
         [ContentSerializer(Optional = true)]
-        public Vector2 mainTextureScale { get; set; }
+        public Vector2 mainTextureScale;
+        [ContentSerializer(Optional = true)]
+        internal bool wrapRepeat;
 
         [ContentSerializerIgnore]
         public Texture2D texture;
@@ -62,6 +64,14 @@ namespace PressPlay.FFWD
             if (device.BlendState != blendState)
             {
                 device.BlendState = blendState;
+            }
+            if (wrapRepeat)
+            {
+                device.SamplerStates[0] = SamplerState.LinearWrap;
+            }
+            else
+            {
+                device.SamplerStates[0] = SamplerState.LinearClamp;
             }
         }
 
