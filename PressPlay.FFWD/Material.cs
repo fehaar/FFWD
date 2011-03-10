@@ -65,6 +65,15 @@ namespace PressPlay.FFWD
             {
                 device.BlendState = blendState;
             }
+            if (renderQueue >= 3000)
+            {
+                device.DepthStencilState = DepthStencilState.DepthRead;
+            }
+            else
+            {
+                device.DepthStencilState = DepthStencilState.Default;
+            }
+
             if (wrapRepeat)
             {
                 device.SamplerStates[0] = SamplerState.LinearWrap;
