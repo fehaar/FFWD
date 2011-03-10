@@ -306,6 +306,8 @@ namespace PressPlay.FFWD.Components
             }
             #endregion
 
+            BasicEffect.View = view;
+            BasicEffect.Projection = projectionMatrix;
             int q = 0;
             for (int i = 0; i < renderQueue.Count; i++)
             {

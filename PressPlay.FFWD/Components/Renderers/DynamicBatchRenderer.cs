@@ -82,8 +82,6 @@ namespace PressPlay.FFWD.Components
             }
 
             cam.BasicEffect.World = Matrix.Identity;
-            cam.BasicEffect.View = cam.view;
-            cam.BasicEffect.Projection = cam.projectionMatrix;
             cam.BasicEffect.VertexColorEnabled = false;
 
             currentMaterial.SetTextureState(cam.BasicEffect);
