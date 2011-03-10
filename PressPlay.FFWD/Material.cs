@@ -42,7 +42,6 @@ namespace PressPlay.FFWD
             blendState = BlendState.Opaque;
             if (shader == "iPhone/Particles/Additive Culled")
             {
-                color = new Color(color.r, color.g, color.b, Mathf.Clamp01(color.a * 3));
                 blendState = BlendState.Additive;
             } 
             else if (renderQueue == 3000 || shader == "TransperantNoLight")
