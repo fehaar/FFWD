@@ -185,7 +185,7 @@ namespace PressPlay.FFWD.Import
                 mesh.triangles[i] = (short)geometry.Indices[i];
             }
 
-            BoundingSphere sphere = BoundingSphere.CreateFromPoints(mesh.vertices);
+            mesh.boundingSphere = BoundingSphere.CreateFromPoints(mesh.vertices);
 
             // Add the new piece of geometry to our output model.
             meshData.meshParts.Add(name, mesh);
