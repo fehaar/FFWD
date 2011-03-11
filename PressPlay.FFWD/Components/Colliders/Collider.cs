@@ -19,6 +19,10 @@ namespace PressPlay.FFWD.Components
         [ContentSerializerIgnore]
         public Body connectedBody;
 
+        /// <summary>
+        /// Do we allow the game to turn off the collider when the game object becomes inactive.
+        /// Usually this is not needed, as it can be a costly affair. So only do it when nessecary.
+        /// </summary>
         [ContentSerializerIgnore]
         public bool allowTurnOff = false;
 
