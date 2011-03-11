@@ -148,7 +148,7 @@ namespace PressPlay.FFWD
                 }
                 if (memInfo[i].FieldType.IsArray && typeof(UnityObject).IsAssignableFrom(memInfo[i].FieldType.GetElementType()))
                 {
-                    UnityObject[] arr = (memInfo[i].GetValue(objectToFix) as UnityObject[]);
+                    UnityObject[] arr = (memInfo[i].GetValue(objectToFix) as UnityObject[]).Clone() as UnityObject[];
                     if (arr != null)
                     {
                         for (int j = 0; j < arr.Length; j++)
@@ -165,6 +165,7 @@ namespace PressPlay.FFWD
                             }
                         }
                     }
+                    memInfo[i].SetValue(objectToFix, arr);
                 }
                 if (Application.fixReferences.Contains(memInfo[i].FieldType.Name))
                 {
