@@ -217,9 +217,10 @@ namespace Box2D.XNA
 	    /// @param shape the shape to be cloned.
 	    /// @param density the shape density (set to zero for static bodies).
 	    /// @warning This function is locked during callbacks.
-	    public Fixture CreateFixture(Shape shape, float density)
+	    public Fixture CreateFixture(Shape shape, float density, bool isSensor)
         {
             FixtureDef def = new FixtureDef();
+            def.isSensor = isSensor;
             def.shape = shape;
             def.density = density;
 

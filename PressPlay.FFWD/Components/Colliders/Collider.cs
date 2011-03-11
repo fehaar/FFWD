@@ -19,6 +19,9 @@ namespace PressPlay.FFWD.Components
         [ContentSerializerIgnore]
         public Body connectedBody;
 
+        [ContentSerializerIgnore]
+        public bool allowTurnOff = false;
+
         protected Vector3 lastResizeScale;
 
         public Bounds bounds

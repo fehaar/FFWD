@@ -19,6 +19,7 @@ namespace PressPlay.FFWD
         public static bool ShowParticleAnimTime = false;
         public static bool ShowPerformanceBreakdown = true;
         public static bool ShowFPSCounter = true;
+        public static bool ShowBodyCounter = true;
         public static bool ShowDebugDisplays = true;
         public static bool ShowDebugLines = true;
         public static bool LogActivatedComponents = false;

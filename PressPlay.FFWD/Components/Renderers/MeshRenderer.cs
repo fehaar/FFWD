@@ -52,6 +52,7 @@ namespace PressPlay.FFWD.Components
 
                 Matrix world = transform.world;
                 cam.BasicEffect.World = world;
+                cam.BasicEffect.VertexColorEnabled = false;
                 material.SetBlendState(device);
                 material.SetTextureState(cam.BasicEffect);
                 foreach (EffectPass pass in cam.BasicEffect.CurrentTechnique.Passes)

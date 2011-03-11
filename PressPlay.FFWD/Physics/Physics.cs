@@ -32,8 +32,8 @@ namespace PressPlay.FFWD
 
         private static bool isPaused = false;
         private static IContactProcessor contactProcessor;
-        public static int velocityIterations = 3;
-        public static int positionIterations = 3;
+        public static int velocityIterations = 2;
+        public static int positionIterations = 2;
 
         #region FFWD specific methods
         public static void Initialize()
@@ -88,13 +88,19 @@ namespace PressPlay.FFWD
                         //TODO: Resize body shape to the current transform.scale of the components game object. Maybe this should be done before physics update. It should only be hard coded in AddCollider in static objects
                         //comp.collider.ResizeConnectedBody();
                     }
-                    if (bodyType != BodyType.Static)
-                    {
-                        body.SetActive(comp.gameObject.active);
-                    }
+                    //if (bodyType != BodyType.Static)
+                    //{
+                    //    body.SetActive(comp.gameObject.active);
+                    //}
                 }
                 body = body.GetNext();
             }
+#if DEBUG
+            if (ApplicationSettings.ShowBodyCounter)
+	        {
+                Debug.Display("Body count", world.BodyCount);
+	        }
+#endif
 
             world.Step(elapsedTime, velocityIterations, positionIterations);
 
@@ -171,8 +177,7 @@ namespace PressPlay.FFWD
             }
             PolygonShape shp = new PolygonShape();
             shp.SetAsBox(width / 2, height / 2, position, angle);
-            Fixture fix = body.CreateFixture(shp, density);
-            fix.SetSensor(isTrigger);
+            Fixture fix = body.CreateFixture(shp, density, isTrigger);
             return body;
         }
 
@@ -183,8 +188,7 @@ namespace PressPlay.FFWD
                 throw new InvalidOperationException("You have to Initialize the Physics system before adding bodies");
             }
             CircleShape shp = new CircleShape() { _radius = radius, _p = position };
-            Fixture fix = body.CreateFixture(shp, density);
-            fix.SetSensor(isTrigger);
+            Fixture fix = body.CreateFixture(shp, density, isTrigger);
             return body;
         }
 
@@ -196,8 +200,7 @@ namespace PressPlay.FFWD
             }
             PolygonShape shp = new PolygonShape();
             shp.Set(vertices, vertices.Length);
-            Fixture fix = body.CreateFixture(shp, density);
-            fix.SetSensor(isTrigger);
+            Fixture fix = body.CreateFixture(shp, density, isTrigger);
             return body;
         }
 
@@ -214,8 +217,7 @@ namespace PressPlay.FFWD
                 {
                     PolygonShape shp = new PolygonShape();
                     shp.Set(tri, tri.Length);
-                    Fixture fix = body.CreateFixture(shp, density);
-                    fix.SetSensor(isTrigger);
+                    Fixture fix = body.CreateFixture(shp, density, isTrigger);
                 }
                 catch (Exception ex)
                 {
