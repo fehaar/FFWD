@@ -38,8 +38,6 @@ namespace PressPlay.FFWD.Components
                 return cam.BatchRender(filter, material, transform);
             }
 
-            Matrix world = transform.world;
-
             // Draw the model.
             ModelMesh mesh = filter.GetModelMesh();
             if (mesh != null)
@@ -51,28 +49,27 @@ namespace PressPlay.FFWD.Components
                 }
 #endif
 
-                material.SetBlendState(device);
 
-                for (int e = 0; e < mesh.Effects.Count; e++)
+                Matrix world = transform.world;
+                cam.BasicEffect.World = world;
+                material.SetBlendState(device);
+                material.SetTextureState(cam.BasicEffect);
+                foreach (EffectPass pass in cam.BasicEffect.CurrentTechnique.Passes)
                 {
-                    BasicEffect effect = mesh.Effects[e] as BasicEffect;
-                    effect.World = world;
-                    effect.View = cam.view;
-                    effect.Projection = cam.projectionMatrix;
-                    effect.LightingEnabled = false;
-                    if (material.texture != null)
+                    pass.Apply();
+                    for (int i = 0; i < mesh.MeshParts.Count; i++)
                     {
-                        effect.TextureEnabled = true;
-                        effect.Texture = material.texture;
-                    }
-                    else
-                    {
-                        effect.DiffuseColor = (Vector3)material.color;
-                    }
-                    foreach (EffectPass pass in effect.CurrentTechnique.Passes)
-                    {
-                        pass.Apply();
-                        mesh.Draw();
+                        ModelMeshPart part = mesh.MeshParts[i];
+                        device.SetVertexBuffer(part.VertexBuffer);
+                        device.Indices = part.IndexBuffer;
+                        device.DrawIndexedPrimitives(
+                            PrimitiveType.TriangleList,
+                            part.VertexOffset,
+                            0,
+                            part.NumVertices,
+                            part.StartIndex,
+                            part.PrimitiveCount
+                        );
                     }
                 }
                 return 1;
