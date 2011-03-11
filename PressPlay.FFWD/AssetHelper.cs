@@ -110,10 +110,10 @@ namespace PressPlay.FFWD
             //Load<T>(name);
         }
 
-        public void PreloadInstant<T>(string name)
+        public T PreloadInstant<T>(string name)
         {
             staticAssets.Add(name);
-            Load<T>(name);
+            return Load<T>(name);
         }
     }
 }
