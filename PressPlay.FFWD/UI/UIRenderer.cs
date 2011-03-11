@@ -42,7 +42,7 @@ namespace PressPlay.FFWD.UI
         internal static int doRender(GraphicsDevice device)
         {
             int estDrawCalls = 0;
-            Camera.spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+            Camera.spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullCounterClockwise);
             for (int i = 0; i < uiRenderQueue.Count; i++)
             {
                 if (uiRenderQueue[i].gameObject == null)

@@ -10,49 +10,39 @@ namespace PressPlay.FFWD.Components
 {
     public class StaticBatchRenderer : Renderer
     {
-        public short[] triangles;
-        public float[] vertices;
-        [ContentSerializer(Optional=true)]
-        public float[] normals;
-        public float[] uv;
+        [ContentSerializer]
+        internal BoundingSphere boundingSphere;
+
+        [ContentSerializer]
+        internal VertexPositionTexture[] vertices;
+        [ContentSerializer]
+        internal short[] indices;
 
         private VertexBuffer vertexBuffer;
         private IndexBuffer indexBuffer;
 
-        public override void Awake()
+        public override void  Awake()
         {
-            base.Awake();
-            if (vertexBuffer == null)
-            {
-                VertexPositionTexture[] buffer = new VertexPositionTexture[vertices.Length / 3];
-                for (int i = 0; i < vertices.Length / 3; i++)
-                {
-                    int vertexIndex = i * 3;
-                    int texCoordIndex = i * 2;
-                    buffer[i] = new VertexPositionTexture(
-                        new Microsoft.Xna.Framework.Vector3(vertices[vertexIndex], -vertices[vertexIndex + 1], vertices[vertexIndex + 2]),
-                        new Microsoft.Xna.Framework.Vector2(uv[texCoordIndex], 1 - uv[texCoordIndex + 1])
-                        );
-                }
+ 	        base.Awake();
 
-                vertexBuffer = new VertexBuffer(Application.screenManager.GraphicsDevice, typeof(VertexPositionTexture), buffer.Length, BufferUsage.WriteOnly);
-                vertexBuffer.SetData(buffer);
-                indexBuffer = new IndexBuffer(Application.screenManager.GraphicsDevice, IndexElementSize.SixteenBits, triangles.Length, BufferUsage.WriteOnly);
-                indexBuffer.SetData(triangles);
-
-                triangles = null;
-                vertices = null;
-                normals = null;
-                uv = null;
-            }
+            vertexBuffer = new VertexBuffer(Application.screenManager.GraphicsDevice, typeof(VertexPositionTexture), vertices.Length, BufferUsage.WriteOnly);
+            vertexBuffer.SetData(vertices);
+            indexBuffer = new IndexBuffer(Application.screenManager.GraphicsDevice, IndexElementSize.SixteenBits, indices.Length, BufferUsage.WriteOnly);
+            indexBuffer.SetData(indices);
         }
 
         public override int Draw(GraphicsDevice device, Camera cam)
         {
-            //RasterizerState oldrasterizerState = device.RasterizerState;
-            //RasterizerState rasterizerState = new RasterizerState();
-            //rasterizerState.CullMode = CullMode.CullCounterClockwiseFace;
-            //device.RasterizerState = rasterizerState;
+            if (cam.DoFrustumCulling(ref boundingSphere))
+            {
+#if DEBUG
+                if (Camera.logRenderCalls)
+                {
+                    Debug.LogFormat("VP cull static batch {0} with radius {1} pos {2} cam {3} at {4}", gameObject, boundingSphere.Radius, transform.position, cam.gameObject, cam.transform.position);
+                }
+#endif
+                return 0;
+            }
 
 #if DEBUG
             if (Camera.logRenderCalls)
@@ -84,8 +74,6 @@ namespace PressPlay.FFWD.Components
                     indexBuffer.IndexCount / 3
                 );
             }
-
-            //device.RasterizerState = oldrasterizerState;
             return 1;
         }
     }

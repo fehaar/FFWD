@@ -247,8 +247,6 @@ namespace PressPlay.FFWD.Components
             }
 
             device.BlendState = BlendState.Opaque;
-            device.DepthStencilState = DepthStencilState.Default;
-            device.SamplerStates[0] = SamplerState.LinearClamp;
             if (wireframeRender)
             {
                 RasterizerState state = new RasterizerState();
