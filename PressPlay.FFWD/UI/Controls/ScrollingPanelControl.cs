@@ -27,15 +27,13 @@ namespace PressPlay.FFWD.UI.Controls
 
         public override void Update()
         {
-
-            /*
+            
             scrollTracker.CanvasRect.X = bounds.X;
             scrollTracker.CanvasRect.Y = bounds.Y;
-            scrollTracker.CanvasRect.Width = bounds.Width;
+            scrollTracker.CanvasRect.Width = 800;
             scrollTracker.CanvasRect.Height = bounds.Height;
-            */
-
-            scrollTracker.CanvasRect = bounds;
+            
+            //scrollTracker.CanvasRect = bounds;
             scrollTracker.Update();
             
             base.Update();

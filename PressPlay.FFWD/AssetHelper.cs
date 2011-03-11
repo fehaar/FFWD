@@ -36,7 +36,14 @@ namespace PressPlay.FFWD
 
         public T Load<T>(string contentPath)
         {
-            return Load<T>(Application.loadedLevelName, contentPath);
+            if (staticAssets.Contains(contentPath))
+            {
+                return Load<T>("Static", contentPath);
+            }
+            else
+            {
+                return Load<T>(Application.loadedLevelName, contentPath);
+            }
         }
 
         public T Load<T>(string category, string contentPath)
@@ -103,10 +110,10 @@ namespace PressPlay.FFWD
             //Load<T>(name);
         }
 
-        public void PreloadInstant<T>(string name)
+        public T PreloadInstant<T>(string name)
         {
             staticAssets.Add(name);
-            Load<T>(name);
+            return Load<T>(name);
         }
     }
 }
