@@ -135,24 +135,29 @@ namespace PressPlay.FFWD
 
         public static void DrawLine(Vector3 start, Vector3 end, Color color)
         {
+#if DEBUG
             if (lines == null)
             {
                 lines = new List<Line>();
             }
             lines.Add(new Line(start, end, color));
+#endif
         }
 
         public static void DrawRay(Vector3 start, Vector3 direction, Color color)
         {
+#if DEBUG
             if (lines == null)
             {
                 lines = new List<Line>();
             }
             lines.Add(new Line(start, start + direction, color));
+#endif
         }
 
         public static void DrawFilledBox(Vector3 center, Vector3 size, Color color)
         {
+#if DEBUG
             Vector3 width = new Vector3(size.x, 0, 0) * 0.5f;
             Vector3 height = new Vector3(0, 0, size.z) * 0.5f;
 
@@ -175,14 +180,17 @@ namespace PressPlay.FFWD
 
             //Debug.DrawLine(center - width + height, center - width - height, color);
             //Debug.DrawLine(center + width - height, center - width - height, color);
+#endif
         }
 
         public static void DrawBox(Vector3 upperLeft, Vector3 upperRight, Vector3 lowerLeft, Vector3 lowerRight, Color color)
         {
+#if DEBUG
             Debug.DrawLine(upperLeft, upperRight, color);
             Debug.DrawLine(upperRight, lowerRight, color);
             Debug.DrawLine(lowerRight, lowerLeft, color);
             Debug.DrawLine(lowerLeft, upperLeft, color);
+#endif
         }
 
         private static BasicEffect effect;

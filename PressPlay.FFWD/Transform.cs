@@ -725,9 +725,11 @@ namespace PressPlay.FFWD
 
         public void DebugDrawLocal()
         {
+#if DEBUG
             Debug.DrawRay(position, forward, Color.blue);
             Debug.DrawRay(position, right, Color.red);
             Debug.DrawRay(position, up, Color.green);
+#endif
         }
     }
 }

@@ -24,9 +24,9 @@ namespace PressPlay.FFWD.Components
         private int currentVertexIndex = 0;
         private int currentIndexIndex = 0;
 
-        private VertexPositionNormalTexture[] vertexData = new VertexPositionNormalTexture[0];
-        private Microsoft.Xna.Framework.Vector3[] positionData = new Microsoft.Xna.Framework.Vector3[0];
-        private short[] indexData = new short[0];
+        private VertexPositionNormalTexture[] vertexData = new VertexPositionNormalTexture[20000];
+        private Microsoft.Xna.Framework.Vector3[] positionData = new Microsoft.Xna.Framework.Vector3[600];
+        private short[] indexData = new short[60000];
 
         /// <summary>
         /// Batch draw the current mesh filter.
@@ -120,6 +120,9 @@ namespace PressPlay.FFWD.Components
                 VertexPositionNormalTexture[] newVertexData = new VertexPositionNormalTexture[batchVertexSize];
                 vertexData.CopyTo(newVertexData, 0);
                 vertexData = newVertexData;
+#if DEBUG
+                Debug.LogWarning("Increased size of Dynamic vertex buffer to " + batchVertexSize);
+#endif
             }
             batchIndexSize += mesh.triangles.Length;
             if (indexData.Length < batchIndexSize)
@@ -127,11 +130,17 @@ namespace PressPlay.FFWD.Components
                 short[] newIndexData = new short[batchIndexSize];
                 indexData.CopyTo(newIndexData, 0);
                 indexData = newIndexData;
+#if DEBUG
+                Debug.LogWarning("Increased size of Dynamic index buffer to " + batchIndexSize);
+#endif
             }
 
             if (positionData.Length < mesh.vertices.Length)
             {
                 positionData = new Microsoft.Xna.Framework.Vector3[mesh.vertices.Length];
+#if DEBUG
+                Debug.LogWarning("Increased size of Dynamic position buffer to " + mesh.vertices.Length);
+#endif
             }
 
             if (transform != Matrix.Identity)

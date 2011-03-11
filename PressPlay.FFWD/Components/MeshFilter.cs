@@ -44,6 +44,14 @@ namespace PressPlay.FFWD.Components
         }
         //private VertexPositionTexture[] data = new VertexPositionTexture[0];
 
+        public override void Awake()
+        {
+            base.Awake();
+            // Do this to force the mesh to get cloned on awake if it is already set.
+            // If sharedMesh is changed later the clone will happen there.
+            Mesh mesh = this.mesh;
+        }
+
         internal bool CanBatch()
         {
             return (mesh != null && mesh.vertices != null);
