@@ -88,10 +88,10 @@ namespace PressPlay.FFWD
                         //TODO: Resize body shape to the current transform.scale of the components game object. Maybe this should be done before physics update. It should only be hard coded in AddCollider in static objects
                         //comp.collider.ResizeConnectedBody();
                     }
-                    //if (bodyType != BodyType.Static)
-                    //{
-                    //    body.SetActive(comp.gameObject.active);
-                    //}
+                    if (comp.collider.allowTurnOff)
+                    {
+                        body.SetActive(comp.gameObject.active);
+                    }
                 }
                 body = body.GetNext();
             }
