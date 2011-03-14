@@ -712,9 +712,9 @@ namespace FarseerPhysics.Common
                                         body.SetTransformIgnoreContacts(ref position, rotation);
                                     }
                                     break;
-                                case "userdata":
-                                    body.UserData = ReadSimpleType(sn, null, false);
-                                    break;
+                                //case "userdata":
+                                //    body.UserData = ReadSimpleType(sn, null, false);
+                                //    break;
                                 case "fixtures":
                                     {
                                         foreach (var v in sn.Elements)

@@ -235,9 +235,6 @@
     <Compile Include="Farseer\Common\ConvexHull\ChainHull.cs" />
     <Compile Include="Farseer\Common\ConvexHull\GiftWrap.cs" />
     <Compile Include="Farseer\Common\ConvexHull\Melkman.cs" />
-    <Compile Include="Farseer\Common\Curve.cs" />
-    <Compile Include="Farseer\Common\CurveKey.cs" />
-    <Compile Include="Farseer\Common\CurveKeyCollection.cs" />
     <Compile Include="Farseer\Common\Decomposition\BayazitDecomposer.cs" />
     <Compile Include="Farseer\Common\Decomposition\CDTDecomposer.cs" />
     <Compile Include="Farseer\Common\Decomposition\CDT\Delaunay\DelaunayTriangle.cs" />
@@ -271,8 +268,6 @@
     <Compile Include="Farseer\Common\HashSet.cs" />
     <Compile Include="Farseer\Common\LineTools.cs" />
     <Compile Include="Farseer\Common\Math.cs" />
-    <Compile Include="Farseer\Common\MathHelper.cs" />
-    <Compile Include="Farseer\Common\Matrix.cs" />
     <Compile Include="Farseer\Common\Path.cs" />
     <Compile Include="Farseer\Common\PathManager.cs" />
     <Compile Include="Farseer\Common\PhysicsLogic\Explosion.cs" />
@@ -285,8 +280,6 @@
     <Compile Include="Farseer\Common\TextureTools\MarchingSquares.cs" />
     <Compile Include="Farseer\Common\TextureTools\MSTerrain.cs" />
     <Compile Include="Farseer\Common\TextureTools\TextureConverter.cs" />
-    <Compile Include="Farseer\Common\Vector2.cs" />
-    <Compile Include="Farseer\Common\Vector3.cs" />
     <Compile Include="Farseer\Common\Vertices.cs" />
     <Compile Include="Farseer\Controllers\AbstractForceController.cs" />
     <Compile Include="Farseer\Controllers\BuoyancyController.cs" />

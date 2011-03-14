@@ -19,7 +19,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
         [Test]
         public void WeCanSetTheInitialGravityByInitializingExplicitly()
         {
-            Physics.Initialize(PressPlay.FFWD.Vector2.one, null);
+            Physics.Initialize(PressPlay.FFWD.Vector2.one);
             Assert.That(Physics.world.Gravity, Is.EqualTo(Microsoft.Xna.Framework.Vector2.One));
         }
     }

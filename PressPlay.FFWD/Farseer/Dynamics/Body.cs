@@ -104,7 +104,7 @@ namespace FarseerPhysics.Dynamics
         {
         }
 
-        public Body(World world, object userData)
+        public Body(World world, PressPlay.FFWD.Component userData)
         {
             FixtureList = new List<Fixture>(32);
             BodyId = _bodyIdCounter++;
@@ -426,7 +426,7 @@ namespace FarseerPhysics.Dynamics
         /// Set the user data. Use this to store your application specific data.
         /// </summary>
         /// <value>The user data.</value>
-        public object UserData { get; set; }
+        public PressPlay.FFWD.Component UserData { get; set; }
 
         /// <summary>
         /// Get the world body origin position.

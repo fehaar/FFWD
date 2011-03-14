@@ -272,15 +272,15 @@ namespace FarseerPhysics.Common.PhysicsLogic
                                       if (!IsActiveOn(body))
                                           return 0;
 
-                                      if (body.UserData != null)
-                                      {
-                                          int index = (int) body.UserData;
-                                          if (index == 0)
-                                          {
-                                              // filter
-                                              return -1.0f;
-                                          }
-                                      }
+                                      //if (body.UserData != null)
+                                      //{
+                                      //    int index = (int) body.UserData;
+                                      //    if (index == 0)
+                                      //    {
+                                      //        // filter
+                                      //        return -1.0f;
+                                      //    }
+                                      //}
 
                                       hitClosest = true;
                                       shape = f;

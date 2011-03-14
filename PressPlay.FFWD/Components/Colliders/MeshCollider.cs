@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Box2D.XNA;
+using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -28,14 +28,9 @@ namespace PressPlay.FFWD.Components
             }
         }
 
-        internal override BodyDef GetBodyDefinition()
-        {
-            return new BodyDef() { position = transform.position, angle = -MathHelper.ToRadians(transform.rotation.eulerAngles.y), userData = this };
-        }
-
         internal override void AddCollider(Body body, float mass)
         {
-            List<Vector2[]> tris = new List<Vector2[]>();
+            List<Microsoft.Xna.Framework.Vector2[]> tris = new List<Microsoft.Xna.Framework.Vector2[]>();
             for (int i = 0; i < triangles.Length; i += 3)
             {
                 if (vertices[triangles[i]].y + vertices[triangles[i + 1]].y + vertices[triangles[i + 2]].y > 1)
@@ -44,10 +39,10 @@ namespace PressPlay.FFWD.Components
                     Debug.Log(" Warning: " + ToString() + " has non zero Y in collider");
 #endif
                 }
-                Vector2[] tri = new Vector2[] { 
-                    new Vector2(vertices[triangles[i]].x * transform.lossyScale.x, vertices[triangles[i]].z * transform.lossyScale.z),
-                    new Vector2(vertices[triangles[i + 2]].x * transform.lossyScale.x, vertices[triangles[i + 2]].z * transform.lossyScale.z),
-                    new Vector2(vertices[triangles[i + 1]].x * transform.lossyScale.x, vertices[triangles[i + 1]].z * transform.lossyScale.z)
+                Microsoft.Xna.Framework.Vector2[] tri = new Microsoft.Xna.Framework.Vector2[] { 
+                    new Microsoft.Xna.Framework.Vector2(vertices[triangles[i]].x * transform.lossyScale.x, vertices[triangles[i]].z * transform.lossyScale.z),
+                    new Microsoft.Xna.Framework.Vector2(vertices[triangles[i + 2]].x * transform.lossyScale.x, vertices[triangles[i + 2]].z * transform.lossyScale.z),
+                    new Microsoft.Xna.Framework.Vector2(vertices[triangles[i + 1]].x * transform.lossyScale.x, vertices[triangles[i + 1]].z * transform.lossyScale.z)
                 };
                 tris.Add(tri);
             }
