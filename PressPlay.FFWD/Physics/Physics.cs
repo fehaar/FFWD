@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Box2D.XNA;
+using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
 using PressPlay.FFWD.Components;
 using PressPlay.FFWD.Interfaces;
+using FarseerPhysics.Collision;
 
 namespace PressPlay.FFWD
 {
@@ -154,8 +155,8 @@ namespace PressPlay.FFWD
 
         public static Bounds BoundsFromAABB(AABB aabb, float width)
         {
-            Vector2 center = aabb.GetCenter();
-            Vector2 size = aabb.GetExtents();
+            Vector2 center = aabb.Center;
+            Vector2 size = aabb.Extents;
             return new Bounds(new Vector3(center.x, 0, center.y),new Vector3(size.x*2, width, size.y*2));
         }
 

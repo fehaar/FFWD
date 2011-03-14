@@ -1,8 +1,8 @@
-﻿using Box2D.XNA;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using PressPlay.FFWD.Interfaces;
 using PressPlay.FFWD;
 using Microsoft.Xna.Framework.Graphics;
+using FarseerPhysics.Dynamics;
 
 namespace PressPlay.FFWD.Components
 {
