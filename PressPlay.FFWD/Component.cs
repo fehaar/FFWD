@@ -148,9 +148,10 @@ namespace PressPlay.FFWD
                 }
                 if (memInfo[i].FieldType.IsArray && typeof(UnityObject).IsAssignableFrom(memInfo[i].FieldType.GetElementType()))
                 {
-                    UnityObject[] arr = (memInfo[i].GetValue(objectToFix) as UnityObject[]).Clone() as UnityObject[];
+                    UnityObject[] arr = (memInfo[i].GetValue(objectToFix) as UnityObject[]); 
                     if (arr != null)
                     {
+                        arr = arr.Clone() as UnityObject[];
                         for (int j = 0; j < arr.Length; j++)
                         {
                             if ((arr[j] != null) && (arr[j].isPrefab))
