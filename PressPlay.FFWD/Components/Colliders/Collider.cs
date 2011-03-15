@@ -49,12 +49,12 @@ namespace PressPlay.FFWD.Components
         {
             if (rigidbody == null)
             {
-                Body body = Physics.AddBody();
-                body.Position = transform.position;
-                body.Rotation = -MathHelper.ToRadians(transform.rotation.eulerAngles.y);
-                body.UserData = this;
-                body.BodyType = (gameObject.isStatic) ? BodyType.Static : BodyType.Kinematic;
-                AddCollider(body, 1);
+                connectedBody = Physics.AddBody();
+                connectedBody.Position = transform.position;
+                connectedBody.Rotation = -MathHelper.ToRadians(transform.rotation.eulerAngles.y);
+                connectedBody.UserData = this;
+                connectedBody.BodyType = (gameObject.isStatic) ? BodyType.Static : BodyType.Kinematic;
+                AddCollider(connectedBody, 1);
             }
         }
 

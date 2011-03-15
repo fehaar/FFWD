@@ -55,7 +55,7 @@ namespace PressPlay.FFWD.Components
         {
             if (collider != null)
             {
-                Body body = Physics.AddBody();
+                body = Physics.AddBody();
                 body.Position = transform.position;
                 body.Rotation = -MathHelper.ToRadians(transform.rotation.eulerAngles.y);
                 body.UserData = this;
@@ -64,7 +64,6 @@ namespace PressPlay.FFWD.Components
                 body.LinearDamping = drag;
                 body.AngularDamping = angularDrag;
                 body.FixedRotation = freezeRotation;
-                body = Physics.AddBody();
                 collider.AddCollider(body, mass);
                 RescaleMass();
             }
