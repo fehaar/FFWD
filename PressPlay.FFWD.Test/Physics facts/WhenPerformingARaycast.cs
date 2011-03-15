@@ -21,7 +21,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
         public void WeCanDetermineAColliderHit()
         {
             Body body = Physics.AddBody();
-            Physics.AddBox(body, false, 10, 10, new Vector2(0, 50), 0, 1);
+            Physics.AddBox(body, false, 10, 10, new Vector2(0, 50), 1);
             bool hit = Physics.Raycast(Vector2.zero, Vector2.up, 100, 0);
             Assert.That(hit, Is.True);
         }
@@ -30,7 +30,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
         public void WeCanDetermineAColliderHitUsing3d()
         {
             Body body = Physics.AddBody();
-            Physics.AddBox(body, false, 10, 10, new Vector2(0, 50), 0, 1);
+            Physics.AddBox(body, false, 10, 10, new Vector2(0, 50), 1);
             bool hit = Physics.Raycast(Vector3.zero, -Vector3.forward, 100, 0);
             Assert.That(hit, Is.True);
         }
@@ -39,7 +39,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
         public void WeCanDetermineAColliderHitUsingRay()
         {
             Body body = Physics.AddBody();
-            Physics.AddBox(body, false, 10, 10, new Vector2(0, 50), 0, 1);
+            Physics.AddBox(body, false, 10, 10, new Vector2(0, 50), 1);
             Ray ray = new Ray(Vector3.zero, -Vector3.forward);
             bool hit = Physics.Raycast(ray, 100, 0);
             Assert.That(hit, Is.True);
@@ -49,7 +49,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
         public void WeCanMissAllColliders()
         {
             Body body = Physics.AddBody();
-            Physics.AddBox(body, false, 10, 10, new Vector2(0, 50), 0, 1);
+            Physics.AddBox(body, false, 10, 10, new Vector2(0, 50), 1);
             bool hit = Physics.Raycast(Vector2.zero, Vector2.right, 100, 0);
             Assert.That(hit, Is.False);
         }
@@ -58,7 +58,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
         public void WeCanMissAllCollidersUsing3d()
         {
             Body body = Physics.AddBody();
-            Physics.AddBox(body, false, 10, 10, new Vector2(0, 50), 0, 1);
+            Physics.AddBox(body, false, 10, 10, new Vector2(0, 50), 1);
             bool hit = Physics.Raycast(Vector2.zero, Vector2.right, 100, 0);
             Assert.That(hit, Is.False);
         }
@@ -67,7 +67,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
         public void WeCanMissAllCollidersUsingRay()
         {
             Body body = Physics.AddBody();
-            Physics.AddBox(body, false, 10, 10, new Vector2(0, 50), 0, 1);
+            Physics.AddBox(body, false, 10, 10, new Vector2(0, 50), 1);
             Ray ray = new Ray(Vector3.zero, Vector3.right);
             bool hit = Physics.Raycast(ray, 100, 0);
             Assert.That(hit, Is.False);
@@ -77,7 +77,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
         public void WeWillNotHitAColliderIfTheRayStartsInsideIt()
         {
             Body body = Physics.AddBody();
-            Physics.AddBox(body, false, 10, 10, new Vector2(0, 0), 0, 1);
+            Physics.AddBox(body, false, 10, 10, new Vector2(0, 0), 1);
             bool hit = Physics.Raycast(Vector2.zero, Vector2.up, 100, 0);
             Assert.That(hit, Is.False);
         }
@@ -86,7 +86,7 @@ namespace PressPlay.FFWD.Test.Physics_facts
         public void WeCanGetHitInfoOnTheObjectThatWasHit()
         {
             Body body = Physics.AddBody();
-            Physics.AddBox(body, false, 10, 10, new Vector2(0, 50), 0, 1);
+            Physics.AddBox(body, false, 10, 10, new Vector2(0, 50), 1);
             RaycastHit hit = new RaycastHit();
             bool hasHit = Physics.Raycast(Vector2.zero, Vector2.up, out hit, 100, 0);
             Assert.That(hasHit, Is.True);
@@ -101,8 +101,8 @@ namespace PressPlay.FFWD.Test.Physics_facts
         {
             Body body = Physics.AddBody();
             Body body1 = Physics.AddBody();
-            Physics.AddBox(body, false, 10, 10, new Vector2(0, 20), 0, 1);
-            Physics.AddBox(body1, false, 10, 10, new Vector2(0, 50), 0, 1);
+            Physics.AddBox(body, false, 10, 10, new Vector2(0, 20), 1);
+            Physics.AddBox(body1, false, 10, 10, new Vector2(0, 50), 1);
             RaycastHit hit = new RaycastHit();
             bool hasHit = Physics.Raycast(Vector2.zero, Vector2.up, out hit, 100, 0);
             Assert.That(hasHit, Is.True);
@@ -114,8 +114,8 @@ namespace PressPlay.FFWD.Test.Physics_facts
         {
             Body body = Physics.AddBody();
             Body body1 = Physics.AddBody();
-            Physics.AddBox(body1, false, 10, 10, new Vector2(0, 50), 0, 1);
-            Physics.AddBox(body, false, 10, 10, new Vector2(0, 20), 0, 1);
+            Physics.AddBox(body1, false, 10, 10, new Vector2(0, 50), 1);
+            Physics.AddBox(body, false, 10, 10, new Vector2(0, 20), 1);
             RaycastHit[] hits = Physics.RaycastAll(Vector2.zero, Vector2.up, 100, 0);
             Assert.That(hits.Length, Is.EqualTo(2));
         }
@@ -136,8 +136,8 @@ namespace PressPlay.FFWD.Test.Physics_facts
         {
             Body body = Physics.AddBody();
             Body body1 = Physics.AddBody();
-            Physics.AddBox(body1, false, 10, 10, new Vector2(0, 50), 0, 1);
-            Physics.AddBox(body, false, 10, 10, new Vector2(0, 20), 0, 1);
+            Physics.AddBox(body1, false, 10, 10, new Vector2(0, 50), 1);
+            Physics.AddBox(body, false, 10, 10, new Vector2(0, 20), 1);
             RaycastHit[] hits = Physics.RaycastAll(Vector2.zero, Vector2.up, 30, 0);
             Assert.That(hits.Length, Is.EqualTo(1));
         }
