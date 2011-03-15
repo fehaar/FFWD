@@ -157,7 +157,7 @@ namespace PressPlay.FFWD
                 throw new InvalidOperationException("You have to Initialize the Physics system before adding bodies");
             }
             Fixture fix = FixtureFactory.AttachRectangle(width, height, density, position, body);
-            fix.IsSensor = isTrigger;
+            fix.IsSensor = isTrigger;            
             return body;
         }
 
@@ -205,6 +205,20 @@ namespace PressPlay.FFWD
                 {
                     Debug.Log(body.UserData + ". Collider triangle is broken: " + verts[0] + "; " + verts[1] + "; " + verts[2] + ": " + ex.Message);
                 }
+            }
+            return body;
+        }
+
+        public static Body AddMesh(Body body, bool isTrigger, List<Vertices> tris, float density)
+        {
+            if (world == null)
+            {
+                throw new InvalidOperationException("You have to Initialize the Physics system before adding bodies");
+            }
+            List<Fixture> fixes = FixtureFactory.AttachCompoundPolygon(tris, density, body);
+            for (int i = 0; i < fixes.Count; i++)
+            {
+                fixes[i].IsSensor = isTrigger;
             }
             return body;
         }
