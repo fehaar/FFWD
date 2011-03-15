@@ -8,13 +8,15 @@ using PressPlay.FFWD.Interfaces;
 using FarseerPhysics.Collision;
 using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Common;
+using FarseerPhysics.Factories;
+using FarseerPhysics;
 
 namespace PressPlay.FFWD
 {
     public static class Physics
     {
         private static World _world;
-        internal static World world
+        public static World world
         {
             get
             {
@@ -24,7 +26,7 @@ namespace PressPlay.FFWD
                 }
                 return _world;
             }
-            set
+            internal set
             {
                 // TODO: If we have an old world we must dispose it properly
                 _world = value;
@@ -46,18 +48,22 @@ namespace PressPlay.FFWD
 
         public static void Initialize(Vector2 gravity)
         {
+#if DEBUG
+            Settings.EnableDiagnostics = true;
+#else
+            Settings.EnableDiagnostics = false;
+#endif
+            Settings.VelocityIterations = velocityIterations;
+            Settings.PositionIterations = positionIterations;
+            Settings.ContinuousPhysics = false;
+
             world = new World(gravity);
+            
             Physics.contactProcessor = new GameObjectContactProcessor();
+
             world.ContactManager.BeginContact = Physics.contactProcessor.BeginContact;
             world.ContactManager.EndContact = Physics.contactProcessor.EndContact;
-            //world.ContactListener = Physics.contactProcessor;
-            //world.ContinuousPhysics = true;
         }
-
-        //public static void SetContactFilter(IContactFilter filter)
-        //{
-        //    world.ContactFilter = filter;
-        //}
 
         public static void TogglePause()
         {
@@ -128,27 +134,6 @@ namespace PressPlay.FFWD
 
             contactProcessor.Update();
         }
-
-        //public static DebugDraw DebugDraw
-        //{
-        //    get
-        //    {
-        //        return world.DebugDraw;
-        //    }
-        //    set
-        //    {
-        //        world.DebugDraw = value;
-        //    }
-        //}
-
-        //public static void DoDebugDraw()
-        //{
-        //    if (world.DebugDraw != null)
-        //    {
-        //        DebugDraw.Reset();
-        //        world.DrawDebugData();
-        //    }
-        //}
         #endregion
 
         #region Helper methods to create physics objects
@@ -165,20 +150,18 @@ namespace PressPlay.FFWD
             return new Body(world);
         }
 
-        public static Body AddBox(Body body, bool isTrigger, float width, float height, Vector2 position, float angle, float density)
+        public static Body AddBox(Body body, bool isTrigger, float width, float height, Vector2 position, float density)
         {
             if (world == null)
             {
                 throw new InvalidOperationException("You have to Initialize the Physics system before adding bodies");
             }
-            PolygonShape shp = new PolygonShape(density);
-            shp.SetAsBox(width / 2, height / 2, position, angle);
-            Fixture fix = body.CreateFixture(shp);
+            Fixture fix = FixtureFactory.AttachRectangle(width, height, density, position, body);
             fix.IsSensor = isTrigger;
             return body;
         }
 
-        public static Body AddCircle(Body body, bool isTrigger, float radius, Vector2 position, float angle, float density)
+        public static Body AddCircle(Body body, bool isTrigger, float radius, Vector2 position, float density)
         {
             if (world == null)
             {
@@ -191,7 +174,7 @@ namespace PressPlay.FFWD
             return body;
         }
 
-        public static Body AddTriangle(Body body, bool isTrigger, Vertices vertices, float angle, float density)
+        public static Body AddTriangle(Body body, bool isTrigger, Vertices vertices, float density)
         {
             if (world == null)
             {
@@ -518,7 +501,14 @@ namespace PressPlay.FFWD
 
         public static void IgnoreCollision(Collider collider1, Collider collider2, bool ignore)
         {
-            // TODO: Create this method by using some sort of filtering in Box2D
+            if (ignore)
+            {
+                collider1.connectedBody.IgnoreCollisionWith(collider2.connectedBody);
+            }
+            else
+            {
+                collider1.connectedBody.RestoreCollisionWith(collider2.connectedBody);
+            }
         }
 
         internal static void RemoveStays(Collider collider)

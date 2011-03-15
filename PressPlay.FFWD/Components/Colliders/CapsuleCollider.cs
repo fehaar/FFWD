@@ -33,7 +33,7 @@ namespace PressPlay.FFWD.Components
                     return;
             }            
             sz *= (Vector2)gameObject.transform.lossyScale;
-            connectedBody = Physics.AddBox(body, isTrigger, sz.x, sz.y, center, 0, mass);
+            connectedBody = Physics.AddBox(body, isTrigger, sz.x, sz.y, center, mass);
         }
     }
 }
