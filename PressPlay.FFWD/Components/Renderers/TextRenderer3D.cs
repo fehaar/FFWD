@@ -35,6 +35,8 @@ namespace PressPlay.FFWD.Components
 
         private Vector3 cameraFront = new Vector3(0, 0, -1);
 
+        public float textSize = 1;
+
         public TextRenderer3D(SpriteFont font)
             : this("", font)
         {
@@ -55,9 +57,9 @@ namespace PressPlay.FFWD.Components
             Vector3 viewSpaceTextPosition = Microsoft.Xna.Framework.Vector3.Transform(transform.position, cam.view * invertY);
 
             Vector2 textOrigin = font.MeasureString(text) / 2;
-            const float textSize = 0.03f;
+            const float _textSize = 0.03f;
 
-            batch.DrawString(font, text, new Vector2(viewSpaceTextPosition.x, viewSpaceTextPosition.y), material.color, 0, textOrigin, textSize, 0, viewSpaceTextPosition.z);
+            batch.DrawString(font, text, new Vector2(viewSpaceTextPosition.x, viewSpaceTextPosition.y), material.color, 0, textOrigin, _textSize * textSize, 0, viewSpaceTextPosition.z);
             return 0;
         }        
     }
