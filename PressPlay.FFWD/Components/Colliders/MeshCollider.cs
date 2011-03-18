@@ -15,6 +15,16 @@ namespace PressPlay.FFWD.Components
 
         internal override void AddCollider(Body body, float mass)
         {
+            Microsoft.Xna.Framework.Vector2 scale = transform.lossyScale;
+            for (int i = 0; i < vertices.Count; i++)
+            {
+                Vertices v = vertices[i];
+                for (int j = 0; j < v.Count; j++)
+                {
+                    v[j] = v[j] * scale;
+                }
+            }
+
             connectedBody = Physics.AddMesh(body, isTrigger, vertices, mass);
         }
     }
