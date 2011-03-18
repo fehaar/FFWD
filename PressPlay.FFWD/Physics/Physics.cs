@@ -1,17 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Box2D.XNA;
+using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
 using PressPlay.FFWD.Components;
 using PressPlay.FFWD.Interfaces;
+using FarseerPhysics.Collision;
+using FarseerPhysics.Collision.Shapes;
+using FarseerPhysics.Common;
+using FarseerPhysics.Factories;
+using FarseerPhysics;
 
 namespace PressPlay.FFWD
 {
     public static class Physics
     {
         private static World _world;
-        internal static World world
+        public static World world
         {
             get
             {
@@ -21,7 +26,7 @@ namespace PressPlay.FFWD
                 }
                 return _world;
             }
-            set
+            internal set
             {
                 // TODO: If we have an old world we must dispose it properly
                 _world = value;
@@ -31,27 +36,33 @@ namespace PressPlay.FFWD
         public const int kDefaultRaycastLayers = -5;
 
         private static bool isPaused = false;
-        private static IContactProcessor contactProcessor;
+        private static GameObjectContactProcessor contactProcessor;
         public static int velocityIterations = 2;
         public static int positionIterations = 2;
 
         #region FFWD specific methods
         public static void Initialize()
         {
-            Initialize(Vector2.zero, null);
+            Initialize(Vector2.zero);
         }
 
-        public static void Initialize(Vector2 gravity, IContactProcessor contactProcessor)
+        public static void Initialize(Vector2 gravity)
         {
-            world = new World(gravity, true);
-            Physics.contactProcessor = contactProcessor ?? new GameObjectContactProcessor();
-            world.ContactListener = Physics.contactProcessor;
-            world.ContinuousPhysics = true;
-        }
+#if DEBUG
+            Settings.EnableDiagnostics = true;
+#else
+            Settings.EnableDiagnostics = false;
+#endif
+            Settings.VelocityIterations = velocityIterations;
+            Settings.PositionIterations = positionIterations;
+            Settings.ContinuousPhysics = false;
 
-        public static void SetContactFilter(IContactFilter filter)
-        {
-            world.ContactFilter = filter;
+            world = new World(gravity);
+            
+            Physics.contactProcessor = new GameObjectContactProcessor();
+
+            world.ContactManager.BeginContact = Physics.contactProcessor.BeginContact;
+            world.ContactManager.EndContact = Physics.contactProcessor.EndContact;
         }
 
         public static void TogglePause()
@@ -61,28 +72,27 @@ namespace PressPlay.FFWD
 
         public static void Update(float elapsedTime)
         {
-            Body body = world.GetBodyList();
-            while (body != null)
+            for (int i = world.BodyList.Count - 1; i >= 0; i--)
             {
-                Component comp = (Component)body.GetUserData();
+                Body body = world.BodyList[i];
+                Component comp = (Component)body.UserData;
                 if (!comp)
                 {
                     // The component containing the body has been destroyed - so remove the body.
-                    Body nextBody = body.GetNext();
-                    world.DestroyBody(body);
-                    body = nextBody;
+                    world.RemoveBody(body);
                     continue;
                 }
                 if (comp != null)
                 {
-                    BodyType bodyType = body.GetType();
+                    BodyType bodyType = body.BodyType;
                     if (comp.gameObject.active && bodyType == BodyType.Kinematic && !comp.gameObject.isStatic && comp.rigidbody == null)
                     {
                         float rad = -MathHelper.ToRadians(comp.transform.eulerAngles.y);
                         if (body.Position != (Microsoft.Xna.Framework.Vector2)comp.transform.position || body.Rotation != rad)
                         {
                             //body.SetTransform(comp.transform.position, rad);
-                            body.SetTransformIgnoreContacts(comp.transform.position, rad);
+                            Microsoft.Xna.Framework.Vector2 pos = comp.transform.position;
+                            body.SetTransformIgnoreContacts(ref pos, rad);
                         }
 
                         //TODO: Resize body shape to the current transform.scale of the components game object. Maybe this should be done before physics update. It should only be hard coded in AddCollider in static objects
@@ -90,63 +100,39 @@ namespace PressPlay.FFWD
                     }
                     if (comp.collider.allowTurnOff)
                     {
-                        body.SetActive(comp.gameObject.active);
+                        body.Enabled = comp.gameObject.active;
                     }
                 }
-                body = body.GetNext();
             }
 #if DEBUG
             if (ApplicationSettings.ShowBodyCounter)
 	        {
-                Debug.Display("Body count", world.BodyCount);
+                Debug.Display("Body count", world.BodyList.Count);
 	        }
 #endif
 
-            world.Step(elapsedTime, velocityIterations, positionIterations);
+            world.Step(elapsedTime);
 
-            // Sync positions of game objects
-            body = world.GetBodyList();
-            while (body != null)
+            for (int i = 0; i < world.BodyList.Count; i++)
             {
-                Component comp = (Component)body.GetUserData();
-              
+                Body body = world.BodyList[i];
+                Component comp = (Component)body.UserData;
+
                 if (comp != null)
                 {
-                    if (body.GetType() != BodyType.Static)
+                    if (body.BodyType != BodyType.Static)
                     {
                         if (comp.rigidbody != null)
                         {
-                            Box2D.XNA.Transform t;
+                            FarseerPhysics.Common.Transform t;
                             body.GetTransform(out t);
-                            comp.transform.SetPositionFromPhysics(t.Position, t.GetAngle());
+                            comp.transform.SetPositionFromPhysics(t.Position, t.Angle);
                         }
                     }
                 }
-                body = body.GetNext();
-            };
+            }
 
             contactProcessor.Update();
-        }
-
-        public static DebugDraw DebugDraw
-        {
-            get
-            {
-                return world.DebugDraw;
-            }
-            set
-            {
-                world.DebugDraw = value;
-            }
-        }
-
-        public static void DoDebugDraw()
-        {
-            if (world.DebugDraw != null)
-            {
-                DebugDraw.Reset();
-                world.DrawDebugData();
-            }
         }
         #endregion
 
@@ -154,57 +140,53 @@ namespace PressPlay.FFWD
 
         public static Bounds BoundsFromAABB(AABB aabb, float width)
         {
-            Vector2 center = aabb.GetCenter();
-            Vector2 size = aabb.GetExtents();
+            Vector2 center = aabb.Center;
+            Vector2 size = aabb.Extents;
             return new Bounds(new Vector3(center.x, 0, center.y),new Vector3(size.x*2, width, size.y*2));
         }
 
         public static Body AddBody()
         {
-            return world.CreateBody(new BodyDef());
+            return new Body(world);
         }
 
-        public static Body AddBody(BodyDef definition)
-        {
-            return world.CreateBody(definition);
-        }
-
-        public static Body AddBox(Body body, bool isTrigger, float width, float height, Vector2 position, float angle, float density)
+        public static Body AddBox(Body body, bool isTrigger, float width, float height, Vector2 position, float density)
         {
             if (world == null)
             {
                 throw new InvalidOperationException("You have to Initialize the Physics system before adding bodies");
             }
-            PolygonShape shp = new PolygonShape();
-            shp.SetAsBox(width / 2, height / 2, position, angle);
-            Fixture fix = body.CreateFixture(shp, density, isTrigger);
+            Fixture fix = FixtureFactory.AttachRectangle(width, height, density, position, body);
+            fix.IsSensor = isTrigger;            
             return body;
         }
 
-        public static Body AddCircle(Body body, bool isTrigger, float radius, Vector2 position, float angle, float density)
+        public static Body AddCircle(Body body, bool isTrigger, float radius, Vector2 position, float density)
         {
             if (world == null)
             {
                 throw new InvalidOperationException("You have to Initialize the Physics system before adding bodies");
             }
-            CircleShape shp = new CircleShape() { _radius = radius, _p = position };
-            Fixture fix = body.CreateFixture(shp, density, isTrigger);
+            CircleShape shp = new CircleShape(radius, density);
+            shp.Position = position;
+            Fixture fix = body.CreateFixture(shp);
+            fix.IsSensor = isTrigger;
             return body;
         }
 
-        public static Body AddTriangle(Body body, bool isTrigger, Vector2[] vertices, float angle, float density)
+        public static Body AddTriangle(Body body, bool isTrigger, Vertices vertices, float density)
         {
             if (world == null)
             {
                 throw new InvalidOperationException("You have to Initialize the Physics system before adding bodies");
             }
-            PolygonShape shp = new PolygonShape();
-            shp.Set(vertices, vertices.Length);
-            Fixture fix = body.CreateFixture(shp, density, isTrigger);
+            PolygonShape shp = new PolygonShape(vertices, density);
+            Fixture fix = body.CreateFixture(shp);
+            fix.IsSensor = isTrigger;
             return body;
         }
 
-        public static Body AddMesh(Body body, bool isTrigger, IEnumerable<Vector2[]> tris, float density)
+        public static Body AddMesh(Body body, bool isTrigger, List<Microsoft.Xna.Framework.Vector2[]> tris, float density)
         {
             if (world == null)
             {
@@ -212,17 +194,31 @@ namespace PressPlay.FFWD
             }
             for (int i = 0; i < tris.Count(); i++)
             {
-                Vector2[] tri = tris.ElementAt(i);
+                Vertices verts = new Vertices(tris.ElementAt(i));
                 try
                 {
-                    PolygonShape shp = new PolygonShape();
-                    shp.Set(tri, tri.Length);
-                    Fixture fix = body.CreateFixture(shp, density, isTrigger);
+                    PolygonShape shp = new PolygonShape(verts, density);
+                    Fixture fix = body.CreateFixture(shp);
+                    fix.IsSensor = isTrigger;
                 }
                 catch (Exception ex)
                 {
-                    Debug.Log(body._userData + ". Collider triangle is broken: " + tri[0] + "; " + tri[1] + "; " + tri[2] + ": " + ex.Message);
+                    Debug.Log(body.UserData + ". Collider triangle is broken: " + verts[0] + "; " + verts[1] + "; " + verts[2] + ": " + ex.Message);
                 }
+            }
+            return body;
+        }
+
+        public static Body AddMesh(Body body, bool isTrigger, List<Vertices> tris, float density)
+        {
+            if (world == null)
+            {
+                throw new InvalidOperationException("You have to Initialize the Physics system before adding bodies");
+            }
+            List<Fixture> fixes = FixtureFactory.AttachCompoundPolygon(tris, density, body);
+            for (int i = 0; i < fixes.Count; i++)
+            {
+                fixes[i].IsSensor = isTrigger;
             }
             return body;
         }
@@ -253,7 +249,7 @@ namespace PressPlay.FFWD
             }
             try
             {
-                world.RayCast(origin, pt2);
+                world.RayCast(RaycastHelper.rayCastCallback, origin, pt2);
             }
             catch (InvalidOperationException)
             {
@@ -299,7 +295,7 @@ namespace PressPlay.FFWD
             }
             try
             {
-                world.RayCast(origin, pt2);
+                world.RayCast(RaycastHelper.rayCastCallback, origin, pt2);
                 hitInfo = RaycastHelper.ClosestHit();
             }
             catch (InvalidOperationException)
@@ -385,7 +381,7 @@ namespace PressPlay.FFWD
             {
                 return new RaycastHit[0];
             }
-            world.RayCast(origin, pt2);
+            world.RayCast(RaycastHelper.rayCastCallback, origin, pt2);
 #if DEBUG
             Application.raycastTimer.Stop();
 #endif
@@ -422,7 +418,7 @@ namespace PressPlay.FFWD
 
             RaycastHelper.SetValues(float.MaxValue, true, layerMask);
 
-            AABB aabb = new AABB() { lowerBound = new Vector2(point.x - float.Epsilon, point.y - float.Epsilon), upperBound = new Vector2(point.x + float.Epsilon, point.y + float.Epsilon) };
+            AABB aabb = new AABB(new Vector2(point.x - float.Epsilon, point.y - float.Epsilon), new Vector2(point.x + float.Epsilon, point.y + float.Epsilon));
             world.QueryAABB(RaycastHelper.pointCastCallback, ref aabb);
             return RaycastHelper.HitCount > 0;
         }
@@ -439,7 +435,7 @@ namespace PressPlay.FFWD
 #endif
             RaycastHelper.SetValues(float.MaxValue, true, layerMask);
 
-            AABB aabb = new AABB() { lowerBound = new Vector2(point.x - float.Epsilon, point.y - float.Epsilon), upperBound = new Vector2(point.x + float.Epsilon, point.y + float.Epsilon) };
+            AABB aabb = new AABB(new Vector2(point.x - float.Epsilon, point.y - float.Epsilon), new Vector2(point.x + float.Epsilon, point.y + float.Epsilon));
             world.QueryAABB(RaycastHelper.pointCastCallback, ref aabb);
             if (RaycastHelper.HitCount > 0)
             {
@@ -475,7 +471,7 @@ namespace PressPlay.FFWD
                 hitInfo = new RaycastHit();
                 return false;
             }
-            world.RayCast(origin, pt2);
+            world.RayCast(RaycastHelper.rayCastCallback, origin, pt2);
             hitInfo = RaycastHelper.ClosestHit();
 #if DEBUG
             Application.raycastTimer.Stop();
@@ -519,7 +515,14 @@ namespace PressPlay.FFWD
 
         public static void IgnoreCollision(Collider collider1, Collider collider2, bool ignore)
         {
-            // TODO: Create this method by using some sort of filtering in Box2D
+            if (ignore)
+            {
+                collider1.connectedBody.IgnoreCollisionWith(collider2.connectedBody);
+            }
+            else
+            {
+                collider1.connectedBody.RestoreCollisionWith(collider2.connectedBody);
+            }
         }
 
         internal static void RemoveStays(Collider collider)

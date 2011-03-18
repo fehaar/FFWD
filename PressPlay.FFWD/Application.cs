@@ -165,7 +165,7 @@ namespace PressPlay.FFWD
             }
             
             base.Update(gameTime);
-            Time.Update((float)gameTime.ElapsedGameTime.TotalSeconds, (float)gameTime.TotalGameTime.TotalSeconds);
+            Time.FixedUpdate((float)gameTime.ElapsedGameTime.TotalSeconds, (float)gameTime.TotalGameTime.TotalSeconds);
             UpdateFPS(gameTime);
 
             if (isLoadingAssetBeforeSceneInitialize)
@@ -196,8 +196,6 @@ namespace PressPlay.FFWD
 #if DEBUG
             fixedUpdateTime.Start();
 #endif
-            Time.InitializeDeltaTimeFixedUpdate(); //sets deltaTime to return fixedDeltaTime
-
             AwakeNewComponents(false);
             StartComponents();
             ChangeComponentActivity();
@@ -233,7 +231,7 @@ namespace PressPlay.FFWD
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
-            Time.Draw();
+            Time.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
 
             hasDrawBeenCalled = true;
 
@@ -241,8 +239,6 @@ namespace PressPlay.FFWD
 #if DEBUG
             updateTime.Start();
 #endif
-
-            Time.InitializeDeltaTimeUpdate((float)gameTime.TotalGameTime.TotalSeconds); //sets deltaTime to return time since last update
 
             StartComponents();
             ChangeComponentActivity();

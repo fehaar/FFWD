@@ -1,8 +1,8 @@
-﻿using Box2D.XNA;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using PressPlay.FFWD.Interfaces;
 using PressPlay.FFWD;
 using Microsoft.Xna.Framework.Graphics;
+using FarseerPhysics.Dynamics;
 
 namespace PressPlay.FFWD.Components
 {
@@ -16,7 +16,7 @@ namespace PressPlay.FFWD.Components
         internal override void AddCollider(Body body, float mass)
         {
             Vector2 sz = (size * gameObject.transform.lossyScale);
-            connectedBody = Physics.AddBox(body, isTrigger, sz.x, sz.y, center * gameObject.transform.lossyScale, 0, mass);
+            connectedBody = Physics.AddBox(body, isTrigger, sz.x, sz.y, center * gameObject.transform.lossyScale, mass);
         }
     }
 }

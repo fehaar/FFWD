@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
-using Box2D.XNA;
+using FarseerPhysics.Dynamics;
 using PressPlay.FFWD;
 
 namespace PressPlay.FFWD.Components
@@ -30,7 +30,7 @@ namespace PressPlay.FFWD.Components
             {
                 if (body != null)
                 {
-                    _drag = body._linearDamping; 
+                    _drag = body.LinearDamping; 
                     
                 }
 
@@ -41,7 +41,7 @@ namespace PressPlay.FFWD.Components
                 _drag = value;
                 if (body != null)
                 {
-                    body._linearDamping = value;
+                    body.LinearDamping = value;
                 }
             } 
         }
@@ -55,14 +55,15 @@ namespace PressPlay.FFWD.Components
         {
             if (collider != null)
             {
-                BodyDef def = collider.GetBodyDefinition();
-                def.userData = this;
-                def.type = (isKinematic) ? BodyType.Kinematic : BodyType.Dynamic;
-                def.active = gameObject.active;
-                def.linearDamping = drag;
-                def.angularDamping = angularDrag;
-                def.fixedRotation = freezeRotation;
-                body = Physics.AddBody(def);
+                body = Physics.AddBody();
+                body.Position = transform.position;
+                body.Rotation = -MathHelper.ToRadians(transform.rotation.eulerAngles.y);
+                body.UserData = this;
+                body.BodyType = (isKinematic) ? BodyType.Kinematic : BodyType.Dynamic;
+                body.Enabled = gameObject.active;
+                body.LinearDamping = drag;
+                body.AngularDamping = angularDrag;
+                body.FixedRotation = freezeRotation;
                 collider.AddCollider(body, mass);
                 RescaleMass();
             }
@@ -76,13 +77,14 @@ namespace PressPlay.FFWD.Components
 
         private void RescaleMass()
         {
-            if (body != null && body.GetMass() > 0)
+            if (body != null && body.Mass > 0)
             {
-                float bodyMass = body.GetMass();
+                float bodyMass = body.Mass;
                 float massRatio = mass / bodyMass;
-                for (Fixture f = body.GetFixtureList(); f != null; f = f._next)
+                for (int i = 0; i < body.FixtureList.Count; i++)
                 {
-                    f._density *= massRatio;
+                    Fixture f = body.FixtureList[i];
+                    f.Shape.Density *= massRatio;
                 }
                 body.ResetMassData();
             }
@@ -97,13 +99,13 @@ namespace PressPlay.FFWD.Components
                 {
                     return Vector3.zero;
                 }
-                return body.GetLinearVelocity();
+                return body.LinearVelocity;
             }
             set
             {
                 if (body != null)
                 {
-                    body.SetLinearVelocity(value);
+                    body.LinearVelocity = value;
                 }
             }
         }
@@ -135,7 +137,8 @@ namespace PressPlay.FFWD.Components
             if (body != null)
             {
 //                body.SetTransform(position, body.GetAngle());
-                body.SetTransformIgnoreContacts(position, body.GetAngle());
+                Microsoft.Xna.Framework.Vector2 pos = position;
+                body.SetTransformIgnoreContacts(ref pos, body.Rotation);
                 Physics.RemoveStays(collider);
             }
         }

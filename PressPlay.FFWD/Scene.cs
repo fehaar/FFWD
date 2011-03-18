@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Box2D.XNA;
+using FarseerPhysics.Dynamics;
 using PressPlay.FFWD.Components;
 
 namespace PressPlay.FFWD

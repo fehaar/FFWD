@@ -51,7 +51,7 @@ namespace PressPlay.FFWD.Test.Core_framework.Invoke
         {
             comp.Invoke("DoSomething", 1);
 
-            Time.Update(1.0f, 1.0f);
+            Time.FixedUpdate(1.0f, 1.0f);
             Application.UpdateInvokeCalls();
 
             Assert.That(comp.invokeMethodCalled, Is.True);
@@ -62,7 +62,7 @@ namespace PressPlay.FFWD.Test.Core_framework.Invoke
         {
             comp.Invoke("DoSomething", 2);
 
-            Time.Update(1.0f, 1.0f);
+            Time.FixedUpdate(1.0f, 1.0f);
             Application.UpdateInvokeCalls();
 
             Assert.That(comp.invokeMethodCalled, Is.False);
@@ -73,7 +73,7 @@ namespace PressPlay.FFWD.Test.Core_framework.Invoke
         {
             comp.Invoke("DoSomething", 1);
 
-            Time.Update(1.0f, 1.0f);
+            Time.FixedUpdate(1.0f, 1.0f);
             Application.UpdateInvokeCalls();
 
             Assert.That(comp.IsInvoking("DoSomething"), Is.False);
@@ -84,9 +84,9 @@ namespace PressPlay.FFWD.Test.Core_framework.Invoke
         {
             comp.Invoke("DoSomething", 2);
 
-            Time.Update(1.0f, 1.0f);
+            Time.FixedUpdate(1.0f, 1.0f);
             Application.UpdateInvokeCalls();
-            Time.Update(1.0f, 1.0f);
+            Time.FixedUpdate(1.0f, 1.0f);
             Application.UpdateInvokeCalls();
 
             Assert.That(comp.invokeMethodCalled, Is.True);

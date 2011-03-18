@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Box2D.XNA;
+using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
+using FarseerPhysics.Collision;
 
 namespace PressPlay.FFWD.Components
 {
@@ -38,7 +39,9 @@ namespace PressPlay.FFWD.Components
                     return new Bounds(); 
                 }
 
-                return Physics.BoundsFromAABB(connectedBody._fixtureList._aabb, 10);
+                AABB aabb;
+                connectedBody.FixtureList[0].GetAABB(out aabb, 0);
+                return Physics.BoundsFromAABB(aabb, 10);
             }
         }
 
@@ -46,12 +49,12 @@ namespace PressPlay.FFWD.Components
         {
             if (rigidbody == null)
             {
-                BodyDef def = GetBodyDefinition();
-                def.userData = this;
-                def.type = (gameObject.isStatic) ? BodyType.Static : BodyType.Kinematic;
-                Body body = Physics.AddBody(def);
-                AddCollider(body, 1);
-                body.Rotation = -MathHelper.ToRadians(transform.rotation.eulerAngles.y);
+                connectedBody = Physics.AddBody();
+                connectedBody.Position = transform.position;
+                connectedBody.Rotation = -MathHelper.ToRadians(transform.rotation.eulerAngles.y);
+                connectedBody.UserData = this;
+                connectedBody.BodyType = (gameObject.isStatic) ? BodyType.Static : BodyType.Kinematic;
+                AddCollider(connectedBody, 1);
             }
         }
 
@@ -59,13 +62,8 @@ namespace PressPlay.FFWD.Components
         {
             if (connectedBody != null)
             {
-                connectedBody.SetType((isStatic) ? BodyType.Static : BodyType.Kinematic);
+                connectedBody.BodyType = (isStatic) ? BodyType.Static : BodyType.Kinematic;
             }
-        }
-
-        internal virtual BodyDef GetBodyDefinition()
-        {
-            return new BodyDef() { position = transform.position };
         }
 
         internal abstract void AddCollider(Body body, float mass);
@@ -74,18 +72,22 @@ namespace PressPlay.FFWD.Components
         {
             if (lastResizeScale == transform.lossyScale) { return; }
 
-            Fixture fixture = connectedBody.GetFixtureList();
-            connectedBody.DestroyFixture(fixture);
+            for (int i = 0; i < connectedBody.FixtureList.Count; i++)
+            {
+                Fixture fixture = connectedBody.FixtureList[i];
+                connectedBody.DestroyFixture(fixture);
+            }
             
-            AddCollider(connectedBody, connectedBody._mass);
+            AddCollider(connectedBody, connectedBody.Mass);
         }
 
         internal void MovePosition(Vector3 position)
         {
-            if (connectedBody != null && connectedBody.GetType() != BodyType.Static)
+            if (connectedBody != null && connectedBody.BodyType != BodyType.Static)
             {
                 //connectedBody.SetTransform(position, connectedBody.GetAngle());
-                connectedBody.SetTransformIgnoreContacts(position, connectedBody.GetAngle());
+                Microsoft.Xna.Framework.Vector2 pos = position;
+                connectedBody.SetTransformIgnoreContacts(ref pos, connectedBody.Rotation);
                 Physics.RemoveStays(this);
             }
         }

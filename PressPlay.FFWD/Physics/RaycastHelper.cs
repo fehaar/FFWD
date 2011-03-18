@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Box2D.XNA;
+using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
 using PressPlay.FFWD.Components;
 using PressPlay.FFWD;
@@ -30,10 +30,10 @@ namespace PressPlay.FFWD
             _didHit = false;;
         }
 
-        internal static float rayCastCallback(Fixture fixture, PressPlay.FFWD.Vector2 point, PressPlay.FFWD.Vector2 normal, float fraction)
+        internal static float rayCastCallback(Fixture fixture, Microsoft.Xna.Framework.Vector2 point, Microsoft.Xna.Framework.Vector2 normal, float fraction)
         {
             float dist = _distance * fraction;
-            UnityObject uo = fixture.GetBody().GetUserData() as UnityObject;
+            Component uo = fixture.Body.UserData;
             Collider coll = uo as Collider;
 
             if (coll == null && (uo is Rigidbody))
@@ -47,7 +47,7 @@ namespace PressPlay.FFWD
                     if (dist < _nearest)
                     {
                         _nearest = dist;
-                        _hit.body = fixture.GetBody();
+                        _hit.body = fixture.Body;
                         _hit.point = point;
                         _hit.normal = normal;
                         _hit.distance = dist;
@@ -59,7 +59,7 @@ namespace PressPlay.FFWD
                 else
                 {
                     // TODO: Consider making this an array
-                    _hits.Add(new RaycastHit() { body = fixture.GetBody(), point = point, normal = normal, distance = dist, collider = coll });
+                    _hits.Add(new RaycastHit() { body = fixture.Body, point = point, normal = normal, distance = dist, collider = coll });
                     return 1;
                 }
             }
@@ -94,7 +94,7 @@ namespace PressPlay.FFWD
 
         public static bool pointCastCallback(Fixture fixture)
         {
-            UnityObject uo = fixture.GetBody().GetUserData() as UnityObject;
+            Component uo = fixture.Body.UserData;
             Collider coll = uo as Collider;
             if (coll == null && (uo is Rigidbody))
             {
@@ -103,7 +103,7 @@ namespace PressPlay.FFWD
             if ((coll != null) && (coll.gameObject != null) && (_layerMask & (1 << coll.gameObject.layer)) > 0)
             {
                 _didHit = true;
-                _hit = new RaycastHit() { body = fixture.GetBody(), collider = coll };
+                _hit = new RaycastHit() { body = fixture.Body, collider = coll };
             }
             return true;
         }

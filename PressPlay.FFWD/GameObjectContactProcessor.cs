@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
-using Box2D.XNA;
+using FarseerPhysics.Dynamics;
 using PressPlay.FFWD.Components;
 using PressPlay.FFWD.Interfaces;
+using FarseerPhysics.Dynamics.Contacts;
 
 namespace PressPlay.FFWD
 {
@@ -45,25 +46,17 @@ namespace PressPlay.FFWD
         }
 
         #region IContactListener Members
-        private readonly List<Contact> beginContacts = new List<Contact>();
-        private readonly List<Contact> endContacts = new List<Contact>();
-        private readonly List<Stay> staying = new List<Stay>();
-        public void BeginContact(Contact contact)
+        private readonly List<Contact> beginContacts = new List<Contact>(50);
+        private readonly List<Contact> endContacts = new List<Contact>(50);
+        private readonly List<Stay> staying = new List<Stay>(50);
+        public bool BeginContact(Contact contact)
         {
             beginContacts.Add(contact);
+            return true;
         }
         public void EndContact(Contact contact)
         {
             endContacts.Add(contact);
-        }
-
-        public void PreSolve(Contact contact, ref Manifold oldManifold)
-        {
-            //preSolveContacts.Add(new PreSolveContact() { c = contact, m = oldManifold });
-        }
-        public void PostSolve(Contact contact, ref ContactImpulse impulse)
-        {
-            //postSolveContacts.Add(contact, impulse);
         }
         #endregion
 
@@ -73,23 +66,23 @@ namespace PressPlay.FFWD
             for (int i = 0; i < endContacts.Count; ++i)
             {
                 Contact contact = endContacts[i];
-                Fixture fixtureA = contact.GetFixtureA();
-                Fixture fixtureB = contact.GetFixtureB();
+                Fixture fixtureA = contact.FixtureA;
+                Fixture fixtureB = contact.FixtureB;
                 if (fixtureA == null || fixtureB == null)
                 {
                     continue;
                 }
-                if (fixtureA.GetBody().GetType() == BodyType.Static && fixtureB.GetBody().GetType() == BodyType.Static)
+                if (fixtureA.Body.BodyType == BodyType.Static && fixtureB.Body.BodyType == BodyType.Static)
                 {
                     continue;
                 }
-                Component compA = fixtureA.GetBody().GetUserData() as Component;
-                Component compB = fixtureB.GetBody().GetUserData() as Component;
+                Component compA = fixtureA.Body.UserData;
+                Component compB = fixtureB.Body.UserData;
                 if (compA == null || compB == null)
                 {
                     continue;
                 }
-                if (fixtureA.IsSensor() || fixtureB.IsSensor())
+                if (fixtureA.IsSensor || fixtureB.IsSensor)
                 {
                     RemoveStay(compA.collider, compB.collider);
                     compA.gameObject.OnTriggerExit(compB.collider);
@@ -106,20 +99,21 @@ namespace PressPlay.FFWD
                         continue;
                     }
                     RemoveStay(compA.collider, compB.collider);
-                    WorldManifold wManifold;
-                    contact.GetWorldManifold(out wManifold);
+                    Microsoft.Xna.Framework.Vector2 normal;
+                    FarseerPhysics.Common.FixedArray2<Microsoft.Xna.Framework.Vector2> points;
+                    contact.GetWorldManifold(out normal, out points);
                     Collision coll = new Collision()
                     {
                         collider = compB.collider,
                         relativeVelocity = ((compA.rigidbody != null) ? compA.rigidbody.velocity : Vector3.zero) - ((compB.rigidbody != null) ? compB.rigidbody.velocity : Vector3.zero),
-                        contacts = new ContactPoint[contact._manifold._pointCount]
+                        contacts = new ContactPoint[2]
                     };
-                    for (int j = 0; j < coll.contacts.Length; j++)
+                    for (int j = 0; j < 2; j++)
                     {
                         coll.contacts[j].thisCollider = compA.collider;
                         coll.contacts[j].otherCollider = compB.collider;
-                        coll.contacts[j].point = wManifold._points[j];
-                        coll.contacts[j].normal = wManifold._normal;
+                        coll.contacts[j].point = points[j];
+                        coll.contacts[j].normal = normal;
                     }
                     compA.gameObject.OnCollisionExit(coll);
                     coll.SetColliders(compB.collider, compA.collider);
@@ -150,25 +144,25 @@ namespace PressPlay.FFWD
             {
                 Contact contact = beginContacts[i];
 
-                Fixture fixtureA = contact.GetFixtureA();
-                Fixture fixtureB = contact.GetFixtureB();
+                Fixture fixtureA = contact.FixtureA;
+                Fixture fixtureB = contact.FixtureB;
 
                 if (fixtureA == null || fixtureB == null)
                 {
                     continue;
                 }
 
-                if (fixtureA.GetBody().GetType() == BodyType.Static && fixtureB.GetBody().GetType() == BodyType.Static)
+                if (fixtureA.Body.BodyType == BodyType.Static && fixtureB.Body.BodyType == BodyType.Static)
                 {
                     continue;
                 }
-                Component compA = fixtureA.GetBody().GetUserData() as Component;
-                Component compB = fixtureB.GetBody().GetUserData() as Component;
+                Component compA = fixtureA.Body.UserData;
+                Component compB = fixtureB.Body.UserData;
                 if (compA == null || compB == null)
                 {
                     continue;
                 }
-                if (fixtureA.IsSensor() || fixtureB.IsSensor())
+                if (fixtureA.IsSensor || fixtureB.IsSensor)
                 {
                     staying.Add(new Stay(compB.collider, compA.collider, compA.gameObject, compB.gameObject ));
                     compA.gameObject.OnTriggerEnter(compB.collider);
@@ -184,31 +178,32 @@ namespace PressPlay.FFWD
                     {
                         continue;
                     }
-                    WorldManifold wManifold;
-                    contact.GetWorldManifold(out wManifold);
+                    Microsoft.Xna.Framework.Vector2 normal;
+                    FarseerPhysics.Common.FixedArray2<Microsoft.Xna.Framework.Vector2> points;
+                    contact.GetWorldManifold(out normal, out points);
                     Collision collisionBToA = new Collision()
                     {
                         collider = compB.collider,
                         relativeVelocity = ((compA.rigidbody != null) ? compA.rigidbody.velocity : Vector3.zero) - ((compB.rigidbody != null) ? compB.rigidbody.velocity : Vector3.zero),
-                        contacts = new ContactPoint[contact._manifold._pointCount]
+                        contacts = new ContactPoint[2]
                     };
                     Collision collisionAToB = new Collision()
                     {
                         collider = compA.collider,
                         relativeVelocity = ((compB.rigidbody != null) ? compB.rigidbody.velocity : Vector3.zero) - ((compA.rigidbody != null) ? compA.rigidbody.velocity : Vector3.zero),
-                        contacts = new ContactPoint[contact._manifold._pointCount]
+                        contacts = new ContactPoint[2]
                     };
                     for (int j = 0; j < collisionBToA.contacts.Length; j++)
                     {
                         collisionBToA.contacts[j].thisCollider = compB.collider;
                         collisionBToA.contacts[j].otherCollider = compA.collider;
-                        collisionBToA.contacts[j].point = wManifold._points[j];
-                        collisionBToA.contacts[j].normal = -wManifold._normal;
+                        collisionBToA.contacts[j].point = points[j];
+                        collisionBToA.contacts[j].normal = -normal;
 
                         collisionAToB.contacts[j].thisCollider = compA.collider;
                         collisionAToB.contacts[j].otherCollider = compB.collider;
-                        collisionAToB.contacts[j].point = wManifold._points[j];
-                        collisionAToB.contacts[j].normal = wManifold._normal;
+                        collisionAToB.contacts[j].point = points[j];
+                        collisionAToB.contacts[j].normal = normal;
                     }
                     Stay s = new Stay(collisionAToB, collisionBToA, compA.gameObject, compB.gameObject);
                     staying.Add(s);
@@ -217,34 +212,8 @@ namespace PressPlay.FFWD
                 }
             }
 
-            //for (int i = 0; i < preSolveContacts.Count; ++i)
-            //{
-            //    PreSolveContact contact = preSolveContacts[i];
-
-            //    Fixture fixtureA = contact.c.GetFixtureA();
-            //    if (fixtureA != null && fixtureA.GetUserData() is GameObject)
-            //        (fixtureA.GetUserData() as GameObject).OnPreSolve(contact.c, contact.m);
-
-            //    Fixture fixtureB = contact.c.GetFixtureB();
-            //    if (fixtureB != null && fixtureB.GetUserData() is GameObject)
-            //        (fixtureB.GetUserData() as GameObject).OnPreSolve(contact.c, contact.m);
-            //}
-
-            //foreach (var contact in postSolveContacts)
-            //{
-            //    Fixture fixtureA = contact.Key.GetFixtureA();
-            //    if (fixtureA != null && fixtureA.GetUserData() is GameObject)
-            //        (fixtureA.GetUserData() as GameObject).OnPostSolve(contact.Key, contact.Value);
-
-            //    Fixture fixtureB = contact.Key.GetFixtureB();
-            //    if (fixtureB != null && fixtureB.GetUserData() is GameObject)
-            //        (fixtureB.GetUserData() as GameObject).OnPostSolve(contact.Key, contact.Value);
-            //}
-
             beginContacts.Clear();
             endContacts.Clear();
-            //postSolveContacts.Clear();
-            //preSolveContacts.Clear();
         }
 
         private void RemoveStay(Collider compA, Collider compB)

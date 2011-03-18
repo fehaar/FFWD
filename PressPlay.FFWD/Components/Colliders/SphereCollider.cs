@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using PressPlay.FFWD.Interfaces;
 using PressPlay.FFWD;
-using Box2D.XNA;
+using FarseerPhysics.Dynamics;
 
 namespace PressPlay.FFWD.Components
 {
@@ -18,29 +18,8 @@ namespace PressPlay.FFWD.Components
 
         internal override void AddCollider(Body body, float mass)
         {
-            lastResizeScale = transform.lossyScale;
-
             float rad = radius * Math.Max(transform.lossyScale.x, Math.Max(transform.lossyScale.y, transform.lossyScale.z));
-
-            if (rad > 10000) 
-            { 
-                rad = 10000;
-                lastResizeScale = new Vector3(float.NaN, float.NaN, float.NaN);
-            } //HACK!!!! to test rescaling of meshes
-
-            connectedBody = Physics.AddCircle(body, isTrigger, rad, center * transform.lossyScale, -MathHelper.ToRadians(transform.rotation.eulerAngles.y), mass);
+            connectedBody = Physics.AddCircle(body, isTrigger, rad, center * transform.lossyScale, mass);
         }
-
-        /*internal override void ResizeConnectedBody(Vector3 _scale)
-        {
-            if (lastResizeScale == transform.lossyScale) { return; }
-
-            Fixture fixture = connectedBody.GetFixtureList();
-            connectedBody.DestroyFixture(fixture);
-
-            float rad = radius * Math.Max(transform.lossyScale.x, Math.Max(transform.lossyScale.y, transform.lossyScale.z));
-            connectedBody = Physics.AddCircle(connectedBody, isTrigger, rad, center, -MathHelper.ToRadians(transform.rotation.eulerAngles.y), connectedBody._mass);
-            lastResizeScale = transform.lossyScale;
-        }*/
     }
 }

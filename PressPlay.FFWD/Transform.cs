@@ -176,9 +176,19 @@ namespace PressPlay.FFWD
             }
             set
             {
-                if (float.IsNaN(value.x) || float.IsNaN(value.y) || float.IsNaN(value.z))
+                if (float.IsNaN(value.x) || float.IsNegativeInfinity(value.x))
                 {
-                    throw new InvalidOperationException();
+                    value.x = 0;
+                }
+
+                if (float.IsNaN(value.y) || float.IsNegativeInfinity(value.y))
+                {
+                    value.y = 0;
+                }
+
+                if (float.IsNaN(value.z) || float.IsNegativeInfinity(value.z))
+                {
+                    value.z = 0;
                 }
 
                 if (parent == null)
