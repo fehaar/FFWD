@@ -161,9 +161,6 @@ namespace PressPlay.FFWD
             {
                 switch (currentStateValue.wrapMode)
                 {
-                    case WrapMode.Once:
-                        currentStateValue.enabled = false;
-                        return;
                     case WrapMode.Loop:
                         time = 0;
                         break;
@@ -172,6 +169,7 @@ namespace PressPlay.FFWD
                         break;
                     case WrapMode.Default:
                         break;
+                    case WrapMode.Once:
                     case WrapMode.Clamp:
                         time = currentStateValue.length;
                         break;
