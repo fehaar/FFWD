@@ -30,7 +30,7 @@ namespace PressPlay.FFWD.UI.Controls
             
             scrollTracker.CanvasRect.X = bounds.X;
             scrollTracker.CanvasRect.Y = bounds.Y;
-            scrollTracker.CanvasRect.Width = 800;
+            scrollTracker.CanvasRect.Width = bounds.Width;
             scrollTracker.CanvasRect.Height = bounds.Height;
             
             //scrollTracker.CanvasRect = bounds;
