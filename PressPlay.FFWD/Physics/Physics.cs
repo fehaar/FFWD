@@ -249,7 +249,7 @@ namespace PressPlay.FFWD
             }
             try
             {
-                world.RayCast(RaycastHelper.rayCastCallback, origin, pt2);
+                world.RayCast(null, origin, pt2);
             }
             catch (InvalidOperationException)
             {
@@ -295,7 +295,7 @@ namespace PressPlay.FFWD
             }
             try
             {
-                world.RayCast(RaycastHelper.rayCastCallback, origin, pt2);
+                world.RayCast(null, origin, pt2);
                 hitInfo = RaycastHelper.ClosestHit();
             }
             catch (InvalidOperationException)
@@ -381,7 +381,7 @@ namespace PressPlay.FFWD
             {
                 return new RaycastHit[0];
             }
-            world.RayCast(RaycastHelper.rayCastCallback, origin, pt2);
+            world.RayCast(null, origin, pt2);
 #if DEBUG
             Application.raycastTimer.Stop();
 #endif
@@ -471,7 +471,7 @@ namespace PressPlay.FFWD
                 hitInfo = new RaycastHit();
                 return false;
             }
-            world.RayCast(RaycastHelper.rayCastCallback, origin, pt2);
+            world.RayCast(null, origin, pt2);
             hitInfo = RaycastHelper.ClosestHit();
 #if DEBUG
             Application.raycastTimer.Stop();

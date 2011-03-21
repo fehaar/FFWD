@@ -63,7 +63,7 @@ namespace PressPlay.FFWD
                     return 1;
                 }
             }
-            return 1;
+            return -1;
         }   
 
         internal static int HitCount

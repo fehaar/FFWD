@@ -32,6 +32,7 @@ using FarseerPhysics.Controllers;
 using FarseerPhysics.Dynamics.Contacts;
 using FarseerPhysics.Dynamics.Joints;
 using Microsoft.Xna.Framework;
+using PressPlay.FFWD.Farseer.Collision;
 
 namespace FarseerPhysics.Dynamics
 {
@@ -165,7 +166,7 @@ namespace FarseerPhysics.Dynamics
     /// The world class manages all physics entities, dynamic simulation,
     /// and asynchronous queries.
     /// </summary>
-    public class World
+    public class World : IRayCastCallback
     {
         /// <summary>
         /// Fires whenever a body has been added
@@ -813,24 +814,35 @@ namespace FarseerPhysics.Dynamics
             input.Point1 = point1;
             input.Point2 = point2;
 
-            ContactManager.BroadPhase.RayCast((rayCastInput, proxyId) =>
-                                                  {
-                                                      FixtureProxy proxy = ContactManager.BroadPhase.GetProxy(proxyId);
-                                                      Fixture fixture = proxy.Fixture;
-                                                      int index = proxy.ChildIndex;
-                                                      RayCastOutput output;
-                                                      bool hit = fixture.RayCast(out output, ref rayCastInput, index);
+            rayCastCallback = callback;
 
-                                                      if (hit)
-                                                      {
-                                                          float fraction = output.Fraction;
-                                                          Vector2 point = (1.0f - fraction) * input.Point1 + fraction * input.Point2;
-                                                          return callback(fixture, point, output.Normal, fraction);
-                                                      }
-
-                                                      return input.MaxFraction;
-                                                  }, ref input);
+            ContactManager.BroadPhase.RayCast(this, ref input);
         }
+
+        private RayCastCallback rayCastCallback = null;
+        
+        public float RayCastCallback(ref RayCastInput input, int proxyId)
+        {
+            FixtureProxy proxy = ContactManager.BroadPhase.GetProxy(proxyId);
+            Fixture fixture = proxy.Fixture;
+            int index = proxy.ChildIndex;
+            RayCastOutput output;
+            bool hit = fixture.RayCast(out output, ref input, index);
+
+            if (hit)
+            {
+                float fraction = output.Fraction;
+                Vector2 point = (1.0f - fraction) * input.Point1 + fraction * input.Point2;
+                if (rayCastCallback != null)
+                {
+                    return rayCastCallback(fixture, point, output.Normal, fraction);
+                }
+                return PressPlay.FFWD.RaycastHelper.rayCastCallback(fixture, point, output.Normal, fraction);
+            }
+
+            return input.MaxFraction;
+        }
+
 
         private void Solve(ref TimeStep step)
         {

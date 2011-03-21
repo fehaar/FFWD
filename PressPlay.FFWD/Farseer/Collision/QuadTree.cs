@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using FarseerPhysics.Collision;
 using Microsoft.Xna.Framework;
+using PressPlay.FFWD.Farseer.Collision;
 
 public class Element<T>
 {
@@ -195,7 +196,7 @@ public class QuadTree<T>
         }
     }
 
-    public void RayCast(Func<RayCastInput, Element<T>, float> callback, ref RayCastInput input)
+    public void RayCast(IElementRayCastCallback<T> callback, ref RayCastInput input)
     {
         Stack<QuadTree<T>> stack = new Stack<QuadTree<T>>();
         stack.Push(this);
@@ -221,7 +222,7 @@ public class QuadTree<T>
                 subInput.Point2 = input.Point2;
                 subInput.MaxFraction = maxFraction;
 
-                float value = callback(subInput, n);
+                float value = callback.RayCastCallback(ref subInput, n);
                 if (value == 0.0f)
                     return; // the client has terminated the raycast.
 

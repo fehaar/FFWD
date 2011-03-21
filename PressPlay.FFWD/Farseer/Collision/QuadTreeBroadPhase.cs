@@ -4,6 +4,7 @@ using FarseerPhysics;
 using FarseerPhysics.Collision;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
+using PressPlay.FFWD.Farseer.Collision;
 
 public class QuadTreeBroadPhase : IBroadPhase
 {
@@ -173,11 +174,21 @@ public class QuadTreeBroadPhase : IBroadPhase
         _quadTree.QueryAABB(TransformPredicate(callback), ref query);
     }
 
-    public void RayCast(Func<RayCastInput, int, float> callback, ref RayCastInput input)
+    public void RayCast(IRayCastCallback callback, ref RayCastInput input)
     {
-        _quadTree.RayCast(TransformRayCallback(callback), ref input);
+        ElementRayCastCallbackHelper helper = new ElementRayCastCallbackHelper() { callback = callback };
+        _quadTree.RayCast(helper, ref input);
     }
 
+    private struct ElementRayCastCallbackHelper : IElementRayCastCallback<FixtureProxy>
+    {
+        internal IRayCastCallback callback;
+
+        public float RayCastCallback(ref RayCastInput input, Element<FixtureProxy> proxyId)
+        {
+            return callback.RayCastCallback(ref input, proxyId.Value.ProxyId);
+        }
+    }
     #endregion
 
     private AABB Fatten(ref AABB aabb)
@@ -190,14 +201,6 @@ public class QuadTreeBroadPhase : IBroadPhase
     {
         Func<Element<FixtureProxy>, bool> qtPred = qtnode => idPredicate(qtnode.Value.ProxyId);     
         return qtPred;
-    }
-
-    private Func<RayCastInput, Element<FixtureProxy>, float> TransformRayCallback(
-        Func<RayCastInput, int, float> callback)
-    {
-        Func<RayCastInput, Element<FixtureProxy>, float> newCallback =
-            (input, qtnode) => callback(input, qtnode.Value.ProxyId);
-        return newCallback;
     }
 
     private bool PairBufferQueryCallback(int proxyID, int baseID)

@@ -177,6 +177,7 @@
     <Compile Include="Farseer\Collision\DynamicTree.cs" />
     <Compile Include="Farseer\Collision\DynamicTreeBroadPhase.cs" />
     <Compile Include="Farseer\Collision\IBroadPhase.cs" />
+    <Compile Include="Farseer\Collision\IRayCastCallback.cs" />
     <Compile Include="Farseer\Collision\QuadTree.cs" />
     <Compile Include="Farseer\Collision\QuadTreeBroadPhase.cs" />
     <Compile Include="Farseer\Collision\Shapes\CircleShape.cs" />

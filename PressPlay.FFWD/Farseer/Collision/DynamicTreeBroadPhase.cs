@@ -26,6 +26,7 @@
 using System;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
+using PressPlay.FFWD.Farseer.Collision;
 
 namespace FarseerPhysics.Collision
 {
@@ -248,7 +249,7 @@ namespace FarseerPhysics.Collision
         /// </summary>
         /// <param name="callback">A callback class that is called for each proxy that is hit by the ray.</param>
         /// <param name="input">The ray-cast input data. The ray extends from p1 to p1 + maxFraction * (p2 - p1).</param>
-        public void RayCast(Func<RayCastInput, int, float> callback, ref RayCastInput input)
+        public void RayCast(IRayCastCallback callback, ref RayCastInput input)
         {
             _tree.RayCast(callback, ref input);
         }

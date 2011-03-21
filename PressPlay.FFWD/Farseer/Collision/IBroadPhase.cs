@@ -1,6 +1,7 @@
 ﻿using System;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
+using PressPlay.FFWD.Farseer.Collision;
 
 namespace FarseerPhysics.Collision
 {
@@ -26,6 +27,6 @@ namespace FarseerPhysics.Collision
 
         void Query(Func<int, bool> callback, ref AABB aabb);
 
-        void RayCast(Func<RayCastInput, int, float> callback, ref RayCastInput input);
+        void RayCast(IRayCastCallback raycastCallback, ref RayCastInput input);
     }
 }
