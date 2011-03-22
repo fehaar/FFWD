@@ -200,10 +200,11 @@ namespace PressPlay.FFWD
 
         public static Vector3 Lerp(Vector3 from, Vector3 to, float t)
         {
+            float normalizedT = Mathf.Clamp01(t);
             return new Vector3(
-                MathHelper.Lerp(from.x, to.x, t),
-                MathHelper.Lerp(from.y, to.y, t),
-                MathHelper.Lerp(from.z, to.z, t));
+                MathHelper.Lerp(from.x, to.x, normalizedT),
+                MathHelper.Lerp(from.y, to.y, normalizedT),
+                MathHelper.Lerp(from.z, to.z, normalizedT));
         }
 
         //TODO

@@ -38,6 +38,11 @@ namespace PressPlay.FFWD
                     throw new InvalidOperationException();
                 }
 
+                //if (float.IsInfinity(value.x) || float.IsInfinity(value.y) || float.IsInfinity(value.z))
+                //{
+                //    throw new InvalidOperationException();
+                //}
+
                 _localPosition = value;
                 hasDirtyWorld = true;
             }

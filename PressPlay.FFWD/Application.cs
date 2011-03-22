@@ -30,6 +30,7 @@ namespace PressPlay.FFWD
         private SpriteBatch spriteBatch;
 #endif
 
+        public static bool isDeactivated = false;
         int frameRate = 0;
         int frameCounter = 0;
         TimeSpan elapsedTime = TimeSpan.Zero;
