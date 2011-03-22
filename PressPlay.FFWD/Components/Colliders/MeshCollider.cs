@@ -13,7 +13,7 @@ namespace PressPlay.FFWD.Components
         public List<Vertices> vertices { get; set; }
         #endregion
 
-        internal override void AddCollider(Body body, float mass)
+        protected override void DoAddCollider(Body body, float mass)
         {
             Microsoft.Xna.Framework.Vector2 scale = transform.lossyScale;
             for (int i = 0; i < vertices.Count; i++)

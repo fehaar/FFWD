@@ -58,6 +58,15 @@ namespace PressPlay.FFWD.Components
             }
         }
 
+        protected override void Destroy()
+        {
+            base.Destroy();
+            if (connectedBody != null)
+            {
+                Physics.RemoveBody(connectedBody);
+            }
+        }
+
         internal void SetStatic(bool isStatic)
         {
             if (connectedBody != null)
@@ -66,7 +75,23 @@ namespace PressPlay.FFWD.Components
             }
         }
 
-        internal abstract void AddCollider(Body body, float mass);
+        internal void AddCollider(Body body, float mass)
+        {
+            DoAddCollider(body, mass);
+            if (body.BodyType != BodyType.Static)
+            {
+                if (rigidbody == null)
+                {
+                    Physics.AddMovingBody(body);
+                }
+                else
+                {
+                    Physics.AddRigidBody(body);
+                }
+            }
+        }
+
+        protected abstract void DoAddCollider(Body body, float mass);
 
         internal void ResizeConnectedBody()
         {

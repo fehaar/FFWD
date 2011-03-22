@@ -40,6 +40,9 @@ namespace PressPlay.FFWD
         public static int velocityIterations = 2;
         public static int positionIterations = 2;
 
+        private static readonly List<Body> movingBodies = new List<Body>(50);
+        private static readonly List<Body> rigidBodies = new List<Body>(50);
+
         #region FFWD specific methods
         public static void Initialize()
         {
@@ -72,36 +75,23 @@ namespace PressPlay.FFWD
 
         public static void Update(float elapsedTime)
         {
-            for (int i = world.BodyList.Count - 1; i >= 0; i--)
+            for (int i = movingBodies.Count - 1; i >= 0; i--)
             {
-                Body body = world.BodyList[i];
+                Body body = movingBodies[i];
                 Component comp = (Component)body.UserData;
-                if (!comp)
+                BodyType bodyType = body.BodyType;
+                if (comp.gameObject.active && bodyType == BodyType.Kinematic)
                 {
-                    // The component containing the body has been destroyed - so remove the body.
-                    world.RemoveBody(body);
-                    continue;
+                    float rad = -MathHelper.ToRadians(comp.transform.eulerAngles.y);
+                    if (body.Position != (Microsoft.Xna.Framework.Vector2)comp.transform.position || body.Rotation != rad)
+                    {
+                        Microsoft.Xna.Framework.Vector2 pos = comp.transform.position;
+                        body.SetTransformIgnoreContacts(ref pos, rad);
+                    }
                 }
-                if (comp != null)
+                if (comp.collider.allowTurnOff)
                 {
-                    BodyType bodyType = body.BodyType;
-                    if (comp.gameObject.active && bodyType == BodyType.Kinematic && !comp.gameObject.isStatic && comp.rigidbody == null)
-                    {
-                        float rad = -MathHelper.ToRadians(comp.transform.eulerAngles.y);
-                        if (body.Position != (Microsoft.Xna.Framework.Vector2)comp.transform.position || body.Rotation != rad)
-                        {
-                            //body.SetTransform(comp.transform.position, rad);
-                            Microsoft.Xna.Framework.Vector2 pos = comp.transform.position;
-                            body.SetTransformIgnoreContacts(ref pos, rad);
-                        }
-
-                        //TODO: Resize body shape to the current transform.scale of the components game object. Maybe this should be done before physics update. It should only be hard coded in AddCollider in static objects
-                        //comp.collider.ResizeConnectedBody();
-                    }
-                    if (comp.collider.allowTurnOff)
-                    {
-                        body.Enabled = comp.gameObject.active;
-                    }
+                    body.Enabled = comp.gameObject.active;
                 }
             }
 #if DEBUG
@@ -113,23 +103,13 @@ namespace PressPlay.FFWD
 
             world.Step(elapsedTime);
 
-            for (int i = 0; i < world.BodyList.Count; i++)
+            for (int i = rigidBodies.Count - 1; i >= 0; i--)
             {
-                Body body = world.BodyList[i];
+                Body body = rigidBodies[i];
                 Component comp = (Component)body.UserData;
-
-                if (comp != null)
-                {
-                    if (body.BodyType != BodyType.Static)
-                    {
-                        if (comp.rigidbody != null)
-                        {
-                            FarseerPhysics.Common.Transform t;
-                            body.GetTransform(out t);
-                            comp.transform.SetPositionFromPhysics(t.Position, t.Angle);
-                        }
-                    }
-                }
+                FarseerPhysics.Common.Transform t;
+                body.GetTransform(out t);
+                comp.transform.SetPositionFromPhysics(t.Position, t.Angle);
             }
 
             contactProcessor.Update();
@@ -528,6 +508,42 @@ namespace PressPlay.FFWD
         internal static void RemoveStays(Collider collider)
         {
             contactProcessor.ResetStays(collider);
+        }
+
+        internal static void AddMovingBody(Body body)
+        {
+            if (movingBodies.Contains(body))
+            {
+                throw new Exception("Body added twice");
+            }
+            movingBodies.Add(body);
+        }
+
+        internal static void AddRigidBody(Body body)
+        {
+            if (rigidBodies.Contains(body))
+            {
+                throw new Exception("Rigidbody added twice");
+            }
+            rigidBodies.Add(body);
+        }
+
+        internal static void RemoveBody(Body body)
+        {
+            if (body.UserData == null)
+            {
+                return;
+            }
+            world.RemoveBody(body);
+            body.UserData = null;
+            if (movingBodies.Contains(body))
+            {
+                movingBodies.Remove(body);
+            }
+            if (rigidBodies.Contains(body))
+            {
+                rigidBodies.Remove(body);
+            }
         }
     }
 }
