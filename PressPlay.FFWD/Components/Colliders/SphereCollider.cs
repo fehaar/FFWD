@@ -16,7 +16,7 @@ namespace PressPlay.FFWD.Components
         public float radius { get; set; }
         #endregion
 
-        internal override void AddCollider(Body body, float mass)
+        protected override void DoAddCollider(Body body, float mass)
         {
             float rad = radius * Math.Max(transform.lossyScale.x, Math.Max(transform.lossyScale.y, transform.lossyScale.z));
             connectedBody = Physics.AddCircle(body, isTrigger, rad, center * transform.lossyScale, mass);

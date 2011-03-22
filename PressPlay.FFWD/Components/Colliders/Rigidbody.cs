@@ -75,6 +75,15 @@ namespace PressPlay.FFWD.Components
             }
         }
 
+        protected override void Destroy()
+        {
+            base.Destroy();
+            if (body != null)
+            {
+                Physics.RemoveBody(body);
+            }
+        }
+
         private void RescaleMass()
         {
             if (body != null && body.Mass > 0)
@@ -136,7 +145,6 @@ namespace PressPlay.FFWD.Components
         {
             if (body != null)
             {
-//                body.SetTransform(position, body.GetAngle());
                 Microsoft.Xna.Framework.Vector2 pos = position;
                 body.SetTransformIgnoreContacts(ref pos, body.Rotation);
                 Physics.RemoveStays(collider);

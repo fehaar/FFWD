@@ -15,7 +15,7 @@ namespace PressPlay.FFWD.Components
         public int direction;
         #endregion
 
-        internal override void AddCollider(Body body, float mass)
+        protected override void DoAddCollider(Body body, float mass)
         {
             Vector2 sz;
             switch (direction)
