@@ -64,7 +64,7 @@ namespace PressPlay.FFWD
             {
                 device.BlendState = blendState;
             }
-            if (renderQueue >= 3000)
+            if (renderQueue == 3000 || shader == "TransperantNoLight")
             {
                 device.DepthStencilState = DepthStencilState.DepthRead;
             }
