@@ -517,20 +517,18 @@ namespace PressPlay.FFWD
 
         internal static void AddMovingBody(Body body)
         {
-            if (movingBodies.Contains(body))
+            if (!movingBodies.Contains(body))
             {
-                throw new Exception("Body added twice");
+                movingBodies.Add(body);
             }
-            movingBodies.Add(body);
         }
 
         internal static void AddRigidBody(Body body)
         {
-            if (rigidBodies.Contains(body))
+            if (!rigidBodies.Contains(body))
             {
-                throw new Exception("Rigidbody added twice");
+                rigidBodies.Add(body);
             }
-            rigidBodies.Add(body);
         }
 
         internal static void RemoveBody(Body body)
