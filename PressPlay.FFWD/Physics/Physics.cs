@@ -80,6 +80,11 @@ namespace PressPlay.FFWD
                 Body body = movingBodies[i];
                 Component comp = (Component)body.UserData;
                 BodyType bodyType = body.BodyType;
+                if (bodyType == BodyType.Static)
+                {
+                    movingBodies.RemoveAt(i);
+                    continue;
+                }
                 if (comp.gameObject.active && bodyType == BodyType.Kinematic)
                 {
                     float rad = -MathHelper.ToRadians(comp.transform.eulerAngles.y);

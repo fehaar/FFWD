@@ -72,6 +72,10 @@ namespace PressPlay.FFWD.Components
             if (connectedBody != null)
             {
                 connectedBody.BodyType = (isStatic) ? BodyType.Static : BodyType.Kinematic;
+                if (!isStatic)
+                {
+                    Physics.AddMovingBody(connectedBody);
+                }
             }
         }
 
