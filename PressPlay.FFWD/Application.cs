@@ -832,6 +832,11 @@ namespace PressPlay.FFWD
             {
                 Component cmp = componentsChangingActivity[i];
                 Type tp = cmp.GetType();
+                if (cmp.gameObject == null)
+                {
+                    // We can have components that are in this list but which have been destroyed. Just ignore them.
+                    continue;
+                }
                 if (cmp.gameObject.active)
                 {
                     if (isUpdateable.Contains(tp))
