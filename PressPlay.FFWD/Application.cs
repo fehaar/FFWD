@@ -200,21 +200,24 @@ namespace PressPlay.FFWD
             AwakeNewComponents(false);
             StartComponents();
             ChangeComponentActivity();
-            int count = fixedUpdateComponents.Count;
-            for (int i = 0; i < count; i++)
+            if (Time.timeScale > 0)
             {
-                IFixedUpdateable cmp = fixedUpdateComponents[i];
-                if (!cmp.gameObject.active)
+                int count = fixedUpdateComponents.Count;
+                for (int i = 0; i < count; i++)
                 {
-                    continue;
-                }
+                    IFixedUpdateable cmp = fixedUpdateComponents[i];
+                    if (!cmp.gameObject.active)
+                    {
+                        continue;
+                    }
 #if DEBUG && COMPONENT_PROFILE
                 componentProfiler.StartFixedUpdateCall(fixedUpdateComponents[i] as Component);
 #endif
-                cmp.FixedUpdate();
+                    cmp.FixedUpdate();
 #if DEBUG && COMPONENT_PROFILE
                 componentProfiler.EndFixedUpdateCall();
 #endif
+                }
             }
             ChangeComponentActivity();
 #if DEBUG
