@@ -808,6 +808,11 @@ namespace PressPlay.FFWD
             return assetHelper.Load<T>(name);
         }
 
+        public static void AddStaticAsset(string name)
+        {
+            assetHelper.AddStaticAsset(name);
+        }
+
         public static void Preload<T>(string name)
         {
             assetHelper.Preload<T>(name);

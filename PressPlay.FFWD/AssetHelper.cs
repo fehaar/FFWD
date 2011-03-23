@@ -104,6 +104,14 @@ namespace PressPlay.FFWD
             return contentManagers[category];
         }
 
+        public void AddStaticAsset(string name)
+        {
+            
+            staticAssets.Add(name);
+            
+            //Load<T>(name);
+        }
+
         public void Preload<T>(string name)
         {
             staticAssets.Add(name);
