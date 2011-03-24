@@ -517,7 +517,7 @@ namespace PressPlay.FFWD
 
         internal static void AddMovingBody(Body body)
         {
-            if (!movingBodies.Contains(body))
+            if (!movingBodies.Contains(body) && body.UserData != null)
             {
                 movingBodies.Add(body);
             }
@@ -525,7 +525,7 @@ namespace PressPlay.FFWD
 
         internal static void AddRigidBody(Body body)
         {
-            if (!rigidBodies.Contains(body))
+            if (!rigidBodies.Contains(body) && body.UserData != null)
             {
                 rigidBodies.Add(body);
             }
