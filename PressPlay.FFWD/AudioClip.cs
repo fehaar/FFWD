@@ -41,6 +41,7 @@ namespace PressPlay.FFWD
             if (sound == null)
             {
                 sound = assetHelper.Load<SoundEffect>("Sounds/" + clip);
+                name = clip;
             }
         }
     }
