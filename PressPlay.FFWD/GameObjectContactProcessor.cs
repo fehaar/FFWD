@@ -23,6 +23,7 @@ namespace PressPlay.FFWD
                 this.gameObjectB = gameObjectB;
                 collisionAToB = null;
                 collisionBToA = null;
+                remove = false;
             }
 
             public Stay(Collision collisionAToB, Collision collisionBToA, GameObject gameObjectA, GameObject gameObjectB)
@@ -33,6 +34,7 @@ namespace PressPlay.FFWD
                 colliderToTriggerB = collisionBToA.collider;
                 this.gameObjectA = gameObjectA;
                 this.gameObjectB = gameObjectB;
+                remove = false;
             }
 
             public Collider colliderToTriggerA;
@@ -41,8 +43,12 @@ namespace PressPlay.FFWD
             public Collision collisionBToA;
             public GameObject gameObjectA;
             public GameObject gameObjectB;
+            public bool remove;
 
-                 
+            public void Remove()
+            {
+                remove = true;
+            }     
         }
 
         #region IContactListener Members
@@ -124,7 +130,7 @@ namespace PressPlay.FFWD
 
             for (int i = staying.Count - 1; i >= 0; i--)
             {
-                if (staying[i].colliderToTriggerA.gameObject == null || staying[i].colliderToTriggerB.gameObject == null || !staying[i].colliderToTriggerA.gameObject.active || !staying[i].colliderToTriggerB.gameObject.active)
+                if (staying[i].remove || staying[i].colliderToTriggerA.gameObject == null || staying[i].colliderToTriggerB.gameObject == null || !staying[i].colliderToTriggerA.gameObject.active || !staying[i].colliderToTriggerB.gameObject.active)
                 {
                     staying.RemoveAt(i);
                 }
@@ -216,13 +222,13 @@ namespace PressPlay.FFWD
             endContacts.Clear();
         }
 
-        private void RemoveStay(Collider compA, Collider compB)
+        internal void RemoveStay(Collider compA, Collider compB)
         {
             for (int i = staying.Count - 1; i >= 0; i--)
             {
                 if ((staying[i].colliderToTriggerA == compA && staying[i].colliderToTriggerB == compB) || (staying[i].colliderToTriggerA == compB && staying[i].colliderToTriggerB == compA))
                 {
-                    staying.RemoveAt(i);
+                    staying[i].Remove();
                 }
             }
         }
@@ -233,7 +239,7 @@ namespace PressPlay.FFWD
             {
                 if (staying[i].colliderToTriggerA == collider || staying[i].colliderToTriggerB == collider)
                 {
-                    staying.RemoveAt(i);
+                    staying[i].Remove();
                 }
             }    
         }

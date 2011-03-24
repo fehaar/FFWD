@@ -503,11 +503,17 @@ namespace PressPlay.FFWD
             if (ignore)
             {
                 collider1.connectedBody.IgnoreCollisionWith(collider2.connectedBody);
+                RemoveStays(collider1, collider2);
             }
             else
             {
                 collider1.connectedBody.RestoreCollisionWith(collider2.connectedBody);
             }
+        }
+
+        private static void RemoveStays(Collider collider1, Collider collider2)
+        {
+            contactProcessor.RemoveStay(collider1, collider2);
         }
 
         internal static void RemoveStays(Collider collider)
