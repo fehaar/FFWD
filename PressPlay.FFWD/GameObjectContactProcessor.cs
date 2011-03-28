@@ -3,6 +3,7 @@ using FarseerPhysics.Dynamics;
 using PressPlay.FFWD.Components;
 using PressPlay.FFWD.Interfaces;
 using FarseerPhysics.Dynamics.Contacts;
+using System.Collections;
 
 namespace PressPlay.FFWD
 {
@@ -14,7 +15,6 @@ namespace PressPlay.FFWD
                 get { return collisionAToB != null; }
             }
 
-
             public Stay(Collider colliderToTriggerA, Collider colliderToTriggerB, GameObject gameObjectA, GameObject gameObjectB)
             {
                 this.colliderToTriggerA = colliderToTriggerA;
@@ -23,7 +23,6 @@ namespace PressPlay.FFWD
                 this.gameObjectB = gameObjectB;
                 collisionAToB = null;
                 collisionBToA = null;
-                remove = false;
             }
 
             public Stay(Collision collisionAToB, Collision collisionBToA, GameObject gameObjectA, GameObject gameObjectB)
@@ -34,7 +33,6 @@ namespace PressPlay.FFWD
                 colliderToTriggerB = collisionBToA.collider;
                 this.gameObjectA = gameObjectA;
                 this.gameObjectB = gameObjectB;
-                remove = false;
             }
 
             public Collider colliderToTriggerA;
@@ -43,18 +41,13 @@ namespace PressPlay.FFWD
             public Collision collisionBToA;
             public GameObject gameObjectA;
             public GameObject gameObjectB;
-            public bool remove;
-
-            public void Remove()
-            {
-                remove = true;
-            }     
         }
 
         #region IContactListener Members
         private readonly List<Contact> beginContacts = new List<Contact>(50);
         private readonly List<Contact> endContacts = new List<Contact>(50);
         private readonly List<Stay> staying = new List<Stay>(50);
+        private BitArray staysToRemove = new BitArray(64);
         public bool BeginContact(Contact contact)
         {
             beginContacts.Add(contact);
@@ -127,12 +120,13 @@ namespace PressPlay.FFWD
                 }
             }
 
-
             for (int i = staying.Count - 1; i >= 0; i--)
             {
-                if (staying[i].remove || staying[i].colliderToTriggerA.gameObject == null || staying[i].colliderToTriggerB.gameObject == null || !staying[i].colliderToTriggerA.gameObject.active || !staying[i].colliderToTriggerB.gameObject.active)
+                if (staysToRemove[i] || staying[i].colliderToTriggerA.gameObject == null || staying[i].colliderToTriggerB.gameObject == null || !staying[i].colliderToTriggerA.gameObject.active || !staying[i].colliderToTriggerB.gameObject.active)
                 {
+                    staysToRemove[i] = false;
                     staying.RemoveAt(i);
+                    continue;
                 }
                 else if (!staying[i].collision)
                 {
@@ -228,7 +222,7 @@ namespace PressPlay.FFWD
             {
                 if ((staying[i].colliderToTriggerA == compA && staying[i].colliderToTriggerB == compB) || (staying[i].colliderToTriggerA == compB && staying[i].colliderToTriggerB == compA))
                 {
-                    staying[i].Remove();
+                    staysToRemove[i] = true;
                 }
             }
         }
@@ -239,7 +233,7 @@ namespace PressPlay.FFWD
             {
                 if (staying[i].colliderToTriggerA == collider || staying[i].colliderToTriggerB == collider)
                 {
-                    staying[i].Remove();
+                    staysToRemove[i] = true;
                 }
             }    
         }
