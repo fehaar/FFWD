@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using PressPlay.FFWD.Interfaces;
 using PressPlay.FFWD;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace PressPlay.FFWD.Components
 {
@@ -17,23 +18,38 @@ namespace PressPlay.FFWD.Components
 
         protected override void DoAddCollider(Body body, float mass)
         {
-            Vector2 sz;
-            switch (direction)
-            {
-                case 0:
-                    sz = new Vector2(radius * 2, radius);
-                    break;
-                case 1:
-                    sz = new Vector2(height, radius * 2);
-                    break;
-                case 2:
-                    sz = new Vector2(radius * 2, height);
-                    break;
-                default:
-                    return;
-            }            
-            sz *= (Vector2)gameObject.transform.lossyScale;
-            connectedBody = Physics.AddBox(body, isTrigger, sz.x, sz.y, center, mass);
+            connectedBody = body;
+            Vector3 cen = center * transform.lossyScale;
+            if (direction == 0)
+	        {
+                float rad = radius * transform.lossyScale.z;
+                Physics.AddCircle(body, isTrigger, rad, cen, mass);
+	        }
+            else
+	        {
+                if (direction == 1)
+	            {
+                    Vector2 sz = new Vector2(height - radius * 2, radius * 2);
+                    sz *= (Vector2)gameObject.transform.lossyScale;
+                    Physics.AddBox(body, isTrigger, sz.x, sz.y, cen, mass);
+                    sz /= 2;
+                    float rad = sz.y;
+                    sz.y = 0;
+                    Physics.AddCircle(body, isTrigger, rad, cen + (Vector3)sz, mass);
+                    Physics.AddCircle(body, isTrigger, rad, cen - (Vector3)sz, mass);
+                }
+                else
+	            {
+                    Vector2 sz = new Vector2(radius * 2, height - radius * 2);
+                    sz *= (Vector2)gameObject.transform.lossyScale;
+                    Physics.AddBox(body, isTrigger, sz.x, sz.y, cen, mass);
+                    sz /= 2;
+                    float rad = sz.x;
+                    sz.x = 0;
+                    Physics.AddCircle(body, isTrigger, rad, cen + (Vector3)sz, mass);
+                    Physics.AddCircle(body, isTrigger, rad, cen - (Vector3)sz, mass);
+                }
+	        }
         }
     }
 }

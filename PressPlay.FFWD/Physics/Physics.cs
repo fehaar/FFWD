@@ -135,7 +135,7 @@ namespace PressPlay.FFWD
             return new Body(world);
         }
 
-        public static Body AddBox(Body body, bool isTrigger, float width, float height, Vector2 position, float density)
+        public static void AddBox(Body body, bool isTrigger, float width, float height, Vector2 position, float density)
         {
             if (world == null)
             {
@@ -143,10 +143,9 @@ namespace PressPlay.FFWD
             }
             Fixture fix = FixtureFactory.AttachRectangle(width, height, density, position, body);
             fix.IsSensor = isTrigger;            
-            return body;
         }
 
-        public static Body AddCircle(Body body, bool isTrigger, float radius, Vector2 position, float density)
+        public static void AddCircle(Body body, bool isTrigger, float radius, Vector2 position, float density)
         {
             if (world == null)
             {
@@ -156,10 +155,9 @@ namespace PressPlay.FFWD
             shp.Position = position;
             Fixture fix = body.CreateFixture(shp);
             fix.IsSensor = isTrigger;
-            return body;
         }
 
-        public static Body AddTriangle(Body body, bool isTrigger, Vertices vertices, float density)
+        public static void AddTriangle(Body body, bool isTrigger, Vertices vertices, float density)
         {
             if (world == null)
             {
@@ -168,10 +166,9 @@ namespace PressPlay.FFWD
             PolygonShape shp = new PolygonShape(vertices, density);
             Fixture fix = body.CreateFixture(shp);
             fix.IsSensor = isTrigger;
-            return body;
         }
 
-        public static Body AddMesh(Body body, bool isTrigger, List<Microsoft.Xna.Framework.Vector2[]> tris, float density)
+        public static void AddMesh(Body body, bool isTrigger, List<Microsoft.Xna.Framework.Vector2[]> tris, float density)
         {
             if (world == null)
             {
@@ -191,10 +188,9 @@ namespace PressPlay.FFWD
                     Debug.Log(body.UserData + ". Collider triangle is broken: " + verts[0] + "; " + verts[1] + "; " + verts[2] + ": " + ex.Message);
                 }
             }
-            return body;
         }
 
-        public static Body AddMesh(Body body, bool isTrigger, List<Vertices> tris, float density)
+        public static void AddMesh(Body body, bool isTrigger, List<Vertices> tris, float density)
         {
             if (world == null)
             {
@@ -205,7 +201,6 @@ namespace PressPlay.FFWD
             {
                 fixes[i].IsSensor = isTrigger;
             }
-            return body;
         }
         #endregion
 

@@ -19,7 +19,8 @@ namespace PressPlay.FFWD.Components
         protected override void DoAddCollider(Body body, float mass)
         {
             float rad = radius * Math.Max(transform.lossyScale.x, Math.Max(transform.lossyScale.y, transform.lossyScale.z));
-            connectedBody = Physics.AddCircle(body, isTrigger, rad, center * transform.lossyScale, mass);
+            connectedBody = body;
+            Physics.AddCircle(body, isTrigger, rad, center * transform.lossyScale, mass);
         }
     }
 }

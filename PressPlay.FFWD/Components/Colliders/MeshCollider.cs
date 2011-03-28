@@ -25,7 +25,8 @@ namespace PressPlay.FFWD.Components
                 }
             }
 
-            connectedBody = Physics.AddMesh(body, isTrigger, vertices, mass);
+            connectedBody = body;
+            Physics.AddMesh(body, isTrigger, vertices, mass);
         }
     }
 }
