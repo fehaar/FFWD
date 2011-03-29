@@ -15,9 +15,9 @@ namespace PressPlay.FFWD
         [ContentSerializer(Optional = true)]
         public string mainTexture;
         [ContentSerializer(Optional = true)]
-        public Vector2 mainTextureOffset;
+        public Vector2 mainTextureOffset = Vector2.zero;
         [ContentSerializer(Optional = true)]
-        public Vector2 mainTextureScale;
+        public Vector2 mainTextureScale = Vector2.one;
         [ContentSerializer(Optional = true)]
         internal bool wrapRepeat;
 

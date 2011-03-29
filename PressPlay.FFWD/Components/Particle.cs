@@ -15,5 +15,8 @@ namespace PressPlay.FFWD.Components
         public float Size;
         public Microsoft.Xna.Framework.Color Color;
         public float Rotation;
+        public float RotationSpeed;
+        public Vector2 TextureOffset;
+        public Vector2 TextureScale;
     }
 }

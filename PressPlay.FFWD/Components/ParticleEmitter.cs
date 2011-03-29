@@ -24,6 +24,17 @@ namespace PressPlay.FFWD.Components
         public bool useWorldSpace;
         public bool enabled;
 
+        [ContentSerializerIgnore]
+        public float minRotationSpeed = 0;
+        [ContentSerializerIgnore]
+        public float maxRotationSpeed = 0;
+        [ContentSerializerIgnore]
+        public bool randomRotation = false;
+        [ContentSerializerIgnore]
+        public int textureTileCountX = 1;
+        [ContentSerializerIgnore]
+        public int textureTileCountY = 1;
+
         // NOTE: These values are not accessible in Unity, therefore we have to deal with them ourselves
         [ContentSerializer(Optional=true)]
         internal Vector3 ellipsoid;
@@ -157,7 +168,7 @@ namespace PressPlay.FFWD.Components
                     {
                         numToEmit--;
                         particleCount++;
-                        EmitNewParticleAt(i);
+                        EmitNewParticle(ref particles[i]);
                     }
                 }
                 if (particlesToCheck == 0 && numToEmit == 0)
@@ -171,12 +182,12 @@ namespace PressPlay.FFWD.Components
 #endif
         }
 
-        private void EmitNewParticleAt(int index)
+        private void EmitNewParticle(ref Particle particle)
         {
-            particles[index].Energy = particles[index].StartingEnergy = Random.Range(minEnergy, maxEnergy);
+            particle.Energy = particle.StartingEnergy = Random.Range(minEnergy, maxEnergy);
 
             Vector3 pointInUnitSphere = Random.insideUnitSphere;
-            particles[index].Position = Microsoft.Xna.Framework.Vector3.Transform(ellipsoid, transform.rotation) * pointInUnitSphere.x;
+            particle.Position = Microsoft.Xna.Framework.Vector3.Transform(ellipsoid, transform.rotation) * pointInUnitSphere.x;
 
             Vector3 velocity = Vector3.zero;
             
@@ -200,15 +211,26 @@ namespace PressPlay.FFWD.Components
                 velocity += (Vector3)(Microsoft.Xna.Framework.Vector3.Transform(localVelocity, transform.rotation));
             }
 
-            particles[index].Velocity = velocity;
+            particle.Velocity = velocity;
 
             if (useWorldSpace)
             {
-                particles[index].Position += gameObject.transform.position;
+                particle.Position += gameObject.transform.position;
             }
 
-            particles[index].Size = Random.Range(minSize, maxSize);
-            particles[index].Color = renderer.material.color;
+            particle.Size = Random.Range(minSize, maxSize);
+            particle.Color = renderer.material.color;
+
+            particle.RotationSpeed = Random.Range(minRotationSpeed, maxRotationSpeed);
+            if (randomRotation)
+	        {
+                particle.Rotation = MathHelper.TwoPi * Random.value;
+	        }
+
+            int x = Random.Range(0, textureTileCountX);
+            int y = Random.Range(0, textureTileCountY);
+            particle.TextureScale = new Vector2(1.0f / textureTileCountX, 1.0f / textureTileCountY);
+            particle.TextureOffset = new Vector2(x * particle.TextureScale.x, y * particle.TextureScale.y);
         }
 
         private float GetNewEmissionTime()

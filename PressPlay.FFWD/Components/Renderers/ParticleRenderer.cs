@@ -121,51 +121,38 @@ namespace PressPlay.FFWD.Components
                 pos += (Microsoft.Xna.Framework.Vector3)transform.position;
             }
 
+            vertices[vertexIndex].TextureCoordinate = new Microsoft.Xna.Framework.Vector2(particle.TextureOffset.x, particle.TextureOffset.y + particle.TextureScale.y);
+            vertices[vertexIndex].Color = particle.Color;
+            vertices[vertexIndex + 1].TextureCoordinate = new Microsoft.Xna.Framework.Vector2(particle.TextureOffset.x, particle.TextureOffset.y);
+            vertices[vertexIndex + 1].Color = particle.Color;
+            vertices[vertexIndex + 2].TextureCoordinate = new Microsoft.Xna.Framework.Vector2(particle.TextureOffset.x + particle.TextureScale.x, particle.TextureOffset.y + particle.TextureScale.y);
+            vertices[vertexIndex + 2].Color = particle.Color;
+            vertices[vertexIndex + 3].TextureCoordinate = new Microsoft.Xna.Framework.Vector2(particle.TextureOffset.x + particle.TextureScale.x, particle.TextureOffset.y);
+            vertices[vertexIndex + 3].Color = particle.Color;
+
             if (particle.Rotation != 0)
             {
                 Matrix m = Matrix.CreateRotationY(particle.Rotation);
+                Microsoft.Xna.Framework.Vector3 p = new Microsoft.Xna.Framework.Vector3(size, vertexIndex * 0.0001f, size);
+                Microsoft.Xna.Framework.Vector3.Transform(ref p, ref m, out p);
 
-                vertices[vertexIndex].TextureCoordinate = new Microsoft.Xna.Framework.Vector2(0, 1);
-                Microsoft.Xna.Framework.Vector3 p = new Microsoft.Xna.Framework.Vector3(-size, vertexIndex * 0.0001f, size);
-                Microsoft.Xna.Framework.Vector3.Transform(ref p, ref m, out vertices[vertexIndex].Position);
-                vertices[vertexIndex].Position += pos;
-                vertices[vertexIndex].Color = particle.Color;
+                vertices[vertexIndex].Position = pos + new Microsoft.Xna.Framework.Vector3(-p.Z, vertexIndex * 0.0001f, p.X);
 
-                vertices[vertexIndex + 1].TextureCoordinate = new Microsoft.Xna.Framework.Vector2(0, 0);
-                p = new Microsoft.Xna.Framework.Vector3(-size, vertexIndex * 0.0001f, -size);
-                Microsoft.Xna.Framework.Vector3.Transform(ref p, ref m, out vertices[vertexIndex + 1].Position);
-                vertices[vertexIndex + 1].Position += pos;
-                vertices[vertexIndex + 1].Color = particle.Color;
+                vertices[vertexIndex + 1].Position = pos + new Microsoft.Xna.Framework.Vector3(-p.X, vertexIndex * 0.0001f, -p.Z);
 
-                vertices[vertexIndex + 2].TextureCoordinate = new Microsoft.Xna.Framework.Vector2(1, 1);
-                p = new Microsoft.Xna.Framework.Vector3(size, vertexIndex * 0.0001f, size);
-                Microsoft.Xna.Framework.Vector3.Transform(ref p, ref m, out vertices[vertexIndex + 2].Position);
-                vertices[vertexIndex + 2].Position += pos;
-                vertices[vertexIndex + 2].Color = particle.Color;
+                vertices[vertexIndex + 2].Position = pos + new Microsoft.Xna.Framework.Vector3(p.X, vertexIndex * 0.0001f, p.Z);
 
-                vertices[vertexIndex + 3].TextureCoordinate = new Microsoft.Xna.Framework.Vector2(1, 0);
-                p = new Microsoft.Xna.Framework.Vector3(size, vertexIndex * 0.0001f, -size);
-                Microsoft.Xna.Framework.Vector3.Transform(ref p, ref m, out vertices[vertexIndex + 3].Position);
-                vertices[vertexIndex + 3].Position += pos;
-                vertices[vertexIndex + 3].Color = particle.Color;
+                vertices[vertexIndex + 3].Position = pos + new Microsoft.Xna.Framework.Vector3(p.Z, vertexIndex * 0.0001f, -p.X);
             }
             else
             {
-                vertices[vertexIndex].TextureCoordinate = new Microsoft.Xna.Framework.Vector2(0, 1);
                 vertices[vertexIndex].Position = pos + new Microsoft.Xna.Framework.Vector3(-size, vertexIndex * 0.0001f, size);
-                vertices[vertexIndex].Color = particle.Color;
 
-                vertices[vertexIndex + 1].TextureCoordinate = new Microsoft.Xna.Framework.Vector2(0, 0);
                 vertices[vertexIndex + 1].Position = pos + new Microsoft.Xna.Framework.Vector3(-size, vertexIndex * 0.0001f, -size);
-                vertices[vertexIndex + 1].Color = particle.Color;
 
-                vertices[vertexIndex + 2].TextureCoordinate = new Microsoft.Xna.Framework.Vector2(1, 1);
                 vertices[vertexIndex + 2].Position = pos + new Microsoft.Xna.Framework.Vector3(size, vertexIndex * 0.0001f, size);
-                vertices[vertexIndex + 2].Color = particle.Color;
 
-                vertices[vertexIndex + 3].TextureCoordinate = new Microsoft.Xna.Framework.Vector2(1, 0);
                 vertices[vertexIndex + 3].Position = pos + new Microsoft.Xna.Framework.Vector3(size, vertexIndex * 0.0001f, -size);
-                vertices[vertexIndex + 3].Color = particle.Color;
             }
 
         }

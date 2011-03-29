@@ -70,7 +70,6 @@ namespace PressPlay.FFWD.Components
 #endif
             bool hasDamping = (damping != 1);
             bool hasForces = (force != Vector3.zero || rndForce != Vector3.zero);
-            bool hasRotation = true;
             bool hasSizing = (sizeGrow != 0);
             bool hasTangentForces = (emitter.tangentVelocity != Vector3.zero);
 
@@ -107,10 +106,7 @@ namespace PressPlay.FFWD.Components
                     //    emitter.particles[i].Velocity += (v * emitter.tangentVelocity) * Time.deltaTime;
                     //}
 
-                    if (hasRotation)
-                    {
-                        // Rotate the particles
-                    }
+                    emitter.particles[i].Rotation += Time.deltaTime * emitter.particles[i].RotationSpeed;
 
                     if (hasSizing)
                     {
