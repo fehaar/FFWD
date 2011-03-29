@@ -185,13 +185,13 @@ namespace PressPlay.FFWD
                     {
                         collider = compB.collider,
                         relativeVelocity = ((compA.rigidbody != null) ? compA.rigidbody.velocity : Vector3.zero) - ((compB.rigidbody != null) ? compB.rigidbody.velocity : Vector3.zero),
-                        contacts = new ContactPoint[2]
+                        contacts = new ContactPoint[contact.Manifold.PointCount]
                     };
                     Collision collisionAToB = new Collision()
                     {
                         collider = compA.collider,
                         relativeVelocity = ((compB.rigidbody != null) ? compB.rigidbody.velocity : Vector3.zero) - ((compA.rigidbody != null) ? compA.rigidbody.velocity : Vector3.zero),
-                        contacts = new ContactPoint[2]
+                        contacts = new ContactPoint[contact.Manifold.PointCount]
                     };
                     for (int j = 0; j < collisionBToA.contacts.Length; j++)
                     {
