@@ -82,6 +82,7 @@ namespace PressPlay.FFWD.UI.Controls
                 _clickRect = value;
             }
         }
+        private Vector3 lastPressPosition;
 
         /// <summary>
         /// Event raised when the menu entry is selected.
@@ -161,18 +162,14 @@ namespace PressPlay.FFWD.UI.Controls
             
             base.HandleInput(input);
 
-            //Debug.Log("buttonControl handle input!");
-
             if (isMouseWithinBounds(input))
             {
                 if (input.isMouseDown)
                 {
-
-                    //Debug.Log("buttonControl: mouse is down");
                     if (state != ButtonControlStates.pressed)
                     {
-                        //Debug.Log("buttonControl: changing state to ButtonControlStates.pressed");
                         ChangeState(ButtonControlStates.pressed);
+                        lastPressPosition = transform.position;
                     }
                 }
                 else if(input.isMouseUp)
@@ -194,6 +191,11 @@ namespace PressPlay.FFWD.UI.Controls
                 {
                     ChangeState(ButtonControlStates.normal);
                 }
+            }
+
+            if (state == ButtonControlStates.pressed && lastPressPosition != transform.position)
+            {
+                ChangeState(ButtonControlStates.normal);
             }
         }
 
