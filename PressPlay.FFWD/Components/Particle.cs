@@ -14,5 +14,6 @@ namespace PressPlay.FFWD.Components
         public float StartingEnergy;
         public float Size;
         public Microsoft.Xna.Framework.Color Color;
+        public float Rotation;
     }
 }
