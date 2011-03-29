@@ -382,6 +382,25 @@ namespace PressPlay.FFWD
         {
             return RaycastAll(ray.origin, ray.direction, distance, layerMask);
         }
+
+        internal static bool Raycast(Body body, Ray ray, out RaycastHit hitInfo, float distance)
+        {
+            RayCastOutput output;
+            RayCastInput input = new RayCastInput() { Point1 = ray.origin, Point2 = ray.origin + ray.direction, MaxFraction = distance };
+            hitInfo = new RaycastHit() { body = body };
+            for (int i = 0; i < body.FixtureList.Count; i++)
+            {
+                if (body.FixtureList[i].RayCast(out output, ref input, 0))
+                {
+                    hitInfo.normal = output.Normal;
+                    hitInfo.distance = output.Fraction;
+                    hitInfo.point = ray.GetPoint(output.Fraction);
+                    return true;
+                }
+            }
+            return false;
+        }
+
         #endregion
 
         #region Pointcast methods
@@ -472,8 +491,7 @@ namespace PressPlay.FFWD
 
         public static bool CheckCapsule(Vector3 start, Vector3 end, float radius, LayerMask layermask)
         {
-            //TODO an actual capsule check.. not just a raycasts
-         
+            //TODO an actual capsule check.. not just a raycasts            
             Vector3 forward = (end - start).normalized;
             Vector3 right = new Vector3(forward.z,0,-forward.x);
 
