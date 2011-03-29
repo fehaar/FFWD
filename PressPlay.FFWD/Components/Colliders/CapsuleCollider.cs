@@ -20,7 +20,8 @@ namespace PressPlay.FFWD.Components
         {
             connectedBody = body;
             Vector3 cen = center * transform.lossyScale;
-            if (direction == 0)
+
+            if (direction == 0 || height <= radius * 2)
 	        {
                 float rad = radius * transform.lossyScale.z;
                 Physics.AddCircle(body, isTrigger, rad, cen, mass);
@@ -30,6 +31,7 @@ namespace PressPlay.FFWD.Components
                 if (direction == 1)
 	            {
                     Vector2 sz = new Vector2(height - radius * 2, radius * 2);
+
                     sz *= (Vector2)gameObject.transform.lossyScale;
                     Physics.AddBox(body, isTrigger, sz.x, sz.y, cen, mass);
                     sz /= 2;
