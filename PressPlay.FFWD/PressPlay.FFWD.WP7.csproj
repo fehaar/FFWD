@@ -300,7 +300,6 @@
     <Compile Include="Extensions\PlaneExtensions.cs" />
     <Compile Include="Application.cs" />
     <Compile Include="GameObject.cs" />
-    <Compile Include="Gestures.cs" />
     <Compile Include="Input.cs" />
     <Compile Include="Interfaces\IContactProcessor.cs" />
     <Compile Include="Interfaces\IFixedUpdateable.cs" />

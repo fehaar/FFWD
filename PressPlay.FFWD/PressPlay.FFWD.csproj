@@ -323,7 +323,6 @@
     <Compile Include="Farseer\Factories\JointFactory.cs" />
     <Compile Include="Farseer\Factories\LinkFactory.cs" />
     <Compile Include="Farseer\Settings.cs" />
-    <Compile Include="Gestures.cs" />
     <Compile Include="InvokeCall.cs" />
     <Compile Include="Material.cs" />
     <Compile Include="Extensions\PlaneExtensions.cs" />

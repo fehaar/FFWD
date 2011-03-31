@@ -24,12 +24,6 @@ namespace PressPlay.FFWD
 
         internal static void Initialize()
         {
-            /*
-#if WINDOWS_PHONE
-            TouchPanel.EnabledGestures = TouchPanel.EnabledGestures | 
-                                         GestureType.Tap;
-#endif
-             */
         }
 
         public static void Update(InputState inputState)
@@ -38,13 +32,6 @@ namespace PressPlay.FFWD
             currentMouseState = Mouse.GetState();
 
 #if WINDOWS_PHONE
-            /*
-            samples.Clear();
-            while (TouchPanel.IsGestureAvailable)
-            {
-                samples.Add(TouchPanel.ReadGesture());
-            }
-             */
             samples = inputState.Gestures;
 
             newTap = false;
