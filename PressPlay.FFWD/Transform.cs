@@ -127,7 +127,9 @@ namespace PressPlay.FFWD
                 //reset transform to match world properties before parent was set
                 position = pos;
                 rotation = rot;
-                //localScale = 
+
+                //HACK!! The rescaling is actually supposed to happen, but it was implemented so late in Tentacles that it introduced too many errors. 
+                //localScale = scale / _parent.lossyScale;
 
                 hasDirtyWorld = true;
             }
