@@ -107,7 +107,7 @@ namespace PressPlay.FFWD.UI.Controls
             this.buttonStyle = buttonStyle;
             this.link = link;
 
-            background = new ImageControl(buttonStyle.texture, buttonStyle[ButtonControlStates.normal]);
+            background = new ImageControl(buttonStyle.texture, buttonStyle[(int)ButtonControlStates.normal]);
             AddChild(background);
 
             textControl = new TextControl();
@@ -118,7 +118,7 @@ namespace PressPlay.FFWD.UI.Controls
         private void ChangeState(ButtonControlStates newState)
         {
             ((UISpriteRenderer)background.renderer).texture = buttonStyle.texture;
-            ((UISpriteRenderer)background.renderer).sourceRect = buttonStyle.GetSourceRect(newState);
+            ((UISpriteRenderer)background.renderer).sourceRect = buttonStyle.GetSourceRect((int)newState);
 
             previousState = _state;
             _state = newState;

@@ -11,15 +11,15 @@ namespace PressPlay.FFWD.UI.Controls
 
         private Dictionary<int, Rectangle> sources;
 
-        public Rectangle this[ButtonControlStates state]
+        public Rectangle this[int state]
         {
             get
             {
-                return sources[(int)state];
+                return sources[state];
             }
             set
             {
-                sources[(int)state] = value;
+                sources[state] = value;
             }
         }
 
@@ -52,20 +52,20 @@ namespace PressPlay.FFWD.UI.Controls
             this.texture = texture;
             
             sources = new Dictionary<int, Rectangle>();
-            sources.Add((int)ButtonControlStates.normal, normal);
-            sources.Add((int)ButtonControlStates.pressed, pressed);
-            sources.Add((int)ButtonControlStates.hover, hover);
-            sources.Add((int)ButtonControlStates.disabled, disabled);
+            sources.Add(1, normal);
+            sources.Add(2, pressed);
+            sources.Add(0, hover);
+            sources.Add(3, disabled);
         }
 
-        public Rectangle GetSourceRect(ButtonControlStates state)
+        public Rectangle GetSourceRect(int state)
         {
-            if (sources[(int)state] != Rectangle.Empty)
+            if (sources[state] != Rectangle.Empty)
             {
-                return sources[(int)state];
+                return sources[state];
             }
 
-            return sources[(int)ButtonControlStates.normal];
+            return sources[1];
         }
     }
 
