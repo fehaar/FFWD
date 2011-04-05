@@ -298,11 +298,11 @@ namespace PressPlay.FFWD.Components
                 RasterizerState state = new RasterizerState();
                 state.FillMode = FillMode.WireFrame;
                 state.CullMode = CullMode.None;
-                TextRenderer3D.batch.Begin(SpriteSortMode.Deferred, null, null, DepthStencilState.Default, state, TextRenderer3D.basicEffect);
+                TextRenderer3D.batch.Begin(SpriteSortMode.Deferred, null, null, DepthStencilState.DepthRead, state, TextRenderer3D.basicEffect);
             }
             else
             {
-                TextRenderer3D.batch.Begin(SpriteSortMode.Deferred, null, null, DepthStencilState.Default, RasterizerState.CullNone, TextRenderer3D.basicEffect);
+                TextRenderer3D.batch.Begin(SpriteSortMode.Deferred, null, null, DepthStencilState.DepthRead, RasterizerState.CullNone, TextRenderer3D.basicEffect);
             }
             #endregion
 
