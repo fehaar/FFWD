@@ -144,7 +144,8 @@ namespace PressPlay.FFWD.Components
                     startIndex = 3;
                 }
                 colorScale = startIndex - (int)startIndex;
-                particle.Color = Microsoft.Xna.Framework.Color.Lerp(_colorAnimation[(int)startIndex], _colorAnimation[(int)startIndex + 1], colorScale);
+                Microsoft.Xna.Framework.Color nonPremul = Microsoft.Xna.Framework.Color.Lerp(_colorAnimation[(int)startIndex], _colorAnimation[(int)startIndex + 1], colorScale);
+                particle.Color = Microsoft.Xna.Framework.Color.FromNonPremultiplied(nonPremul.R, nonPremul.G, nonPremul.B, nonPremul.A);
             }
             else
             {
