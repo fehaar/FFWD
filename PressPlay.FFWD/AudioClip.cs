@@ -15,7 +15,7 @@ namespace PressPlay.FFWD
         public string clip;
 
         [ContentSerializerIgnore]
-        public SoundEffect sound;
+        private SoundEffect sound;
 
         public float length
         {
@@ -34,6 +34,11 @@ namespace PressPlay.FFWD
         public AudioClip(SoundEffect sound)
         {
             this.sound = sound;
+            if (sound != null)
+            {
+                Instance = sound.CreateInstance();
+                loopSet = false;
+            }
         }
 
         protected override void DoLoadAsset(AssetHelper assetHelper)
@@ -41,7 +46,21 @@ namespace PressPlay.FFWD
             if (sound == null)
             {
                 sound = assetHelper.Load<SoundEffect>("Sounds/" + clip);
+                Instance = sound.CreateInstance();
+                loopSet = false;
                 name = clip;
+            }
+        }
+
+        internal SoundEffectInstance Instance { get; private set; }
+
+        private bool loopSet = false;
+        internal void Loop(bool loop)
+        {
+            if (!loopSet && Instance != null)
+            {
+                loopSet = true;
+                Instance.IsLooped = loop;
             }
         }
     }

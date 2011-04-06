@@ -55,20 +55,16 @@ namespace PressPlay.FFWD
             }
             set
             {
-                if (soundEffect != null && soundEffect.IsDisposed)
+                if (clip == null || clip.Instance.IsDisposed)
                 {
-                    soundEffect = null;
+                    return;
                 }
 
                 _volume = Mathf.Clamp01(value);
                 _volume = Mathf.Max(_volume, minVolume);
                 _volume = Mathf.Min(_volume, maxVolume);
 
-
-                if (soundEffect != null)
-                {
-                    soundEffect.Volume = _volume;
-                }
+                clip.Instance.Volume = _volume;
             }
         }
 
@@ -76,11 +72,11 @@ namespace PressPlay.FFWD
         {
             get
             {
-                if (soundEffect == null) { return false; }
+                if (clip == null) { return false; }
 
-                if (soundEffect.IsDisposed) { return false; }
+                if (clip.Instance.IsDisposed) { return false; }
 
-                return (soundEffect.State == SoundState.Playing);
+                return (clip.Instance.State == SoundState.Playing);
             }
         }
 
@@ -95,9 +91,9 @@ namespace PressPlay.FFWD
             set
             {
                 _loop = value;
-                if (soundEffect != null)
+                if (clip != null)
                 {
-                    soundEffect.IsLooped = _loop;
+                    clip.Loop(_loop);
                 }
             }
         }
@@ -107,31 +103,26 @@ namespace PressPlay.FFWD
         public float time = 0;
         public AudioVelocityUpdateMode velocityUpdateMode = AudioVelocityUpdateMode.Auto;
 
-        private SoundEffectInstance soundEffect;
-
         private void SetSoundEffect(AudioClip sfx)
         {
-            if (sfx == null || sfx.sound == null)
+            if (sfx != null)
             {
-                soundEffect = null;
-            }
-            else
-            {
-                soundEffect = sfx.sound.CreateInstance();
-                soundEffect.IsLooped = loop;
-                soundEffect.Volume = volume;
+                sfx.Instance.Volume = volume;
                 time = 0;
             }
         }
 
         public void Play()
         {
-            if (soundEffect == null || soundEffect.IsDisposed)
-            { 
-                return; 
+            if (clip == null)
+            {
+                return;
             }
-
-            soundEffect.Play();
+            if (clip.Instance.State == SoundState.Playing)
+            {
+                clip.Instance.Stop();
+            }
+            clip.Instance.Play();
         }
 
         public void PlayOneShot(AudioClip clip, float volumeScale)
@@ -146,15 +137,15 @@ namespace PressPlay.FFWD
 
         public void Stop()
         {
-            if (soundEffect == null || soundEffect.IsDisposed) return;
-            soundEffect.Stop();
+            if (clip == null || clip.Instance.IsDisposed) return;
+            clip.Instance.Stop();
             time = 0;
         }
 
         public void Pause()
         {
-            if (soundEffect == null || soundEffect.IsDisposed) return;
-            soundEffect.Pause();
+            if (clip == null || clip.Instance.IsDisposed) return;
+            clip.Instance.Pause();
         }
 
         public static void PlayClipAtPoint(AudioClip clip, Vector3 position)
@@ -167,29 +158,25 @@ namespace PressPlay.FFWD
             throw new NotImplementedException();
         }
 
-        public void Update()
-        {
-            if (soundEffect != null && !soundEffect.IsDisposed && soundEffect.State == SoundState.Playing)
-            {
-                time += Time.deltaTime;
-                if (time > clip.length)
-                {
-                    time = time - clip.length;
-                }
-            }
-        }
-
         public void LateUpdate()
         {
- 
+
         }
 
-        protected override void Destroy()
+        public void Update()
         {
-            base.Destroy();
-            if (soundEffect != null && !soundEffect.IsDisposed)
+            if (clip == null || clip.Instance.IsDisposed) return;
+            if (clip.Instance.State == SoundState.Playing)
             {
-                soundEffect.Dispose();
+                time += Time.deltaTime;
+                if (time >= clip.length)
+                {
+                    time = time - clip.length;
+                    if (!loop && clip.Instance.IsLooped)
+                    {
+                        clip.Instance.Stop();
+                    }
+                }
             }
         }
     }
