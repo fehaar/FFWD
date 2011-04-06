@@ -93,17 +93,37 @@ namespace PressPlay.FFWD.Import
                     {
                         rendererGo.RemoveComponent(filter);
                     }
-                    if (rendererGo.ComponentCount == 1)
+                    PurgeGo(rendererGo);
+                }
+            }
+        }
+
+        private void PurgeGo(GameObject go)
+        {
+            if (go.ComponentCount == 1)
+            {
+                if (go.transform.childCount > 0)
+                {
+                    foreach (Transform trans in go.GetComponentsInChildren<Transform>())
                     {
-                        if (rendererGo.transform.parent == null)
+                        if (go.transform != trans)
                         {
-                            scene.gameObjects.Remove(rendererGo);
-                        }
-                        else
-                        {
-                            rendererGo.transform.parent = null;
+                            PurgeGo(trans.gameObject);
                         }
                     }
+                    if (go.transform.childCount > 0)
+                    {
+                        return;
+                    }
+                }
+
+                if (go.transform.parent == null)
+                {
+                    scene.gameObjects.Remove(go);
+                }
+                else
+                {
+                    go.transform.parent = null;
                 }
             }
         }
