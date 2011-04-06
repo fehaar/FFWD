@@ -15,6 +15,9 @@ namespace PressPlay.FFWD.Components
         public float maxParticleSize;
         public Vector3 uvAnimation;
 
+        [ContentSerializerIgnore]
+        public bool doViewportCulling = false;
+
         private ParticleEmitter emitter;
         private VertexPositionColorTexture[] vertices;
         private short[] triangles;
@@ -77,11 +80,19 @@ namespace PressPlay.FFWD.Components
             int particlesRendered = 0;
             for (int i = 0; i < emitter.particles.Length && particlesRendered < emitter.particleCount; i++)
             {
-                if (emitter.particles[i].Energy > 0)
+                Particle part = emitter.particles[i];
+                if (part.Energy > 0)
                 {
-                    RenderParticle(particlesRendered * 4, particlesRendered * 6, ref emitter.particles[i]);
-                    particlesRendered++;
+                    if (RenderParticle(cam, particlesRendered * 4, particlesRendered * 6, ref part))
+                    {
+                        particlesRendered++;
+                    }
                 }
+            }
+
+            if (particlesRendered == 0)
+            {
+                return 0;
             }
 
 #if DEBUG
@@ -112,13 +123,27 @@ namespace PressPlay.FFWD.Components
             return 1;
         }
 
-        private void RenderParticle(int vertexIndex, int triangleIndex, ref Particle particle)
+        private bool RenderParticle(Camera cam, int vertexIndex, int triangleIndex, ref Particle particle)
         {
-            Microsoft.Xna.Framework.Vector3 pos = particle.Position;
             float size = particle.Size / 2;
+            if (size <= 0)
+            {
+                return false;
+            }
+
+            Microsoft.Xna.Framework.Vector3 pos = particle.Position;
             if (!emitter.useWorldSpace)
             {
                 pos += (Microsoft.Xna.Framework.Vector3)transform.position;
+            }
+
+            if (doViewportCulling)
+            {
+                BoundingSphere sphere = new BoundingSphere(pos, size);
+                if (cam.DoFrustumCulling(ref sphere))
+                {
+                    return false;
+                }
             }
 
             vertices[vertexIndex].TextureCoordinate = new Microsoft.Xna.Framework.Vector2(particle.TextureOffset.x, particle.TextureOffset.y + particle.TextureScale.y);
@@ -154,7 +179,7 @@ namespace PressPlay.FFWD.Components
 
                 vertices[vertexIndex + 3].Position = pos + new Microsoft.Xna.Framework.Vector3(size, vertexIndex * 0.0001f, -size);
             }
-
+            return true;
         }
 
     }
