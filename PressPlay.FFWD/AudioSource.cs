@@ -118,7 +118,7 @@ namespace PressPlay.FFWD
             {
                 return;
             }
-            if (clip.Instance.State == SoundState.Playing)
+            if (clip.Instance.State != SoundState.Stopped)
             {
                 clip.Instance.Stop();
             }
