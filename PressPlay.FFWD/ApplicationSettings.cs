@@ -28,9 +28,16 @@ namespace PressPlay.FFWD
         public static SpriteFont DebugFont;
 
 #if WINDOWS
-        public static int AssetLoadInterval = 100; // In Ticks
+        public static float pressPlayLogoSplashTime = 0;
+        public static float MGSLogoSplashTime = 0;
 #else
-        public static int AssetLoadInterval = 40; // In Ticks
+        public static float pressPlayLogoSplashTime = 1;
+        public static float MGSLogoSplashTime = 5;
+#endif
+#if WINDOWS
+        public static int AssetLoadInterval = 50; // In Milliseconds
+#else
+        public static int AssetLoadInterval = 50; // In Milliseconds
 #endif
     }
 }

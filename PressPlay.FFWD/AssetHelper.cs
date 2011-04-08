@@ -42,6 +42,9 @@ namespace PressPlay.FFWD
             }
             else
             {
+#if DEBUG
+                Debug.Log("loading asset from disk : " + contentPath);
+#endif
                 return Load<T>(Application.loadedLevelName, contentPath);
             }
         }

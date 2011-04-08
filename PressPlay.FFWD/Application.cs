@@ -455,7 +455,7 @@ namespace PressPlay.FFWD
             {
                 //Debug.Log("Assets left: "+tempAssets.Count+" Elapsed time: " + stopWatch.ElapsedMilliseconds);
 
-                if (stopWatch.ElapsedTicks > ApplicationSettings.AssetLoadInterval)
+                if (stopWatch.ElapsedMilliseconds > ApplicationSettings.AssetLoadInterval)
                 {
                     //Debug.Log("Application > Chewing asset loading. Assets left to load: " + tempAssets.Count);
                     stopWatch.Stop();
