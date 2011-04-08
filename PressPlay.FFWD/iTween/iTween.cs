@@ -7423,7 +7423,7 @@ namespace PressPlay.FFWD
             // HACK: Something wierd is going on here. This should never be possible
             if (tweenArguments == null)
             {
-                Debug.Log("Exited iTween on ", gameObject, " as tween arguments had been added.");
+                //Debug.Log("Exited iTween on ", gameObject, " as tween arguments had been added.");
                 Destroy(this);
                 return;
             }

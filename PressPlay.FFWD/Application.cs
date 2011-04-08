@@ -404,7 +404,7 @@ namespace PressPlay.FFWD
 
         private void DoSceneLoad()
         {
-            Debug.Log("DoSceneLoad: " + sceneToLoad);
+            //Debug.Log("DoSceneLoad: " + sceneToLoad);
 
             _loadingProgess = 0;
 
@@ -492,7 +492,7 @@ namespace PressPlay.FFWD
         private void OnSceneLoadComplete()
         {
             
-            Debug.Log("OnSceneLoadComplete");
+            //Debug.Log("OnSceneLoadComplete");
 
             stopWatch.Stop();
             stopWatch.Reset();
