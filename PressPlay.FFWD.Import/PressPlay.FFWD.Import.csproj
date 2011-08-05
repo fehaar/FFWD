@@ -190,6 +190,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AudioClipSerializer.cs" />
+    <Compile Include="CharacterRange.cs" />
     <Compile Include="ColorTypeSerializer.cs" />
     <Compile Include="Animation\CpuSkinnedModelProcessor.cs" />
     <Compile Include="Animation\CpuSkinnedModelWriter.cs" />
@@ -203,6 +204,7 @@
     <Compile Include="MeshProcessor.cs" />
     <Compile Include="SceneProcessor.cs" />
     <Compile Include="StaticBatchRendererSerializer.cs" />
+    <Compile Include="TextureSpriteFontProcessor.cs" />
     <Compile Include="Vector2TypeSerializer.cs" />
     <Compile Include="QuaternionTypeSerializer.cs" />
     <Compile Include="Vector3ArrayTypeSerializer.cs" />
