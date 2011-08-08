@@ -122,7 +122,18 @@ namespace PressPlay.FFWD
             {
                 clip.Instance.Stop();
             }
-            clip.Instance.Play();
+            try
+            {
+                clip.Instance.Play();
+            }
+            catch (InstancePlayLimitException)
+            {
+                // We will eat this exception so it does not crash the game. 
+                // In order not to get it we should put some limit on playing instances on somewhere else.
+#if DEBUG
+                PressPlay.FFWD.Debug.LogError("We are trying to play too many sounds at the same time. You cannot play more than 16 sound effects at the same time.");
+#endif
+            }
         }
 
         public void PlayOneShot(AudioClip clip, float volumeScale)
