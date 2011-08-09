@@ -55,6 +55,7 @@ namespace PressPlay.FFWD.Import
                 }
 
                 StringBuilder rangeText = new StringBuilder();
+                ranges.Add(range);
                 ranges.ForEach(r => rangeText.Append(r + ";"));
                 File.WriteAllText(defFile.Insert(defFile.Length - 4, "-ranges"), rangeText.ToString(0, rangeText.Length - 1));
             }
@@ -63,6 +64,7 @@ namespace PressPlay.FFWD.Import
 
         protected override char GetCharacterForIndex(int index)
         {
+            //File.AppendAllText(@"c:\temp\chars.txt", Characters[index] + " - " + index + " ");
             return Characters[index];
         }
     }
