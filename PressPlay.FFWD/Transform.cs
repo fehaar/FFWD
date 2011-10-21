@@ -598,6 +598,11 @@ namespace PressPlay.FFWD
             LookAt(worldPosition, Vector3.up);
         }
 
+        public void LookAt(Transform t)
+        {
+            LookAt(t.position, Vector3.up);
+        }
+
         private void WorldChanged()
         {
             if (parent == null)
@@ -747,6 +752,11 @@ namespace PressPlay.FFWD
             Debug.DrawRay(position, right, Color.red);
             Debug.DrawRay(position, up, Color.green);
 #endif
+        }
+
+        public void RotateAround(Vector3 vector3, float rotateThisFrame)
+        {
+            // TODO: Implement this
         }
     }
 }

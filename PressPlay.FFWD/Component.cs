@@ -4,6 +4,7 @@ using System.Reflection;
 using Microsoft.Xna.Framework.Content;
 using PressPlay.FFWD.Components;
 using PressPlay.FFWD.Attributes;
+using System.Collections;
 
 namespace PressPlay.FFWD
 {
@@ -146,28 +147,48 @@ namespace PressPlay.FFWD
                         }
                     }
                 }
-                if (memInfo[i].FieldType.IsArray && typeof(UnityObject).IsAssignableFrom(memInfo[i].FieldType.GetElementType()))
+                //if (memInfo[i].FieldType.IsArray && typeof(UnityObject).IsAssignableFrom(memInfo[i].FieldType.GetElementType()))
+                //{
+                //    UnityObject[] arr = (memInfo[i].GetValue(objectToFix) as UnityObject[]); 
+                //    if (arr != null)
+                //    {
+                //        arr = arr.Clone() as UnityObject[];
+                //        for (int j = 0; j < arr.Length; j++)
+                //        {
+                //            if ((arr[j] != null) && (arr[j].isPrefab))
+                //            {
+                //                if (idMap.ContainsKey(arr[j].GetInstanceID()))
+                //                {
+                //                    if (arr[j] != idMap[arr[j].GetInstanceID()])
+                //                    {
+                //                        arr[j] = idMap[arr[j].GetInstanceID()];
+                //                    }
+                //                }
+                //            }
+                //        }
+                //    }
+                //    memInfo[i].SetValue(objectToFix, arr);
+                //    continue;
+                //}
+
+                if (typeof(IList).IsAssignableFrom(memInfo[i].FieldType))
                 {
-                    UnityObject[] arr = (memInfo[i].GetValue(objectToFix) as UnityObject[]); 
-                    if (arr != null)
+                    IList list = (memInfo[i].GetValue(objectToFix) as IList);
+                    if (list != null)
                     {
-                        arr = arr.Clone() as UnityObject[];
-                        for (int j = 0; j < arr.Length; j++)
+                        for (int j = 0; j < list.Count; j++)
                         {
-                            if ((arr[j] != null) && (arr[j].isPrefab))
+                            if (list[j] is UnityObject && (list[j] as UnityObject).isPrefab)
                             {
-                                if (idMap.ContainsKey(arr[j].GetInstanceID()))
+                                if (idMap.ContainsKey((list[j] as UnityObject).GetInstanceID()))
                                 {
-                                    if (arr[j] != idMap[arr[j].GetInstanceID()])
-                                    {
-                                        arr[j] = idMap[arr[j].GetInstanceID()];
-                                    }
+                                    list[j] = idMap[(list[j] as UnityObject).GetInstanceID()];
                                 }
                             }
                         }
                     }
-                    memInfo[i].SetValue(objectToFix, arr);
                 }
+
                 if (Application.fixReferences.Contains(memInfo[i].FieldType.Name))
                 {
                     DoFixReferences(memInfo[i].GetValue(objectToFix), idMap);

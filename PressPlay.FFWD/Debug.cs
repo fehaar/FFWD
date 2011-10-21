@@ -144,6 +144,18 @@ namespace PressPlay.FFWD
 #endif
         }
 
+        public static void DrawLine(Vector3 start, Vector3 end, Color color, float duration)
+        {
+            /// TODO: Make duration do something
+#if DEBUG
+            if (lines == null)
+            {
+                lines = new List<Line>();
+            }
+            lines.Add(new Line(start, end, color));
+#endif
+        }
+
         public static void DrawRay(Vector3 start, Vector3 direction, Color color)
         {
 #if DEBUG

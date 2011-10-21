@@ -8,5 +8,7 @@ namespace PressPlay.FFWD.Test.Core_framework
     public class ReferencingComponent : Component
     {
         public Component reference;
+        public Component[] componentArray;
+        public List<Component> componentList;
     }
 }
