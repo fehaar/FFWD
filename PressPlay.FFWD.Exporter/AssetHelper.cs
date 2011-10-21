@@ -7,16 +7,14 @@ using UnityEditor;
 
 namespace PressPlay.FFWD.Exporter
 {
+    [Serializable]
     public class AssetHelper
     {
-        public string TextureDir { get; set; }
-        public string AudioDir { get; set; }
-        public string MeshDir { get; set; }
-        public string ScriptDir { get; set; }
+        public string TextureDir;
+        public string AudioDir; 
+        public string MeshDir; 
+        public string ScriptDir;
 
-        //private HashSet<string> exportedTextures = new HashSet<string>();
-        //private HashSet<string> exportedScripts = new HashSet<string>();
-        //private HashSet<string> exportedMeshes = new HashSet<string>();
         private List<string> exportedTextures = new List<string>();
         private List<string> exportedAudio = new List<string>();
         private List<string> exportedScripts = new List<string>();
@@ -60,8 +58,7 @@ namespace PressPlay.FFWD.Exporter
             }
             catch (UnityException ue)
             {
-                Debug.Log(ue.ToString());
-                throw;
+                Debug.LogError(ue.ToString(), tex);
             }
         }
 
@@ -92,7 +89,7 @@ namespace PressPlay.FFWD.Exporter
             }
             catch (Exception ex)
             {
-                Debug.Log(key + " export exception: " + ex.Message);
+                Debug.LogError(key + " export exception: " + ex.Message);
             }
             finally
             {

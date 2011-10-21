@@ -239,9 +239,9 @@ namespace PressPlay.FFWD.Exporter.Writers
                     }
                     return true;
                 }
-                catch
+                catch (Exception ex)
                 {
-                    Debug.Log("Exception when writing " + component.GetType() + " on " + component.name + " under " + component.transform.root.name, component);
+                    Debug.Log("Exception when writing " + component.GetType() + " on " + component.name + " under " + component.transform.root.name + ":\n" + ex.Message, component);
                 }
             }
             else
