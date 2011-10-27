@@ -93,9 +93,9 @@ public class ExportSceneWizard : ScriptableWizard
             {
                 config = (ExportConfig)xmlSer.Deserialize(sr);
             }
-            if (EditorPrefs.HasKey("FFWD XNA dir"))
+            if (EditorPrefs.HasKey("FFWD XNA dir " + PlayerSettings.productName))
             {
-                xnaBaseDir = EditorPrefs.GetString("FFWD XNA dir");
+                xnaBaseDir = EditorPrefs.GetString("FFWD XNA dir " + PlayerSettings.productName);
             }
             if (EditorPrefs.HasKey("FFWD active group"))
             {
@@ -116,7 +116,7 @@ public class ExportSceneWizard : ScriptableWizard
         {
             xmlSer.Serialize(sw, config);
         }
-        EditorPrefs.SetString("FFWD XNA dir", xnaBaseDir);
+        EditorPrefs.SetString("FFWD XNA dir " + PlayerSettings.productName, xnaBaseDir);
         EditorPrefs.SetInt("FFWD active group", activeGroup);
     }
 
