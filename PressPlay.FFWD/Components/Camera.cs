@@ -317,6 +317,13 @@ namespace PressPlay.FFWD.Components
                     // It is acceptable behaviour.
                     continue;
                 }
+
+                if (renderQueue[i].material == null)
+                {
+                    // We have no material, so we will skip rendering
+                    continue;
+                }
+
                 if (renderQueue[i].material.renderQueue != q)
                 {
                     if (q > 0)

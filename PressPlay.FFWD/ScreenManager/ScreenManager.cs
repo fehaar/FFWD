@@ -225,6 +225,11 @@ namespace PressPlay.FFWD.ScreenManager
                 }
             }
 
+            if (screensToUpdate.Count == 0)
+            {
+                Input.Update(input);
+            }
+
             // Print debug trace?
             if (traceEnabled)
                 TraceScreens();

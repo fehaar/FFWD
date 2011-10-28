@@ -20,6 +20,7 @@ namespace PressPlay.FFWD.Import
             ReadNormals = true;
             ReadUVs = true;
             WriteAsModel = false;
+            Scale = 1.0f;
         }
 
         [DefaultValue(false)]
@@ -83,6 +84,10 @@ namespace PressPlay.FFWD.Import
                 else
                 {
                     Microsoft.Xna.Framework.Quaternion rotation = Microsoft.Xna.Framework.Quaternion.CreateFromYawPitchRoll(MathHelper.ToRadians(RotationY), MathHelper.ToRadians(RotationX), MathHelper.ToRadians(RotationZ));
+                    if (Scale == 0)
+                    {
+                        throw new Exception("Scale of model is 0!");
+                    }
                     preTransform = Matrix.CreateScale(Scale) * Matrix.CreateFromQuaternion(rotation);
 
                     if (input.Name == "sprite_square")
@@ -188,6 +193,14 @@ namespace PressPlay.FFWD.Import
             mesh.boundingSphere = BoundingSphere.CreateFromPoints(mesh.vertices);
 
             // Add the new piece of geometry to our output model.
+            int num = 1;
+            string tempName = name;
+            while (meshData.meshParts.ContainsKey(name))
+            {
+                name = tempName + "_" + num;
+                num++;
+            }
+
             meshData.meshParts.Add(name, mesh);
         }
 

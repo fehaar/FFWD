@@ -141,6 +141,16 @@ namespace PressPlay.FFWD
             {
                 throw new InvalidOperationException("You have to Initialize the Physics system before adding bodies");
             }
+            if (width < 0)
+            {
+                Debug.LogWarning(String.Format("Width of the Physics rectangle at {0} is negative. Inverting.", body.UserData.ToString()));
+                width = -width;
+            }
+            if (height < 0)
+            {
+                Debug.LogWarning(String.Format("Height of the Physics rectangle at {0} is negative. Inverting.", body.UserData.ToString()));
+                height = -height;
+            }
             Fixture fix = FixtureFactory.AttachRectangle(width, height, density, position, body);
             fix.IsSensor = isTrigger;            
         }
