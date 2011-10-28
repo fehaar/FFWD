@@ -4,71 +4,126 @@ using PressPlay.FFWD.Exporter.Writers;
 using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
+using System;
+using System.Xml.Serialization;
 
 public class ExportSceneWizard : ScriptableWizard
 {
+    [Serializable]
+    public class SceneGroup
+    {
+        public string name;
+        public List<string> scenes;
+    }
+
+    [Serializable]
+    public class ExportConfig
+    {
+        public string scriptNamespace = "";
+        public AssetHelper assets = new AssetHelper();
+        public string exportDir = "";
+        public string configSource = @"Editor\FFWD\PressPlay.FFWD.Exporter.dll.config";
+        public bool showComponentsNotWritten = true;
+        public bool flipYInTransforms = true;
+        public List<SceneGroup> groups;
+        public List<string> allowedSkippedComponents = new List<string>();
+    }
+
+    public string xnaBaseDir = "";
+    public int activeGroup = 0;
+    public ExportConfig config;
 
     private List<string> allComponentsNotWritten = new List<string>();
-    private List<string> allowedSkippedComponents = new List<string>(new string[]{"PPMetrics", "PPCommunicator", "CheatManager", "UIManager", "DamageVisualizer", "SnapToAxis", "SnapToYAxis",
-    	"PoolableTrailRenderer", "UnityEngine.MeshCollider", "LoadPreloaderFirst", "DrawIcon", "DoNotRenderAtRuntime", "MetricDataHandler", "XNAEllipsoidParticleEmitter", 
-		"UnityEngine.ConfigurableJoint", "LemmySquishedTester", "GameObjectPreloader", "SpriteText", "ReturnPoolableObject", "GameObjectPreloaderSet", 
-		"SnapLocalPosition", "InputRayPlaneHandler"});
+
+    private XmlSerializer xmlSer = new XmlSerializer(typeof(ExportConfig));
+    private TypeResolver resolver;
+    private AssetHelper assets;
 
     public ExportSceneWizard()
     {
+        LoadConfiguration();
+        
         if (EditorPrefs.HasKey("FFWD configSource"))
         {
-            configSource = EditorPrefs.GetString("FFWD configSource");
-        }
-        if (EditorPrefs.HasKey("FFWD XNA dir"))
-        {
-            xnaDir = EditorPrefs.GetString("FFWD XNA dir");
+            EditorPrefs.DeleteKey("FFWD configSource");
         }
         if (EditorPrefs.HasKey("FFWD scenes"))
         {
-            scenes = EditorPrefs.GetString("FFWD scenes").Split(';');
+            EditorPrefs.DeleteKey("FFWD scenes");
         }
         if (EditorPrefs.HasKey("FFWD textureDir"))
         {
-            textureDir = EditorPrefs.GetString("FFWD textureDir");
+            EditorPrefs.DeleteKey("FFWD textureDir");
         }
         if (EditorPrefs.HasKey("FFWD scriptDir"))
         {
-            scriptDir = EditorPrefs.GetString("FFWD scriptDir");
+            EditorPrefs.DeleteKey("FFWD scriptDir");
         }
         if (EditorPrefs.HasKey("FFWD meshDir"))
         {
-            meshDir = EditorPrefs.GetString("FFWD meshDir");
+            EditorPrefs.DeleteKey("FFWD meshDir");
         }
         if (EditorPrefs.HasKey("FFWD audioDir"))
         {
-            audioDir = EditorPrefs.GetString("FFWD audioDir");
+            EditorPrefs.DeleteKey("FFWD audioDir");
         }
 
-        string configPath = Path.Combine(Application.dataPath, configSource);
-
+        string configPath = Path.Combine(Application.dataPath, config.configSource);
         if (File.Exists(configPath))
         {
             resolver = TypeResolver.ReadConfiguration(configPath);
         }
-
         if (resolver == null)
         {
             Debug.LogWarning("We have no TypeResolver so we will not export any components");
         }
 
         assets = new AssetHelper();
-        assets.TextureDir = Path.Combine(xnaDir, textureDir);
-        assets.ScriptDir = Path.Combine(xnaDir, scriptDir);
-        assets.MeshDir = Path.Combine(xnaDir, meshDir);
-        assets.AudioDir = Path.Combine(xnaDir, audioDir);
+        assets.TextureDir = Path.Combine(xnaBaseDir, config.assets.TextureDir);
+        assets.ScriptDir = Path.Combine(xnaBaseDir, config.assets.ScriptDir);
+        assets.MeshDir = Path.Combine(xnaBaseDir, config.assets.MeshDir);
+        assets.AudioDir = Path.Combine(xnaBaseDir, config.assets.AudioDir);
     }
 
+    private void LoadConfiguration()
+    {
+        try
+        {
+            using (StreamReader sr = new StreamReader(Path.Combine(Application.dataPath, @"Editor\FFWD\ExportSceneWizard.config")))
+            {
+                config = (ExportConfig)xmlSer.Deserialize(sr);
+            }
+            if (EditorPrefs.HasKey("FFWD XNA dir " + PlayerSettings.productName))
+            {
+                xnaBaseDir = EditorPrefs.GetString("FFWD XNA dir " + PlayerSettings.productName);
+            }
+            if (EditorPrefs.HasKey("FFWD active group"))
+            {
+                activeGroup = EditorPrefs.GetInt("FFWD active group");
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError("Could not read configuration data. " + ex.Message);
+            config = new ExportConfig();
+            SaveConfiguration();
+        }
+    }
 
-    [MenuItem("Press Play/FFWD/Export Scene")]
+    private void SaveConfiguration()
+    {
+        using (StreamWriter sw = new StreamWriter(Path.Combine(Application.dataPath, @"Editor\FFWD\ExportSceneWizard.config")))
+        {
+            xmlSer.Serialize(sw, config);
+        }
+        EditorPrefs.SetString("FFWD XNA dir " + PlayerSettings.productName, xnaBaseDir);
+        EditorPrefs.SetInt("FFWD active group", activeGroup);
+    }
+
+    [MenuItem("Press Play/FFWD/Export Scenes")]
     static void CreateWizard()
     {
-        ScriptableWizard.DisplayWizard("Export Scene to XNA", typeof(ExportSceneWizard), "Open scene", "Selected scenes");
+        ScriptableWizard.DisplayWizard("Export Scenes to XNA", typeof(ExportSceneWizard), "Export all groups", "Export active group");
     }
 
     [MenuItem("CONTEXT/Transform/FFWD Export Resource")]
@@ -78,104 +133,41 @@ public class ExportSceneWizard : ScriptableWizard
         wiz.ExportResource(((Transform)command.context).gameObject);
     }
 
-    public string scriptNamespace = @"PressPlay.Tentacles.Scripts";
-    public string xnaDir = @"C:\Projects\PressPlay\Tentacles\XNA";
-    public string exportDir = @"PressPlay.Tentacles.XmlContent";
-    public string scriptDir = @"PressPlay.Tentacles.Scripts";
-    public string textureDir = @"PressPlay.Tentacles.Win\PressPlay.Tentacles.WinContent\Textures";
-    public string audioDir = @"PressPlay.Tentacles.Win\PressPlay.Tentacles.WinContent\Sounds";
-    public string meshDir = @"PressPlay.Tentacles.Win\PressPlay.Tentacles.WinContent\Models";
-    public string configSource = @"Editor\FFWD\PressPlay.FFWD.Exporter.dll.config";
-    public bool showComponentsNotWritten = true;
-    public bool flipYInTransforms = true;
-
-    public string[] scenes = { 
-        @"Assets\Levels (Scenes)\Build Levels\petridish_tutorial.unity",
-
-        @"Assets\Levels (Scenes)\Build Levels\Green_intro.unity",
-        @"Assets\Levels (Scenes)\Build Levels\Green_VeryEasy_OnlySpikes.unity",
-        @"Assets\Levels (Scenes)\Build Levels\Green_currentsAndTiming.unity",
-        @"Assets\Levels (Scenes)\Build Levels\VEIN_SuperEasy.unity",
-
-        @"Assets\Levels (Scenes)\Build Levels\INTESTINES_FirstMovingSpikesEasy.unity",
-        @"Assets\Levels (Scenes)\Build Levels\Intestines_circleblocks.unity",
-        @"Assets\Levels (Scenes)\Build Levels\Intestine_MeatHackerDmdChallMiniBossWorm.unity",
-        @"Assets\Levels (Scenes)\Build Levels\Veins_EasyRotatingChallenge .unity",
-
-        @"Assets\Levels (Scenes)\Build Levels\Green_AcidPenetratorPickupBonus.unity",
-        @"Assets\Levels (Scenes)\Build Levels\Green_CrumblingBlocks.unity",
-        @"Assets\Levels (Scenes)\Build Levels\Green_LotsOfCurrents.unity",
-        @"Assets\Levels (Scenes)\Build Levels\Veins_ShooterOmniSpikePickup.unity",
-
-        @"Assets\Levels (Scenes)\Build Levels\Brain_easyBrainMiniBossGobbler.unity",
-        @"Assets\Levels (Scenes)\Build Levels\Brain_Vortex_LeapOfFaith_.unity",
-        @"Assets\Levels (Scenes)\Build Levels\Brain_SpinningMovingBlocks.unity",
-        @"Assets\Levels (Scenes)\Build Levels\Veins_WeedsOmniShooter.unity",
-
-        @"Assets\Levels (Scenes)\Build Levels\Green_RollerGobblerTimeVortex.unity",
-        @"Assets\Levels (Scenes)\Build Levels\Green_AcidChallenge+LeapOfFaith.unity",
-        @"Assets\Levels (Scenes)\Build Levels\Green_AcidChallCurrentMixArenaMiniBossShooter.unity",
-        @"Assets\Levels (Scenes)\Build Levels\Veins_MinesPickupChallenge.unity",
-
-        @"Assets\Levels (Scenes)\Build Levels\Intestines_PoisonPenetrator.unity",
-        @"Assets\Levels (Scenes)\Build Levels\INTESTINES_GobblersAcidMovingIntesties.unity",
-        @"Assets\Levels (Scenes)\Build Levels\Intestine_SmileyMovingWalkersDNA.unity",
-        @"Assets\Levels (Scenes)\Build Levels\Veins_DestructoBlocksTeethTripping.unity",
-
-        @"Assets\Levels (Scenes)\Build Levels\Brain_ElectricPenetrator.unity",
-        @"Assets\Levels (Scenes)\Build Levels\Brain_SpeedChallenge.unity",
-        @"Assets\Levels (Scenes)\Build Levels\Brain_CurrentsSidewalking_BossWorm.unity",
-        @"Assets\Levels (Scenes)\Build Levels\Veins_SwingingDmgChallMovingBlocks.unity",
-
-        @"Assets\Levels (Scenes)\Build Levels\Green_AcidOpenAreaAsteroids.unity",
-        @"Assets\Levels (Scenes)\Build Levels\Green_MovingCrumblingWeedDandelions.unity",
-        @"Assets\Levels (Scenes)\Build Levels\Green_islandSpeedChallenge.unity",
-        @"Assets\Levels (Scenes)\Build Levels\Veins_weedsDmgChallMovingBlocksTeeth.unity",
-
-        @"Assets\Levels (Scenes)\Build Levels\Intestine_RollerCurrentAcidMixArenaGobBoss.unity",
-        @"Assets\Levels (Scenes)\Build Levels\Intestine_OmniWalkersBlockChallArena.unity",
-        @"Assets\Levels (Scenes)\Build Levels\intestine_RollercoasterSpikeWalkers.unity",
-        @"Assets\Levels (Scenes)\Build Levels\Veins_RollersCrumblingDmgChallArena.unity",
-
-        @"Assets\Levels (Scenes)\Build Levels\Brain_ElectricTimedBlocksHard.unity",
-        @"Assets\Levels (Scenes)\Build Levels\Brain_ElectricCurrentsHard.unity",
-        @"Assets\Levels (Scenes)\Build Levels\Brain_Final_boss.unity",
-    
-        @"Assets\Levels (Scenes)\Base Scenes\Preloader.unity"
-    };
-
-
-    private TypeResolver resolver;
-    private AssetHelper assets;
+    [MenuItem("CONTEXT/MonoBehaviour/FFWD Export Script")]
+    static void ExportScript(MenuCommand command)
+    {
+        ExportSceneWizard wiz = new ExportSceneWizard();
+        wiz.ExportScript(command.context as MonoBehaviour);
+    }
 
     public void OnWizardUpdate()
     {
-        EditorPrefs.SetString("FFWD XNA dir", xnaDir);
-        EditorPrefs.SetString("FFWD configSource", configSource);
-        EditorPrefs.SetString("FFWD scenes", string.Join(";", scenes));
-
-        EditorPrefs.SetString("FFWD textureDir", textureDir);
-        EditorPrefs.SetString("FFWD scriptDir", scriptDir);
-        EditorPrefs.SetString("FFWD meshDir", meshDir);
-        EditorPrefs.SetString("FFWD audioDir", audioDir);
+        SaveConfiguration();
     }
 
-    public void OnWizardCreate()
+    [MenuItem("Press Play/FFWD/Export Open Scene")]
+    static void ExportOpenScene()
+    {
+        ExportSceneWizard wiz = new ExportSceneWizard();
+        wiz.ExportScene();
+    }
+
+    private void ExportScene()
     {
         SceneWriter scene = new SceneWriter(resolver, assets);
-        scene.ExportDir = Path.Combine(Path.Combine(xnaDir, exportDir), "Scenes");
-        scene.FlipYInTransforms = flipYInTransforms;
-        ScriptTranslator.ScriptNamespace = scriptNamespace;
+        scene.ExportDir = Path.Combine(Path.Combine(xnaBaseDir, config.exportDir), "Scenes");
+        scene.FlipYInTransforms = config.flipYInTransforms;
+        ScriptTranslator.ScriptNamespace = config.scriptNamespace;
 
         Debug.Log("----------------------- " + Path.GetFileName(EditorApplication.currentScene) + " -------------------------Start scene export");
         scene.Write(Path.ChangeExtension(Path.GetFileName(EditorApplication.currentScene), "xml"));
 
-        if (showComponentsNotWritten)
+        if (config.showComponentsNotWritten)
         {
             string skippedComponents = "";
             foreach (string item in scene.componentsNotWritten)
             {
-                if (allowedSkippedComponents.Contains(item)) { continue; }
+                if (config.allowedSkippedComponents.Contains(item)) { continue; }
 
                 if (!allComponentsNotWritten.Contains(item))
                 {
@@ -192,21 +184,77 @@ public class ExportSceneWizard : ScriptableWizard
         //Debug.Log("---End scene export of " + Path.GetFileName(EditorApplication.currentScene));
     }
 
+    public void OnWizardCreate()
+    {
+        allComponentsNotWritten.Clear();
+
+        foreach (SceneGroup group in config.groups)
+        {
+            Debug.Log("************************ START LEVEL EXPORT FOR GROUP " + group.name + " ****************************");
+
+            foreach (string name in group.scenes)
+            {
+                string levelName = name;
+
+                if (!levelName.EndsWith(".unity"))
+                {
+                    levelName += ".unity";
+                }
+
+                if (EditorApplication.OpenScene(levelName))
+                {
+                    ExportScene();
+                }
+                else
+                {
+                    Debug.Log("Could not open scene " + levelName);
+                }
+            }
+        }
+
+        string notWritten = "";
+        foreach (string item in allComponentsNotWritten)
+        {
+            notWritten += item + ", ";
+        }
+
+        Debug.Log(notWritten);
+    }
+
     public void OnWizardOtherButton()
     {
         allComponentsNotWritten.Clear();
 
-        Debug.Log("******************************* START LEVEL EXPORT ***************************************");
-
-        foreach (string name in scenes)
+        SceneGroup group = null;
+        if (activeGroup >= 0 && activeGroup < config.groups.Count)
         {
-            if (EditorApplication.OpenScene(name))
+            group = config.groups[activeGroup];
+        }
+
+        if (group == null)
+        {
+            Debug.LogError("Export failed: Active group " + activeGroup + " does not exist.");
+            return;
+        }
+
+        Debug.Log("************************ START LEVEL EXPORT FOR GROUP " + group.name + " ****************************");
+
+        foreach (string name in group.scenes)
+        {
+            string levelName = name;
+
+            if (!levelName.EndsWith(".unity"))
             {
-                OnWizardCreate();
+                levelName += ".unity";
+            }
+
+            if (EditorApplication.OpenScene(levelName))
+            {
+                ExportScene();
             }
             else
             {
-                Debug.Log("Could not open scene " + name);
+                Debug.Log("Could not open scene " + levelName);
             }
         }
 
@@ -228,13 +276,19 @@ public class ExportSceneWizard : ScriptableWizard
         }
 
         SceneWriter scene = new SceneWriter(resolver, assets);
-        scene.ExportDir = Path.Combine(xnaDir, exportDir);
-        scene.FlipYInTransforms = flipYInTransforms;
-        ScriptTranslator.ScriptNamespace = scriptNamespace;
+        scene.ExportDir = Path.Combine(xnaBaseDir, config.exportDir);
+        scene.FlipYInTransforms = config.flipYInTransforms;
+        ScriptTranslator.ScriptNamespace = config.scriptNamespace;
 
         string path = Path.ChangeExtension(AssetDatabase.GetAssetPath(go).Replace("Assets/", ""), "xml");
         Debug.Log("Start resource export of " + path);
         scene.WriteResource(path, go);
+    }
+
+    private void ExportScript(MonoBehaviour monoBehaviour)
+    {
+        Debug.Log("Start script export of " + monoBehaviour.GetType());
+        assets.ExportScript(monoBehaviour.GetType(), false, true);
     }
 }
 

@@ -35,15 +35,14 @@ namespace PressPlay.FFWD
             {
                 if (float.IsNaN(value.x) || float.IsNaN(value.y) || float.IsNaN(value.z))
                 {
-                    throw new InvalidOperationException();
+                    //throw new InvalidOperationException();
+                    Debug.LogError(String.Format("Trying to set an invalid local position {0} on {1}.", value, ToString()));
+                    _localPosition = Vector3.zero;
                 }
-
-                //if (float.IsInfinity(value.x) || float.IsInfinity(value.y) || float.IsInfinity(value.z))
-                //{
-                //    throw new InvalidOperationException();
-                //}
-
-                _localPosition = value;
+                else
+                {
+                    _localPosition = value;
+                }
                 hasDirtyWorld = true;
             }
         }
@@ -598,6 +597,11 @@ namespace PressPlay.FFWD
             LookAt(worldPosition, Vector3.up);
         }
 
+        public void LookAt(Transform t)
+        {
+            LookAt(t.position, Vector3.up);
+        }
+
         private void WorldChanged()
         {
             if (parent == null)
@@ -747,6 +751,11 @@ namespace PressPlay.FFWD
             Debug.DrawRay(position, right, Color.red);
             Debug.DrawRay(position, up, Color.green);
 #endif
+        }
+
+        public void RotateAround(Vector3 vector3, float rotateThisFrame)
+        {
+            // TODO: Implement this
         }
     }
 }

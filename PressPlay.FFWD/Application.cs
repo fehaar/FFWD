@@ -33,6 +33,8 @@ namespace PressPlay.FFWD
         public static bool isDeactivated = false;
         int frameRate = 0;
         int frameCounter = 0;
+        int updateRate = 0;
+        int updateCounter = 0;
         TimeSpan elapsedTime = TimeSpan.Zero;
         private static string sceneToLoad = "";
 
@@ -352,7 +354,7 @@ namespace PressPlay.FFWD
             
             if (ApplicationSettings.ShowFPSCounter)
             {
-                Debug.Display("FPS", String.Format("{0} ms {1}", frameRate, frameTime.ElapsedMilliseconds));
+                Debug.Display("FPS", String.Format("{0}, ms {1}, UR {2}", frameRate, frameTime.ElapsedMilliseconds, updateRate));
                 //Debug.Display("frame time", frameTime.ElapsedMilliseconds);
                 frameTime.Reset();
                 frameTime.Start();
@@ -393,12 +395,14 @@ namespace PressPlay.FFWD
         private void UpdateFPS(GameTime gameTime)
         {
             elapsedTime += gameTime.ElapsedGameTime;
-
+            updateCounter++;
             if (elapsedTime > TimeSpan.FromSeconds(1))
             {
                 elapsedTime -= TimeSpan.FromSeconds(1);
                 frameRate = frameCounter;
+                updateRate = updateCounter;
                 frameCounter = 0;
+                updateCounter = 0;
             }
         }
 

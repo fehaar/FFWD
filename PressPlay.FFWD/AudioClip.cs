@@ -46,9 +46,12 @@ namespace PressPlay.FFWD
             if (sound == null)
             {
                 sound = assetHelper.Load<SoundEffect>("Sounds/" + clip);
-                Instance = sound.CreateInstance();
                 loopSet = false;
                 name = clip;
+                if (sound != null)
+                {
+                    Instance = sound.CreateInstance();
+                }
             }
         }
 

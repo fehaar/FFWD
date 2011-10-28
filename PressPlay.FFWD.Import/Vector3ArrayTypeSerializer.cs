@@ -15,7 +15,7 @@ namespace PressPlay.FFWD.Import
             string[] s = input.Xml.ReadContentAsString().Trim().Split(' ');
             if ((s.Length % 3) != 0)
             {
-                throw new Exception("Not enough floats in the string for Vector3[] - was " + s.Length);
+                throw new Exception(String.Format("Not enough floats in the string for Vector3[] in element {0}. Was {1}.", format.ElementName, s.Length));
             }
             Vector3[] vs = new Vector3[s.Length / 3];
             for (int i = 0; i < vs.Length; i++)
@@ -29,7 +29,7 @@ namespace PressPlay.FFWD.Import
                 }
                 catch (IndexOutOfRangeException)
                 {
-                    throw new IndexOutOfRangeException("Error reading Vector3[] from string i was " + i + " for a limit of " + vs.Length + " using " + s.Length + " numbers");
+                    throw new IndexOutOfRangeException("Error reading Vector3[] from string in element " + format.ElementName + ". i was " + i + " for a limit of " + vs.Length + " using " + s.Length + " numbers");
                 }
             }
             return vs;

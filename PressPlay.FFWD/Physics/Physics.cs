@@ -506,6 +506,19 @@ namespace PressPlay.FFWD
         }
         #endregion
 
+        #region OverlapSpehere methods
+        public static Collider[] OverlapSphere(Vector3 position, float radius)
+        {
+            return OverlapSphere(position, radius, kDefaultRaycastLayers);
+        }
+
+        public static Collider[] OverlapSphere(Vector3 position, float radius, LayerMask layermask)
+        {
+            // TODO: Implement this
+            return new Collider[0];
+        }
+        #endregion
+
         public static void IgnoreCollision(Collider collider1, Collider collider2)
         {
             IgnoreCollision(collider1, collider2, true);

@@ -217,6 +217,7 @@ namespace PressPlay.FFWD.Exporter.Writers
 
             System.Type type = component.GetType();
             IComponentWriter componentWriter = resolver.GetComponentWriter(type);
+
             if (componentWriter != null)
             {
                 try
@@ -239,9 +240,9 @@ namespace PressPlay.FFWD.Exporter.Writers
                     }
                     return true;
                 }
-                catch
+                catch (Exception ex)
                 {
-                    Debug.Log("Exception when writing " + component.GetType() + " on " + component.name + " under " + component.transform.root.name, component);
+                    Debug.Log("Exception when writing " + component.GetType() + " on " + component.name + " under " + component.transform.root.name + ":\n" + ex.Message, component);
                 }
             }
             else
@@ -488,6 +489,23 @@ namespace PressPlay.FFWD.Exporter.Writers
                     writer.WriteEndElement();
                     return;
                 }
+                if (obj is AnimationCurve)
+                {
+                    writer.WriteStartElement(name);
+                    writer.WriteAttributeString("Type", resolver.ResolveTypeName(obj));
+                    if (obj != null)
+                    {
+                        Components.AnimationCurveWriter acw = new Components.AnimationCurveWriter();
+                        acw.Write(this, obj);
+                    }
+                    else
+                    {
+                        writer.WriteAttributeString("Null", ToString(true));
+                    }
+                    writer.WriteEndElement();
+                    return;
+                }
+
                 if (obj is Component)
                 {
                     Component theObject = (obj as Component);

@@ -43,6 +43,10 @@ namespace PressPlay.FFWD
             {
                 return size / 2;
             }
+            set
+            {
+                // TODO: Implement this!
+            }
         }
 
         public Vector3 min

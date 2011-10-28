@@ -13,7 +13,7 @@ namespace PressPlay.FFWD.Test.Core_framework
         public void WeWillReplaceADummyPrefabReferenceWithAReferenceFromTheIdMap()
         {
             GameObject go = new GameObject();
-            TestComponent testCmp = new TestComponent();
+            TestComponent testCmp = new TestComponent(true);
             TestComponent newCmp = new TestComponent();
             ReferencingComponent cmp = new ReferencingComponent() { reference = testCmp };
             go.AddComponent(cmp);
@@ -29,7 +29,7 @@ namespace PressPlay.FFWD.Test.Core_framework
         public void WeFixUpTheComponentsOfAGameObject()
         {
             GameObject go = new GameObject();
-            TestComponent testCmp = new TestComponent();
+            TestComponent testCmp = new TestComponent(true);
             TestComponent newCmp = new TestComponent();
             ReferencingComponent cmp = new ReferencingComponent() { reference = testCmp };
             go.AddComponent(cmp);
@@ -45,7 +45,7 @@ namespace PressPlay.FFWD.Test.Core_framework
         public void WeWillFixReferencesInTheHierarchy()
         {
             TestHierarchy h = new TestHierarchy();
-            TestComponent testCmp = new TestComponent();
+            TestComponent testCmp = new TestComponent(true);
             TestComponent newCmp = new TestComponent();
             ReferencingComponent cmp = new ReferencingComponent() { reference = testCmp };
             h.childOfChild.AddComponent(cmp);
@@ -68,6 +68,39 @@ namespace PressPlay.FFWD.Test.Core_framework
             cmp.FixReferences(dict);
 
             Assert.That(cmp.reference, Is.Null);
+        }
+
+        [Test]
+        public void WeCanFixReferencesInArrayProperties()
+        {
+            GameObject go = new GameObject();
+            TestComponent testCmp = new TestComponent(true);
+            TestComponent newCmp = new TestComponent();
+            ReferencingComponent cmp = new ReferencingComponent() { componentArray = new Component[] { testCmp } };
+            go.AddComponent(cmp);
+            Dictionary<int, UnityObject> dict = new Dictionary<int, UnityObject>();
+            dict.Add(testCmp.GetInstanceID(), newCmp);
+
+            cmp.FixReferences(dict);
+
+            Assert.That(cmp.componentArray[0], Is.SameAs(newCmp));
+        }
+
+        [Test]
+        public void WeCanFixReferencesInListProperties()
+        {
+            GameObject go = new GameObject();
+            TestComponent testCmp = new TestComponent(true);
+            TestComponent newCmp = new TestComponent();
+            ReferencingComponent cmp = new ReferencingComponent() { componentList = new List<Component>() };
+            cmp.componentList.Add(testCmp);
+            go.AddComponent(cmp);
+            Dictionary<int, UnityObject> dict = new Dictionary<int, UnityObject>();
+            dict.Add(testCmp.GetInstanceID(), newCmp);
+
+            cmp.FixReferences(dict);
+
+            Assert.That(cmp.componentList[0], Is.SameAs(newCmp));
         }
 	
     }
