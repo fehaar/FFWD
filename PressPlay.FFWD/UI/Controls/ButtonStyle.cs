@@ -52,10 +52,16 @@ namespace PressPlay.FFWD.UI.Controls
             this.texture = texture;
             
             sources = new Dictionary<int, Rectangle>();
-            sources.Add(1, normal);
-            sources.Add(2, pressed);
-            sources.Add(0, hover);
-            sources.Add(3, disabled);
+            sources.Add((int)ButtonControlStates.normal, normal);
+            sources.Add((int)ButtonControlStates.pressed, pressed);
+            sources.Add((int)ButtonControlStates.hover, hover);
+            sources.Add((int)ButtonControlStates.disabled, disabled);
+        }
+
+        public ButtonStyle(Texture2D texture, Rectangle normal, Rectangle pressed, Rectangle hover, Rectangle disabled, Rectangle selected)
+            : this(texture, normal, pressed, hover, disabled)
+        {
+            sources.Add((int)ButtonControlStates.selected, selected);
         }
 
         public Rectangle GetSourceRect(int state)

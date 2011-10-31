@@ -43,7 +43,8 @@ namespace PressPlay.FFWD.UI.Controls
         hover,
         normal,
         pressed,
-        disabled
+        disabled,
+        selected
     }
 
     public class ButtonControl : Control
@@ -67,6 +68,8 @@ namespace PressPlay.FFWD.UI.Controls
             }
         }
 
+        public bool selectable = false;
+
         public string link;
         private bool useCustomClickRect = false;
         private Rectangle _clickRect;
@@ -87,16 +90,13 @@ namespace PressPlay.FFWD.UI.Controls
         /// <summary>
         /// Event raised when the menu entry is selected.
         /// </summary>
-        public event EventHandler<EventArgs> OnClickEvent;
+        public event EventHandler<ButtonControlEventArgs> OnClickEvent;
 
         /// <summary>
         /// Method for raising the Selected event.
         /// </summary>
         protected virtual void OnClickMethod()
-        {   
-            //log action in screen manager for metrics
-            Application.screenManager.LogAction(link);
-
+        {
             if (OnClickEvent != null)
             {
                 OnClickEvent(this, new ButtonControlEventArgs(link));
@@ -179,7 +179,7 @@ namespace PressPlay.FFWD.UI.Controls
                 {
                     if (state == ButtonControlStates.pressed)
                     {
-                        ChangeState(ButtonControlStates.normal);
+                        ChangeState((selectable) ? ButtonControlStates.selected : ButtonControlStates.normal);
                         OnClickMethod();
                     }
                 }
@@ -192,7 +192,7 @@ namespace PressPlay.FFWD.UI.Controls
             {
                 if (state == ButtonControlStates.hover || state == ButtonControlStates.pressed)
                 {
-                    ChangeState(ButtonControlStates.normal);
+                    ChangeState((previousState == ButtonControlStates.selected) ? ButtonControlStates.selected : ButtonControlStates.normal);
                 }
             }
 
@@ -211,6 +211,14 @@ namespace PressPlay.FFWD.UI.Controls
             else
             {
                 return base.isMouseWithinBounds(input);
+            }
+        }
+
+        public void Deselect()
+        {
+            if (state == ButtonControlStates.selected)
+            {
+                ChangeState(ButtonControlStates.normal);
             }
         }
     }

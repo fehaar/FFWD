@@ -229,6 +229,10 @@ namespace PressPlay.FFWD.Components
         internal static void DoRender(GraphicsDevice device)
         {
 #if DEBUG && WINDOWS
+            if (Input.GetMouseButtonUp(1))
+            {
+                wireframeRender = !wireframeRender;
+            }
             if (Input.GetMouseButtonUp(2))
             {
                 logRenderCalls = true;
