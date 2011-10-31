@@ -2,14 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
 
-namespace PressPlay.FFWD
+namespace PressPlay.FFWD.Components
 {
-    public class AnimationCurve
+    public class AnimationCurve : Curve
     {
-        public float Evaluate(float x)
-        {
-            return x;
-        }
     }
 }

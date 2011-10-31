@@ -102,6 +102,34 @@ namespace PressPlay.FFWD.ScreenManager
 
         #region Initialization
 
+        List<string> _screenActionLog = new List<string>();
+        public List<string> screenActionLog {
+            get { return _screenActionLog; }
+        }
+        public string GetActionLogString(){
+            string str = "";
+            for (int i = 0; i < _screenActionLog.Count; i++)
+            { str += "->" + _screenActionLog[i];}
+            return str;
+        }
+        public string FlushActionLog(){
+            string str = GetActionLogString();
+            _screenActionLog.Clear();
+            return str;
+        }
+        public void LogAction(string action) {
+            _screenActionLog.Add(action);
+
+            //max 20 log entries
+            if (_screenActionLog.Count > 15)
+            {
+                _screenActionLog.RemoveAt(0);
+            }
+#if DEBUG
+            Debug.Log("ScreenActionLog: " + GetActionLogString());
+#endif
+        }
+
 
         /// <summary>
         /// Constructs a new screen manager component.
@@ -285,6 +313,9 @@ namespace PressPlay.FFWD.ScreenManager
         /// </summary>
         public void AddScreen(GameScreen screen, PlayerIndex? controllingPlayer)
         {
+            //log add screen
+            LogAction(screen.GetType().Name);
+
             screen.ControllingPlayer = controllingPlayer;
             screen.ScreenManager = this;
             screen.IsExiting = false;

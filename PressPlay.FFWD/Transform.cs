@@ -35,15 +35,14 @@ namespace PressPlay.FFWD
             {
                 if (float.IsNaN(value.x) || float.IsNaN(value.y) || float.IsNaN(value.z))
                 {
-                    throw new InvalidOperationException();
+                    //throw new InvalidOperationException();
+                    Debug.LogError(String.Format("Trying to set an invalid local position {0} on {1}.", value, ToString()));
+                    _localPosition = Vector3.zero;
                 }
-
-                //if (float.IsInfinity(value.x) || float.IsInfinity(value.y) || float.IsInfinity(value.z))
-                //{
-                //    throw new InvalidOperationException();
-                //}
-
-                _localPosition = value;
+                else
+                {
+                    _localPosition = value;
+                }
                 hasDirtyWorld = true;
             }
         }

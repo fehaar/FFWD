@@ -530,6 +530,10 @@ namespace PressPlay.FFWD
 
         public static void LoadLevel(string name)
         {
+#if DEBUG
+            Debug.Log("******************************** Loading Level " + name + " ***********************************");
+#endif
+
             sceneToLoad = name;
             UnloadCurrentLevel();
         }
