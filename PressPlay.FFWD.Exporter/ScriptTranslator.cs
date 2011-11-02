@@ -25,6 +25,18 @@ namespace PressPlay.FFWD.Exporter
             OverrideMethods();
 
             ReplaceAllAttributes();
+
+            AddFFWDNamespace();
+        }
+
+        private void AddFFWDNamespace()
+        {
+            int line = -1;
+            Regex rex = new Regex("[^.]Random.");
+            while ((line = scriptLines.FindIndex(s => rex.IsMatch(s))) > -1)
+            {
+                scriptLines[line] = scriptLines[line].Replace("Random.", "PressPlay.FFWD.Random.");
+            }
         }
 
         private void ReplaceAllAttributes()

@@ -135,6 +135,5 @@ namespace PressPlay.FFWD.Exporter.Test
             }
             Assert.Pass("We have translated all scripts");
         }
-	
 	}
 }
