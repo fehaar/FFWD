@@ -14,7 +14,11 @@ namespace PressPlay.FFWD.Exporter
         public static string ScriptNamespace { get; set; }
         private List<string> scriptLines;
         public static List<string> DefaultUsings = new List<string> { "System", "System.Collections.Generic", "System.Text", "PressPlay.FFWD", "PressPlay.FFWD.Components", "Microsoft.Xna.Framework.Content" };
-        public static Dictionary<string, string> ReplaceAttributes = new Dictionary<string, string>() { { "HideInInspector", "ContentSerializerIgnore" } };
+        public static Dictionary<string, string> ReplaceAttributes = new Dictionary<string, string>() { 
+            { "HideInInspector", "ContentSerializerIgnore" },
+            { "System.Serializable", "" },
+            { "Serializable", "" }
+        };
 
         public void Translate()
         {
@@ -46,7 +50,14 @@ namespace PressPlay.FFWD.Exporter
                 int line = -1;
                 while ((line = scriptLines.FindIndex(s => s.Contains("[" + item.Key + "]"))) > -1)
                 {
-                    scriptLines[line] = scriptLines[line].Replace(item.Key, item.Value);
+                    if (String.IsNullOrEmpty(item.Value))
+                    {
+                        scriptLines[line] = scriptLines[line].Replace("[" + item.Key + "]", "");
+                    }
+                    else
+                    {
+                        scriptLines[line] = scriptLines[line].Replace(item.Key, item.Value);
+                    }
                 }
             }
         }

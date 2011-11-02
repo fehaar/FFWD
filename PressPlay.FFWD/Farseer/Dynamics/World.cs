@@ -789,7 +789,14 @@ namespace FarseerPhysics.Dynamics
             ContactManager.BroadPhase.Query(proxyId =>
                                                 {
                                                     FixtureProxy proxy = ContactManager.BroadPhase.GetProxy(proxyId);
-                                                    return callback(proxy.Fixture);
+                                                    if (callback != null)
+                                                    {
+                                                        return callback(proxy.Fixture);
+                                                    }
+                                                    else
+                                                    {
+                                                        return PressPlay.FFWD.QueryHelper.QueryCallback(proxy.Fixture);
+                                                    }
                                                 }, ref aabb);
         }
 

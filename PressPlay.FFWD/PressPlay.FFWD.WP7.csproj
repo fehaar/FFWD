@@ -283,6 +283,7 @@
     <Compile Include="MeshDataPart.cs" />
     <Compile Include="MeshDataReader.cs" />
     <Compile Include="Physics\LayerMaskOperations.cs" />
+    <Compile Include="Physics\QueryHelper.cs" />
     <Compile Include="Ray.cs" />
     <Compile Include="Color.cs" />
     <Compile Include="Component.cs" />

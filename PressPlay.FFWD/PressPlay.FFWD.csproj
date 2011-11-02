@@ -348,6 +348,7 @@
     <Compile Include="Physics\LayerMask.cs" />
     <Compile Include="Physics\LayerMaskOperations.cs" />
     <Compile Include="Physics\Physics.cs" />
+    <Compile Include="Physics\QueryHelper.cs" />
     <Compile Include="Physics\RaycastHelper.cs" />
     <Compile Include="Physics\RaycastHit.cs" />
     <Compile Include="Quaternion.cs" />
