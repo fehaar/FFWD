@@ -20,6 +20,7 @@ namespace PressPlay.FFWD
 #if WINDOWS_PHONE
         private static Vector2 lastTap;
         private static bool newTap = false;
+        private static bool hasAFingerOnScreen = false;
 #endif
 
         internal static void Initialize()
@@ -35,6 +36,7 @@ namespace PressPlay.FFWD
             samples = inputState.Gestures;
 
             newTap = false;
+            hasAFingerOnScreen = false;
             for (int i = 0; i < inputState.TouchState.Count; i++)
             {
                 if (inputState.TouchState[i].State == TouchLocationState.Pressed)
@@ -42,7 +44,12 @@ namespace PressPlay.FFWD
                     lastTap = inputState.TouchState[i].Position;
                     newTap = true;
                 }
+                if (inputState.TouchState[i].State != TouchLocationState.Released)
+                {
+                    hasAFingerOnScreen = true;
+                }
             }
+            Debug.Display("finger on screen", hasAFingerOnScreen);
 #endif
         }
 
@@ -108,7 +115,7 @@ namespace PressPlay.FFWD
         public static bool GetMouseButton(int button)
         {
 #if WINDOWS_PHONE
-            return newTap;
+            return hasAFingerOnScreen;
 #else
             switch (button)
             {
@@ -127,15 +134,6 @@ namespace PressPlay.FFWD
         {
 #if WINDOWS_PHONE
             return newTap;
-            //switch (button)
-            //{
-            //    case 0:
-            //        return (currentMouseState.LeftButton == ButtonState.Pressed);
-            //    case 1:
-            //        return (currentMouseState.MiddleButton == ButtonState.Pressed);
-            //    case 2:
-            //        return (currentMouseState.RightButton == ButtonState.Pressed);
-            //}
 #else
             switch (button)
             {
