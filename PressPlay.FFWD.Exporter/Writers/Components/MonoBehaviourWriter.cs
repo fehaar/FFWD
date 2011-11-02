@@ -47,6 +47,10 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
                 {
                     continue;
                 }
+                if (memInfo[m].FieldType.IsSubclassOf(typeof(Delegate)))
+                {
+                    continue;
+                }
                 if (filter.Includes(memInfo[m].Name))
                 {
                     scene.WriteElement(memInfo[m].Name, memInfo[m].GetValue(component), memInfo[m].FieldType);
