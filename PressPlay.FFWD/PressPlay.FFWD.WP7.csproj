@@ -277,6 +277,7 @@
     <Compile Include="Farseer\Factories\JointFactory.cs" />
     <Compile Include="Farseer\Factories\LinkFactory.cs" />
     <Compile Include="Farseer\Settings.cs" />
+    <Compile Include="Gizmos.cs" />
     <Compile Include="InvokeCall.cs" />
     <Compile Include="MeshData.cs" />
     <Compile Include="MeshDataPart.cs" />
