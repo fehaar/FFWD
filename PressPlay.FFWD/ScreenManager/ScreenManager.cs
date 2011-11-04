@@ -308,6 +308,11 @@ namespace PressPlay.FFWD.ScreenManager
         /// </summary>
         public void AddScreen(GameScreen screen, PlayerIndex? controllingPlayer)
         {
+            if (screens.Contains(screen))
+            {
+                return;
+            }
+
             //log add screen
             LogAction(screen.GetType().Name);
 
@@ -357,6 +362,8 @@ namespace PressPlay.FFWD.ScreenManager
         /// </summary>
         public void RemoveScreen(GameScreen screen)
         {
+            Debug.Log("Remove screen " + screen.GetType().Name);
+
             // If we have a graphics device, tell the screen to unload content.
             if (isInitialized)
             {
