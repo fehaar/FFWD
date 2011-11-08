@@ -22,7 +22,7 @@ namespace PressPlay.FFWD
                 coll = (uo as Rigidbody).collider;
             }
 
-            if ((bool)coll && (layermask & (1 << coll.gameObject.layer)) > 0)
+            if ((bool)coll && fixture.Body.Enabled && coll.gameObject.active && (layermask & (1 << coll.gameObject.layer)) > 0)
             {
                 colliders.Add(coll);
             }

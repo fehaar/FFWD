@@ -44,6 +44,10 @@ namespace PressPlay.FFWD.UI.Controls
             }
             set
             {
+                if (gameObject == null)
+                {
+                    return;
+                }
                 gameObject.transform.localPosition = new Vector3(value, (float)gameObject.transform.localPosition);
                 if (parent != null)
                 {
