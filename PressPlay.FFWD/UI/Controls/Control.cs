@@ -249,7 +249,6 @@ namespace PressPlay.FFWD.UI.Controls
             if (gameObject != null && gameObject.renderer != null)
             {
                 UIRenderer r = (UIRenderer)gameObject.renderer;
-                
                 r.material.color = new PressPlay.FFWD.Color(r.material.color.r, r.material.color.g, r.material.color.b, 1f - transitionTime);
             }
 
