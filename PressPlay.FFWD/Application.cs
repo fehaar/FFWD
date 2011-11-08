@@ -538,7 +538,7 @@ namespace PressPlay.FFWD
             UnloadCurrentLevel();
         }
 
-        public static void UnloadCurrentLevel()
+        internal static void UnloadCurrentLevel()
         {
             foreach (UnityObject obj in objects.Values)
             {
@@ -786,17 +786,16 @@ namespace PressPlay.FFWD
         {
             if (target is Component)
             {
-                if(!dontDestroyOnLoad.Contains(((Component)target).gameObject))
-                {
-                    dontDestroyOnLoad.Add(((Component)target).gameObject);
-                }
+                DontDestroyOnLoad((target as Component).gameObject);
             }
 
             if (target is GameObject)
             {
-                if (!dontDestroyOnLoad.Contains((GameObject)target))
+                GameObject go = target as GameObject;
+                if (!dontDestroyOnLoad.Contains(go))
                 {
-                    dontDestroyOnLoad.Add((GameObject)target);
+                    dontDestroyOnLoad.Add(go);
+                    go.transform.DontDestroyOnLoadOnChildren();
                 }
             }
         }

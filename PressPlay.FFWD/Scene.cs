@@ -42,7 +42,6 @@ namespace PressPlay.FFWD
             {
                 prefabs[i].isPrefab = true;
                 prefabs[i].AfterLoad(idMap);
-                //Debug.Log("Prefab name: "+prefabs[i].name+" prefab: "+prefabs[i]);
             }
         }
 

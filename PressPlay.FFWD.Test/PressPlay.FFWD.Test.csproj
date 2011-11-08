@@ -158,6 +158,7 @@
     <Compile Include="Core framework\Bounds\WhenChangingValuesOnBounds.cs" />
     <Compile Include="Core framework\WhenTransformingQuaternionsToAndFromEulers.cs" />
     <Compile Include="Core framework\Bounds\WhenCreatingBounds.cs" />
+    <Compile Include="Core framework\WhenUsingDoNotDestroyOnLoad.cs" />
     <Compile Include="Core framework\WhenUsingTheComponentShortcutMethods.cs" />
     <Compile Include="Core framework\WhenUsingTheGameObjectShortcutProperties.cs" />
     <Compile Include="Physics facts\WhenCollisionsOccur.cs" />
@@ -175,6 +176,7 @@
       <Name>PressPlay.FFWD</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

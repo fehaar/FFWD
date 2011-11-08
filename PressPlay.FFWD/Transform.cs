@@ -473,6 +473,17 @@ namespace PressPlay.FFWD
                 }
             }
         }
+
+        internal void DontDestroyOnLoadOnChildren()
+        {
+            if (children != null)
+            {
+                for (int i = 0; i < children.Count; i++)
+                {
+                    Application.DontDestroyOnLoad(children[i]);
+                }
+            }
+        }
         #endregion
 
         #region Public methods
