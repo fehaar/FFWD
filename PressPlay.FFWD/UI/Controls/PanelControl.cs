@@ -42,9 +42,7 @@ namespace PressPlay.FFWD.UI.Controls
             for (int i = 0; i < childCount; i++)
             {
                 Control child = this[i];
-                //child.transform.position = new Vector2 { x = offset.x + xMargin, y = y };
-                child.transform.localPosition = new Vector2 { x = offset.x + xMargin, y = y };
-                //y += child.bounds.Height + ySpacing;
+                child.transform.localPosition = new Vector3(new Vector2(offset.x + xMargin, y), (float)child.transform.localPosition );
 
                 //Debug.Log(i + " : " + child.transform.localPosition);
 

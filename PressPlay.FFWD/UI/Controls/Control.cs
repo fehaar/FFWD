@@ -44,7 +44,7 @@ namespace PressPlay.FFWD.UI.Controls
             }
             set
             {
-                gameObject.transform.localPosition = value;
+                gameObject.transform.localPosition = new Vector3(value, (float)gameObject.transform.localPosition);
                 if (parent != null)
                 {
                     parent.InvalidateAutoSize();

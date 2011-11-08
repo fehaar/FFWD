@@ -14,6 +14,8 @@ namespace PressPlay.FFWD.UI.Controls
         private Vector3 startPosition;
         private bool hasScrolled = false;
 
+        public bool lockScrolling = false;
+
         public ScrollingPanelControl(int width, int height)
             : base()
         {
@@ -44,15 +46,20 @@ namespace PressPlay.FFWD.UI.Controls
  
             base.HandleInput(input);
 
+            if (lockScrolling)
+            {
+                return;
+            }
+
 #if WINDOWS
             KeyboardState ks = Keyboard.GetState();
             if (ks.IsKeyDown(Keys.Up))
             {
-                scrollTracker.MoveScrollTracker(+30);
+                scrollTracker.MoveScrollTracker(-20);
             }
             else if (ks.IsKeyDown(Keys.Down))
             {
-                scrollTracker.MoveScrollTracker(-30);
+                scrollTracker.MoveScrollTracker(+20);
             }
 #endif
 

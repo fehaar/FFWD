@@ -51,7 +51,7 @@ namespace PressPlay.FFWD.UI.Controls
     {
         public TextControl textControl;
         public AudioClip buttonSound;
-        private ImageControl background;
+        protected ImageControl background;
         private ButtonStyle buttonStyle;
 
         private ButtonControlStates previousState = ButtonControlStates.normal;
