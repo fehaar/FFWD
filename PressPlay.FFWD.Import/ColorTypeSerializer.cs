@@ -19,10 +19,9 @@ namespace PressPlay.FFWD.Import
             return Color.Parse(s);
         }
 
-        protected override void Serialize(IntermediateWriter output, Color value, Microsoft.Xna.Framework.Content.ContentSerializerAttribute format)
+        protected override void Serialize(IntermediateWriter output, Color c, Microsoft.Xna.Framework.Content.ContentSerializerAttribute format)
         {
-            throw new NotImplementedException();
-            //return ((int)(c.a * 255)).ToString("X") + ((int)(c.r * 255)).ToString("X") + ((int)(c.g * 255)).ToString("X") + ((int)(c.b * 255)).ToString("X");
+            output.Xml.WriteElementString(format.ElementName, ((int)(c.a * 255)).ToString("X") + ((int)(c.r * 255)).ToString("X") + ((int)(c.g * 255)).ToString("X") + ((int)(c.b * 255)).ToString("X"));
         }
     }
 }
