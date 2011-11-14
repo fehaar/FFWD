@@ -351,13 +351,14 @@ namespace PressPlay.FFWD.UI.Controls
             OnChildAdded(index, child);
         }
 
-        public void RemoveChildAt(int index)
+        public Control RemoveChildAt(int index)
         {
             Control child = children[index];
             child.parent = null;
             child.transform.parent = null;
             children.RemoveAt(index);
             OnChildRemoved(index, child);
+            return child;
         }
 
 

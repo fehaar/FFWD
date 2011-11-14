@@ -174,6 +174,7 @@ namespace PressPlay.FFWD
                 if (typeof(IList).IsAssignableFrom(memInfo[i].FieldType))
                 {
                     IList list = (memInfo[i].GetValue(objectToFix) as IList);
+                    // TODO: We should actually create a new list here to fix issues when cloning. We did the same in the old code - see above line 155
                     if (list != null)
                     {
                         for (int j = 0; j < list.Count; j++)

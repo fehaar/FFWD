@@ -34,10 +34,6 @@ namespace PressPlay.FFWD
             {
                 idMap.Add(_id, this);
             }
-            //if (_id > nextId)
-            //{
-            //    nextId = _id + 1;
-            //}
         }
 
         /// <summary>
@@ -128,7 +124,6 @@ namespace PressPlay.FFWD
             Dictionary<int, UnityObject> idMap = new Dictionary<int, UnityObject>();
             clone.SetNewId(idMap);
             clone.FixReferences(idMap);
-
 
             // HACK THIS NEEDS TO BE REWORKED AS IT WILL RESULT IN RECURSIVE AWAKENEWCOMPS CALLS. DANGER DANGER!
             Application.AwakeNewComponents(true);

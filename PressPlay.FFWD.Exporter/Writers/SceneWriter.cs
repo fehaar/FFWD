@@ -139,7 +139,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                 }
                 catch (Exception ex)
                 {
-                    Debug.Log("Exception while writing Component of type " + comps[i].GetType());
+                    Debug.LogError("Exception while writing Component of type " + comps[i].GetType());
                     throw;
                 }
             }
@@ -242,7 +242,8 @@ namespace PressPlay.FFWD.Exporter.Writers
                 }
                 catch (Exception ex)
                 {
-                    Debug.Log("Exception when writing " + component.GetType() + " on " + component.name + " under " + component.transform.root.name + ":\n" + ex.Message, component);
+                    Debug.LogError(String.Format("Exception when writing {0} on {1} under {2} using writer {3} :\n{4}",
+                        component.GetType(), component.name, component.transform.root.name, componentWriter.GetType(), ex.Message), component);
                 }
             }
             else
@@ -570,7 +571,7 @@ namespace PressPlay.FFWD.Exporter.Writers
             }
             catch (Exception ex)
             {
-                Debug.Log("Exception when writing " + name + " with value " + obj + ": " + ex.Message);
+                Debug.LogError("Exception when writing " + name + " with value " + obj + ": " + ex.Message);
                 throw;
             }
         }
