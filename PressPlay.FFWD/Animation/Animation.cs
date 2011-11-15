@@ -31,6 +31,26 @@ namespace PressPlay.FFWD.Components
 			}
 		}
 
+        [ContentSerializerIgnore]
+        public bool DoZFlip
+        {
+            get
+            {
+                if (animationPlayer != null)
+                {
+                    return animationPlayer.DoZFlip;
+                }
+                return false;
+            }
+            set
+            {
+                if (animationPlayer != null)
+                {
+                    animationPlayer.DoZFlip = value;
+                }
+            }
+        }
+
 		private Dictionary<string, AnimationClip> clips = new Dictionary<string, AnimationClip>();
 		private Dictionary<string, AnimationState> states = new Dictionary<string, AnimationState>();
 		private string animationIndex;
@@ -180,7 +200,7 @@ namespace PressPlay.FFWD.Components
 			{
 				AddClip(modelData.AnimationClips[name], name);
 			}
-			animationPlayer = new SkinnedAnimationPlayer(modelData, bakedTransform);
+            animationPlayer = new SkinnedAnimationPlayer(modelData, bakedTransform);
 			animationPlayer.SetTransforms(transform.GetComponentsInChildren<Transform>());
 			if (playAutomatically)
 			{

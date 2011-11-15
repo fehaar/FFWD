@@ -33,17 +33,17 @@ namespace PressPlay.FFWD
 {
     public struct Vector3 : IEquatable<Vector3>
     {
-        #region Private Fields
+        #region Static constants
 
-        private static Vector3 _zero = new Vector3(0f, 0f, 0f);
-        private static Vector3 _one = new Vector3(1f, 1f, 1f);
-        private static Vector3 _up = new Vector3(0f, 1f, 0f);
-        private static Vector3 _right = new Vector3(1f, 0f, 0f);
-        private static Vector3 _forward = new Vector3(0f, 0f, -1f);
-        private static Vector3 _back = new Vector3(0f, 0f, 1f);
-        private static Vector3 _down = new Vector3(0f, -1f, 0f);
+        public static readonly Vector3 zero = new Vector3(0f, 0f, 0f);
+        public static readonly Vector3 one = new Vector3(1f, 1f, 1f);
+        public static readonly Vector3 up = new Vector3(0f, 1f, 0f);
+        public static readonly Vector3 right = new Vector3(1f, 0f, 0f);
+        public static readonly Vector3 forward = new Vector3(0f, 0f, -1f);
+        public static readonly Vector3 back = new Vector3(0f, 0f, 1f);
+        public static readonly Vector3 down = new Vector3(0f, -1f, 0f);
 
-        #endregion Private Fields
+        #endregion Static constants
 
         #region Public Fields
 
@@ -71,41 +71,6 @@ namespace PressPlay.FFWD
             get{
                 return DistanceSquared(this, Vector3.zero);
             }
-        }
-
-        public static Vector3 zero
-        {
-            get { return _zero; }
-        }
-
-        public static Vector3 one
-        {
-            get { return _one; }
-        }
-
-        public static Vector3 up
-        {
-            get { return _up; }
-        }
-
-        public static Vector3 down
-        {
-            get { return _down; }
-        }
-
-        public static Vector3 right
-        {
-            get { return _right; }
-        }
-
-        public static Vector3 forward
-        {
-            get { return _forward; }
-        }
-
-        public static Vector3 back
-        {
-            get { return _back; }
         }
 
         public float this[int index]

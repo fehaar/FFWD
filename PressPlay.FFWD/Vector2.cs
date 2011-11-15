@@ -34,14 +34,14 @@ namespace PressPlay.FFWD
 {
     public struct Vector2 : IEquatable<Vector2>
     {
-        #region Private Fields
+        #region Static constants
 
-        private static Vector2 Zero = new Vector2(0f, 0f);
-        private static Vector2 One = new Vector2(1f, 1f);
-        private static Vector2 Up = new Vector2(0f, 1f);
-        private static Vector2 Right = new Vector2(1f, 0f);
+        public static readonly Vector2 zero = new Vector2(0f, 0f);
+        public static readonly Vector2 one = new Vector2(1f, 1f);
+        public static readonly Vector2 up = new Vector2(0f, 1f);
+        public static readonly Vector2 right = new Vector2(1f, 0f);
 
-        #endregion Private Fields
+        #endregion Static constants
 
         #region Public Fields
 
@@ -63,27 +63,6 @@ namespace PressPlay.FFWD
                 return DistanceSquared(this, Vector2.zero);
             }
         }
-
-        public static Vector2 zero
-        {
-            get { return Zero; }
-        }
-
-        public static Vector2 one
-        {
-            get { return One; }
-        }
-
-        public static Vector2 up
-        {
-            get { return Up; }
-        }
-
-        public static Vector2 right
-        {
-            get { return Right; }
-        }
-
 
         public float this[int index]
         {
