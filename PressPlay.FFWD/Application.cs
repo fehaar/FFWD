@@ -287,7 +287,7 @@ namespace PressPlay.FFWD
 #if DEBUG
             graphics.Stop();
             double total = fixedUpdateTime.Elapsed.TotalSeconds + lateUpdateTime.Elapsed.TotalSeconds + updateTime.Elapsed.TotalSeconds + graphics.Elapsed.TotalSeconds + physics.Elapsed.TotalSeconds;
-            if (ApplicationSettings.LogActivatedComponents)
+            if (ApplicationSettings.ShowDebugLines)
             {
                 //Camera lineCam = (String.IsNullOrEmpty(ApplicationSettings.DebugLineCamera)) ? Camera.main : Camera.FindByName(ApplicationSettings.DebugLineCamera);
                 Camera lineCam = ApplicationSettings.DebugCamera;

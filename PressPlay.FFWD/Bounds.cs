@@ -45,7 +45,10 @@ namespace PressPlay.FFWD
             }
             set
             {
-                // TODO: Implement this!
+                Vector3 c = center;
+
+                box.Max = c + value;
+                box.Min = c - value;
             }
         }
 
