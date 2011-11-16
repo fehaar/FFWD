@@ -755,15 +755,6 @@ namespace PressPlay.FFWD
             }
         }
 
-        public void DebugDrawLocal()
-        {
-#if DEBUG
-            Debug.DrawRay(position, forward, Color.blue);
-            Debug.DrawRay(position, right, Color.red);
-            Debug.DrawRay(position, up, Color.green);
-#endif
-        }
-
         public void RotateAround(Vector3 vector3, float rotateThisFrame)
         {
             // TODO: Implement this
