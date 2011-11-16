@@ -19,6 +19,7 @@ namespace PressPlay.FFWD.Exporter
             { "System.Serializable", "" },
             { "Serializable", "" }
         };
+        public static string[] MethodsToOverride = new string[] { "Start", "Update", "FixedUpdate", "LateUpdate", "Awake", "OnTriggerEnter", "OnTriggerExit", "OnTriggerStay", "OnCollisionEnter", "OnCollisionExit", "OnCollisionStay" };
 
         public void Translate()
         {
@@ -64,8 +65,7 @@ namespace PressPlay.FFWD.Exporter
 
         private void OverrideMethods()
         {
-            string[] methods = new string[] { "Start", "Update", "FixedUpdate", "Awake", "OnTriggerEnter", "OnTriggerExit", "OnTriggerStay", "OnCollisionEnter", "OnCollisionExit", "OnCollisionStay" };
-            foreach (string method in methods)
+            foreach (string method in MethodsToOverride)
             {
                 Regex methEx = new Regex(@"void\s+" + method + @"\s?\(");
                 int startLine = scriptLines.FindIndex(s => methEx.IsMatch(s));
