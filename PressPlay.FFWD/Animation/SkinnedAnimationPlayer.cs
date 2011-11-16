@@ -231,12 +231,12 @@ namespace PressPlay.FFWD
                 // Move transforms according to bone
                 if (transforms[bone] != null)
                 {
-                    Vector3 pos = Matrix.Invert(worldTransforms[bone]).Translation * skinningDataValue.ModelScale;
+                    Matrix m = Matrix.Invert(worldTransforms[bone]) * Matrix.CreateScale(skinningDataValue.ModelScale);
                     if (DoZFlip)
 	                {
-                        pos.z = -pos.z;
+                        m.M43 = -m.M43;
 	                }
-                    transforms[bone].localPosition = pos;
+                    transforms[bone].SetLocalTransform(m);
                 }
             }
 
