@@ -5,6 +5,10 @@ namespace PressPlay.FFWD.Test.Core_framework
 {
     internal class TestComponent : Component, IFixedUpdateable, IUpdateable
     {
+        public TestComponent()
+        {
+        }
+
         internal TestComponent(bool isPrefab = false)
         {
             base.isPrefab = isPrefab;

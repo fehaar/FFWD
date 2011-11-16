@@ -230,6 +230,7 @@ namespace PressPlay.FFWD.Test.Core_framework
         [Test]
         public void InstantiatingComponentsWillPutThemInTheAwakeQueue()
         {
+            Application.hasAwake.Add(typeof(TestComponent));
             int awakeCalls = 0;
             GameObject obj = new GameObject();
             TestComponent comp = new TestComponent() { onAwake = () => { awakeCalls++; } };
@@ -244,24 +245,16 @@ namespace PressPlay.FFWD.Test.Core_framework
         }
 
         [Test]
-        public void InstantiatingAComponentInAwakeWillAwakeThemOnNextCall()
+        public void InstantiatingAComponentInAwakeWillAwakeThemImmidiately()
         {
+            Application.hasAwake.Add(typeof(TestComponent));
             int awakeCalls = 0;
-            GameObject objPrefab = new GameObject() { isPrefab = true };
+            GameObject objPrefab = new GameObject(true);
             TestComponent compPrefab = new TestComponent() { onAwake = () => { awakeCalls++; } };
             objPrefab.AddComponent(compPrefab);
 
-            TestComponent inst = null;
-            GameObject obj = new GameObject();
-            TestComponent comp = new TestComponent() { onAwake = () => { inst = (TestComponent)UnityObject.Instantiate(compPrefab); awakeCalls++; } };
-            obj.AddComponent(comp);
-
-            Application.AwakeNewComponents();
-
-            Assert.That(inst, Is.Not.Null);
+            TestComponent inst = (TestComponent)UnityObject.Instantiate(compPrefab);
             Assert.That(awakeCalls, Is.EqualTo(1));
-            Application.AwakeNewComponents();
-            Assert.That(awakeCalls, Is.EqualTo(2));
         }
 
         [Test]
@@ -300,19 +293,5 @@ namespace PressPlay.FFWD.Test.Core_framework
             Assert.That(Application.Find(clone.GetInstanceID()), Is.Not.Null);
         }
 
-        [Test]
-        public void ReferencesBackToComponentsInTheClonedObjectWillBeChanged()
-        {
-            GameObject obj = new GameObject();
-            ReferencingComponent cmp = new ReferencingComponent();
-            obj.AddComponent(cmp);
-            cmp.reference = obj.transform;
-
-            GameObject clone = (GameObject)GameObject.Instantiate(obj);
-            ReferencingComponent cloneCmp = clone.GetComponent<ReferencingComponent>();
-            Assert.That(cloneCmp.reference, Is.Not.SameAs(obj.transform));
-            Assert.That(cloneCmp.reference, Is.SameAs(clone.transform));
-        }
-	
     }
 }

@@ -131,6 +131,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core framework\Bounds\WhenSettingTheCenterOfBounds.cs" />
+    <Compile Include="Core framework\Instantiate\WhenAnInstantiatedObjectHaveReferences.cs" />
     <Compile Include="Core framework\Invoke\WhenInvokingAMethod.cs" />
     <Compile Include="Core framework\ReferencingComponent.cs" />
     <Compile Include="Core framework\TestComponent.cs" />
@@ -148,7 +149,7 @@
     <Compile Include="Core framework\WhenFindingAnObject.cs" />
     <Compile Include="Core framework\WhenFixingUpReferences.cs" />
     <Compile Include="Core framework\WhenGettingTheComponentName.cs" />
-    <Compile Include="Core framework\WhenInstantiatingANewObject.cs" />
+    <Compile Include="Core framework\Instantiate\WhenInstantiatingANewObject.cs" />
     <Compile Include="Core framework\WhenLoadingAScene.cs" />
     <Compile Include="Core framework\WhenLocatingAComponent.cs" />
     <Compile Include="Core framework\WhenRunningTheGameLoop.cs" />

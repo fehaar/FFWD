@@ -77,7 +77,7 @@ namespace PressPlay.FFWD
         private static readonly TypeSet isUpdateable = new TypeSet(100);
         private static readonly TypeSet isFixedUpdateable = new TypeSet(25);
         private static readonly TypeSet isLateUpdateable = new TypeSet(25);
-        private static readonly TypeSet hasAwake = new TypeSet(50);
+        internal static readonly TypeSet hasAwake = new TypeSet(50);
         internal static readonly TypeSet fixReferences = new TypeSet(5);
 
         private static readonly List<InvokeCall> invokeCalls = new List<InvokeCall>(10);

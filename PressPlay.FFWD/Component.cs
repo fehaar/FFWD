@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Content;
 using PressPlay.FFWD.Components;
 using PressPlay.FFWD.Attributes;
 using System.Collections;
+using System.Text;
 
 namespace PressPlay.FFWD
 {
@@ -135,7 +136,7 @@ namespace PressPlay.FFWD
                 if (typeof(UnityObject).IsAssignableFrom(memInfo[i].FieldType))
                 {
                     UnityObject val = (memInfo[i].GetValue(objectToFix) as UnityObject);
-                    if (val == null || !val.isPrefab)
+                    if (val == null)
                     {
                         continue;
                     }
@@ -147,46 +148,31 @@ namespace PressPlay.FFWD
                         }
                     }
                 }
-                //if (memInfo[i].FieldType.IsArray && typeof(UnityObject).IsAssignableFrom(memInfo[i].FieldType.GetElementType()))
-                //{
-                //    UnityObject[] arr = (memInfo[i].GetValue(objectToFix) as UnityObject[]); 
-                //    if (arr != null)
-                //    {
-                //        arr = arr.Clone() as UnityObject[];
-                //        for (int j = 0; j < arr.Length; j++)
-                //        {
-                //            if ((arr[j] != null) && (arr[j].isPrefab))
-                //            {
-                //                if (idMap.ContainsKey(arr[j].GetInstanceID()))
-                //                {
-                //                    if (arr[j] != idMap[arr[j].GetInstanceID()])
-                //                    {
-                //                        arr[j] = idMap[arr[j].GetInstanceID()];
-                //                    }
-                //                }
-                //            }
-                //        }
-                //    }
-                //    memInfo[i].SetValue(objectToFix, arr);
-                //    continue;
-                //}
-
                 if (typeof(IList).IsAssignableFrom(memInfo[i].FieldType))
                 {
                     IList list = (memInfo[i].GetValue(objectToFix) as IList);
-                    // TODO: We should actually create a new list here to fix issues when cloning. We did the same in the old code - see above line 155
                     if (list != null)
                     {
+                        IList newList = (IList)list.GetType().GetConstructor(new Type[] { typeof(int) }).Invoke(new object[] { list.Count });
                         for (int j = 0; j < list.Count; j++)
                         {
-                            if (list[j] is UnityObject && (list[j] as UnityObject).isPrefab)
+                            if (newList is Array)
+                            {
+                                newList[j] = list[j];
+                            }
+                            else
+                            {
+                                newList.Add(list[j]);
+                            }
+                            if (list[j] is UnityObject)
                             {
                                 if (idMap.ContainsKey((list[j] as UnityObject).GetInstanceID()))
                                 {
-                                    list[j] = idMap[(list[j] as UnityObject).GetInstanceID()];
+                                    newList[j] = idMap[(list[j] as UnityObject).GetInstanceID()];
                                 }
                             }
                         }
+                        memInfo[i].SetValue(objectToFix, newList);
                     }
                 }
 
@@ -279,11 +265,17 @@ namespace PressPlay.FFWD
         #region Overridden methods
         public override string ToString()
         {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendFormat("{0} ({1}){2}", GetType().Name, GetInstanceID(), (isPrefab) ? "P" : "");
             if (gameObject == null)
             {
-                return GetType().Name + " (" + GetInstanceID() + ") on its own";
+                sb.Append(" on its own.");
             }
-            return GetType().Name + " (" + GetInstanceID() + ") on " + gameObject.name + " (" + gameObject.GetInstanceID() + ") active: "+gameObject.active;
+            else
+            {
+                sb.AppendFormat(" on {0}", gameObject.ToString());
+            }
+            return sb.ToString();
         }
         #endregion
 
