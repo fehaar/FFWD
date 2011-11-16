@@ -55,6 +55,9 @@ namespace PressPlay.FFWD
         [ContentSerializer]
         public Dictionary<string, int> BoneMap { get; private set; }
 
+        [ContentSerializerIgnore]
+        public float ModelScale = 0.01f;
+
         /// <summary>
         /// Constructs a new skinning data object.
         /// </summary>
