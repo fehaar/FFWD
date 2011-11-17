@@ -20,6 +20,7 @@ namespace PressPlay.FFWD.Import
             ReadNormals = true;
             ReadUVs = true;
             WriteAsModel = false;
+            Scale = 1.0f;
         }
 
         [DefaultValue(false)]
