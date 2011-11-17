@@ -28,8 +28,8 @@ namespace PressPlay.FFWD.UI.Controls
             get
             {
                 Vector2 pos = transform.position;
-                Vector2 scale = transform.lossyScale;
-                return new Rectangle((int)pos.x, (int)pos.y, (int)(size.x * scale.x), (int)(size.y * scale.y));
+                //Vector2 scale = transform.lossyScale;
+                return new Rectangle((int)pos.x, (int)pos.y, (int)size.x, (int)size.y);
             }
         }
 
@@ -285,8 +285,7 @@ namespace PressPlay.FFWD.UI.Controls
             // We want to make sure, that the parent recalculates its size
             InvalidateAutoSize();
 
-            //transform.localPosition = new Vector3((parent.bounds.Width / 2) - (bounds.Width / 2), transform.localPosition.y, transform.localPosition.z);
-            transform.localPosition = new Vector3(offset.x + (parent.bounds.Width / 2) - (bounds.Width / 2), transform.localPosition.y, offset.y + (parent.bounds.Height / 2) - (bounds.Height / 2));
+            transform.position = new Vector3(offset.x + parent.bounds.Left + (parent.bounds.Width / 2) - (bounds.Width / 2), transform.position.y, offset.y + parent.bounds.Top + (parent.bounds.Height / 2) - (bounds.Height / 2));
 
             if (hasIgnoredSize)
             {
