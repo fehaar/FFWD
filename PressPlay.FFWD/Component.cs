@@ -153,14 +153,19 @@ namespace PressPlay.FFWD
                     IList list = (memInfo[i].GetValue(objectToFix) as IList);
                     if (list != null)
                     {
-                        IList newList = (IList)list.GetType().GetConstructor(new Type[] { typeof(int) }).Invoke(new object[] { list.Count });
+                        IList newList;
+                        if (list is Array)
+                        {
+                            newList = (IList)(list as Array).Clone();
+                        }
+                        else
+	                    {
+                            ConstructorInfo ctor = list.GetType().GetConstructor(new Type[] { typeof(int) });
+                            newList = (IList)ctor.Invoke(new object[] { list.Count });
+	                    }
                         for (int j = 0; j < list.Count; j++)
                         {
-                            if (newList is Array)
-                            {
-                                newList[j] = list[j];
-                            }
-                            else
+                            if (!(newList is Array))
                             {
                                 newList.Add(list[j]);
                             }
