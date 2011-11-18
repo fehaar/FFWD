@@ -271,6 +271,8 @@ namespace PressPlay.FFWD
             updateTime.Stop();
             lateUpdateTime.Start();
 #endif
+            StartComponents();
+            ChangeComponentActivity();
             count = lateUpdateComponents.Count;
             for (int i = 0; i < count; i++)
             {
