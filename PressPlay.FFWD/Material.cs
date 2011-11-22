@@ -44,7 +44,7 @@ namespace PressPlay.FFWD
             {
                 blendState = BlendState.Additive;
             } 
-            else if (renderQueue == 3000 || shader == "TransperantNoLight")
+            else if (renderQueue == 3000 || shader == "TransperantNoLight" || shader == "Transparent/Cutout/Soft Edge Unlit")
             {
                 blendState = BlendState.AlphaBlend;
             }

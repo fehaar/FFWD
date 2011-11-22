@@ -27,6 +27,7 @@ namespace PressPlay.FFWD
         public Microsoft.Xna.Framework.Vector2[] uv;
         [ContentSerializerIgnore]
         public short[] triangles;
+        private short[][] triangleSets;
 
         internal BoundingSphere boundingSphere;
 
@@ -75,7 +76,21 @@ namespace PressPlay.FFWD
                         if (part != null)
                         {
                             vertices = (Microsoft.Xna.Framework.Vector3[])part.vertices.Clone();
-                            triangles = (short[])part.triangles.Clone();
+                            triangleSets = (short[][])part.triangles.Clone();
+
+                            int triCount = 0;
+                            int triIndex = 0;
+                            for (int i = 0; i < part.triangles.Length; i++)
+                            {
+                                triCount += part.triangles[i].Length;
+                            }
+                            triangles = new short[triCount];
+                            for (int i = 0; i < part.triangles.Length; i++)
+                            {
+                                part.triangles[i].CopyTo(triangles, triIndex);
+                                triIndex += part.triangles[i].Length;
+                            }
+
                             uv = (Microsoft.Xna.Framework.Vector2[])part.uv.Clone();
                             if (part.normals != null)
                             {

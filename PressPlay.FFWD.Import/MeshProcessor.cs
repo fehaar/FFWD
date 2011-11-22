@@ -90,46 +90,10 @@ namespace PressPlay.FFWD.Import
                     }
                     preTransform = Matrix.CreateScale(Scale) * Matrix.CreateFromQuaternion(rotation);
 
-                    if (input.Name == "sprite_square")
-                    {
-                        ProcessSpriteSquareMesh(input as MeshContent);
-                    }
-                    else
-                    {
-                        ProcessNode(input);
-                    }
+                    ProcessNode(input);
                 }
             }
             return meshData;
-        }
-
-        private void ProcessSpriteSquareMesh(MeshContent input)
-        {
-            MeshDataPart mesh = new MeshDataPart();
-
-            Microsoft.Xna.Framework.Vector3[] verts = new Microsoft.Xna.Framework.Vector3[input.Positions.Count];
-            mesh.vertices = new Microsoft.Xna.Framework.Vector3[input.Positions.Count];
-            input.Positions.CopyTo(verts, 0);
-            Microsoft.Xna.Framework.Vector3.Transform(verts, ref preTransform, mesh.vertices);
-
-            // This is hardcoded to make it work. The uvs and tris from the Mesh seems broken. Uhh...
-            mesh.triangles = new short[6] { 2, 0, 1, 2, 1, 3 };
-            mesh.uv = new Microsoft.Xna.Framework.Vector2[4] {
-                                new Microsoft.Xna.Framework.Vector2(0, 0),
-                                new Microsoft.Xna.Framework.Vector2(1, 0),
-                                new Microsoft.Xna.Framework.Vector2(0, 1),
-                                new Microsoft.Xna.Framework.Vector2(1, 1)
-                            };
-
-            if (ReadNormals && input.Geometry[0].Vertices.Channels.Contains(VertexChannelNames.Normal(0)))
-            {
-                VertexChannel<Microsoft.Xna.Framework.Vector3> normals = input.Geometry[0].Vertices.Channels.Get<Microsoft.Xna.Framework.Vector3>(VertexChannelNames.Normal(0));
-                mesh.normals = normals.ToArray();
-            }
-
-            mesh.boundingSphere = BoundingSphere.CreateFromPoints(mesh.vertices);
-
-            meshData.meshParts.Add(input.Name, mesh);
         }
 
         void ProcessNode(NodeContent node)
@@ -184,24 +148,24 @@ namespace PressPlay.FFWD.Import
             geometry.Vertices.Positions.CopyTo(verts, 0);
             Microsoft.Xna.Framework.Vector3.Transform(verts, ref preTransform, mesh.vertices);
 
-            mesh.triangles = new short[geometry.Indices.Count];
+            mesh.triangles = new short[][] { new short[geometry.Indices.Count] };
             for (int i = 0; i < geometry.Indices.Count; i++)
             {
-                mesh.triangles[i] = (short)geometry.Indices[i];
+                mesh.triangles[0][i] = (short)geometry.Indices[i];
             }
 
             mesh.boundingSphere = BoundingSphere.CreateFromPoints(mesh.vertices);
 
-            // Add the new piece of geometry to our output model.
-            int num = 1;
-            string tempName = name;
-            while (meshData.meshParts.ContainsKey(name))
+            // Add the new piece of geometry to our output model. If the name is already here, it is a submesh and the triangles will be combined.
+            if (meshData.meshParts.ContainsKey(name))
             {
-                name = tempName + "_" + num;
-                num++;
+                MeshDataPart oldPart = meshData.meshParts[name];
+                oldPart.AddSubMesh(mesh);
             }
-
-            meshData.meshParts.Add(name, mesh);
+            else
+            {
+                meshData.meshParts.Add(name, mesh);
+            }
         }
 
     }
