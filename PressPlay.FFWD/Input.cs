@@ -18,8 +18,9 @@ namespace PressPlay.FFWD
         private static MouseState currentMouseState;
 
 #if WINDOWS_PHONE
-        private static Vector2 lastTap;
+        private static Vector2 lastTapPosition;
         private static bool newTap = false;
+        private static bool hasAFingerOnScreen = false;
 #endif
 
         internal static void Initialize()
@@ -35,12 +36,20 @@ namespace PressPlay.FFWD
             samples = inputState.Gestures;
 
             newTap = false;
+            hasAFingerOnScreen = false;
             for (int i = 0; i < inputState.TouchState.Count; i++)
             {
-                if (inputState.TouchState[i].State == TouchLocationState.Pressed)
+                switch (inputState.TouchState[i].State)
                 {
-                    lastTap = inputState.TouchState[i].Position;
-                    newTap = true;
+                    case TouchLocationState.Moved:
+                        hasAFingerOnScreen = true;
+                        lastTapPosition = inputState.TouchState[i].Position;
+                        break;
+                    case TouchLocationState.Pressed:
+                        hasAFingerOnScreen = true;
+                        newTap = true;
+                        lastTapPosition = inputState.TouchState[i].Position;
+                        break;
                 }
             }
 #endif
@@ -78,7 +87,7 @@ namespace PressPlay.FFWD
             get
             {
 #if WINDOWS_PHONE
-                return lastTap;
+                return lastTapPosition;
 #else
                 return new Vector2(currentMouseState.X, currentMouseState.Y);
 #endif
@@ -108,7 +117,7 @@ namespace PressPlay.FFWD
         public static bool GetMouseButton(int button)
         {
 #if WINDOWS_PHONE
-            return newTap;
+            return hasAFingerOnScreen;
 #else
             switch (button)
             {
@@ -127,15 +136,6 @@ namespace PressPlay.FFWD
         {
 #if WINDOWS_PHONE
             return newTap;
-            //switch (button)
-            //{
-            //    case 0:
-            //        return (currentMouseState.LeftButton == ButtonState.Pressed);
-            //    case 1:
-            //        return (currentMouseState.MiddleButton == ButtonState.Pressed);
-            //    case 2:
-            //        return (currentMouseState.RightButton == ButtonState.Pressed);
-            //}
 #else
             switch (button)
             {

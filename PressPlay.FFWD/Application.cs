@@ -77,7 +77,7 @@ namespace PressPlay.FFWD
         private static readonly TypeSet isUpdateable = new TypeSet(100);
         private static readonly TypeSet isFixedUpdateable = new TypeSet(25);
         private static readonly TypeSet isLateUpdateable = new TypeSet(25);
-        private static readonly TypeSet hasAwake = new TypeSet(50);
+        internal static readonly TypeSet hasAwake = new TypeSet(50);
         internal static readonly TypeSet fixReferences = new TypeSet(5);
 
         private static readonly List<InvokeCall> invokeCalls = new List<InvokeCall>(10);
@@ -271,6 +271,8 @@ namespace PressPlay.FFWD
             updateTime.Stop();
             lateUpdateTime.Start();
 #endif
+            StartComponents();
+            ChangeComponentActivity();
             count = lateUpdateComponents.Count;
             for (int i = 0; i < count; i++)
             {
@@ -287,7 +289,7 @@ namespace PressPlay.FFWD
 #if DEBUG
             graphics.Stop();
             double total = fixedUpdateTime.Elapsed.TotalSeconds + lateUpdateTime.Elapsed.TotalSeconds + updateTime.Elapsed.TotalSeconds + graphics.Elapsed.TotalSeconds + physics.Elapsed.TotalSeconds;
-            if (ApplicationSettings.LogActivatedComponents)
+            if (ApplicationSettings.ShowDebugLines)
             {
                 //Camera lineCam = (String.IsNullOrEmpty(ApplicationSettings.DebugLineCamera)) ? Camera.main : Camera.FindByName(ApplicationSettings.DebugLineCamera);
                 Camera lineCam = ApplicationSettings.DebugCamera;
@@ -538,7 +540,7 @@ namespace PressPlay.FFWD
             UnloadCurrentLevel();
         }
 
-        public static void UnloadCurrentLevel()
+        internal static void UnloadCurrentLevel()
         {
             foreach (UnityObject obj in objects.Values)
             {
@@ -786,17 +788,16 @@ namespace PressPlay.FFWD
         {
             if (target is Component)
             {
-                if(!dontDestroyOnLoad.Contains(((Component)target).gameObject))
-                {
-                    dontDestroyOnLoad.Add(((Component)target).gameObject);
-                }
+                DontDestroyOnLoad((target as Component).gameObject);
             }
 
             if (target is GameObject)
             {
-                if (!dontDestroyOnLoad.Contains((GameObject)target))
+                GameObject go = target as GameObject;
+                if (!dontDestroyOnLoad.Contains(go))
                 {
-                    dontDestroyOnLoad.Add((GameObject)target);
+                    dontDestroyOnLoad.Add(go);
+                    go.transform.DontDestroyOnLoadOnChildren();
                 }
             }
         }

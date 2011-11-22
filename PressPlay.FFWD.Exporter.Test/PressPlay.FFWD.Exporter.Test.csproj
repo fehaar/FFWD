@@ -61,8 +61,11 @@
     <None Include="TestScripts\TentacleStats.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Compile Include="ScriptTranslation\WhenAScriptHasAttributes.cs" />
+    <Compile Include="ScriptTranslation\WhenAScriptHasLateUpdate.cs" />
+    <Compile Include="ScriptTranslation\WhenAScriptHasRandom.cs" />
     <Compile Include="WhenCreatingAScriptStub.cs" />
-    <Compile Include="WhenTranslatingAScript.cs" />
+    <Compile Include="ScriptTranslation\WhenTranslatingAScript.cs" />
     <Compile Include="WhenUsingTheFilter.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -137,7 +137,8 @@ namespace PressPlay.FFWD.UI.Controls
                 return Vector2.zero;
             }
 
-            return font.MeasureString(text);
+            Microsoft.Xna.Framework.Vector2 scale = transform.lossyScale;
+            return font.MeasureString(text) * scale;
         }
     }
 }

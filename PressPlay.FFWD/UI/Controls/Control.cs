@@ -28,8 +28,8 @@ namespace PressPlay.FFWD.UI.Controls
             get
             {
                 Vector2 pos = transform.position;
-                Vector2 scale = transform.lossyScale;
-                return new Rectangle((int)pos.x, (int)pos.y, (int)(size.x * scale.x), (int)(size.y * scale.y));
+                //Vector2 scale = transform.lossyScale;
+                return new Rectangle((int)pos.x, (int)pos.y, (int)size.x, (int)size.y);
             }
         }
 
@@ -44,7 +44,11 @@ namespace PressPlay.FFWD.UI.Controls
             }
             set
             {
-                gameObject.transform.localPosition = value;
+                if (gameObject == null)
+                {
+                    return;
+                }
+                gameObject.transform.localPosition = new Vector3(value, (float)gameObject.transform.localPosition);
                 if (parent != null)
                 {
                     parent.InvalidateAutoSize();
@@ -249,7 +253,6 @@ namespace PressPlay.FFWD.UI.Controls
             if (gameObject != null && gameObject.renderer != null)
             {
                 UIRenderer r = (UIRenderer)gameObject.renderer;
-                
                 r.material.color = new PressPlay.FFWD.Color(r.material.color.r, r.material.color.g, r.material.color.b, 1f - transitionTime);
             }
 
@@ -282,8 +285,7 @@ namespace PressPlay.FFWD.UI.Controls
             // We want to make sure, that the parent recalculates its size
             InvalidateAutoSize();
 
-            //transform.localPosition = new Vector3((parent.bounds.Width / 2) - (bounds.Width / 2), transform.localPosition.y, transform.localPosition.z);
-            transform.localPosition = new Vector3(offset.x + (parent.bounds.Width / 2) - (bounds.Width / 2), transform.localPosition.y, offset.y + (parent.bounds.Height / 2) - (bounds.Height / 2));
+            transform.position = new Vector3(offset.x + parent.bounds.Left + (parent.bounds.Width / 2) - (bounds.Width / 2), transform.position.y, offset.y + parent.bounds.Top + (parent.bounds.Height / 2) - (bounds.Height / 2));
 
             if (hasIgnoredSize)
             {
@@ -348,13 +350,14 @@ namespace PressPlay.FFWD.UI.Controls
             OnChildAdded(index, child);
         }
 
-        public void RemoveChildAt(int index)
+        public Control RemoveChildAt(int index)
         {
             Control child = children[index];
             child.parent = null;
             child.transform.parent = null;
             children.RemoveAt(index);
             OnChildRemoved(index, child);
+            return child;
         }
 
 

@@ -42,9 +42,7 @@ namespace PressPlay.FFWD.UI.Controls
             for (int i = 0; i < childCount; i++)
             {
                 Control child = this[i];
-                //child.transform.position = new Vector2 { x = offset.x + xMargin, y = y };
-                child.transform.localPosition = new Vector2 { x = offset.x + xMargin, y = y };
-                //y += child.bounds.Height + ySpacing;
+                child.transform.localPosition = new Vector3(new Vector2(offset.x + xMargin, y), (float)child.transform.localPosition );
 
                 //Debug.Log(i + " : " + child.transform.localPosition);
 
@@ -54,6 +52,46 @@ namespace PressPlay.FFWD.UI.Controls
             InvalidateAutoSize();
 
             //Debug.Log("Column size after layout: "+bounds);
+        }
+
+        /// <summary>
+        /// Layout a column with the given spacing and all controls centered vertically
+        /// </summary>
+        /// <param name="xMargin"></param>
+        /// <param name="yMargin"></param>
+        /// <param name="ySpacing"></param>
+        public virtual void LayoutColumnVerticallyCentered(float xMargin, float yMargin, float ySpacing)
+        {
+            this.xMargin = xMargin;
+            this.yMargin = yMargin;
+            this.ySpacing = ySpacing;
+
+            // Parent offset
+            Vector2 offset = transform.position;
+
+            float y = yMargin + offset.y;
+            float maxWidth = 0;
+
+            for (int i = 0; i < childCount; i++)
+            {
+                Control child = this[i];
+                child.transform.localPosition = new Vector2 { x = offset.x + xMargin, y = y };
+                if (maxWidth < child.bounds.Width)
+                {
+                    maxWidth = child.bounds.Width;
+                }
+                y += child.bounds.Height + ySpacing;
+            }
+            for (int i = 0; i < childCount; i++)
+            {
+                Control child = this[i];
+                if (child.bounds.Width != maxWidth)
+                {
+                    child.transform.localPosition += new Vector3((maxWidth - child.bounds.Width) / 2 ,0);
+                }
+            }
+
+            InvalidateAutoSize();
         }
 
         public void LayoutRow()

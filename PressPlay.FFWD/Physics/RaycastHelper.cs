@@ -9,6 +9,9 @@ using PressPlay.FFWD;
 
 namespace PressPlay.FFWD
 {
+    /// <summary>
+    /// This is a helper class that reduces the amount of garbage that is created when doing raycasts and making delegates.
+    /// </summary>
     internal static class RaycastHelper
     {
         private static bool _findClosest;

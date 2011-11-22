@@ -277,11 +277,13 @@
     <Compile Include="Farseer\Factories\JointFactory.cs" />
     <Compile Include="Farseer\Factories\LinkFactory.cs" />
     <Compile Include="Farseer\Settings.cs" />
+    <Compile Include="Gizmos.cs" />
     <Compile Include="InvokeCall.cs" />
     <Compile Include="MeshData.cs" />
     <Compile Include="MeshDataPart.cs" />
     <Compile Include="MeshDataReader.cs" />
     <Compile Include="Physics\LayerMaskOperations.cs" />
+    <Compile Include="Physics\QueryHelper.cs" />
     <Compile Include="Ray.cs" />
     <Compile Include="Color.cs" />
     <Compile Include="Component.cs" />

@@ -64,6 +64,11 @@ namespace PressPlay.FFWD
         }
 
         /// <summary>
+        /// This is a special setting to avoid an issue with certain models that animate along the z-axis
+        /// </summary>
+        public bool DoZFlip;
+
+        /// <summary>
         /// Constructs a new animation player.
         /// </summary>
         public SkinnedAnimationPlayer(SkinningData skinningData, Matrix bakedTransform)
@@ -222,10 +227,16 @@ namespace PressPlay.FFWD
                 int parentBone = skinningDataValue.SkeletonHierarchy[bone];
 
                 worldTransforms[bone] = boneTransforms[bone] * worldTransforms[parentBone];
+
                 // Move transforms according to bone
                 if (transforms[bone] != null)
                 {
-                    transforms[bone].localPosition = Matrix.Invert(worldTransforms[bone]).Translation * 0.01f;
+                    Matrix m = Matrix.Invert(worldTransforms[bone]) * Matrix.CreateScale(skinningDataValue.ModelScale);
+                    if (DoZFlip)
+	                {
+                        m.M43 = -m.M43;
+	                }
+                    transforms[bone].SetLocalTransform(m);
                 }
             }
 
@@ -239,25 +250,14 @@ namespace PressPlay.FFWD
             for (int bone = 0; bone < skinTransforms.Length; bone++)
             {
                 skinTransforms[bone] = skinningDataValue.InverseBindPose[bone] * worldTransforms[bone];
+                if (DoZFlip)
+                {
+                    Matrix m = skinTransforms[bone];
+                    m.M43 = -m.M43;
+                    skinTransforms[bone] = m;
+                }
             }
         }
-
-        //internal bool WorldTransformForBone(string boneName, out Matrix m)
-        //{
-        //    if (currentClipValue != null)
-        //    {
-        //        if (skinningDataValue.BoneMap.ContainsKey(boneName))
-        //        {
-        //            m = worldTransforms[skinningDataValue.BoneMap[boneName]];
-        //            // TODO: This is a very brutal hardcoded hack as the animation does not work very well with hiearchical scales
-        //            m.Translation = m.Translation * 0.01f;
-                    
-        //            return true;
-        //        }
-        //    }
-        //    m = Matrix.Identity;
-        //    return false;
-        //}
 
         internal void SetTransforms(Transform[] transform)
         {

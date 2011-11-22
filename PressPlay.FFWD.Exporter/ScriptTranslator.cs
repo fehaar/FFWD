@@ -14,7 +14,12 @@ namespace PressPlay.FFWD.Exporter
         public static string ScriptNamespace { get; set; }
         private List<string> scriptLines;
         public static List<string> DefaultUsings = new List<string> { "System", "System.Collections.Generic", "System.Text", "PressPlay.FFWD", "PressPlay.FFWD.Components", "Microsoft.Xna.Framework.Content" };
-        public static Dictionary<string, string> ReplaceAttributes = new Dictionary<string, string>() { { "HideInInspector", "ContentSerializerIgnore" } };
+        public static Dictionary<string, string> ReplaceAttributes = new Dictionary<string, string>() { 
+            { "HideInInspector", "ContentSerializerIgnore" },
+            { "System.Serializable", "" },
+            { "Serializable", "" }
+        };
+        public static string[] MethodsToOverride = new string[] { "Start", "Update", "FixedUpdate", "LateUpdate", "Awake", "OnTriggerEnter", "OnTriggerExit", "OnTriggerStay", "OnCollisionEnter", "OnCollisionExit", "OnCollisionStay" };
 
         public void Translate()
         {
@@ -25,6 +30,18 @@ namespace PressPlay.FFWD.Exporter
             OverrideMethods();
 
             ReplaceAllAttributes();
+
+            AddFFWDNamespace();
+        }
+
+        private void AddFFWDNamespace()
+        {
+            int line = -1;
+            Regex rex = new Regex("[^.]Random.");
+            while ((line = scriptLines.FindIndex(s => rex.IsMatch(s))) > -1)
+            {
+                scriptLines[line] = scriptLines[line].Replace("Random.", "PressPlay.FFWD.Random.");
+            }
         }
 
         private void ReplaceAllAttributes()
@@ -34,15 +51,21 @@ namespace PressPlay.FFWD.Exporter
                 int line = -1;
                 while ((line = scriptLines.FindIndex(s => s.Contains("[" + item.Key + "]"))) > -1)
                 {
-                    scriptLines[line] = scriptLines[line].Replace(item.Key, item.Value);
+                    if (String.IsNullOrEmpty(item.Value))
+                    {
+                        scriptLines[line] = scriptLines[line].Replace("[" + item.Key + "]", "");
+                    }
+                    else
+                    {
+                        scriptLines[line] = scriptLines[line].Replace(item.Key, item.Value);
+                    }
                 }
             }
         }
 
         private void OverrideMethods()
         {
-            string[] methods = new string[] { "Start", "Update", "FixedUpdate", "Awake", "OnTriggerEnter", "OnTriggerExit", "OnTriggerStay", "OnCollisionEnter", "OnCollisionExit", "OnCollisionStay" };
-            foreach (string method in methods)
+            foreach (string method in MethodsToOverride)
             {
                 Regex methEx = new Regex(@"void\s+" + method + @"\s?\(");
                 int startLine = scriptLines.FindIndex(s => methEx.IsMatch(s));

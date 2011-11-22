@@ -473,6 +473,17 @@ namespace PressPlay.FFWD
                 }
             }
         }
+
+        internal void DontDestroyOnLoadOnChildren()
+        {
+            if (children != null)
+            {
+                for (int i = 0; i < children.Count; i++)
+                {
+                    Application.DontDestroyOnLoad(children[i]);
+                }
+            }
+        }
         #endregion
 
         #region Public methods
@@ -742,15 +753,6 @@ namespace PressPlay.FFWD
                     children[i].BroadcastMessage(methodName, value, sendMessageOptions);
                 }
             }
-        }
-
-        public void DebugDrawLocal()
-        {
-#if DEBUG
-            Debug.DrawRay(position, forward, Color.blue);
-            Debug.DrawRay(position, right, Color.red);
-            Debug.DrawRay(position, up, Color.green);
-#endif
         }
 
         public void RotateAround(Vector3 vector3, float rotateThisFrame)

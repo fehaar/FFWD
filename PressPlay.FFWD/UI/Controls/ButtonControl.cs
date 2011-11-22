@@ -51,7 +51,7 @@ namespace PressPlay.FFWD.UI.Controls
     {
         public TextControl textControl;
         public AudioClip buttonSound;
-        private ImageControl background;
+        protected ImageControl background;
         private ButtonStyle buttonStyle;
 
         private ButtonControlStates previousState = ButtonControlStates.normal;
@@ -125,6 +125,15 @@ namespace PressPlay.FFWD.UI.Controls
 
             previousState = _state;
             _state = newState;
+
+            if (newState == ButtonControlStates.disabled)
+            {
+                textControl.SetColor(FFWD.Color.gray);
+            }
+            if (previousState == ButtonControlStates.disabled)
+            {
+                textControl.SetColor(FFWD.Color.white);
+            }
         }
 
         public void ScaleTextToFit()

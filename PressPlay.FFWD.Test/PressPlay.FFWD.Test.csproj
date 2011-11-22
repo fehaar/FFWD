@@ -131,6 +131,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core framework\Bounds\WhenSettingTheCenterOfBounds.cs" />
+    <Compile Include="Core framework\Instantiate\WhenAnInstantiatedObjectHaveReferences.cs" />
     <Compile Include="Core framework\Invoke\WhenInvokingAMethod.cs" />
     <Compile Include="Core framework\ReferencingComponent.cs" />
     <Compile Include="Core framework\TestComponent.cs" />
@@ -148,7 +149,7 @@
     <Compile Include="Core framework\WhenFindingAnObject.cs" />
     <Compile Include="Core framework\WhenFixingUpReferences.cs" />
     <Compile Include="Core framework\WhenGettingTheComponentName.cs" />
-    <Compile Include="Core framework\WhenInstantiatingANewObject.cs" />
+    <Compile Include="Core framework\Instantiate\WhenInstantiatingANewObject.cs" />
     <Compile Include="Core framework\WhenLoadingAScene.cs" />
     <Compile Include="Core framework\WhenLocatingAComponent.cs" />
     <Compile Include="Core framework\WhenRunningTheGameLoop.cs" />
@@ -158,6 +159,7 @@
     <Compile Include="Core framework\Bounds\WhenChangingValuesOnBounds.cs" />
     <Compile Include="Core framework\WhenTransformingQuaternionsToAndFromEulers.cs" />
     <Compile Include="Core framework\Bounds\WhenCreatingBounds.cs" />
+    <Compile Include="Core framework\WhenUsingDoNotDestroyOnLoad.cs" />
     <Compile Include="Core framework\WhenUsingTheComponentShortcutMethods.cs" />
     <Compile Include="Core framework\WhenUsingTheGameObjectShortcutProperties.cs" />
     <Compile Include="Physics facts\WhenCollisionsOccur.cs" />
@@ -175,6 +177,7 @@
       <Name>PressPlay.FFWD</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

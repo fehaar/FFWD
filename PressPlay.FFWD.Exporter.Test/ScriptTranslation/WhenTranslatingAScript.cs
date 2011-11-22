@@ -105,19 +105,6 @@ namespace PressPlay.FFWD.Exporter.Test
             Assert.That(newScript, Is.Not.StringContaining("virtual protected public override void"));
         }
 	
-
-        [Test]
-        public void WeWillReplaceAttributes()
-        {
-            ScriptTranslator.ReplaceAttributes = new System.Collections.Generic.Dictionary<string, string>() { { "HideInInspector", "InspectorGadget" } };
-            ScriptTranslator trans = new ScriptTranslator(testScript);
-            trans.Translate();
-            string newScript = trans.ToString();
-
-            Assert.That(newScript, Is.StringContaining("[InspectorGadget]"));
-            Assert.That(newScript, Is.Not.StringContaining("[HideInInspector]"));
-        }
-
         [Test]
         public void WeCanTranslateTheTestScripts()
         {
@@ -135,6 +122,5 @@ namespace PressPlay.FFWD.Exporter.Test
             }
             Assert.Pass("We have translated all scripts");
         }
-	
 	}
 }

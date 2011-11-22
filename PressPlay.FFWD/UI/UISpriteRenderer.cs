@@ -47,19 +47,7 @@ namespace PressPlay.FFWD.UI
                 _sourceRect = value;
             }
         }
-        /*
-        private Rectangle _bounds = Rectangle.Empty;
-        public Rectangle bounds
-        {
-            get
-            {
-                //_bounds = new Rectangle(0, 0, (int)control.size.x, (int)control.size.y);
-                _bounds = new Rectangle((int)(control.drawOffset.x + transform.position.x), (int)(control.drawOffset.y + transform.position.z), texture.Bounds.Width, texture.Bounds.Height);
-                
-                return _bounds;
-            }
-        }
-        */
+
         public Vector2 origin = Vector2.zero;
         public float scale = 1f;
         public SpriteEffects effects = SpriteEffects.None;

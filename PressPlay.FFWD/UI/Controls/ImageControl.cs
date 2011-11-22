@@ -42,16 +42,16 @@ namespace PressPlay.FFWD.UI.Controls
         public override Vector2 ComputeSize()
         {
             UISpriteRenderer r = (UISpriteRenderer)gameObject.renderer;
-            
+            Vector2 scale = transform.lossyScale;
             if (r.texture != null)
             {
                 if (r.sourceRect != Rectangle.Empty)
                 {
-                    return new Vector2(r.sourceRect.Width, r.sourceRect.Height);
+                    return new Vector2(r.sourceRect.Width, r.sourceRect.Height) * scale;
                 }
                 else
                 {
-                    return new Vector2(texture.Width, texture.Height);
+                    return new Vector2(texture.Width, texture.Height) * scale;
                 }
             }
             return Vector2.zero;

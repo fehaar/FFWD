@@ -524,8 +524,10 @@ namespace PressPlay.FFWD
 
         public static Collider[] OverlapSphere(Vector3 position, float radius, LayerMask layermask)
         {
-            // TODO: Implement this
-            return new Collider[0];
+            AABB aabb = new AABB(position, radius, radius);
+            QueryHelper.layermask = layermask;
+            world.QueryAABB(null, ref aabb);
+            return QueryHelper.GetQueryResult();
         }
         #endregion
 
