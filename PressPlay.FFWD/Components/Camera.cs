@@ -278,6 +278,7 @@ namespace PressPlay.FFWD.Components
 #endif
         }
 
+        private readonly Matrix inverter = new Matrix(-1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
         internal void doRender(GraphicsDevice device)
         {
             Clear(device);
@@ -288,10 +289,11 @@ namespace PressPlay.FFWD.Components
             }
 #endif
 
-            view = Matrix.CreateLookAt(
+            Matrix m = Matrix.CreateLookAt(
                 transform.position,
                 transform.position + transform.forward,
-                transform.up);
+                -transform.up);
+            view = m * inverter;
             frustum.Matrix = view * projectionMatrix;
 
             #region TextRenderer3D batching start
