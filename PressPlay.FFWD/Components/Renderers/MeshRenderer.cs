@@ -35,9 +35,14 @@ namespace PressPlay.FFWD.Components
 
             if (filter.CanBatch())
             {
-                return cam.BatchRender(filter, material, transform);
+                return cam.BatchRender(filter.mesh, materials, transform);
             }
 
+            return DrawModelDirectly(device, cam);
+        }
+
+        private int DrawModelDirectly(GraphicsDevice device, Camera cam)
+        {
             // Draw the model.
             ModelMesh mesh = filter.GetModelMesh();
             if (mesh != null)
@@ -48,7 +53,6 @@ namespace PressPlay.FFWD.Components
                     Debug.LogFormat("Mesh model: {0} on {1}", gameObject, cam.gameObject);
                 }
 #endif
-
 
                 Matrix world = transform.world;
                 cam.BasicEffect.World = world;

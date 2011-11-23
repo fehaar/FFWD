@@ -36,7 +36,7 @@ namespace PressPlay.FFWD.Components
         /// <param name="material"></param>
         /// <param name="filter"></param>
         /// <returns></returns>
-        internal int Draw<T>(Camera cam, Material material, T verts, Transform transform)
+        internal int Draw(Camera cam, Material material, Mesh mesh, Transform transform, int subMeshIndex = 0)
         {
             int drawCalls = 0;
 
@@ -44,8 +44,9 @@ namespace PressPlay.FFWD.Components
             {
                 drawCalls = DoDraw(device, cam);
                 currentMaterial = material;
-            }            
-            Add(verts, transform);
+            }
+            Matrix world = (transform != null) ? transform.world : Matrix.Identity;
+            PrepareMesh(mesh, subMeshIndex, ref world);
             return drawCalls;
         }
 
@@ -56,22 +57,6 @@ namespace PressPlay.FFWD.Components
             batchIndexSize = 0;
             currentVertexIndex = 0;
             currentIndexIndex = 0;
-        }
-
-        private void Add<T>(T model, Transform transform)
-        {
-            Matrix world = (transform != null) ? transform.world : Matrix.Identity;
-            MeshFilter filter = model as MeshFilter;
-            if (filter != null)
-            {
-                PrepareMesh(filter.mesh, ref world);
-            }
-
-            Mesh mesh = model as Mesh;
-            if (mesh != null)
-            {
-                PrepareMesh(mesh, ref world);
-            }
         }
 
         internal int DoDraw(GraphicsDevice device, Camera cam)
@@ -90,7 +75,7 @@ namespace PressPlay.FFWD.Components
 #if DEBUG
             if (Camera.logRenderCalls)
             {
-                Debug.LogFormat("Dyn batch draw: {0} on {1} verts {2}, indices {3}", currentMaterial.mainTexture, cam.gameObject, currentVertexIndex, currentIndexIndex);
+                Debug.LogFormat("==> Dyn batch draw: {0} on {1} verts {2}, indices {3}", currentMaterial.mainTexture, cam.gameObject, currentVertexIndex, currentIndexIndex);
             }
 #endif
 
@@ -112,7 +97,7 @@ namespace PressPlay.FFWD.Components
             return 1;
         }
 
-        private void PrepareMesh(Mesh mesh, ref Matrix transform)
+        private void PrepareMesh(Mesh mesh, int subMeshIndex, ref Matrix transform)
         {
             batchVertexSize += mesh.vertices.Length;
             if (vertexData.Length < batchVertexSize)
@@ -128,7 +113,7 @@ namespace PressPlay.FFWD.Components
             if (indexData.Length < batchIndexSize)
             {
                 short[] newIndexData = new short[batchIndexSize];
-                indexData.CopyTo(newIndexData, 0);
+                Buffer.BlockCopy(indexData, 0, newIndexData, 0, indexData.Length);
                 indexData = newIndexData;
 #if DEBUG
                 Debug.LogWarning("Increased size of Dynamic index buffer to " + batchIndexSize);
@@ -173,13 +158,18 @@ namespace PressPlay.FFWD.Components
                 }
             }
 
-            for (int t = 0; t < mesh.triangles.Length; t++)
+            short[] tris = mesh.triangles;
+            if (mesh.subMeshCount > 1)
             {
-                indexData[currentIndexIndex + t] = (short)(mesh.triangles[t] + currentVertexIndex);
+                tris = mesh.GetTriangles(subMeshIndex);
+            }
+            for (int t = 0; t < tris.Length; t++)
+            {
+                indexData[currentIndexIndex + t] = (short)(tris[t] + currentVertexIndex);
             }
 
             currentVertexIndex += mesh.vertices.Length;
-            currentIndexIndex += mesh.triangles.Length;
+            currentIndexIndex += tris.Length;
         }
     }
 }

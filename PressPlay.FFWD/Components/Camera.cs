@@ -393,7 +393,7 @@ namespace PressPlay.FFWD.Components
             return null;
         }
 
-        internal int BatchRender<T>(T data, Material material, Transform transform)
+        internal int BatchRender(Mesh data, Material[] materials, Transform transform)
         {
 #if DEBUG
             if (Camera.logRenderCalls)
@@ -401,7 +401,12 @@ namespace PressPlay.FFWD.Components
                 Debug.LogFormat("Dyn batch: {0} on {1} at {2}", data, gameObject, (transform != null) ? transform.position : Vector3.zero);
             }
 #endif
-            return dynamicBatchRenderer.Draw(this, material, data, transform);
+            int calls = 0;
+            for (int i = 0; i < data.subMeshCount; i++)
+            {
+                calls += dynamicBatchRenderer.Draw(this, materials[i], data, transform, i);
+            }
+            return calls;
         }
 
         internal bool DoFrustumCulling(ref BoundingSphere sphere)

@@ -115,6 +115,7 @@ namespace PressPlay.FFWD
             normals = null;
             uv = null;
             triangles = null;
+            triangleSets = null;
         }
 
         internal ModelMesh GetModelMesh()
@@ -135,6 +136,27 @@ namespace PressPlay.FFWD
             return null;
         }
 
+        public int subMeshCount
+        {
+            get
+            {
+                if (triangleSets == null)
+                {
+                    if (triangles == null)
+                    {
+                        return 0;
+                    }
+                    return 1;
+                }
+                return triangleSets.Length;
+            }
+        }
+
+        public short[] GetTriangles(int subMeshIndex)
+        {
+            return triangleSets[subMeshIndex];
+        }
+
         #region ICloneable Members
         internal override UnityObject Clone()
         {
@@ -147,6 +169,7 @@ namespace PressPlay.FFWD
             {
                 clone.vertices = (Microsoft.Xna.Framework.Vector3[])vertices.Clone();
                 clone.triangles = (short[])triangles.Clone();
+                clone.triangleSets = (short[][])triangleSets.Clone();
                 clone.uv = (Microsoft.Xna.Framework.Vector2[])uv.Clone();
                 if (normals != null)
                 {
@@ -162,5 +185,6 @@ namespace PressPlay.FFWD
         {
             return String.Format("{0} - {1} ({2})", GetType().Name, asset, GetInstanceID());
         }
+
     }
 }
