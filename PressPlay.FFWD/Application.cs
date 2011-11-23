@@ -20,9 +20,6 @@ namespace PressPlay.FFWD
             UpdateOrder = 1;
             DrawOrder = 0;
 
-            isUpdateable.Add(typeof(iTween));
-            isLateUpdateable.Add(typeof(iTween));
-            isFixedUpdateable.Add(typeof(iTween));
             isUpdateable.Add(typeof(PressPlay.FFWD.UI.Controls.ScrollingPanelControl));
         }
 
@@ -617,13 +614,6 @@ namespace PressPlay.FFWD
                 Component cmp = newComponents[i];
                 if (cmp.gameObject != null)
                 {
-                    // TODO: Fix this with a content processor!
-                    // Purge superfluous Transforms that is created when GameObjects are imported from the scene
-                    //if ((cmp is Transform) && (cmp.gameObject.transform != cmp))
-                    //{
-                    //    cmp.gameObject = null;
-                    //    continue;
-                    //}
                     objects.Add(cmp.GetInstanceID(), cmp);
 
                     if (!cmp.isPrefab)
@@ -644,6 +634,10 @@ namespace PressPlay.FFWD
                         {
                             componentsToAwake.Enqueue(cmp);
                         }
+                    }
+                    if (cmp is IInitializable)
+                    {
+                        (cmp as IInitializable).Initialize();
                     }
                 }
             }

@@ -24,21 +24,20 @@ namespace PressPlay.FFWD
         public static bool ShowDebugLines = true;
         public static bool ShowDebugPhysics = false;
         public static bool LogActivatedComponents = false;
-        //public static string DebugLineCamera = "";
         public static Camera DebugCamera;
         public static SpriteFont DebugFont;
+#if WINDOWS
+        public static int AssetLoadInterval = 50; // In Milliseconds
+#else
+        public static int AssetLoadInterval = 50; // In Milliseconds
+#endif
 
-#if WINDOWS
-        public static float pressPlayLogoSplashTime = 0;
-        public static float MGSLogoSplashTime = 0;
-#else
-        public static float pressPlayLogoSplashTime = 1;
-        public static float MGSLogoSplashTime = 5;
-#endif
-#if WINDOWS
-        public static int AssetLoadInterval = 50; // In Milliseconds
-#else
-        public static int AssetLoadInterval = 50; // In Milliseconds
-#endif
+        /// <summary>
+        /// All of these settings can be tuned in order to adjust memory usage of the engine.
+        /// You should do this in your game contructor.
+        /// </summary>
+        #region Default list sizes
+        public static int LightsDefaultCapacity = 4;
+        #endregion
     }
 }

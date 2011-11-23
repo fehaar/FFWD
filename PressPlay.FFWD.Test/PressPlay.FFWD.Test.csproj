@@ -130,12 +130,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core framework\Helpers\ApplicationTestBase.cs" />
+    <Compile Include="Core framework\Behaviours\WhenSettingTheEnabledProperty.cs" />
     <Compile Include="Core framework\Bounds\WhenSettingTheCenterOfBounds.cs" />
+    <Compile Include="Core framework\Helpers\TestBehaviour.cs" />
     <Compile Include="Core framework\Instantiate\WhenAnInstantiatedObjectHaveReferences.cs" />
     <Compile Include="Core framework\Invoke\WhenInvokingAMethod.cs" />
-    <Compile Include="Core framework\ReferencingComponent.cs" />
-    <Compile Include="Core framework\TestComponent.cs" />
-    <Compile Include="Core framework\TestHierarchy.cs" />
+    <Compile Include="Core framework\Helpers\ReferencingComponent.cs" />
+    <Compile Include="Core framework\Helpers\TestComponent.cs" />
+    <Compile Include="Core framework\Helpers\TestHierarchy.cs" />
     <Compile Include="Core framework\Transforms\WhenManipulatingTransforms.cs" />
     <Compile Include="Core framework\Transforms\WhenManipulatingTheTransformHierarchy.cs" />
     <Compile Include="Core framework\WhenAddingAComponentToAGameObject.cs" />

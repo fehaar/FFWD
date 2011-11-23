@@ -69,6 +69,11 @@ namespace PressPlay.FFWD.Components
         {
             base.FixReferences(idMap);
         }
+
+        protected override sealed void Destroy()
+        {
+            base.Destroy();
+        }
         #endregion
 
         #region Invoke

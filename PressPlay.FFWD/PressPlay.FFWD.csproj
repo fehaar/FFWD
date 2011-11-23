@@ -206,6 +206,7 @@
     <Compile Include="Components\Colliders\Rigidbody.cs" />
     <Compile Include="Components\Colliders\SphereCollider.cs" />
     <Compile Include="Components\IdMap.cs" />
+    <Compile Include="Components\Light.cs" />
     <Compile Include="Components\MeshFilter.cs" />
     <Compile Include="Components\Particle.cs" />
     <Compile Include="Components\ParticleAnimator.cs" />
@@ -325,10 +326,10 @@
     <Compile Include="Farseer\Factories\LinkFactory.cs" />
     <Compile Include="Farseer\Settings.cs" />
     <Compile Include="Gizmos.cs" />
+    <Compile Include="Interfaces\IInitializable.cs" />
     <Compile Include="InvokeCall.cs" />
     <Compile Include="Material.cs" />
     <Compile Include="Extensions\PlaneExtensions.cs" />
-    <Compile Include="iTween\iTween.cs" />
     <Compile Include="Input.cs" />
     <Compile Include="Mathf.cs" />
     <Compile Include="Mesh.cs" />

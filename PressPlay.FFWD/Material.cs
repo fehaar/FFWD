@@ -111,7 +111,7 @@ namespace PressPlay.FFWD
             {
                 basicEffect.TextureEnabled = true;
                 basicEffect.Texture = texture;
-                basicEffect.DiffuseColor = Color.white;
+                basicEffect.DiffuseColor = color;
             }
             else
             {

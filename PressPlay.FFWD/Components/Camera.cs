@@ -158,6 +158,7 @@ namespace PressPlay.FFWD.Components
             return viewPort.Project(position, projectionMatrix, view, Matrix.Identity);
         }
 
+        #region Keeping track of renderers
         internal static List<Renderer> nonAssignedRenderers = new List<Renderer>();
         internal static void AddRenderer(Renderer renderer)
         {
@@ -221,6 +222,7 @@ namespace PressPlay.FFWD.Components
         {
             renderQueue.Remove(renderer);
         }
+        #endregion
 
 #if DEBUG
         internal static bool logRenderCalls = false;
@@ -314,6 +316,12 @@ namespace PressPlay.FFWD.Components
 
             BasicEffect.View = view;
             BasicEffect.Projection = projectionMatrix;
+
+            if (Light.HasLights)
+            {
+                Light.EnableLighting(BasicEffect);
+            }
+
             int q = 0;
             for (int i = 0; i < renderQueue.Count; i++)
             {

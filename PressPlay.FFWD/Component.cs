@@ -17,7 +17,7 @@ namespace PressPlay.FFWD
             Application.AddNewComponent(this);
         }
 
-        public virtual GameObject gameObject { get; internal set; }
+        public GameObject gameObject { get; internal set; }
 
         [ContentSerializerIgnore]
         public string name
