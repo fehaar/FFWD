@@ -21,6 +21,7 @@ namespace PressPlay.FFWD.Import
             ReadUVs = true;
             WriteAsModel = false;
             Scale = 1.0f;
+            RotationY = 180;
         }
 
         [DefaultValue(false)]
@@ -44,7 +45,7 @@ namespace PressPlay.FFWD.Import
         [Description("The rotation of the model in the game.")]
         public float RotationX { get; set; }
         [DisplayName("Rotation Y")]
-        [DefaultValue(0.0f)]
+        [DefaultValue(180.0f)]
         [Description("The rotation of the model in the game.")]
         public float RotationY { get; set; }
         [DisplayName("Rotation Z")]
@@ -88,7 +89,7 @@ namespace PressPlay.FFWD.Import
                     {
                         throw new Exception("Scale of model is 0!");
                     }
-                    preTransform = Matrix.CreateScale(Scale) * Matrix.CreateFromQuaternion(rotation);
+                    preTransform = Matrix.CreateScale(new Microsoft.Xna.Framework.Vector3(Scale, Scale, -Scale)) * Matrix.CreateFromQuaternion(rotation);
 
                     ProcessNode(input);
                 }
