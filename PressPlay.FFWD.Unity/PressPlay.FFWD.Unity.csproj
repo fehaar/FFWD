@@ -46,7 +46,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExportSceneWizard.cs" />
+    <Compile Include="FFWD_DontExportAttribute.cs" />
+    <Compile Include="FFWD_ExportOptionsAttribute.cs" />
+    <Compile Include="Editor\ExportSceneWizard.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -57,7 +59,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(ProjectDir)\*.cs" "$(SolutionDir)\..\..\Unity\Assets\Editor\FFWD\"
+    <PostBuildEvent>copy "$(ProjectDir)\*.cs" "$(SolutionDir)\..\..\Unity\Assets\FFWD\"
+copy "$(ProjectDir)\Editor\*.cs" "$(SolutionDir)\..\..\Unity\Assets\Editor\FFWD\"
 </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

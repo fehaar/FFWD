@@ -44,7 +44,7 @@ namespace PressPlay.FFWD
             {
                 blendState = BlendState.Additive;
             } 
-            else if (renderQueue == 3000 || shader == "TransperantNoLight" || shader == "Transparent/Cutout/Soft Edge Unlit")
+            else if (renderQueue == 3000 || (shader ?? "").StartsWith("Trans"))
             {
                 blendState = BlendState.AlphaBlend;
             }
@@ -64,7 +64,7 @@ namespace PressPlay.FFWD
             {
                 device.BlendState = blendState;
             }
-            if (renderQueue == 3000 || shader == "TransperantNoLight")
+            if (renderQueue == 3000 || (shader ?? "").StartsWith("Trans"))
             {
                 device.DepthStencilState = DepthStencilState.DepthRead;
             }
