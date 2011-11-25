@@ -8,8 +8,8 @@
     <ProjectGuid>{8CD56DE8-14AF-4EE3-844C-FFFD39E7F207}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PressPlay.U2X.Unity</RootNamespace>
-    <AssemblyName>PressPlay.U2X.Unity</AssemblyName>
+    <RootNamespace>PressPlay.FFWD.Unity</RootNamespace>
+    <AssemblyName>PressPlay.FFWD.Unity</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
