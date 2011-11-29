@@ -17,7 +17,8 @@ namespace PressPlay.FFWD.Exporter
         public static Dictionary<string, string> ReplaceAttributes = new Dictionary<string, string>() { 
             { "HideInInspector", "ContentSerializerIgnore" },
             { "System.Serializable", "" },
-            { "Serializable", "" }
+            { "Serializable", "" },
+            { "AddComponentMenu", "" }
         };
         public static string[] MethodsToOverride = new string[] { "Start", "Update", "FixedUpdate", "LateUpdate", "Awake", "OnTriggerEnter", "OnTriggerExit", "OnTriggerStay", "OnCollisionEnter", "OnCollisionExit", "OnCollisionStay" };
 
@@ -49,15 +50,17 @@ namespace PressPlay.FFWD.Exporter
             foreach (var item in ReplaceAttributes)
             {
                 int line = -1;
-                while ((line = scriptLines.FindIndex(s => s.Contains("[" + item.Key + "]"))) > -1)
-                {
+                Regex rex = new Regex(String.Format(@"(\[{0}(\(.+\))?\])", item.Key));
+                Match m;
+                while ((line = scriptLines.FindIndex(s => (m = rex.Match(s)).Success)) > -1)
+                {                    
                     if (String.IsNullOrEmpty(item.Value))
                     {
-                        scriptLines[line] = scriptLines[line].Replace("[" + item.Key + "]", "");
+                        scriptLines[line] = rex.Replace(scriptLines[line], "");
                     }
                     else
                     {
-                        scriptLines[line] = scriptLines[line].Replace(item.Key, item.Value);
+                        scriptLines[line] = rex.Replace(scriptLines[line], "[" + item.Value + "$2]");
                     }
                 }
             }
