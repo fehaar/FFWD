@@ -31,6 +31,15 @@ namespace PressPlay.FFWD
 
         internal BoundingSphere boundingSphere;
 
+        public Bounds bounds
+        {
+            get
+            {
+                // TODO: Implement this
+                throw new NotImplementedException();
+            }
+        }
+
         protected override void DoLoadAsset(AssetHelper assetHelper)
         {
             // TODO: Optimize this by bundling everything into the same structure.

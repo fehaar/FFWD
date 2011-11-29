@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace PressPlay.FFWD
 {
@@ -32,6 +33,11 @@ namespace PressPlay.FFWD
                 return scene.prefabs[0];
             }
             return null;
+        }
+
+        public static object Load(string name, Type type)
+        {
+            throw new NotImplementedException();
         }
     }
 }

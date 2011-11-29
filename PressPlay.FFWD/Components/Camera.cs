@@ -158,6 +158,11 @@ namespace PressPlay.FFWD.Components
             return viewPort.Project(position, projectionMatrix, view, Matrix.Identity);
         }
 
+        public Vector3 WorldToScreenPoint(Vector3 vector3)
+        {
+            throw new System.NotImplementedException();
+        }
+
         #region Keeping track of renderers
         internal static List<Renderer> nonAssignedRenderers = new List<Renderer>();
         internal static void AddRenderer(Renderer renderer)

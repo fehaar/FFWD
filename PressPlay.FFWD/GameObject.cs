@@ -159,6 +159,20 @@ namespace PressPlay.FFWD
                 return _audio;
             }
         }
+
+        protected ParticleEmitter _particleEmitter;
+        [ContentSerializerIgnore]
+        public ParticleEmitter particleEmitter
+        {
+            get
+            {
+                if (_particleEmitter == null)
+                {
+                    _particleEmitter = GetComponent<ParticleEmitter>();
+                }
+                return _particleEmitter;
+            }
+        }
         #endregion
 
         [ContentSerializer(ElementName = "cs", CollectionItemName = "c", Optional = true)]

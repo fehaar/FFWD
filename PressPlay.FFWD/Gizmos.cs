@@ -21,8 +21,7 @@ namespace PressPlay.FFWD
         public static void DrawWireCube(Vector3 position, Vector3 size)
         { }
 
-        
-
-            
+        public static void DrawSphere(Vector3 vector3, float p)
+        { }
     }
 }

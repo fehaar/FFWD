@@ -205,6 +205,14 @@ namespace PressPlay.FFWD
         }
         #endregion
 
+        public static bool operator ==(Color d, Color c)
+        {
+            return d.a == c.a && d.r == c.r && d.g == c.g && d.b == c.b;
+        }
+        public static bool operator !=(Color d, Color c)
+        {
+            return d.a != c.a || d.r != c.r || d.g != c.g || d.b != c.b;
+        }
         public static Color operator *(float d, Color c)
         {
             return new Color(c.r * d, c.g * d, c.b * d, c.a * d);

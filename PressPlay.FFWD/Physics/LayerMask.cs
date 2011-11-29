@@ -19,6 +19,12 @@ namespace PressPlay.FFWD
             return new LayerMask() { value = mask };
         }
 
+        public static int NameToLayer(string name)
+        {
+            // TODO: Implement this!
+            throw new NotImplementedException();
+        }
+
         public override string ToString()
         {
             return value.ToString();

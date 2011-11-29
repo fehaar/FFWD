@@ -685,6 +685,11 @@ namespace PressPlay.FFWD
             return Microsoft.Xna.Framework.Vector3.Transform(new Microsoft.Xna.Framework.Vector3(x, y, z), Matrix.Invert(world));
         }
 
+        public void RotateAround(Vector3 vector3, float rotateThisFrame)
+        {
+            // TODO: Implement this
+        }
+
         public void DetachChildren()
         {
             // TODO: Implement this method
@@ -701,6 +706,18 @@ namespace PressPlay.FFWD
         {
             // TODO : Add implementation of method
             throw new NotImplementedException("Method not implemented.");
+        }
+
+        public Transform FindChild(string name)
+        {
+            // TODO : Add implementation of method
+            throw new NotImplementedException();
+        }
+
+        public Transform GetChild(int i)
+        {
+            // TODO : Add implementation of method
+            throw new NotImplementedException();
         }
         #endregion
 
@@ -753,11 +770,6 @@ namespace PressPlay.FFWD
                     children[i].BroadcastMessage(methodName, value, sendMessageOptions);
                 }
             }
-        }
-
-        public void RotateAround(Vector3 vector3, float rotateThisFrame)
-        {
-            // TODO: Implement this
         }
     }
 }

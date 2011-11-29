@@ -3,6 +3,7 @@ using PressPlay.FFWD.Interfaces;
 using PressPlay.FFWD;
 using Microsoft.Xna.Framework.Graphics;
 using FarseerPhysics.Dynamics;
+using Microsoft.Xna.Framework.Content;
 
 namespace PressPlay.FFWD.Components
 {
@@ -11,6 +12,18 @@ namespace PressPlay.FFWD.Components
         #region Content properties
         public Vector3 center { get; set; }
         public Vector3 size { get; set; }
+        [ContentSerializerIgnore]
+        public Vector3 extents
+        {
+            get
+            {
+                return size;
+            }
+            set
+            {
+                size = value;
+            }
+        }
         #endregion
 
         protected override void DoAddCollider(Body body, float mass)

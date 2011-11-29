@@ -130,6 +130,12 @@ namespace PressPlay.FFWD
         }
 
         [Conditional("DEBUG")]
+        public static void Break()
+        {
+            Debugger.Break();
+        }
+
+        [Conditional("DEBUG")]
         public static void DrawLine(Vector3 start, Vector3 end)
         {
             DrawLine(start, end, Color.white);

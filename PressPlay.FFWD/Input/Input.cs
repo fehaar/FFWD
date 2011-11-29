@@ -167,5 +167,7 @@ namespace PressPlay.FFWD
             return false;
 #endif
         }
+
+        public static IEnumerable<Touch> touches { get; set; }
     }
 }

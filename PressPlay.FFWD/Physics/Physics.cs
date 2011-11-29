@@ -592,5 +592,16 @@ namespace PressPlay.FFWD
                 rigidBodies.Remove(body);
             }
         }
+
+        public static bool SphereCast(Ray ray, float radius, float distance, LayerMask layerMask)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool SphereCast(Vector3 origin, float radius, Vector3 direction, out RaycastHit hitInfo, float distance = Mathf.Infinity, int layerMask = kDefaultRaycastLayers)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }
