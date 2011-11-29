@@ -10,6 +10,7 @@ using System.IO;
 using PressPlay.FFWD.Exporter.Interfaces;
 using PressPlay.FFWD.Exporter.Writers;
 using UnityEngine;
+using PressPlay.FFWD.Exporter.Writers.Components;
 
 namespace PressPlay.FFWD.Exporter
 {
@@ -17,8 +18,6 @@ namespace PressPlay.FFWD.Exporter
 	{
 		public TypeResolver()
 		{
-			ExcludeTypes = new List<string>();
-			IncludeTypes = new List<string>();
 			NamespaceRules = new List<NamespaceRule>();
 			DefaultNamespace = "PressPlay.FFWD";
             ComponentWriters = new List<ComponentMap>();
@@ -26,12 +25,6 @@ namespace PressPlay.FFWD.Exporter
 
 		[XmlAttribute]
 		public bool ExcludeByDefault { get; set; }
-		[XmlArray]
-		[XmlArrayItem("Type", typeof(string))]
-		public List<string> ExcludeTypes { get; set; }
-		[XmlArray]
-		[XmlArrayItem("Type", typeof(string))]
-		public List<string> IncludeTypes { get; set; }
 		[XmlElement]
 		public string DefaultNamespace { get; set; }
 		[XmlArray]
@@ -60,16 +53,34 @@ namespace PressPlay.FFWD.Exporter
 
 		public bool SkipComponent(object component)
 		{
-			String type = component.GetType().FullName;
-			if (IncludeTypes != null && IncludeTypes.Contains(type))
-			{
-				return false;
-			}
-			if (ExcludeTypes != null && ExcludeTypes.Contains(type))
-			{
-				return true;
-			}
-			return ExcludeByDefault;
+            if (!(component is MonoBehaviour))
+            {
+                return false;
+            }
+            if (ExcludeByDefault)
+            {
+                Type tp = component.GetType();
+                foreach (var item in tp.GetCustomAttributes(true))
+                {
+                    if (item.GetType().Name == "FFWD_ExportOptionsAttribute")
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            else
+            {
+                Type tp = component.GetType();
+                foreach (var item in tp.GetCustomAttributes(true))
+                {
+                    if (item.GetType().Name == "FFWD_DontExportAttribute")
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
 		}
 
 		public string ResolveTypeName(object component)
@@ -89,13 +100,24 @@ namespace PressPlay.FFWD.Exporter
             }
             if (component is MonoBehaviour && !result.Contains("."))
             {
-                result = ScriptTranslator.ScriptNamespace + "." + result;
+                if (!String.IsNullOrEmpty(ScriptTranslator.ScriptNamespace))
+                {
+                    result = ScriptTranslator.ScriptNamespace + "." + result;
+                }
             }
             return result;
 		}	
 
         public IComponentWriter GetComponentWriter(Type type)
         {
+            if (type.IsSubclassOf(typeof(MonoBehaviour)))
+            {
+                MonoBehaviourWriter wr = new MonoBehaviourWriter();
+                wr.filter = new Filter() { filterType = wr.defaultFilterType };
+                wr.options = "noExport";
+                return wr;
+            }
+
             string result = type.FullName;
             foreach (ComponentMap map in ComponentWriters)
             {

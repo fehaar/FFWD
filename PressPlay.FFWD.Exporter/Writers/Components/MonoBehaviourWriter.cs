@@ -30,7 +30,10 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
             {
                 WriteFieldsForType(scene, beh, component.GetType());
             }
-            scene.WriteScript(beh, !options.Contains("noOverwrite"));
+            if (!options.Contains("noExport"))
+            {
+                scene.WriteScript(beh, !options.Contains("noOverwrite"));
+            }
         }
         #endregion
 

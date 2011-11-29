@@ -210,41 +210,45 @@ namespace PressPlay.FFWD.Exporter.Writers
                 WriteTransform(component as Transform, isPrefab);
                 return true;
             }
-            if (resolver.SkipComponent(component))
-            {
-                return false;
-            }
 
             System.Type type = component.GetType();
+            if (resolver.SkipComponent(component))
+            {
+                if (!componentsNotWritten.Contains(type.FullName))
+                {
+                    componentsNotWritten.Add(type.FullName);
+                }
+                return false;
+            }
             IComponentWriter componentWriter = resolver.GetComponentWriter(type);
 
             if (componentWriter != null)
             {
+                writtenIds.Add(component.GetInstanceID());
+                if (!isPrefab)
+                {
+                    writer.WriteStartElement("c");
+                    writer.WriteAttributeString("Type", resolver.ResolveTypeName(component));
+                }
+                writer.WriteElementString("id", component.GetInstanceID().ToString());
+                if (isPrefab)
+                {
+                    writer.WriteElementString("isPrefab", ToString(true));
+                }
                 try
                 {
-                    writtenIds.Add(component.GetInstanceID());
-                    if (!isPrefab)
-                    {
-                        writer.WriteStartElement("c");
-                        writer.WriteAttributeString("Type", resolver.ResolveTypeName(component));
-                    }
-                    writer.WriteElementString("id", component.GetInstanceID().ToString());
-                    if (isPrefab)
-                    {
-                        writer.WriteElementString("isPrefab", ToString(true));
-                    }
                     componentWriter.Write(this, component);
-                    if (!isPrefab)
-                    {
-                        writer.WriteEndElement();
-                    }
-                    return true;
                 }
                 catch (Exception ex)
                 {
                     Debug.LogError(String.Format("Exception when writing {0} on {1} under {2} using writer {3} :\n{4}",
                         component.GetType(), component.name, component.transform.root.name, componentWriter.GetType(), ex.Message), component);
                 }
+                if (!isPrefab)
+                {
+                    writer.WriteEndElement();
+                }
+                return true;
             }
             else
             {

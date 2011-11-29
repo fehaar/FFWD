@@ -21,10 +21,6 @@ namespace PressPlay.FFWD.Exporter.Test.Configuration
             Assert.That(obj, Is.InstanceOf<TypeResolver>());
 
             Assert.That(obj.ExcludeByDefault, Is.True);
-            Assert.That(obj.ExcludeTypes, Is.Not.Null);
-            Assert.That(obj.ExcludeTypes, Is.Not.Empty);
-            Assert.That(obj.IncludeTypes, Is.Not.Null);
-            Assert.That(obj.IncludeTypes, Is.Not.Empty);
 
             Assert.That(obj.DefaultNamespace, Is.EqualTo("PressPlay.FFWD"));
 
@@ -38,7 +34,7 @@ namespace PressPlay.FFWD.Exporter.Test.Configuration
             ComponentMap map = obj.ComponentWriters.Find(m => m.Type == "UnityEngine.MeshRenderer");
             Assert.That(map, Is.Not.Null);
             Assert.That(map.To, Is.StringStarting(typeof(MeshRendererWriter).FullName));
-            Assert.That(map.FilterType, Is.EqualTo(Filter.FilterType.ExcludeAll));
+            Assert.That(map.FilterType, Is.EqualTo(Filter.FilterType.None));
 
             map = obj.ComponentWriters.Find(m => m.Type == "AnimatedCheckPoint");
             Assert.That(map, Is.Not.Null);
