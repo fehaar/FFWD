@@ -13,12 +13,17 @@ namespace PressPlay.FFWD.Exporter
 
         public static string ScriptNamespace { get; set; }
         private List<string> scriptLines;
-        public static List<string> DefaultUsings = new List<string> { "System", "System.Collections.Generic", "System.Text", "PressPlay.FFWD", "PressPlay.FFWD.Components", "Microsoft.Xna.Framework.Content" };
+        public static List<string> UsingsThatShouldBeKept = new List<string> { "System", "System.Collections.Generic", "System.Text", "System.Diagnostics", "System.Xml" };
+        public static List<string> DefaultUsings = new List<string> { "PressPlay.FFWD", "PressPlay.FFWD.Components", "Microsoft.Xna.Framework.Content", "Microsoft.Xna.Framework.Graphics" };
         public static Dictionary<string, string> ReplaceAttributes = new Dictionary<string, string>() { 
             { "HideInInspector", "ContentSerializerIgnore" },
             { "System.Serializable", "" },
             { "Serializable", "" },
-            { "AddComponentMenu", "" }
+            { "AddComponentMenu", "" },
+            { "RequireComponent", "" }
+        };
+        public static Dictionary<string, string> ReplaceClasses = new Dictionary<string, string>() {
+            { "Object", "UnityObject" }
         };
         public static string[] MethodsToOverride = new string[] { "Start", "Update", "FixedUpdate", "LateUpdate", "Awake", "OnTriggerEnter", "OnTriggerExit", "OnTriggerStay", "OnCollisionEnter", "OnCollisionExit", "OnCollisionStay" };
 
@@ -33,6 +38,22 @@ namespace PressPlay.FFWD.Exporter
             ReplaceAllAttributes();
 
             AddFFWDNamespace();
+
+            ReplaceAllClasses();
+        }
+
+        private void ReplaceAllClasses()
+        {
+            foreach (var item in ReplaceClasses)
+            {
+                int line = -1;
+                Regex rex = new Regex(String.Format(@"(\W){0}(\W)", item.Key));
+                Match m;
+                while ((line = scriptLines.FindIndex(s => (m = rex.Match(s)).Success)) > -1)
+                {
+                    scriptLines[line] = rex.Replace(scriptLines[line], "$1" + item.Value + "$2");
+                }
+            }
         }
 
         private void AddFFWDNamespace()
@@ -111,7 +132,7 @@ namespace PressPlay.FFWD.Exporter
         private void ReplaceUsings()
         {
             // Replace usings
-            scriptLines.RemoveAll(s => s.StartsWith("using"));
+            scriptLines.RemoveAll(s => s.StartsWith("using ") && UsingsThatShouldBeKept.FindIndex(us => s.Contains(" " + us + ";")) == -1);
             //scriptLines.InsertRange(0, DefaultUsings.Select(s => "using " + s + ";"));
             int line = 0;
             DefaultUsings.ForEach(s => scriptLines.Insert(line++, "using " + s + ";"));

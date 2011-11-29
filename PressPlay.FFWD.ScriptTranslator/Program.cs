@@ -22,6 +22,7 @@ namespace PressPlay.FFWD.ScriptTranslator
             Program p = new Program();
 
             p.FindAllClasses();
+            int scripts = 0;
             foreach (var item in args)
             {
                 foreach (var scriptFile in p.FindScriptsToTranslate(item))
@@ -34,8 +35,11 @@ namespace PressPlay.FFWD.ScriptTranslator
                         Directory.CreateDirectory(Path.GetDirectoryName(newPath));
                     }
                     File.WriteAllText(newPath, newText);
+                    scripts++;
                 }
             }
+            Console.WriteLine("Conversion done. Converted " + scripts + " scripts.");
+            Console.ReadKey();
         }
 
         public Program()
@@ -64,12 +68,17 @@ namespace PressPlay.FFWD.ScriptTranslator
 
                 for (int i = 0; i < root.Members.Count; i++)
                 {
-                    var types = root.Members[i].DescendentNodesAndSelf().OfType<ClassDeclarationSyntax>().ToArray();
-                    foreach (var item in types)
+                    var classes = root.Members[i].DescendentNodesAndSelf().OfType<ClassDeclarationSyntax>();
+                    foreach (var item in classes)
                     {
                         typeFiles.Add(item.Identifier.ValueText, path);
                     }
-                    var enums = root.Members[i].DescendentNodesAndSelf().OfType<EnumDeclarationSyntax>().ToArray();
+                    var interfaces = root.Members[i].DescendentNodesAndSelf().OfType<InterfaceDeclarationSyntax>();
+                    foreach (var item in interfaces)
+                    {
+                        typeFiles.Add(item.Identifier.ValueText, path);
+                    }
+                    var enums = root.Members[i].DescendentNodesAndSelf().OfType<EnumDeclarationSyntax>();
                     foreach (var item in enums)
                     {
                         typeFiles.Add(item.Identifier.ValueText, path);
@@ -131,6 +140,10 @@ namespace PressPlay.FFWD.ScriptTranslator
                     if (typeFiles.ContainsKey(typeName))
                     {
                         typesToConvert.Add(typeName);
+                    }
+                    else if (typeName == "<Error>" && typeFiles.ContainsKey(types.ElementAt(i).PlainName))
+                    {
+                        typesToConvert.Add(types.ElementAt(i).PlainName);
                     }
                 }
             }

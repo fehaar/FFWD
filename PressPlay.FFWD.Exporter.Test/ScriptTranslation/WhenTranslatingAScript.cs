@@ -25,42 +25,7 @@ namespace PressPlay.FFWD.Exporter.Test
             "\t}",
             "}"
         };
-
-        [Test]
-        public void WeWillRemoveOldUsings()
-        {
-            ScriptTranslator trans = new ScriptTranslator(testScript);
-            trans.Translate();
-            string newScript = trans.ToString();
-            Assert.That(newScript, Is.Not.StringContaining("UnityEngine;"));
-            Assert.That(newScript, Is.Not.StringContaining("SomeSystem;"));
-        }
 	
-		[Test]
-		public void WeWillAddTheDefinedUsings()
-		{
-            ScriptTranslator trans = new ScriptTranslator(testScript);
-            trans.Translate();
-            string newScript = trans.ToString();
-
-            foreach (string u in ScriptTranslator.DefaultUsings)
-            {
-                Assert.That(newScript, Is.StringContaining("using " + u + ";"));
-            }
-        }
-
-        [Test]
-        public void WeCanAddExtraUsings()
-        {
-            string myNamespace = "MyNamespace";
-            ScriptTranslator trans = new ScriptTranslator(testScript);
-            ScriptTranslator.DefaultUsings.Add(myNamespace);
-            trans.Translate();
-            string newScript = trans.ToString();
-            Assert.That(newScript, Is.StringContaining("using " + myNamespace + ";"));
-        }
-
-
         [Test]
         public void WeWillAddANamespaceAfterUsingStatements()
         {

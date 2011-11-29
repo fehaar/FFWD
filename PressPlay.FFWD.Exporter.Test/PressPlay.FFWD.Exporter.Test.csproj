@@ -65,6 +65,8 @@
     <Compile Include="ScriptTranslation\WhenAScriptHasAttributes.cs" />
     <Compile Include="ScriptTranslation\WhenAScriptHasLateUpdate.cs" />
     <Compile Include="ScriptTranslation\WhenAScriptHasRandom.cs" />
+    <Compile Include="ScriptTranslation\WhenAScriptReferencesObject.cs" />
+    <Compile Include="ScriptTranslation\WhenConvertingTheUsingClauses.cs" />
     <Compile Include="WhenCreatingAScriptStub.cs" />
     <Compile Include="ScriptTranslation\WhenTranslatingAScript.cs" />
     <Compile Include="WhenUsingTheFilter.cs" />
