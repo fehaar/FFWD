@@ -20,7 +20,9 @@ namespace PressPlay.FFWD.Exporter
             { "System.Serializable", "" },
             { "Serializable", "" },
             { "AddComponentMenu", "" },
-            { "RequireComponent", "" }
+            { "RequireComponent", "" },
+            { "FFWD_ExportOptions", "" },
+            { "FFWD_DontExport", "" }
         };
         public static Dictionary<string, string> ReplaceClasses = new Dictionary<string, string>() {
             { "Object", "UnityObject" }
