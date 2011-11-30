@@ -97,6 +97,19 @@ namespace PressPlay.FFWD
                 return gameObject.collider;
             }
         }
+
+        [ContentSerializerIgnore]
+        public Camera camera
+        {
+            get
+            {
+                if (gameObject == null)
+                {
+                    return null;
+                }
+                return gameObject.camera;
+            }
+        }
         #endregion
 
         #region Behaviour methods

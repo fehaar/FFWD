@@ -173,6 +173,20 @@ namespace PressPlay.FFWD
                 return _particleEmitter;
             }
         }
+
+        private Camera _camera;
+        [ContentSerializerIgnore]
+        public Camera camera
+        {
+            get
+            {
+                if (_camera == null)
+                {
+                    _camera = GetComponent<Camera>();
+                }
+                return _camera;
+            }
+        }
         #endregion
 
         [ContentSerializer(ElementName = "cs", CollectionItemName = "c", Optional = true)]

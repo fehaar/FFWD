@@ -329,11 +329,11 @@
     <Compile Include="Gizmos.cs" />
     <Compile Include="GUI\GUI.cs" />
     <Compile Include="GUI\GUILayout.cs" />
+    <Compile Include="GUI\GUIStyle.cs" />
     <Compile Include="Input\Touch.cs" />
     <Compile Include="Interfaces\IInitializable.cs" />
     <Compile Include="InvokeCall.cs" />
     <Compile Include="Material.cs" />
-    <Compile Include="Extensions\PlaneExtensions.cs" />
     <Compile Include="Input\Input.cs" />
     <Compile Include="Mathf.cs" />
     <Compile Include="Mesh.cs" />
@@ -356,6 +356,7 @@
     <Compile Include="Physics\QueryHelper.cs" />
     <Compile Include="Physics\RaycastHelper.cs" />
     <Compile Include="Physics\RaycastHit.cs" />
+    <Compile Include="Plane.cs" />
     <Compile Include="Profiler.cs" />
     <Compile Include="Quaternion.cs" />
     <Compile Include="Random.cs" />

@@ -21,5 +21,15 @@ namespace PressPlay.FFWD
         {
             throw new NotImplementedException();
         }
+
+        public static void Label(string text)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static void Label(string text, GUIStyle style)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

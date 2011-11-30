@@ -32,6 +32,21 @@ namespace PressPlay.FFWD.Components
         public float aspect { get; set; }
         public int cullingMask { get; set; }
 
+        public int pixelWidth 
+        { 
+            get
+            {
+                return viewPort.Width;
+            }
+        }
+        public int pixelHeight
+        { 
+            get
+            {
+                return viewPort.Height;
+            }
+        }
+
         [ContentSerializerIgnore]
         public BoundingFrustum frustum { get; private set; }
 
@@ -151,6 +166,11 @@ namespace PressPlay.FFWD.Components
             Vector3 near = viewPort.Unproject(new Vector3(screen.x, screen.y, 0), projectionMatrix, view, Matrix.Identity);
             Vector3 far = viewPort.Unproject(new Vector3(screen.x, screen.y, 1), projectionMatrix, view, Matrix.Identity);
             return new Ray(near, (far - near).normalized);
+        }
+
+        public Vector3 ScreenToWorldPoint(Vector3 vector3)
+        {
+            throw new System.NotImplementedException();
         }
 
         public Vector3 WorldToViewportPoint(Vector3 position)
