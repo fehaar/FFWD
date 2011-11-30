@@ -6,6 +6,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System;
 using System.Xml.Serialization;
+using System.Text;
 
 public class ExportSceneWizard : ScriptableWizard
 {
@@ -83,6 +84,7 @@ public class ExportSceneWizard : ScriptableWizard
         assets.ScriptDir = Path.Combine(xnaBaseDir, config.assets.ScriptDir);
         assets.MeshDir = Path.Combine(xnaBaseDir, config.assets.MeshDir);
         assets.AudioDir = Path.Combine(xnaBaseDir, config.assets.AudioDir);
+        assets.XmlDir = Path.Combine(xnaBaseDir, config.exportDir);
     }
 
     private void LoadConfiguration()
@@ -140,6 +142,37 @@ public class ExportSceneWizard : ScriptableWizard
         wiz.ExportScript(command.context as MonoBehaviour);
     }
 
+    [MenuItem("CONTEXT/TextAsset/FFWD Export Resource")]
+    static void ExportTextAsset(MenuCommand command)
+    {
+        ExportSceneWizard wiz = new ExportSceneWizard();
+        TextAsset asset = command.context as TextAsset;
+        string assetPath = AssetDatabase.GetAssetPath(asset.GetInstanceID()).Replace("Assets/", "");
+        string exportPath = Path.Combine(wiz.assets.XmlDir, assetPath);
+        if (!Directory.Exists(Path.GetDirectoryName(exportPath)))
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(exportPath));
+        }
+        File.WriteAllBytes(exportPath, asset.bytes);
+        Debug.Log("Exported the asset to " + exportPath);
+    }
+
+    [MenuItem("CONTEXT/TagManager/FFWD Export Tags")]
+    static void ExportTags(MenuCommand command)
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.Append("<?xml version=\"1.0\" encoding=\"utf-8\"?><XnaContent><Asset Type=\"System.String[]\">");
+        for (int i = 0; i < 31; i++)
+        {
+            sb.AppendFormat("<Item>{0}</Item>", LayerMask.LayerToName(i));
+        }
+        sb.Append("</Asset></XnaContent>");
+        ExportSceneWizard wiz = new ExportSceneWizard();
+        string exportPath = Path.Combine(wiz.assets.XmlDir, "LayerNames.xml");
+        File.WriteAllText(exportPath, sb.ToString());
+        Debug.Log("Exported all tags to " + exportPath);
+    }
+
     public void OnWizardUpdate()
     {
         SaveConfiguration();
@@ -155,7 +188,7 @@ public class ExportSceneWizard : ScriptableWizard
     private void ExportScene()
     {
         SceneWriter scene = new SceneWriter(resolver, assets);
-        scene.ExportDir = Path.Combine(Path.Combine(xnaBaseDir, config.exportDir), "Scenes");
+        scene.ExportDir = Path.Combine(assets.XmlDir, "Scenes");
         scene.FlipYInTransforms = config.flipYInTransforms;
         ScriptTranslator.ScriptNamespace = config.scriptNamespace;
 

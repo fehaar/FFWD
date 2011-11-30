@@ -9,6 +9,8 @@ namespace PressPlay.FFWD
     {
         public int value { get; set; }
 
+        private static List<string> layerNames;
+
         public static implicit operator int(LayerMask mask)
         {
             return mask.value;
@@ -21,13 +23,35 @@ namespace PressPlay.FFWD
 
         public static int NameToLayer(string name)
         {
-            // TODO: Implement this!
-            throw new NotImplementedException();
+            return layerNames.IndexOf(name);
+        }
+
+        public static string LayerToName(int layer)
+        {
+            if (layer > 0 && layer < layerNames.Count)
+            {
+                return layerNames[layer];
+            }
+            return String.Empty;
         }
 
         public override string ToString()
         {
             return value.ToString();
+        }
+
+        internal static void LoadLayerNames(AssetHelper helper)
+        {
+            if (layerNames == null)
+            {
+                helper.AddStaticAsset("LayerNames");
+                layerNames = new List<string>();
+                string[] names = helper.Load<String[]>("LayerNames");
+                if (names != null)
+                {
+                    layerNames.AddRange(names);
+                }
+            }
         }
     }
 }

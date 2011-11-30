@@ -21,8 +21,7 @@ namespace PressPlay.FFWD
         public string text { get; private set; }
 
         protected override void DoLoadAsset(AssetHelper assetHelper)
-        {
-            throw new NotImplementedException();
+        {            
         }
     }
 }

@@ -131,6 +131,7 @@ namespace PressPlay.FFWD
                 View = Matrix.Identity
             };
             TextRenderer3D.batch = new SpriteBatch(Game.GraphicsDevice);
+            LayerMask.LoadLayerNames(assetHelper);
 
 #if DEBUG
             spriteBatch = new SpriteBatch(Game.GraphicsDevice);

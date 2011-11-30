@@ -14,6 +14,7 @@ namespace PressPlay.FFWD.Exporter
         public string AudioDir; 
         public string MeshDir; 
         public string ScriptDir;
+        public string XmlDir;
 
         private List<string> exportedTextures = new List<string>();
         private List<string> exportedAudio = new List<string>();
