@@ -35,9 +35,26 @@ namespace PressPlay.FFWD
             return null;
         }
 
+        /// <summary>
+        /// This should actually return UnityObjects, but since Texture2D is not a UO at the moment, it cannot do it.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public static object Load(string name, Type type)
         {
-            throw new NotImplementedException();
+            if (type == typeof(Texture2D))
+            {
+                try
+                {
+                    return AssetHelper.Load<Texture2D>(Path.Combine("Resources", name));
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError("Cannot load resource " + name + " as Texture2D. " + ex.Message);
+                }
+            }
+            return null;
         }
     }
 }
