@@ -588,8 +588,7 @@ namespace PressPlay.FFWD
         /// <returns></returns>
         public static GameObject Find(string name)
         {
-            // TODO : Add implementation of method
-            throw new NotImplementedException("Method not implemented.");
+            return Application.FindByName(name);
         }
 
         protected override void Destroy()

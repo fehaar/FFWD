@@ -602,6 +602,19 @@ namespace PressPlay.FFWD
             return null;
         }
 
+        internal static GameObject FindByName(string name)
+        {
+            foreach (UnityObject obj in objects.Values)
+            {
+                GameObject go = obj as GameObject;
+                if (go != null && go.name == name)
+                {
+                    return go;
+                }
+            }
+            return null;
+        }
+
         internal static void AwakeNewComponents()
         {
             AwakeNewComponents(false);
