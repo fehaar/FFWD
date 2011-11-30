@@ -607,9 +607,30 @@ namespace PressPlay.FFWD
             foreach (UnityObject obj in objects.Values)
             {
                 GameObject go = obj as GameObject;
-                if (go != null && go.name == name)
+                if (go != null)
                 {
-                    return go;
+                    if (name.Contains('/'))
+                    {
+                        if (go.FullName() != name)
+                        {
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        if (go.name != name)
+                        {
+                            continue;
+                        }
+                    }
+                    if (go.active)
+                    {
+                        return go;
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
             }
             return null;

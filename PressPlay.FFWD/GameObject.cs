@@ -675,5 +675,17 @@ namespace PressPlay.FFWD
         {
             return String.Format("{0} ({1}){2}{3}", String.IsNullOrWhiteSpace(name) ? "?" : name, GetInstanceID(), (isPrefab) ? "P" : "", (active) ? "A" : "");
         }
+
+        internal string FullName()
+        {
+            if (transform.parent == null)
+            {
+                return name;
+            }
+            else
+            {
+                return transform.parent.gameObject.FullName() + "/" + name;
+            }
+        }
     }
 }

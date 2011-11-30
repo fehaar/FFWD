@@ -64,6 +64,7 @@ namespace PressPlay.FFWD
 
             if (scene.gameObjects.Count > 0)
             {
+                scene.gameObjects[0].active = true;
                 return scene.gameObjects[0];
             }
             else if (scene.prefabs.Count > 0)
