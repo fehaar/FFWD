@@ -13,26 +13,17 @@ namespace PressPlay.FFWD
 
         internal static AssetHelper AssetHelper;
 
+        private static Func<string, UnityObject>[] loaders = new Func<string, UnityObject>[] { LoadScene, LoadText };
+
         public static UnityObject Load(string name)
         {
-            Application.loadingScene = true;
-            Scene scene = AssetHelper.Load<Scene>(Path.Combine("Resources", name));
-
-            // This is removed here. It is called in scene.Initialize just below.
-            //scene.AfterLoad(null); 
-            scene.Initialize();
-            Application.loadingScene = false;
-            Application.LoadNewAssets();
-
-            if (scene.gameObjects.Count > 0)
-            {
-                return scene.gameObjects[0];
-            } 
-            else if (scene.prefabs.Count > 0)
-            {
-                return scene.prefabs[0];
-            }
-            return null;
+            UnityObject result = null;
+            int loaderIndex = 0;
+            while (result == null && loaderIndex < loaders.Length)
+	        {
+                result = loaders[loaderIndex++](name);
+	        }
+            return result;
         }
 
         /// <summary>
@@ -53,6 +44,44 @@ namespace PressPlay.FFWD
                 {
                     Debug.LogError("Cannot load resource " + name + " as Texture2D. " + ex.Message);
                 }
+            }
+            return null;
+        }
+
+        private static UnityObject LoadScene(string name)
+        {
+            Application.loadingScene = true;
+            Scene scene = AssetHelper.Load<Scene>(Path.Combine("Resources", name));
+            if (scene == null)
+            {
+                Debug.LogError("Resources not found at " + name);
+                return null;
+            }
+            // This is removed here. It is called in scene.Initialize just below.
+            scene.Initialize();
+            Application.loadingScene = false;
+            Application.LoadNewAssets();
+
+            if (scene.gameObjects.Count > 0)
+            {
+                return scene.gameObjects[0];
+            }
+            else if (scene.prefabs.Count > 0)
+            {
+                return scene.prefabs[0];
+            }
+            return null;
+        }
+
+        private static UnityObject LoadText(string name)
+        {
+            try
+            {
+                return AssetHelper.Load<TextAsset>(Path.Combine("Resources", name));
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError("Cannot load resource " + name + " as TextAsset. " + ex.Message);
             }
             return null;
         }
