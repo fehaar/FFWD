@@ -322,6 +322,11 @@ namespace PressPlay.FFWD.Exporter.Writers
                     writer.WriteElementString(name, ToString((float)obj));
                     return;
                 }
+                if (obj is Double)
+                {
+                    writer.WriteElementString(name, ToString((Double)obj));
+                    return;
+                }
                 if (obj is Boolean)
                 {
                     writer.WriteElementString(name, ToString((Boolean)obj));
@@ -682,6 +687,11 @@ namespace PressPlay.FFWD.Exporter.Writers
         private string ToString(float f)
         {
             return f.ToString("0.#####", CultureInfo.InvariantCulture);
+        }
+
+        private string ToString(Double d)
+        {
+            return d.ToString("0.#####", CultureInfo.InvariantCulture);
         }
 
         private string ToString(Guid g)

@@ -17,6 +17,7 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
             {
                 throw new Exception(GetType() + " cannot export components of type " + component.GetType());
             }
+            writer.WriteElement("enabled", pr.enabled);
             writer.WriteElement("materials", pr.sharedMaterials);
             writer.WriteElement("lengthScale", pr.lengthScale);
             writer.WriteElement("velocityScale", pr.velocityScale);
