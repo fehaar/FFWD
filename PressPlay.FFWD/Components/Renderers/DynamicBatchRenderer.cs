@@ -36,7 +36,20 @@ namespace PressPlay.FFWD.Components
         /// <param name="material"></param>
         /// <param name="filter"></param>
         /// <returns></returns>
-        internal int Draw(Camera cam, Material material, Mesh mesh, Transform transform, int subMeshIndex = 0)
+        internal int Draw(Camera cam, Material material, Mesh mesh, Transform transform)
+        {
+            return Draw(cam, material, mesh, transform, 0);
+        }
+
+        /// <summary>
+        /// Batch draw the current mesh filter.
+        /// We will only do the actual draw call if the material has changed.
+        /// Until that we will collect the mesh filters into a list and draw them all together.
+        /// </summary>
+        /// <param name="material"></param>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        internal int Draw(Camera cam, Material material, Mesh mesh, Transform transform, int subMeshIndex)
         {
             int drawCalls = 0;
 
