@@ -170,6 +170,7 @@ namespace PressPlay.FFWD.Components
 
         public Vector3 ScreenToWorldPoint(Vector3 vector3)
         {
+            return viewPort.Unproject(vector3, projectionMatrix, view, Matrix.Identity);
             throw new System.NotImplementedException();
         }
 
@@ -315,7 +316,7 @@ namespace PressPlay.FFWD.Components
                 Debug.Log("**** Camera begin : ", name, "****");
             }
 #endif
-
+            // TODO: Do not recreate view matrix every frame. Only when camera is moved.
             Matrix m = Matrix.CreateLookAt(
                 transform.position,
                 transform.position + transform.forward,

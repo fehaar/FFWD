@@ -25,6 +25,7 @@ namespace PressPlay.FFWD
 
         internal static void Initialize()
         {
+            touches = new Touch[0];
         }
 
         public static void Update(InputState inputState)
@@ -168,6 +169,6 @@ namespace PressPlay.FFWD
 #endif
         }
 
-        public static IEnumerable<Touch> touches { get; set; }
+        public static Touch[] touches { get; private set; }
     }
 }

@@ -11,11 +11,10 @@ namespace PressPlay.FFWD.Components
             enabled = true;
         }
 
+        public bool enabled { get; set; }
+
         [ContentSerializer(CollectionItemName = "material")]
         public Material[] materials{ get; set; }
-
-        [ContentSerializerIgnore]
-        public bool enabled { get; set; }
 
         [ContentSerializerIgnore]
         public Material sharedMaterial

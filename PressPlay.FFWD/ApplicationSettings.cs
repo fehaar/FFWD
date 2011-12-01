@@ -38,6 +38,7 @@ namespace PressPlay.FFWD
         /// </summary>
         #region Default list sizes
         public static int LightsDefaultCapacity = 4;
+        public static int QueryHelperDefaultCapacity = 20;
         #endregion
     }
 }

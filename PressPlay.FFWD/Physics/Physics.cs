@@ -595,12 +595,28 @@ namespace PressPlay.FFWD
 
         public static bool SphereCast(Ray ray, float radius, float distance, LayerMask layerMask)
         {
-            throw new NotImplementedException();
+            AABB aabb = new AABB(ray.GetPoint(distance / 2), distance, radius);
+            QueryHelper.layermask = layerMask;
+            QueryHelper.breakOnFirst = true;
+            world.QueryAABB(null, ref aabb);
+            return QueryHelper.GetQueryResult().Length > 0;
         }
 
         public static bool SphereCast(Vector3 origin, float radius, Vector3 direction, out RaycastHit hitInfo, float distance = Mathf.Infinity, int layerMask = kDefaultRaycastLayers)
         {
-            throw new NotImplementedException();
+            Ray ray = new Ray(origin, direction);
+            AABB aabb = new AABB(ray.GetPoint(distance / 2), distance, radius);
+            QueryHelper.layermask = layerMask;
+            QueryHelper.breakOnFirst = true;
+            world.QueryAABB(null, ref aabb);
+
+            if (QueryHelper.GetQueryResult().Length > 0)
+            {
+                hitInfo = QueryHelper.ClosestHit();    
+                return true;
+            }
+            hitInfo = new RaycastHit();
+            return false;
         }
 
     }
