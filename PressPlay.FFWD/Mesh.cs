@@ -31,12 +31,16 @@ namespace PressPlay.FFWD
 
         internal BoundingSphere boundingSphere;
 
+        private Bounds? _bounds = null;
         public Bounds bounds
         {
             get
             {
-                // TODO: Implement this
-                throw new NotImplementedException();
+                if (!_bounds.HasValue)
+                {
+                    _bounds = new Bounds(boundingSphere.Center, new Vector3(boundingSphere.Radius));
+                }
+                return _bounds.Value;
             }
         }
 

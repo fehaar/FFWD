@@ -609,6 +609,10 @@ namespace PressPlay.FFWD
                 GameObject go = obj as GameObject;
                 if (go != null)
                 {
+                    if (go.isPrefab)
+                    {
+                        continue;
+                    }
                     if (name.Contains('/'))
                     {
                         if (go.FullName() != name)
@@ -634,6 +638,11 @@ namespace PressPlay.FFWD
                 }
             }
             return null;
+        }
+
+        internal static IEnumerable<GameObject> FindByTag(string tag)
+        {
+            return objects.Values.Where(o => o is GameObject && !(o as GameObject).isPrefab && (o as GameObject).tag == tag).Cast<GameObject>();
         }
 
         internal static void AwakeNewComponents()

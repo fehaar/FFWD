@@ -62,12 +62,7 @@ namespace PressPlay.FFWD
             Application.loadingScene = false;
             Application.LoadNewAssets();
 
-            if (scene.gameObjects.Count > 0)
-            {
-                scene.gameObjects[0].active = true;
-                return scene.gameObjects[0];
-            }
-            else if (scene.prefabs.Count > 0)
+            if (scene.prefabs.Count > 0)
             {
                 return scene.prefabs[0];
             }

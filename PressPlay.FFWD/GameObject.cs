@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.Xna.Framework.Content;
@@ -552,8 +553,7 @@ namespace PressPlay.FFWD
         /// <returns></returns>
         public static GameObject FindWithTag(string tag)
         {
-            // TODO : Add implementation of method
-            throw new NotImplementedException("Method not implemented.");
+            return FindGameObjectWithTag(tag);
         }
 
         /// <summary>
@@ -562,9 +562,9 @@ namespace PressPlay.FFWD
         /// </summary>
         /// <param name="p"></param>
         /// <returns></returns>
-        public static GameObject FindGameObjectWithTag(string p)
+        public static GameObject FindGameObjectWithTag(string tag)
         {
-            throw new NotImplementedException();
+            return Application.FindByTag(tag).First();
         }
 
         /// <summary>
@@ -575,8 +575,7 @@ namespace PressPlay.FFWD
         /// <returns></returns>
         public static GameObject[] FindGameObjectsWithTag(string tag)
         {
-            // TODO : Add implementation of method
-            throw new NotImplementedException("Method not implemented.");
+            return Application.FindByTag(tag).ToArray();
         }
 
         /// <summary>

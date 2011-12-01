@@ -688,6 +688,7 @@ namespace PressPlay.FFWD
         public void RotateAround(Vector3 vector3, float rotateThisFrame)
         {
             // TODO: Implement this
+            throw new NotImplementedException("Not implemented yet");
         }
 
         public void DetachChildren()
@@ -698,8 +699,25 @@ namespace PressPlay.FFWD
 
         public Transform Find(string name)
         {
-            // TODO : Add implementation of method
-            throw new NotImplementedException("Method not implemented.");
+            for (int i = 0; i < childCount; i++)
+            {
+                int pathIndex = name.IndexOf('/');
+                if (pathIndex > -1)
+                {
+                    if (name.StartsWith(children[i].name + '/'))
+                    {
+                        return children[i].transform.Find(name.Substring(pathIndex + 1));
+                    }
+                }
+                else
+                {
+                    if (name == children[i].name)
+                    {
+                        return children[i].transform;
+                    }
+                }
+            }
+            return null;
         }
 
         public bool IsChildOf(Transform parent)
@@ -710,14 +728,12 @@ namespace PressPlay.FFWD
 
         public Transform FindChild(string name)
         {
-            // TODO : Add implementation of method
-            throw new NotImplementedException();
+            return Find(name);
         }
 
         public Transform GetChild(int i)
         {
-            // TODO : Add implementation of method
-            throw new NotImplementedException();
+            return children[i].transform;
         }
         #endregion
 
