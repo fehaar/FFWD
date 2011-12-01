@@ -7,19 +7,21 @@ namespace PressPlay.FFWD
 {
     public class ScriptableObject : UnityObject
     {
-        public static ScriptableObject CreateInstance<T>() where T : ScriptableObject
+        public static T CreateInstance<T>() where T : ScriptableObject
         {
-            throw new NotImplementedException();
+            return Activator.CreateInstance<T>();
         }
 
         public static ScriptableObject CreateInstance(Type type)
         {
-            throw new NotImplementedException();
+            return (ScriptableObject)Activator.CreateInstance(type);
         }
 
         public static ScriptableObject CreateInstance(string typeName)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("Somethings is off here. We don't find the types involved...");
+            Type t = Type.GetType(typeName);
+            return CreateInstance(t);
         }
     }
 }
