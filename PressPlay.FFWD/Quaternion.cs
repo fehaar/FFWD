@@ -225,7 +225,7 @@ namespace PressPlay.FFWD
         Vector3 QuaternionToEulerAngleVector3(Quaternion rotation)
         {
             Vector3 rotationaxes = new Vector3();
-            Vector3 forward = rotation * Vector3.forward;
+            Vector3 forward = rotation * -Vector3.forward;
             Vector3 up = rotation * Vector3.up;
 
             rotationaxes = AngleTo(new Vector3(), forward);

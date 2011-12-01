@@ -132,7 +132,7 @@ namespace PressPlay.FFWD
         [Conditional("DEBUG")]
         public static void Break()
         {
-            Debugger.Break();
+            //Debugger.Break();
         }
 
         [Conditional("DEBUG")]
@@ -205,9 +205,10 @@ namespace PressPlay.FFWD
         [Conditional("DEBUG")]
         public static void DrawTransform(Transform t)
         {
-            Debug.DrawRay(t.position, t.forward, Color.blue);
-            Debug.DrawRay(t.position, t.right, Color.red);
-            Debug.DrawRay(t.position, t.up, Color.green);
+            // TODO: Scale so it can be seen in the viewport no matter the distance
+            Debug.DrawRay(t.position + t.up * 0.1f, t.forward * 5, Color.blue);
+            Debug.DrawRay(t.position + t.up * 0.1f, t.right * 5, Color.red);
+            Debug.DrawRay(t.position + t.up * 0.1f, t.up * 5, Color.green);
         }
 
         private static BasicEffect effect;

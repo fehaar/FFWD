@@ -320,7 +320,7 @@ namespace PressPlay.FFWD.Components
             Matrix m = Matrix.CreateLookAt(
                 transform.position,
                 transform.position + transform.forward,
-                -transform.up);
+                transform.up);
             view = m * inverter;
             frustum.Matrix = view * projectionMatrix;
 

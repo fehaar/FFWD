@@ -37,11 +37,9 @@ namespace PressPlay.FFWD
 
         public static readonly Vector3 zero = new Vector3(0f, 0f, 0f);
         public static readonly Vector3 one = new Vector3(1f, 1f, 1f);
+        public static readonly Vector3 forward = new Vector3(0f, 0f, 1f);
         public static readonly Vector3 up = new Vector3(0f, 1f, 0f);
         public static readonly Vector3 right = new Vector3(1f, 0f, 0f);
-        public static readonly Vector3 forward = new Vector3(0f, 0f, -1f);
-        public static readonly Vector3 back = new Vector3(0f, 0f, 1f);
-        public static readonly Vector3 down = new Vector3(0f, -1f, 0f);
 
         #endregion Static constants
 
