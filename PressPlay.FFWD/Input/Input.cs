@@ -14,57 +14,86 @@ namespace PressPlay.FFWD
 {
     public static class Input
     {
-        private static MouseState lastMouseState;
-        private static MouseState currentMouseState;
-
-#if WINDOWS_PHONE
-        private static Vector2 lastTapPosition;
-        private static bool newTap = false;
-        private static bool hasAFingerOnScreen = false;
-#endif
+        private static MouseState _lastMouseState;
+        private static MouseState _currentMouseState;
 
         internal static void Initialize()
         {
-            touches = new Touch[0];
+            _touches = new Touch[ApplicationSettings.DefaultCapacities.Touches];
         }
 
-        public static void Update(InputState inputState)
+        public static void Update()
         {
-            lastMouseState = currentMouseState;
-            currentMouseState = Mouse.GetState();
+            _lastMouseState = _currentMouseState;
+            _currentMouseState = Mouse.GetState();
 
 #if WINDOWS_PHONE
-            samples = inputState.Gestures;
-
-            newTap = false;
-            hasAFingerOnScreen = false;
-            for (int i = 0; i < inputState.TouchState.Count; i++)
+            gestureCount = 0;
+            while (TouchPanel.IsGestureAvailable)
             {
-                switch (inputState.TouchState[i].State)
+                gestures[gestureCount++] = TouchPanel.ReadGesture();
+            }
+
+            _touchCount = 0;
+            TouchCollection tc = TouchPanel.GetState();
+            for (int i = 0; i < tc.Count; i++)
+            {
+                // TODO: Add support for deltas and stationary touches
+                //_touches[i].phase = TouchPhase.Canceled;
+                TouchLocation tl = tc[i];
+                if (tl.State == TouchLocationState.Invalid)
                 {
-                    case TouchLocationState.Moved:
-                        hasAFingerOnScreen = true;
-                        lastTapPosition = inputState.TouchState[i].Position;
-                        break;
-                    case TouchLocationState.Pressed:
-                        hasAFingerOnScreen = true;
-                        newTap = true;
-                        lastTapPosition = inputState.TouchState[i].Position;
-                        break;
+                    continue;
                 }
+                _touches[_touchCount].fingerId = tl.Id;
+                _touches[_touchCount].position = tl.Position;
+                _touches[_touchCount].phase = ToPhase(tl.State);
+                _touchCount++;
+                //switch (tl.State)
+                //{
+                //    case TouchLocationState.Moved:
+                //        _hasAFingerOnScreen = true;
+                //        _lastTapPosition = tl.Position;
+                //        break;
+                //    case TouchLocationState.Pressed:
+                //        _hasAFingerOnScreen = true;
+                //        _newTap = true;
+                //        _lastTapPosition = tl.Position;
+                //        break;
+                //}
             }
 #endif
         }
 
 #if WINDOWS_PHONE
-        private static List<GestureSample> samples = new List<GestureSample>();
+        private static TouchPhase ToPhase(TouchLocationState touchLocationState)
+        {
+            switch (touchLocationState)
+            {
+                case TouchLocationState.Invalid:
+                    return TouchPhase.Canceled;
+                case TouchLocationState.Moved:
+                    return TouchPhase.Moved;
+                case TouchLocationState.Pressed:
+                    return TouchPhase.Began;
+                case TouchLocationState.Released:
+                    return TouchPhase.Ended;
+                default:
+                    throw new InvalidOperationException("The touch state " + touchLocationState + " does not exist!");
+            }
+        }
+#endif
+
+#if WINDOWS_PHONE
+        private static GestureSample[] gestures = new GestureSample[ApplicationSettings.DefaultCapacities.GestureSamples];
+        private static int gestureCount = 0;
         public static IEnumerable<GestureSample> GetSample(GestureType type)
         {
-            for (int i = 0; i < samples.Count; i++)
+            for (int i = 0; i < gestureCount; i++)
             {
-                if ((samples[i].GestureType & type) != 0)
+                if ((gestures[i].GestureType & type) != 0)
                 {
-                    yield return samples[i];
+                    yield return gestures[i];
                 }
             }
             yield break;
@@ -72,9 +101,9 @@ namespace PressPlay.FFWD
 
         public static bool HasSample(GestureType type)
         {
-            for (int i = 0; i < samples.Count; i++)
+            for (int i = 0; i < gestureCount; i++)
             {
-                if ((samples[i].GestureType & type) != 0)
+                if ((gestures[i].GestureType & type) != 0)
                 {
                     return true;
                 }
@@ -88,9 +117,16 @@ namespace PressPlay.FFWD
             get
             {
 #if WINDOWS_PHONE
-                return lastTapPosition;
+                if (_touchCount > 0)
+                {
+                    for (int i = 0; i < _touchCount; i++)
+                    {
+                        return _touches[0].position;
+                    }
+                }
+                return Vector2.zero;
 #else
-                return new Vector2(currentMouseState.X, currentMouseState.Y);
+                return new Vector2(_currentMouseState.X, _currentMouseState.Y);
 #endif
             }
         }
@@ -118,16 +154,16 @@ namespace PressPlay.FFWD
         public static bool GetMouseButton(int button)
         {
 #if WINDOWS_PHONE
-            return hasAFingerOnScreen;
+            return _touchCount > 0;
 #else
             switch (button)
             {
                 case 0:
-                    return currentMouseState.LeftButton == ButtonState.Pressed;
+                    return _currentMouseState.LeftButton == ButtonState.Pressed;
                 case 1:
-                    return currentMouseState.MiddleButton == ButtonState.Pressed;
+                    return _currentMouseState.MiddleButton == ButtonState.Pressed;
                 case 2:
-                    return currentMouseState.RightButton == ButtonState.Pressed;
+                    return _currentMouseState.RightButton == ButtonState.Pressed;
             }
             return false;
 #endif
@@ -136,16 +172,23 @@ namespace PressPlay.FFWD
         public static bool GetMouseButtonDown(int button)
         {
 #if WINDOWS_PHONE
-            return newTap;
+            for (int i = 0; i < _touchCount; i++)
+            {
+                if (_touches[i].phase == TouchPhase.Began)
+                {
+                    return true;
+                }
+            }
+            return false;
 #else
             switch (button)
             {
                 case 0:
-                    return (currentMouseState.LeftButton == ButtonState.Pressed) && (lastMouseState.LeftButton == ButtonState.Released);
+                    return (_currentMouseState.LeftButton == ButtonState.Pressed) && (_lastMouseState.LeftButton == ButtonState.Released);
                 case 1:
-                    return (currentMouseState.MiddleButton == ButtonState.Pressed) && (lastMouseState.MiddleButton == ButtonState.Released);
+                    return (_currentMouseState.MiddleButton == ButtonState.Pressed) && (_lastMouseState.MiddleButton == ButtonState.Released);
                 case 2:
-                    return (currentMouseState.RightButton == ButtonState.Pressed) && (lastMouseState.RightButton == ButtonState.Released);
+                    return (_currentMouseState.RightButton == ButtonState.Pressed) && (_lastMouseState.RightButton == ButtonState.Released);
             }
             return false;
 #endif
@@ -154,21 +197,34 @@ namespace PressPlay.FFWD
         public static bool GetMouseButtonUp(int button)
         {
 #if WINDOWS_PHONE
-            return !newTap;
+            return !GetMouseButtonDown(button);
 #else
             switch (button)
             {
                 case 0:
-                    return (currentMouseState.LeftButton == ButtonState.Released) && (lastMouseState.LeftButton == ButtonState.Pressed);
+                    return (_currentMouseState.LeftButton == ButtonState.Released) && (_lastMouseState.LeftButton == ButtonState.Pressed);
                 case 1:
-                    return (currentMouseState.MiddleButton == ButtonState.Released) && (lastMouseState.MiddleButton == ButtonState.Pressed);
+                    return (_currentMouseState.MiddleButton == ButtonState.Released) && (_lastMouseState.MiddleButton == ButtonState.Pressed);
                 case 2:
-                    return (currentMouseState.RightButton == ButtonState.Released) && (lastMouseState.RightButton == ButtonState.Pressed);
+                    return (_currentMouseState.RightButton == ButtonState.Released) && (_lastMouseState.RightButton == ButtonState.Pressed);
             }
             return false;
 #endif
         }
 
-        public static Touch[] touches { get; private set; }
+        private static int _touchCount = 0;
+        private static Touch[] _touches;
+        private static Touch[] _noTouch = new Touch[0];
+        public static Touch[] touches 
+        { 
+            get
+            {
+                if (_touchCount == 0)
+                {
+                    return _noTouch;
+                }
+                return _touches.Take(_touchCount).ToArray();
+            }
+        }
     }
 }

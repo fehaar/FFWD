@@ -602,7 +602,17 @@ namespace PressPlay.FFWD
             return QueryHelper.GetQueryResult().Length > 0;
         }
 
-        public static bool SphereCast(Vector3 origin, float radius, Vector3 direction, out RaycastHit hitInfo, float distance = Mathf.Infinity, int layerMask = kDefaultRaycastLayers)
+        public static bool SphereCast(Vector3 origin, float radius, Vector3 direction, out RaycastHit hitInfo)
+        {
+            return SphereCast(origin, radius, direction, out hitInfo, Mathf.Infinity, kDefaultRaycastLayers);
+        }
+
+        public static bool SphereCast(Vector3 origin, float radius, Vector3 direction, out RaycastHit hitInfo, float distance)
+        {
+            return SphereCast(origin, radius, direction, out hitInfo, distance, kDefaultRaycastLayers);
+        }
+
+        public static bool SphereCast(Vector3 origin, float radius, Vector3 direction, out RaycastHit hitInfo, float distance, int layerMask)
         {
             Ray ray = new Ray(origin, direction);
             AABB aabb = new AABB(ray.GetPoint(distance / 2), distance, radius);

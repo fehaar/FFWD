@@ -47,9 +47,7 @@ namespace PressPlay.FFWD
         //private Stopwatch startTime = new Stopwatch();
         private Stopwatch physics = new Stopwatch();
         private Stopwatch graphics = new Stopwatch();
-        public static Stopwatch iTweenUpdateTime = new Stopwatch();
         public static Stopwatch raycastTimer = new Stopwatch();
-        public static Stopwatch lemmyStuffTimer = new Stopwatch();
         public static Stopwatch turnOffTimer = new Stopwatch();
         public static Stopwatch particleAnimTimer = new Stopwatch();
         public static Stopwatch particleEmitTimer = new Stopwatch();
@@ -168,6 +166,8 @@ namespace PressPlay.FFWD
             base.Update(gameTime);
             Time.FixedUpdate((float)gameTime.ElapsedGameTime.TotalSeconds, (float)gameTime.TotalGameTime.TotalSeconds);
             UpdateFPS(gameTime);
+
+            Input.Update();
 
             if (isLoadingAssetBeforeSceneInitialize)
             {
@@ -297,22 +297,10 @@ namespace PressPlay.FFWD
             Debug.Display("GetWorst()", componentProfiler.GetWorst());
             componentProfiler.FlushData();
 #endif
-            if (ApplicationSettings.ShowiTweenUpdateTime)
-            {
-                Debug.Display("iTweenUpdateTime", iTweenUpdateTime.ElapsedMilliseconds);
-                iTweenUpdateTime.Reset();
-            }
-
-
             if (ApplicationSettings.ShowRaycastTime)
             {
                 Debug.Display("Raycasts ms", Application.raycastTimer.ElapsedMilliseconds);
                 raycastTimer.Reset();
-            }
-            if (ApplicationSettings.ShowRaycastTime)
-            {
-                Debug.Display("Lemmystuff ms", Application.lemmyStuffTimer.ElapsedMilliseconds);
-                lemmyStuffTimer.Reset();
             }
             if (ApplicationSettings.ShowTurnOffTime)
             {

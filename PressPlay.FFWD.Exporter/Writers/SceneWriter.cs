@@ -250,6 +250,10 @@ namespace PressPlay.FFWD.Exporter.Writers
             }
             else
             {
+                if (type == typeof(MeshCollider))
+                {
+                    Debug.Log("Unexported Mesh collider", component);
+                }
                 if (!componentsNotWritten.Contains(type.FullName))
                 {
                     componentsNotWritten.Add(type.FullName);

@@ -9,7 +9,8 @@ namespace PressPlay.FFWD
 {
     internal static class QueryHelper
     {
-        private static List<Collider> colliders = new List<Collider>(ApplicationSettings.QueryHelperDefaultCapacity);
+        private static Collider[] colliders = new Collider[ApplicationSettings.DefaultCapacities.QueryHelper];
+        private static int colliderCount = 0;
         internal static LayerMask layermask;
         internal static bool breakOnFirst;
 
@@ -28,8 +29,8 @@ namespace PressPlay.FFWD
 
             if ((bool)coll && fixture.Body.Enabled && coll.gameObject.active && (layermask & (1 << coll.gameObject.layer)) > 0)
             {
-                colliders.Add(coll);
-                _hit = new RaycastHit() { body = fixture.Body, collider = coll };
+                colliders[colliderCount++] = coll;
+                _hit = new RaycastHit() { body = fixture.Body, collider = coll, transform = coll.transform };
                 if (breakOnFirst)
                 {
                     return false;
@@ -46,8 +47,8 @@ namespace PressPlay.FFWD
 
         internal static Collider[] GetQueryResult()
         {
-            Collider[] cols = colliders.ToArray();
-            colliders.Clear();
+            Collider[] cols = colliders.Take(colliderCount).ToArray();
+            colliderCount = 0;
             layermask = Physics.kDefaultRaycastLayers;
             breakOnFirst = false;
             return cols;

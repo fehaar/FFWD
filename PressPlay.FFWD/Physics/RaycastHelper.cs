@@ -17,7 +17,8 @@ namespace PressPlay.FFWD
         private static bool _findClosest;
         private static float _distance;
         private static int _layerMask;
-        private static List<RaycastHit> _hits = new List<RaycastHit>(10);
+        private static RaycastHit[] _hits = new RaycastHit[ApplicationSettings.DefaultCapacities.RaycastHits];
+        private static int _hitCount;
         private static RaycastHit _hit;
         private static float _nearest = float.PositiveInfinity;
         private static bool _didHit = false;
@@ -27,8 +28,7 @@ namespace PressPlay.FFWD
             _distance = distance;
             _findClosest = findClosest;
             _layerMask = layerMask;
-
-            _hits.Clear();
+            _hitCount = 0;
             _nearest = float.PositiveInfinity;
             _didHit = false;;
         }
@@ -55,14 +55,20 @@ namespace PressPlay.FFWD
                         _hit.normal = normal;
                         _hit.distance = dist;
                         _hit.collider = coll;
+                        _hit.transform = coll.transform;
                         _didHit = true;
                     }
                     return fraction;
                 }
                 else
                 {
-                    // TODO: Consider making this an array
-                    _hits.Add(new RaycastHit() { body = fixture.Body, point = point, normal = normal, distance = dist, collider = coll });
+                    _hits[_hitCount].body = fixture.Body;
+                    _hits[_hitCount].collider = coll;
+                    _hits[_hitCount].distance = dist;
+                    _hits[_hitCount].normal = normal;
+                    _hits[_hitCount].point = point;
+                    _hits[_hitCount].transform = coll.transform;
+                    _hitCount++;
                     return 1;
                 }
             }
@@ -78,7 +84,7 @@ namespace PressPlay.FFWD
                     return 1;
                 }
 
-                return _hits.Count;
+                return _hitCount;
             }
         }
 
@@ -86,7 +92,7 @@ namespace PressPlay.FFWD
         {
             get
             {
-                return _hits.ToArray();
+                return _hits.Take(_hitCount).ToArray();
             }
         }
 
@@ -106,7 +112,7 @@ namespace PressPlay.FFWD
             if ((coll != null) && (coll.gameObject != null) && (_layerMask & (1 << coll.gameObject.layer)) > 0)
             {
                 _didHit = true;
-                _hit = new RaycastHit() { body = fixture.Body, collider = coll };
+                _hit = new RaycastHit() { body = fixture.Body, collider = coll, transform = coll.transform };
             }
             return true;
         }

@@ -167,7 +167,6 @@
     <Compile Include="Farseer\Controllers\SimpleWindForce.cs" />
     <Compile Include="Farseer\Controllers\VelocityLimitController.cs" />
     <Compile Include="Farseer\DebugView.cs" />
-    <Compile Include="Farseer\DebugViewXNA.cs" />
     <Compile Include="Farseer\Dynamics\Body.cs" />
     <Compile Include="Farseer\Dynamics\BreakableBody.cs" />
     <Compile Include="Farseer\Dynamics\ContactManager.cs" />
@@ -201,7 +200,6 @@
     <Compile Include="Farseer\Factories\FixtureFactory.cs" />
     <Compile Include="Farseer\Factories\JointFactory.cs" />
     <Compile Include="Farseer\Factories\LinkFactory.cs" />
-    <Compile Include="Farseer\PrimitiveBatch.cs" />
     <Compile Include="Farseer\Settings.cs" />
     <Compile Include="Gizmos.cs" />
     <Compile Include="GUI\GUI.cs" />
@@ -245,6 +243,7 @@
     <Compile Include="Screen.cs" />
     <Compile Include="ScreenManager\Component\Sprite.cs" />
     <Compile Include="ScreenManager\GameScreen.cs" />
+    <Compile Include="ScreenManager\InputState.cs" />
     <Compile Include="ScreenManager\ScreenManager.cs" />
     <Compile Include="ScreenManager\Screens\LoadingScreen.cs" />
     <Compile Include="ScreenManager\Screens\MenuEntry.cs" />

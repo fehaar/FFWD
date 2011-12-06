@@ -12,7 +12,6 @@ namespace PressPlay.FFWD
         public enum To2dMode { DropX, DropY, DropZ };
         public static To2dMode to2dMode = To2dMode.DropY;
         public static bool ShowComponentProfile = false;
-        public static bool ShowiTweenUpdateTime = false;
         public static bool ShowTurnOffTime = false;
         public static bool ShowTimeBetweenUpdates = false;
         public static bool ShowRaycastTime = false;
@@ -32,13 +31,20 @@ namespace PressPlay.FFWD
         public static int AssetLoadInterval = 50; // In Milliseconds
 #endif
 
-        /// <summary>
-        /// All of these settings can be tuned in order to adjust memory usage of the engine.
-        /// You should do this in your game contructor.
-        /// </summary>
-        #region Default list sizes
-        public static int LightsDefaultCapacity = 4;
-        public static int QueryHelperDefaultCapacity = 20;
-        #endregion
+        public static class DefaultCapacities
+        {
+            /// <summary>
+            /// All of these settings can be tuned in order to adjust memory usage of the engine.
+            /// You should do this in your game contructor.
+            /// </summary>
+            #region Default list sizes
+            public static int Lights = 4;
+            public static int QueryHelper = 20;
+            public static int RaycastHits = 20;
+            public static int GestureSamples = 4;
+            public static int Touches = 4;
+            #endregion
+        }
+
     }
 }
