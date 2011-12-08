@@ -39,7 +39,6 @@ namespace PressPlay.FFWD.ScriptTranslator
                 }
             }
             Console.WriteLine("Conversion done. Converted " + scripts + " scripts.");
-            Console.ReadKey();
         }
 
         public Program()

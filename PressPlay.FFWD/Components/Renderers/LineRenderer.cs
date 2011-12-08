@@ -26,5 +26,10 @@ namespace PressPlay.FFWD.Components
         {
             throw new NotImplementedException();
         }
+
+        public void SetPosition(int index, Vector3 position)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
