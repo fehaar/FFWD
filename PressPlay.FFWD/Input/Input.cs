@@ -40,7 +40,6 @@ namespace PressPlay.FFWD
 
             _touchCount = 0;
             TouchCollection tc = TouchPanel.GetState();
-            Debug.Log("Input Get touches");
             for (int i = 0; i < tc.Count; i++)
             {
                 // TODO: Add support for deltas and stationary touches
