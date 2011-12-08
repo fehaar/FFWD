@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
@@ -8,7 +9,7 @@ namespace PressPlay.FFWD.Exporter
     {
         public ScriptTranslator(string[] originalScriptText)
         {
-            scriptLines = new List<string>(originalScriptText);
+            scriptLines = new List<string>(originalScriptText.Select(s => s.TrimEnd('\r')));
         }
 
         public static string ScriptNamespace { get; set; }
@@ -22,6 +23,7 @@ namespace PressPlay.FFWD.Exporter
             { "Serializable", "" },
             { "AddComponentMenu", "" },
             { "RequireComponent", "" },
+            { "ExecuteInEditMode", "" },
             { "FFWD_ExportOptions", "" },
             { "FFWD_DontExport", "" }
         };
