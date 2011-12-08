@@ -19,8 +19,6 @@ namespace PressPlay.FFWD
         {
             UpdateOrder = 1;
             DrawOrder = 0;
-
-            isUpdateable.Add(typeof(PressPlay.FFWD.UI.Controls.ScrollingPanelControl));
         }
 
 #if DEBUG
@@ -287,10 +285,6 @@ namespace PressPlay.FFWD
 #if DEBUG
             graphics.Stop();
             double total = fixedUpdateTime.Elapsed.TotalSeconds + lateUpdateTime.Elapsed.TotalSeconds + updateTime.Elapsed.TotalSeconds + graphics.Elapsed.TotalSeconds + physics.Elapsed.TotalSeconds;
-            if (ApplicationSettings.ShowDebugLines)
-            {
-                Debug.DrawLines(GraphicsDevice, ApplicationSettings.DebugCamera);
-            }
 
 #if COMPONENT_PROFILE
             componentProfiler.Sort();
@@ -362,6 +356,7 @@ namespace PressPlay.FFWD
 
             timeUpdateEndUpdateStart.Start(); //measure time from draw ended to beginning of Update, to try and measure graphics performance
 #endif
+            Debug.ClearLines();
         }
 
         private void UpdateFPS(GameTime gameTime)

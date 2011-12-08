@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using PressPlay.FFWD.UI;
 
 namespace PressPlay.FFWD.Components
 {
@@ -188,13 +187,6 @@ namespace PressPlay.FFWD.Components
         internal static List<Renderer> nonAssignedRenderers = new List<Renderer>();
         internal static void AddRenderer(Renderer renderer)
         {
-            // Tag UI renderes og gem dem i en liste. Returner så kameraerne ikke f'r den
-            if (renderer is UIRenderer)
-            {
-                UIRenderer.AddRenderer(renderer as UIRenderer);
-                return;
-            }
-
             bool isAdded = false;
             for (int i = 0; i < _allCameras.Count; i++)
             {
@@ -232,12 +224,6 @@ namespace PressPlay.FFWD.Components
 
         internal static void RemoveRenderer(Renderer renderer)
         {
-            if (renderer is UIRenderer)
-            {
-                UIRenderer.RemoveRenderer(renderer as UIRenderer);
-                return;
-            }
-
             for (int i = 0; i < _allCameras.Count; i++)
             {
                 _allCameras[i].removeRenderer(renderer);
@@ -299,7 +285,6 @@ namespace PressPlay.FFWD.Components
                 device.RasterizerState = RasterizerState.CullCounterClockwise;
             }
 
-            estimatedDrawCalls += UIRenderer.doRender(device);
 #if DEBUG
             Debug.Display("Estimated Draw calls", estimatedDrawCalls);
             logRenderCalls = false;

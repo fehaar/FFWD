@@ -86,7 +86,7 @@ namespace PressPlay.FFWD.ScreenManager
         /// Responds to user input, changing the selected entry and accepting
         /// or cancelling the menu.
         /// </summary>
-        public override void HandleInput(InputState input)
+        public override void HandleInput()
         {
             // we cancel the current menu screen if the user presses the back button
             PlayerIndex player;

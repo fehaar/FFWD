@@ -113,9 +113,9 @@ namespace PressPlay.FFWD
             {
                 _didHit = true;
                 _hit = new RaycastHit() { body = fixture.Body, collider = coll, transform = coll.transform };
+                _hits[_hitCount++] = _hit;
             }
-            return true;
+            return !_findClosest;
         }
-
     }
 }

@@ -26,7 +26,6 @@ namespace FarseerPhysics
         //Drawing
         private PrimitiveBatch _primitiveBatch;
         private SpriteBatch _batch;
-        private SpriteFont _font;
         private GraphicsDevice _device;
         private Vector2[] _tempVertices = new Vector2[Settings.MaxPolygonVertices];
         private List<StringData> _stringData;
@@ -70,7 +69,6 @@ namespace FarseerPhysics
         public Rectangle PerformancePanelBounds = new Rectangle(250, 100, 200, 100);
 #endif
         private Vector2[] _background = new Vector2[4];
-        public bool Enabled = true;
 
 #if XBOX || WINDOWS_PHONE
         public const int CircleSegments = 16;
@@ -765,17 +763,13 @@ namespace FarseerPhysics
 
         public void RenderDebugData(ref Matrix projection, ref Matrix view)
         {
-            if (!Enabled)
-            {
-                return;
-            }
-
             //Nothing is enabled - don't draw the debug view.
              if (Flags == 0)
                 return;
 
             _device.RasterizerState = RasterizerState.CullNone;
             _device.DepthStencilState = DepthStencilState.Default;
+            _device.BlendState = BlendState.AlphaBlend;
 
             _primitiveBatch.Begin(ref projection, ref view);
             DrawDebugData();
@@ -788,40 +782,37 @@ namespace FarseerPhysics
                 _primitiveBatch.End();
             }
 
-            // begin the sprite batch effect
-            _batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-
-            // draw any strings we have
-            for (int i = 0; i < _stringData.Count; i++)
+            if (_stringData.Count > 0)
             {
-                _batch.DrawString(_font, string.Format(_stringData[i].S, _stringData[i].Args),
-                                  new Vector2(_stringData[i].X + 1f, _stringData[i].Y + 1f), Color.Black);
-                _batch.DrawString(_font, string.Format(_stringData[i].S, _stringData[i].Args),
-                                  new Vector2(_stringData[i].X, _stringData[i].Y), _stringData[i].Color);
-            }
-            // end the sprite batch effect
-            _batch.End();
+                // begin the sprite batch effect
+                _batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
 
-            _stringData.Clear();
+                // draw any strings we have
+                for (int i = 0; i < _stringData.Count; i++)
+                {
+                    _batch.DrawString(PressPlay.FFWD.ApplicationSettings.DebugFont, string.Format(_stringData[i].S, _stringData[i].Args),
+                                      new Vector2(_stringData[i].X + 1f, _stringData[i].Y + 1f), Color.Black);
+                    _batch.DrawString(PressPlay.FFWD.ApplicationSettings.DebugFont, string.Format(_stringData[i].S, _stringData[i].Args),
+                                      new Vector2(_stringData[i].X, _stringData[i].Y), _stringData[i].Color);
+                }
+                // end the sprite batch effect
+                _batch.End();
+                _stringData.Clear();
+            }
         }
 
         public void RenderDebugData(ref Matrix projection)
         {
-            if (!Enabled)
-            {
-                return;
-            }
             Matrix view = Matrix.Identity;
             RenderDebugData(ref projection, ref view);
         }
 
-        public void LoadContent(GraphicsDevice device, ContentManager content)
+        public void LoadContent(GraphicsDevice device)
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             _device = device;
             _batch = new SpriteBatch(_device);
             _primitiveBatch = new PrimitiveBatch(_device, 1000);
-            _font = content.Load<SpriteFont>("TestFont");
             _stringData = new List<StringData>();
 
             _localProjection = Matrix.CreateOrthographicOffCenter(0f, _device.Viewport.Width, _device.Viewport.Height, 0f, 0f, 1f);

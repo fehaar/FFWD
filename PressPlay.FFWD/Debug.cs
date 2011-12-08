@@ -273,5 +273,14 @@ namespace PressPlay.FFWD
 
             lines.Clear();
         }
+
+        [Conditional("DEBUG")]
+        internal static void ClearLines()
+        {
+            if (lines != null)
+            {
+                lines.Clear();
+            }
+        }
     }
 }

@@ -53,21 +53,27 @@ namespace PressPlay.FFWD
 
         #region Properties
 
-        public Vector3 normalized{
-            get{
+        public Vector3 normalized
+        {
+            get
+            {
                 return Vector3.Normalize(this);
             }
         }
 
-        public float magnitude{
-            get{
-                return (float)Math.Sqrt(DistanceSquared(this, Vector3.zero));
+        public float magnitude
+        {
+            get
+            {
+                return (float)Math.Sqrt(x * x + y * y + z * z);
             }
         }
 
-        public float sqrMagnitude{
-            get{
-                return DistanceSquared(this, Vector3.zero);
+        public float sqrMagnitude
+        {
+            get
+            {
+                return x * x + y * y + z * z;
             }
         }
 

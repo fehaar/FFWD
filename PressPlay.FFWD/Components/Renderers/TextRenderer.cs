@@ -1,7 +1,6 @@
 ﻿using PressPlay.FFWD.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using PressPlay.FFWD.UI.Controls;
 using PressPlay.FFWD;
 
 namespace PressPlay.FFWD.Components

@@ -16,6 +16,8 @@ namespace PressPlay.FFWD
     {
         private static MouseState _lastMouseState;
         private static MouseState _currentMouseState;
+        private static KeyboardState _lastKeyboardState;
+        private static KeyboardState _currentKeyboardState;
 
         internal static void Initialize()
         {
@@ -26,6 +28,8 @@ namespace PressPlay.FFWD
         {
             _lastMouseState = _currentMouseState;
             _currentMouseState = Mouse.GetState();
+            _lastKeyboardState = _currentKeyboardState;
+            _currentKeyboardState = Keyboard.GetState();
 
 #if WINDOWS_PHONE
             gestureCount = 0;
@@ -36,6 +40,7 @@ namespace PressPlay.FFWD
 
             _touchCount = 0;
             TouchCollection tc = TouchPanel.GetState();
+            Debug.Log("Input Get touches");
             for (int i = 0; i < tc.Count; i++)
             {
                 // TODO: Add support for deltas and stationary touches
@@ -45,10 +50,9 @@ namespace PressPlay.FFWD
                 {
                     continue;
                 }
-                _touches[_touchCount].fingerId = tl.Id;
-                _touches[_touchCount].position = tl.Position;
-                _touches[_touchCount].phase = ToPhase(tl.State);
-                _touchCount++;
+                Touch t = new Touch() { fingerId = tl.Id, position = tl.Position, phase = ToPhase(tl.State) };
+                Debug.Log("Touch " + _touchCount + " phase " + t.phase);
+                _touches[_touchCount++] = t;
                 //switch (tl.State)
                 //{
                 //    case TouchLocationState.Moved:
@@ -223,8 +227,18 @@ namespace PressPlay.FFWD
                 {
                     return _noTouch;
                 }
+                Debug.Log("Return " + _touchCount + " touches");
                 return _touches.Take(_touchCount).ToArray();
             }
+        }
+
+        public static bool GetKeyUp(Keys key)
+        {
+#if WINDOWS_PHONE
+            return false;
+#else
+            return _currentKeyboardState.IsKeyUp(key) && _lastKeyboardState.IsKeyDown(key);
+#endif
         }
     }
 }

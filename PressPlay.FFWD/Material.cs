@@ -7,7 +7,7 @@ namespace PressPlay.FFWD
     public class Material : Asset
     {
         [ContentSerializer]
-        private string shader;
+        internal string shader;
         [ContentSerializer]
         public int renderQueue;
         [ContentSerializer(Optional = true)]

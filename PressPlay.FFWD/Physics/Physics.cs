@@ -463,6 +463,21 @@ namespace PressPlay.FFWD
                 return false;
             }
         }
+
+        public static RaycastHit[] PointcastAll(Vector2 point, int layerMask)
+        {
+#if DEBUG
+            Application.raycastTimer.Start();
+#endif
+            RaycastHelper.SetValues(float.MaxValue, false, layerMask);
+
+            AABB aabb = new AABB(new Vector2(point.x - float.Epsilon, point.y - float.Epsilon), new Vector2(point.x + float.Epsilon, point.y + float.Epsilon));
+            world.QueryAABB(RaycastHelper.pointCastCallback, ref aabb);
+#if DEBUG
+            Application.raycastTimer.Stop();
+#endif
+            return RaycastHelper.Hits;
+        }
         #endregion
 
         #region Linecast methods

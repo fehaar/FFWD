@@ -96,6 +96,7 @@
     <Compile Include="Components\Renderers\SpriteRenderer.cs" />
     <Compile Include="Components\Renderers\StaticBatchRenderer.cs" />
     <Compile Include="Components\Renderers\TextRenderer.cs" />
+    <Compile Include="DebugCamera.cs" />
     <Compile Include="Extensions\SendMessageMethodCache.cs" />
     <Compile Include="Farseer\Collision\Collision.cs" />
     <Compile Include="Farseer\Collision\Distance.cs" />
@@ -247,8 +248,6 @@
     <Compile Include="ScreenManager\GameScreen.cs" />
     <Compile Include="ScreenManager\ScreenManager.cs" />
     <Compile Include="ScreenManager\Screens\LoadingScreen.cs" />
-    <Compile Include="ScreenManager\Screens\MenuEntry.cs" />
-    <Compile Include="ScreenManager\Screens\MenuScreen.cs" />
     <Compile Include="ScreenManager\Screens\PlayerIndexEventArgs.cs" />
     <Compile Include="ScriptableObject.cs" />
     <Compile Include="SkinnedModel\CpuSkinnedModel.cs" />
@@ -260,20 +259,6 @@
     <Compile Include="Time.cs" />
     <Compile Include="Transform.cs" />
     <Compile Include="TypeSet.cs" />
-    <Compile Include="UI\Controls\ButtonControl.cs" />
-    <Compile Include="UI\Controls\ButtonStyle.cs" />
-    <Compile Include="UI\Controls\Control.cs" />
-    <Compile Include="UI\Controls\ButtonControlOld.cs" />
-    <Compile Include="UI\Controls\Events\LevelSelectEventArgs.cs" />
-    <Compile Include="UI\Controls\ImageControl.cs" />
-    <Compile Include="UI\Controls\PanelControl.cs" />
-    <Compile Include="UI\Controls\ScrollingPanelControl.cs" />
-    <Compile Include="UI\Controls\ScrollTracker.cs" />
-    <Compile Include="UI\Controls\TextControl.cs" />
-    <Compile Include="UI\UIButtonRenderer.cs" />
-    <Compile Include="UI\UIRenderer.cs" />
-    <Compile Include="UI\UISpriteRenderer.cs" />
-    <Compile Include="UI\UITextRenderer.cs" />
     <Compile Include="UnityObject.cs" />
     <Compile Include="Vector2.cs" />
     <Compile Include="Vector3.cs">

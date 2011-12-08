@@ -52,15 +52,28 @@ namespace PressPlay.FFWD
 
         #region Properties
 
-        public float magnitude{
-            get{
-                return (float)Math.Sqrt(DistanceSquared(this, Vector2.zero));
+        public float magnitude
+        {
+            get 
+            {
+                return (float)Math.Sqrt(x * x + y * y);
             }
         }
 
-        public float sqrMagnitude{
-            get{
-                return DistanceSquared(this, Vector2.zero);
+        public float sqrMagnitude
+        {
+            get
+            {
+                return x * x + y * y;
+            }
+        }
+
+        public Vector2 normalized
+        {
+            get
+            {
+                float factor = 1f / magnitude;
+                return new Vector2(this.x *= factor, this.y *= factor);
             }
         }
 

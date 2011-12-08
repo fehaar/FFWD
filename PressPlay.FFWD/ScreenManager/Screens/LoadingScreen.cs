@@ -11,7 +11,6 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using PressPlay.FFWD.UI.Controls;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Input.Touch;
 #endregion
@@ -39,8 +38,6 @@ namespace PressPlay.FFWD.ScreenManager
         protected bool loadingIsSlow;
         protected bool otherScreensAreGone;
         protected bool hasAddedScreens = false;
-        protected List<Control> controls = new List<Control>();
-        protected Control rootControl;
 
         protected GameScreen[] screensToLoad;
 
