@@ -132,6 +132,7 @@ namespace PressPlay.FFWD.Components
         }
 
         public static Camera main { get; private set; }
+        public static Camera mainCamera { get { return main; } }
 
         public static Viewport FullScreen;
 

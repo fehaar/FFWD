@@ -188,6 +188,15 @@ namespace PressPlay.FFWD
                 return _camera;
             }
         }
+
+        [ContentSerializerIgnore]
+        public GameObject gameObject
+        {
+            get
+            {
+                return this;
+            }
+        }
         #endregion
 
         [ContentSerializer(ElementName = "cs", CollectionItemName = "c", Optional = true)]

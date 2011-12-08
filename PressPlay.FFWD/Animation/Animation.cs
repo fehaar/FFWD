@@ -236,5 +236,10 @@ namespace PressPlay.FFWD.Components
 				AddClip(new AnimationClip(new TimeSpan(), null), item);
 			}
 		}
-	}
+
+        public bool IsPlaying(string name)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

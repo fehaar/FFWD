@@ -330,6 +330,7 @@
     <Compile Include="Gizmos.cs" />
     <Compile Include="GUI\GUI.cs" />
     <Compile Include="GUI\GUILayout.cs" />
+    <Compile Include="GUI\GUISkin.cs" />
     <Compile Include="GUI\GUIStyle.cs" />
     <Compile Include="Input\Touch.cs" />
     <Compile Include="Interfaces\IInitializable.cs" />

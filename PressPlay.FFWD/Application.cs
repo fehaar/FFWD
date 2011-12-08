@@ -103,6 +103,22 @@ namespace PressPlay.FFWD
 
         private static AssetHelper assetHelper = new AssetHelper();
 
+        public static string dataPath
+        {
+            get
+            {
+                return "";
+            }
+        }
+
+        public static bool isLoadingLevel
+        {
+            get
+            {
+                return !String.IsNullOrEmpty(sceneToLoad);
+            }
+        }
+
         public override void Initialize()
         {
             base.Initialize();
@@ -493,6 +509,11 @@ namespace PressPlay.FFWD
                 newAssets[i].LoadAsset(assetHelper);
                 newAssets.RemoveAt(i);
             }
+        }
+
+        public static void LoadLevelAdditive(string m_strLevelBase)
+        {
+            throw new NotImplementedException();
         }
 
         public static void LoadLevel(string name)
@@ -967,6 +988,5 @@ namespace PressPlay.FFWD
                 }
             }
         }
-
     }
 }

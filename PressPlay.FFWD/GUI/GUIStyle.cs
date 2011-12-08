@@ -9,6 +9,8 @@ namespace PressPlay.FFWD
 
     public class GUIStyle
     {
+        public static readonly GUIStyle none = new GUIStyle();
+
         public int fontSize;
         public TextAnchor alignment;
     }

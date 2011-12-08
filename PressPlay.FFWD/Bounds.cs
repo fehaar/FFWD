@@ -95,7 +95,7 @@ namespace PressPlay.FFWD
 
         }
 
-        public void Contains(Vector3 point)
+        public bool Contains(Vector3 point)
         {
             // TODO : Add implementation of method
             throw new NotImplementedException("Method not implemented.");

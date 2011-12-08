@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Content;
+﻿using System;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace PressPlay.FFWD.Components
@@ -47,6 +48,14 @@ namespace PressPlay.FFWD.Components
                     materials = new Material[1]; 
                 }
                 materials[0] = value;
+            }
+        }
+
+        public Bounds bounds
+        {
+            get
+            {
+                throw new NotImplementedException("Not implemented");
             }
         }
 

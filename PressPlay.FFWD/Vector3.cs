@@ -266,6 +266,11 @@ namespace PressPlay.FFWD
             return (a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y) + (a.z - b.z) * (a.z - b.z);
         }
 
+        public static float SqrMagnitude(Vector3 v)
+        {
+            return v.sqrMagnitude;
+        }
+
         public static Vector3 Max(Vector3 value1, Vector3 value2)
         {
             return new Vector3(

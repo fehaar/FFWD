@@ -282,5 +282,17 @@ namespace PressPlay.FFWD
                 lines.Clear();
             }
         }
+
+        public static bool isDebugBuild 
+        {
+            get
+            {
+#if DEBUG
+                return true;
+#else
+                return false;
+#endif
+            }
+        }
     }
 }
