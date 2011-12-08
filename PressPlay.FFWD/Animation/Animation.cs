@@ -82,7 +82,11 @@ namespace PressPlay.FFWD.Components
 
 		public AnimationClip GetClip(string name)
 		{
-			return clips[name];
+            if (clips.ContainsKey(name))
+            {
+                return clips[name];
+            }
+            return null;
 		}
 
 		public bool isPlaying {
@@ -227,19 +231,10 @@ namespace PressPlay.FFWD.Components
 			return null;
 		}
 
-		internal override void AfterLoad(Dictionary<int, UnityObject> idMap)
-		{
-			base.AfterLoad(idMap);
-			foreach (string item in animations)
-			{
-				// TODO: Why are we doing this when we are using non-existing data?!?!?!
-				AddClip(new AnimationClip(new TimeSpan(), null), item);
-			}
-		}
-
         public bool IsPlaying(string name)
         {
-            throw new NotImplementedException();
+            // TODO: Implement this!
+            return false;
         }
     }
 }

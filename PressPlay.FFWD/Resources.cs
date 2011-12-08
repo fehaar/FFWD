@@ -38,7 +38,7 @@ namespace PressPlay.FFWD
             {
                 try
                 {
-                    return AssetHelper.Load<Texture2D>(Path.Combine("Resources", name));
+                    return AssetHelper.Load<Texture2D>("Resources", Path.Combine("Resources", name));
                 }
                 catch (Exception ex)
                 {
@@ -51,7 +51,7 @@ namespace PressPlay.FFWD
         private static UnityObject LoadScene(string name)
         {
             Application.loadingScene = true;
-            Scene scene = AssetHelper.Load<Scene>(Path.Combine("Resources", name));
+            Scene scene = AssetHelper.Load<Scene>("Resources", Path.Combine("Resources", name));
             if (scene == null)
             {
                 Debug.LogError("Resources not found at " + name);
@@ -73,7 +73,7 @@ namespace PressPlay.FFWD
         {
             try
             {
-                return AssetHelper.Load<TextAsset>(Path.Combine("Resources", name));
+                return AssetHelper.Load<TextAsset>("Resources", Path.Combine("Resources", name));
             }
             catch (Exception ex)
             {

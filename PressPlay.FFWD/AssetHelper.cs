@@ -36,17 +36,7 @@ namespace PressPlay.FFWD
 
         public T Load<T>(string contentPath)
         {
-            if (staticAssets.Contains(contentPath))
-            {
-                return Load<T>("Static", contentPath);
-            }
-            else
-            {
-#if DEBUG
-                Debug.Log("loading asset from disk : " + contentPath);
-#endif
-                return Load<T>(Application.loadedLevelName, contentPath);
-            }
+            return Load<T>(Application.loadedLevelName, contentPath);
         }
 
         public T Load<T>(string category, string contentPath)
@@ -58,18 +48,26 @@ namespace PressPlay.FFWD
                     category = "Static";
                 }
                 ContentManager manager = GetContentManager(category);
+                T asset = default(T);
                 try
                 {
-                    content.Add(contentPath, manager.Load<T>(contentPath));
-                    managerContent[category].Add(contentPath);
+#if DEBUG
+                    Debug.Log("loading asset from disk : " + contentPath);
+#endif
+                    asset = manager.Load<T>(contentPath);
                 }
-                catch
+                catch (Exception ex)
                 {
 #if DEBUG
-                    Debug.Log("Asset not found. " + typeof(T).Name + " at " + contentPath);
+                    Debug.Log("Asset not found. " + typeof(T).Name + " at " + contentPath + ". " + ex.Message);
 #endif
+                }
+                if (asset == null && category == "Resources")
+                {
                     return default(T);
                 }
+                content.Add(contentPath, asset);
+                managerContent[category].Add(contentPath);
             }
             else
             {

@@ -7,6 +7,11 @@ namespace PressPlay.FFWD.Components
 {
     public class LineRenderer : Renderer
     {
+        public bool useWorldSpace;
+
+        private int vertexCount = 0;
+        private Vector3[] vertices = null;
+
         public override int Draw(Microsoft.Xna.Framework.Graphics.GraphicsDevice device, Camera cam)
         {
             return 0;
@@ -24,12 +29,20 @@ namespace PressPlay.FFWD.Components
 
         public void SetVertexCount(int count)
         {
-            throw new NotImplementedException();
+            if (vertices == null || vertices.Length < count)
+            {
+                vertices = new Vector3[count];
+            }
+            vertexCount = count;
         }
 
         public void SetPosition(int index, Vector3 position)
         {
-            throw new NotImplementedException();
+            if (index < 0 || index > vertexCount)
+            {
+                throw new IndexOutOfRangeException("Trying to set a vertex that does not exist!");
+            }
+            vertices[index] = position;
         }
     }
 }

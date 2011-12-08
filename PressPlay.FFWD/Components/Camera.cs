@@ -424,7 +424,12 @@ namespace PressPlay.FFWD.Components
             int calls = 0;
             for (int i = 0; i < data.subMeshCount; i++)
             {
-                calls += dynamicBatchRenderer.Draw(this, materials[i], data, transform, i);
+                Material mat = materials[0];
+                if (i < materials.Length)
+                {
+                    mat = materials[i];
+                }
+                calls += dynamicBatchRenderer.Draw(this, mat, data, transform, i);
             }
             return calls;
         }
