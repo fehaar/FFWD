@@ -25,6 +25,10 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
             {
                 writer.WriteMesh((mr as SkinnedMeshRenderer).sharedMesh, "sharedMesh");
             }
+            if (mr is LineRenderer)
+            {
+                writer.WriteElement("useWorldSpace", (mr as LineRenderer).useWorldSpace);
+            }
         }
         #endregion
     }
