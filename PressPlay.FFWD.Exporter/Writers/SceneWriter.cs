@@ -32,6 +32,14 @@ namespace PressPlay.FFWD.Exporter.Writers
         private List<int> writtenIds = new List<int>();
         public List<string> componentsNotWritten = new List<string>();
 
+        private struct MeshWriterData
+        {
+            internal Mesh mesh;
+            internal bool writeAsStatic;
+        }
+
+        private Dictionary<int, MeshWriterData> meshesToWrite = new Dictionary<int, MeshWriterData>();
+
         public void Write(string path)
         {
             path = PreparePath(path);
@@ -47,6 +55,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                 writer.WriteAttributeString("Type", resolver.DefaultNamespace + ".Scene");
                 WriteGOs();
                 WritePrefabs();
+                WriteAssets();
                 writer.WriteEndElement();
                 writer.WriteEndElement();
             }
@@ -67,6 +76,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                 writer.WriteAttributeString("Type", resolver.DefaultNamespace + ".Scene");
                 Prefabs.Add(go);
                 WritePrefabs();
+                WriteAssets();
                 writer.WriteEndElement();
                 writer.WriteEndElement();
             }
@@ -115,6 +125,17 @@ namespace PressPlay.FFWD.Exporter.Writers
                 writtenIds.Add(Prefabs[i].GetInstanceID());
                 writer.WriteStartElement("p");
                 WriteGameObject(Prefabs[i]);
+                writer.WriteEndElement();
+            }
+        }
+
+        private void WriteAssets()
+        {
+            Debug.Log("Writing " + meshesToWrite.Values.Count + " meshes");
+            foreach (var item in meshesToWrite.Values)
+            {
+                writer.WriteStartElement("asset");
+                WriteMeshData(item);
                 writer.WriteEndElement();
             }
         }
@@ -262,12 +283,6 @@ namespace PressPlay.FFWD.Exporter.Writers
             return false;
         }
 
-        //internal void WriteTexture(Texture texture)
-        //{
-        //    writer.WriteElementString("texture", texture.name);
-        //    assetHelper.ExportTexture(texture as Texture2D);
-        //}
-
         internal void WriteScript(MonoBehaviour component, bool overwrite)
         {
             // TODO: Find Interfaces as well
@@ -289,15 +304,46 @@ namespace PressPlay.FFWD.Exporter.Writers
             }
         }
 
-        internal void WriteMesh(Mesh mesh, string name)
+        internal void WriteMesh(Mesh mesh, string name, bool staticMesh = false)
         {
-            string asset = Path.GetFileNameWithoutExtension(AssetDatabase.GetAssetPath(mesh.GetInstanceID()));
+            int id = mesh.GetInstanceID();
             writer.WriteStartElement(name);
-            writer.WriteElementString("id", mesh.GetInstanceID().ToString());
-            writer.WriteElementString("name", mesh.name);
-            writer.WriteElementString("asset", asset);
+            writer.WriteElementString("id", id.ToString());
             writer.WriteEndElement();
-            assetHelper.ExportMesh(mesh);
+
+            if (!meshesToWrite.ContainsKey(id))
+            {
+                meshesToWrite[id] = new MeshWriterData() { mesh = mesh, writeAsStatic = staticMesh };
+            }
+            else
+            {
+                if (staticMesh && !meshesToWrite[id].writeAsStatic)
+                {
+                    MeshWriterData d = meshesToWrite[id];
+                    d.writeAsStatic = true;
+                    meshesToWrite[id] = d;
+                }
+            }
+            if (!staticMesh)
+            {
+                assetHelper.ExportMesh(mesh);
+            }
+        }
+
+        private void WriteMeshData(MeshWriterData data)
+        {
+            writer.WriteAttributeString("Type", "PressPlay.FFWD.Mesh");
+            string asset = Path.GetFileNameWithoutExtension(AssetDatabase.GetAssetPath(data.mesh.GetInstanceID()));
+            writer.WriteElementString("id", data.mesh.GetInstanceID().ToString());
+            writer.WriteElementString("name", data.mesh.name);
+            writer.WriteElementString("asset", asset);
+            if (data.writeAsStatic)
+            {
+                WriteElement("vertices", data.mesh.vertices);
+                WriteElement("normals", data.mesh.normals);
+                WriteElement("uv", data.mesh.uv);
+                WriteElement("triangles", data.mesh.triangles);
+            }
         }
 
         internal void WriteElement(string name, object obj)

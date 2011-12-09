@@ -21,6 +21,8 @@ namespace PressPlay.FFWD
         public List<GameObject> gameObjects { get; set; }
         [ContentSerializer(FlattenContent = true, CollectionItemName = "p")]
         public List<GameObject> prefabs { get; set; }
+        [ContentSerializer(FlattenContent = true, CollectionItemName = "asset")]
+        public List<Asset> assets { get; set; }
         [ContentSerializer(Optional = true, ElementName = "up")]
         internal List<string> isUpdateable = new List<string>();
         [ContentSerializer(Optional = true, ElementName = "fup")]

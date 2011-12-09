@@ -11,6 +11,7 @@ namespace PressPlay.FFWD
 {
     public class Mesh : Asset
     {
+        [ContentSerializer(Optional = true)]
         public string asset { get; set; }
 
         [ContentSerializerIgnore]
@@ -19,13 +20,13 @@ namespace PressPlay.FFWD
         public CpuSkinnedModel skinnedModel;
         private int meshIndex;
 
-        [ContentSerializerIgnore]
+        [ContentSerializer(Optional=true)]
         public Microsoft.Xna.Framework.Vector3[] vertices;
-        [ContentSerializerIgnore]
+        [ContentSerializer(Optional = true)]
         public Microsoft.Xna.Framework.Vector3[] normals;
-        [ContentSerializerIgnore]
+        [ContentSerializer(Optional = true)]
         public Microsoft.Xna.Framework.Vector2[] uv;
-        [ContentSerializerIgnore]
+        [ContentSerializer(Optional = true)]
         public short[] triangles;
         private short[][] triangleSets;
 

@@ -9,6 +9,8 @@ namespace PressPlay.FFWD.Components
         [ContentSerializer(ElementName="mesh", Optional=true)]
         public Mesh sharedMesh { get; set; }
 
+        public bool isStatic;
+
         private Mesh _mesh;
         [ContentSerializerIgnore]
         public Mesh mesh 
