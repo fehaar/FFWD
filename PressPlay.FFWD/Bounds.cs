@@ -1,4 +1,6 @@
 ﻿using System;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework;
 
 namespace PressPlay.FFWD
 {
@@ -6,17 +8,20 @@ namespace PressPlay.FFWD
     {
         public Bounds(Microsoft.Xna.Framework.BoundingBox b)
         {
+            _boundingSphere = null;
             box = b;
         }
 
         public Bounds(Vector3 center, Vector3 size)
         {
+            _boundingSphere = null;
             Vector3 ext = size / 2;
             box = new Microsoft.Xna.Framework.BoundingBox(center - ext, center + ext);
         }
 
         private Microsoft.Xna.Framework.BoundingBox box;
 
+        [ContentSerializer(ElementName="c")]
         public Vector3 center
         {
             get
@@ -26,6 +31,7 @@ namespace PressPlay.FFWD
             set
             {
                 box = new Microsoft.Xna.Framework.BoundingBox(value - extents, value + extents);
+                _boundingSphere = null;
             }
         }
 
@@ -37,6 +43,7 @@ namespace PressPlay.FFWD
             }
         }
 
+        [ContentSerializer(ElementName = "e")]
         public Vector3 extents
         {
             get
@@ -49,6 +56,7 @@ namespace PressPlay.FFWD
 
                 box.Max = c + value;
                 box.Min = c - value;
+                _boundingSphere = null;
             }
         }
 
@@ -119,15 +127,6 @@ namespace PressPlay.FFWD
         public void DebugDraw(Color color)
         {
             Debug.DrawFilledBox(center, size, color);
-
-            /*Vector3 width = new Vector3(size.x, 0, 0) * 0.5f;
-            Vector3 height = new Vector3( 0, 0, size.z ) * 0.5f;
-
-            Debug.DrawLine(center + width + height, center + width - height, Color.gray);
-            Debug.DrawLine(center + width + height, center - width + height, Color.gray);
-
-            Debug.DrawLine(center - width + height, center - width - height, Color.gray);
-            Debug.DrawLine(center + width - height, center - width - height, Color.gray);*/
         }
 
         public override string ToString()
@@ -135,5 +134,18 @@ namespace PressPlay.FFWD
             return box.ToString();
         }
         #endregion
+
+        private BoundingSphere? _boundingSphere;
+        internal BoundingSphere boundingSphere
+        {
+            get
+            {
+                if (!_boundingSphere.HasValue)
+                {
+                    _boundingSphere = new BoundingSphere(center, Math.Max(Math.Max(size.x, size.y), size.z) / 2);
+                }
+                return _boundingSphere.Value;
+            }
+        }
     }
 }

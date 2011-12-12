@@ -30,20 +30,8 @@ namespace PressPlay.FFWD
         public short[] triangles;
         private short[][] triangleSets;
 
-        internal BoundingSphere boundingSphere;
-
-        private Bounds? _bounds = null;
-        public Bounds bounds
-        {
-            get
-            {
-                if (!_bounds.HasValue)
-                {
-                    _bounds = new Bounds(boundingSphere.Center, new Vector3(boundingSphere.Radius));
-                }
-                return _bounds.Value;
-            }
-        }
+        [ContentSerializer(ElementName="bounds", Optional=true)]
+        public Bounds bounds;
 
         protected override void DoLoadAsset(AssetHelper assetHelper)
         {
@@ -59,8 +47,7 @@ namespace PressPlay.FFWD
                 MeshData data = assetHelper.Load<MeshData>("Models/" + asset);
                 if (data != null)
                 {
-                    boundingSphere = data.boundingSphere;
-
+                    bounds = new Bounds(data.boundingBox);
                     skinnedModel = data.skinnedModel;
                     if (skinnedModel != null)
                     {
@@ -84,7 +71,7 @@ namespace PressPlay.FFWD
                             if (model.Meshes[i].Name == name)
                             {
                                 meshIndex = i;
-                                boundingSphere = model.Meshes[i].BoundingSphere;
+                                bounds = new Bounds(model.Meshes[i].BoundingSphere.Center, new Vector3(model.Meshes[i].BoundingSphere.Radius));
                                 break;
                             }
                         }
@@ -116,7 +103,8 @@ namespace PressPlay.FFWD
                             {
                                 normals = (Microsoft.Xna.Framework.Vector3[])part.normals.Clone();
                             }
-                            boundingSphere = part.boundingSphere;
+
+                            bounds = new Bounds(part.boundingBox);
                         }
                     }
                 }
@@ -200,7 +188,7 @@ namespace PressPlay.FFWD
                     clone.normals = (Microsoft.Xna.Framework.Vector3[])normals.Clone();
                 }
             }
-            clone.boundingSphere = boundingSphere;
+            clone.bounds = bounds;
             return clone;
         }
         #endregion

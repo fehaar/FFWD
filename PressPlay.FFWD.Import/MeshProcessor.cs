@@ -69,7 +69,7 @@ namespace PressPlay.FFWD.Import
                 proc.RotationZ = this.RotationZ;
                 proc.Scale = this.Scale;
                 meshData.skinnedModel = proc.Process(input, context);
-                meshData.boundingSphere = meshData.skinnedModel.BoundingSphere;
+                meshData.boundingBox = BoundingBox.CreateFromSphere(meshData.skinnedModel.BoundingSphere);
             }
             else
             {
@@ -155,7 +155,7 @@ namespace PressPlay.FFWD.Import
                 mesh.triangles[0][i] = (short)geometry.Indices[i];
             }
 
-            mesh.boundingSphere = BoundingSphere.CreateFromPoints(mesh.vertices);
+            mesh.boundingBox = BoundingBox.CreateFromPoints(mesh.vertices);
 
             // Add the new piece of geometry to our output model. If the name is already here, it is a submesh and the triangles will be combined.
             if (meshData.meshParts.ContainsKey(name))

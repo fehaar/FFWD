@@ -351,6 +351,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                 WriteElement("uv", TransformUV(data.mesh.uv));
                 WriteElement("triangles", data.mesh.triangles);
             }
+            WriteElement("bounds", data.mesh.bounds);
         }
 
         private Vector2[] TransformUV(Vector2[] uv)
@@ -381,7 +382,11 @@ namespace PressPlay.FFWD.Exporter.Writers
                 }
                 if (obj is Bounds)
                 {
-                    // These components are always skipped for some reason. There must be some logic to it?
+                    Bounds b = (Bounds)obj;
+                    writer.WriteStartElement(name);
+                    writer.WriteElementString("c", ToString(b.center));
+                    writer.WriteElementString("e", ToString(b.extents));
+                    writer.WriteEndElement();
                     return;
                 }
                 if (obj is float)

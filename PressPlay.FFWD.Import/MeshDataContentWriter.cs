@@ -15,7 +15,7 @@ namespace PressPlay.FFWD.Import
             output.WriteObject(value.skinnedModel);
             output.WriteObject(value.model);
             output.WriteObject(value.meshParts);
-            output.WriteObject(value.boundingSphere);
+            output.WriteObject(value.boundingBox);
         }
 
         public override string GetRuntimeType(TargetPlatform targetPlatform)

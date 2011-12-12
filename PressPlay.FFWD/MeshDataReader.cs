@@ -16,7 +16,7 @@ namespace PressPlay.FFWD
             data.skinnedModel = input.ReadObject<CpuSkinnedModel>();
             data.model = input.ReadObject<Model>();
             data.meshParts = input.ReadObject<Dictionary<string, MeshDataPart>>();
-            data.boundingSphere = input.ReadObject<Microsoft.Xna.Framework.BoundingSphere>();
+            data.boundingBox = input.ReadObject<Microsoft.Xna.Framework.BoundingBox>();
             return data;
         }
     }

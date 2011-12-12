@@ -26,13 +26,13 @@ namespace PressPlay.FFWD.Components
             }
 
             // Check the frustum of the camera
-            BoundingSphere sphere = new BoundingSphere(transform.position, sharedMesh.boundingSphere.Radius * transform.lossyScale.sqrMagnitude);
+            BoundingSphere sphere = new BoundingSphere(transform.position, sharedMesh.bounds.boundingSphere.Radius * transform.lossyScale.sqrMagnitude);            
             if (cam.DoFrustumCulling(ref sphere))
             {
 #if DEBUG
                 if (Camera.logRenderCalls)
                 {
-                    Debug.LogFormat("VP cull {0} with radius {1} pos {2} cam {3} at {4}", gameObject, sharedMesh.boundingSphere.Radius, transform.position, cam.gameObject, cam.transform.position);
+                    Debug.LogFormat("VP cull {0} with radius {1} pos {2} cam {3} at {4}", gameObject, sharedMesh.bounds.boundingSphere.Radius, transform.position, cam.gameObject, cam.transform.position);
                 }
 #endif
                 return 0;

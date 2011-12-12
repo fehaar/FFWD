@@ -18,7 +18,7 @@ namespace PressPlay.FFWD
         internal short[][] triangles;
 
         [ContentSerializer]
-        internal Microsoft.Xna.Framework.BoundingSphere boundingSphere;
+        internal Microsoft.Xna.Framework.BoundingBox boundingBox;
 
         internal void AddSubMesh(MeshDataPart mesh)
         {

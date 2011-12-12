@@ -41,7 +41,7 @@ namespace PressPlay.FFWD.Components
             {
                 if (meshToRender != null)
                 {
-                    return meshToRender.boundingSphere;
+                    return meshToRender.bounds.boundingSphere;
                 }
                 return new BoundingSphere();
             }

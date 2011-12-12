@@ -19,6 +19,6 @@ namespace PressPlay.FFWD.Import
 
         internal Dictionary<string, MeshDataPart> meshParts;
 
-        internal Microsoft.Xna.Framework.BoundingSphere boundingSphere;
+        internal Microsoft.Xna.Framework.BoundingBox boundingBox;
     }
 }

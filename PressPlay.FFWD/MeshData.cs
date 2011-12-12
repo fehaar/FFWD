@@ -16,6 +16,6 @@ namespace PressPlay.FFWD
 
         internal Dictionary<string, MeshDataPart> meshParts;
 
-        internal BoundingSphere boundingSphere;
+        internal BoundingBox boundingBox;
     }
 }   
