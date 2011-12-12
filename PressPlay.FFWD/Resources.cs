@@ -60,6 +60,7 @@ namespace PressPlay.FFWD
             // This is removed here. It is called in scene.Initialize just below.
             scene.Initialize();
             Application.loadingScene = false;
+            Application.newAssets.AddRange(scene.assets);
             Application.LoadNewAssets();
 
             if (scene.prefabs.Count > 0)

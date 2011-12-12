@@ -50,7 +50,6 @@ namespace PressPlay.FFWD
                     continue;
                 }
                 Touch t = new Touch() { fingerId = tl.Id, position = tl.Position, phase = ToPhase(tl.State) };
-                Debug.Log("Touch " + _touchCount + " phase " + t.phase);
                 _touches[_touchCount++] = t;
                 //switch (tl.State)
                 //{
@@ -226,7 +225,6 @@ namespace PressPlay.FFWD
                 {
                     return _noTouch;
                 }
-                Debug.Log("Return " + _touchCount + " touches");
                 return _touches.Take(_touchCount).ToArray();
             }
         }
