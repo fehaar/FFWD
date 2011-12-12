@@ -64,7 +64,7 @@ namespace PressPlay.FFWD
         [ContentSerializer(Optional = true)]
         public string tag;
 
-        [ContentSerializer(ElementName = "isStatic", Optional = true)]
+        [ContentSerializer(ElementName = "static", Optional = true)]
         private bool _isStatic = true;
         [ContentSerializerIgnore]
         public bool isStatic

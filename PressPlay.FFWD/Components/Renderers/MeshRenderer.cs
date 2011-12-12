@@ -35,7 +35,7 @@ namespace PressPlay.FFWD.Components
 
             if (filter.CanBatch())
             {
-                return cam.BatchRender(filter.mesh, materials, transform);
+                return cam.BatchRender(filter.meshToRender, materials, transform);
             }
 
             return DrawModelDirectly(device, cam);

@@ -11,7 +11,10 @@ namespace PressPlay.FFWD
         public Asset()
             : base()
         {
-            Application.AddNewAsset(this);
+            if (!(this is Mesh))
+            {
+                Application.AddNewAsset(this);
+            }
         }
 
         [ContentSerializer(Optional=true)]

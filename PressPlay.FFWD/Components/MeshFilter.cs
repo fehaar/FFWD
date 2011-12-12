@@ -9,8 +9,6 @@ namespace PressPlay.FFWD.Components
         [ContentSerializer(ElementName = "mesh", Optional = true)]
         public Mesh sharedMesh;
 
-        public bool isStatic;
-
         private Mesh _mesh;
         [ContentSerializerIgnore]
         public Mesh mesh 
@@ -29,34 +27,38 @@ namespace PressPlay.FFWD.Components
             }
         }
 
+        internal Mesh meshToRender
+        {
+            get
+            {
+                return _mesh ?? sharedMesh;
+            }
+        }
+
         public BoundingSphere boundingSphere
         {
             get
             {
-                if (_mesh != null)
+                if (meshToRender != null)
                 {
-                    return _mesh.boundingSphere;
-                }
-                if (sharedMesh != null)
-                {
-                    return sharedMesh.boundingSphere;
+                    return meshToRender.boundingSphere;
                 }
                 return new BoundingSphere();
             }
         }
-        //private VertexPositionTexture[] data = new VertexPositionTexture[0];
 
         public override void Awake()
         {
             base.Awake();
+            // NOTE: I am not sure why we did this. But I have removed the functionality for now as I want to share meshes if possible.
             // Do this to force the mesh to get cloned on awake if it is already set.
             // If sharedMesh is changed later the clone will happen there.
-            Mesh mesh = this.mesh;
+            //Mesh mesh = this.mesh;
         }
 
         internal bool CanBatch()
         {
-            return (mesh != null && mesh.vertices != null);
+            return (meshToRender != null && meshToRender.vertices != null);
         }
 
         public ModelMesh GetModelMesh()

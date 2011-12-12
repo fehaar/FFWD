@@ -50,6 +50,12 @@ namespace PressPlay.FFWD
             // TODO: Optimize this by bundling everything into the same structure.
             if (!String.IsNullOrEmpty(asset))
             {
+                // If this is a static mesh, we do not need to load the data
+                if (vertices != null && triangles != null)
+                {
+                    return;
+                }
+
                 MeshData data = assetHelper.Load<MeshData>("Models/" + asset);
                 if (data != null)
                 {
@@ -117,7 +123,7 @@ namespace PressPlay.FFWD
 #if DEBUG
                 else
                 {
-                    Debug.LogWarning("Cannot find a way to load the mesh " + asset);
+                    Debug.LogWarning("Cannot find a way to load the mesh " + asset + "/" + name);
                 }
 #endif
             }

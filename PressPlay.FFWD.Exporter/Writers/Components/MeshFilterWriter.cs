@@ -20,7 +20,6 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
             {
                 scene.WriteMesh(filter.sharedMesh, "mesh", filter.gameObject.isStatic);
             }
-            scene.WriteElement("isStatic", filter.gameObject.isStatic);
         }
         #endregion
     }

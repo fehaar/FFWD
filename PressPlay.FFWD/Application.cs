@@ -410,6 +410,7 @@ namespace PressPlay.FFWD
             scene = assetHelper.Load<Scene>(sceneToLoad);
             sceneToLoad = "";
 
+            tempAssets.AddRange(scene.assets);
             totalNumberOfAssetsToLoad = tempAssets.Count;
             numberOfAssetsLoaded = 0;
             //Debug.Log("TempAssets.Count: "+tempAssets.Count);
@@ -720,8 +721,6 @@ namespace PressPlay.FFWD
 
         internal static void AddNewAsset(Asset asset)
         {
-            //newAssets.Add(asset);
-
             if (isLoadingAssetBeforeSceneInitialize)
             {
                 tempAssets.Add(asset);

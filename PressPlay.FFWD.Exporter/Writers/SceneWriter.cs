@@ -146,8 +146,15 @@ namespace PressPlay.FFWD.Exporter.Writers
             writer.WriteElementString("id", go.GetInstanceID().ToString());
             writer.WriteElementString("name", go.name);            
             writer.WriteElementString("layer", ToString(go.layer));
-            writer.WriteElementString("active", ToString(go.active));
+            if (!go.active)
+            {
+                writer.WriteElementString("active", ToString(go.active));
+            }
             writer.WriteElementString("tag", go.tag);
+            if (go.isStatic)
+            {
+                writer.WriteElementString("static", ToString(go.isStatic));
+            }
             writer.WriteStartElement("cs");
             Component[] comps = go.GetComponents(typeof(Component));
             for (int i = 0; i < comps.Length; i++)
@@ -341,9 +348,19 @@ namespace PressPlay.FFWD.Exporter.Writers
             {
                 WriteElement("vertices", data.mesh.vertices);
                 WriteElement("normals", data.mesh.normals);
-                WriteElement("uv", data.mesh.uv);
+                WriteElement("uv", TransformUV(data.mesh.uv));
                 WriteElement("triangles", data.mesh.triangles);
             }
+        }
+
+        private Vector2[] TransformUV(Vector2[] uv)
+        {
+            Vector2[] result = new Vector2[uv.Length];
+            for (int i = 0; i < uv.Length; i++)
+            {
+                result[i] = new Vector2(uv[i].x, 1 - uv[i].y);
+            }
+            return result;
         }
 
         internal void WriteElement(string name, object obj)

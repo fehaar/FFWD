@@ -145,7 +145,7 @@ namespace PressPlay.FFWD
             }
             private set
             {
-                if (gameObject != null)
+                if (gameObject != null && collider != null)
                 {
                     gameObject.isStatic = false;
                 }

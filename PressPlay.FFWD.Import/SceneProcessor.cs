@@ -22,6 +22,19 @@ namespace PressPlay.FFWD.Import
             input.AfterLoad(null);
             scene = input;
 
+            // Create static batch renderers
+            //Dictionary<int, GameObject> staticRenderers = new Dictionary<int, GameObject>();
+            //foreach (MeshFilter filter in Application.newComponents.Where(c => c is MeshFilter))
+            //{
+            //    if (filter.isStatic)
+            //    {
+            //        if (staticRenderers[filter])
+            //        {
+                        
+            //        }
+            //    }
+            //}
+
             foreach (GameObject go in input.gameObjects)
             {
                 PurgeStaticallyBatchedRenderers(go);
