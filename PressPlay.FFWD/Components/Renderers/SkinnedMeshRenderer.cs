@@ -7,7 +7,7 @@ namespace PressPlay.FFWD.Components
 {
     public class SkinnedMeshRenderer : Renderer
     {
-        public Mesh sharedMesh { get; set; }
+        public Mesh sharedMesh;
 
         private Animation animation;
 

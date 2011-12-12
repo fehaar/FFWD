@@ -45,6 +45,10 @@ namespace PressPlay.FFWD
                 prefabs[i].isPrefab = true;
                 prefabs[i].AfterLoad(idMap);
             }
+            for (int i = 0; i < assets.Count; i++)
+            {
+                assets[i].AfterLoad(idMap);
+            }
         }
 
         internal void Initialize()

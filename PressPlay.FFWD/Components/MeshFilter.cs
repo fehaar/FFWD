@@ -6,8 +6,8 @@ namespace PressPlay.FFWD.Components
 {
     public class MeshFilter : Component
     {
-        [ContentSerializer(ElementName="mesh", Optional=true)]
-        public Mesh sharedMesh { get; set; }
+        [ContentSerializer(ElementName = "mesh", Optional = true)]
+        public Mesh sharedMesh;
 
         public bool isStatic;
 

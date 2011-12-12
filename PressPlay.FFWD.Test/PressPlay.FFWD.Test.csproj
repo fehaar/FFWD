@@ -153,7 +153,7 @@
     <Compile Include="Core framework\WhenDestroyingAComponent.cs" />
     <Compile Include="Core framework\WhenDestroyingAGameObject.cs" />
     <Compile Include="Core framework\WhenFindingAnObject.cs" />
-    <Compile Include="Core framework\WhenFixingUpReferences.cs" />
+    <Compile Include="Core framework\SceneLoading\WhenFixingUpReferences.cs" />
     <Compile Include="Core framework\WhenGettingTheComponentName.cs" />
     <Compile Include="Core framework\Instantiate\WhenInstantiatingANewObject.cs" />
     <Compile Include="Core framework\WhenLoadingAScene.cs" />
