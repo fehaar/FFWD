@@ -32,7 +32,7 @@ namespace PressPlay.FFWD.Import
             renderer.materials = input.ReadObject<Material[]>(attr);
 
             attr.ElementName = "triangles";
-            renderer.indices = input.ReadObject<short[]>(attr);
+            renderer.indices = input.ReadObject<short[][]>(attr);
 
             attr.ElementName = "vertices";
             Microsoft.Xna.Framework.Vector3[] vs = input.ReadObject<Microsoft.Xna.Framework.Vector3[]>(attr);
@@ -41,16 +41,16 @@ namespace PressPlay.FFWD.Import
             Microsoft.Xna.Framework.Vector2[] uv = input.ReadObject<Microsoft.Xna.Framework.Vector2[]>(attr);
             renderer.boundingSphere = BoundingSphere.CreateFromPoints(vs);
 
-            VertexPositionTexture[] buffer = new VertexPositionTexture[vs.Length];
-            for (int i = 0; i < vs.Length; i++)
-            {
-                Microsoft.Xna.Framework.Vector3 v = vs[i];
-                v.Y = -v.Y;
-                Microsoft.Xna.Framework.Vector2 u = uv[i];
-                u.Y = 1 - u.Y;
-                buffer[i] = new VertexPositionTexture(v, u);
-            }
-            renderer.vertices = buffer;
+            //VertexPositionNormalTexture[] buffer = new VertexPositionNormalTexture[vs.Length];
+            //for (int i = 0; i < vs.Length; i++)
+            //{
+            //    Microsoft.Xna.Framework.Vector3 v = vs[i];
+            //    v.Y = -v.Y;
+            //    Microsoft.Xna.Framework.Vector2 u = uv[i];
+            //    u.Y = 1 - u.Y;
+            //    buffer[i] = new VertexPositionTexture(v, u);
+            //}
+            //renderer.vertices = buffer;
 
             return renderer;
         }

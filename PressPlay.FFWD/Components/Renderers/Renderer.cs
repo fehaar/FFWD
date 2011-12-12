@@ -12,6 +12,9 @@ namespace PressPlay.FFWD.Components
             enabled = true;
         }
 
+        [ContentSerializer(Optional=true)]
+        public bool isPartOfStaticBatch = false;
+
         public bool enabled { get; set; }
 
         [ContentSerializer(CollectionItemName = "material")]

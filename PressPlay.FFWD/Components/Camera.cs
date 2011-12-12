@@ -189,6 +189,12 @@ namespace PressPlay.FFWD.Components
         internal static void AddRenderer(Renderer renderer)
         {
             bool isAdded = false;
+
+            if (renderer.isPartOfStaticBatch)
+            {
+                return;
+            }
+
             for (int i = 0; i < _allCameras.Count; i++)
             {
                 isAdded |= _allCameras[i].addRenderer(renderer);
@@ -347,6 +353,12 @@ namespace PressPlay.FFWD.Components
                 if (renderQueue[i].material == null)
                 {
                     // We have no material, so we will skip rendering
+                    continue;
+                }
+
+                if (renderQueue[i].isPartOfStaticBatch)
+                {
+                    // The object is statically batched, so we will skip it
                     continue;
                 }
 

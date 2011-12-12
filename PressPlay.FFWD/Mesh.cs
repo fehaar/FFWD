@@ -174,6 +174,10 @@ namespace PressPlay.FFWD
 
         public short[] GetTriangles(int subMeshIndex)
         {
+            if (triangleSets == null && subMeshIndex == 0)
+            {
+                return triangles;
+            }
             return triangleSets[subMeshIndex];
         }
 

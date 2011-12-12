@@ -23,22 +23,23 @@ namespace PressPlay.FFWD.Import
             scene = input;
 
             // Create static batch renderers
-            //Dictionary<int, GameObject> staticRenderers = new Dictionary<int, GameObject>();
-            //foreach (MeshFilter filter in Application.newComponents.Where(c => c is MeshFilter))
-            //{
-            //    if (filter.isStatic)
-            //    {
-            //        if (staticRenderers[filter])
-            //        {
-                        
-            //        }
-            //    }
-            //}
-
-            foreach (GameObject go in input.gameObjects)
+            Dictionary<int, StaticBatchRenderer> staticRenderers = new Dictionary<int, StaticBatchRenderer>();
+            foreach (Renderer r in Application.newComponents.Where(c => (c is Renderer) && (c as Renderer).gameObject.isStatic).ToArray())
             {
-                PurgeStaticallyBatchedRenderers(go);
+                Material m = r.material;
+                if (!staticRenderers.ContainsKey(m.GetInstanceID()))
+                {
+                    GameObject sbGo = new GameObject("Static - " + m.name);
+                    staticRenderers[m.GetInstanceID()] = sbGo.AddComponent<StaticBatchRenderer>();
+                    staticRenderers[m.GetInstanceID()].materials = (Material[])r.materials.Clone();
+                }
+
+                MeshFilter mf = r.gameObject.GetComponent<MeshFilter>();
+                int id = mf.meshToRender.GetInstanceID();
+                staticRenderers[m.GetInstanceID()].AddMesh((Mesh)scene.assets.Where(a => a.GetInstanceID() == id).FirstOrDefault(), r.transform.world);
+                r.isPartOfStaticBatch = true;
             }
+            input.gameObjects.AddRange(staticRenderers.Values.Select(sbr => sbr.gameObject));
 
             foreach (Component cmp in Application.newComponents)
             {
