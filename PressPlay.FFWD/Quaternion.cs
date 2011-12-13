@@ -337,7 +337,8 @@ namespace PressPlay.FFWD
             {
                 return Quaternion.identity;
             }
-            return new Quaternion(Microsoft.Xna.Framework.Quaternion.CreateFromRotationMatrix(Microsoft.Xna.Framework.Matrix.CreateWorld(Microsoft.Xna.Framework.Vector3.Zero, forward, up)));
+
+            return new Quaternion(Microsoft.Xna.Framework.Quaternion.CreateFromRotationMatrix(Microsoft.Xna.Framework.Matrix.Invert(Microsoft.Xna.Framework.Matrix.CreateLookAt(forward, Microsoft.Xna.Framework.Vector3.Zero, up))));
         }
         #endregion
     }

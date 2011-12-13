@@ -257,7 +257,6 @@ namespace PressPlay.FFWD
 
         public static float Angle(Vector3 from, Vector3 to)
         {
-
             float dot = Vector3.Dot(from.normalized, to.normalized);
 
             if (dot >= 1 || dot <= -1) { return 0; }

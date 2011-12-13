@@ -597,10 +597,9 @@ namespace PressPlay.FFWD
             }
         }
 
-        //TODO: Implement LookAt
         public void LookAt(Transform target, Vector3 worldUp)
         {
-            // NOTE: Use a look matrix
+            LookAt(target.position, worldUp);
         }
 
         public void LookAt(Vector3 worldPosition)
