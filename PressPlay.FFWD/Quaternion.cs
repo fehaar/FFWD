@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
 
 namespace PressPlay.FFWD
 {
@@ -246,6 +247,19 @@ namespace PressPlay.FFWD
                 up = Microsoft.Xna.Framework.Vector3.Transform(up, Microsoft.Xna.Framework.Matrix.CreateRotationX(-rotationaxes.x));
 
                 rotationaxes.z = (float)Math.Atan2((double)-up.x, (double)up.y);
+            }
+
+            if (rotationaxes.x < 0)
+            {
+                rotationaxes.x += MathHelper.TwoPi;
+            }
+            if (rotationaxes.y < 0)
+            {
+                rotationaxes.y += MathHelper.TwoPi;
+            }
+            if (rotationaxes.z < 0)
+            {
+                rotationaxes.z += MathHelper.TwoPi;
             }
 
             return new Vector3(Microsoft.Xna.Framework.MathHelper.ToDegrees(rotationaxes.x), Microsoft.Xna.Framework.MathHelper.ToDegrees(rotationaxes.y), Microsoft.Xna.Framework.MathHelper.ToDegrees(rotationaxes.z));

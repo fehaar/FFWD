@@ -76,12 +76,12 @@ namespace PressPlay.FFWD
 
         public bool Contains(Vector2 point)
         {
-            throw new NotImplementedException();
+            return (point.x >= _xMin && point.y >= _yMin && point.x <= _xMax && point.y <= _yMax);
         }
 
         public bool Contains(Vector3 point)
         {
-            throw new NotImplementedException();
+            return (point.x >= _xMin && point.y >= _yMin && point.x <= _xMax && point.y <= _yMax);
         }
 
         public override string ToString()
