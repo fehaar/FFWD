@@ -101,6 +101,7 @@ namespace PressPlay.FFWD
             return _hit;
         }
 
+        internal static Vector3 pointCastPoint;
         public static bool pointCastCallback(Fixture fixture)
         {
             Component uo = fixture.Body.UserData;
@@ -112,7 +113,7 @@ namespace PressPlay.FFWD
             if ((coll != null) && (coll.gameObject != null) && (_layerMask & (1 << coll.gameObject.layer)) > 0)
             {
                 _didHit = true;
-                _hit = new RaycastHit() { body = fixture.Body, collider = coll, transform = coll.transform };
+                _hit = new RaycastHit() { body = fixture.Body, collider = coll, transform = coll.transform, point = pointCastPoint };
                 _hits[_hitCount++] = _hit;
             }
             return !_findClosest;

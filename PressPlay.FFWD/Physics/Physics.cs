@@ -472,6 +472,7 @@ namespace PressPlay.FFWD
             RaycastHelper.SetValues(float.MaxValue, false, layerMask);
 
             AABB aabb = new AABB(new Vector2(point.x - float.Epsilon, point.y - float.Epsilon), new Vector2(point.x + float.Epsilon, point.y + float.Epsilon));
+            RaycastHelper.pointCastPoint = point;
             world.QueryAABB(RaycastHelper.pointCastCallback, ref aabb);
 #if DEBUG
             Application.raycastTimer.Stop();
