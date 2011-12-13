@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
 using PressPlay.FFWD;
 using PressPlay.FFWD.ScreenManager;
+using PressPlay.FFWD.Components;
 #if WINDOWS_PHONE
 using Microsoft.Xna.Framework.Input.Touch;
 #endif
@@ -49,7 +50,7 @@ namespace PressPlay.FFWD
                 {
                     continue;
                 }
-                Touch t = new Touch() { fingerId = tl.Id, position = tl.Position, phase = ToPhase(tl.State) };
+                Touch t = new Touch() { fingerId = tl.Id, position = new Vector2(tl.Position.X, Camera.main.viewPort.Height - tl.Position.Y), phase = ToPhase(tl.State) };
                 _touches[_touchCount++] = t;
                 //switch (tl.State)
                 //{
@@ -128,7 +129,7 @@ namespace PressPlay.FFWD
                 }
                 return Vector2.zero;
 #else
-                return new Vector2(_currentMouseState.X, _currentMouseState.Y);
+                return new Vector2(_currentMouseState.X, Camera.main.viewPort.Height - _currentMouseState.Y);
 #endif
             }
         }

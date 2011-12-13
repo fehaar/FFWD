@@ -163,15 +163,17 @@ namespace PressPlay.FFWD.Components
 
         public Ray ScreenPointToRay(Vector2 screen)
         {
-            Vector3 near = viewPort.Unproject(new Vector3(screen.x, screen.y, 0), projectionMatrix, view, Matrix.Identity);
-            Vector3 far = viewPort.Unproject(new Vector3(screen.x, screen.y, 1), projectionMatrix, view, Matrix.Identity);
+            Vector3 near = viewPort.Unproject(new Vector3(screen.x, viewPort.Height - screen.y, 0), projectionMatrix, view, Matrix.Identity);
+            Vector3 far = viewPort.Unproject(new Vector3(screen.x, viewPort.Height - screen.y, 1), projectionMatrix, view, Matrix.Identity);
             return new Ray(near, (far - near).normalized);
         }
 
         public Vector3 ScreenToWorldPoint(Vector3 vector3)
         {
+            float normZ = (vector3.z - nearClipPlane) / (farClipPlane - nearClipPlane);
+            vector3.z = normZ;
+            vector3.y = pixelHeight - vector3.y;
             return viewPort.Unproject(vector3, projectionMatrix, view, Matrix.Identity);
-            throw new System.NotImplementedException();
         }
 
         public Vector3 WorldToViewportPoint(Vector3 position)

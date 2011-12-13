@@ -16,8 +16,17 @@ namespace PressPlay.FFWD
 
         public Plane(Vector3 inNormal, Vector3 inPoint)
         {
-            // TODO: Test that this is true
-            p = new Microsoft.Xna.Framework.Plane(inNormal, inPoint.magnitude);
+            if (inNormal == Vector3.up)
+            {
+                p = new Microsoft.Xna.Framework.Plane(inPoint, Vector3.forward + inPoint, Vector3.right + inPoint);
+            }
+            else
+            {
+                Microsoft.Xna.Framework.Vector3 u = Microsoft.Xna.Framework.Vector3.Cross(inNormal, Microsoft.Xna.Framework.Vector3.Backward);
+                Microsoft.Xna.Framework.Vector3 v = Microsoft.Xna.Framework.Vector3.Cross(inNormal, u);
+                Microsoft.Xna.Framework.Vector3 pt = inPoint;
+                p = new Microsoft.Xna.Framework.Plane(inPoint, pt + u, pt + v);
+            }
         }
 
         public Vector3 normal
@@ -43,10 +52,9 @@ namespace PressPlay.FFWD
             }
         }
 
-        public float GetDistanceToPoint(Vector3 tl)
-        {            
-            // TODO: Implement this!
-            return 1;
+        public float GetDistanceToPoint(Vector3 point)
+        {
+            return Microsoft.Xna.Framework.Vector3.Dot(Microsoft.Xna.Framework.Vector3.Normalize(p.Normal), point) - p.D;
         }
 
         public bool Raycast(Ray ray, out float enter)
