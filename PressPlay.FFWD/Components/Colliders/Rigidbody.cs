@@ -55,16 +55,20 @@ namespace PressPlay.FFWD.Components
         {
             if (collider != null)
             {
-                body = Physics.AddBody();
-                body.Position = transform.position;
-                body.Rotation = -MathHelper.ToRadians(transform.rotation.eulerAngles.y);
-                body.UserData = this;
+                body = collider.connectedBody;
+                if (body == null)
+                {
+                    body = Physics.AddBody();
+                    body.Position = transform.position;
+                    body.Rotation = -MathHelper.ToRadians(transform.rotation.eulerAngles.y);
+                    body.UserData = collider;
+                    collider.AddCollider(body, mass);
+                }
                 body.BodyType = (isKinematic) ? BodyType.Kinematic : BodyType.Dynamic;
                 body.Enabled = gameObject.active;
                 body.LinearDamping = drag;
                 body.AngularDamping = angularDrag;
                 body.FixedRotation = freezeRotation;
-                collider.AddCollider(body, mass);
                 RescaleMass();
             }
             else
