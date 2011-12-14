@@ -17,11 +17,11 @@ namespace PressPlay.FFWD.Components
         {
             get
             {
-                return size;
+                return size / 2;
             }
             set
             {
-                size = value;
+                size = value * 2;
             }
         }
         #endregion
