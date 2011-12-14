@@ -37,6 +37,15 @@ namespace PressPlay.FFWD.Components
 
         internal void AddMesh(Mesh m, Matrix transform)
         {
+            if (m == null)
+            {
+                throw new Exception("Trying to add null mesh to static batch");
+            }
+            if (m.vertices == null)
+            {
+                throw new Exception("Mesh " + m.name + " does not have any vertices and is being added to a static batch");
+            }
+
             // TODO: Add a test for too many verts
             int vertexOffset = 0;
             if (vertices == null)

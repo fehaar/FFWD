@@ -36,7 +36,12 @@ namespace PressPlay.FFWD.Import
 
                 MeshFilter mf = r.gameObject.GetComponent<MeshFilter>();
                 int id = mf.meshToRender.GetInstanceID();
-                staticRenderers[m.GetInstanceID()].AddMesh((Mesh)scene.assets.Where(a => a.GetInstanceID() == id).FirstOrDefault(), r.transform.world);
+                Mesh mesh = (Mesh)scene.assets.Where(a => a.GetInstanceID() == id).FirstOrDefault();
+                if (mesh == null)
+                {
+                    throw new Exception("The mesh with Id " + id + " was not found in assets. Gotten from " + mf);
+                }
+                staticRenderers[m.GetInstanceID()].AddMesh(mesh, r.transform.world);
                 r.isPartOfStaticBatch = true;
             }
             input.gameObjects.AddRange(staticRenderers.Values.Select(sbr => sbr.gameObject));
@@ -61,7 +66,7 @@ namespace PressPlay.FFWD.Import
                     }
                 }
             }
-
+            Application.Reset();
             return input;
         }
 

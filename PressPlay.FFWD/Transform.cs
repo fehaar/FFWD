@@ -500,7 +500,9 @@ namespace PressPlay.FFWD
             }
             else
             {
-                throw new NotImplementedException("Not implemented yet");
+                localPosition += translation;
+                //Vector3 trans = Microsoft.Xna.Framework.Vector3.TransformNormal(translation, world);
+                //localPosition += trans;
             }
         }
 

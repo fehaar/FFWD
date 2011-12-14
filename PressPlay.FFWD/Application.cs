@@ -734,6 +734,11 @@ namespace PressPlay.FFWD
         internal static void Reset()
         {
             objects.Clear();
+            componentsToAwake.Clear();
+            instantiatedComponentsToAwake.Clear();
+            componentsToStart.Clear();
+            newComponents.Clear();
+            newAssets.Clear();
             updateComponents.Clear();
             fixedUpdateComponents.Clear();
             lateUpdateComponents.Clear();
