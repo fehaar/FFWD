@@ -22,8 +22,6 @@ namespace PressPlay.FFWD
 
             Screen.height = game.GraphicsDevice.Viewport.Height;
             Screen.width = game.GraphicsDevice.Viewport.Width;
-
-            isGUI.Add("UnitPropertiesGUI");
         }
 
 #if DEBUG
@@ -73,10 +71,11 @@ namespace PressPlay.FFWD
         internal static readonly List<PressPlay.FFWD.Components.MonoBehaviour> guiComponents = new List<PressPlay.FFWD.Components.MonoBehaviour>(50);
         private static readonly List<Component> componentsChangingActivity = new List<Component>(50);
 
+        internal static readonly TypeSet typeCaps = new TypeSet(100);
         private static readonly TypeSet isUpdateable = new TypeSet(100);
         private static readonly TypeSet isFixedUpdateable = new TypeSet(25);
         private static readonly TypeSet isLateUpdateable = new TypeSet(25);
-        private static readonly TypeSet isGUI = new TypeSet(25);
+        private static readonly TypeSet hasGUI = new TypeSet(25);
         internal static readonly TypeSet hasAwake = new TypeSet(50);
         internal static readonly TypeSet fixReferences = new TypeSet(5);
 
@@ -424,11 +423,7 @@ namespace PressPlay.FFWD
 
             if (scene != null)
             {
-                isUpdateable.AddRange(scene.isUpdateable);
-                isFixedUpdateable.AddRange(scene.isFixedUpdateable);
-                isLateUpdateable.AddRange(scene.isLateUpdateable);
-                hasAwake.AddRange(scene.hasAwake);
-                fixReferences.AddRange(scene.fixReferences);
+                typeCaps.Add(scene.typeCaps);
             }
 
             if (scene == null)
@@ -664,7 +659,7 @@ namespace PressPlay.FFWD
                     {
                         objects.Add(cmp.gameObject.GetInstanceID(), cmp.gameObject);
                     }
-                    if (!cmp.isPrefab && hasAwake.Contains(cmp.GetType()))
+                    if (!cmp.isPrefab && typeCaps.HasCaps(cmp.GetType(), TypeSet.TypeCapabilities.Awake))
                     {
                         if (onInstantiate)
                         {
@@ -890,7 +885,7 @@ namespace PressPlay.FFWD
                 }
                 if (cmp.gameObject.active)
                 {
-                    if (isUpdateable.Contains(tp))
+                    if (typeCaps.HasCaps(tp, TypeSet.TypeCapabilities.Update))
                     {
                         if (!updateComponents.Contains(cmp as PressPlay.FFWD.Interfaces.IUpdateable))
                         {
@@ -903,7 +898,7 @@ namespace PressPlay.FFWD
 #endif
                         }
                     }
-                    if (isLateUpdateable.Contains(tp))
+                    if (typeCaps.HasCaps(tp, TypeSet.TypeCapabilities.LateUpdate))
                     {
                         if (!lateUpdateComponents.Contains(cmp as PressPlay.FFWD.Interfaces.IUpdateable))
                         {
@@ -916,7 +911,7 @@ namespace PressPlay.FFWD
 #endif
                         }
                     }
-                    if (isFixedUpdateable.Contains(tp))
+                    if (typeCaps.HasCaps(tp, TypeSet.TypeCapabilities.FixedUpdate))
                     {
                         if (!fixedUpdateComponents.Contains(cmp as PressPlay.FFWD.Interfaces.IFixedUpdateable))
                         {
@@ -929,7 +924,7 @@ namespace PressPlay.FFWD
 #endif
                         }
                     }
-                    if (isGUI.Contains(tp))
+                    if (typeCaps.HasCaps(tp, TypeSet.TypeCapabilities.GUI))
                     {
                         if (!guiComponents.Contains(cmp as MonoBehaviour))
                         {
@@ -949,28 +944,28 @@ namespace PressPlay.FFWD
                 }
                 else
                 {
-                    if (isUpdateable.Contains(tp))
+                    if (typeCaps.HasCaps(tp, TypeSet.TypeCapabilities.Update))
                     {
                         if (updateComponents.Contains(cmp as PressPlay.FFWD.Interfaces.IUpdateable))
                         {
                             updateComponents.Remove(cmp as PressPlay.FFWD.Interfaces.IUpdateable);
                         }
                     }
-                    if (isLateUpdateable.Contains(tp))
+                    if (typeCaps.HasCaps(tp, TypeSet.TypeCapabilities.LateUpdate))
                     {
                         if (lateUpdateComponents.Contains(cmp as PressPlay.FFWD.Interfaces.IUpdateable))
                         {
                             lateUpdateComponents.Remove(cmp as PressPlay.FFWD.Interfaces.IUpdateable);
                         }
                     }
-                    if (isFixedUpdateable.Contains(tp))
+                    if (typeCaps.HasCaps(tp, TypeSet.TypeCapabilities.FixedUpdate))
                     {
                         if (fixedUpdateComponents.Contains(cmp as PressPlay.FFWD.Interfaces.IFixedUpdateable))
                         {
                             fixedUpdateComponents.Remove(cmp as PressPlay.FFWD.Interfaces.IFixedUpdateable);
                         }
                     }
-                    if (isGUI.Contains(tp))
+                    if (typeCaps.HasCaps(tp, TypeSet.TypeCapabilities.GUI))
                     {
                         if (guiComponents.Contains(cmp as MonoBehaviour))
                         {

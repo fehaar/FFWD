@@ -7,9 +7,15 @@ namespace PressPlay.FFWD
 {
     public class GUISkin : ScriptableObject
     {
+        private Dictionary<string, GUIStyle> styles = new Dictionary<string, GUIStyle>();
+
         public GUIStyle GetStyle(string name)
         {
-            throw new NotImplementedException();
+            if (!styles.ContainsKey(name))
+            {
+                styles.Add(name, new GUIStyle());
+            }
+            return styles[name];
         }
     }
 }

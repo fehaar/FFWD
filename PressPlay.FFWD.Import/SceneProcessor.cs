@@ -55,46 +55,17 @@ namespace PressPlay.FFWD.Import
                 }
             }
 
+            TypeSet tc = new TypeSet();
             foreach (Assembly ass in assembliesUsed)
             {
                 foreach (Type type in ass.GetTypes())
                 {
-                    AddBehaviourTypeProperties(type);
-                    if (type.GetCustomAttributes(typeof(FixReferencesAttribute), true).Length > 0)
-                    {
-                        scene.fixReferences.Add(type.Name);
-                    }
+                    tc.Add(type);
                 }
             }
+            scene.typeCaps = tc.ToList();
             Application.Reset();
             return input;
-        }
-
-        private void AddBehaviourTypeProperties(Type tp)
-        {
-            MethodInfo info = tp.GetMethod("Update");
-            if (info != null && info.DeclaringType != typeof(MonoBehaviour))
-            {
-                scene.isUpdateable.Add(tp.Name);
-            }
-
-            info = tp.GetMethod("LateUpdate");
-            if (info != null && info.DeclaringType != typeof(MonoBehaviour))
-            {
-                scene.isLateUpdateable.Add(tp.Name);
-            }
-
-            info = tp.GetMethod("FixedUpdate");
-            if (info != null && info.DeclaringType != typeof(MonoBehaviour))
-            {
-                scene.isFixedUpdateable.Add(tp.Name);
-            }
-
-            info = tp.GetMethod("Awake");
-            if (info != null && info.DeclaringType != typeof(Component))
-            {
-                scene.hasAwake.Add(tp.Name);
-            }
         }
 
         private void PurgeStaticallyBatchedRenderers(GameObject go)

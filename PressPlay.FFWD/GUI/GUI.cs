@@ -11,7 +11,7 @@ namespace PressPlay.FFWD
         private static bool isRendering = false;
         internal static SpriteBatch spriteBatch = null;
 
-        public static GUISkin skin { get; set; }
+        public static GUISkin skin = new GUISkin();
         public static Color backgroundColor = Color.white;
         public static Color color = Color.white;
 
@@ -34,7 +34,15 @@ namespace PressPlay.FFWD
 
         public static void Label(Rect rect, string text, GUIStyle style)
         {
-            throw new NotImplementedException();
+            if (isRendering)
+            {
+                Rectangle r = rect;
+                if (Camera.main.viewPort.Bounds.Contains(r))
+                {
+                    Microsoft.Xna.Framework.Vector2 pos = new Microsoft.Xna.Framework.Vector2(r.Location.X, r.Location.Y);
+                    spriteBatch.DrawString(ApplicationSettings.DebugFont, text, pos, color);
+                }
+            }
         }
 
         public static bool Button(Rect rect, string text)
@@ -42,14 +50,23 @@ namespace PressPlay.FFWD
             throw new NotImplementedException();
         }
 
-        public static bool Button(Rect rect, Texture2D tex)
+        public static bool Button(Rect rect, Texture texture)
         {
-            return Button(rect, tex, GUIStyle.none);
+            return Button(rect, texture, GUIStyle.none);
         }
 
-        public static bool Button(Rect rect, Texture2D tex, GUIStyle style)
+        public static bool Button(Rect rect, Texture texture, GUIStyle style)
         {
-            throw new NotImplementedException();
+            if (isRendering)
+            {
+                Rectangle r = rect;
+                if (Camera.main.viewPort.Bounds.Contains(r))
+                {
+                    spriteBatch.Draw((Texture2D)texture, r, color);
+                }
+            }
+            // TODO: We need to check input
+            return false;
         }
 
         public static string TextField(Rect rect, string m_strLevelName)

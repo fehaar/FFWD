@@ -194,7 +194,7 @@ namespace PressPlay.FFWD
                     }
                 }
 
-                if (Application.fixReferences.Contains(memInfo[i].FieldType.Name))
+                if (Application.typeCaps.HasCaps(memInfo[i].FieldType, TypeSet.TypeCapabilities.FixReferences))
                 {
                     DoFixReferences(memInfo[i].GetValue(objectToFix), idMap);
                 }
