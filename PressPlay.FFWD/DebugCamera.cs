@@ -13,8 +13,11 @@ namespace PressPlay.FFWD
         private DebugViewXNA physicsDebugView;
         public Camera activeCamera;
 
+        public static bool activated = false;
+
         public override void Awake()
         {
+            activated = true;
             activeCamera = Camera.main;
             physicsDebugView = new DebugViewXNA(Physics.world);
             physicsDebugView.LoadContent(Application.screenManager.GraphicsDevice);

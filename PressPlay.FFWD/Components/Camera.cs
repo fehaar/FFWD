@@ -276,6 +276,10 @@ namespace PressPlay.FFWD.Components
                 state.FillMode = FillMode.WireFrame;
                 device.RasterizerState = state;
             }
+            else
+            {
+                device.RasterizerState = RasterizerState.CullCounterClockwise;
+            }
 
             for (int i = 0; i < _allCameras.Count; i++)
             {
@@ -283,11 +287,6 @@ namespace PressPlay.FFWD.Components
                 {
                     _allCameras[i].doRender(device);
                 }
-            }
-
-            if (wireframeRender)
-            {
-                device.RasterizerState = RasterizerState.CullCounterClockwise;
             }
 
             GUI.StartRendering();

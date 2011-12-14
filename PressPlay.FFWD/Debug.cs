@@ -212,6 +212,7 @@ namespace PressPlay.FFWD
         }
 
         private static BasicEffect effect;
+        [Conditional("DEBUG")]
         internal static void DrawLines(GraphicsDevice device, Camera cam)
         {
             if (lines == null || lines.Count == 0)
@@ -230,16 +231,16 @@ namespace PressPlay.FFWD
                 effect = new BasicEffect(device);
             }
 
-            RasterizerState oldrasterizerState = device.RasterizerState;
-            RasterizerState rasterizerState = new RasterizerState();
-            rasterizerState.CullMode = CullMode.None;
-            device.RasterizerState = rasterizerState;
+            device.RasterizerState = RasterizerState.CullNone;
+            device.DepthStencilState = DepthStencilState.Default;
+            device.BlendState = BlendState.AlphaBlend;
 
             effect.World = Matrix.Identity;
             effect.View = cam.view;
             effect.Projection = cam.projectionMatrix;
             effect.VertexColorEnabled = true;
             effect.Alpha = 1.0f;
+            effect.LightingEnabled = false;
 
             // TODO: This can be optimized by not recreating data every time
             VertexPositionColor[] data = new VertexPositionColor[lines.Count * 2];
@@ -268,8 +269,6 @@ namespace PressPlay.FFWD
                     data.Length / 2
                 );
             }
-
-            device.RasterizerState = oldrasterizerState;
 
             lines.Clear();
         }
