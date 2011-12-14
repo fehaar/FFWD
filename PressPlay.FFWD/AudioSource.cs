@@ -190,5 +190,11 @@ namespace PressPlay.FFWD
                 }
             }
         }
+
+        public void Play(ulong _uDelay)
+        {
+            // TODO: Implement the delay
+            Play();
+        }
     }
 }

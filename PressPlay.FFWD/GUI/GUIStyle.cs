@@ -6,6 +6,7 @@ using System.Text;
 namespace PressPlay.FFWD
 {
     public enum TextAnchor { UpperLeft, UpperCenter, UpperRight, MiddleLeft, MiddleCenter, MiddleRight, LowerLeft, LowerCenter, LowerRight }
+    public enum FontStyle { Normal, Bold, Italic, BoldAndItalic }
 
     public class GUIStyle
     {
@@ -13,5 +14,12 @@ namespace PressPlay.FFWD
 
         public int fontSize;
         public TextAnchor alignment;
+        public GUIStyleState normal;
+        public GUIStyleState hover;
+        public GUIStyleState onNormal;
+        public GUIStyleState onActive;
+        public GUIStyleState focused;
+        public GUIStyleState onFocused;
+        public FontStyle fontStyle;
     }
 }

@@ -66,5 +66,13 @@ namespace PressPlay.FFWD
                 Instance.IsLooped = loop;
             }
         }
+
+        public bool isReadyToPlay 
+        {
+            get
+            {
+                return Instance != null;
+            }
+        }
     }
 }

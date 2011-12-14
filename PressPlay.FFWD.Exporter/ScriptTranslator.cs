@@ -53,8 +53,7 @@ namespace PressPlay.FFWD.Exporter
             {
                 int line = -1;
                 Regex rex = new Regex(String.Format(@"(\W){0}(\W)", item.Key));
-                Match m;
-                while ((line = scriptLines.FindIndex(s => (m = rex.Match(s)).Success)) > -1)
+                while ((line = scriptLines.FindIndex(s => rex.IsMatch(s))) > -1)
                 {
                     scriptLines[line] = rex.Replace(scriptLines[line], "$1" + item.Value + "$2");
                 }
@@ -64,10 +63,16 @@ namespace PressPlay.FFWD.Exporter
         private void AddFFWDNamespace()
         {
             int line = -1;
-            Regex rex = new Regex("[^.]Random.");
+            Regex rex = new Regex(@"UnityEngine\.");
             while ((line = scriptLines.FindIndex(s => rex.IsMatch(s))) > -1)
             {
-                scriptLines[line] = scriptLines[line].Replace("Random.", "PressPlay.FFWD.Random.");
+                scriptLines[line] = rex.Replace(scriptLines[line], "PressPlay.FFWD.");
+            }
+
+            rex = new Regex(@"([^.])Random\.");
+            while ((line = scriptLines.FindIndex(s => rex.IsMatch(s))) > -1)
+            {
+                scriptLines[line] = rex.Replace(scriptLines[line], "$1PressPlay.FFWD.Random.");
             }
         }
 

@@ -15,7 +15,7 @@ namespace PressPlay.FFWD.Exporter.Test
             "[HideInInspector]",
             "public string iAmLegion;",
             "\tvoid Start() {",
-            "\t\tVector3 dir = Vector3.up + Vector3.forward;",
+            "\t\tVector3 dir = UnityEngine.Vector3.up + Vector3.forward;",
             "\t\tif (dir==Vector3.zero) return;",
             "\t}",
             "",
@@ -69,6 +69,18 @@ namespace PressPlay.FFWD.Exporter.Test
             Assert.That(newScript, Is.StringContaining("public override void FixedUpdate"));
             Assert.That(newScript, Is.Not.StringContaining("virtual protected public override void"));
         }
+
+        [Test]
+        public void WeWillReplaceExplicitUnityEngineWithFFWDNamespace()
+        {
+            ScriptTranslator trans = new ScriptTranslator(testScript);
+            trans.Translate();
+            string newScript = trans.ToString();
+
+            Assert.That(newScript, Is.StringContaining("PressPlay.FFWD.Vector3"));
+            Assert.That(newScript, Is.Not.StringContaining("UnityEngine.Vector3"));
+        }
+	
 	
         [Test]
         public void WeCanTranslateTheTestScripts()
