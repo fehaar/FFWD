@@ -496,13 +496,14 @@ namespace PressPlay.FFWD
         {
             if (space == Space.Self)
             {
+                // TODO: This probably does the wrong thing - and needs the code below
+                //Vector3 trans = Microsoft.Xna.Framework.Vector3.TransformNormal(translation, world);
+                //localPosition += trans;
                 localPosition += translation;
             }
             else
             {
                 localPosition += translation;
-                //Vector3 trans = Microsoft.Xna.Framework.Vector3.TransformNormal(translation, world);
-                //localPosition += trans;
             }
         }
 
