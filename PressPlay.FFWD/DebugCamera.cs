@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 
 namespace PressPlay.FFWD
 {
+#if DEBUG
     public class DebugCamera : Renderer
     {
         private DebugViewXNA physicsDebugView;
@@ -40,4 +41,5 @@ namespace PressPlay.FFWD
             return 0;
         }
     }
+#endif
 }

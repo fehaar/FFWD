@@ -23,7 +23,6 @@ namespace PressPlay.FFWD
         public static bool ShowDebugLines = false;
         public static bool ShowDebugPhysics = false;
         public static bool LogActivatedComponents = false;
-        public static SpriteFont DebugFont;
 #if WINDOWS
         public static int AssetLoadInterval = 50; // In Milliseconds
 #else

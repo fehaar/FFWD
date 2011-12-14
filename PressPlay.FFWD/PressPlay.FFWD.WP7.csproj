@@ -94,7 +94,6 @@
     <Compile Include="Components\Renderers\Renderer.cs" />
     <Compile Include="Components\Renderers\SkinnedMeshRenderer.cs" />
     <Compile Include="Components\Renderers\StaticBatchRenderer.cs" />
-    <Compile Include="Components\Renderers\TextRenderer.cs" />
     <Compile Include="DebugCamera.cs" />
     <Compile Include="Extensions\SendMessageMethodCache.cs" />
     <Compile Include="Farseer\Collision\Collision.cs" />
@@ -246,7 +245,6 @@
     <Compile Include="Scene.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Screen.cs" />
-    <Compile Include="ScreenManager\Component\Sprite.cs" />
     <Compile Include="ScreenManager\GameScreen.cs" />
     <Compile Include="ScreenManager\ScreenManager.cs" />
     <Compile Include="ScreenManager\Screens\LoadingScreen.cs" />

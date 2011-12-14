@@ -583,6 +583,7 @@ namespace PressPlay.FFWD
 
         public void LookAt(Vector3 worldPosition, Vector3 worldUp)
         {
+            // TODO: This will have problems if we have a parent.
             if (worldPosition == position) { return; }
 
             Matrix m = Matrix.CreateWorld(position, position - worldPosition, worldUp);

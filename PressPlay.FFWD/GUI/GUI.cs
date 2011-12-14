@@ -14,6 +14,7 @@ namespace PressPlay.FFWD
         public static GUISkin skin = new GUISkin();
         public static Color backgroundColor = Color.white;
         public static Color color = Color.white;
+        public static SpriteFont spriteFont;
 
         public static void DrawTexture(Rect rect, Texture texture)
         {
@@ -40,7 +41,7 @@ namespace PressPlay.FFWD
                 if (Camera.main.viewPort.Bounds.Contains(r))
                 {
                     Microsoft.Xna.Framework.Vector2 pos = new Microsoft.Xna.Framework.Vector2(r.Location.X, r.Location.Y);
-                    spriteBatch.DrawString(ApplicationSettings.DebugFont, text, pos, color);
+                    spriteBatch.DrawString(GUI.spriteFont, text, pos, color);
                 }
             }
         }

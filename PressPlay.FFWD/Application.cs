@@ -156,6 +156,12 @@ namespace PressPlay.FFWD
 #endif
         }
 
+        protected override void LoadContent()
+        {
+            base.LoadContent();
+            GUI.spriteFont = Game.Content.Load<SpriteFont>("GUIFont");
+        }
+
         private ContentManager CreateContentManager()
         {
             return new ContentManager(Game.Services, Game.Content.RootDirectory);
@@ -363,9 +369,9 @@ namespace PressPlay.FFWD
                 for (int i = 0; i < displayStrings.Length; i++)
                 {
                     string text = displayStrings[i].Key + ": " + displayStrings[i].Value;
-                    spriteBatch.DrawString(ApplicationSettings.DebugFont, text, Position + Microsoft.Xna.Framework.Vector2.One + offset, Microsoft.Xna.Framework.Color.Black);
-                    spriteBatch.DrawString(ApplicationSettings.DebugFont, text, Position + offset, Microsoft.Xna.Framework.Color.White);
-                    offset.Y += ApplicationSettings.DebugFont.MeasureString(text).Y * 0.75f;
+                    spriteBatch.DrawString(GUI.spriteFont, text, Position + Microsoft.Xna.Framework.Vector2.One + offset, Microsoft.Xna.Framework.Color.Black);
+                    spriteBatch.DrawString(GUI.spriteFont, text, Position + offset, Microsoft.Xna.Framework.Color.White);
+                    offset.Y += GUI.spriteFont.MeasureString(text).Y * 0.75f;
                 }
 
                 spriteBatch.End();

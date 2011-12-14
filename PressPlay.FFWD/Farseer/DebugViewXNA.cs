@@ -790,9 +790,9 @@ namespace FarseerPhysics
                 // draw any strings we have
                 for (int i = 0; i < _stringData.Count; i++)
                 {
-                    _batch.DrawString(PressPlay.FFWD.ApplicationSettings.DebugFont, string.Format(_stringData[i].S, _stringData[i].Args),
+                    _batch.DrawString(PressPlay.FFWD.GUI.spriteFont, string.Format(_stringData[i].S, _stringData[i].Args),
                                       new Vector2(_stringData[i].X + 1f, _stringData[i].Y + 1f), Color.Black);
-                    _batch.DrawString(PressPlay.FFWD.ApplicationSettings.DebugFont, string.Format(_stringData[i].S, _stringData[i].Args),
+                    _batch.DrawString(PressPlay.FFWD.GUI.spriteFont, string.Format(_stringData[i].S, _stringData[i].Args),
                                       new Vector2(_stringData[i].X, _stringData[i].Y), _stringData[i].Color);
                 }
                 // end the sprite batch effect
@@ -850,6 +850,6 @@ namespace FarseerPhysics
         }
 
         #endregion
-#endif
     }
+#endif
 }
