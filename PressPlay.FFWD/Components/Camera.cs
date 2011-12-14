@@ -294,6 +294,10 @@ namespace PressPlay.FFWD.Components
                 device.RasterizerState = RasterizerState.CullCounterClockwise;
             }
 
+            GUI.StartRendering();
+            GUI.RenderComponents(Application.guiComponents);
+            GUI.EndRendering();
+
 #if DEBUG
             Debug.Display("Estimated Draw calls", estimatedDrawCalls);
             logRenderCalls = false;

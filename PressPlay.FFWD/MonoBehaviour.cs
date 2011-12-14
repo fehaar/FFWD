@@ -23,6 +23,11 @@ namespace PressPlay.FFWD.Components
             // NOTE: Do not make any code here. Typically base.Update() is NOT called in MonoScripts so this will not be called either!!!!!
         }
 
+        public virtual void OnGUI()
+        {
+            // NOTE: Do not make any code here. Typically base.Update() is NOT called in MonoScripts so this will not be called either!!!!!
+        }
+
         public virtual void OnCollisionEnter(Collision collision)
         {
             // NOTE: Do not make any code here. Typically base.Update() is NOT called in MonoScripts so this will not be called either!!!!!

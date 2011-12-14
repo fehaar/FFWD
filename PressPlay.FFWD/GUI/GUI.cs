@@ -1,10 +1,13 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 
 namespace PressPlay.FFWD
 {
     public static class GUI
     {
+        private static bool isRendering = false;
+
         public static GUISkin skin { get; set; }
         public static Color backgroundColor { get; set; }
         public static Color color { get; set; }
@@ -42,6 +45,24 @@ namespace PressPlay.FFWD
         public static string TextField(Rect rect, string m_strLevelName)
         {
             throw new NotImplementedException();
+        }
+
+        internal static void StartRendering()
+        {
+            isRendering = true;
+        }
+
+        internal static void EndRendering()
+        {
+            isRendering = false;
+        }
+
+        internal static void RenderComponents(List<Components.MonoBehaviour> list)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                list[i].OnGUI();
+            }
         }
     }
 }

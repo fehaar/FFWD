@@ -19,6 +19,8 @@ namespace PressPlay.FFWD
         {
             UpdateOrder = 1;
             DrawOrder = 0;
+
+            isGUI.Add("UnitPropertiesGUI");
         }
 
 #if DEBUG
@@ -65,11 +67,13 @@ namespace PressPlay.FFWD
         private static readonly List<PressPlay.FFWD.Interfaces.IUpdateable> updateComponents = new List<PressPlay.FFWD.Interfaces.IUpdateable>(500);
         private static readonly List<PressPlay.FFWD.Interfaces.IFixedUpdateable> fixedUpdateComponents = new List<PressPlay.FFWD.Interfaces.IFixedUpdateable>(100);
         private static readonly List<PressPlay.FFWD.Interfaces.IUpdateable> lateUpdateComponents = new List<PressPlay.FFWD.Interfaces.IUpdateable>(100);
+        internal static readonly List<PressPlay.FFWD.Components.MonoBehaviour> guiComponents = new List<PressPlay.FFWD.Components.MonoBehaviour>(50);
         private static readonly List<Component> componentsChangingActivity = new List<Component>(50);
 
         private static readonly TypeSet isUpdateable = new TypeSet(100);
         private static readonly TypeSet isFixedUpdateable = new TypeSet(25);
         private static readonly TypeSet isLateUpdateable = new TypeSet(25);
+        private static readonly TypeSet isGUI = new TypeSet(25);
         internal static readonly TypeSet hasAwake = new TypeSet(50);
         internal static readonly TypeSet fixReferences = new TypeSet(5);
 
@@ -922,6 +926,19 @@ namespace PressPlay.FFWD
 #endif
                         }
                     }
+                    if (isGUI.Contains(tp))
+                    {
+                        if (!guiComponents.Contains(cmp as MonoBehaviour))
+                        {
+                            guiComponents.Add(cmp as MonoBehaviour);
+#if DEBUG
+                            if (ApplicationSettings.LogActivatedComponents)
+                            {
+                                Debug.Log("Added to GUI: " + cmp);
+                            }
+#endif
+                        }
+                    }
                     if (cmp is Renderer)
                     {
                         Camera.AddRenderer(cmp as Renderer);
@@ -948,6 +965,13 @@ namespace PressPlay.FFWD
                         if (fixedUpdateComponents.Contains(cmp as PressPlay.FFWD.Interfaces.IFixedUpdateable))
                         {
                             fixedUpdateComponents.Remove(cmp as PressPlay.FFWD.Interfaces.IFixedUpdateable);
+                        }
+                    }
+                    if (isGUI.Contains(tp))
+                    {
+                        if (guiComponents.Contains(cmp as MonoBehaviour))
+                        {
+                            guiComponents.Remove(cmp as MonoBehaviour);
                         }
                     }
                     if (cmp is Renderer)
