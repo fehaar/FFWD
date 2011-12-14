@@ -30,7 +30,7 @@ namespace PressPlay.FFWD.Exporter
         public static Dictionary<string, string> ReplaceClasses = new Dictionary<string, string>() {
             { "Object", "UnityObject" }
         };
-        public static string[] MethodsToOverride = new string[] { "Start", "Update", "FixedUpdate", "LateUpdate", "Awake", "OnTriggerEnter", "OnTriggerExit", "OnTriggerStay", "OnCollisionEnter", "OnCollisionExit", "OnCollisionStay" };
+        public static string[] MethodsToOverride = new string[] { "Start", "Update", "FixedUpdate", "LateUpdate", "Awake", "OnTriggerEnter", "OnTriggerExit", "OnTriggerStay", "OnCollisionEnter", "OnCollisionExit", "OnCollisionStay", "OnGUI" };
 
         public void Translate()
         {

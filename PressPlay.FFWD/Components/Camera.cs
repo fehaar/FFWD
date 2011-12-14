@@ -55,16 +55,6 @@ namespace PressPlay.FFWD.Components
 
         private static DynamicBatchRenderer dynamicBatchRenderer;
 
-        internal static SpriteBatch spriteBatch;
-        [ContentSerializerIgnore]
-        public SpriteBatch SpriteBatch
-        {
-            get
-            {
-                return spriteBatch;
-            }
-        }
-
         internal static BasicEffect basicEffect;
         [ContentSerializerIgnore]
         public BasicEffect BasicEffect
@@ -178,12 +168,18 @@ namespace PressPlay.FFWD.Components
 
         public Vector3 WorldToViewportPoint(Vector3 position)
         {
-            return viewPort.Project(position, projectionMatrix, view, Matrix.Identity);
+            Vector3 v = viewPort.Project(position, projectionMatrix, view, Matrix.Identity);
+            v.y = pixelHeight - v.y;
+            return v;
         }
 
-        public Vector3 WorldToScreenPoint(Vector3 vector3)
+        public Vector3 WorldToScreenPoint(Vector3 position)
         {
-            throw new System.NotImplementedException();
+            // TODO: If the viewport of the camera is not the same as the screen, this will give an issue.
+            // I am not sue if it can happen at all at the moment...
+            Vector3 v = viewPort.Project(position, projectionMatrix, view, Matrix.Identity);
+            v.y = pixelHeight - v.y;
+            return v;
         }
 
         #region Keeping track of renderers

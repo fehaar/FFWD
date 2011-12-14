@@ -88,5 +88,10 @@ namespace PressPlay.FFWD
         {
             return base.ToString();
         }
+
+        public static implicit operator Microsoft.Xna.Framework.Rectangle(Rect r)
+        {
+            return new Microsoft.Xna.Framework.Rectangle((int)r.xMin, (int)r.yMin, (int)r.width, (int)r.height);
+        }
     }
 }

@@ -20,6 +20,9 @@ namespace PressPlay.FFWD
             UpdateOrder = 1;
             DrawOrder = 0;
 
+            Screen.height = game.GraphicsDevice.Viewport.Height;
+            Screen.width = game.GraphicsDevice.Viewport.Width;
+
             isGUI.Add("UnitPropertiesGUI");
         }
 
@@ -136,7 +139,7 @@ namespace PressPlay.FFWD
             Time.Reset();
             Input.Initialize();
             assetHelper.CreateContentManager = CreateContentManager;
-            Camera.spriteBatch = new SpriteBatch(Game.GraphicsDevice);
+            GUI.spriteBatch = new SpriteBatch(Game.GraphicsDevice);
             Camera.basicEffect = new BasicEffect(Game.GraphicsDevice);
             // Note we cannot share this as it is used in between cameras as it is done now
             TextRenderer3D.basicEffect = new BasicEffect(Game.GraphicsDevice)
