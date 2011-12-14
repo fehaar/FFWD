@@ -20,13 +20,13 @@ namespace PressPlay.FFWD.Components
         #region IRenderable Members
         public override int Draw(GraphicsDevice device, Camera cam)
         {
-            if (sharedMesh == null || sharedMesh.skinnedModel == null)
+            if (sharedMesh == null)
             {
                 return 0;
             }
 
             // Check the frustum of the camera
-            BoundingSphere sphere = new BoundingSphere(transform.position, sharedMesh.bounds.boundingSphere.Radius * transform.lossyScale.sqrMagnitude);            
+            BoundingSphere sphere = new BoundingSphere(transform.position, sharedMesh.bounds.boundingSphere.Radius * transform.lossyScale.sqrMagnitude);
             if (cam.DoFrustumCulling(ref sphere))
             {
 #if DEBUG
@@ -38,11 +38,20 @@ namespace PressPlay.FFWD.Components
                 return 0;
             }
 
-            // Draw the model.
-            CpuSkinnedModelPart modelPart = sharedMesh.GetSkinnedModelPart();
-            Matrix world = transform.world;
-            modelPart.SetBones(animation.GetTransforms(), ref world, sharedMesh);
-            return cam.BatchRender(sharedMesh, materials, null);
+            if (sharedMesh.skinnedModel != null)
+            {
+                // Draw the skinned model with the animation as CPU animation.
+                CpuSkinnedModelPart modelPart = sharedMesh.GetSkinnedModelPart();
+                Matrix world = transform.world;
+                modelPart.SetBones(animation.GetTransforms(), ref world, sharedMesh);
+                return cam.BatchRender(sharedMesh, materials, null);
+            }
+            else
+            {
+                // We do not have bone animation - so just render as a normal model
+                return cam.BatchRender(sharedMesh, materials, transform);
+            }
+
         }
         #endregion
     }

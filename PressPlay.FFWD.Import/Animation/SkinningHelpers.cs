@@ -227,7 +227,7 @@ namespace PressPlay.FFWD.Import.Animation
         {
             if (node is MeshContent)
             {
-                return MeshHasSkinning(node as MeshContent);
+                return MeshHasSkinning(node as MeshContent) && (MeshHelper.FindSkeleton(node) != null);
             }
             else
             {
