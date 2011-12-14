@@ -585,7 +585,7 @@ namespace PressPlay.FFWD
         {
             if (worldPosition == position) { return; }
 
-            Matrix m = Matrix.CreateWorld(position, worldPosition - position, worldUp);
+            Matrix m = Matrix.CreateWorld(position, position - worldPosition, worldUp);
             Microsoft.Xna.Framework.Vector3 scale;
             Microsoft.Xna.Framework.Quaternion rot;
             Microsoft.Xna.Framework.Vector3 pos;
