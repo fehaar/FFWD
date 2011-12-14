@@ -241,6 +241,7 @@
     <Compile Include="Random.cs" />
     <Compile Include="Ray.cs" />
     <Compile Include="Rect.cs" />
+    <Compile Include="RenderSettings.cs" />
     <Compile Include="Resources.cs" />
     <Compile Include="Scene.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

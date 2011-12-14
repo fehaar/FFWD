@@ -83,12 +83,13 @@ namespace PressPlay.FFWD.Components
             {
                 effect.DirectionalLight2.Enabled = false;
             }
+            effect.AmbientLightColor = RenderSettings.ambientLight;
         }
 
         private static void EnableDirectionalLight(DirectionalLight directionalLight, Light light)
         {
             directionalLight.Enabled = true;
-            directionalLight.DiffuseColor = light.color * (light.intensity * 2);
+            directionalLight.DiffuseColor = light.color * light.intensity;
             directionalLight.Direction = light.transform.forward;
         }
     }

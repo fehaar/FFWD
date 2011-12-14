@@ -135,6 +135,12 @@ public class ExportSceneWizard : ScriptableWizard
         wiz.ExportResource(((Transform)command.context).gameObject);
     }
 
+    [MenuItem("Press Play/FFWD/Export Render Settings")]
+    static void ExportRenderSettings()
+    {
+        Debug.LogWarning("Not implemented yet");
+    }
+
     [MenuItem("CONTEXT/MonoBehaviour/FFWD Export Script")]
     static void ExportScript(MenuCommand command)
     {
