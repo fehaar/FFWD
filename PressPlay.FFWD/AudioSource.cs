@@ -55,7 +55,7 @@ namespace PressPlay.FFWD
             }
             set
             {
-                if (clip == null || clip.Instance.IsDisposed)
+                if (clip == null)
                 {
                     return;
                 }
@@ -64,7 +64,7 @@ namespace PressPlay.FFWD
                 _volume = Mathf.Max(_volume, minVolume);
                 _volume = Mathf.Min(_volume, maxVolume);
 
-                clip.Instance.Volume = _volume;
+                clip.Volume = _volume;
             }
         }
 
@@ -72,11 +72,7 @@ namespace PressPlay.FFWD
         {
             get
             {
-                if (clip == null) { return false; }
-
-                if (clip.Instance.IsDisposed) { return false; }
-
-                return (clip.Instance.State == SoundState.Playing);
+                return (clip != null) && clip.isPlaying;
             }
         }
 
@@ -93,7 +89,7 @@ namespace PressPlay.FFWD
                 _loop = value;
                 if (clip != null)
                 {
-                    clip.Loop(_loop);
+                    clip.Loop = _loop;
                 }
             }
         }
@@ -107,7 +103,7 @@ namespace PressPlay.FFWD
         {
             if (sfx != null)
             {
-                sfx.Instance.Volume = volume;
+                sfx.Volume = volume;
                 time = 0;
             }
         }
@@ -118,13 +114,9 @@ namespace PressPlay.FFWD
             {
                 return;
             }
-            if (clip.Instance.State != SoundState.Stopped)
-            {
-                clip.Instance.Stop();
-            }
             try
             {
-                clip.Instance.Play();
+                clip.Play();
             }
             catch (InstancePlayLimitException)
             {
@@ -148,15 +140,15 @@ namespace PressPlay.FFWD
 
         public void Stop()
         {
-            if (clip == null || clip.Instance.IsDisposed) return;
-            clip.Instance.Stop();
+            if (clip == null) return;
+            clip.Stop();
             time = 0;
         }
 
         public void Pause()
         {
-            if (clip == null || clip.Instance.IsDisposed) return;
-            clip.Instance.Pause();
+            if (clip == null) return;
+            clip.Pause();
         }
 
         public static void PlayClipAtPoint(AudioClip clip, Vector3 position)
@@ -171,21 +163,21 @@ namespace PressPlay.FFWD
 
         public void LateUpdate()
         {
-
         }
 
         public void Update()
         {
-            if (clip == null || clip.Instance.IsDisposed) return;
-            if (clip.Instance.State == SoundState.Playing)
+            if (clip == null) return;
+            clip.Update();
+            if (clip.isPlaying)
             {
                 time += Time.deltaTime;
                 if (time >= clip.length)
                 {
                     time = time - clip.length;
-                    if (!loop && clip.Instance.IsLooped)
+                    if (!loop && clip.Loop)
                     {
-                        clip.Instance.Stop();
+                        clip.Stop();
                     }
                 }
             }

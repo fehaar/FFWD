@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Audio;
 
 namespace PressPlay.FFWD
 {
@@ -34,16 +35,22 @@ namespace PressPlay.FFWD
         /// <returns></returns>
         public static object Load(string name, Type type)
         {
-            if (type == typeof(Texture2D))
+            try
             {
-                try
+                if (type == typeof(Texture2D))
                 {
                     return AssetHelper.Load<Texture2D>("Resources", Path.Combine("Resources", name));
                 }
-                catch (Exception ex)
+                if (type == typeof(AudioClip))
                 {
-                    Debug.LogError("Cannot load resource " + name + " as Texture2D. " + ex.Message);
+                    SoundEffect sfx = AssetHelper.Load<SoundEffect>("Resources", Path.Combine("Resources", name));
+                    return new AudioClip(sfx);
                 }
+                throw new Exception("Unsupported file type.");
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError("Cannot load resource " + name + " as Texture2D. " + ex.Message);
             }
             return null;
         }
