@@ -7,6 +7,7 @@ using Roslyn.Compilers;
 using System.IO;
 using System.Reflection;
 using System.Configuration;
+using System.Windows.Forms;
 
 namespace PressPlay.FFWD.ScriptTranslator
 {
@@ -14,42 +15,152 @@ namespace PressPlay.FFWD.ScriptTranslator
     {
         static void Main(string[] args)
         {
-            if (args.Length == 0)
+            Program p = new Program();
+            string appPath = Path.GetDirectoryName(Application.ExecutablePath);
+            p.UnityScriptsBasePath = Path.Combine(appPath, ConfigurationManager.AppSettings["UnityScriptsBasePath"]);
+            p.XNAScriptsBasePath = Path.Combine(appPath, ConfigurationManager.AppSettings["XNAScriptsBasePath"]);
+
+            List<string> excludedScripts = new List<string>();
+            string exclude = ConfigurationManager.AppSettings["ExcludeScripts"];
+            if (!String.IsNullOrEmpty(exclude))
             {
-                args = new string[] { @"UnitProperties" };
+                excludedScripts.AddRange(exclude.Split(','));
+            }
+            List<string> excludedPaths = new List<string>();
+            exclude = ConfigurationManager.AppSettings["ExcludePaths"];
+            if (!String.IsNullOrEmpty(exclude))
+            {
+                excludedPaths.AddRange(exclude.Split(','));
             }
 
-            Program p = new Program();
+            bool exportAllScripts = false;
+            bool noDependencies = false;
+            bool purgeScripts = true;
+            List<string> scriptsToExport = new List<string>();
 
-            p.FindAllClasses();
-            int scripts = 0;
             foreach (var item in args)
             {
-                foreach (var scriptFile in p.FindScriptsToTranslate(item))
+                if (item.StartsWith("-"))
                 {
-                    Console.WriteLine("Converting script " + Path.GetFileName(scriptFile));
-                    string newText = p.TranslateScript(scriptFile);
-                    string newPath = scriptFile.Replace(ConfigurationManager.AppSettings["UnityScriptsBasePath"], ConfigurationManager.AppSettings["XNAScriptsBasePath"]);
-                    if (!Directory.Exists(Path.GetDirectoryName(newPath)))
+                    if (item == "-all")
                     {
-                        Directory.CreateDirectory(Path.GetDirectoryName(newPath));
+                        exportAllScripts = true;
                     }
-                    File.WriteAllText(newPath, newText);
+                    if (item == "-d")
+                    {
+                        noDependencies = true;
+                        Console.WriteLine("Do not convert dependencies");
+                    }
+                    if (item == "-p")
+                    {
+                        purgeScripts = false;
+                        Console.WriteLine("Do not purge XNA scripts");
+                    }
+                }
+                else
+                {
+                    scriptsToExport.Add(item);
+                }
+            }
+
+            p.FindAllUnityScripts();
+            Console.WriteLine("Found " + p.unityScriptFiles.Count + " Unity scripts.");
+            p.FindAllXnaScripts();
+            Console.WriteLine("Found " + p.xnaScriptFiles.Count + " XNA scripts.");
+            p.FindAllClasses();
+
+            int scripts = 0;
+
+            if (exportAllScripts)
+            {
+                foreach (var className in p.unityScriptFiles.Keys)
+                {
+                    if (excludedScripts.Contains(className))
+                    {
+                        continue;
+                    }
+                    string scriptFile = p.unityScriptFiles[className];
+                    if (excludedPaths.Any(s => scriptFile.Contains("\\" + s + "\\")))
+                    {
+                        continue;
+                    }
+                    p.TranslateScriptFile(scriptFile);
                     scripts++;
                 }
             }
-            Console.WriteLine("Conversion done. Converted " + scripts + " scripts.");
-        }
-
-        public Program()
-        {
-            foreach (string file in Directory.GetFiles(ConfigurationManager.AppSettings["UnityScriptsBasePath"], "*.cs", SearchOption.AllDirectories))
+            else
             {
-                scriptFiles[Path.GetFileNameWithoutExtension(file)] = file;
+                foreach (var item in scriptsToExport)
+                {
+                    if (noDependencies)
+                    {
+                        string scriptFile = p.unityScriptFiles[item];
+                        p.TranslateScriptFile(scriptFile);
+                        scripts++;
+                    }
+                    else
+                    {
+                        foreach (var scriptFile in p.FindDependentScripts(item))
+                        {
+                            p.TranslateScriptFile(scriptFile);
+                            scripts++;
+                        }
+                    }
+                }
+            }
+            Console.WriteLine("Conversion done. Converted " + scripts + " scripts.");
+
+            scripts = 0;
+            if (purgeScripts)
+            {
+                foreach (var className in p.xnaScriptFiles.Keys)
+                {
+                    if (excludedScripts.Contains(className))
+                    {
+                        continue;
+                    }
+                    if (!p.unityScriptFiles.ContainsKey(className))
+                    {
+                        File.Delete(p.xnaScriptFiles[className]);
+                    }
+                    scripts++;
+                }
             }
         }
 
-        private Dictionary<string, string> scriptFiles = new Dictionary<string,string>();
+        private void TranslateScriptFile(string scriptFile)
+        {
+            Console.WriteLine("Converting script " + Path.GetFileName(scriptFile));
+            string newText = TranslateScript(scriptFile);
+            string newPath = scriptFile.Replace(UnityScriptsBasePath, XNAScriptsBasePath);
+            if (!Directory.Exists(Path.GetDirectoryName(newPath)))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(newPath));
+            }
+            File.WriteAllText(newPath, newText);
+        }
+
+        private void FindAllUnityScripts()
+        {
+            foreach (string file in Directory.GetFiles(UnityScriptsBasePath, "*.cs", SearchOption.AllDirectories))
+            {
+                unityScriptFiles[Path.GetFileNameWithoutExtension(file)] = file;
+            }
+        }
+
+        private void FindAllXnaScripts()
+        {
+            foreach (string file in Directory.GetFiles(XNAScriptsBasePath, "*.cs", SearchOption.AllDirectories))
+            {
+                xnaScriptFiles[Path.GetFileNameWithoutExtension(file)] = file;
+            }
+        }
+
+        public string UnityScriptsBasePath;
+        public string XNAScriptsBasePath;
+
+        private Dictionary<string, string> unityScriptFiles = new Dictionary<string,string>();
+        private Dictionary<string, string> xnaScriptFiles = new Dictionary<string, string>();
         private Dictionary<string, string> scriptTexts = new Dictionary<string, string>();
         private Dictionary<string, string> typeFiles = new Dictionary<string, string>();
         private Dictionary<string, HashSet<string>> typesInFile = new Dictionary<string, HashSet<string>>();
@@ -58,7 +169,7 @@ namespace PressPlay.FFWD.ScriptTranslator
 
         private void FindAllClasses()
         {
-            foreach (var path in scriptFiles.Values)
+            foreach (var path in unityScriptFiles.Values)
             {
                 string file = File.ReadAllText(path);
                 scriptTexts.Add(path, file);
@@ -86,13 +197,13 @@ namespace PressPlay.FFWD.ScriptTranslator
             }
         }
 
-        private IEnumerable<string> FindScriptsToTranslate(string className)
+        private IEnumerable<string> FindDependentScripts(string className)
         {
             visitedTypes.Clear();
-            return FindScriptsToTranslateIterator(className);
+            return FindDependentScriptsIterator(className);
         }
 
-        private IEnumerable<string> FindScriptsToTranslateIterator(string className)
+        private IEnumerable<string> FindDependentScriptsIterator(string className)
         {
             HashSet<string> scripts = new HashSet<string>();
             if (visitedTypes.Contains(className))
@@ -104,7 +215,7 @@ namespace PressPlay.FFWD.ScriptTranslator
 
             foreach (string item in FindTypesInFile(typeFiles[className]))
             {
-                foreach (string file in FindScriptsToTranslateIterator(item))
+                foreach (string file in FindDependentScriptsIterator(item))
                 {
                     scripts.Add(file);
                 }
