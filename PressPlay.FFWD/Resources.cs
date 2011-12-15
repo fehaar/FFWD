@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
 
 namespace PressPlay.FFWD
 {
@@ -40,6 +41,10 @@ namespace PressPlay.FFWD
                 if (type == typeof(Texture2D))
                 {
                     return AssetHelper.Load<Texture2D>("Resources", Path.Combine("Resources", name));
+                }
+                if (type == typeof(Song))
+                {
+                    return AssetHelper.Load<Song>("Resources", Path.Combine("Resources", name));
                 }
                 if (type == typeof(AudioClip))
                 {
