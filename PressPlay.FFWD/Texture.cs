@@ -38,7 +38,7 @@ namespace PressPlay.FFWD
         {
             if (tex == null)
             {
-                tex = assetHelper.Load<Microsoft.Xna.Framework.Graphics.Texture2D>("Textures/" + name);
+                tex = assetHelper.Load<Microsoft.Xna.Framework.Graphics.Texture2D>(name);
             }
         }
 

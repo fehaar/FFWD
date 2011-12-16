@@ -515,7 +515,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                     }
                     if (mat.mainTexture != null)
                     {
-                        writer.WriteElementString("mainTexture", mat.mainTexture.name);
+                        WriteElement("mainTexture", mat.mainTexture, typeof(Texture2D));
                         writer.WriteElementString("mainTextureOffset", ToString(mat.mainTextureOffset));
                         writer.WriteElementString("mainTextureScale", ToString(mat.mainTextureScale));
                         if (mat.mainTexture.wrapMode == TextureWrapMode.Repeat)
@@ -528,7 +528,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                         }
                         catch (UnityException ex)
                         {
-                            Debug.Log("Error when exporting texture in Material " + mat.name, mat);
+                            Debug.Log("Error when exporting texture in Material " + mat.name + ", " + ex.Message, mat);
                             throw;
                         }
                     }
@@ -561,7 +561,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                     else
                     {
                         writer.WriteElementString("id", (obj as Texture2D).GetInstanceID().ToString());
-                        writer.WriteElementString("name", (obj as Texture2D).name);
+                        writer.WriteElementString("name", Path.ChangeExtension(assetHelper.GetAssetName(obj as Texture2D), "").TrimEnd('.'));
                         assetHelper.ExportTexture(obj as Texture2D);
                     }
                     writer.WriteEndElement();
@@ -665,7 +665,7 @@ namespace PressPlay.FFWD.Exporter.Writers
             }
             catch (Exception ex)
             {
-                Debug.LogError("Exception when writing " + name + " with value " + obj + ": " + ex.Message);
+                Debug.LogError("Exception when writing " + name + " with value " + obj + ": " + ex.Message + " (" + ex.GetType() + ")");
                 throw;
             }
         }

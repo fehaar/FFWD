@@ -48,7 +48,7 @@ namespace PressPlay.FFWD.Components
 
         public Rectangle GetSourceRect()
         {
-            return new Rectangle(0, 0, material.texture.Width, material.texture.Height);
+            return new Rectangle(0, 0, material.mainTexture.Width, material.mainTexture.Height);
         }
 
         public bool IsVisible(Viewport viewport)

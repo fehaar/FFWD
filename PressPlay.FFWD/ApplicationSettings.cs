@@ -24,7 +24,7 @@ namespace PressPlay.FFWD
         public static bool ShowDebugPhysics = false;
         public static bool LogActivatedComponents = false;
 #if WINDOWS
-        public static int AssetLoadInterval = 50; // In Milliseconds
+        public static int AssetLoadInterval = 0; // In Milliseconds
 #else
         public static int AssetLoadInterval = 50; // In Milliseconds
 #endif

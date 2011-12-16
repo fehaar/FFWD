@@ -38,24 +38,49 @@ namespace PressPlay.FFWD.Exporter
             }
         }
 
-        public void ExportTexture(Texture2D tex)
+        public string GetAssetName(UnityEngine.Object asset)
         {
-            if (tex == null) return;
-            if (exportedTextures.Contains(tex.name)) return;
-            
-            string path = Path.Combine(TextureDir, tex.name + ".png");
+            string assetPath = AssetDatabase.GetAssetPath(asset.GetInstanceID());
+            return assetPath.Remove(0, assetPath.IndexOf('/') + 1);
+        }
+
+        public void ExportTexture(Texture2D asset)
+        {
+            if (asset == null) return;
+
+            string assetPath = GetAssetName(asset);
+            if (exportedTextures.Contains(assetPath)) return;
+            exportedTextures.Add(assetPath);
+
+            string path = Path.Combine(TextureDir, Path.ChangeExtension(assetPath, "png"));
+            if (!Directory.Exists(Path.GetDirectoryName(path)))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(path));
+            }
             try
             {
-                Color[] texPixels = tex.GetPixels();
-                Texture2D tex2 = new Texture2D(tex.width, tex.height, TextureFormat.ARGB32, false);
-                tex2.SetPixels(texPixels);
-                byte[] texBytes = tex2.EncodeToPNG();
-                File.WriteAllBytes(path, texBytes);
-                exportedTextures.Add(tex.name);
+                if (Path.GetExtension(assetPath) == ".png")
+                {
+                    File.Copy(Path.Combine(Application.dataPath, assetPath), path, true);
+                }
+                else
+                {
+                    if (asset.format == TextureFormat.ARGB32 || asset.format == TextureFormat.RGB24)
+                    {
+                        File.WriteAllBytes(path, asset.EncodeToPNG());
+                    }
+                    else
+                    {
+                        Color[] texPixels = asset.GetPixels();
+                        Texture2D tex2 = new Texture2D(asset.width, asset.height, TextureFormat.ARGB32, false);
+                        tex2.SetPixels(texPixels);
+                        File.WriteAllBytes(path, tex2.EncodeToPNG());
+                    }
+                }
             }
             catch (UnityException ue)
             {
-                Debug.LogError(ue.ToString(), tex);
+                Debug.LogError(ue.ToString(), asset);
             }
         }
 

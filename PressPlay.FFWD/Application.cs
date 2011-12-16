@@ -449,11 +449,8 @@ namespace PressPlay.FFWD
 
             for (int i = tempAssets.Count - 1; i >= 0; i--)
             {
-                //Debug.Log("Assets left: "+tempAssets.Count+" Elapsed time: " + stopWatch.ElapsedMilliseconds);
-
-                if (stopWatch.ElapsedMilliseconds > ApplicationSettings.AssetLoadInterval)
+                if (ApplicationSettings.AssetLoadInterval > 0 && stopWatch.ElapsedMilliseconds > ApplicationSettings.AssetLoadInterval)
                 {
-                    //Debug.Log("Application > Chewing asset loading. Assets left to load: " + tempAssets.Count);
                     stopWatch.Stop();
                     stopWatch.Reset();
                     return;
@@ -464,10 +461,6 @@ namespace PressPlay.FFWD
                 numberOfAssetsLoaded++;
                 count++;
             }
-
-            //Debug.Log("Finished asset loading. Elapsed time: " + stopWatch.ElapsedTicks + " count: " + count);
-
-            //OnSceneLoadComplete();
             loadIsComplete = true;
         }
 
@@ -481,15 +474,10 @@ namespace PressPlay.FFWD
             {
                 _loadingProgess = Mathf.Clamp01(((float)numberOfAssetsLoaded / (float)totalNumberOfAssetsToLoad));
             }
-
-            //Debug.Log("Application.loadingProgress: " + loadingProgress);
         }
 
         private void OnSceneLoadComplete()
         {
-            
-            //Debug.Log("OnSceneLoadComplete");
-
             stopWatch.Stop();
             stopWatch.Reset();
 
@@ -504,11 +492,7 @@ namespace PressPlay.FFWD
             {
                 scene.Initialize();
             }
-
-            //_loadingProgess = 0;
-
             doGarbageCollectAfterAwake = true;
-            //GC.Collect();
         }
 
         internal static void LoadNewAssets()

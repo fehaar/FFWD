@@ -384,7 +384,7 @@ public class ExportSceneWizard : ScriptableWizard
     private void ExportTexture(Texture2D asset)
     {
         string assetPath = AssetDatabase.GetAssetPath(asset.GetInstanceID());
-        string exportPath = Path.Combine(Path.Combine(assets.TextureDir, ".."), assetPath.Replace("Assets/", ""));
+        string exportPath = Path.Combine(assets.TextureDir, assetPath.Replace("Assets/", ""));
         if (!Directory.Exists(Path.GetDirectoryName(exportPath)))
         {
             Directory.CreateDirectory(Path.GetDirectoryName(exportPath));

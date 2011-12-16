@@ -13,16 +13,13 @@ namespace PressPlay.FFWD
         [ContentSerializer(Optional = true)]
         public Color color;
         [ContentSerializer(Optional = true)]
-        public string mainTexture;
+        public Texture2D mainTexture;
         [ContentSerializer(Optional = true)]
         public Vector2 mainTextureOffset = Vector2.zero;
         [ContentSerializer(Optional = true)]
         public Vector2 mainTextureScale = Vector2.one;
         [ContentSerializer(Optional = true)]
         internal bool wrapRepeat;
-
-        [ContentSerializerIgnore]
-        public Microsoft.Xna.Framework.Graphics.Texture2D texture;
 
         private static readonly Dictionary<string, int> textureRenderIndexes = new Dictionary<string, int>();
 
@@ -33,11 +30,6 @@ namespace PressPlay.FFWD
 
         protected override void DoLoadAsset(AssetHelper assetHelper)
         {
-            if (mainTexture != null)
-            {
-                texture = assetHelper.Load<Microsoft.Xna.Framework.Graphics.Texture2D>("Textures/" + mainTexture);
-            }
-
             // NOTE: We have hardcoded shader values here that should be configurable in some other way
             blendState = BlendState.Opaque;
             if (shader == "iPhone/Particles/Additive Culled")
@@ -96,21 +88,22 @@ namespace PressPlay.FFWD
             {
                 finalRenderQueue += 2000f;
             }
-            if (!textureRenderIndexes.ContainsKey(mainTexture ?? string.Empty))
+            string texName = (mainTexture == null) ? string.Empty : mainTexture.name;
+            if (!textureRenderIndexes.ContainsKey(texName))
             {
-                textureRenderIndexes.Add(mainTexture ?? string.Empty, textureRenderIndexes.Count);
+                textureRenderIndexes.Add(texName, textureRenderIndexes.Count);
             }
-            finalRenderQueue += textureRenderIndexes[mainTexture ?? string.Empty];
+            finalRenderQueue += textureRenderIndexes[texName];
         }
 
         public static readonly Material Default = new Material();
 
         internal void SetTextureState(BasicEffect basicEffect)
         {
-            if (texture != null)
+            if (mainTexture != null)
             {
                 basicEffect.TextureEnabled = true;
-                basicEffect.Texture = texture;
+                basicEffect.Texture = mainTexture;
                 basicEffect.DiffuseColor = color;
             }
             else
