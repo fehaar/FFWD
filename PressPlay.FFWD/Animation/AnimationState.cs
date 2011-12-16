@@ -7,6 +7,7 @@ namespace PressPlay.FFWD
 {
     public class AnimationState
     {
+        public string name;
         public float normalizedTime {
             get 
             {

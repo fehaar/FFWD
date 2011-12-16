@@ -61,6 +61,12 @@ namespace PressPlay.FFWD
             Application.markedForDestruction.Add(this);
         }
 
+        protected virtual void DestroyImmediate(UnityObject obj)
+        {
+            // TODO: Implement this properly
+            Application.markedForDestruction.Add(this);
+        }
+
         /// <summary>
         /// Clones the object original, places it at position and sets the rotation to rotation, then returns the cloned object. 
         /// This is essentially the same as using duplicate command (cmd-d) in Unity and then moving the object to the given location. 

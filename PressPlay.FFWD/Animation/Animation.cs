@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework;
 
 namespace PressPlay.FFWD.Components
 {
-	public class Animation : Behaviour, PressPlay.FFWD.Interfaces.IFixedUpdateable
+	public class Animation : Behaviour, PressPlay.FFWD.Interfaces.IFixedUpdateable, IEnumerable<AnimationState>
 	{
 
 		public bool playAutomatically;
@@ -235,6 +235,23 @@ namespace PressPlay.FFWD.Components
         {
             // TODO: Implement this!
             return false;
+        }
+
+        public int GetClipCount()
+        {
+            return clips.Count;
+        }
+
+        public IEnumerator<AnimationState> GetEnumerator()
+        {
+            // TODO: Implement this!
+            return null;
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            // TODO: Implement this!
+            return null;
         }
     }
 }
