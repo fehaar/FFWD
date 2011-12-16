@@ -141,6 +141,40 @@ public class ExportSceneWizard : ScriptableWizard
         Debug.LogWarning("Not implemented yet");
     }
 
+    [MenuItem("Press Play/FFWD/Export all resources")]
+    static void ExportAllResources()
+    {
+        ExportSceneWizard wiz = new ExportSceneWizard();
+        UnityEngine.Object[] os = Resources.LoadAll("");
+        foreach (var item in os)
+        {
+            try
+            {
+                if (item is GameObject)
+                {
+                    wiz.ExportResource(item as GameObject);
+                }
+                if (item is TextAsset)
+                {
+                    wiz.ExportTextAsset(item as TextAsset);
+                }
+                if (item is Texture2D)
+                {
+                    wiz.ExportTexture(item as Texture2D);
+                }
+                if (item is AudioClip)
+                {
+                    wiz.ExportAudio(item as AudioClip);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.Log("Could not export " + item.name + ". " + ex.Message);
+            }
+        }
+        Resources.UnloadUnusedAssets();
+    }
+
     [MenuItem("CONTEXT/MonoBehaviour/FFWD Export Script")]
     static void ExportScript(MenuCommand command)
     {
@@ -153,14 +187,7 @@ public class ExportSceneWizard : ScriptableWizard
     {
         ExportSceneWizard wiz = new ExportSceneWizard();
         TextAsset asset = command.context as TextAsset;
-        string assetPath = AssetDatabase.GetAssetPath(asset.GetInstanceID()).Replace("Assets/", "");
-        string exportPath = Path.Combine(wiz.assets.XmlDir, assetPath);
-        if (!Directory.Exists(Path.GetDirectoryName(exportPath)))
-        {
-            Directory.CreateDirectory(Path.GetDirectoryName(exportPath));
-        }
-        File.WriteAllBytes(exportPath, asset.bytes);
-        Debug.Log("Exported the asset to " + exportPath);
+        wiz.ExportTextAsset(asset);
     }
 
     [MenuItem("CONTEXT/TagManager/FFWD Export Tags")]
@@ -328,6 +355,59 @@ public class ExportSceneWizard : ScriptableWizard
     {
         Debug.Log("Start script export of " + monoBehaviour.GetType());
         assets.ExportScript(monoBehaviour.GetType(), false, true);
+    }
+
+    private void ExportTextAsset(TextAsset asset)
+    {
+        string assetPath = AssetDatabase.GetAssetPath(asset.GetInstanceID()).Replace("Assets/", "");
+        string exportPath = Path.Combine(assets.XmlDir, assetPath);
+        if (!Directory.Exists(Path.GetDirectoryName(exportPath)))
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(exportPath));
+        }
+        File.WriteAllBytes(exportPath, asset.bytes);
+        Debug.Log("Exported Text asset to " + exportPath);
+    }
+
+    private void ExportAudio(AudioClip asset)
+    {
+        string assetPath = AssetDatabase.GetAssetPath(asset.GetInstanceID());
+        string exportPath = Path.Combine(Path.Combine(assets.AudioDir, ".."), assetPath.Replace("Assets/", ""));
+        if (!Directory.Exists(Path.GetDirectoryName(exportPath)))
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(exportPath));
+        }
+        File.Copy(assetPath, exportPath, true);
+        Debug.Log("Exported Audio asset to " + exportPath);
+    }
+
+    private void ExportTexture(Texture2D asset)
+    {
+        string assetPath = AssetDatabase.GetAssetPath(asset.GetInstanceID());
+        string exportPath = Path.Combine(Path.Combine(assets.TextureDir, ".."), assetPath.Replace("Assets/", ""));
+        if (!Directory.Exists(Path.GetDirectoryName(exportPath)))
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(exportPath));
+        }
+        if (Path.GetExtension(assetPath) == ".png")
+        {
+            File.Copy(assetPath, exportPath, true);
+        }
+        else
+        {
+            if (asset.format == TextureFormat.ARGB32 || asset.format == TextureFormat.RGB24)
+            {
+                File.WriteAllBytes(exportPath, asset.EncodeToPNG());
+            }
+            else
+            {
+                Color[] texPixels = asset.GetPixels();
+                Texture2D tex2 = new Texture2D(asset.width, asset.height, TextureFormat.ARGB32, false);
+                tex2.SetPixels(texPixels);
+                File.WriteAllBytes(exportPath, tex2.EncodeToPNG());
+            }
+        }
+        Debug.Log("Exported Texture asset to " + exportPath);
     }
 }
 

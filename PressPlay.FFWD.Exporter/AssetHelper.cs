@@ -16,7 +16,7 @@ namespace PressPlay.FFWD.Exporter
         public string ScriptDir;
         public string XmlDir;
 
-        private List<string> exportedTextures = new List<string>();
+        private List<string> exportedTextures = new List<string>( new string[] { "Default-Particle" });
         private List<string> exportedAudio = new List<string>();
         private List<string> exportedScripts = new List<string>();
         private List<string> exportedMeshes = new List<string>();
@@ -42,7 +42,7 @@ namespace PressPlay.FFWD.Exporter
         {
             if (tex == null) return;
             if (exportedTextures.Contains(tex.name)) return;
-
+            
             string path = Path.Combine(TextureDir, tex.name + ".png");
             try
             {
@@ -50,11 +50,7 @@ namespace PressPlay.FFWD.Exporter
                 Texture2D tex2 = new Texture2D(tex.width, tex.height, TextureFormat.ARGB32, false);
                 tex2.SetPixels(texPixels);
                 byte[] texBytes = tex2.EncodeToPNG();
-                FileStream writeStream;
-                writeStream = new FileStream(path, FileMode.Create);
-                BinaryWriter writeBinay = new BinaryWriter(writeStream);
-                for (int i = 0; i < texBytes.Length; i++) writeBinay.Write(texBytes[i]);
-                writeBinay.Close();
+                File.WriteAllBytes(path, texBytes);
                 exportedTextures.Add(tex.name);
             }
             catch (UnityException ue)

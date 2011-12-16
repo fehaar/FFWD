@@ -131,7 +131,6 @@ namespace PressPlay.FFWD.Exporter.Writers
 
         private void WriteAssets()
         {
-            Debug.Log("Writing " + meshesToWrite.Values.Count + " meshes");
             foreach (var item in meshesToWrite.Values)
             {
                 writer.WriteStartElement("asset");
