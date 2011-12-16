@@ -244,14 +244,12 @@ namespace PressPlay.FFWD.Components
 
         public IEnumerator<AnimationState> GetEnumerator()
         {
-            // TODO: Implement this!
-            return null;
+            return states.Values.GetEnumerator();
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
-            // TODO: Implement this!
-            return null;
+            return states.Values.GetEnumerator();
         }
     }
 }
