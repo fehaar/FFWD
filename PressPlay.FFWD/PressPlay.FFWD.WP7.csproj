@@ -219,7 +219,6 @@
     <Compile Include="MeshDataPart.cs" />
     <Compile Include="MeshDataReader.cs" />
     <Compile Include="MonoBehaviour.cs" />
-    <Compile Include="ContentHelper.cs" />
     <Compile Include="Debug.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="Interfaces\IContactProcessor.cs" />
@@ -256,6 +255,8 @@
     <Compile Include="SkinnedModel\CpuSkinningHelpers.cs" />
     <Compile Include="SkinnedModel\CpuVertex.cs" />
     <Compile Include="TextAsset.cs" />
+    <Compile Include="Texture.cs" />
+    <Compile Include="Texture2D.cs" />
     <Compile Include="Time.cs" />
     <Compile Include="Transform.cs" />
     <Compile Include="TypeSet.cs" />

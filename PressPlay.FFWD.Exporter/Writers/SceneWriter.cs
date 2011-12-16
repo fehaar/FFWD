@@ -551,6 +551,22 @@ namespace PressPlay.FFWD.Exporter.Writers
                     writer.WriteElementString(name, obj.ToString());
                     return;
                 }
+                if (obj is Texture2D)
+                {
+                    writer.WriteStartElement(name);
+                    if ((obj as Texture2D) == null)
+                    {
+                        writer.WriteAttributeString("Null", ToString(true));
+                    }
+                    else
+                    {
+                        writer.WriteElementString("id", (obj as Texture2D).GetInstanceID().ToString());
+                        writer.WriteElementString("name", (obj as Texture2D).name);
+                        assetHelper.ExportTexture(obj as Texture2D);
+                    }
+                    writer.WriteEndElement();
+                    return;
+                }
                 if (obj is GameObject)
                 {
                     GameObject go = (obj as GameObject);

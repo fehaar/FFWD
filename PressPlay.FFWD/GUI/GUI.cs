@@ -23,7 +23,7 @@ namespace PressPlay.FFWD
                 Rectangle r = rect;
                 if (Camera.main.viewPort.Bounds.Contains(r))
                 {
-                    spriteBatch.Draw((Texture2D)texture, r, color);
+                    spriteBatch.Draw((Microsoft.Xna.Framework.Graphics.Texture2D)texture, r, color);
                 }
             }
         }

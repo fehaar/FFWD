@@ -22,7 +22,7 @@ namespace PressPlay.FFWD
         internal bool wrapRepeat;
 
         [ContentSerializerIgnore]
-        public Texture2D texture;
+        public Microsoft.Xna.Framework.Graphics.Texture2D texture;
 
         private static readonly Dictionary<string, int> textureRenderIndexes = new Dictionary<string, int>();
 
@@ -35,7 +35,7 @@ namespace PressPlay.FFWD
         {
             if (mainTexture != null)
             {
-                texture = assetHelper.Load<Texture2D>("Textures/" + mainTexture);
+                texture = assetHelper.Load<Microsoft.Xna.Framework.Graphics.Texture2D>("Textures/" + mainTexture);
             }
 
             // NOTE: We have hardcoded shader values here that should be configurable in some other way

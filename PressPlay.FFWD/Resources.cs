@@ -15,7 +15,7 @@ namespace PressPlay.FFWD
 
         internal static AssetHelper AssetHelper;
 
-        private static Func<string, UnityObject>[] loaders = new Func<string, UnityObject>[] { LoadScene, LoadText };
+        private static Func<string, UnityObject>[] loaders = new Func<string, UnityObject>[] { LoadScene, LoadTexture, LoadText };
 
         public static UnityObject Load(string name)
         {
@@ -40,7 +40,8 @@ namespace PressPlay.FFWD
             {
                 if (type == typeof(Texture2D))
                 {
-                    return AssetHelper.Load<Texture2D>("Resources", Path.Combine("Resources", name));
+                    Microsoft.Xna.Framework.Graphics.Texture2D t = AssetHelper.Load<Microsoft.Xna.Framework.Graphics.Texture2D>("Resources", Path.Combine("Resources", name));
+                    return new Texture2D(t);
                 }
                 if (type == typeof(Song))
                 {
@@ -66,7 +67,7 @@ namespace PressPlay.FFWD
             Scene scene = AssetHelper.Load<Scene>("Resources", Path.Combine("Resources", name));
             if (scene == null)
             {
-                Debug.LogError("Resources not found at " + name);
+                Application.loadingScene = false;
                 return null;
             }
             // This is removed here. It is called in scene.Initialize just below.
@@ -88,9 +89,21 @@ namespace PressPlay.FFWD
             {
                 return AssetHelper.Load<TextAsset>("Resources", Path.Combine("Resources", name));
             }
-            catch (Exception ex)
+            catch
             {
-                Debug.LogError("Cannot load resource " + name + " as TextAsset. " + ex.Message);
+            }
+            return null;
+        }
+
+        private static UnityObject LoadTexture(string name)
+        {
+            try
+            {
+                Microsoft.Xna.Framework.Graphics.Texture2D t = AssetHelper.Load<Microsoft.Xna.Framework.Graphics.Texture2D>("Resources", Path.Combine("Resources", name));
+                return new Texture2D(t);
+            }
+            catch
+            {
             }
             return null;
         }

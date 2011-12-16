@@ -24,8 +24,17 @@ namespace PressPlay.FFWD.Import
 
             // Create static batch renderers
             Dictionary<int, StaticBatchRenderer> staticRenderers = new Dictionary<int, StaticBatchRenderer>();
-            foreach (Renderer r in Application.newComponents.Where(c => (c is Renderer) && (c as Renderer).gameObject.isStatic).ToArray())
+            foreach (Renderer r in Application.newComponents.Where(c => (c is Renderer)).ToArray())
             {
+                if (r.gameObject == null)
+                {
+                    Debug.LogError("The gameObject of " + r + " has vanished?!");
+                    continue;
+                }
+                if (!r.gameObject.isStatic)
+                {
+                    continue;
+                }
                 Material m = r.material;
                 if (!staticRenderers.ContainsKey(m.GetInstanceID()))
                 {
