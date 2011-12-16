@@ -15,17 +15,35 @@ namespace PressPlay.FFWD
 
         internal static AssetHelper AssetHelper;
 
-        private static Func<string, UnityObject>[] loaders = new Func<string, UnityObject>[] { LoadScene, LoadTexture, LoadText };
-
         public static UnityObject Load(string name)
         {
-            UnityObject result = null;
-            int loaderIndex = 0;
-            while (result == null && loaderIndex < loaders.Length)
-	        {
-                result = loaders[loaderIndex++](name);
-	        }
-            return result;
+            // NOTE: If refactoring this please be careful with the loadingScene flag!
+            Application.loadingScene = true;
+            object o = AssetHelper.Load<object>("Resources", Path.Combine("Resources", name));
+            if (o is Scene)
+            {
+                UnityObject uo = LoadScene(o as Scene);
+                Application.loadingScene = false;
+                return uo;
+            }
+            Application.loadingScene = false;
+            if (o == null)
+            {
+                return null;
+            }
+            if (o is UnityObject)
+            {
+                return o as UnityObject;
+            }
+            if (o is Microsoft.Xna.Framework.Graphics.Texture2D)
+            {
+                return new Texture2D(o as Microsoft.Xna.Framework.Graphics.Texture2D);
+            }
+            if (o is SoundEffect)
+            {
+                return new AudioClip(o as SoundEffect);
+            }
+            return null;
         }
 
         /// <summary>
@@ -36,66 +54,28 @@ namespace PressPlay.FFWD
         /// <returns></returns>
         public static object Load(string name, Type type)
         {
-            try
+            if (type.IsSubclassOf(typeof(UnityObject)))
             {
-                if (type == typeof(Texture2D))
-                {
-                    Microsoft.Xna.Framework.Graphics.Texture2D t = AssetHelper.Load<Microsoft.Xna.Framework.Graphics.Texture2D>("Resources", Path.Combine("Resources", name));
-                    return new Texture2D(t);
-                }
-                if (type == typeof(Song))
-                {
-                    return AssetHelper.Load<Song>("Resources", Path.Combine("Resources", name));
-                }
-                if (type == typeof(AudioClip))
-                {
-                    SoundEffect sfx = AssetHelper.Load<SoundEffect>("Resources", Path.Combine("Resources", name));
-                    return new AudioClip(sfx);
-                }
-                throw new Exception("Unsupported file type.");
+                return Load(name);
             }
-            catch (Exception ex)
+            if (type == typeof(Song))
             {
-                Debug.LogError("Cannot load resource " + name + " as Texture2D. " + ex.Message);
+                return AssetHelper.Load<Song>("Resources", Path.Combine("Resources", name));
             }
-            return null;
+            throw new Exception("Unsupported file type " + type.Name + " when loading resource with explicit name");
         }
 
-        private static UnityObject LoadScene(string name)
+        private static UnityObject LoadScene(Scene scene)
         {
-            Application.loadingScene = true;
-            Scene scene = AssetHelper.Load<Scene>("Resources", Path.Combine("Resources", name));
-            if (scene == null)
-            {
-                Application.loadingScene = false;
-                return null;
-            }
             // This is removed here. It is called in scene.Initialize just below.
             scene.Initialize();
-            Application.loadingScene = false;
             Application.newAssets.AddRange(scene.assets);
             Application.LoadNewAssets();
-
             if (scene.prefabs.Count > 0)
             {
                 return scene.prefabs[0];
             }
             return null;
-        }
-
-        private static UnityObject LoadText(string name)
-        {
-            return AssetHelper.Load<TextAsset>("Resources", Path.Combine("Resources", name));
-        }
-
-        private static UnityObject LoadTexture(string name)
-        {
-            Microsoft.Xna.Framework.Graphics.Texture2D t = AssetHelper.Load<Microsoft.Xna.Framework.Graphics.Texture2D>("Resources", Path.Combine("Resources", name));
-            if (t == null)
-            {
-                return null;
-            }
-            return new Texture2D(t);
         }
     }
 }
