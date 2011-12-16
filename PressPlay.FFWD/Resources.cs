@@ -85,27 +85,17 @@ namespace PressPlay.FFWD
 
         private static UnityObject LoadText(string name)
         {
-            try
-            {
-                return AssetHelper.Load<TextAsset>("Resources", Path.Combine("Resources", name));
-            }
-            catch
-            {
-            }
-            return null;
+            return AssetHelper.Load<TextAsset>("Resources", Path.Combine("Resources", name));
         }
 
         private static UnityObject LoadTexture(string name)
         {
-            try
+            Microsoft.Xna.Framework.Graphics.Texture2D t = AssetHelper.Load<Microsoft.Xna.Framework.Graphics.Texture2D>("Resources", Path.Combine("Resources", name));
+            if (t == null)
             {
-                Microsoft.Xna.Framework.Graphics.Texture2D t = AssetHelper.Load<Microsoft.Xna.Framework.Graphics.Texture2D>("Resources", Path.Combine("Resources", name));
-                return new Texture2D(t);
+                return null;
             }
-            catch
-            {
-            }
-            return null;
+            return new Texture2D(t);
         }
     }
 }
