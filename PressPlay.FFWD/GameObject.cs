@@ -573,7 +573,7 @@ namespace PressPlay.FFWD
         /// <returns></returns>
         public static GameObject FindGameObjectWithTag(string tag)
         {
-            return Application.FindByTag(tag).First();
+            return Application.FindByTag(tag).FirstOrDefault();
         }
 
         /// <summary>

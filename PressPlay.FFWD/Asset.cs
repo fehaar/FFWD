@@ -35,7 +35,7 @@ namespace PressPlay.FFWD
 
         public override string ToString()
         {
-            return String.Format("{0} ({1})", GetType().Name, GetInstanceID());
+            return String.Format("{0} {2} ({1})", GetType().Name, GetInstanceID(), name);
         }
     }
 }
