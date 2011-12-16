@@ -33,6 +33,23 @@ namespace PressPlay.FFWD
             }
         }
 
+        private static Vector3 _gravity;
+        public static Vector3 gravity
+        {
+            get
+            {
+                return _gravity;
+            }
+            set
+            {
+                _gravity = value;
+                if (_world != null)
+                {
+                    _world.Gravity = new Microsoft.Xna.Framework.Vector2(_gravity.x, _gravity.y);
+                }
+            }
+        }
+
         public const int kDefaultRaycastLayers = -5;
 
         private static bool isPaused = false;
@@ -46,7 +63,7 @@ namespace PressPlay.FFWD
         #region FFWD specific methods
         public static void Initialize()
         {
-            Initialize(Vector2.zero);
+            Initialize(new Microsoft.Xna.Framework.Vector2(gravity.x, gravity.y));
         }
 
         public static void Initialize(Vector2 gravity)
