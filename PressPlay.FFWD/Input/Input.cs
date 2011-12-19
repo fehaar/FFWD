@@ -20,6 +20,11 @@ namespace PressPlay.FFWD
         private static KeyboardState _lastKeyboardState;
         private static KeyboardState _currentKeyboardState;
 
+        private static bool[] mouseHolds = new bool[3];
+        private static bool[] mouseDowns = new bool[3];
+        private static bool[] mouseUps = new bool[3];
+        private static bool isInDraw = false;
+
         internal static void Initialize()
         {
             _touches = new Touch[ApplicationSettings.DefaultCapacities.Touches];
@@ -31,6 +36,8 @@ namespace PressPlay.FFWD
             _currentMouseState = Mouse.GetState();
             _lastKeyboardState = _currentKeyboardState;
             _currentKeyboardState = Keyboard.GetState();
+
+            UpdateMouseStates();
 
 #if WINDOWS_PHONE
             gestureCount = 0;
@@ -66,6 +73,57 @@ namespace PressPlay.FFWD
                 //}
             }
 #endif
+        }
+
+        private static void UpdateMouseStates()
+        {
+            mouseHolds[0] &= (_currentMouseState.LeftButton == ButtonState.Pressed);
+            mouseHolds[1] &= (_currentMouseState.MiddleButton == ButtonState.Pressed);
+            mouseHolds[2] &= (_currentMouseState.RightButton == ButtonState.Pressed);
+            if ((_currentMouseState.LeftButton == ButtonState.Pressed) && (_lastMouseState.LeftButton == ButtonState.Released))
+            {
+                mouseDowns[0] = true;
+            }
+            if ((_currentMouseState.MiddleButton == ButtonState.Pressed) && (_lastMouseState.MiddleButton == ButtonState.Released))
+            {
+                mouseDowns[1] = true;
+            }
+            if ((_currentMouseState.RightButton == ButtonState.Pressed) && (_lastMouseState.RightButton == ButtonState.Released))
+            {
+                mouseDowns[2] = true;
+            }
+            if ((_currentMouseState.LeftButton == ButtonState.Released) && (_lastMouseState.LeftButton == ButtonState.Pressed))
+            {
+                mouseDowns[0] = false;
+                mouseUps[0] = true;
+            }
+            if ((_currentMouseState.MiddleButton == ButtonState.Released) && (_lastMouseState.MiddleButton == ButtonState.Pressed))
+            {
+                mouseDowns[1] = false;
+                mouseUps[1] = true;
+            }
+            if ((_currentMouseState.RightButton == ButtonState.Released) && (_lastMouseState.RightButton == ButtonState.Pressed))
+            {
+                mouseDowns[2] = false;
+                mouseUps[2] = true;
+            }
+        }
+
+        internal static void ClearStates()
+        {
+            // Clear all variables set since last fixed update to make sure that we get consistant values in draw
+            for (int i = 0; i < mouseDowns.Length; i++)
+            {
+                mouseDowns[i] = false;
+                mouseHolds[i] = true;
+                mouseUps[i] = false;
+            }
+            isInDraw = false;
+        }
+
+        internal static void BeginFixedUpdate()
+        {
+            isInDraw = true;
         }
 
 #if WINDOWS_PHONE
@@ -134,6 +192,25 @@ namespace PressPlay.FFWD
             }
         }
 
+        public static Vector2 mousePositionClean
+        {
+            get
+            {
+#if WINDOWS_PHONE
+                if (_touchCount > 0)
+                {
+                    for (int i = 0; i < _touchCount; i++)
+                    {
+                        return _touches[0].position;
+                    }
+                }
+                return Vector2.zero;
+#else
+                return new Vector2(_currentMouseState.X, _currentMouseState.Y);
+#endif
+            }
+        }
+
         public static float GetAxis(string axisName)
         {
             return 0.0f;
@@ -162,11 +239,11 @@ namespace PressPlay.FFWD
             switch (button)
             {
                 case 0:
-                    return _currentMouseState.LeftButton == ButtonState.Pressed;
+                    return (isInDraw) ? mouseHolds[0] : _currentMouseState.LeftButton == ButtonState.Pressed;
                 case 1:
-                    return _currentMouseState.MiddleButton == ButtonState.Pressed;
+                    return (isInDraw) ? mouseHolds[1] : _currentMouseState.MiddleButton == ButtonState.Pressed;
                 case 2:
-                    return _currentMouseState.RightButton == ButtonState.Pressed;
+                    return (isInDraw) ? mouseHolds[2] : _currentMouseState.RightButton == ButtonState.Pressed;
             }
             return false;
 #endif
@@ -187,11 +264,11 @@ namespace PressPlay.FFWD
             switch (button)
             {
                 case 0:
-                    return (_currentMouseState.LeftButton == ButtonState.Pressed) && (_lastMouseState.LeftButton == ButtonState.Released);
+                    return (isInDraw) ? mouseDowns[0] : (_currentMouseState.LeftButton == ButtonState.Pressed) && (_lastMouseState.LeftButton == ButtonState.Released);
                 case 1:
-                    return (_currentMouseState.MiddleButton == ButtonState.Pressed) && (_lastMouseState.MiddleButton == ButtonState.Released);
+                    return (isInDraw) ? mouseDowns[1] : (_currentMouseState.MiddleButton == ButtonState.Pressed) && (_lastMouseState.MiddleButton == ButtonState.Released);
                 case 2:
-                    return (_currentMouseState.RightButton == ButtonState.Pressed) && (_lastMouseState.RightButton == ButtonState.Released);
+                    return (isInDraw) ? mouseDowns[2] : (_currentMouseState.RightButton == ButtonState.Pressed) && (_lastMouseState.RightButton == ButtonState.Released);
             }
             return false;
 #endif
@@ -205,11 +282,11 @@ namespace PressPlay.FFWD
             switch (button)
             {
                 case 0:
-                    return (_currentMouseState.LeftButton == ButtonState.Released) && (_lastMouseState.LeftButton == ButtonState.Pressed);
+                    return (isInDraw) ? mouseUps[0] : (_currentMouseState.LeftButton == ButtonState.Released) && (_lastMouseState.LeftButton == ButtonState.Pressed);
                 case 1:
-                    return (_currentMouseState.MiddleButton == ButtonState.Released) && (_lastMouseState.MiddleButton == ButtonState.Pressed);
+                    return (isInDraw) ? mouseUps[1] : (_currentMouseState.MiddleButton == ButtonState.Released) && (_lastMouseState.MiddleButton == ButtonState.Pressed);
                 case 2:
-                    return (_currentMouseState.RightButton == ButtonState.Released) && (_lastMouseState.RightButton == ButtonState.Pressed);
+                    return (isInDraw) ? mouseUps[2] : (_currentMouseState.RightButton == ButtonState.Released) && (_lastMouseState.RightButton == ButtonState.Pressed);
             }
             return false;
 #endif

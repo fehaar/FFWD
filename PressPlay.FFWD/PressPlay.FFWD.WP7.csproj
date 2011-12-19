@@ -48,7 +48,9 @@
     <DefineConstants>DEBUG;TRACE;WINDOWS_PHONE</DefineConstants>
     <XnaCompressContent>false</XnaCompressContent>
   </PropertyGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="button.PNG" />
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="Animation\Animation.cs" />
     <Compile Include="Animation\AnimationClip.cs" />
@@ -208,6 +210,7 @@
     <Compile Include="GUI\GUISkin.cs" />
     <Compile Include="GUI\GUIStyle.cs" />
     <Compile Include="GUI\GUIStyleState.cs" />
+    <Compile Include="GUI\RectOffset.cs" />
     <Compile Include="Input\Touch.cs" />
     <Compile Include="Interfaces\IInitializable.cs" />
     <Compile Include="InvokeCall.cs" />

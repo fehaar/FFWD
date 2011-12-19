@@ -41,6 +41,13 @@ namespace PressPlay.FFWD
                 if (Camera.main.viewPort.Bounds.Contains(r))
                 {
                     Microsoft.Xna.Framework.Vector2 pos = new Microsoft.Xna.Framework.Vector2(r.Location.X, r.Location.Y);
+
+                    if (style.alignment == TextAnchor.MiddleCenter)
+                    {
+                        Microsoft.Xna.Framework.Vector2 sz = GUI.spriteFont.MeasureString(text);
+                        pos += new Microsoft.Xna.Framework.Vector2((rect.width - sz.X) / 2, (rect.height - sz.Y) / 2);
+                    }
+
                     spriteBatch.DrawString(GUI.spriteFont, text, pos, color);
                 }
             }
@@ -48,12 +55,18 @@ namespace PressPlay.FFWD
 
         public static bool Button(Rect rect, string text)
         {
-            throw new NotImplementedException();
+            if (isRendering)
+            {
+                bool result = Button(rect, GUI.skin.button.normal.background, GUI.skin.button);
+                Label(rect, text, GUI.skin.button);
+                return result;
+            }
+            return false;
         }
 
         public static bool Button(Rect rect, Texture texture)
         {
-            return Button(rect, texture, GUIStyle.none);
+            return Button(rect, texture, GUI.skin.button);
         }
 
         public static bool Button(Rect rect, Texture texture, GUIStyle style)
@@ -65,8 +78,11 @@ namespace PressPlay.FFWD
                 {
                     spriteBatch.Draw((Texture2D)texture, r, color);
                 }
+                if (Input.GetMouseButtonDown(0) && rect.Contains(Input.mousePositionClean))
+                {
+                    return true;
+                }
             }
-            // TODO: We need to check input
             return false;
         }
 

@@ -331,6 +331,7 @@
     <Compile Include="GUI\GUISkin.cs" />
     <Compile Include="GUI\GUIStyle.cs" />
     <Compile Include="GUI\GUIStyleState.cs" />
+    <Compile Include="GUI\RectOffset.cs" />
     <Compile Include="Input\Touch.cs" />
     <Compile Include="Interfaces\IInitializable.cs" />
     <Compile Include="InvokeCall.cs" />
@@ -391,7 +392,9 @@
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="button.PNG" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <PropertyGroup>

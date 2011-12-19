@@ -70,9 +70,10 @@ namespace PressPlay.FFWD
             // This is removed here. It is called in scene.Initialize just below.
             scene.Initialize();
             Application.newAssets.AddRange(scene.assets);
-            Application.LoadNewAssets();
+            Application.LoadNewAssets(true);
             if (scene.prefabs.Count > 0)
             {
+                UnityObject.DontDestroyOnLoad(scene.prefabs[0]);
                 return scene.prefabs[0];
             }
             return null;

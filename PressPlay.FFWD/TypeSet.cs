@@ -111,7 +111,10 @@ namespace PressPlay.FFWD
                 string s = list[i];
                 int index = s.IndexOf('#');
                 string name = s.Substring(0, index);
-                dict.Add(name, (TypeCapabilities)Enum.Parse(typeof(TypeCapabilities), s.Substring(index + 1), true));
+                if (!dict.ContainsKey(name))
+                {
+                    dict.Add(name, (TypeCapabilities)Enum.Parse(typeof(TypeCapabilities), s.Substring(index + 1), true));
+                }
             }
         }
 

@@ -13,6 +13,8 @@ namespace PressPlay.FFWD
         public static readonly GUIStyle none = new GUIStyle();
 
         public int fontSize;
+        public int fixedHeight;
+        public RectOffset margin;
         public TextAnchor alignment;
         public GUIStyleState normal;
         public GUIStyleState hover;
