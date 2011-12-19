@@ -10,13 +10,93 @@ namespace PressPlay.FFWD.Components
 {
     public class ParticleEmitter : Component, IFixedUpdateable
     {
+        public delegate void OnParticleCountChanged();
+        [ContentSerializerIgnore]
+        public OnParticleCountChanged onParticleCountChanged;
+
+        float _minEnergy;
+        public float minEnergy
+        {
+            get { return _minEnergy; }
+            set
+            {
+                _minEnergy = value;
+            }
+        }
+        float _maxEnergy;
+        public float maxEnergy
+        {
+            get { return _maxEnergy; }
+            set
+            {
+                if (value > _maxEnergy)
+                {
+                    _maxEnergy = value;
+                    particles = new Particle[particlesToAllocate()];
+
+                    if (onParticleCountChanged != null)
+                    { onParticleCountChanged(); }
+                }
+                _maxEnergy = value;
+            }
+        }
+        
+        
+        float timeSinceEmit;
+        float _minEmission;
+        public float minEmission
+        {
+            get { return _minEmission; }
+            set
+            {
+                _minEmission = value;
+                timeToNextEmit = GetNewEmissionTime();
+            }
+        }
+        float _maxEmissionEver;
+        float _maxEmission;
+        public float maxEmission
+        {
+            get { return _maxEmission; }
+            set
+            {
+                //this is sort of hacky...
+                //float timeSinceEmit = timeToNextEmit - (1/maxEmission);
+
+                if (value > _maxEmissionEver)
+                {
+                    _maxEmission = value;
+                    _maxEmissionEver = value;
+
+                    Particle[] newParticles = new Particle[particlesToAllocate()];
+                    for (int i = 0; i < particles.Length; i++)
+                    {
+                        if (i >= newParticles.Length) { break; }
+
+                        newParticles[i] = particles[i];
+                    }
+                    particles = newParticles;
+
+                    if (onParticleCountChanged != null)
+                    { onParticleCountChanged(); }
+                }
+                _maxEmission = value;
+
+
+
+                timeToNextEmit = GetNewEmissionTime() - timeSinceEmit;
+            }
+        }
+
         public bool emit;
         public float minSize;
         public float maxSize;
-        public float minEnergy;
-        public float maxEnergy;
-        public float minEmission;
-        public float maxEmission;
+        //public float minEnergy;
+
+        //public float minEmission;
+        
+        
+
         public float emitterVelocityScale;
         public Vector3 worldVelocity;
         public Vector3 localVelocity;
@@ -125,7 +205,7 @@ namespace PressPlay.FFWD.Components
             Application.particleEmitTimer.Start();
 #endif
 
-
+            
             int numToEmit = 0;
             if (emit)
             {
@@ -136,12 +216,13 @@ namespace PressPlay.FFWD.Components
                 }
                 else
                 {
+                    timeSinceEmit += Time.deltaTime;
+                    timeToNextEmit -= Time.deltaTime;
                     while (timeToNextEmit < 0)
                     {
                         numToEmit++;
                         timeToNextEmit += GetNewEmissionTime();
                     }
-                    timeToNextEmit -= Time.deltaTime;
                 }
             }
 
@@ -184,6 +265,8 @@ namespace PressPlay.FFWD.Components
 
         private void EmitNewParticle(ref Particle particle)
         {
+            timeSinceEmit = 0;
+
             particle.Energy = particle.StartingEnergy = Random.Range(minEnergy, maxEnergy);
 
             Vector3 pointInUnitSphere = Random.insideUnitSphere;
@@ -209,6 +292,12 @@ namespace PressPlay.FFWD.Components
             {
                 //velocity += (Vector3)(-Microsoft.Xna.Framework.Vector3.Transform(localVelocity, transform.rotation));
                 velocity += (Vector3)(Microsoft.Xna.Framework.Vector3.Transform(localVelocity, transform.rotation));
+            }
+
+            if (worldVelocity.x != 0 || worldVelocity.y != 0 || worldVelocity.z != 0)
+            {
+                //velocity += (Vector3)(-Microsoft.Xna.Framework.Vector3.Transform(localVelocity, transform.rotation));
+                velocity += worldVelocity;
             }
 
             particle.Velocity = velocity;
