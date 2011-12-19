@@ -107,7 +107,10 @@ namespace PressPlay.FFWD
         {
             for (int i = 0; i < list.Count; i++)
             {
-                list[i].OnGUI();
+                if ((bool)list[i])
+                {
+                    list[i].OnGUI();
+                }
             }
         }
     }
