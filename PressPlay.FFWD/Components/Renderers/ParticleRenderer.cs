@@ -30,7 +30,14 @@ namespace PressPlay.FFWD.Components
             base.Awake();
 
             emitter = gameObject.GetComponent<ParticleEmitter>();
+            emitter.onParticleCountChanged = ParticleCountChanged;
+            ParticleCountChanged();
+        }
+
+        void ParticleCountChanged()
+        {
             vertices = new VertexPositionColorTexture[emitter.particlesToAllocate() * 4];
+
 
             // Create all triangles as they will not change
             triangles = new short[emitter.particles.Length * 6];
@@ -73,7 +80,6 @@ namespace PressPlay.FFWD.Components
 
             cam.BasicEffect.World = Matrix.Identity;
             cam.BasicEffect.VertexColorEnabled = true;
-            cam.BasicEffect.LightingEnabled = false;
 
             material.SetTextureState(cam.BasicEffect);
             material.SetBlendState(device);
