@@ -32,11 +32,11 @@ namespace PressPlay.FFWD
         {
             // NOTE: We have hardcoded shader values here that should be configurable in some other way
             blendState = BlendState.Opaque;
-            if (shader == "iPhone/Particles/Additive Culled")
+            if (shader == "iPhone/Particles/Additive Culled" || shader == "Particles/Additive")
             {
                 blendState = BlendState.Additive;
-            } 
-            else if (renderQueue == 3000 || (shader ?? "").StartsWith("Trans"))
+            }
+            else if (renderQueue == 3000 || (shader ?? "").StartsWith("Trans") || shader == "Particles/VertexLit Blended" || shader == "Particles/Alpha Blended")
             {
                 blendState = BlendState.AlphaBlend;
             }
@@ -44,6 +44,11 @@ namespace PressPlay.FFWD
             {
                 color = new Color(color.r, color.g, color.b, 0.5f);
             }
+            //if (name == "Default-Particle")
+            //{
+            //    color = Color.white;
+            //}
+
             CalculateRenderQueue();
         }
 

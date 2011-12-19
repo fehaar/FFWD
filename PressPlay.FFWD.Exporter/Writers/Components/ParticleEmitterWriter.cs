@@ -17,13 +17,15 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
             {
                 throw new Exception(GetType() + " cannot export components of type " + component.GetType());
             }
-            writer.WriteElement("emit", pr.emit);
-            writer.WriteElement("minSize", pr.minSize);
-            writer.WriteElement("maxSize", pr.maxSize);
             writer.WriteElement("minEnergy", pr.minEnergy);
             writer.WriteElement("maxEnergy", pr.maxEnergy);
             writer.WriteElement("minEmission", pr.minEmission);
             writer.WriteElement("maxEmission", pr.maxEmission);
+
+            writer.WriteElement("emit", pr.emit);
+            writer.WriteElement("minSize", pr.minSize);
+            writer.WriteElement("maxSize", pr.maxSize);
+            
             writer.WriteElement("emitterVelocityScale", pr.emitterVelocityScale);
             writer.WriteElement("worldVelocity", pr.worldVelocity);
             writer.WriteElement("localVelocity", pr.localVelocity);
