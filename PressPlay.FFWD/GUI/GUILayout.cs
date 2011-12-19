@@ -40,12 +40,12 @@ namespace PressPlay.FFWD
 
         public static void Label(string text)
         {
-            throw new NotImplementedException();
+            // TODO: Implement this
         }
 
         public static void Label(string text, GUIStyle style)
         {
-            throw new NotImplementedException();
+            // TODO: Implement this
         }
     }
 }
