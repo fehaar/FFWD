@@ -11,7 +11,7 @@ namespace PressPlay.FFWD
     {
         public enum To2dMode { DropX, DropY, DropZ };
         public static To2dMode to2dMode = To2dMode.DropY;
-        public static bool ShowComponentProfile = false;
+        public static bool ShowComponentProfile = true;
         public static bool ShowTurnOffTime = false;
         public static bool ShowTimeBetweenUpdates = false;
         public static bool ShowRaycastTime = false;
