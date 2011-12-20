@@ -37,8 +37,6 @@ namespace PressPlay.FFWD
             _lastKeyboardState = _currentKeyboardState;
             _currentKeyboardState = Keyboard.GetState();
 
-            UpdateMouseStates();
-
 #if WINDOWS_PHONE
             gestureCount = 0;
             while (TouchPanel.IsGestureAvailable)
@@ -57,21 +55,11 @@ namespace PressPlay.FFWD
                 {
                     continue;
                 }
-                Touch t = new Touch() { fingerId = tl.Id, position = new Vector2(tl.Position.X, Camera.main.viewPort.Height - tl.Position.Y), phase = ToPhase(tl.State) };
+                Touch t = new Touch() { fingerId = tl.Id, position = new Vector2(tl.Position.X, Camera.FullScreen.Height - tl.Position.Y), phase = ToPhase(tl.State) };
                 _touches[_touchCount++] = t;
-                //switch (tl.State)
-                //{
-                //    case TouchLocationState.Moved:
-                //        _hasAFingerOnScreen = true;
-                //        _lastTapPosition = tl.Position;
-                //        break;
-                //    case TouchLocationState.Pressed:
-                //        _hasAFingerOnScreen = true;
-                //        _newTap = true;
-                //        _lastTapPosition = tl.Position;
-                //        break;
-                //}
             }
+#else
+            UpdateMouseStates();
 #endif
         }
 
