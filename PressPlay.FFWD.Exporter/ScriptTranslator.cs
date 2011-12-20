@@ -101,7 +101,7 @@ namespace PressPlay.FFWD.Exporter
         {
             foreach (string method in MethodsToOverride)
             {
-                Regex methEx = new Regex(@"void\s+" + method + @"\s+\(");
+                Regex methEx = new Regex(@"void\s+" + method + @"\s*\(");
                 int startLine = scriptLines.FindIndex(s => methEx.IsMatch(s));
                 if (startLine >= 0)
                 {
