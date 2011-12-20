@@ -140,6 +140,15 @@ namespace PressPlay.FFWD
             return obj;
         }
 
+        protected override void Destroy()
+        {
+            if (gameObject != null)
+            {
+                gameObject.RemoveComponent(this);
+            }
+            base.Destroy();
+        }
+
         private void DoFixReferences(object objectToFix, Dictionary<int, UnityObject> idMap)
         {
             // We find all fields only - not properties as they cannot be set as references in Unity

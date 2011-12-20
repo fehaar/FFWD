@@ -19,7 +19,8 @@ namespace PressPlay.FFWD.Import
 
         public override Scene Process(Scene input, ContentProcessorContext context)
         {
-            input.AfterLoad(null);
+            Dictionary<int, UnityObject> idMap = new Dictionary<int, UnityObject>();
+            input.AfterLoad(idMap);
             scene = input;
 
             // Create static batch renderers
@@ -39,7 +40,16 @@ namespace PressPlay.FFWD.Import
                 if (!staticRenderers.ContainsKey(m.GetInstanceID()))
                 {
                     GameObject sbGo = new GameObject("Static - " + m.name);
-                    staticRenderers[m.GetInstanceID()] = sbGo.AddComponent<StaticBatchRenderer>();
+                    while (idMap.ContainsKey(sbGo.GetInstanceID()))
+                    {
+                        sbGo.SetNewId(null);
+                    }
+                    StaticBatchRenderer sbr = sbGo.AddComponent<StaticBatchRenderer>();
+                    while (idMap.ContainsKey(sbr.GetInstanceID()))
+                    {
+                        sbr.SetNewId(null);
+                    }
+                    staticRenderers[m.GetInstanceID()] = sbr;
                     staticRenderers[m.GetInstanceID()].materials = (Material[])r.materials.Clone();
                 }
 
