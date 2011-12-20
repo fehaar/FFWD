@@ -289,9 +289,12 @@ namespace PressPlay.FFWD.Components
                 }
             }
 
-            GUI.StartRendering();
-            GUI.RenderComponents(Application.guiComponents);
-            GUI.EndRendering();
+            if (Camera.main != null)
+            {
+                GUI.StartRendering();
+                GUI.RenderComponents(Application.guiComponents);
+                GUI.EndRendering();
+            }
 
 #if DEBUG
             Debug.Display("Estimated Draw calls", estimatedDrawCalls);

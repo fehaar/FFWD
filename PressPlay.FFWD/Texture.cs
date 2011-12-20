@@ -34,6 +34,22 @@ namespace PressPlay.FFWD
             }
         }
 
+        public int width
+        {
+            get
+            {
+                return (tex == null) ? 0 : tex.Width;
+            }
+        }
+
+        public int height
+        {
+            get
+            {
+                return (tex == null) ? 0 : tex.Height;
+            }
+        }
+
         protected override void DoLoadAsset(AssetHelper assetHelper)
         {
             if (tex == null)

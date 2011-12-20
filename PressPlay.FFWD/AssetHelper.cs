@@ -14,10 +14,11 @@ namespace PressPlay.FFWD
 
         public Func<ContentManager> CreateContentManager;
         private static List<string> staticAssets = new List<string>();
+        internal bool LoadingResources;
 
         public T Load<T>(string contentPath)
         {
-            return Load<T>(Application.loadedLevelName, contentPath);
+            return Load<T>((LoadingResources) ? "Resources" : Application.loadedLevelName, contentPath);
         }
 
         public T Load<T>(string category, string contentPath)

@@ -35,7 +35,7 @@ namespace PressPlay.FFWD.Components
             }
         }
 
-        internal void AddMesh(Mesh m, Matrix transform)
+        internal bool AddMesh(Mesh m, Matrix transform)
         {
             if (m == null)
             {
@@ -46,7 +46,6 @@ namespace PressPlay.FFWD.Components
                 throw new Exception("Mesh " + m.name + " does not have any vertices and is being added to a static batch");
             }
 
-            // TODO: Add a test for too many verts
             int vertexOffset = 0;
             if (vertices == null)
             {
@@ -54,6 +53,11 @@ namespace PressPlay.FFWD.Components
             }
             else
             {
+                if (vertices.Length + m.vertices.Length > UInt16.MaxValue)
+                {
+                    return false;
+                }
+
                 VertexPositionNormalTexture[] oldVerts = vertices;
                 vertices = new VertexPositionNormalTexture[oldVerts.Length + m.vertices.Length];
                 oldVerts.CopyTo(vertices, 0);
@@ -89,6 +93,7 @@ namespace PressPlay.FFWD.Components
                     indices[i] = newTris;
                 }
             }
+            return true;
         }
 
         public override int Draw(GraphicsDevice device, Camera cam)

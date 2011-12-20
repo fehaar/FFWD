@@ -24,6 +24,8 @@ namespace PressPlay.FFWD
             UpdateOrder = 1;
             DrawOrder = 0;
 
+            Instance = this;
+
             Screen.height = game.GraphicsDevice.Viewport.Height;
             Screen.width = game.GraphicsDevice.Viewport.Width;
         }
@@ -31,6 +33,7 @@ namespace PressPlay.FFWD
 #if DEBUG
         private SpriteBatch spriteBatch;
 #endif
+        internal static Application Instance { get; private set; }
 
         public static bool isDeactivated = false;
         int frameRate = 0;
@@ -222,7 +225,7 @@ namespace PressPlay.FFWD
                 CleanUp();
                 DoSceneLoad();
             }
-            LoadNewAssets();
+            LoadNewAssets(false);
 
 #if DEBUG
             fixedUpdateTime.Start();
@@ -266,6 +269,7 @@ namespace PressPlay.FFWD
         {
             base.Draw(gameTime);
             Time.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+            Input.BeginFixedUpdate();
 
             hasDrawBeenCalled = true;
 
@@ -389,6 +393,7 @@ namespace PressPlay.FFWD
             timeUpdateEndUpdateStart.Start(); //measure time from draw ended to beginning of Update, to try and measure graphics performance
 #endif
             Debug.ClearLines();
+            Input.ClearStates();
         }
 
         private void UpdateFPS(GameTime gameTime)
@@ -422,8 +427,8 @@ namespace PressPlay.FFWD
             isLoadingAssetBeforeSceneInitialize = true;
             loadIsComplete = false;
 
-            loadedLevelName = sceneToLoad.Contains('/') ? sceneToLoad.Substring(sceneToLoad.LastIndexOf('/') + 1) : sceneToLoad;
-            scene = assetHelper.Load<Scene>(sceneToLoad);
+            loadedLevelName = sceneToLoad;
+            scene = assetHelper.Load<Scene>("Scenes/" + sceneToLoad);
             sceneToLoad = "";
 
             tempAssets.AddRange(scene.assets);
@@ -499,8 +504,9 @@ namespace PressPlay.FFWD
             doGarbageCollectAfterAwake = true;
         }
 
-        internal static void LoadNewAssets()
+        internal static void LoadNewAssets(bool loadResources)
         {
+            assetHelper.LoadingResources = loadResources;
             for (int i = newAssets.Count - 1; i >= 0; i--)
             {
                 newAssets[i].LoadAsset(assetHelper);
@@ -518,7 +524,6 @@ namespace PressPlay.FFWD
 #if DEBUG
             Debug.Log("******************************** Loading Level " + name + " ***********************************");
 #endif
-
             sceneToLoad = name;
             UnloadCurrentLevel();
         }

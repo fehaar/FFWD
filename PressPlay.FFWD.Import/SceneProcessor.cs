@@ -50,8 +50,10 @@ namespace PressPlay.FFWD.Import
                 {
                     throw new Exception("The mesh with Id " + id + " was not found in assets. Gotten from " + mf);
                 }
-                staticRenderers[m.GetInstanceID()].AddMesh(mesh, r.transform.world);
-                r.isPartOfStaticBatch = true;
+                if (staticRenderers[m.GetInstanceID()].AddMesh(mesh, r.transform.world))
+                {
+                    r.isPartOfStaticBatch = true;
+                }
             }
             input.gameObjects.AddRange(staticRenderers.Values.Select(sbr => sbr.gameObject));
 
