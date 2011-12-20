@@ -478,6 +478,15 @@ public class ExportSceneWizard : ScriptableWizard
         cmd.ExportAllScripts();
     }
 
+    [MenuItem("Press Play/FFWD/Full export")]
+    static void FullExport()
+    {
+        ExportAllScenes();
+        ExportAllScripts();
+        ExportAllResources();
+        ExportTags(null);
+    }
+
     [MenuItem("CONTEXT/Transform/FFWD export resource")]
     static void ExportTransform(MenuCommand command)
     {
