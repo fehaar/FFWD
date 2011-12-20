@@ -27,14 +27,8 @@ public class ExportSceneWizard : ScriptableWizard
         public string exportDir = "";
         public string configSource = @"Editor\FFWD\PressPlay.FFWD.Exporter.dll.config";
         public bool showComponentsNotWritten = true;
-        public bool flipYInTransforms = true;
         public List<SceneGroup> groups;
         public List<string> allowedSkippedComponents = new List<string>();
-
-        [NonSerialized]
-        public string xnaBaseDir = "";
-        [NonSerialized]
-        public int activeGroup = 0;
 
         public List<string> excludedScripts = new List<string>();
         public List<string> excludedPaths = new List<string>();
@@ -48,14 +42,6 @@ public class ExportSceneWizard : ScriptableWizard
                 using (StreamReader sr = new StreamReader(Path.Combine(Application.dataPath, @"Editor\FFWD\ExportSceneWizard.config")))
                 {
                     config = (ExportConfig)xmlSer.Deserialize(sr);
-                }
-                if (EditorPrefs.HasKey("FFWD XNA dir " + PlayerSettings.productName))
-                {
-                    config.xnaBaseDir = EditorPrefs.GetString("FFWD XNA dir " + PlayerSettings.productName);
-                }
-                if (EditorPrefs.HasKey("FFWD active group"))
-                {
-                    config.activeGroup = EditorPrefs.GetInt("FFWD active group");
                 }
             }
             catch (Exception ex)
@@ -73,8 +59,6 @@ public class ExportSceneWizard : ScriptableWizard
             {
                 xmlSer.Serialize(sw, this);
             }
-            EditorPrefs.SetString("FFWD XNA dir " + PlayerSettings.productName, xnaBaseDir);
-            EditorPrefs.SetInt("FFWD active group", activeGroup);
         }
     }
 
@@ -83,6 +67,15 @@ public class ExportSceneWizard : ScriptableWizard
         public ExportCommands()
         {
             config = ExportConfig.Load();
+            if (EditorPrefs.HasKey("FFWD XNA dir " + PlayerSettings.productName))
+            {
+                xnaBaseDir = EditorPrefs.GetString("FFWD XNA dir " + PlayerSettings.productName);
+            }
+            if (EditorPrefs.HasKey("FFWD active group"))
+            {
+                activeGroup = EditorPrefs.GetInt("FFWD active group");
+            }
+
             string configPath = Path.Combine(Application.dataPath, config.configSource);
             if (File.Exists(configPath))
             {
@@ -94,14 +87,16 @@ public class ExportSceneWizard : ScriptableWizard
             }
 
             assets = new AssetHelper();
-            assets.TextureDir = Path.Combine(config.xnaBaseDir, config.xnaAssets.TextureDir);
-            assets.ScriptDir = Path.Combine(config.xnaBaseDir, config.xnaAssets.ScriptDir);
-            assets.MeshDir = Path.Combine(config.xnaBaseDir, config.xnaAssets.MeshDir);
-            assets.AudioDir = Path.Combine(config.xnaBaseDir, config.xnaAssets.AudioDir);
-            assets.XmlDir = Path.Combine(config.xnaBaseDir, config.exportDir);
+            assets.TextureDir = Path.Combine(xnaBaseDir, config.xnaAssets.TextureDir);
+            assets.ScriptDir = Path.Combine(xnaBaseDir, config.xnaAssets.ScriptDir);
+            assets.MeshDir = Path.Combine(xnaBaseDir, config.xnaAssets.MeshDir);
+            assets.AudioDir = Path.Combine(xnaBaseDir, config.xnaAssets.AudioDir);
+            assets.XmlDir = Path.Combine(xnaBaseDir, config.exportDir);
         }
 
         public ExportConfig config;
+        public string xnaBaseDir = "";
+        public int activeGroup = 0;
         private TypeResolver resolver;
         public AssetHelper assets;
         private List<string> allComponentsNotWritten = new List<string>();
@@ -115,8 +110,7 @@ public class ExportSceneWizard : ScriptableWizard
             }
 
             SceneWriter scene = new SceneWriter(resolver, assets);
-            scene.ExportDir = Path.Combine(config.xnaBaseDir, config.exportDir);
-            scene.FlipYInTransforms = config.flipYInTransforms;
+            scene.ExportDir = Path.Combine(xnaBaseDir, config.exportDir);
             ScriptTranslator.ScriptNamespace = config.scriptNamespace;
 
             string path = Path.ChangeExtension(AssetDatabase.GetAssetPath(go).Replace("Assets/", ""), "xml");
@@ -201,7 +195,6 @@ public class ExportSceneWizard : ScriptableWizard
         {
             SceneWriter scene = new SceneWriter(resolver, assets);
             scene.ExportDir = Path.Combine(assets.XmlDir, "Scenes");
-            scene.FlipYInTransforms = config.flipYInTransforms;
             ScriptTranslator.ScriptNamespace = config.scriptNamespace;
 
             Debug.Log("----------------------- " + Path.GetFileName(EditorApplication.currentScene) + " -------------------------Start scene export");
@@ -271,14 +264,14 @@ public class ExportSceneWizard : ScriptableWizard
             allComponentsNotWritten.Clear();
 
             SceneGroup group = null;
-            if (config.activeGroup >= 0 && config.activeGroup < config.groups.Count)
+            if (activeGroup >= 0 && activeGroup < config.groups.Count)
             {
-                group = config.groups[config.activeGroup];
+                group = config.groups[activeGroup];
             }
 
             if (group == null)
             {
-                Debug.LogError("Export failed: Active group " + config.activeGroup + " does not exist.");
+                Debug.LogError("Export failed: Active group " + activeGroup + " does not exist.");
                 return;
             }
 
@@ -325,7 +318,7 @@ public class ExportSceneWizard : ScriptableWizard
 
         private void FindAllXnaScripts()
         {
-            foreach (string file in Directory.GetFiles(Path.Combine(config.xnaBaseDir, config.xnaAssets.ScriptDir), "*.cs", SearchOption.AllDirectories))
+            foreach (string file in Directory.GetFiles(Path.Combine(xnaBaseDir, config.xnaAssets.ScriptDir), "*.cs", SearchOption.AllDirectories))
             {
                 xnaScriptFiles[Path.GetFileNameWithoutExtension(file)] = file;
             }
@@ -378,7 +371,7 @@ public class ExportSceneWizard : ScriptableWizard
             PressPlay.FFWD.Exporter.ScriptTranslator trans = new ScriptTranslator(textLines);
             trans.Translate();
             string newText = trans.ToString();
-            string newPath = scriptFile.Replace(Path.Combine(Application.dataPath, config.unityScriptDir), Path.Combine(config.xnaBaseDir, config.xnaAssets.ScriptDir));
+            string newPath = scriptFile.Replace(Path.Combine(Application.dataPath, config.unityScriptDir), Path.Combine(xnaBaseDir, config.xnaAssets.ScriptDir));
             if (!Directory.Exists(Path.GetDirectoryName(newPath)))
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(newPath));
@@ -388,15 +381,27 @@ public class ExportSceneWizard : ScriptableWizard
     }
 
     public ExportConfig config;
+    public string xnaBaseDir = "";
+    public int activeGroup = 0;
 
     public ExportSceneWizard()
     {
         config = ExportConfig.Load();
+        if (EditorPrefs.HasKey("FFWD XNA dir " + PlayerSettings.productName))
+        {
+            xnaBaseDir = EditorPrefs.GetString("FFWD XNA dir " + PlayerSettings.productName);
+        }
+        if (EditorPrefs.HasKey("FFWD active group"))
+        {
+            activeGroup = EditorPrefs.GetInt("FFWD active group");
+        }
     }
 
     public void OnWizardCreate()
     {
         config.Save();
+        EditorPrefs.SetString("FFWD XNA dir " + PlayerSettings.productName, xnaBaseDir);
+        EditorPrefs.SetInt("FFWD active group", activeGroup);
     }
 
     public void OnWizardOtherButton()

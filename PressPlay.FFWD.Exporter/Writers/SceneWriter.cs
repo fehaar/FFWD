@@ -24,7 +24,6 @@ namespace PressPlay.FFWD.Exporter.Writers
         private AssetHelper assetHelper;
 
         public string ExportDir { get; set; }
-        public bool FlipYInTransforms { get; set; }
 
         private XmlWriter writer = null;
 
@@ -174,10 +173,6 @@ namespace PressPlay.FFWD.Exporter.Writers
         private void WriteTransform(Transform transform, bool isPrefab)
         {
             Vector3 pos = transform.localPosition;
-            if (FlipYInTransforms)
-            {
-                pos.y = -pos.y;
-            }
             if (!isPrefab)
             {
                 writer.WriteStartElement("c");

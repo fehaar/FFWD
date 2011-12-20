@@ -195,7 +195,7 @@ namespace PressPlay.FFWD
 
         public override string ToString()
         {
-            return String.Format("{0} - {1} ({2})", GetType().Name, asset, GetInstanceID());
+            return String.Format("{0} - {1}/{2} ({3})", GetType().Name, asset, name, GetInstanceID());
         }
 
     }
