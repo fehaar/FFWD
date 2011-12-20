@@ -218,7 +218,6 @@ namespace PressPlay.FFWD
 
             if (!String.IsNullOrEmpty(sceneToLoad))
             {
-                CleanUp();
                 DoSceneLoad();
             }
             LoadNewAssets(false);
@@ -414,9 +413,9 @@ namespace PressPlay.FFWD
 
             if (!String.IsNullOrEmpty(loadedLevelName))
             {
-                UnloadCurrentLevel();
                 CleanUp();
                 assetHelper.Unload(loadedLevelName);
+                Physics.Reset();
             }
 
             loadingScene = true;
@@ -531,10 +530,10 @@ namespace PressPlay.FFWD
                 if (obj is GameObject)
                 {
                     GameObject gObj = (GameObject)obj;
-
                     if (!dontDestroyOnLoad.Contains(gObj))
                     {
                         UnityObject.Destroy(gObj);
+                        gObj.active = false;
                     }
                 }
             }
@@ -797,6 +796,14 @@ namespace PressPlay.FFWD
                         }
                     }
 
+                    if (cmp is MonoBehaviour)
+	                {
+                        if (guiComponents.Contains(cmp as MonoBehaviour))
+                        {
+                            guiComponents.Remove(cmp as MonoBehaviour);
+                        }
+	                }
+
                     for (int j = invokeCalls.Count - 1; j >= 0; j--)
                     {
                         if (invokeCalls[j].behaviour == cmp)
@@ -970,6 +977,13 @@ namespace PressPlay.FFWD
                     if (cmp is Renderer)
                     {
                         Camera.RemoveRenderer(cmp as Renderer);
+                    }
+                    for (int j = invokeCalls.Count - 1; j >= 0; j--)
+                    {
+                        if (invokeCalls[j].behaviour == cmp)
+                        {
+                            invokeCalls.RemoveAt(j);
+                        }
                     }
                 }
             }

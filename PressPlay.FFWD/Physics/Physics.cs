@@ -662,5 +662,9 @@ namespace PressPlay.FFWD
             return false;
         }
 
+        internal static void Reset()
+        {
+            Initialize();
+        }
     }
 }
