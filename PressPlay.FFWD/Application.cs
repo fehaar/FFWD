@@ -947,9 +947,17 @@ namespace PressPlay.FFWD
                     {
                         Camera.AddRenderer(cmp as Renderer);
                     }
+                    if (cmp is MonoBehaviour)
+                    {
+                        (cmp as MonoBehaviour).OnEnable();
+                    }
                 }
                 else
                 {
+                    if (cmp is MonoBehaviour)
+                    {
+                        (cmp as MonoBehaviour).OnDisable();
+                    }
                     if (typeCaps.HasCaps(tp, TypeSet.TypeCapabilities.Update))
                     {
                         if (updateComponents.Contains(cmp as PressPlay.FFWD.Interfaces.IUpdateable))
