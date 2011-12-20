@@ -234,7 +234,7 @@ namespace PressPlay.FFWD
                 for (int i = 0; i < count; i++)
                 {
                     IFixedUpdateable cmp = fixedUpdateComponents[i];
-                    if (!cmp.gameObject.active)
+                    if (cmp.gameObject == null || !cmp.gameObject.active)
                     {
                         continue;
                     }
@@ -279,7 +279,7 @@ namespace PressPlay.FFWD
             for (int i = 0; i < count; i++)
             {
                 PressPlay.FFWD.Interfaces.IUpdateable cmp = updateComponents[i];
-                if (!cmp.gameObject.active)
+                if (cmp.gameObject == null || !cmp.gameObject.active)
                 {
                     continue;
                 }
@@ -303,7 +303,11 @@ namespace PressPlay.FFWD
             count = lateUpdateComponents.Count;
             for (int i = 0; i < count; i++)
             {
-                lateUpdateComponents[i].LateUpdate();
+                Component c = lateUpdateComponents[i] as Component;
+                if (c.gameObject != null && c.gameObject.active)
+                {
+                    lateUpdateComponents[i].LateUpdate();
+                }
             }
             ChangeComponentActivity();
 
