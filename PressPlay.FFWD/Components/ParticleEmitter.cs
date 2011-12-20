@@ -211,8 +211,17 @@ namespace PressPlay.FFWD.Components
             {
                 if (oneShot)
                 {
-                    numToEmit = Mathf.FloorToInt(Random.Range(minEmission, maxEmission));
-                    emit = false;
+                    //if (part)
+
+                    if (particleCount == 0)
+                    {
+                        numToEmit = Mathf.FloorToInt(Random.Range(minEmission, maxEmission));
+                    }
+                    else
+                    {
+                        numToEmit = 0;
+                    }
+                    //emit = false;
                 }
                 else
                 {

@@ -88,11 +88,12 @@ namespace PressPlay.FFWD.Components
             camForwardVector = (Microsoft.Xna.Framework.Vector3)cam.transform.forward;
 
             cam.BasicEffect.World = Matrix.Identity;
-            cam.BasicEffect.VertexColorEnabled = true;
-            cam.BasicEffect.LightingEnabled = false;
-
+            
             material.SetTextureState(cam.BasicEffect);
             material.SetBlendState(device);
+
+            cam.BasicEffect.VertexColorEnabled = true;
+            cam.BasicEffect.LightingEnabled = false;
 
             int particlesRendered = 0;
             for (int i = 0; i < emitter.particles.Length && particlesRendered < emitter.particleCount; i++)
@@ -173,39 +174,11 @@ namespace PressPlay.FFWD.Components
             vertices[vertexIndex + 3].Color = particle.Color;
 
             //XZ plane particles
-            //if (particle.Rotation != 0)
-            //{
-            //    Matrix m = Matrix.CreateRotationY(particle.Rotation);
-            //    Microsoft.Xna.Framework.Vector3 p = new Microsoft.Xna.Framework.Vector3(size, vertexIndex * 0.0001f, size);
-            //    Microsoft.Xna.Framework.Vector3.Transform(ref p, ref m, out p);
-            //    vertices[vertexIndex].Position = pos + new Microsoft.Xna.Framework.Vector3(-p.Z, vertexIndex * 0.0001f, p.X);
-            //    vertices[vertexIndex + 1].Position = pos + new Microsoft.Xna.Framework.Vector3(-p.X, vertexIndex * 0.0001f, -p.Z);
-            //    vertices[vertexIndex + 2].Position = pos + new Microsoft.Xna.Framework.Vector3(p.X, vertexIndex * 0.0001f, p.Z);
-            //    vertices[vertexIndex + 3].Position = pos + new Microsoft.Xna.Framework.Vector3(p.Z, vertexIndex * 0.0001f, -p.X);
-            //}
-            //else
-            //{
-            //    vertices[vertexIndex].Position = pos + new Microsoft.Xna.Framework.Vector3(-size, vertexIndex * 0.0001f, size);
-            //    vertices[vertexIndex + 1].Position = pos + new Microsoft.Xna.Framework.Vector3(-size, vertexIndex * 0.0001f, -size);
-            //    vertices[vertexIndex + 2].Position = pos + new Microsoft.Xna.Framework.Vector3(size, vertexIndex * 0.0001f, size);
-            //    vertices[vertexIndex + 3].Position = pos + new Microsoft.Xna.Framework.Vector3(size, vertexIndex * 0.0001f, -size);
-            //}
-
-            //rotated particles
-            if (particle.Rotation == 0)
+            if (particle.Rotation != 0)
             {
-                Microsoft.Xna.Framework.Vector3 p = particle.Position;
-
-                Matrix.CreateBillboard(
-                    ref p,
-                    ref camPosition,
-                    ref camUpVector,
-                    camForwardVector,
-                    out m
-                    );
-                p = new Microsoft.Xna.Framework.Vector3(size, vertexIndex * 0.0001f, size);
+                Matrix m = Matrix.CreateRotationY(particle.Rotation);
+                Microsoft.Xna.Framework.Vector3 p = new Microsoft.Xna.Framework.Vector3(size, vertexIndex * 0.0001f, size);
                 Microsoft.Xna.Framework.Vector3.Transform(ref p, ref m, out p);
-                
                 vertices[vertexIndex].Position = pos + new Microsoft.Xna.Framework.Vector3(-p.Z, vertexIndex * 0.0001f, p.X);
                 vertices[vertexIndex + 1].Position = pos + new Microsoft.Xna.Framework.Vector3(-p.X, vertexIndex * 0.0001f, -p.Z);
                 vertices[vertexIndex + 2].Position = pos + new Microsoft.Xna.Framework.Vector3(p.X, vertexIndex * 0.0001f, p.Z);
@@ -218,6 +191,34 @@ namespace PressPlay.FFWD.Components
                 vertices[vertexIndex + 2].Position = pos + new Microsoft.Xna.Framework.Vector3(size, vertexIndex * 0.0001f, size);
                 vertices[vertexIndex + 3].Position = pos + new Microsoft.Xna.Framework.Vector3(size, vertexIndex * 0.0001f, -size);
             }
+
+            //rotated particles
+            //if (particle.Rotation == 0)
+            //{
+            //    Microsoft.Xna.Framework.Vector3 p = particle.Position;
+
+            //    Matrix.CreateBillboard(
+            //        ref p,
+            //        ref camPosition,
+            //        ref camUpVector,
+            //        camForwardVector,
+            //        out m
+            //        );
+            //    p = new Microsoft.Xna.Framework.Vector3(size, vertexIndex * 0.0001f, size);
+            //    Microsoft.Xna.Framework.Vector3.Transform(ref p, ref m, out p);
+                
+            //    vertices[vertexIndex].Position = pos + new Microsoft.Xna.Framework.Vector3(-p.Z, vertexIndex * 0.0001f, p.X);
+            //    vertices[vertexIndex + 1].Position = pos + new Microsoft.Xna.Framework.Vector3(-p.X, vertexIndex * 0.0001f, -p.Z);
+            //    vertices[vertexIndex + 2].Position = pos + new Microsoft.Xna.Framework.Vector3(p.X, vertexIndex * 0.0001f, p.Z);
+            //    vertices[vertexIndex + 3].Position = pos + new Microsoft.Xna.Framework.Vector3(p.Z, vertexIndex * 0.0001f, -p.X);
+            //}
+            //else
+            //{
+            //    vertices[vertexIndex].Position = pos + new Microsoft.Xna.Framework.Vector3(-size, vertexIndex * 0.0001f, size);
+            //    vertices[vertexIndex + 1].Position = pos + new Microsoft.Xna.Framework.Vector3(-size, vertexIndex * 0.0001f, -size);
+            //    vertices[vertexIndex + 2].Position = pos + new Microsoft.Xna.Framework.Vector3(size, vertexIndex * 0.0001f, size);
+            //    vertices[vertexIndex + 3].Position = pos + new Microsoft.Xna.Framework.Vector3(size, vertexIndex * 0.0001f, -size);
+            //}
             return true;
         }
 
