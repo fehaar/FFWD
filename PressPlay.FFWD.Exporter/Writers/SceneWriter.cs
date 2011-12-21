@@ -338,7 +338,7 @@ namespace PressPlay.FFWD.Exporter.Writers
             writer.WriteElementString("id", data.mesh.GetInstanceID().ToString());
             writer.WriteElementString("name", data.mesh.name);
             writer.WriteElementString("asset", asset);
-            if (data.writeAsStatic)
+            if (data.writeAsStatic || String.IsNullOrEmpty(asset))
             {
                 WriteElement("vertices", data.mesh.vertices);
                 WriteElement("normals", data.mesh.normals);
