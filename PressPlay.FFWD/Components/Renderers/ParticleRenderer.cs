@@ -15,6 +15,15 @@ namespace PressPlay.FFWD.Components
         public float maxParticleSize;
         public Vector3 uvAnimation;
 
+        [ContentSerializer(Optional = true)]
+        public StretchParticles stretchParticles = StretchParticles.Billboard;
+        public enum StretchParticles
+        {
+            Billboard,
+            Stretched,
+            HorizontalBillboard
+        }
+
         [ContentSerializerIgnore]
         public bool doViewportCulling = false;
 
@@ -24,6 +33,11 @@ namespace PressPlay.FFWD.Components
         
         [ContentSerializerIgnore]
         public Rectangle ParticleBounds;
+
+        Microsoft.Xna.Framework.Vector3 camPosition = new Microsoft.Xna.Framework.Vector3();
+        Microsoft.Xna.Framework.Vector3 camUpVector = new Microsoft.Xna.Framework.Vector3();
+        Microsoft.Xna.Framework.Vector3 camForwardVector = new Microsoft.Xna.Framework.Vector3();
+        Matrix m = new Matrix();
 
         public override void Awake()
         {
@@ -78,12 +92,17 @@ namespace PressPlay.FFWD.Components
 #endif
             if (emitter.particles == null || emitter.particleCount == 0) return 0;
 
-            cam.BasicEffect.World = Matrix.Identity;
-            cam.BasicEffect.VertexColorEnabled = true;
-            cam.BasicEffect.LightingEnabled = false;
+            camPosition = (Microsoft.Xna.Framework.Vector3)cam.transform.position;
+            camUpVector = (Microsoft.Xna.Framework.Vector3)cam.transform.up;
+            camForwardVector = (Microsoft.Xna.Framework.Vector3)cam.transform.forward;
 
+            cam.BasicEffect.World = Matrix.Identity;
+            
             material.SetTextureState(cam.BasicEffect);
             material.SetBlendState(device);
+
+            cam.BasicEffect.VertexColorEnabled = true;
+            cam.BasicEffect.LightingEnabled = false;
 
             int particlesRendered = 0;
             for (int i = 0; i < emitter.particles.Length && particlesRendered < emitter.particleCount; i++)
@@ -153,7 +172,7 @@ namespace PressPlay.FFWD.Components
                     return false;
                 }
             }
-
+            
             vertices[vertexIndex].TextureCoordinate = new Microsoft.Xna.Framework.Vector2(particle.TextureOffset.x, particle.TextureOffset.y + particle.TextureScale.y);
             vertices[vertexIndex].Color = particle.Color;
             vertices[vertexIndex + 1].TextureCoordinate = new Microsoft.Xna.Framework.Vector2(particle.TextureOffset.x, particle.TextureOffset.y);
@@ -163,30 +182,62 @@ namespace PressPlay.FFWD.Components
             vertices[vertexIndex + 3].TextureCoordinate = new Microsoft.Xna.Framework.Vector2(particle.TextureOffset.x + particle.TextureScale.x, particle.TextureOffset.y);
             vertices[vertexIndex + 3].Color = particle.Color;
 
-            if (particle.Rotation != 0)
+            //rotated particles
+            if (stretchParticles == StretchParticles.Billboard)
             {
-                Matrix m = Matrix.CreateRotationY(particle.Rotation);
-                Microsoft.Xna.Framework.Vector3 p = new Microsoft.Xna.Framework.Vector3(size, vertexIndex * 0.0001f, size);
-                Microsoft.Xna.Framework.Vector3.Transform(ref p, ref m, out p);
+                Microsoft.Xna.Framework.Vector3 particlePosition = particle.Position;
 
-                vertices[vertexIndex].Position = pos + new Microsoft.Xna.Framework.Vector3(-p.Z, vertexIndex * 0.0001f, p.X);
+                Matrix.CreateBillboard(
+                    ref particlePosition,
+                    ref camPosition,
+                    ref camUpVector,
+                    camForwardVector,
+                    out m
+                    );
 
-                vertices[vertexIndex + 1].Position = pos + new Microsoft.Xna.Framework.Vector3(-p.X, vertexIndex * 0.0001f, -p.Z);
+                Microsoft.Xna.Framework.Vector3 vertical = new Microsoft.Xna.Framework.Vector3(0, -size, 0);
+                Microsoft.Xna.Framework.Vector3 horizontal = new Microsoft.Xna.Framework.Vector3(size, 0, 0);
 
-                vertices[vertexIndex + 2].Position = pos + new Microsoft.Xna.Framework.Vector3(p.X, vertexIndex * 0.0001f, p.Z);
+                m.Translation = Microsoft.Xna.Framework.Vector3.Zero;
+                //Microsoft.Xna.Framework.Vector3.Transform(ref p, ref m, out p);
 
-                vertices[vertexIndex + 3].Position = pos + new Microsoft.Xna.Framework.Vector3(p.Z, vertexIndex * 0.0001f, -p.X);
+                Microsoft.Xna.Framework.Vector3.Transform(ref vertical, ref m, out vertical);
+                Microsoft.Xna.Framework.Vector3.Transform(ref horizontal, ref m, out horizontal);
+
+                vertices[vertexIndex].Position = pos - vertical + horizontal;
+                vertices[vertexIndex+1].Position = pos - vertical - horizontal;
+                vertices[vertexIndex+2].Position = pos + vertical + horizontal;
+                vertices[vertexIndex+3].Position = pos + vertical - horizontal;
             }
-            else
+
+            if (stretchParticles == StretchParticles.Stretched)
+            {
+                Microsoft.Xna.Framework.Vector3 particlePosition = particle.Position;
+
+                //TODO make this work correctly, and add velocityScale functionality.
+                Microsoft.Xna.Framework.Vector3 vertical = particle.Velocity;
+                vertical.Normalize();
+                vertical *= size * lengthScale;
+                Microsoft.Xna.Framework.Vector3 horizontal = -Microsoft.Xna.Framework.Vector3.Cross(vertical, camForwardVector);
+                horizontal.Normalize();
+                horizontal *= size;
+                
+                vertices[vertexIndex].Position = pos - vertical + horizontal;
+                vertices[vertexIndex + 1].Position = pos - vertical - horizontal;
+                vertices[vertexIndex + 2].Position = pos + vertical + horizontal;
+                vertices[vertexIndex + 3].Position = pos + vertical - horizontal;
+            }
+
+
+            if (stretchParticles == StretchParticles.HorizontalBillboard)
             {
                 vertices[vertexIndex].Position = pos + new Microsoft.Xna.Framework.Vector3(-size, vertexIndex * 0.0001f, size);
-
                 vertices[vertexIndex + 1].Position = pos + new Microsoft.Xna.Framework.Vector3(-size, vertexIndex * 0.0001f, -size);
-
                 vertices[vertexIndex + 2].Position = pos + new Microsoft.Xna.Framework.Vector3(size, vertexIndex * 0.0001f, size);
-
                 vertices[vertexIndex + 3].Position = pos + new Microsoft.Xna.Framework.Vector3(size, vertexIndex * 0.0001f, -size);
             }
+
+
             return true;
         }
 

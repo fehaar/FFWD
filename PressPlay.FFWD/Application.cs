@@ -1,4 +1,7 @@
-﻿using System;
+﻿#define COMPONENT_PROFILE
+
+
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -9,6 +12,7 @@ using PressPlay.FFWD.Components;
 using PressPlay.FFWD.Interfaces;
 using System.Text;
 using System.Reflection;
+
 
 namespace PressPlay.FFWD
 {
@@ -732,7 +736,7 @@ namespace PressPlay.FFWD
         }
 
         internal static void Reset()
-        {
+        {            
             objects.Clear();
             componentsToAwake.Clear();
             instantiatedComponentsToAwake.Clear();

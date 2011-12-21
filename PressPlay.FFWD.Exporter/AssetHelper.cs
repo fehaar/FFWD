@@ -49,7 +49,7 @@ namespace PressPlay.FFWD.Exporter
             if (asset == null) return;
 
             string assetPath = GetAssetName(asset);
-            if (exportedTextures.Contains(assetPath)) return;
+            if (exportedTextures.Contains(assetPath) || exportedTextures.Contains(asset.name)) return;
             exportedTextures.Add(assetPath);
 
             string path = Path.Combine(TextureDir, Path.ChangeExtension(assetPath, "png"));

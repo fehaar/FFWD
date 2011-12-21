@@ -24,7 +24,6 @@ namespace PressPlay.FFWD.Exporter.Writers
         private AssetHelper assetHelper;
 
         public string ExportDir { get; set; }
-        public bool FlipYInTransforms { get; set; }
 
         private XmlWriter writer = null;
 
@@ -174,10 +173,6 @@ namespace PressPlay.FFWD.Exporter.Writers
         private void WriteTransform(Transform transform, bool isPrefab)
         {
             Vector3 pos = transform.localPosition;
-            if (FlipYInTransforms)
-            {
-                pos.y = -pos.y;
-            }
             if (!isPrefab)
             {
                 writer.WriteStartElement("c");
@@ -502,17 +497,20 @@ namespace PressPlay.FFWD.Exporter.Writers
                     writer.WriteElementString("name", mat.name);
                     writer.WriteElementString("shader", mat.shader.name);
                     writer.WriteElementString("renderQueue", mat.renderQueue.ToString());
+
                     if (mat.HasProperty("_Color"))
                     {
                         writer.WriteElementString("color", ToString(mat.color));
                     }
-                    else
+                    else if (mat.HasProperty("_TintColor"))
                     {
-                        if (mat.HasProperty("_TintColor"))
-                        {
-                            writer.WriteElementString("color", ToString(mat.GetColor("_TintColor")));
-                        }
+                        writer.WriteElementString("color", ToString(mat.GetColor("_TintColor")));
                     }
+                    else if ((obj as Material).name == "Default-Particle")
+                    {
+                        writer.WriteElementString("color", "FFFFFFFF");
+                    }
+                    
                     if (mat.mainTexture != null)
                     {
                         WriteElement("mainTexture", mat.mainTexture, typeof(Texture2D));
@@ -561,8 +559,15 @@ namespace PressPlay.FFWD.Exporter.Writers
                     else
                     {
                         writer.WriteElementString("id", (obj as Texture2D).GetInstanceID().ToString());
-                        writer.WriteElementString("name", Path.ChangeExtension(assetHelper.GetAssetName(obj as Texture2D), "").TrimEnd('.'));
-                        assetHelper.ExportTexture(obj as Texture2D);
+                        if ((obj as Texture2D).name == "Default-Particle")
+                        {
+                            writer.WriteElementString("name", "Default-Particle");
+                        }
+                        else
+                        {
+                            writer.WriteElementString("name", Path.ChangeExtension(assetHelper.GetAssetName(obj as Texture2D), "").TrimEnd('.'));
+                            assetHelper.ExportTexture(obj as Texture2D);
+                        }
                     }
                     writer.WriteEndElement();
                     return;
