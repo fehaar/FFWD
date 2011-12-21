@@ -138,8 +138,25 @@ namespace PressPlay.FFWD
 
         public void SetLookRotation(Vector3 view, Vector3 up)
         {
-            // TODO : Add implementation of method
-            throw new NotImplementedException("Method not implemented.");
+            if (view == up)
+            {
+                quaternion = new Microsoft.Xna.Framework.Quaternion(-0.7f, 0, 0, 0.7f);
+                return;
+            }
+            if (view == -up)
+            {
+                quaternion = new Microsoft.Xna.Framework.Quaternion(0.7f, 0, 0, 0.7f);
+                return;
+            }
+
+            Matrix m = Matrix.CreateWorld(Vector3.zero, view, up);
+            Microsoft.Xna.Framework.Vector3 scale;
+            Microsoft.Xna.Framework.Vector3 pos;
+
+            if (!m.Decompose(out scale, out quaternion, out pos) || float.IsNaN(quaternion.W))
+            {
+                quaternion = Quaternion.identity;
+            }
         }
         #endregion
 
