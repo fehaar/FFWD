@@ -88,7 +88,8 @@ namespace PressPlay.FFWD
 
         public static string TextField(Rect rect, string m_strLevelName)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            return m_strLevelName;
         }
 
         internal static void StartRendering()

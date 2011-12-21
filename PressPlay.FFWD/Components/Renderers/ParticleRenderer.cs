@@ -212,10 +212,11 @@ namespace PressPlay.FFWD.Components
 
             if (stretchParticles == StretchParticles.Stretched)
             {
+                size *= 2;
                 Microsoft.Xna.Framework.Vector3 particlePosition = particle.Position;
 
                 //TODO make this work correctly, and add velocityScale functionality.
-                Microsoft.Xna.Framework.Vector3 vertical = particle.Velocity;
+                Microsoft.Xna.Framework.Vector3 vertical = -particle.Velocity;
                 vertical.Normalize();
                 vertical *= size * lengthScale;
                 Microsoft.Xna.Framework.Vector3 horizontal = -Microsoft.Xna.Framework.Vector3.Cross(vertical, camForwardVector);
