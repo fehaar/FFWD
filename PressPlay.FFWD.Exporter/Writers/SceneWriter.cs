@@ -81,6 +81,25 @@ namespace PressPlay.FFWD.Exporter.Writers
             }
         }
 
+        public void WriteResource(string path, Material mat)
+        {
+            path = PreparePath(path);
+
+            XmlWriterSettings settings = new XmlWriterSettings();
+            settings.Indent = true;
+            settings.IndentChars = "  ";
+            using (writer = XmlWriter.Create(path, settings))
+            {
+                writer.WriteStartDocument();
+                writer.WriteStartElement("XnaContent");
+                writer.WriteStartElement("Asset");
+                writer.WriteAttributeString("Type", resolver.DefaultNamespace + ".Material");
+                WriteElement(null, mat);
+                writer.WriteEndElement();
+                writer.WriteEndElement();
+            }
+        }
+
         private string PreparePath(string path)
         {
             path = Path.Combine(ExportDir, path);
@@ -338,7 +357,7 @@ namespace PressPlay.FFWD.Exporter.Writers
             writer.WriteElementString("id", data.mesh.GetInstanceID().ToString());
             writer.WriteElementString("name", data.mesh.name);
             writer.WriteElementString("asset", asset);
-            if (data.writeAsStatic)
+            if (data.writeAsStatic || String.IsNullOrEmpty(asset))
             {
                 WriteElement("vertices", data.mesh.vertices);
                 WriteElement("normals", data.mesh.normals);
@@ -492,7 +511,10 @@ namespace PressPlay.FFWD.Exporter.Writers
                     {
                         return;
                     }
-                    writer.WriteStartElement(name);
+                    if (name != null)
+                    {
+                        writer.WriteStartElement(name);
+                    }
                     writer.WriteElementString("id", mat.GetInstanceID().ToString());
                     writer.WriteElementString("name", mat.name);
                     writer.WriteElementString("shader", mat.shader.name);
@@ -530,7 +552,10 @@ namespace PressPlay.FFWD.Exporter.Writers
                             throw;
                         }
                     }
-                    writer.WriteEndElement();
+                    if (name != null)
+                    {
+                        writer.WriteEndElement();
+                    }
                     return;
                 }
                 if (obj is AudioClip)

@@ -30,7 +30,7 @@ namespace PressPlay.FFWD.Exporter
         public static Dictionary<string, string> ReplaceClasses = new Dictionary<string, string>() {
             { "Object", "UnityObject" }
         };
-        public static string[] MethodsToOverride = new string[] { "Start", "Update", "FixedUpdate", "LateUpdate", "Awake", "OnTriggerEnter", "OnTriggerExit", "OnTriggerStay", "OnCollisionEnter", "OnCollisionExit", "OnCollisionStay", "OnGUI" };
+        public static string[] MethodsToOverride = new string[] { "Start", "Update", "FixedUpdate", "LateUpdate", "Awake", "OnTriggerEnter", "OnTriggerExit", "OnTriggerStay", "OnCollisionEnter", "OnCollisionExit", "OnCollisionStay", "OnGUI", "OnEnable", "OnDisable" };
 
         public void Translate()
         {
@@ -101,7 +101,7 @@ namespace PressPlay.FFWD.Exporter
         {
             foreach (string method in MethodsToOverride)
             {
-                Regex methEx = new Regex(@"void\s+" + method + @"\s?\(");
+                Regex methEx = new Regex(@"void\s+" + method + @"\s*\(");
                 int startLine = scriptLines.FindIndex(s => methEx.IsMatch(s));
                 if (startLine >= 0)
                 {

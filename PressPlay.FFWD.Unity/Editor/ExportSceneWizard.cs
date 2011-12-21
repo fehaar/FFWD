@@ -136,6 +136,23 @@ public class ExportSceneWizard : ScriptableWizard
             Debug.Log("Exported Text asset to " + exportPath);
         }
 
+        public void ExportMaterial(Material mat)
+        {
+            if (mat == null)
+            {
+                Debug.LogError("FFWD: Cannot export null material");
+                return;
+            }
+
+            SceneWriter scene = new SceneWriter(resolver, assets);
+            scene.ExportDir = Path.Combine(xnaBaseDir, config.exportDir);
+            ScriptTranslator.ScriptNamespace = config.scriptNamespace;
+
+            string path = Path.ChangeExtension(AssetDatabase.GetAssetPath(mat).Replace("Assets/", ""), "xml");
+            Debug.Log("Start resource export of " + path);
+            scene.WriteResource(path, mat);
+        }
+
         public void ExportAudio(AudioClip asset)
         {
             string assetPath = AssetDatabase.GetAssetPath(asset.GetInstanceID());
@@ -445,6 +462,10 @@ public class ExportSceneWizard : ScriptableWizard
                 if (item is AudioClip)
                 {
                     cmd.ExportAudio(item as AudioClip);
+                }
+                if (item is Material)
+                {
+                    cmd.ExportMaterial(item as Material);
                 }
             }
             catch (Exception ex)

@@ -23,5 +23,15 @@ namespace PressPlay.FFWD
             Type t = Type.GetType(typeName);
             return CreateInstance(t);
         }
+
+        public virtual void OnEnable()
+        {
+            // NOTE: Do not make any code here. Typically base method is NOT called in MonoScripts so this will not be called either!!!!!
+        }
+
+        public virtual void OnDisable()
+        {
+            // NOTE: Do not make any code here. Typically base method is NOT called in MonoScripts so this will not be called either!!!!!
+        }
     }
 }

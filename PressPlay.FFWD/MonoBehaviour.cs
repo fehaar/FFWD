@@ -10,52 +10,62 @@ namespace PressPlay.FFWD.Components
         #region Overridable methods
         public virtual void Update()
         {
-            // NOTE: Do not make any code here. Typically base.Update() is NOT called in MonoScripts so this will not be called either!!!!!
+            // NOTE: Do not make any code here. Typically base method is NOT called in MonoScripts so this will not be called either!!!!!
         }
 
         public virtual void LateUpdate()
         {
-            // NOTE: Do not make any code here. Typically base.Update() is NOT called in MonoScripts so this will not be called either!!!!!
+            // NOTE: Do not make any code here. Typically base method is NOT called in MonoScripts so this will not be called either!!!!!
         }
 
         public virtual void FixedUpdate()
         {
-            // NOTE: Do not make any code here. Typically base.Update() is NOT called in MonoScripts so this will not be called either!!!!!
+            // NOTE: Do not make any code here. Typically base method is NOT called in MonoScripts so this will not be called either!!!!!
+        }
+
+        public virtual void OnEnable()
+        {
+            // NOTE: Do not make any code here. Typically base method is NOT called in MonoScripts so this will not be called either!!!!!
+        }
+
+        public virtual void OnDisable()
+        {
+            // NOTE: Do not make any code here. Typically base method is NOT called in MonoScripts so this will not be called either!!!!!
         }
 
         public virtual void OnGUI()
         {
-            // NOTE: Do not make any code here. Typically base.Update() is NOT called in MonoScripts so this will not be called either!!!!!
+            // NOTE: Do not make any code here. Typically base method is NOT called in MonoScripts so this will not be called either!!!!!
         }
 
         public virtual void OnCollisionEnter(Collision collision)
         {
-            // NOTE: Do not make any code here. Typically base.Update() is NOT called in MonoScripts so this will not be called either!!!!!
+            // NOTE: Do not make any code here. Typically base method is NOT called in MonoScripts so this will not be called either!!!!!
         }
 
         public virtual void OnCollisionStay(Collision collision)
         {
-            // NOTE: Do not make any code here. Typically base.Update() is NOT called in MonoScripts so this will not be called either!!!!!
+            // NOTE: Do not make any code here. Typically base method is NOT called in MonoScripts so this will not be called either!!!!!
         }
 
         public virtual void OnCollisionExit(Collision collision)
         {
-            // NOTE: Do not make any code here. Typically base.Update() is NOT called in MonoScripts so this will not be called either!!!!!
+            // NOTE: Do not make any code here. Typically base method is NOT called in MonoScripts so this will not be called either!!!!!
         }
 
         public virtual void OnTriggerStay(Collider collider)
         {
-            // NOTE: Do not make any code here. Typically base.Update() is NOT called in MonoScripts so this will not be called either!!!!!
+            // NOTE: Do not make any code here. Typically base method is NOT called in MonoScripts so this will not be called either!!!!!
         }
 
         public virtual void OnTriggerEnter(Collider collider)
         {
-            // NOTE: Do not make any code here. Typically base.Update() is NOT called in MonoScripts so this will not be called either!!!!!
+            // NOTE: Do not make any code here. Typically base method is NOT called in MonoScripts so this will not be called either!!!!!
         }
 
         public virtual void OnTriggerExit(Collider collider)
         {
-            // NOTE: Do not make any code here. Typically base.Update() is NOT called in MonoScripts so this will not be called either!!!!!
+            // NOTE: Do not make any code here. Typically base method is NOT called in MonoScripts so this will not be called either!!!!!
         }
         #endregion
 
