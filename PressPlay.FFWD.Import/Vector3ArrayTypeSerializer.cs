@@ -12,7 +12,10 @@ namespace PressPlay.FFWD.Import
     {
         protected override Vector3[] Deserialize(IntermediateReader input, ContentSerializerAttribute format, Vector3[] existingInstance)
         {
-            string[] s = input.Xml.ReadContentAsString().Trim().Split(' ');
+            string str = input.Xml.ReadContentAsString().Trim();
+            if (string.IsNullOrWhiteSpace(str)) { return new Vector3[0]; }
+
+            string[] s = str.Split(' ');
             if ((s.Length % 3) != 0)
             {
                 throw new Exception(String.Format("Not enough floats in the string for Vector3[] in element {0}. Was {1}.", format.ElementName, s.Length));

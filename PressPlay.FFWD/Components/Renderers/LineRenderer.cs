@@ -10,30 +10,14 @@ namespace PressPlay.FFWD.Components
     public class LineRenderer : Renderer
     {
         //for drawing
-        //private int vertexCount = 0;
         private VertexPositionColorTexture[] vertexPositionColorTextures;
         private short[] triangleIndexData;
-
-        //private Vector3[] vertices;
-        //private Microsoft.Xna.Framework.Vector2[] uvs;
-        //private short[] triangles;
-        //private bool[] flipped;
         private float lineIncrementDeltaFraction;
         private float widthDif;
         private float curWidth = 1;
-        //private float nextWidth = 1;
-        
-
-        //private Vector3 p1;
-        //private Vector3 p2;
-        //private Vector3 p3;
-
-        private Vector3 tmpVerticePosUpper;
-        private Vector3 tmpVerticePosLower;
         Vector3 orthogonalVector = new Vector3();
-        Vector3[] tmpPositions;
-        int pointCnt = -1;
-        int oldPointCnt = -1;
+        int pointCnt = 0;
+        Vector3[] transformedPositions = new Vector3[0];
 
         //LineRenderer members
         public bool useWorldSpace;
@@ -48,17 +32,9 @@ namespace PressPlay.FFWD.Components
         [ContentSerializer(Optional = true)]
         Vector3[] positions = new Vector3[0];
         
-        Vector3[] transformedPositions = new Vector3[0];
-
-
         public override void Awake()
         {
             base.Awake();
-            //transformedPositions = new Vector3[positions.Length];
-            //vertexPositionColorTextures = new VertexPositionColorTexture[positions.Length * 2];
-            //triangleIndexData = new short[positions.Length * 6];
-            //pointCnt = positions.Length;
-            //widthDif = endWidth - startWidth;
 
             widthDif = endWidth - startWidth;
             Vector3[] oldPositions = (Vector3[])positions.Clone();
@@ -84,31 +60,33 @@ namespace PressPlay.FFWD.Components
 
         public void SetVertexCount(int count)
         {
-            pointCnt = count;
-            
+            if (count < 2)
+            { return; }
+
             //creqate new arrays if the current ones are too short
             if (transformedPositions == null || transformedPositions.Length < count)
             {
                 positions = new Vector3[count];
                 transformedPositions = new Vector3[count];
                 vertexPositionColorTextures = new VertexPositionColorTexture[count * 2];
-                triangleIndexData = new short[count * 6];
+                triangleIndexData = new short[(count - 1) * 6];
+                //create triangles
+                for (int i = pointCnt; i < count - 1; i++)
+                {
+                    int triangleOffset = i * 6;
+                    int verticeOffset = i * 2;
+                    triangleIndexData[triangleOffset] = (short)verticeOffset;
+                    triangleIndexData[triangleOffset + 1] = (short)(verticeOffset + 1);
+                    triangleIndexData[triangleOffset + 2] = (short)(verticeOffset + 2);
+                    triangleIndexData[triangleOffset + 3] = (short)(verticeOffset + 2);
+                    triangleIndexData[triangleOffset + 4] = (short)(verticeOffset + 1);
+                    triangleIndexData[triangleOffset + 5] = (short)(verticeOffset + 3);
+                }
             }
 
-            //create triangles and other drawing information
+            //create other drawing information
             lineIncrementDeltaFraction = 1f / ((float)count - 1f);
-            triangleIndexData = new short[(count - 1) * 6];
-            for (int i = 0; i < count - 1; i++)
-            {
-                int triangleOffset = i * 6;
-                int verticeOffset = i * 2;
-                triangleIndexData[triangleOffset] = (short)verticeOffset;
-                triangleIndexData[triangleOffset + 1] = (short)(verticeOffset + 1);
-                triangleIndexData[triangleOffset + 2] = (short)(verticeOffset + 2);
-                triangleIndexData[triangleOffset + 3] = (short)(verticeOffset + 1);
-                triangleIndexData[triangleOffset + 4] = (short)(verticeOffset + 2);
-                triangleIndexData[triangleOffset + 5] = (short)(verticeOffset + 3);
-            }
+            
 
             Vector2 texScale = material.mainTextureScale;
             for (int i = 0; i < count - 1; i++)
@@ -126,6 +104,8 @@ namespace PressPlay.FFWD.Components
 
             vertexPositionColorTextures[count * 2 - 2].Color = endColor;
             vertexPositionColorTextures[count * 2 - 1].Color = endColor;
+
+            pointCnt = count;
         }
 
         public void SetPosition(int index, Vector3 position)
@@ -187,9 +167,9 @@ namespace PressPlay.FFWD.Components
                 orthogonalVector = Vector3.Cross(lineDir, cameraDir);
                 orthogonalVector.Normalize();
 //#if DEBUG
-                //Debug.DrawRay(positions[i], lineDir, Color.green);
-                //Debug.DrawRay(positions[i], orthogonalVector * 10, Color.red);
-                //Debug.DrawRay(positions[i], cameraDir, Color.red);
+//                Debug.DrawRay(positions[i], lineDir, Color.green);
+//                Debug.DrawRay(positions[i], orthogonalVector * 10, Color.red);
+//                Debug.DrawRay(positions[i], cameraDir, Color.red);
 //#endif
                 float lineIncrementFraction = i * lineIncrementDeltaFraction;
                 curWidth = (startWidth + (widthDif * lineIncrementFraction)) * 0.5f;
@@ -199,7 +179,7 @@ namespace PressPlay.FFWD.Components
             }
             vertexPositionColorTextures[(pointCnt - 2) * 2 + 2].Position = positions[(pointCnt - 2) + 1] - orthogonalVector * endWidth;
             vertexPositionColorTextures[(pointCnt - 2) * 2 + 3].Position = positions[(pointCnt - 2) + 1] + orthogonalVector * endWidth;
-            
+
 //#if DEBUG
 //            for (int i = 0; i < vertexPositionColorTextures.Length-1; i++)
 //            {
