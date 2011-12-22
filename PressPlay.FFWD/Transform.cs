@@ -214,14 +214,6 @@ namespace PressPlay.FFWD
                     Vector3 trans = Microsoft.Xna.Framework.Vector3.Transform(value, Matrix.Invert(parent.world));
                     localPosition = trans;
                 }
-                if (rigidbody != null)
-                {
-                    rigidbody.MovePosition(position);
-                }
-                else if (collider != null)
-                {
-                    collider.MovePosition(position);
-                }
             }
         }
 
