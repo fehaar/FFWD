@@ -45,7 +45,7 @@ namespace PressPlay.FFWD
                     if (style.alignment == TextAnchor.MiddleCenter)
                     {
                         Microsoft.Xna.Framework.Vector2 sz = GUI.spriteFont.MeasureString(text);
-                        pos += new Microsoft.Xna.Framework.Vector2((rect.width - sz.X) / 2, (rect.height - sz.Y) / 2);
+                        pos += new Microsoft.Xna.Framework.Vector2(Mathf.Floor((rect.width - sz.X) / 2), Mathf.Floor((rect.height - sz.Y) / 2));
                     }
 
                     spriteBatch.DrawString(GUI.spriteFont, text, pos, color);

@@ -44,6 +44,14 @@ namespace PressPlay.FFWD
                     _localPosition = value;
                 }
                 hasDirtyWorld = true;
+                if (rigidbody != null)
+                {
+                    rigidbody.MovePosition(position);
+                }
+                else if (collider != null)
+                {
+                    collider.MovePosition(position);
+                }
             }
         }
 
@@ -209,6 +217,10 @@ namespace PressPlay.FFWD
                 if (rigidbody != null)
                 {
                     rigidbody.MovePosition(position);
+                }
+                else if (collider != null)
+                {
+                    collider.MovePosition(position);
                 }
             }
         }
