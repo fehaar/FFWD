@@ -55,7 +55,7 @@ namespace PressPlay.FFWD
                 {
                     continue;
                 }
-                Touch t = new Touch() { fingerId = tl.Id, position = new Vector2(tl.Position.X, Camera.FullScreen.Height - tl.Position.Y), phase = ToPhase(tl.State) };
+                Touch t = new Touch() { fingerId = tl.Id, position = new Vector2(tl.Position.X, Camera.FullScreen.Height - tl.Position.Y), cleanPosition = tl.Position, phase = ToPhase(tl.State) };
                 _touches[_touchCount++] = t;
             }
 #else

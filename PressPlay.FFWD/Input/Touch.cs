@@ -11,6 +11,7 @@ namespace PressPlay.FFWD
     {
         public int fingerId;
         public Vector2 position;
+        internal Vector2 cleanPosition;
         public Vector2 deltaPosition;
         public Vector2 deltaTime;
         public int tapCount;

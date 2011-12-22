@@ -58,7 +58,13 @@ namespace PressPlay.FFWD
             if (isRendering)
             {
                 bool result = Button(rect, GUI.skin.button.normal.background, GUI.skin.button);
+                Color oldColor = color;
+                if (result)
+                {
+                    color = Color.green;
+                }
                 Label(rect, text, GUI.skin.button);
+                color = oldColor;
                 return result;
             }
             return false;
@@ -81,6 +87,13 @@ namespace PressPlay.FFWD
                 if (Input.GetMouseButtonDown(0) && rect.Contains(Input.mousePositionClean))
                 {
                     return true;
+                }
+                for (int i = 0; i < Input.touches.Length; i++)
+                {
+                    if (Input.touches[i].phase == TouchPhase.Began && rect.Contains(Input.touches[i].cleanPosition))
+                    {
+                        return true;
+                    }
                 }
             }
             return false;
