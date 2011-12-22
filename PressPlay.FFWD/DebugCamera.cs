@@ -26,6 +26,12 @@ namespace PressPlay.FFWD
             base.Awake();
         }
 
+        protected override void Destroy()
+        {
+            activated = false;
+            base.Destroy();
+        }
+
         public override int Draw(Microsoft.Xna.Framework.Graphics.GraphicsDevice device, Camera cam)
         {
             if (ApplicationSettings.ShowDebugLines)
