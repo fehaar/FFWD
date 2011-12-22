@@ -21,7 +21,7 @@ namespace PressPlay.FFWD
             if (isRendering)
             {
                 Rectangle r = rect;
-                if (Camera.main.viewPort.Bounds.Contains(r))
+                if (Camera.FullScreen.Bounds.Contains(r))
                 {
                     spriteBatch.Draw((Microsoft.Xna.Framework.Graphics.Texture2D)texture, r, color);
                 }
@@ -38,7 +38,7 @@ namespace PressPlay.FFWD
             if (isRendering)
             {
                 Rectangle r = rect;
-                if (Camera.main.viewPort.Bounds.Contains(r))
+                if (Camera.FullScreen.Bounds.Contains(r))
                 {
                     Microsoft.Xna.Framework.Vector2 pos = new Microsoft.Xna.Framework.Vector2(r.Location.X, r.Location.Y);
 
@@ -74,7 +74,7 @@ namespace PressPlay.FFWD
             if (isRendering)
             {
                 Rectangle r = rect;
-                if (Camera.main.viewPort.Bounds.Contains(r))
+                if (Camera.FullScreen.Bounds.Contains(r))
                 {
                     spriteBatch.Draw((Texture2D)texture, r, color);
                 }
