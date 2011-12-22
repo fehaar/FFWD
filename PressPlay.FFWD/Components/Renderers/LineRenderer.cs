@@ -14,19 +14,19 @@ namespace PressPlay.FFWD.Components
         private VertexPositionColorTexture[] vertexPositionColorTextures;
         private short[] triangleIndexData;
 
-        private Vector3[] vertices;
-        private Microsoft.Xna.Framework.Vector2[] uvs;
-        private short[] triangles;
-        private bool[] flipped;
+        //private Vector3[] vertices;
+        //private Microsoft.Xna.Framework.Vector2[] uvs;
+        //private short[] triangles;
+        //private bool[] flipped;
         private float lineIncrementDeltaFraction;
         private float widthDif;
         private float curWidth = 1;
-        private float nextWidth = 1;
+        //private float nextWidth = 1;
         
 
-        private Vector3 p1;
-        private Vector3 p2;
-        private Vector3 p3;
+        //private Vector3 p1;
+        //private Vector3 p2;
+        //private Vector3 p3;
 
         private Vector3 tmpVerticePosUpper;
         private Vector3 tmpVerticePosLower;
@@ -74,7 +74,7 @@ namespace PressPlay.FFWD.Components
 
         public void SetVertexCount(int count)
         {
-            if (vertices == null || vertices.Length < count)
+            if (transformedPositions == null || transformedPositions.Length < count)
             {
                 positions = new Vector3[count];
                 transformedPositions = new Vector3[count];
@@ -136,10 +136,6 @@ namespace PressPlay.FFWD.Components
         {
             if (pointCnt < 2) return;
 
-            for (int i = 0; i < pointCnt-1; i++)
-            {
-                Debug.DrawLine(positions[i], positions[i + 1], Color.white);
-            }
             widthDif = endWidth - startWidth;
             bool rebuildArraysAndUVs = (oldPointCnt != pointCnt);
             oldPointCnt = pointCnt;
@@ -147,18 +143,14 @@ namespace PressPlay.FFWD.Components
             {
                 //Debug.Log("LineDrawerXZ on "+name+" rebuilding arrays and UVs");
 
-                vertices = new Vector3[pointCnt * 5];
-                uvs = new Microsoft.Xna.Framework.Vector2[pointCnt * 5];
-                triangles = new short[((pointCnt - 1) * 9)];
-                flipped = new bool[pointCnt];
+                //vertices = new Vector3[pointCnt * 5];
+                //uvs = new Microsoft.Xna.Framework.Vector2[pointCnt * 5];
+                //triangles = new short[((pointCnt - 1) * 9)];
+                //flipped = new bool[pointCnt];
 
                 lineIncrementDeltaFraction = 1f / ((float)pointCnt - 1f);
-
-
                 triangleIndexData = new short[(pointCnt - 1) * 6];
             }
-
-            
 
             for (int i = 0; i < pointCnt - 1; i++)
             {
@@ -174,35 +166,36 @@ namespace PressPlay.FFWD.Components
                 //Debug.Log("lineIncrementFraction "+lineIncrementFraction+" i "+i);
                 //float width;
                 curWidth = (startWidth + (widthDif * lineIncrementFraction)) * 0.5f;
-                nextWidth = (startWidth + (widthDif * (lineIncrementFraction + lineIncrementDeltaFraction))) * 0.5f;
+                
 
-                p1 = positions[i];
-                p2 = positions[i + 1];
-                p3 = positions[Mathf.Clamp(i + 2, 0, pointCnt - 1)];
+                //p1 = positions[i];
+                //p2 = positions[i + 1];
+                //p3 = positions[Mathf.Clamp(i + 2, 0, pointCnt - 1)];
 
-                // todo fix with if..
-                float rad = Mathf.Atan2(p2.z - p1.z, p1.x - p2.x);
-                float tmpRad = rad;
-                if (tmpRad < 0) tmpRad += 2 * Mathf.PI;
-                float tmpRad2 = Mathf.Atan2(p3.z - p2.z, p2.x - p3.x);
-                if (tmpRad2 < 0) tmpRad2 += 2 * Mathf.PI;
-                tmpRad2 = tmpRad - tmpRad2;
-                if (tmpRad2 < 0) tmpRad2 += 2 * Mathf.PI;
-                tmpRad2 *= Mathf.Rad2Deg;
-                //Debug.Log(p1 + " rad2= "+ tmpRad2);
-                //Debug.Log("rad3= "+ rad3);
+                //// todo fix with if..
+                //float rad = Mathf.Atan2(p2.z - p1.z, p1.x - p2.x);
+                //float tmpRad = rad;
+                //if (tmpRad < 0) tmpRad += 2 * Mathf.PI;
+                //float tmpRad2 = Mathf.Atan2(p3.z - p2.z, p2.x - p3.x);
+                //if (tmpRad2 < 0) tmpRad2 += 2 * Mathf.PI;
+                //tmpRad2 = tmpRad - tmpRad2;
+                //if (tmpRad2 < 0) tmpRad2 += 2 * Mathf.PI;
+                //tmpRad2 *= Mathf.Rad2Deg;
+                ////Debug.Log(p1 + " rad2= "+ tmpRad2);
+                ////Debug.Log("rad3= "+ rad3);
 
-                if (tmpRad2 > 180)
-                {
-                    flipped[i] = true;
-                }
-                else
-                {
-                    flipped[i] = false;
-                }
+                //if (tmpRad2 > 180)
+                //{
+                //    flipped[i] = true;
+                //}
+                //else
+                //{
+                //    flipped[i] = false;
+                //}
 
-                orthogonalVector.x = Mathf.Sin(rad);
-                orthogonalVector.z = Mathf.Cos(rad);
+                //orthogonalVector.x = Mathf.Sin(rad);
+                //orthogonalVector.z = Mathf.Cos(rad);
+                //Debug.DrawRay(positions[i], orthogonalVector*10, Color.cyan);
 
                 //vertices[i * 5] = p1 + orthogonalVector * curWidth;
                 //vertices[(i * 5) + 1] = p1 - orthogonalVector * curWidth;
@@ -223,14 +216,10 @@ namespace PressPlay.FFWD.Components
                 //vertices[(i * 5) + 4] = p2;
 
 
-                vertexPositionColorTextures[i * 2].Position = p1 + orthogonalVector * curWidth;
-                vertexPositionColorTextures[i * 2 + 1].Position = p1 - orthogonalVector * curWidth;
+                vertexPositionColorTextures[i * 2].Position = positions[i] - orthogonalVector * curWidth;
+                vertexPositionColorTextures[i * 2 + 1].Position = positions[i] + orthogonalVector * curWidth;
 
-                if (i == pointCnt-2)
-                {
-                    vertexPositionColorTextures[i * 2 + 2].Position = p2 + orthogonalVector * nextWidth;
-                    vertexPositionColorTextures[i * 2 + 3].Position = p2 - orthogonalVector * nextWidth;
-                }
+                
 
                 //Debug.DrawLine(vertices[i * 5], vertices[(i * 5) + 1], Color.black);
                 //Debug.DrawLine(vertices[(i * 5) + 1], vertices[(i * 5) + 2], Color.black);
@@ -240,10 +229,16 @@ namespace PressPlay.FFWD.Components
                 //tmpVerticePosUpper = vertices[(i * 5) + 2];
                 //tmpVerticePosLower = vertices[(i * 5) + 3];
             }
+            vertexPositionColorTextures[(pointCnt - 2) * 2 + 2].Position = positions[(pointCnt - 2) + 1] - orthogonalVector * endWidth;
+            vertexPositionColorTextures[(pointCnt - 2) * 2 + 3].Position = positions[(pointCnt - 2) + 1] + orthogonalVector * endWidth;
+            
+
 
             for (int i = 0; i < vertexPositionColorTextures.Length-1; i++)
             {
-                Debug.DrawLine(vertexPositionColorTextures[i].Position, vertexPositionColorTextures[i+1].Position, Color.black);
+                Debug.DrawLine(vertexPositionColorTextures[i].Position, vertexPositionColorTextures[i + 1].Position, new Color(0.8f, 0.8f, 0.8f, 0.5f));
+                if (i < vertexPositionColorTextures.Length - 2)
+                { Debug.DrawLine(vertexPositionColorTextures[i].Position, vertexPositionColorTextures[i + 2].Position, new Color(0.8f, 0.8f, 0.8f, 0.5f)); }
             }
 
             if (rebuildArraysAndUVs)

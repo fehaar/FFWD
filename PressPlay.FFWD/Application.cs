@@ -397,7 +397,7 @@ namespace PressPlay.FFWD
 
             timeUpdateEndUpdateStart.Start(); //measure time from draw ended to beginning of Update, to try and measure graphics performance
 #endif
-            Debug.ClearLines();
+            //Debug.ClearLines();
             Input.ClearStates();
         }
 
