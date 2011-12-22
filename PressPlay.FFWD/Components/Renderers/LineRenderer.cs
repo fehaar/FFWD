@@ -109,7 +109,11 @@ namespace PressPlay.FFWD.Components
                 Rebuild(positions, pointCnt, cam.transform.forward);
             }
 
-            
+            material.SetTextureState(cam.BasicEffect);
+            material.SetBlendState(device);
+
+            cam.BasicEffect.VertexColorEnabled = true;
+            cam.BasicEffect.LightingEnabled = false;
 
             foreach (EffectPass pass in cam.BasicEffect.CurrentTechnique.Passes)
             {
