@@ -255,24 +255,39 @@ namespace PressPlay.FFWD
             return gameObject.GetComponentsInChildren<T>();
         }
 
-        #region Component locator methods
         public T GetComponent<T>() where T : Component
         {
+            if (gameObject == null)
+            {
+                return null;
+            }
             return gameObject.GetComponent<T>();
         }
 
         public T[] GetComponents<T>() where T : Component
         {
+            if (gameObject == null)
+            {
+                return new T[0];
+            }
             return gameObject.GetComponents<T>();
         }
 
         public Component[] GetComponentsInChildren(Type type)
         {
+            if (gameObject == null)
+            {
+                return new Component[0];
+            }
             return gameObject.GetComponentsInChildren(type);
         }
 
         public T GetComponentInParents<T>() where T : Component
         {
+            if (gameObject == null)
+            {
+                return null;
+            }
             return gameObject.GetComponentInParents<T>();
         }
 
@@ -280,11 +295,9 @@ namespace PressPlay.FFWD
         {
             throw new NotImplementedException();
         }
-        #endregion
 
         public Component[] GetComponentsInChildren(Type type, bool includeInactive)
         {
-            // TODO: Objects should be destroyed after Update but before Rendering
             throw new NotImplementedException("Method not implemented.");
         }
         #endregion

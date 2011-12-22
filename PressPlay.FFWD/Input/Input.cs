@@ -175,7 +175,7 @@ namespace PressPlay.FFWD
                 }
                 return Vector2.zero;
 #else
-                return new Vector2(_currentMouseState.X, Camera.main.viewPort.Height - _currentMouseState.Y);
+                return new Vector2(_currentMouseState.X, Camera.FullScreen.Height - _currentMouseState.Y);
 #endif
             }
         }

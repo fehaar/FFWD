@@ -321,6 +321,8 @@ namespace PressPlay.FFWD
             graphics.Start();
 #endif
             Camera.DoRender(GraphicsDevice);
+            ChangeComponentActivity();
+            CleanUp();
 #if DEBUG
             graphics.Stop();
             double total = fixedUpdateTime.Elapsed.TotalSeconds + lateUpdateTime.Elapsed.TotalSeconds + updateTime.Elapsed.TotalSeconds + graphics.Elapsed.TotalSeconds + physics.Elapsed.TotalSeconds;
@@ -888,12 +890,7 @@ namespace PressPlay.FFWD
             {
                 Component cmp = componentsChangingActivity[i];
                 Type tp = cmp.GetType();
-                if (cmp.gameObject == null)
-                {
-                    // We can have components that are in this list but which have been destroyed. Just ignore them.
-                    continue;
-                }
-                if (cmp.gameObject.active)
+                if (cmp.gameObject != null && cmp.gameObject.active)
                 {
                     if (typeCaps.HasCaps(tp, TypeSet.TypeCapabilities.Update))
                     {
@@ -958,7 +955,7 @@ namespace PressPlay.FFWD
                 }
                 else
                 {
-                    if (cmp is MonoBehaviour)
+                    if (cmp is MonoBehaviour && cmp.gameObject != null)
                     {
                         (cmp as MonoBehaviour).OnDisable();
                     }

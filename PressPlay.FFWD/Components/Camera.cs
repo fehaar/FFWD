@@ -110,6 +110,14 @@ namespace PressPlay.FFWD.Components
         public static void RemoveCamera(Camera cam)
         {
             _allCameras.Remove(cam);
+            if (cam == main)
+            {
+                main = null;
+                if (_allCameras.Count > 0)
+                {
+                    main = _allCameras[0];
+                }
+            }
         }
 
         private static List<Camera> _allCameras = new List<Camera>();
@@ -289,12 +297,9 @@ namespace PressPlay.FFWD.Components
                 }
             }
 
-            if (Camera.main != null)
-            {
-                GUI.StartRendering();
-                GUI.RenderComponents(Application.guiComponents);
-                GUI.EndRendering();
-            }
+            GUI.StartRendering();
+            GUI.RenderComponents(Application.guiComponents);
+            GUI.EndRendering();
 
 #if DEBUG
             Debug.Display("Estimated Draw calls", estimatedDrawCalls);

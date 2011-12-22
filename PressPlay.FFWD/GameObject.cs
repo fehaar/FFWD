@@ -601,7 +601,7 @@ namespace PressPlay.FFWD
 
         protected override void Destroy()
         {
-            for (int i = 0; i < components.Count; i++)
+            for (int i = components.Count - 1; i >= 0; i--)
             {
                 Destroy(components[i]);
             }

@@ -87,6 +87,7 @@ namespace PressPlay.FFWD.Components
 
         protected override sealed void Destroy()
         {
+            OnDisable();
             base.Destroy();
         }
         #endregion

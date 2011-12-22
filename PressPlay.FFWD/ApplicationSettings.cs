@@ -20,7 +20,7 @@ namespace PressPlay.FFWD
         public static bool ShowFPSCounter = true;
         public static bool ShowBodyCounter = true;
         public static bool ShowDebugDisplays = true;
-        public static bool ShowDebugLines = true;
+        public static bool ShowDebugLines = false;
         public static bool ShowDebugPhysics = false;
         public static bool LogActivatedComponents = false;
 #if WINDOWS
