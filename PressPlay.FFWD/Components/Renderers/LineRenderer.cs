@@ -102,11 +102,11 @@ namespace PressPlay.FFWD.Components
                 {
                     transformedPositions[i] = transform.TransformPoint(positions[i]);
                 }
-                Rebuild(transformedPositions, pointCnt, cam.transform.forward);
+                Rebuild(transformedPositions, pointCnt, cam.transform.position);
             }
             else
             {
-                Rebuild(positions, pointCnt, cam.transform.forward);
+                Rebuild(positions, pointCnt, cam.transform.position);
             }
 
             
@@ -128,7 +128,7 @@ namespace PressPlay.FFWD.Components
             return 1;
         }
 
-        void Rebuild(Vector3[] positions, int pointCnt, Vector3 cameraForwardDir)
+        void Rebuild(Vector3[] positions, int pointCnt, Vector3 cameraPosition)
         {
             if (pointCnt < 2) return;
 
@@ -158,9 +158,13 @@ namespace PressPlay.FFWD.Components
 
             for (int i = 0; i < pointCnt - 1; i++)
             {
-                //orthogonalVector = Vector3.Cross(positions[i + 1] - positions[i], cameraForwardDir);
-                //orthogonalVector.Normalize();
-                //Debug.DrawRay(positions[i], orthogonalVector * 10, Color.red);
+                Vector3 lineDir = positions[i + 1] - positions[i];
+                Vector3 cameraDir = cameraPosition - positions[i];
+                orthogonalVector = Vector3.Cross(lineDir, cameraDir);
+                orthogonalVector.Normalize();
+                Debug.DrawRay(positions[i], lineDir, Color.green);
+                Debug.DrawRay(positions[i], orthogonalVector * 10, Color.red);
+                Debug.DrawRay(positions[i], cameraDir, Color.red);
 
                 float lineIncrementFraction = i * lineIncrementDeltaFraction;
                 //Debug.Log("lineIncrementFraction "+lineIncrementFraction+" i "+i);
