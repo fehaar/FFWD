@@ -24,7 +24,7 @@ namespace PressPlay.FFWD.Import
             scene = input;
 
             // Create static batch renderers
-            Dictionary<int, StaticBatchRenderer> staticRenderers = new Dictionary<int, StaticBatchRenderer>();
+            Dictionary<string, StaticBatchRenderer> staticRenderers = new Dictionary<string, StaticBatchRenderer>();
             foreach (Renderer r in Application.newComponents.Where(c => (c is Renderer)).ToArray())
             {
                 if (r.gameObject == null)
@@ -36,10 +36,10 @@ namespace PressPlay.FFWD.Import
                 {
                     continue;
                 }
-                Material m = r.material;
-                if (!staticRenderers.ContainsKey(m.GetInstanceID()))
+                string key = GetMaterialKey(r.materials);
+                if (!staticRenderers.ContainsKey(key))
                 {
-                    GameObject sbGo = new GameObject("Static - " + m.name);
+                    GameObject sbGo = new GameObject("Static - " + key);
                     while (idMap.ContainsKey(sbGo.GetInstanceID()))
                     {
                         sbGo.SetNewId(null);
@@ -49,8 +49,8 @@ namespace PressPlay.FFWD.Import
                     {
                         sbr.SetNewId(null);
                     }
-                    staticRenderers[m.GetInstanceID()] = sbr;
-                    staticRenderers[m.GetInstanceID()].materials = (Material[])r.materials.Clone();
+                    staticRenderers[key] = sbr;
+                    staticRenderers[key].materials = (Material[])r.materials.Clone();
                 }
 
                 MeshFilter mf = r.gameObject.GetComponent<MeshFilter>();
@@ -60,7 +60,7 @@ namespace PressPlay.FFWD.Import
                 {
                     throw new Exception("The mesh with Id " + id + " was not found in assets. Gotten from " + mf);
                 }
-                if (staticRenderers[m.GetInstanceID()].AddMesh(mesh, r.transform.world))
+                if (staticRenderers[key].AddMesh(mesh, r.transform.world))
                 {
                     r.isPartOfStaticBatch = true;
                 }
@@ -87,6 +87,20 @@ namespace PressPlay.FFWD.Import
             scene.typeCaps = tc.ToList();
             Application.Reset();
             return input;
+        }
+
+        private string GetMaterialKey(Material[] material)
+        {
+            if (material.Length == 1)
+            {
+                return material[0].GetInstanceID().ToString();
+            }
+            StringBuilder sb = new StringBuilder(material[0].GetInstanceID().ToString());
+            for (int i = 1; i < material.Length; i++)
+            {
+                sb.AppendFormat("-{0}", material[i].GetInstanceID());
+            }
+            return sb.ToString();
         }
 
         private void PurgeStaticallyBatchedRenderers(GameObject go)

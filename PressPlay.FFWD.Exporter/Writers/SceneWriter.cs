@@ -182,7 +182,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                 }
                 catch (Exception ex)
                 {
-                    Debug.LogError("Exception while writing Component of type " + comps[i].GetType());
+                    Debug.LogError("Exception while writing Component of type " + comps[i].GetType() + " : " + ex.Message);
                     throw;
                 }
             }
@@ -362,7 +362,12 @@ namespace PressPlay.FFWD.Exporter.Writers
                 WriteElement("vertices", data.mesh.vertices);
                 WriteElement("normals", data.mesh.normals);
                 WriteElement("uv", TransformUV(data.mesh.uv));
-                WriteElement("triangles", data.mesh.triangles);
+                writer.WriteStartElement("triangleSets");
+                for (int i = 0; i < data.mesh.subMeshCount; i++)
+                {
+                    WriteElement("Item", data.mesh.GetTriangles(i));
+                }
+                writer.WriteEndElement();
             }
             WriteElement("bounds", data.mesh.bounds);
         }

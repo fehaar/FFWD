@@ -28,6 +28,7 @@ namespace PressPlay.FFWD
         public Microsoft.Xna.Framework.Vector2[] uv;
         [ContentSerializer(Optional = true)]
         public short[] triangles;
+        [ContentSerializer(Optional = true)]
         private short[][] triangleSets;
 
         [ContentSerializer(ElementName="bounds", Optional=true)]
@@ -39,8 +40,12 @@ namespace PressPlay.FFWD
             if (!String.IsNullOrEmpty(asset))
             {
                 // If this is a static mesh, we do not need to load the data
-                if (vertices != null && triangles != null)
+                if (vertices != null)
                 {
+                    if (triangleSets != null && triangles == null)
+                    {
+                        FlattenTriangleSets();
+                    }
                     return;
                 }
 
@@ -84,20 +89,7 @@ namespace PressPlay.FFWD
                         {
                             vertices = (Microsoft.Xna.Framework.Vector3[])part.vertices.Clone();
                             triangleSets = (short[][])part.triangles.Clone();
-
-                            int triCount = 0;
-                            int triIndex = 0;
-                            for (int i = 0; i < part.triangles.Length; i++)
-                            {
-                                triCount += part.triangles[i].Length;
-                            }
-                            triangles = new short[triCount];
-                            for (int i = 0; i < part.triangles.Length; i++)
-                            {
-                                part.triangles[i].CopyTo(triangles, triIndex);
-                                triIndex += part.triangles[i].Length;
-                            }
-
+                            FlattenTriangleSets();
                             uv = (Microsoft.Xna.Framework.Vector2[])part.uv.Clone();
                             if (part.normals != null)
                             {
@@ -114,6 +106,22 @@ namespace PressPlay.FFWD
                     Debug.LogWarning("Cannot find a way to load the mesh " + asset + "/" + name);
                 }
 #endif
+            }
+        }
+
+        private void FlattenTriangleSets()
+        {
+            int triCount = 0;
+            int triIndex = 0;
+            for (int i = 0; i < triangleSets.Length; i++)
+            {
+                triCount += triangleSets[i].Length;
+            }
+            triangles = new short[triCount];
+            for (int i = 0; i < triangleSets.Length; i++)
+            {
+                triangleSets[i].CopyTo(triangles, triIndex);
+                triIndex += triangleSets[i].Length;
             }
         } 
 

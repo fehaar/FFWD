@@ -33,6 +33,10 @@ namespace PressPlay.FFWD.Components
                 indexBuffer[i] = new IndexBuffer(Application.screenManager.GraphicsDevice, IndexElementSize.SixteenBits, indices[i].Length, BufferUsage.WriteOnly);
                 indexBuffer[i].SetData(indices[i]);
             }
+            if (materials.Length > indexBuffer.Length)
+            {
+                throw new Exception("The static batch renderer does not have enough submeshes for all materials!");
+            }
         }
 
         internal bool AddMesh(Mesh m, Matrix transform)
@@ -120,25 +124,26 @@ namespace PressPlay.FFWD.Components
             cam.BasicEffect.VertexColorEnabled = false;
             cam.BasicEffect.LightingEnabled = Light.HasLights;
 
-            material.SetTextureState(cam.BasicEffect);
-            material.SetBlendState(device);
-
             device.SetVertexBuffer(vertexBuffer);
-            device.Indices = indexBuffer[0];
-
-            foreach (EffectPass pass in cam.BasicEffect.CurrentTechnique.Passes)
+            for (int i = 0; i < materials.Length; i++)
             {
-                pass.Apply();
-                device.DrawIndexedPrimitives(
-                    PrimitiveType.TriangleList,
-                    0,
-                    0,
-                    vertexBuffer.VertexCount,
-                    0,
-                    indexBuffer[0].IndexCount / 3
-                );
+                materials[i].SetTextureState(cam.BasicEffect);
+                materials[i].SetBlendState(device);
+                device.Indices = indexBuffer[i];
+                foreach (EffectPass pass in cam.BasicEffect.CurrentTechnique.Passes)
+                {
+                    pass.Apply();
+                    device.DrawIndexedPrimitives(
+                        PrimitiveType.TriangleList,
+                        0,
+                        0,
+                        vertexBuffer.VertexCount,
+                        0,
+                        indexBuffer[i].IndexCount / 3
+                    );
+                }
             }
-            return 1;
+            return indexBuffer.Length;
         }
     }
 }
