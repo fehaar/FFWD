@@ -15,6 +15,7 @@ namespace PressPlay.FFWD
         internal Model model;
 
         internal Dictionary<string, MeshDataPart> meshParts;
+        internal Dictionary<string, byte> boneIndices;
 
         internal BoundingBox boundingBox;
     }

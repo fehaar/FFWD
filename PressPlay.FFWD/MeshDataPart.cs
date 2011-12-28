@@ -16,6 +16,10 @@ namespace PressPlay.FFWD
         internal Microsoft.Xna.Framework.Vector2[] uv;
         [ContentSerializer]
         internal short[][] triangles;
+        [ContentSerializer]
+        internal byte[] blendIndices;
+        [ContentSerializer]
+        internal Microsoft.Xna.Framework.Vector4[] blendWeights;
 
         [ContentSerializer]
         internal Microsoft.Xna.Framework.BoundingBox boundingBox;

@@ -31,6 +31,10 @@ namespace PressPlay.FFWD
         [ContentSerializer(Optional = true)]
         private short[][] triangleSets;
 
+        internal Dictionary<string, byte> boneIndices;
+        internal byte[] blendIndices;
+        internal Microsoft.Xna.Framework.Vector4[] blendWeights;
+
         [ContentSerializer(ElementName="bounds", Optional=true)]
         public Bounds bounds;
 
@@ -53,6 +57,25 @@ namespace PressPlay.FFWD
                 if (data != null)
                 {
                     bounds = new Bounds(data.boundingBox);
+                    if (data.meshParts.Count > 0)
+                    {
+                        MeshDataPart part = data.meshParts[name];
+                        if (part != null)
+                        {
+                            boneIndices = data.boneIndices;
+                            blendIndices = part.blendIndices;
+                            blendWeights = part.blendWeights;
+                            vertices = (Microsoft.Xna.Framework.Vector3[])part.vertices.Clone();
+                            triangleSets = (short[][])part.triangles.Clone();
+                            FlattenTriangleSets();
+                            uv = (Microsoft.Xna.Framework.Vector2[])part.uv.Clone();
+                            if (part.normals != null)
+                            {
+                                normals = (Microsoft.Xna.Framework.Vector3[])part.normals.Clone();
+                            }
+                        }
+                        return;
+                    }
                     skinnedModel = data.skinnedModel;
                     if (skinnedModel != null)
                     {
@@ -67,6 +90,7 @@ namespace PressPlay.FFWD
                                 break;
                             }
                         }
+                        return;
                     }
                     model = data.model;
                     if (model != null)
@@ -80,24 +104,7 @@ namespace PressPlay.FFWD
                                 break;
                             }
                         }
-                    }
-
-                    if (data.meshParts.Count > 0)
-                    {
-                        MeshDataPart part = data.meshParts[name];
-                        if (part != null)
-                        {
-                            vertices = (Microsoft.Xna.Framework.Vector3[])part.vertices.Clone();
-                            triangleSets = (short[][])part.triangles.Clone();
-                            FlattenTriangleSets();
-                            uv = (Microsoft.Xna.Framework.Vector2[])part.uv.Clone();
-                            if (part.normals != null)
-                            {
-                                normals = (Microsoft.Xna.Framework.Vector3[])part.normals.Clone();
-                            }
-
-                            bounds = new Bounds(part.boundingBox);
-                        }
+                        return;
                     }
                 }
 #if DEBUG
