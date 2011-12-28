@@ -204,6 +204,9 @@ namespace PressPlay.FFWD
                 }
             }
             clone.bounds = bounds;
+            // Note that these are not actually cloned as they will not be changed
+            clone.blendIndices = blendIndices;
+            clone.blendWeights = blendWeights;
             return clone;
         }
         #endregion

@@ -129,6 +129,7 @@ namespace PressPlay.FFWD.Import
         private void ProcessBoneWeights()
         {
             meshData.boneIndices = new Dictionary<string, byte>();
+            // NOTE: It is assumed that every 
             foreach (var mesh in boneWeights.Keys)
             {
                 MeshDataPart part = meshData.meshParts[mesh];
@@ -169,6 +170,7 @@ namespace PressPlay.FFWD.Import
                                 w.W = weight.Weight;
                                 break;
                             default:
+                                //throw new Exception("We have more than 4 bone indexes for a single mesh!");
                                 break;
                         }
                     }

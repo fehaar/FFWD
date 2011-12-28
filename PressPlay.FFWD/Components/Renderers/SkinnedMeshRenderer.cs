@@ -8,6 +8,8 @@ namespace PressPlay.FFWD.Components
     public class SkinnedMeshRenderer : Renderer
     {
         public Mesh sharedMesh;
+        private Mesh mesh;
+        private Matrix[] bones;
 
         private Animation animation;
 
@@ -15,6 +17,11 @@ namespace PressPlay.FFWD.Components
         {
             base.Awake();
             animation = GetComponentInParents<Animation>();
+            if (sharedMesh.blendIndices != null)
+            {
+                mesh = (Mesh)sharedMesh.Clone();
+                bones = new Matrix[sharedMesh.boneIndices.Count];
+            }
         }
 
         #region IRenderable Members
@@ -46,10 +53,34 @@ namespace PressPlay.FFWD.Components
                 modelPart.SetBones(animation.GetTransforms(), ref world, sharedMesh);
                 return cam.BatchRender(sharedMesh, materials, null);
             }
-            else
+            else if (sharedMesh.blendIndices == null)
             {
                 // We do not have bone animation - so just render as a normal model
                 return cam.BatchRender(sharedMesh, materials, transform);
+            }
+            else
+            {
+                Matrix world = transform.world;
+                // Find the current bone data from the bone Transform.
+                for (int i = 0; i < bones.Length; i++)
+                {
+                    bones[i] = Matrix.Identity;
+                }
+
+                // We have blended parts that does not come from a bone structure
+                for (int i = 0; i < sharedMesh.vertices.Length; i++)
+                {
+                    CpuSkinningHelpers.SkinVertex(
+                        bones,
+                        ref sharedMesh.vertices[i],
+                        ref sharedMesh.normals[i],
+                        ref world,
+                        ref sharedMesh.blendIndices,
+                        ref sharedMesh.blendWeights[i],
+                        out mesh.vertices[i],
+                        out mesh.normals[i]);
+                }
+                return cam.BatchRender(mesh, materials, null);
             }
 
         }
