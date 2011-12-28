@@ -706,6 +706,12 @@ namespace PressPlay.FFWD
 
         public Transform Find(string name)
         {
+            bool depthSearch = false;
+            if (name.StartsWith("//"))
+            {
+                depthSearch = true;
+                name = name.Substring(2);
+            }
             for (int i = 0; i < childCount; i++)
             {
                 int pathIndex = name.IndexOf('/');
@@ -721,6 +727,14 @@ namespace PressPlay.FFWD
                     if (name == children[i].name)
                     {
                         return children[i].transform;
+                    }
+                    if (depthSearch)
+                    {
+                        Transform t = children[i].transform.Find("//" + name);
+                        if (t != null)
+                        {
+                            return t;
+                        }
                     }
                 }
             }

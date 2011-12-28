@@ -10,6 +10,7 @@ namespace PressPlay.FFWD.Components
         public Mesh sharedMesh;
         private Mesh mesh;
         private Matrix[] bones;
+        private Transform[] boneTransforms;
 
         private Animation animation;
 
@@ -21,6 +22,11 @@ namespace PressPlay.FFWD.Components
             {
                 mesh = (Mesh)sharedMesh.Clone();
                 bones = new Matrix[sharedMesh.boneIndices.Count];
+                boneTransforms = new Transform[sharedMesh.boneIndices.Count];
+                foreach (var name in sharedMesh.boneIndices.Keys)
+                {
+                    boneTransforms[sharedMesh.boneIndices[name]] = transform.parent.FindChild("//" + name);
+                }
             }
         }
 
@@ -60,11 +66,11 @@ namespace PressPlay.FFWD.Components
             }
             else
             {
-                Matrix world = transform.world;
+                Matrix world = Matrix.Identity;
                 // Find the current bone data from the bone Transform.
                 for (int i = 0; i < bones.Length; i++)
                 {
-                    bones[i] = Matrix.Identity;
+                    bones[i] = boneTransforms[i].world;
                 }
 
                 // We have blended parts that does not come from a bone structure

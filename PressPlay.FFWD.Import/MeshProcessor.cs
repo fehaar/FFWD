@@ -58,10 +58,12 @@ namespace PressPlay.FFWD.Import
 
         private Dictionary<string, BoneWeightCollection[]> boneWeights = new Dictionary<string, BoneWeightCollection[]>();
 
+        private ContentBuildLogger logger;
+
         public override MeshDataContent Process(NodeContent input, ContentProcessorContext context)
         {
             meshData = new MeshDataContent();
-
+            logger = context.Logger;
             if (SkinningHelpers.MeshHasSkinning(input))
             {
                 // This is a skinned model, so treat is as one
@@ -92,7 +94,6 @@ namespace PressPlay.FFWD.Import
                         throw new Exception("Scale of model is 0!");
                     }
                     preTransform = Matrix.CreateScale(new Microsoft.Xna.Framework.Vector3(Scale, Scale, -Scale)) * Matrix.CreateFromQuaternion(rotation);
-
                     ProcessNode(input);
 
                     ProcessBoneWeights();
@@ -105,6 +106,7 @@ namespace PressPlay.FFWD.Import
         {
             // Is this node in fact a mesh?
             MeshContent mesh = node as MeshContent;
+            //logger.LogMessage("Node {0} - {3} abs: {1} - t: {2}", node.Name, node.AbsoluteTransform.Translation, node.Transform.Translation, node.Transform == node.AbsoluteTransform);
 
             if (mesh != null)
             {
@@ -115,7 +117,12 @@ namespace PressPlay.FFWD.Import
                 // Process all the geometry in the mesh.
                 foreach (GeometryContent geometry in mesh.Geometry)
                 {
-                    ProcessGeometry(node.Name, geometry, node.Transform * Matrix.CreateScale(0.01f));
+                    Matrix m = node.AbsoluteTransform;
+                    if (node.AbsoluteTransform == node.Transform)
+                    {
+                        m = m * Matrix.CreateScale(0.01f);
+                    }
+                    ProcessGeometry(node.Name, geometry, m);
                 }
             }
 
@@ -191,7 +198,7 @@ namespace PressPlay.FFWD.Import
                 {
                     VertexChannel<Microsoft.Xna.Framework.Vector3> normals = channel as VertexChannel<Microsoft.Xna.Framework.Vector3>;
                     mesh.normals = new Microsoft.Xna.Framework.Vector3[normals.Count];
-                    normals.CopyTo(mesh.normals, 0);
+                    Microsoft.Xna.Framework.Vector3.TransformNormal(normals.ToArray(), ref preTransform, mesh.normals);
                 }
                 if (channel.Name == texCoordName)
                 {
@@ -219,8 +226,8 @@ namespace PressPlay.FFWD.Import
             t.Decompose(out scale, out rot, out trans);
 
             //Microsoft.Xna.Framework.Vector3.Transform(verts, ref transform, mesh.vertices);
-            //Microsoft.Xna.Framework.Vector3.Transform(verts, ref preTransform, mesh.vertices);
-            Microsoft.Xna.Framework.Vector3.Transform(verts, ref t, mesh.vertices);
+            Microsoft.Xna.Framework.Vector3.Transform(verts, ref preTransform, mesh.vertices);
+            //Microsoft.Xna.Framework.Vector3.Transform(verts, ref t, mesh.vertices);
 
             mesh.triangles = new short[][] { new short[geometry.Indices.Count] };
             for (int i = 0; i < geometry.Indices.Count; i++)
