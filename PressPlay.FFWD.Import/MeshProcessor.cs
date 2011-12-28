@@ -111,7 +111,7 @@ namespace PressPlay.FFWD.Import
                 // Process all the geometry in the mesh.
                 foreach (GeometryContent geometry in mesh.Geometry)
                 {
-                    ProcessGeometry(node.Name, geometry);
+                    ProcessGeometry(node.Name, geometry, node.Transform * Matrix.CreateScale(0.01f));
                 }
             }
 
@@ -122,7 +122,7 @@ namespace PressPlay.FFWD.Import
             }
         }
 
-        void ProcessGeometry(string name, GeometryContent geometry)
+        void ProcessGeometry(string name, GeometryContent geometry, Matrix transform)
         {
             MeshDataPart mesh = new MeshDataPart();
 
@@ -147,7 +147,17 @@ namespace PressPlay.FFWD.Import
             Microsoft.Xna.Framework.Vector3[] verts = new Microsoft.Xna.Framework.Vector3[geometry.Vertices.Positions.Count];
             mesh.vertices = new Microsoft.Xna.Framework.Vector3[geometry.Vertices.Positions.Count];
             geometry.Vertices.Positions.CopyTo(verts, 0);
-            Microsoft.Xna.Framework.Vector3.Transform(verts, ref preTransform, mesh.vertices);
+            Matrix t = preTransform * Matrix.Invert(transform);
+//            t.Translation += transform.Translation;
+            Microsoft.Xna.Framework.Vector3 scale;
+            Microsoft.Xna.Framework.Quaternion rot;
+            Microsoft.Xna.Framework.Vector3 trans;
+            transform.Decompose(out scale, out rot, out trans);
+            t.Decompose(out scale, out rot, out trans);
+
+            //Microsoft.Xna.Framework.Vector3.Transform(verts, ref transform, mesh.vertices);
+            //Microsoft.Xna.Framework.Vector3.Transform(verts, ref preTransform, mesh.vertices);
+            Microsoft.Xna.Framework.Vector3.Transform(verts, ref t, mesh.vertices);
 
             mesh.triangles = new short[][] { new short[geometry.Indices.Count] };
             for (int i = 0; i < geometry.Indices.Count; i++)
