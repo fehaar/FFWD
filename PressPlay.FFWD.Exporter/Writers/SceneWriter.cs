@@ -368,6 +368,25 @@ namespace PressPlay.FFWD.Exporter.Writers
                     WriteElement("Item", data.mesh.GetTriangles(i));
                 }
                 writer.WriteEndElement();
+                if (data.mesh.boneWeights != null)
+                {
+                    writer.WriteStartElement("boneWeights");
+                    for (int i = 0; i < data.mesh.boneWeights.Length; i++)
+                    {
+                        BoneWeight w = data.mesh.boneWeights[i];
+                        writer.WriteElementString("Item", String.Format("{0} {1} {2} {3} {4} {5} {6} {7}", w.weight0, w.weight1, w.weight2, w.weight3, w.boneIndex0, w.boneIndex1, w.boneIndex2, w.boneIndex3));
+                    }
+                    writer.WriteEndElement();
+                }
+                if (data.mesh.bindposes != null)
+                {
+                    writer.WriteStartElement("bindPoses");
+                    for (int i = 0; i < data.mesh.bindposes.Length; i++)
+                    {
+                        writer.WriteString(ToString(data.mesh.bindposes[i]) + " ");
+                    }
+                    writer.WriteEndElement();
+                }
             }
             WriteElement("bounds", data.mesh.bounds);
         }
@@ -463,6 +482,11 @@ namespace PressPlay.FFWD.Exporter.Writers
                 if (obj is Vector3[])
                 {
                     writer.WriteElementString(name, ToString(obj as Vector3[]));
+                    return;
+                }
+                if (obj is Matrix4x4)
+                {
+                    writer.WriteElementString(name, ToString((Matrix4x4)obj));
                     return;
                 }
                 if (obj is Color)
@@ -774,6 +798,11 @@ namespace PressPlay.FFWD.Exporter.Writers
                 sb.Append(" ");
             }
             return sb.ToString();
+        }
+
+        private string ToString(Matrix4x4 matrix4x4)
+        {
+            return matrix4x4.ToString();
         }
 
         private string ToString(Vector2 vector2)

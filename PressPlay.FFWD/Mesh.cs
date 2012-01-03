@@ -30,6 +30,10 @@ namespace PressPlay.FFWD
         public short[] triangles;
         [ContentSerializer(Optional = true)]
         private short[][] triangleSets;
+        [ContentSerializer(Optional = true)]
+        internal BoneWeight[] boneWeights;
+        [ContentSerializer(Optional = true)]
+        internal Matrix[] bindPoses;
 
         internal Dictionary<string, byte> boneIndices;
         internal byte[] blendIndices;
@@ -50,13 +54,13 @@ namespace PressPlay.FFWD
                     {
                         FlattenTriangleSets();
                     }
+                    
                     return;
                 }
 
                 MeshData data = assetHelper.Load<MeshData>("Models/" + asset);
                 if (data != null)
                 {
-                    bounds = new Bounds(data.boundingBox);
                     if (data.meshParts.Count > 0)
                     {
                         MeshDataPart part = data.meshParts[name];
@@ -77,6 +81,7 @@ namespace PressPlay.FFWD
                         return;
                     }
                     skinnedModel = data.skinnedModel;
+                    bounds = new Bounds(data.boundingBox);
                     if (skinnedModel != null)
                     {
                         for (int i = 0; i < skinnedModel.Parts.Count; i++)

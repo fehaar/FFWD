@@ -215,19 +215,14 @@ namespace PressPlay.FFWD.Import
             }
 
             Microsoft.Xna.Framework.Vector3[] verts = new Microsoft.Xna.Framework.Vector3[geometry.Vertices.Positions.Count];
+            Microsoft.Xna.Framework.Vector3[] verts1 = new Microsoft.Xna.Framework.Vector3[geometry.Vertices.Positions.Count];
             mesh.vertices = new Microsoft.Xna.Framework.Vector3[geometry.Vertices.Positions.Count];
             geometry.Vertices.Positions.CopyTo(verts, 0);
-            Matrix t = preTransform * Matrix.Invert(transform);
-//            t.Translation += transform.Translation;
-            Microsoft.Xna.Framework.Vector3 scale;
-            Microsoft.Xna.Framework.Quaternion rot;
-            Microsoft.Xna.Framework.Vector3 trans;
-            transform.Decompose(out scale, out rot, out trans);
-            t.Decompose(out scale, out rot, out trans);
+            Matrix t = Matrix.Invert(transform);
 
             //Microsoft.Xna.Framework.Vector3.Transform(verts, ref transform, mesh.vertices);
+            Microsoft.Xna.Framework.Vector3.Transform(verts, ref t, verts1);
             Microsoft.Xna.Framework.Vector3.Transform(verts, ref preTransform, mesh.vertices);
-            //Microsoft.Xna.Framework.Vector3.Transform(verts, ref t, mesh.vertices);
 
             mesh.triangles = new short[][] { new short[geometry.Indices.Count] };
             for (int i = 0; i < geometry.Indices.Count; i++)

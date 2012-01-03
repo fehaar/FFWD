@@ -72,6 +72,28 @@ namespace PressPlay.FFWD.SkinnedModel
         }
 
         /// <summary>
+        /// Skins an individual vertex.
+        /// </summary>
+        public static void SkinVertex(
+            Matrix[] bones,
+            ref Microsoft.Xna.Framework.Vector3 position,
+            ref Microsoft.Xna.Framework.Vector3 normal,
+            ref Matrix bakedTransform,
+            ref BoneWeight bw,
+            out Microsoft.Xna.Framework.Vector3 outPosition,
+            out Microsoft.Xna.Framework.Vector3 outNormal)
+        {
+            Matrix skinnedTransformSum;
+            Blend4x3Matrix(ref bones[bw.boneIndex0], ref bones[bw.boneIndex1], ref bones[bw.boneIndex2], ref bones[bw.boneIndex3], ref bw.weights, out skinnedTransformSum);
+
+            Matrix.Multiply(ref skinnedTransformSum, ref bakedTransform, out skinnedTransformSum);
+
+            // Support the 4 Bone Influences - Position then Normal
+            Microsoft.Xna.Framework.Vector3.Transform(ref position, ref skinnedTransformSum, out outPosition);
+            Microsoft.Xna.Framework.Vector3.TransformNormal(ref normal, ref skinnedTransformSum, out outNormal);
+        }
+
+        /// <summary>
         /// This method blends the 4 input matrices using the 4 weights provided
         /// </summary>
         /// <param name="m1">1st input matrix for blending.</param>

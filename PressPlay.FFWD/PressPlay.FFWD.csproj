@@ -192,6 +192,9 @@
     <Compile Include="AudioClip.cs" />
     <Compile Include="AudioSource.cs" />
     <Compile Include="Behaviour.cs" />
+    <Compile Include="BoneWeight.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Bounds.cs" />
     <Compile Include="CachedContent.cs" />
     <Compile Include="Color.cs" />

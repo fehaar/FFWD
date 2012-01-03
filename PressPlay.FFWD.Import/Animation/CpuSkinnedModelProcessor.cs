@@ -187,7 +187,7 @@ namespace PressPlay.FFWD.Import.Animation
             // get our indices and weights
             for (int i = 0; i < inputWeights.Count; i++)
             {
-                BoneWeight weight = inputWeights[i];
+                Microsoft.Xna.Framework.Content.Pipeline.Graphics.BoneWeight weight = inputWeights[i];
                 if (boneIndices.ContainsKey(weight.BoneName))
                 {
                     tempIndices[i] = boneIndices[weight.BoneName];
