@@ -79,12 +79,15 @@ namespace PressPlay.FFWD.Components
             }
             else if (sharedMesh.boneWeights != null)
             {
-                // We do not have bone animation - so just render as a normal model
-                Matrix world = transform.world;
+                // This is the rendering of data gotten directly from Unity
+                //Matrix world = transform.world;
+                Matrix world = Matrix.Identity;
                 // Find the current bone data from the bone Transform.
                 for (int i = 0; i < bones.Length; i++)
                 {
-                    bindPoses[i] = Matrix.Identity;// Matrix.Invert(sharedMesh.bindPoses[i]);
+                    bindPoses[i] = Matrix.Identity;
+                    //bindPoses[i] = bones[i].world * Matrix.Invert(transform.world);
+                    bindPoses[i] = sharedMesh.bindPoses[i] * bones[i].world;
                 }
 
                 // We have blended parts that does not come from a bone structure
@@ -108,11 +111,16 @@ namespace PressPlay.FFWD.Components
             }
             else
             {
-                Matrix world = transform.world;
+                // This is the rendering of data gotten from the FBX
+                Matrix world = Matrix.Identity; //transform.world;
+                Matrix iworld = Matrix.Invert(world);
+                //Matrix world = Matrix.Identity;
                 // Find the current bone data from the bone Transform.
                 for (int i = 0; i < bindPoses.Length; i++)
                 {
-                    bindPoses[i] = Matrix.Identity; // bones[i].world;
+                    Matrix bpose = Matrix.Invert(bones[i].world);
+                    //bindPoses[i] = Matrix.Identity;
+                    bindPoses[i] = bones[i].world; // (bpose * bones[i].world) * iworld;
                 }
 
                 // We have blended parts that does not come from a bone structure

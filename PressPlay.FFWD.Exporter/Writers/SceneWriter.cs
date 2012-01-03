@@ -802,7 +802,13 @@ namespace PressPlay.FFWD.Exporter.Writers
 
         private string ToString(Matrix4x4 matrix4x4)
         {
-            return matrix4x4.ToString();
+            StringBuilder sb = new StringBuilder(35 * 4);
+            for (int i = 0; i < 16; i++)
+			{
+                sb.Append(matrix4x4[i]);
+                sb.Append(" ");
+			}
+            return sb.ToString();
         }
 
         private string ToString(Vector2 vector2)

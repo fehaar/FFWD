@@ -50,7 +50,7 @@ namespace PressPlay.FFWD.SkinnedModel
             Matrix[] bones,
             ref Microsoft.Xna.Framework.Vector3 position,
             ref Microsoft.Xna.Framework.Vector3 normal,
-            ref Matrix bakedTransform,
+            ref Matrix world,
             ref byte[] blendIndices,
             ref Vector4 blendWeights,
             out Microsoft.Xna.Framework.Vector3 outPosition,
@@ -64,7 +64,7 @@ namespace PressPlay.FFWD.SkinnedModel
             Matrix skinnedTransformSum;
             Blend4x3Matrix(ref bones[b0], ref bones[b1], ref bones[b2], ref bones[b3], ref blendWeights, out skinnedTransformSum);
 
-            Matrix.Multiply(ref skinnedTransformSum, ref bakedTransform, out skinnedTransformSum);
+            Matrix.Multiply(ref skinnedTransformSum, ref world, out skinnedTransformSum);
 
             // Support the 4 Bone Influences - Position then Normal
             Microsoft.Xna.Framework.Vector3.Transform(ref position, ref skinnedTransformSum, out outPosition);

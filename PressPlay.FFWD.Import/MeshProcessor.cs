@@ -114,11 +114,12 @@ namespace PressPlay.FFWD.Import
                 // an order that makes efficient use of the GPU vertex cache.
                 MeshHelper.OptimizeForCache(mesh);
 
+                
                 // Process all the geometry in the mesh.
                 foreach (GeometryContent geometry in mesh.Geometry)
                 {
                     Matrix m = node.AbsoluteTransform;
-                    if (node.AbsoluteTransform == node.Transform)
+                    if (node.Parent == null)
                     {
                         m = m * Matrix.CreateScale(0.01f);
                     }
@@ -189,7 +190,7 @@ namespace PressPlay.FFWD.Import
         void ProcessGeometry(string name, GeometryContent geometry, Matrix transform)
         {
             MeshDataPart mesh = new MeshDataPart();
-
+            
             string normalName = VertexChannelNames.EncodeName(VertexElementUsage.Normal, 0);
             string texCoordName = VertexChannelNames.EncodeName(VertexElementUsage.TextureCoordinate, 0);
             foreach (var channel in geometry.Vertices.Channels)
