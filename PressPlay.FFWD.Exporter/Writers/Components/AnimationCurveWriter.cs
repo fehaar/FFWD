@@ -18,15 +18,12 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
             {
                 throw new Exception(GetType() + " cannot export components of type " + component.GetType());
             }
-            //<PreLoop>Constant</PreLoop>
-            //<PostLoop>Constant</PostLoop>
-            //<Keys>0 0 0 0.5 Smooth 0.5 0.5 0 0 Smooth 1 0 -0.5 -0 Smooth</Keys>
             writer.WriteElement("PreLoop", ConvertLoopType(curve.preWrapMode));
             writer.WriteElement("PostLoop", ConvertLoopType(curve.postWrapMode));
             StringBuilder sb = new StringBuilder();
             foreach (Keyframe item in curve.keys)
             {
-                sb.AppendFormat("{0} {1} {2} {3} {4} ", item.time, item.inTangent, item.outTangent, item.value, "Smooth");
+                sb.AppendFormat("{0} {1} {2} {3} {4} ", item.time, item.value, item.inTangent, item.outTangent, "Smooth");
             }
             writer.WriteElement("Keys", sb.ToString().TrimEnd());
         }

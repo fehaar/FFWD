@@ -38,6 +38,7 @@ namespace PressPlay.FFWD.Exporter.Writers
         }
 
         private Dictionary<int, MeshWriterData> meshesToWrite = new Dictionary<int, MeshWriterData>();
+        private Dictionary<int, AnimationClip> animationClipsToWrite = new Dictionary<int, AnimationClip>();
 
         public void Write(string path)
         {
@@ -58,6 +59,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                 writer.WriteEndElement();
                 writer.WriteEndElement();
             }
+            WriteAnimations();
         }
 
         public void WriteResource(string path, GameObject go)
@@ -79,6 +81,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                 writer.WriteEndElement();
                 writer.WriteEndElement();
             }
+            WriteAnimations();
         }
 
         public void WriteResource(string path, Material mat)
@@ -154,6 +157,27 @@ namespace PressPlay.FFWD.Exporter.Writers
                 writer.WriteStartElement("asset");
                 WriteMeshData(item);
                 writer.WriteEndElement();
+            }
+        }
+
+        private void WriteAnimations()
+        {
+            foreach (int key in animationClipsToWrite.Keys)
+            {
+                string path = PreparePath(String.Format("../Assets/{0}.xml", key));
+                XmlWriterSettings settings = new XmlWriterSettings();
+                settings.Indent = true;
+                settings.IndentChars = "  ";
+                using (writer = XmlWriter.Create(path, settings))
+                {
+                    writer.WriteStartDocument();
+                    writer.WriteStartElement("XnaContent");
+                    writer.WriteStartElement("Asset");
+                    writer.WriteAttributeString("Type", resolver.DefaultNamespace + ".AnimationClip");
+                    WriteElement(null, animationClipsToWrite[key]);
+                    writer.WriteEndElement();
+                    writer.WriteEndElement();
+                }
             }
         }
 
@@ -426,6 +450,11 @@ namespace PressPlay.FFWD.Exporter.Writers
                     writer.WriteEndElement();
                     return;
                 }
+                if (obj is String)
+                {
+                    writer.WriteElementString(name, obj.ToString());
+                    return;
+                }
                 if (obj is float)
                 {
                     writer.WriteElementString(name, ToString((float)obj));
@@ -507,6 +536,42 @@ namespace PressPlay.FFWD.Exporter.Writers
                 if (obj is LayerMask)
                 {
                     writer.WriteElementString(name, ((LayerMask)obj).value.ToString());
+                    return;
+                }
+                if (obj is AnimationClip)
+                {
+                    AnimationClip clip = obj as AnimationClip;
+                    if (name != null)
+                    {
+                        writer.WriteStartElement(name);
+                    }
+                    WriteElement("id", clip.GetInstanceID());
+                    writer.WriteElementString("name", clip.name);
+                    WriteElement("length", clip.length);
+                    WriteElement("wrapMode", clip.wrapMode);
+                    WriteElement("curves", AnimationUtility.GetAllCurves(clip));
+                    if (name != null)
+                    {
+                        writer.WriteEndElement();
+                    }
+                    return;
+                }
+                if (obj is AnimationClipCurveData)
+                {
+                    AnimationClipCurveData acd = obj as AnimationClipCurveData;
+                    writer.WriteStartElement(name);
+                    writer.WriteElementString("path", acd.path);
+                    writer.WriteElementString("propertyName", acd.propertyName);
+                    //if (acd.type != null)
+                    //{
+                    //    writer.WriteElementString("type", acd.type.FullName);
+                    //}
+                    if (acd.target != null)
+                    {
+                        WriteElement("target", acd.target.GetInstanceID());
+                    }
+                    WriteElement("curve", acd.curve);
+                    writer.WriteEndElement();
                     return;
                 }
                 if (obj is IDictionary)
@@ -598,11 +663,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                     assetHelper.ExportAudio(audio);
                     return;
                 }
-                if (obj is String)
-                {
-                    writer.WriteElementString(name, obj.ToString());
-                    return;
-                }
+                
                 if (obj is Texture2D)
                 {
                     writer.WriteStartElement(name);
@@ -707,15 +768,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                 if (obj.GetType().GetCustomAttributes(typeof(SerializableAttribute), true).Length > 0 || (obj.GetType().IsValueType && !obj.GetType().IsEnum))
                 {
                     writer.WriteStartElement(name);
-                    FieldInfo[] memInfo = obj.GetType().GetFields(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance);
-                    for (int m = 0; m < memInfo.Length; m++)
-                    {
-                        if (memInfo[m].GetCustomAttributes(typeof(HideInInspector), true).Length > 0)
-                        {
-                            continue;
-                        }
-                        WriteElement(memInfo[m].Name, memInfo[m].GetValue(obj));
-                    }
+                    WriteMembers(obj);
                     writer.WriteEndElement();
                     return;
                 }
@@ -726,6 +779,19 @@ namespace PressPlay.FFWD.Exporter.Writers
             {
                 Debug.LogError("Exception when writing " + name + " with value " + obj + ": " + ex.Message + " (" + ex.GetType() + ")");
                 throw;
+            }
+        }
+
+        private void WriteMembers(object obj)
+        {
+            FieldInfo[] memInfo = obj.GetType().GetFields(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance);
+            for (int m = 0; m < memInfo.Length; m++)
+            {
+                if (memInfo[m].GetCustomAttributes(typeof(HideInInspector), true).Length > 0)
+                {
+                    continue;
+                }
+                WriteElement(memInfo[m].Name, memInfo[m].GetValue(obj));
             }
         }
 
@@ -742,6 +808,14 @@ namespace PressPlay.FFWD.Exporter.Writers
                 return theObject.GetInstanceID().ToString();
             }
             return theObject.GetType().FullName;
+        }
+
+        internal void AddAnimationClip(AnimationClip animationClip)
+        {
+            if (!animationClipsToWrite.ContainsKey(animationClip.GetInstanceID()))
+            {
+                animationClipsToWrite.Add(animationClip.GetInstanceID(), animationClip);
+            }
         }
 
         #region ToString methods
