@@ -18,6 +18,11 @@ namespace PressPlay.FFWD
             tex = t;
         }
 
+        internal Texture(int _width, int _height)
+        {            
+            tex = new Microsoft.Xna.Framework.Graphics.Texture2D(Application.Instance.GraphicsDevice, _width, _height);               
+        }
+
         public int Width
         {
             get
@@ -48,6 +53,21 @@ namespace PressPlay.FFWD
             {
                 return (tex == null) ? 0 : tex.Height;
             }
+        }
+
+        public void SetPixel(int x, int y, Color color)
+        {
+            // TODO: Implement this
+        }
+
+        public void Apply()
+        {
+            Apply(false, false);
+        }
+
+        public void Apply(bool updateMipmaps, bool makeNoLongerReadable)
+        {
+            // TODO: Implement this
         }
 
         protected override void DoLoadAsset(AssetHelper assetHelper)

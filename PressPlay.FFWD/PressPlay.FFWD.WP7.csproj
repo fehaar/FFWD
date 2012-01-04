@@ -206,6 +206,7 @@
     <Compile Include="Farseer\Settings.cs" />
     <Compile Include="Gizmos.cs" />
     <Compile Include="GUI\GUI.cs" />
+    <Compile Include="GUI\GUIContent.cs" />
     <Compile Include="GUI\GUILayout.cs" />
     <Compile Include="GUI\GUISkin.cs" />
     <Compile Include="GUI\GUIStyle.cs" />

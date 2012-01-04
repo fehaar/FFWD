@@ -23,5 +23,10 @@ namespace PressPlay.FFWD
         public GUIStyleState focused;
         public GUIStyleState onFocused;
         public FontStyle fontStyle;
+
+        public Vector2 CalcSize(GUIContent guiContent)
+        {
+            return Vector2.zero;
+        }
     }
 }

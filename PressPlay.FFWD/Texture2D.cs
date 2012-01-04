@@ -12,6 +12,11 @@ namespace PressPlay.FFWD
         {
         }
 
+        public Texture2D(int width, int height)
+            : base(width, height)
+        {
+        }
+
         internal Texture2D(Microsoft.Xna.Framework.Graphics.Texture2D t)
             : base(t)
         {
