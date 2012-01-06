@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework;
 
 namespace PressPlay.FFWD.Components
 {
-	public class Animation : Behaviour, PressPlay.FFWD.Interfaces.IFixedUpdateable, IEnumerable<AnimationState>
+	public class Animation : Behaviour, IEnumerable<AnimationState>
 	{
         [ContentSerializer(ElementName = "clip", Optional=true)]
         private int clipId;
@@ -23,53 +23,13 @@ namespace PressPlay.FFWD.Components
 		private string[] animations = null;
 
 		[ContentSerializerIgnore]
-		public AnimationClip clip
-		{
-			get
-			{
-				if (clips.Count == 0)
-				{
-					return null;
-				}
-				return clips[animationIndex];
-			}
-		}
-
-        [ContentSerializerIgnore]
-        public bool DoZFlip
-        {
-            get
-            {
-                if (animationPlayer != null)
-                {
-                    return animationPlayer.DoZFlip;
-                }
-                return false;
-            }
-            set
-            {
-                if (animationPlayer != null)
-                {
-                    animationPlayer.DoZFlip = value;
-                }
-            }
-        }
+		public AnimationClip clip;
 
 		private Dictionary<string, AnimationClip> clips = new Dictionary<string, AnimationClip>();
 		private Dictionary<string, AnimationState> states = new Dictionary<string, AnimationState>();
-		private string animationIndex;
-		private SkinnedAnimationPlayer animationPlayer;
 
 		public override void Awake()
 		{
-			SkinnedMeshRenderer smr = GetComponentInChildren<SkinnedMeshRenderer>();
-			if ((smr != null) && (smr.sharedMesh != null) && (smr.sharedMesh.skinnedModel != null))
-			{
-				if (smr.sharedMesh.skinnedModel.SkinningData.AnimationClips != null)
-				{
-					Initialize(smr.sharedMesh.skinnedModel.SkinningData, smr.sharedMesh.skinnedModel.BakedTransform);
-				}
-			}
 		}
 
 		public AnimationState this[string index]
@@ -111,11 +71,8 @@ namespace PressPlay.FFWD.Components
 
 		public void Play(string name)
 		{
-			if (animationPlayer != null)
-			{
-				animationPlayer.StartClip(clips[name], states[name]);
-			}
-		}
+            throw new NotImplementedException("Method not implemented.");
+        }
 
 		public void PlayQueued(string name)
 		{
@@ -125,7 +82,7 @@ namespace PressPlay.FFWD.Components
 		public void PlayQueued(string name, QueueMode mode)
 		{
 			// TODO : Add implementation of method
-			//throw new NotImplementedException("Method not implemented.");
+            throw new NotImplementedException("Method not implemented.");
 		}
 
 		public void Stop()
@@ -153,10 +110,6 @@ namespace PressPlay.FFWD.Components
 			clip.name = newName;
 			clips[newName] = clip;
 			states[newName] = new AnimationState() { length = (float)clip.Duration.TotalSeconds, wrapMode = clip.wrapMode };
-			if (String.IsNullOrEmpty(animationIndex))
-			{
-				animationIndex = newName;
-			}
 		}
 
 		public void AddClip(AnimationClip clip, string newName, int firstFrame, int lastFrame)
@@ -202,42 +155,16 @@ namespace PressPlay.FFWD.Components
 			Play(name);
 		}
 
-		internal void Initialize(SkinningData modelData, Matrix bakedTransform)
+		public void Sample()
 		{
-			foreach (string name in modelData.AnimationClips.Keys)
-			{
-				AddClip(modelData.AnimationClips[name], name);
-			}
-            animationPlayer = new SkinnedAnimationPlayer(modelData, bakedTransform);
-			animationPlayer.SetTransforms(transform.GetComponentsInChildren<Transform>());
-			if (playAutomatically)
-			{
-				animationPlayer.StartClip(clip, states[clip.name]);
-			}
-		}
-
-		#region IUpdateable Members
-		public void FixedUpdate()
-		{
-			if (animationPlayer != null)
-			{
-				animationPlayer.FixedUpdate();
-			}
-		}
-		#endregion
-
-		internal Microsoft.Xna.Framework.Matrix[] GetTransforms()
-		{
-			if (animationPlayer != null)
-			{
-				return animationPlayer.SkinTransforms;
-			}
-			return null;
 		}
 
         public bool IsPlaying(string name)
         {
-            // TODO: Implement this!
+            if (states.ContainsKey(name))
+            {
+                return states[name].enabled;
+            }
             return false;
         }
 

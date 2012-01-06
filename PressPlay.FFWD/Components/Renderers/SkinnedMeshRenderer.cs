@@ -69,15 +69,7 @@ namespace PressPlay.FFWD.Components
                 return 0;
             }
 
-            if (sharedMesh.skinnedModel != null)
-            {
-                // Draw the skinned model with the animation as CPU animation.
-                CpuSkinnedModelPart modelPart = sharedMesh.GetSkinnedModelPart();
-                Matrix world = transform.world;
-                modelPart.SetBones(animation.GetTransforms(), ref world, sharedMesh);
-                return cam.BatchRender(sharedMesh, materials, null);
-            }
-            else if (sharedMesh.boneWeights != null)
+            if (sharedMesh.boneWeights != null)
             {
                 // This is the rendering of data gotten directly from Unity
                 //Matrix world = transform.world;
@@ -109,36 +101,7 @@ namespace PressPlay.FFWD.Components
                 // We do not have bone animation - so just render as a normal model
                 return cam.BatchRender(sharedMesh, materials, transform);
             }
-            else
-            {
-                // This is the rendering of data gotten from the FBX
-                Matrix world = Matrix.Identity; //transform.world;
-                Matrix iworld = Matrix.Invert(world);
-                //Matrix world = Matrix.Identity;
-                // Find the current bone data from the bone Transform.
-                for (int i = 0; i < bindPoses.Length; i++)
-                {
-                    Matrix bpose = Matrix.Invert(bones[i].world);
-                    //bindPoses[i] = Matrix.Identity;
-                    bindPoses[i] = bones[i].world; // (bpose * bones[i].world) * iworld;
-                }
-
-                // We have blended parts that does not come from a bone structure
-                for (int i = 0; i < sharedMesh.vertices.Length; i++)
-                {
-                    CpuSkinningHelpers.SkinVertex(
-                        bindPoses,
-                        ref sharedMesh.vertices[i],
-                        ref sharedMesh.normals[i],
-                        ref world,
-                        ref sharedMesh.blendIndices,
-                        ref sharedMesh.blendWeights[i],
-                        out mesh.vertices[i],
-                        out mesh.normals[i]);
-                }
-                return cam.BatchRender(mesh, materials, null);
-            }
-
+            return 0;
         }
         #endregion
     }

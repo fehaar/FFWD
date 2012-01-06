@@ -21,6 +21,7 @@ namespace PressPlay.FFWD
     /// </summary>
     public class AnimationClip : UnityObject
     {
+        // TODO: Reimplement this
         internal AnimationClip(AnimationClip clip, string newName, int firstFrame, int lastFrame)
         {
             this.name = newName;

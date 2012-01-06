@@ -14,10 +14,6 @@ namespace PressPlay.FFWD
         [ContentSerializer(Optional = true)]
         public string asset { get; set; }
 
-        [ContentSerializerIgnore]
-        public Model model; 
-        [ContentSerializerIgnore]
-        public CpuSkinnedModel skinnedModel;
         private int meshIndex;
 
         [ContentSerializer(Optional=true)]
@@ -80,37 +76,6 @@ namespace PressPlay.FFWD
                         }
                         return;
                     }
-                    skinnedModel = data.skinnedModel;
-                    bounds = new Bounds(data.boundingBox);
-                    if (skinnedModel != null)
-                    {
-                        for (int i = 0; i < skinnedModel.Parts.Count; i++)
-                        {
-                            if (skinnedModel.Parts[i].name == name)
-                            {
-                                meshIndex = i;
-
-                                skinnedModel.Parts[i].InitializeMesh(this);
-
-                                break;
-                            }
-                        }
-                        return;
-                    }
-                    model = data.model;
-                    if (model != null)
-                    {
-                        for (int i = 0; i < model.Meshes.Count; i++)
-                        {
-                            if (model.Meshes[i].Name == name)
-                            {
-                                meshIndex = i;
-                                bounds = new Bounds(model.Meshes[i].BoundingSphere.Center, new Vector3(model.Meshes[i].BoundingSphere.Radius));
-                                break;
-                            }
-                        }
-                        return;
-                    }
                 }
 #if DEBUG
                 else
@@ -146,24 +111,6 @@ namespace PressPlay.FFWD
             triangleSets = null;
         }
 
-        internal ModelMesh GetModelMesh()
-        {
-            if (model != null)
-            {
-                return model.Meshes[meshIndex];
-            }
-            return null;
-        }
-
-        public CpuSkinnedModelPart GetSkinnedModelPart()
-        {
-            if (skinnedModel != null)
-            {
-                return skinnedModel.Parts[meshIndex];
-            }
-            return null;
-        }
-
         public int subMeshCount
         {
             get
@@ -193,8 +140,6 @@ namespace PressPlay.FFWD
         internal override UnityObject Clone()
         {
             Mesh clone = new Mesh();
-            clone.skinnedModel = skinnedModel;
-            clone.model = model;
             clone.meshIndex = meshIndex;
 
             if (vertices != null)
