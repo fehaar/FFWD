@@ -24,35 +24,36 @@ namespace PressPlay.FFWD
         // TODO: Reimplement this
         internal AnimationClip(AnimationClip clip, string newName, int firstFrame, int lastFrame)
         {
-            this.name = newName;
-            if (firstFrame < 0)
-            {
-                firstFrame = 0;
-            }
+            throw new NotImplementedException();
+            //this.name = newName;
+            //if (firstFrame < 0)
+            //{
+            //    firstFrame = 0;
+            //}
 
-            float startTime = firstFrame * (1.0f / 30.0f);
-            float endTime = lastFrame * (1.0f / 30.0f);
+            //float startTime = firstFrame * (1.0f / 30.0f);
+            //float endTime = lastFrame * (1.0f / 30.0f);
 
-            if (clip.Keyframes != null)
-            {
-                Keyframes = new List<Keyframe>();
-                timeOffset = (float)startTime;
-                int cnt = clip.Keyframes.Count;
-                for (int i = 0; i < cnt; i++)
-                {
-                    Keyframe frame = clip.Keyframes[i];
-                    float keySecs = frame.Time;
-                    if (keySecs >= startTime && keySecs < endTime)
-                    {
-                        Keyframes.Add(frame);
-                    }
-                }
-            }
-            this.Duration = TimeSpan.FromSeconds(endTime - startTime);
+            //if (clip.Keyframes != null)
+            //{
+            //    Keyframes = new List<Keyframe>();
+            //    timeOffset = (float)startTime;
+            //    int cnt = clip.Keyframes.Count;
+            //    for (int i = 0; i < cnt; i++)
+            //    {
+            //        Keyframe frame = clip.Keyframes[i];
+            //        float keySecs = frame.Time;
+            //        if (keySecs >= startTime && keySecs < endTime)
+            //        {
+            //            Keyframes.Add(frame);
+            //        }
+            //    }
+            //}
+            //this.Duration = TimeSpan.FromSeconds(endTime - startTime);
         }
 
         [ContentSerializer]
-        public float length { get; private set; }
+        public float length { get; internal set; }
         public string name;
         public WrapMode wrapMode = WrapMode.Once;
         [ContentSerializer]
@@ -61,31 +62,9 @@ namespace PressPlay.FFWD
         internal float timeOffset;
 
         /// <summary>
-        /// Gets the total length of the model animation clip
-        /// </summary>
-        [ContentSerializerIgnore]
-        public TimeSpan Duration { get; private set; }
-        
-        /// <summary>
-        /// Gets a combined list containing all the keyframes for all bones,
-        /// sorted by time.
-        /// </summary>
-        [ContentSerializerIgnore]
-        public List<Keyframe> Keyframes { get; private set; }
-
-        /// <summary>
-        /// Constructs a new model animation clip object.
-        /// </summary>
-        public AnimationClip(TimeSpan duration, List<Keyframe> keyframes)
-        {
-            Duration = duration;
-            Keyframes = keyframes;
-        }
-
-        /// <summary>
         /// Private constructor for use by the XNB deserializer.
         /// </summary>
-        private AnimationClip()
+        internal AnimationClip()
         {
         }
     }

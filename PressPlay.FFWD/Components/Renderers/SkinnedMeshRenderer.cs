@@ -96,11 +96,6 @@ namespace PressPlay.FFWD.Components
                 }
                 return cam.BatchRender(mesh, materials, null);
             }
-            else if (sharedMesh.blendIndices == null)
-            {
-                // We do not have bone animation - so just render as a normal model
-                return cam.BatchRender(sharedMesh, materials, transform);
-            }
             return 0;
         }
         #endregion

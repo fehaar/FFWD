@@ -676,7 +676,7 @@ namespace PressPlay.FFWD
                     }
                     if (cmp is IInitializable)
                     {
-                        (cmp as IInitializable).Initialize();
+                        (cmp as IInitializable).Initialize(assetHelper);
                     }
                 }
             }

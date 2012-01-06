@@ -167,7 +167,7 @@ namespace PressPlay.FFWD.Import.Animation
             if (animation.Duration <= TimeSpan.Zero)
                 throw new InvalidContentException("Animation has a zero duration.");
 
-            return new AnimationClip(animation.Duration, keyframes);
+            return new AnimationClip();
         }
 
         /// <summary>

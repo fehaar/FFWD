@@ -9,36 +9,69 @@ using Microsoft.Xna.Framework;
 
 namespace PressPlay.FFWD.Components
 {
-	public class Animation : Behaviour, IEnumerable<AnimationState>
+    public class Animation : Behaviour, IInitializable, IEnumerable<AnimationState>
 	{
         [ContentSerializer(ElementName = "clip", Optional=true)]
-        private int clipId;
+        private int clipId = 0;
         public bool playAutomatically;
         public WrapMode wrapMode;
         [ContentSerializer(ElementName = "clips")]
-        private int[] clipsId;
+        private int[] clipsId = null;
 
-		// TODO: This should be moved to a content processor!
-		[ContentSerializerIgnore]
-		private string[] animations = null;
+        private string defaultClip;
+        [ContentSerializerIgnore]
+		public AnimationClip clip
+        {
+            get
+            {
+                return GetClip(defaultClip);
+            }
+            set
+            {
+                AddClip(value, value.name);
+                defaultClip = value.name;
+            }
+        }
 
-		[ContentSerializerIgnore]
-		public AnimationClip clip;
+		private Dictionary<string, int> stateIndexes = new Dictionary<string, int>();
+        private List<AnimationState> states;
 
-		private Dictionary<string, AnimationClip> clips = new Dictionary<string, AnimationClip>();
-		private Dictionary<string, AnimationState> states = new Dictionary<string, AnimationState>();
+        public void Initialize(AssetHelper assets)
+        {
+            if (clipsId != null)
+            {
+                states = new List<AnimationState>(clipsId.Length);
+                for (int i = 0; i < clipsId.Length; i++)
+                {
+                    AnimationClip data = assets.LoadAsset<AnimationClip>(clipsId[i]);
+                    if (data != null)
+                    {
+                        AddClip(data, data.name);
+                        if (clipsId[i] == clipId)
+                        {
+                            defaultClip = data.name;
+                        }
+                    }
+                }
+            }
+        }
 
-		public override void Awake()
-		{
-		}
+        public override void Awake()
+        {
+            base.Awake();
+            if (playAutomatically && clip != null)
+            {
+                Play(defaultClip);
+            }
+        }
 
 		public AnimationState this[string index]
 		{
 			get
 			{
-				if (states.ContainsKey(index))
+				if (stateIndexes.ContainsKey(index))
 				{
-					return states[index];
+					return states[stateIndexes[index]];
 				}
 				return null;
 			}
@@ -46,16 +79,19 @@ namespace PressPlay.FFWD.Components
 
 		public AnimationClip GetClip(string name)
 		{
-            if (clips.ContainsKey(name))
+            if (stateIndexes.ContainsKey(name))
             {
-                return clips[name];
+                return states[stateIndexes[name]].clip;
             }
             return null;
 		}
 
-		public bool isPlaying {
-			get { return true; } //TODO check if animation is playing or not
-			private set { }
+		public bool isPlaying
+        {
+			get 
+            {
+                return states.Any(s => s.enabled);
+            } 
 		}
 
 		public void Rewind()
@@ -64,14 +100,23 @@ namespace PressPlay.FFWD.Components
 			throw new NotImplementedException("Method not implemented.");
 		}
 
-		public void Play()
+		public bool Play()
 		{
-			Play(animations[0]);
+			return Play(defaultClip);
 		}
 
-		public void Play(string name)
+		public bool Play(string name)
 		{
-            throw new NotImplementedException("Method not implemented.");
+            if (String.IsNullOrEmpty(name))
+            {
+                return false;
+            }            
+            if (!stateIndexes.ContainsKey(name))
+            {
+                return false;
+            }
+            this[name].enabled = true;
+            return true;
         }
 
 		public void PlayQueued(string name)
@@ -87,29 +132,39 @@ namespace PressPlay.FFWD.Components
 
 		public void Stop()
 		{
-			foreach (AnimationState state in states.Values)
-			{
-				state.enabled = false;
-			}
+            for (int i = 0; i < states.Count; i++)
+            {
+                states[i].enabled = false;
+            }
 		}
 
 		public void Stop(string name)
 		{
-			if (states.ContainsKey(name))
+			if (stateIndexes.ContainsKey(name))
 			{
-				states[name].enabled = false;
+				states[stateIndexes[name]].enabled = false;
 			}
 		}
-	
+
 		public void AddClip(AnimationClip clip, string newName)
 		{
 			if (String.IsNullOrEmpty(newName))
 			{
 				return;
 			}
-			clip.name = newName;
-			clips[newName] = clip;
-			states[newName] = new AnimationState() { length = (float)clip.Duration.TotalSeconds, wrapMode = clip.wrapMode };
+            if (states == null)
+            {
+                states = new List<AnimationState>(1);
+            }
+            if (stateIndexes.ContainsKey(newName))
+            {
+                states[stateIndexes[newName]] = new AnimationState(this, clip);
+            }
+            else
+            {
+                stateIndexes[newName] = states.Count;
+                states.Add(new AnimationState(this, clip));
+            }
 		}
 
 		public void AddClip(AnimationClip clip, string newName, int firstFrame, int lastFrame)
@@ -161,26 +216,34 @@ namespace PressPlay.FFWD.Components
 
         public bool IsPlaying(string name)
         {
-            if (states.ContainsKey(name))
+            if (stateIndexes.ContainsKey(name))
             {
-                return states[name].enabled;
+                return states[stateIndexes[name]].enabled;
             }
             return false;
         }
 
         public int GetClipCount()
         {
-            return clips.Count;
+            return states.Count;
         }
 
         public IEnumerator<AnimationState> GetEnumerator()
         {
-            return states.Values.GetEnumerator();
+            return states.GetEnumerator();
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
-            return states.Values.GetEnumerator();
+            return stateIndexes.Values.GetEnumerator();
+        }
+
+        internal void UpdateAnimationStates(float deltaTime)
+        {
+            for (int i = 0; i < states.Count; i++)
+            {
+                states[i].Update(deltaTime);
+            }
         }
     }
 }
