@@ -10,6 +10,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
+using PressPlay.FFWD.Components;
 
 namespace PressPlay.FFWD
 {
@@ -18,7 +19,7 @@ namespace PressPlay.FFWD
     /// Microsoft.Xna.Framework.Content.Pipeline.Graphics.AnimationContent type.
     /// It holds all the keyframes needed to describe a single model animation.
     /// </summary>
-    public class AnimationClip
+    public class AnimationClip : UnityObject
     {
         internal AnimationClip(AnimationClip clip, string newName, int firstFrame, int lastFrame)
         {
@@ -49,30 +50,26 @@ namespace PressPlay.FFWD
             this.Duration = TimeSpan.FromSeconds(endTime - startTime);
         }
 
-        [ContentSerializerIgnore]
-        public float length
-        {
-            get
-            {
-                return (float)Duration.TotalSeconds;
-            }
-        }
-
+        [ContentSerializer]
+        public float length { get; private set; }
         public string name;
         public WrapMode wrapMode = WrapMode.Once;
+        [ContentSerializer]
+        private AnimationClipCurveData[] curves;
+
         internal float timeOffset;
 
         /// <summary>
         /// Gets the total length of the model animation clip
         /// </summary>
-        [ContentSerializer]
+        [ContentSerializerIgnore]
         public TimeSpan Duration { get; private set; }
         
         /// <summary>
         /// Gets a combined list containing all the keyframes for all bones,
         /// sorted by time.
         /// </summary>
-        [ContentSerializer]
+        [ContentSerializerIgnore]
         public List<Keyframe> Keyframes { get; private set; }
 
         /// <summary>

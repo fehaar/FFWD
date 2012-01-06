@@ -27,6 +27,10 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
             int[] clipIds = new int[clips.Length];
             for (int i = 0; i < clips.Length; i++)
             {
+                if (clips[i] == null)
+                {
+                    continue;
+                }
                 clipIds[i] = clips[i].GetInstanceID();
                 scene.AddAnimationClip(clips[i]);
             }

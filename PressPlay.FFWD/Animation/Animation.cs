@@ -11,11 +11,15 @@ namespace PressPlay.FFWD.Components
 {
 	public class Animation : Behaviour, PressPlay.FFWD.Interfaces.IFixedUpdateable, IEnumerable<AnimationState>
 	{
-
-		public bool playAutomatically;
+        [ContentSerializer(ElementName = "clip", Optional=true)]
+        private int clipId;
+        public bool playAutomatically;
+        public WrapMode wrapMode;
+        [ContentSerializer(ElementName = "clips")]
+        private int[] clipsId;
 
 		// TODO: This should be moved to a content processor!
-		[ContentSerializer]
+		[ContentSerializerIgnore]
 		private string[] animations = null;
 
 		[ContentSerializerIgnore]

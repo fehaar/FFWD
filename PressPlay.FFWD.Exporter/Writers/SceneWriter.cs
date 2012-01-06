@@ -162,12 +162,17 @@ namespace PressPlay.FFWD.Exporter.Writers
 
         private void WriteAnimations()
         {
+            if (animationClipsToWrite.Count > 0)
+            {
+                Debug.Log("Write " + animationClipsToWrite.Count + " animations");
+            }
             foreach (int key in animationClipsToWrite.Keys)
             {
                 string path = PreparePath(String.Format("../Assets/{0}.xml", key));
                 XmlWriterSettings settings = new XmlWriterSettings();
                 settings.Indent = true;
                 settings.IndentChars = "  ";
+                //Debug.Log("Write animation " + key, animationClipsToWrite[key]);
                 using (writer = XmlWriter.Create(path, settings))
                 {
                     writer.WriteStartDocument();
@@ -546,8 +551,8 @@ namespace PressPlay.FFWD.Exporter.Writers
                         writer.WriteStartElement(name);
                     }
                     WriteElement("id", clip.GetInstanceID());
-                    writer.WriteElementString("name", clip.name);
                     WriteElement("length", clip.length);
+                    writer.WriteElementString("name", clip.name);
                     WriteElement("wrapMode", clip.wrapMode);
                     WriteElement("curves", AnimationUtility.GetAllCurves(clip));
                     if (name != null)
@@ -777,7 +782,7 @@ namespace PressPlay.FFWD.Exporter.Writers
             }
             catch (Exception ex)
             {
-                Debug.LogError("Exception when writing " + name + " with value " + obj + ": " + ex.Message + " (" + ex.GetType() + ")");
+                Debug.LogError("Exception when writing " + name + " with value " + obj + ": " + ex.Message + " (" + ex.GetType() + ")", obj as UnityEngine.Object);
                 throw;
             }
         }

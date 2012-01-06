@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="Animation\Animation.cs" />
     <Compile Include="Animation\AnimationClip.cs" />
+    <Compile Include="Animation\AnimationClipCurveData.cs" />
     <Compile Include="Animation\AnimationCurve.cs" />
     <Compile Include="Animation\SkinnedAnimationPlayer.cs" />
     <Compile Include="Animation\AnimationState.cs" />
