@@ -567,10 +567,10 @@ namespace PressPlay.FFWD.Exporter.Writers
                     writer.WriteStartElement(name);
                     writer.WriteElementString("path", acd.path);
                     writer.WriteElementString("propertyName", acd.propertyName);
-                    //if (acd.type != null)
-                    //{
-                    //    writer.WriteElementString("type", acd.type.FullName);
-                    //}
+                    if (acd.type != null)
+                    {
+                        writer.WriteElementString("type", acd.type.FullName);
+                    }
                     if (acd.target != null)
                     {
                         WriteElement("target", acd.target.GetInstanceID());

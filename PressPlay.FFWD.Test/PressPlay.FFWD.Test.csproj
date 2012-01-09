@@ -135,6 +135,7 @@
     <Compile Include="Core framework\Animation\UpdatingAnimationStates.cs" />
     <Compile Include="Core framework\Animation\WhenAddingANewClip.cs" />
     <Compile Include="Core framework\Animation\WhenPlayingAClip.cs" />
+    <Compile Include="Core framework\Animation\WhenSamplingTheAnimationState.cs" />
     <Compile Include="Core framework\Helpers\ApplicationTestBase.cs" />
     <Compile Include="Core framework\Behaviours\WhenSettingTheEnabledProperty.cs" />
     <Compile Include="Core framework\Bounds\WhenSettingTheCenterOfBounds.cs" />

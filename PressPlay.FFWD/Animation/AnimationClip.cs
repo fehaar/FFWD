@@ -21,35 +21,10 @@ namespace PressPlay.FFWD
     /// </summary>
     public class AnimationClip : UnityObject
     {
-        // TODO: Reimplement this
         internal AnimationClip(AnimationClip clip, string newName, int firstFrame, int lastFrame)
         {
+            // TODO: Reimplement this
             throw new NotImplementedException();
-            //this.name = newName;
-            //if (firstFrame < 0)
-            //{
-            //    firstFrame = 0;
-            //}
-
-            //float startTime = firstFrame * (1.0f / 30.0f);
-            //float endTime = lastFrame * (1.0f / 30.0f);
-
-            //if (clip.Keyframes != null)
-            //{
-            //    Keyframes = new List<Keyframe>();
-            //    timeOffset = (float)startTime;
-            //    int cnt = clip.Keyframes.Count;
-            //    for (int i = 0; i < cnt; i++)
-            //    {
-            //        Keyframe frame = clip.Keyframes[i];
-            //        float keySecs = frame.Time;
-            //        if (keySecs >= startTime && keySecs < endTime)
-            //        {
-            //            Keyframes.Add(frame);
-            //        }
-            //    }
-            //}
-            //this.Duration = TimeSpan.FromSeconds(endTime - startTime);
         }
 
         [ContentSerializer]
@@ -57,7 +32,7 @@ namespace PressPlay.FFWD
         public string name;
         public WrapMode wrapMode = WrapMode.Once;
         [ContentSerializer]
-        private AnimationClipCurveData[] curves;
+        internal AnimationClipCurveData[] curves;
 
         internal float timeOffset;
 
