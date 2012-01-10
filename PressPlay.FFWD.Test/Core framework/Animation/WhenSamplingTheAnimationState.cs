@@ -48,6 +48,8 @@ namespace PressPlay.FFWD.Test.Core_framework.Animation
             h.root.AddComponent(animation);
             animation.AddClip(leftRight, "left/right");
 
+            animation.Awake();
+
 
         }
 
@@ -56,7 +58,7 @@ namespace PressPlay.FFWD.Test.Core_framework.Animation
         {
             // TODO : Add implementation of test
             Assert.Ignore("Test not implemented");
-            
+
         }
 	
 
