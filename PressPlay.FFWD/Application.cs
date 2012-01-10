@@ -113,6 +113,7 @@ namespace PressPlay.FFWD
         private static Stopwatch stopWatch = new Stopwatch();
         internal static readonly List<Component> tempComponents = new List<Component>();
         internal static readonly List<Asset> tempAssets = new List<Asset>();
+        internal static bool isLoadingAdditive = false;
 
         private static AssetHelper assetHelper = new AssetHelper();
 
@@ -421,7 +422,7 @@ namespace PressPlay.FFWD
 
             _loadingProgess = 0;
 
-            if (!String.IsNullOrEmpty(loadedLevelName))
+            if (!isLoadingAdditive && !String.IsNullOrEmpty(loadedLevelName))
             {
                 CleanUp();
                 assetHelper.Unload(loadedLevelName);
@@ -501,6 +502,7 @@ namespace PressPlay.FFWD
             loadingScene = false;
             isLoadingAssetBeforeSceneInitialize = false;
             loadIsComplete = false;
+            isLoadingAdditive = false;
 
             if (scene != null)
             {
@@ -521,7 +523,9 @@ namespace PressPlay.FFWD
 
         public static void LoadLevelAdditive(string m_strLevelBase)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            sceneToLoad = m_strLevelBase;
+            isLoadingAdditive = true;
         }
 
         public static void LoadLevel(string name)
