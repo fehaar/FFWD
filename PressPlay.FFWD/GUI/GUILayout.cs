@@ -47,5 +47,11 @@ namespace PressPlay.FFWD
         {
             // TODO: Implement this
         }
+
+        public static bool Toggle(bool value, string text)
+        {
+            // TODO: Implement this
+            return value;
+        }
     }
 }
