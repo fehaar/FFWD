@@ -329,6 +329,7 @@
     <Compile Include="GUI\GUI.cs" />
     <Compile Include="GUI\GUIContent.cs" />
     <Compile Include="GUI\GUILayout.cs" />
+    <Compile Include="GUI\GUILayoutOption.cs" />
     <Compile Include="GUI\GUISkin.cs" />
     <Compile Include="GUI\GUIStyle.cs" />
     <Compile Include="GUI\GUIStyleState.cs" />

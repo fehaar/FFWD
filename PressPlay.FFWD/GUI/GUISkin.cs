@@ -17,6 +17,14 @@ namespace PressPlay.FFWD
             }
         }
 
+        public GUIStyle toggle
+        {
+            get
+            {
+                return GetStyle("toggle");
+            }
+        }
+
         public GUIStyle GetStyle(string name)
         {
             if (!styles.ContainsKey(name))
@@ -31,6 +39,9 @@ namespace PressPlay.FFWD
                             margin = new RectOffset() { bottom = 4, top = 4},
                             normal = new GUIStyleState() { background = Texture2D.LoadFromResource("button.PNG") }
                         });
+                        break;
+                    case "toggle":
+                        // TODO
                         break;
                     default:
                         styles.Add(name, new GUIStyle());

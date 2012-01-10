@@ -7,9 +7,21 @@ namespace PressPlay.FFWD
 {
     public class GUIContent
     {
-        public GUIContent(string text)
+        private static GUIContent s_Image;
+        private static GUIContent s_Text;
+        private static GUIContent s_TextImage;
+
+        internal protected string m_Text;
+
+        internal static protected GUIContent Temp(string t)
         {
-            // TODO: Implement this
+            s_Text.m_Text = t;
+            return s_Text;
+        }
+
+        public GUIContent(string text)
+        {         
+
         }
     }
 }

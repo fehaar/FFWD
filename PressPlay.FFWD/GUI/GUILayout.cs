@@ -48,10 +48,23 @@ namespace PressPlay.FFWD
             // TODO: Implement this
         }
 
-        public static bool Toggle(bool value, string text)
+        public static bool Toggle(bool value, string text, params GUILayoutOption[] options)
+        {
+            return DoToggle(value, GUIContent.Temp(text), GUI.skin.toggle, options);
+        }
+
+        // TODO:
+        //public static bool Toggle(bool value, GUIContent content, GUIStyle style, GUILayoutOption[] options)
+        //public static bool Toggle(bool value, Texture image, GUIStyle style, GUILayoutOption[] options)
+        //public static bool Toggle(bool value, Texture image, GUILayoutOption[] options)
+        //public static bool Toggle(bool value, string text, GUIStyle style, GUILayoutOption[] options)
+        //public static bool Toggle(bool value, GUIContent content, GUILayoutOption[] options)
+
+        private static bool DoToggle(bool value, GUIContent content, GUIStyle style, GUILayoutOption[] options)
         {
             // TODO: Implement this
-            return value;
+            return false;
         }
+        
     }
 }
