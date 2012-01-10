@@ -11,10 +11,34 @@ namespace PressPlay.FFWD
         private static bool isRendering = false;
         internal static SpriteBatch spriteBatch = null;
 
-        public static GUISkin skin = new GUISkin();
+        private static GUISkin s_Skin = new GUISkin();
+        public static GUISkin skin
+        {
+            get
+            {
+                //GUIUtility.CheckOnGUI(); TODO!
+                return s_Skin;
+            }
+
+            set
+            {
+                /* TODO
+                GUIUtility.CheckOnGUI(); 
+                if (!Object.op_Implicit(value))
+                {
+                    value = GUIUtility.GetDefaultSkin();
+                }
+                 */
+
+                s_Skin = value;
+                //value.MakeCurrent(); TODO!
+            }
+        }
         public static Color backgroundColor = Color.white;
         public static Color color = Color.white;
         public static SpriteFont spriteFont;
+
+        
 
         public static void DrawTexture(Rect rect, Texture texture)
         {
