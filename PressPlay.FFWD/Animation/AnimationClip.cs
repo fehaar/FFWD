@@ -49,14 +49,21 @@ namespace PressPlay.FFWD
             for (int i = 0; i < curves.Length; i++)
             {
                 AnimationClipCurveData curveData = curves[i];
-                string sampleKey = curveData.type + "." + ((curveData.propertyName.Contains(".")) ? curveData.propertyName.Substring(0, curveData.propertyName.LastIndexOf('.')) : curveData.propertyName);
+                string sampleKey = curveData.path + "/" + curveData.type + "." + ((curveData.propertyName.Contains(".")) ? curveData.propertyName.Substring(0, curveData.propertyName.LastIndexOf('.')) : curveData.propertyName);
 
                 Sampler sampler = null;
                 if (!samps.ContainsKey(sampleKey))
 	            {
-                    sampler = GetSampler(g, curveData);
+                    GameObject go = g;
+                    if (!String.IsNullOrEmpty(curveData.path))
+                    {
+                        go = g.transform.Find(curveData.path).gameObject;
+                    }
+
+                    sampler = GetSampler(go, curveData);
                     if (sampler != null)
 	                {
+                        Debug.Log("Added a sampler for " + sampleKey);
                         samps.Add(sampleKey, sampler);
 	                }
 	            }

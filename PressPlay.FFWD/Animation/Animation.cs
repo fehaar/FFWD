@@ -64,7 +64,6 @@ namespace PressPlay.FFWD.Components
                     AnimationClip data = assets.LoadAsset<AnimationClip>(clipsId[i]);
                     if (data != null)
                     {
-                        data.InitializeSamplers(gameObject);
                         AddClip(data, data.name);
                         if (clipsId[i] == clipId)
                         {
@@ -79,6 +78,10 @@ namespace PressPlay.FFWD.Components
         public override void Awake()
         {
             base.Awake();
+            for (int i = 0; i < states.Count; i++)
+            {
+                states[i].clip.InitializeSamplers(gameObject);
+            }
             if (playAutomatically && clip != null)
             {
                 Play(defaultClip);
@@ -105,6 +108,10 @@ namespace PressPlay.FFWD.Components
 
 		public AnimationClip GetClip(string name)
 		{
+            if (String.IsNullOrEmpty(name))
+            {
+                return null;
+            }
             if (stateIndexes.ContainsKey(name))
             {
                 return states[stateIndexes[name]].clip;

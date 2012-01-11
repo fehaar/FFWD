@@ -80,6 +80,7 @@ namespace PressPlay.FFWD.Components
                     bindPoses[i] = Matrix.Identity;
                     //bindPoses[i] = bones[i].world * Matrix.Invert(transform.world);
                     bindPoses[i] = sharedMesh.bindPoses[i] * bones[i].world;
+                    //Debug.Log(bones[i].name + " : " + bones[i].localPosition);
                 }
 
                 // We have blended parts that does not come from a bone structure
