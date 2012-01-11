@@ -66,5 +66,9 @@ namespace PressPlay.FFWD
         }
 
         protected abstract object GetSampleValue(float time);
+
+        internal virtual void AddCurveData(AnimationClipCurveData curveData)
+        {
+        }
     }
 }

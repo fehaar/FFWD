@@ -8,7 +8,7 @@ namespace PressPlay.FFWD
 {
     public class Behaviour : Component
     {
-        [ContentSerializerIgnore]
+        [ContentSerializer(Optional=true)]
         public bool enabled { get; set; }
     }
 }

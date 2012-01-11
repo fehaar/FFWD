@@ -296,8 +296,9 @@ namespace PressPlay.FFWD
                 componentProfiler.EndUpdateCall();
 #endif
             }
-            ChangeComponentActivity();
+            ChangeComponentActivity();            
             UpdateInvokeCalls();
+            Animation.SampleAnimations();
 #if DEBUG
             updateTime.Stop();
             lateUpdateTime.Start();

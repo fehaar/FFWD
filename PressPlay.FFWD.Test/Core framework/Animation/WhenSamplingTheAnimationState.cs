@@ -30,9 +30,9 @@ namespace PressPlay.FFWD.Test.Core_framework.Animation
             c1.Keys.Add(new CurveKey(0.5f, 5, 0, 0, CurveContinuity.Smooth));
             c1.Keys.Add(new CurveKey(1, 0, 0, 0, CurveContinuity.Smooth));
             leftRight.curves = new AnimationClipCurveData[] { 
-                new AnimationClipCurveData() { propertyName = "m_LocalPosition.x", curve = c1 },
-                new AnimationClipCurveData() { propertyName = "m_LocalPosition.y", curve = c2 },
-                new AnimationClipCurveData() { propertyName = "m_LocalPosition.z", curve = c3 }
+                new AnimationClipCurveData() { propertyName = "m_LocalPosition.x", type = "PressPlay.FFWD.Transform", curve = c1 },
+                new AnimationClipCurveData() { propertyName = "m_LocalPosition.y", type = "PressPlay.FFWD.Transform", curve = c2 },
+                new AnimationClipCurveData() { propertyName = "m_LocalPosition.z", type = "PressPlay.FFWD.Transform", curve = c3 }
             };
         }
 

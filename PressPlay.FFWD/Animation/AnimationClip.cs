@@ -45,7 +45,38 @@ namespace PressPlay.FFWD
 
         internal void InitializeSamplers(GameObject g)
         {
-            samplers = new Sampler[0];
+            Dictionary<string, Sampler> samps = new Dictionary<string, Sampler>();
+            for (int i = 0; i < curves.Length; i++)
+            {
+                AnimationClipCurveData curveData = curves[i];
+                string sampleKey = curveData.type + "." + ((curveData.propertyName.Contains(".")) ? curveData.propertyName.Substring(0, curveData.propertyName.LastIndexOf('.')) : curveData.propertyName);
+
+                Sampler sampler = null;
+                if (!samps.ContainsKey(sampleKey))
+	            {
+                    sampler = GetSampler(g, curveData);
+                    if (sampler != null)
+	                {
+                        samps.Add(sampleKey, sampler);
+	                }
+	            }
+
+                if (sampler != null)
+                {
+                    sampler.AddCurveData(curveData);
+                }
+            }
+            samplers = new Sampler[samps.Count];
+            samps.Values.CopyTo(samplers, 0);
+        }
+
+        private Sampler GetSampler(GameObject g, AnimationClipCurveData curveData)
+        {
+            if (curveData.type == typeof(Transform).FullName && curveData.propertyName.StartsWith("m_LocalPosition"))
+            {
+                return new Vector3Sampler(g.transform, "localPosition");
+            }
+            return null;
         }
 
         internal void Sample(float time)

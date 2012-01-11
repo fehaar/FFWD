@@ -17,6 +17,7 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
             {
                 throw new Exception(GetType() + " cannot export components of type " + component.GetType());
             }
+            scene.WriteElement("enabled", anim.enabled);
             if (anim.clip != null)
             {
                 scene.WriteElement("clip", anim.clip.GetInstanceID());

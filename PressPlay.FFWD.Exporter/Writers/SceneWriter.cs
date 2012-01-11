@@ -296,7 +296,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                 if (!isPrefab)
                 {
                     writer.WriteStartElement("c");
-                    writer.WriteAttributeString("Type", resolver.ResolveTypeName(component));
+                    writer.WriteAttributeString("Type", resolver.ResolveObjectType(component));
                 }
                 writer.WriteElementString("id", component.GetInstanceID().ToString());
                 if (isPrefab)
@@ -569,7 +569,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                     writer.WriteElementString("propertyName", acd.propertyName);
                     if (acd.type != null)
                     {
-                        writer.WriteElementString("type", acd.type.FullName);
+                        writer.WriteElementString("type", resolver.ResolveTypeName(acd.type.FullName));
                     }
                     if (acd.target != null)
                     {
@@ -712,7 +712,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                 if (obj is AnimationCurve)
                 {
                     writer.WriteStartElement(name);
-                    writer.WriteAttributeString("Type", resolver.ResolveTypeName(obj));
+                    writer.WriteAttributeString("Type", resolver.ResolveObjectType(obj));
                     if (obj != null)
                     {
                         Components.AnimationCurveWriter acw = new Components.AnimationCurveWriter();
@@ -733,7 +733,7 @@ namespace PressPlay.FFWD.Exporter.Writers
 
                     if ((theObject != null) && (obj.GetType() != elementType))
                     {   
-                        writer.WriteAttributeString("Type", resolver.ResolveTypeName(obj));
+                        writer.WriteAttributeString("Type", resolver.ResolveObjectType(obj));
                     }
                    
                     if (theObject == null || !WriteComponent(theObject, true))

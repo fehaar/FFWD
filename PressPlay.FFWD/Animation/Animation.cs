@@ -36,6 +36,24 @@ namespace PressPlay.FFWD.Components
 		private Dictionary<string, int> stateIndexes = new Dictionary<string, int>();
         private List<AnimationState> states;
 
+        #region Static members for doing the animation
+        private static List<Animation> animationComponents = new List<Animation>(ApplicationSettings.DefaultCapacities.AnimationComponents);
+
+        internal static void SampleAnimations()
+        {
+            for (int i = 0; i < animationComponents.Count; i++)
+            {
+                Animation a = animationComponents[i];
+                // TODO: Implement culling here
+                if (a.enabled)
+                {
+                    a.UpdateAnimationStates(Time.deltaTime);
+                    a.Sample();
+                }
+            }
+        }
+    	#endregion
+
         public void Initialize(AssetHelper assets)
         {
             if (clipsId != null)
@@ -46,6 +64,7 @@ namespace PressPlay.FFWD.Components
                     AnimationClip data = assets.LoadAsset<AnimationClip>(clipsId[i]);
                     if (data != null)
                     {
+                        data.InitializeSamplers(gameObject);
                         AddClip(data, data.name);
                         if (clipsId[i] == clipId)
                         {
@@ -54,6 +73,7 @@ namespace PressPlay.FFWD.Components
                     }
                 }
             }
+            animationComponents.Add(this);
         }
 
         public override void Awake()
@@ -63,6 +83,12 @@ namespace PressPlay.FFWD.Components
             {
                 Play(defaultClip);
             }
+        }
+
+        protected override void Destroy()
+        {
+            base.Destroy();
+            animationComponents.Remove(this);
         }
 
 		public AnimationState this[string index]

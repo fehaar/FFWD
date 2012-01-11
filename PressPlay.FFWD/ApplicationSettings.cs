@@ -41,6 +41,7 @@ namespace PressPlay.FFWD
             public static int RaycastHits = 20;
             public static int GestureSamples = 4;
             public static int Touches = 4;
+            public static int AnimationComponents = 30;
             #endregion
         }
 

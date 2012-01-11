@@ -40,20 +40,18 @@ namespace PressPlay.FFWD
 
         protected override void DoLoadAsset(AssetHelper assetHelper)
         {
-            // TODO: Optimize this by bundling everything into the same structure.
+            // If this is a static mesh, we do not need to load the data
+            if (vertices != null)
+            {
+                if (triangleSets != null && triangles == null)
+                {
+                    FlattenTriangleSets();
+                }
+                return;
+            }
+
             if (!String.IsNullOrEmpty(asset))
             {
-                // If this is a static mesh, we do not need to load the data
-                if (vertices != null)
-                {
-                    if (triangleSets != null && triangles == null)
-                    {
-                        FlattenTriangleSets();
-                    }
-                    
-                    return;
-                }
-
                 MeshData data = assetHelper.Load<MeshData>("Models/" + asset);
                 if (data != null)
                 {
