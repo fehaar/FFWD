@@ -130,12 +130,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core framework\Animation\SampleTester.cs" />
     <Compile Include="Core framework\Animation\WhenAClipReachesTheEnd.cs" />
     <Compile Include="Core framework\Animation\TheDefaultAnimationClip.cs" />
     <Compile Include="Core framework\Animation\UpdatingAnimationStates.cs" />
     <Compile Include="Core framework\Animation\WhenAddingANewClip.cs" />
     <Compile Include="Core framework\Animation\WhenPlayingAClip.cs" />
     <Compile Include="Core framework\Animation\WhenSamplingTheAnimationState.cs" />
+    <Compile Include="Core framework\Animation\WithTheColorSampler.cs" />
+    <Compile Include="Core framework\Animation\WithTheFloatSampler.cs" />
+    <Compile Include="Core framework\Animation\WithTheVector3Sampler.cs" />
     <Compile Include="Core framework\Helpers\ApplicationTestBase.cs" />
     <Compile Include="Core framework\Behaviours\WhenSettingTheEnabledProperty.cs" />
     <Compile Include="Core framework\Bounds\WhenSettingTheCenterOfBounds.cs" />

@@ -56,10 +56,13 @@
     <Compile Include="Animation\AnimationClip.cs" />
     <Compile Include="Animation\AnimationClipCurveData.cs" />
     <Compile Include="Animation\AnimationCurve.cs" />
-    <Compile Include="Animation\SkinnedAnimationPlayer.cs" />
     <Compile Include="Animation\AnimationState.cs" />
     <Compile Include="Animation\Keyframe.cs" />
     <Compile Include="Animation\QueueMode.cs" />
+    <Compile Include="Animation\Samplers\ColorSampler.cs" />
+    <Compile Include="Animation\Samplers\FloatSampler.cs" />
+    <Compile Include="Animation\Samplers\Sampler.cs" />
+    <Compile Include="Animation\Samplers\Vector3Sampler.cs" />
     <Compile Include="Animation\SkinningData.cs" />
     <Compile Include="Animation\WrapMode.cs" />
     <Compile Include="Application.cs" />

@@ -212,6 +212,10 @@ namespace PressPlay.FFWD.Components
 
 		public void Sample()
 		{
+            for (int i = 0; i < states.Count; i++)
+            {
+                states[i].Sample();
+            }
 		}
 
         public bool IsPlaying(string name)

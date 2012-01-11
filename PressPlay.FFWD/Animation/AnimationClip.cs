@@ -34,13 +34,26 @@ namespace PressPlay.FFWD
         [ContentSerializer]
         internal AnimationClipCurveData[] curves;
 
-        internal float timeOffset;
+        private Sampler[] samplers;
 
         /// <summary>
         /// Private constructor for use by the XNB deserializer.
         /// </summary>
         internal AnimationClip()
         {
+        }
+
+        internal void InitializeSamplers(GameObject g)
+        {
+            samplers = new Sampler[0];
+        }
+
+        internal void Sample(float time)
+        {
+            for (int i = 0; i < samplers.Length; i++)
+            {
+                samplers[i].Sample(time);
+            }
         }
     }
 }

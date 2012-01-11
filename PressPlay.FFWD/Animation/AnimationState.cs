@@ -108,5 +108,17 @@ namespace PressPlay.FFWD
                 }
             }
         }
+
+        internal void Sample()
+        {
+            if (!enabled)
+            {
+                return;
+            }
+            if (clip != null)
+            {
+                clip.Sample(time);
+            }
+        }
     }
 }

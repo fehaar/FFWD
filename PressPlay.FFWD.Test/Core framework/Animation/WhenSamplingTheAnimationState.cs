@@ -49,8 +49,13 @@ namespace PressPlay.FFWD.Test.Core_framework.Animation
             animation.AddClip(leftRight, "left/right");
 
             animation.Awake();
+            animation.Play("left/right");
+            Vector3 position = h.rootTrans.localPosition;
 
+            animation.UpdateAnimationStates(0.1f);
+            animation.Sample();
 
+            Assert.That(h.rootTrans.localPosition, Is.Not.EqualTo(position));
         }
 
         [Test]
@@ -64,6 +69,14 @@ namespace PressPlay.FFWD.Test.Core_framework.Animation
 
         [Test]
         public void AnimationCanAlterThePathOfASubcomponent()
+        {
+            // TODO : Add implementation of test
+            Assert.Ignore("Test not implemented");
+
+        }
+
+        [Test]
+        public void ItCanBeDoneByManuallySettingTheClipPositions()
         {
             // TODO : Add implementation of test
             Assert.Ignore("Test not implemented");
