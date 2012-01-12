@@ -681,7 +681,7 @@ namespace PressPlay.FFWD
 
         public override string ToString()
         {
-            return String.Format("{0} ({1}){2}{3}", String.IsNullOrWhiteSpace(name) ? "?" : name, GetInstanceID(), (isPrefab) ? "P" : "", (active) ? "A" : "");
+            return String.Format("{0} ({1}){2}{3}", String.IsNullOrEmpty(name) ? "?" : name, GetInstanceID(), (isPrefab) ? "P" : "", (active) ? "A" : "");
         }
 
         internal string FullName()
