@@ -80,7 +80,7 @@ namespace PressPlay.FFWD.Components
             base.Awake();
             for (int i = 0; i < states.Count; i++)
             {
-                states[i].clip.InitializeSamplers(gameObject);
+                states[i].InitializeSamplers(gameObject);
             }
             if (playAutomatically && clip != null)
             {
