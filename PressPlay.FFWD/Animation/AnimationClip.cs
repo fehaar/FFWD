@@ -53,7 +53,6 @@ namespace PressPlay.FFWD
             for (int i = 0; i < curves.Length; i++)
             {
                 AnimationClipCurveData curveData = curves[i];
-                //curveData.curve.Denormalize();
                 string sampleKey = GetSampleKey(curveData);
 
                 Sampler sampler = null;
