@@ -20,22 +20,22 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
             scene.WriteElement("enabled", anim.enabled);
             if (anim.clip != null)
             {
-                scene.WriteElement("clip", anim.clip.GetInstanceID());
+                scene.WriteElement("clip", scene.SanitizeFileName(anim.name + "-" + anim.clip.name));
             }
             scene.WriteElement("playAutomatically", anim.playAutomatically);
             scene.WriteElement("wrapMode", anim.wrapMode);
             AnimationClip[] clips = AnimationUtility.GetAnimationClips(anim);
-            int[] clipIds = new int[clips.Length];
+            string[] clipNames = new string[clips.Length];
             for (int i = 0; i < clips.Length; i++)
             {
                 if (clips[i] == null)
                 {
                     continue;
                 }
-                clipIds[i] = clips[i].GetInstanceID();
-                scene.AddAnimationClip(clips[i]);
+                clipNames[i] = scene.SanitizeFileName(anim.name + "-" + clips[i].name);
+                scene.AddAnimationClip(clipNames[i], clips[i]);
             }
-            scene.WriteElement("clips", clipIds);
+            scene.WriteElement("clips", clipNames);
         }
         #endregion
     }

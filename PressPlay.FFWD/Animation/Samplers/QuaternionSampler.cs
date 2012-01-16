@@ -3,49 +3,61 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using PressPlay.FFWD.Components;
-using System.Reflection;
 
 namespace PressPlay.FFWD
 {
-    internal class Vector3Sampler : Sampler
+    internal class QuaternionSampler : Sampler
     {
         internal AnimationCurve x;
         internal AnimationCurve y;
         internal AnimationCurve z;
+        internal AnimationCurve w;
 
-        public Vector3Sampler(object t, string memberName)
+        public QuaternionSampler(object t, string memberName)
             : base(t, memberName)
         {
-        }
 
-        public Vector3Sampler(object t, string memberName, AnimationCurve x, AnimationCurve y, AnimationCurve z)
-            : base(t, memberName)
-        {
-            this.x = x;
-            this.y = y;
-            this.z = z;
         }
 
         protected override object GetSampleValue(float time)
         {
-            Vector3 v = (Vector3)GetOriginalValue();
-            GetSampleValue(time, ref v);
-            return v;
-        }
-
-        internal void GetSampleValue(float time, ref Vector3 v)
-        {
+            Quaternion q = (Quaternion)GetOriginalValue();
             if (x != null)
             {
-                v.x = x.Evaluate(time);
+                q.x = x.Evaluate(time);
             }
             if (y != null)
             {
-                v.y = y.Evaluate(time);
+                q.y = y.Evaluate(time);
             }
             if (z != null)
             {
-                v.z = z.Evaluate(time);
+                q.z = z.Evaluate(time);
+            }
+            if (w != null)
+            {
+                q.w = w.Evaluate(time);
+            }
+            return q;
+        }
+
+        internal void GetSampleValue(float time, ref Quaternion q)
+        {
+            if (x != null)
+            {
+                q.x = x.Evaluate(time);
+            }
+            if (y != null)
+            {
+                q.y = y.Evaluate(time);
+            }
+            if (z != null)
+            {
+                q.z = z.Evaluate(time);
+            }
+            if (w != null)
+            {
+                q.w = w.Evaluate(time);
             }
         }
 
@@ -63,6 +75,10 @@ namespace PressPlay.FFWD
             if (curveData.propertyName.EndsWith(".z"))
             {
                 z = curveData.curve;
+            }
+            if (curveData.propertyName.EndsWith(".w"))
+            {
+                w = curveData.curve;
             }
         } 
     }

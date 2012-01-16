@@ -110,10 +110,11 @@ public class ExportSceneWizard : ScriptableWizard
             }
 
             SceneWriter scene = new SceneWriter(resolver, assets);
-            scene.ExportDir = Path.Combine(xnaBaseDir, config.exportDir);
+            scene.ExportDir = Path.Combine(assets.XmlDir, "Scenes");
+            Debug.Log("Export dir set to: " + scene.ExportDir);
             ScriptTranslator.ScriptNamespace = config.scriptNamespace;
 
-            string path = Path.ChangeExtension(AssetDatabase.GetAssetPath(go).Replace("Assets/", ""), "xml");
+            string path = Path.ChangeExtension(AssetDatabase.GetAssetPath(go).Replace("Assets/", "../"), "xml");
             Debug.Log("Start resource export of " + path);
             scene.WriteResource(path, go);
         }
@@ -145,10 +146,10 @@ public class ExportSceneWizard : ScriptableWizard
             }
 
             SceneWriter scene = new SceneWriter(resolver, assets);
-            scene.ExportDir = Path.Combine(xnaBaseDir, config.exportDir);
+            scene.ExportDir = Path.Combine(assets.XmlDir, "Scenes");
             ScriptTranslator.ScriptNamespace = config.scriptNamespace;
 
-            string path = Path.ChangeExtension(AssetDatabase.GetAssetPath(mat).Replace("Assets/", ""), "xml");
+            string path = Path.ChangeExtension(AssetDatabase.GetAssetPath(mat).Replace("Assets/", "../"), "xml");
             Debug.Log("Start resource export of " + path);
             scene.WriteResource(path, mat);
         }

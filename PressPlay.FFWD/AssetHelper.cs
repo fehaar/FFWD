@@ -62,9 +62,9 @@ namespace PressPlay.FFWD
             return (T)content[contentPath];
         }
 
-        internal T LoadAsset<T>(int id)
+        internal T LoadAsset<T>(string name)
         {
-            return Load<T>("Assets", Path.Combine("Assets", id.ToString()));
+            return Load<T>("Assets", Path.Combine("Assets", name));
         }
 
         public void Unload(string category)

@@ -23,7 +23,7 @@ namespace PressPlay.FFWD
         private List<GameObject> children { get; set; }
 
         [ContentSerializer(ElementName = "p", Optional = true)]
-        private Vector3 _localPosition;
+        internal Vector3 _localPosition;
         [ContentSerializerIgnore]
         public Vector3 localPosition
         {
@@ -56,7 +56,7 @@ namespace PressPlay.FFWD
         }
 
         [ContentSerializer(ElementName = "s", Optional = true)]
-        private Vector3 _localScale = Vector3.one;
+        internal Vector3 _localScale = Vector3.one;
         [ContentSerializerIgnore]
         public Vector3 localScale
         {
@@ -77,7 +77,7 @@ namespace PressPlay.FFWD
         }
 
         [ContentSerializer(ElementName = "r", Optional = true)]
-        private Quaternion _localRotation = Quaternion.identity;
+        internal Quaternion _localRotation = Quaternion.identity;
         [ContentSerializerIgnore]
         public Quaternion localRotation
         {
@@ -151,7 +151,7 @@ namespace PressPlay.FFWD
             {
                 return _hasDirtyWorld;
             }
-            private set
+            set
             {
                 if (gameObject != null && collider != null)
                 {

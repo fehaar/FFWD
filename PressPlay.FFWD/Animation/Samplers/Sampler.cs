@@ -14,26 +14,29 @@ namespace PressPlay.FFWD
         public Sampler(object t, string memberName)
         {
             this.obj = t;
-            MemberInfo[] members = this.obj.GetType().GetMember(memberName, BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-            if (members.Length > 0)
+            if (!String.IsNullOrEmpty(memberName))
             {
-                member = members[0];
-                if (!(member is FieldInfo) && !(member is PropertyInfo))
+                MemberInfo[] members = this.obj.GetType().GetMember(memberName, BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                if (members.Length > 0)
                 {
-                    throw new ArgumentException("We cannot sample on a method.", "memberName");
+                    member = members[0];
+                    if (!(member is FieldInfo) && !(member is PropertyInfo))
+                    {
+                        throw new ArgumentException("We cannot sample on a method.", "memberName");
+                    }
                 }
-            }
-            else
-            {
-                throw new ArgumentException("You cannot specify a value that is non existant", "memberName");
+                else
+                {
+                    throw new ArgumentException("You cannot specify a value that is non existant", "memberName");
+                }
             }
         }
 
         internal void Sample(float time)
         {
+            object value = GetSampleValue(time);
             if (member != null)
             {
-                object value = GetSampleValue(time);
                 if (member is PropertyInfo)
                 {
                     (member as PropertyInfo).SetValue(obj, value, null);
@@ -42,10 +45,6 @@ namespace PressPlay.FFWD
                 {
                     (member as FieldInfo).SetValue(obj, value);
                 }
-            }
-            else
-            {
-                throw new InvalidOperationException("You cannot sample to a non existing member");
             }
         }
 

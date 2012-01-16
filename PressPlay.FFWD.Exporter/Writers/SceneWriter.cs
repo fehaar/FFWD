@@ -9,6 +9,7 @@ using System.Xml;
 using PressPlay.FFWD.Exporter.Interfaces;
 using UnityEditor;
 using UnityEngine;
+using System.Text.RegularExpressions;
 
 namespace PressPlay.FFWD.Exporter.Writers
 {
@@ -38,7 +39,7 @@ namespace PressPlay.FFWD.Exporter.Writers
         }
 
         private Dictionary<int, MeshWriterData> meshesToWrite = new Dictionary<int, MeshWriterData>();
-        private Dictionary<int, AnimationClip> animationClipsToWrite = new Dictionary<int, AnimationClip>();
+        private Dictionary<string, AnimationClip> animationClipsToWrite = new Dictionary<string, AnimationClip>();
 
         public void Write(string path)
         {
@@ -166,7 +167,7 @@ namespace PressPlay.FFWD.Exporter.Writers
             {
                 Debug.Log("Write " + animationClipsToWrite.Count + " animations");
             }
-            foreach (int key in animationClipsToWrite.Keys)
+            foreach (string key in animationClipsToWrite.Keys)
             {
                 string path = PreparePath(String.Format("../Assets/{0}.xml", key));
                 XmlWriterSettings settings = new XmlWriterSettings();
@@ -815,11 +816,11 @@ namespace PressPlay.FFWD.Exporter.Writers
             return theObject.GetType().FullName;
         }
 
-        internal void AddAnimationClip(AnimationClip animationClip)
+        internal void AddAnimationClip(string name, AnimationClip animationClip)
         {
-            if (!animationClipsToWrite.ContainsKey(animationClip.GetInstanceID()))
+            if (!animationClipsToWrite.ContainsKey(name))
             {
-                animationClipsToWrite.Add(animationClip.GetInstanceID(), animationClip);
+                animationClipsToWrite.Add(name, animationClip);
             }
         }
 
@@ -936,5 +937,11 @@ namespace PressPlay.FFWD.Exporter.Writers
         }
         #endregion
 
+        public string SanitizeFileName(string name)
+        {
+            string invalidChars = Regex.Escape(new string(Path.GetInvalidFileNameChars()));
+            string invalidReStr = string.Format(@"[{0}]+", invalidChars.Replace(" ", ""));            
+            return Regex.Replace(name, invalidReStr, "_").Replace("(Clone)", "");
+        }
     }
 }

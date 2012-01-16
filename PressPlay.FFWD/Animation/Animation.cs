@@ -12,11 +12,11 @@ namespace PressPlay.FFWD.Components
     public class Animation : Behaviour, IInitializable, IEnumerable<AnimationState>
 	{
         [ContentSerializer(ElementName = "clip", Optional=true)]
-        private int clipId = 0;
+        private string clipId = string.Empty;
         public bool playAutomatically;
         public WrapMode wrapMode;
         [ContentSerializer(ElementName = "clips")]
-        private int[] clipsId = null;
+        private string[] clipsId = null;
 
         private string defaultClip;
         [ContentSerializerIgnore]

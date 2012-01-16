@@ -45,11 +45,16 @@ namespace PressPlay.FFWD
 
         internal void InitializeSamplers(GameObject g)
         {
-            Dictionary<string, Sampler> samps = new Dictionary<string, Sampler>();
+            if (curves == null)
+            {
+                return;
+            }
+            Dictionary<string, Sampler> samps = new Dictionary<string, Sampler>();            
             for (int i = 0; i < curves.Length; i++)
             {
                 AnimationClipCurveData curveData = curves[i];
-                string sampleKey = curveData.path + "/" + curveData.type + "." + ((curveData.propertyName.Contains(".")) ? curveData.propertyName.Substring(0, curveData.propertyName.LastIndexOf('.')) : curveData.propertyName);
+                curveData.curve.Denormalize();
+                string sampleKey = GetSampleKey(curveData);
 
                 Sampler sampler = null;
                 if (!samps.ContainsKey(sampleKey))
@@ -67,6 +72,10 @@ namespace PressPlay.FFWD
                         samps.Add(sampleKey, sampler);
 	                }
 	            }
+                else
+                {
+                    sampler = samps[sampleKey];
+                }
 
                 if (sampler != null)
                 {
@@ -77,17 +86,30 @@ namespace PressPlay.FFWD
             samps.Values.CopyTo(samplers, 0);
         }
 
+        private string GetSampleKey(AnimationClipCurveData curveData)
+        {
+            if (curveData.type == typeof(Transform).FullName)
+            {
+                return curveData.path + "/" + curveData.type;
+            }
+            return curveData.path + "/" + curveData.type + ":" + ((curveData.propertyName.Contains(".")) ? curveData.propertyName.Substring(0, curveData.propertyName.LastIndexOf('.')) : curveData.propertyName);
+        }
+
         private Sampler GetSampler(GameObject g, AnimationClipCurveData curveData)
         {
-            if (curveData.type == typeof(Transform).FullName && curveData.propertyName.StartsWith("m_LocalPosition"))
+            if (curveData.type == typeof(Transform).FullName)
             {
-                return new Vector3Sampler(g.transform, "localPosition");
+                return new TransformSampler(g.transform);
             }
             return null;
         }
 
         internal void Sample(float time)
         {
+            if (samplers == null)
+            {
+                return;
+            }
             for (int i = 0; i < samplers.Length; i++)
             {
                 samplers[i].Sample(time);
