@@ -44,6 +44,56 @@ namespace PressPlay.FFWD.SkinnedModel
         }
 
         /// <summary>
+        /// Skins an individual vertex.
+        /// </summary>
+        public static void SkinVertex(
+            Matrix[] bones,
+            ref Microsoft.Xna.Framework.Vector3 position,
+            ref Microsoft.Xna.Framework.Vector3 normal,
+            ref Matrix world,
+            ref byte[] blendIndices,
+            ref Vector4 blendWeights,
+            out Microsoft.Xna.Framework.Vector3 outPosition,
+            out Microsoft.Xna.Framework.Vector3 outNormal)
+        {
+            int b0 = (int)blendIndices[0];
+            int b1 = (int)blendIndices[1];
+            int b2 = (int)blendIndices[2];
+            int b3 = (int)blendIndices[3];
+
+            Matrix skinnedTransformSum;
+            Blend4x3Matrix(ref bones[b0], ref bones[b1], ref bones[b2], ref bones[b3], ref blendWeights, out skinnedTransformSum);
+
+            Matrix.Multiply(ref skinnedTransformSum, ref world, out skinnedTransformSum);
+
+            // Support the 4 Bone Influences - Position then Normal
+            Microsoft.Xna.Framework.Vector3.Transform(ref position, ref skinnedTransformSum, out outPosition);
+            Microsoft.Xna.Framework.Vector3.TransformNormal(ref normal, ref skinnedTransformSum, out outNormal);
+        }
+
+        /// <summary>
+        /// Skins an individual vertex.
+        /// </summary>
+        public static void SkinVertex(
+            Matrix[] bones,
+            ref Microsoft.Xna.Framework.Vector3 position,
+            ref Microsoft.Xna.Framework.Vector3 normal,
+            ref Matrix bakedTransform,
+            ref BoneWeight bw,
+            out Microsoft.Xna.Framework.Vector3 outPosition,
+            out Microsoft.Xna.Framework.Vector3 outNormal)
+        {
+            Matrix skinnedTransformSum;
+            Blend4x3Matrix(ref bones[bw.boneIndex0], ref bones[bw.boneIndex1], ref bones[bw.boneIndex2], ref bones[bw.boneIndex3], ref bw.weights, out skinnedTransformSum);
+
+            Matrix.Multiply(ref skinnedTransformSum, ref bakedTransform, out skinnedTransformSum);
+
+            // Support the 4 Bone Influences - Position then Normal
+            Microsoft.Xna.Framework.Vector3.Transform(ref position, ref skinnedTransformSum, out outPosition);
+            Microsoft.Xna.Framework.Vector3.TransformNormal(ref normal, ref skinnedTransformSum, out outNormal);
+        }
+
+        /// <summary>
         /// This method blends the 4 input matrices using the 4 weights provided
         /// </summary>
         /// <param name="m1">1st input matrix for blending.</param>

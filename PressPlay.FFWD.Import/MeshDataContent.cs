@@ -18,6 +18,7 @@ namespace PressPlay.FFWD.Import
         internal ModelContent model;
 
         internal Dictionary<string, MeshDataPart> meshParts;
+        internal Dictionary<string, byte> boneIndices;
 
         internal Microsoft.Xna.Framework.BoundingBox boundingBox;
     }

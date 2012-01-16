@@ -21,9 +21,16 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
             }
             writer.WriteElement("enabled", mr.enabled);
             writer.WriteElement("materials", mr.sharedMaterials);
-            if (mr is SkinnedMeshRenderer)
+            SkinnedMeshRenderer smr = mr as SkinnedMeshRenderer;
+            if (smr != null)
             {
-                writer.WriteMesh((mr as SkinnedMeshRenderer).sharedMesh, "sharedMesh");
+                int[] bones = new int[smr.bones.Length];
+                for (int i = 0; i < smr.bones.Length; i++)
+			    {
+                    bones[i] = smr.bones[i].GetInstanceID();
+			    }
+                writer.WriteElement("bones", bones);
+                writer.WriteMesh(smr.sharedMesh, "sharedMesh", true);
             }
             if (mr is LineRenderer)
             {

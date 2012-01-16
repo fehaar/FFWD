@@ -190,6 +190,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AudioClipSerializer.cs" />
+    <Compile Include="BoneWeightTypeSerializer.cs" />
     <Compile Include="CharacterRange.cs" />
     <Compile Include="ColorTypeSerializer.cs" />
     <Compile Include="Animation\CpuSkinnedModelProcessor.cs" />

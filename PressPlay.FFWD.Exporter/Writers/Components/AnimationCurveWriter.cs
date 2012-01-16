@@ -18,17 +18,39 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
             {
                 throw new Exception(GetType() + " cannot export components of type " + component.GetType());
             }
-            //<PreLoop>Constant</PreLoop>
-            //<PostLoop>Constant</PostLoop>
-            //<Keys>0 0 0 0.5 Smooth 0.5 0.5 0 0 Smooth 1 0 -0.5 -0 Smooth</Keys>
             writer.WriteElement("PreLoop", ConvertLoopType(curve.preWrapMode));
             writer.WriteElement("PostLoop", ConvertLoopType(curve.postWrapMode));
             StringBuilder sb = new StringBuilder();
-            foreach (Keyframe item in curve.keys)
+
+            // NOTE: Keyframe.tangentMode might say something about if the tangetn is smooth or broken?
+
+            Keyframe[] normalizedKeys = new Keyframe[curve.keys.Length];
+            for (int i = 0; i < curve.keys.Length; i++)
             {
-                sb.AppendFormat("{0} {1} {2} {3} {4} ", item.time, item.inTangent, item.outTangent, item.value, "Smooth");
+                Keyframe k = curve.keys[i];
+                normalizedKeys[i] = new Keyframe(k.time, k.value, k.inTangent, k.outTangent);
+                if (i > 0)
+                {
+                    Keyframe j = curve.keys[i - 1];
+                    normalizedKeys[i - 1].outTangent = DenormalizeTangent(j.time, k.time, j.outTangent);
+                    normalizedKeys[i].inTangent = DenormalizeTangent(j.time, k.time, k.inTangent);
+                }
+            }
+
+            foreach (Keyframe item in normalizedKeys)
+            {
+                sb.AppendFormat("{0} {1} {2} {3} {4} ", item.time, item.value, item.inTangent, item.outTangent, "Smooth");
             }
             writer.WriteElement("Keys", sb.ToString().TrimEnd());
+        }
+
+        private float DenormalizeTangent(float time, float otherTime, float tangent)
+        {
+            if (tangent == 0)
+            {
+                return 0;
+            }
+            return tangent * (otherTime - time);
         }
 
         private string ConvertLoopType(WrapMode wrapMode)

@@ -297,8 +297,9 @@ namespace PressPlay.FFWD
                 componentProfiler.EndUpdateCall();
 #endif
             }
-            ChangeComponentActivity();
+            ChangeComponentActivity();            
             UpdateInvokeCalls();
+            Animation.SampleAnimations();
 #if DEBUG
             updateTime.Stop();
             lateUpdateTime.Start();
@@ -437,15 +438,13 @@ namespace PressPlay.FFWD
             scene = assetHelper.Load<Scene>("Scenes/" + sceneToLoad);
             sceneToLoad = "";
 
-            tempAssets.AddRange(scene.assets);
-            totalNumberOfAssetsToLoad = tempAssets.Count;
-            numberOfAssetsLoaded = 0;
-            //Debug.Log("TempAssets.Count: "+tempAssets.Count);
-
             if (scene != null)
             {
                 typeCaps.Add(scene.typeCaps);
+                tempAssets.AddRange(scene.assets);
             }
+            totalNumberOfAssetsToLoad = tempAssets.Count;
+            numberOfAssetsLoaded = 0;
 
             if (scene == null)
             {
@@ -680,7 +679,7 @@ namespace PressPlay.FFWD
                     }
                     if (cmp is IInitializable)
                     {
-                        (cmp as IInitializable).Initialize();
+                        (cmp as IInitializable).Initialize(assetHelper);
                     }
                 }
             }

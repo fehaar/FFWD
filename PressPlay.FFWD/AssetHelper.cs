@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Content;
+using System.IO;
 
 namespace PressPlay.FFWD
 {
@@ -59,6 +60,11 @@ namespace PressPlay.FFWD
                 }
             }
             return (T)content[contentPath];
+        }
+
+        internal T LoadAsset<T>(string name)
+        {
+            return Load<T>("Assets", Path.Combine("Assets", name));
         }
 
         public void Unload(string category)
