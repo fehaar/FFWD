@@ -72,7 +72,7 @@ namespace PressPlay.FFWD
                         pos += new Microsoft.Xna.Framework.Vector2(Mathf.Floor((rect.width - sz.X) / 2), Mathf.Floor((rect.height - sz.Y) / 2));
                     }
 
-                    spriteBatch.DrawString(GUI.spriteFont, text, pos, color);
+                    spriteBatch.DrawString(GUI.spriteFont, text ?? "", pos, color);
                 }
             }
         }
