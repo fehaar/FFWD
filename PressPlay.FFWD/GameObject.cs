@@ -189,6 +189,20 @@ namespace PressPlay.FFWD
             }
         }
 
+        private Light _light;
+        [ContentSerializerIgnore]
+        public Light light
+        {
+            get
+            {
+                if (_light == null)
+                {
+                    _light = GetComponent<Light>();
+                }
+                return _light;
+            }
+        }
+
         [ContentSerializerIgnore]
         public GameObject gameObject
         {
