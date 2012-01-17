@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace PressPlay.FFWD.SkinnedModel
+namespace PressPlay.FFWD.Components
 {
     public static class CpuSkinningHelpers
     {
@@ -24,7 +24,7 @@ namespace PressPlay.FFWD.SkinnedModel
             ref Microsoft.Xna.Framework.Vector3 normal,
             ref Matrix bakedTransform,
             ref Microsoft.Xna.Framework.Vector4 blendIndices,
-            ref Microsoft.Xna.Framework.Vector4 blendWeights,
+            ref Vector4 blendWeights,
             out Microsoft.Xna.Framework.Vector3 outPosition,
             out Microsoft.Xna.Framework.Vector3 outNormal)
         {
@@ -102,12 +102,12 @@ namespace PressPlay.FFWD.SkinnedModel
         /// <param name="m4">4th input matrix for blending.</param>
         /// <param name="weights">4 Blend weights encoded in a Microsoft.Xna.Framework.Vector4 type.</param>
         /// <param name="blended">Output Blended result matrix.</param>
-        private static void Blend4x3Matrix(ref Matrix m1, ref Matrix m2, ref Matrix m3, ref Matrix m4, ref Microsoft.Xna.Framework.Vector4 weights, out Matrix blended)
+        private static void Blend4x3Matrix(ref Matrix m1, ref Matrix m2, ref Matrix m3, ref Matrix m4, ref Vector4 weights, out Matrix blended)
         {
-            float w1 = weights.X;
-            float w2 = weights.Y;
-            float w3 = weights.Z;
-            float w4 = weights.W;
+            float w1 = weights.x;
+            float w2 = weights.y;
+            float w3 = weights.z;
+            float w4 = weights.w;
 
             float num11 = (m1.M11 * w1) + (m2.M11 * w2) + (m3.M11 * w3) + (m4.M11 * w4);
             float num12 = (m1.M12 * w1) + (m2.M12 * w2) + (m3.M12 * w3) + (m4.M12 * w4);

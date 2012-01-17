@@ -5,93 +5,185 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using PressPlay.FFWD.SkinnedModel;
+using PressPlay.FFWD.Extensions;
+using System.IO;
 
 namespace PressPlay.FFWD
 {
     public class Mesh : Asset
     {
-        [ContentSerializer(Optional = true)]
-        public string asset { get; set; }
+        [ContentSerializer(ElementName="vertices", Optional=true)]
+        internal Microsoft.Xna.Framework.Vector3[] _vertices;
+        [ContentSerializerIgnore]
+        public Vector3[] vertices
+        {
+            get
+            {
+                if (_vertices == null)
+                {
+                    return null;
+                }
+                // NOTE: We could cache this if we use it too much
+                Vector3[] v = new Vector3[_vertices.Length];
+                for (int i = 0; i < _vertices.Length; i++)
+                {
+                    v[i] = _vertices[i];
+                }
+                return v;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    _vertices = null;
+                    return;
+                }
+                _vertices = new Microsoft.Xna.Framework.Vector3[value.Length];
+                for (int i = 0; i < _vertices.Length; i++)
+                {
+                    _vertices[i] = value[i];
+                }
+            }
+        }
 
-        private int meshIndex;
+        [ContentSerializer(ElementName = "normals", Optional = true)]
+        internal Microsoft.Xna.Framework.Vector3[] _normals;
+        [ContentSerializerIgnore]
+        public Vector3[] normals
+        {
+            get
+            {
+                if (_normals == null)
+                {
+                    return null;
+                }
+                // NOTE: We could cache this if we use it too much
+                Vector3[] n = new Vector3[_normals.Length];
+                for (int i = 0; i < _normals.Length; i++)
+                {
+                    n[i] = _normals[i];
+                }
+                return n;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    _normals = null;
+                    return;
+                }
+                _normals = new Microsoft.Xna.Framework.Vector3[value.Length];
+                for (int i = 0; i < _normals.Length; i++)
+                {
+                    _normals[i] = value[i];
+                }
+            }
+        }
 
-        [ContentSerializer(Optional=true)]
-        public Microsoft.Xna.Framework.Vector3[] vertices;
         [ContentSerializer(Optional = true)]
-        public Microsoft.Xna.Framework.Vector3[] normals;
-        [ContentSerializer(Optional = true)]
-        public Microsoft.Xna.Framework.Vector2[] uv;
-        [ContentSerializer(Optional = true)]
+        public Vector4[] tangents;
+
+        [ContentSerializer(ElementName = "uv", Optional = true)]
+        internal Microsoft.Xna.Framework.Vector2[] _uv;
+        [ContentSerializerIgnore]
+        public Vector2[] uv
+        {
+            get
+            {
+                if (_uv == null)
+                {
+                    return null;
+                }
+                // NOTE: We could cache this if we use it too much
+                Vector2[] u = new Vector2[_uv.Length];
+                for (int i = 0; i < _uv.Length; i++)
+                {
+                    u[i] = _uv[i];
+                }
+                return u;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    _uv = null;
+                    return;
+                }
+                _uv = new Microsoft.Xna.Framework.Vector2[value.Length];
+                for (int i = 0; i < _uv.Length; i++)
+                {
+                    _uv[i] = value[i];
+                }
+            }
+        }
+
+        [ContentSerializer(ElementName = "uv2", Optional = true)]
+        internal Microsoft.Xna.Framework.Vector2[] _uv2;
+        [ContentSerializerIgnore]
+        public Vector2[] uv2
+        {
+            get
+            {
+                if (_uv2 == null)
+                {
+                    return null;
+                }
+                // NOTE: We could cache this if we use it too much
+                Vector2[] u = new Vector2[_uv2.Length];
+                for (int i = 0; i < _uv2.Length; i++)
+                {
+                    u[i] = _uv2[i];
+                }
+                return u;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    _uv2 = null;
+                    return;
+                }
+                _uv2 = new Microsoft.Xna.Framework.Vector2[value.Length];
+                for (int i = 0; i < _uv2.Length; i++)
+                {
+                    _uv2[i] = value[i];
+                }
+            }
+        }
+
+        [ContentSerializerIgnore]
         public short[] triangles;
         [ContentSerializer(Optional = true)]
         private short[][] triangleSets;
+        [ContentSerializer(Optional = true)]
+        public Color[] colors;
         [ContentSerializer(Optional = true)]
         internal BoneWeight[] boneWeights;
         [ContentSerializer(Optional = true)]
         internal Matrix[] bindPoses;
 
-        internal Dictionary<string, byte> boneIndices;
-        internal byte[] blendIndices;
-        internal Microsoft.Xna.Framework.Vector4[] blendWeights;
-
         [ContentSerializer(ElementName="bounds", Optional=true)]
         public Bounds bounds;
 
-        //[ContentSerializer(Optional = true)]
-        public Color[] colors; //TODO
-
-        //[ContentSerializer(Optional = true)]
-        public Vector4[] tangents; //TODO       
-
         protected override void DoLoadAsset(AssetHelper assetHelper)
         {
-            // If this is a static mesh, we do not need to load the data
-            if (vertices != null)
+            if (!String.IsNullOrEmpty(name))
             {
-                if (triangleSets != null && triangles == null)
+                Mesh mesh = assetHelper.LoadAsset<Mesh>(Path.Combine("Meshes", name));
+                if (mesh != null)
                 {
-                    FlattenTriangleSets();
+                    mesh.FlattenTriangleSets();
+                    CloneTo(mesh, this);
                 }
-                return;
-            }
-
-            if (!String.IsNullOrEmpty(asset))
-            {
-                MeshData data = assetHelper.Load<MeshData>("Models/" + asset);
-                if (data != null)
-                {
-                    if (data.meshParts.Count > 0)
-                    {
-                        MeshDataPart part = data.meshParts[name];
-                        if (part != null)
-                        {
-                            boneIndices = data.boneIndices;
-                            blendIndices = part.blendIndices;
-                            blendWeights = part.blendWeights;
-                            vertices = (Microsoft.Xna.Framework.Vector3[])part.vertices.Clone();
-                            triangleSets = (short[][])part.triangles.Clone();
-                            FlattenTriangleSets();
-                            uv = (Microsoft.Xna.Framework.Vector2[])part.uv.Clone();
-                            if (part.normals != null)
-                            {
-                                normals = (Microsoft.Xna.Framework.Vector3[])part.normals.Clone();
-                            }
-                        }
-                        return;
-                    }
-                }
-#if DEBUG
-                else
-                {
-                    Debug.LogWarning("Cannot find a way to load the mesh " + asset + "/" + name);
-                }
-#endif
             }
         }
 
         private void FlattenTriangleSets()
         {
+            if (triangleSets == null)
+            {
+                return;
+            }
             int triCount = 0;
             int triIndex = 0;
             for (int i = 0; i < triangleSets.Length; i++)
@@ -108,9 +200,9 @@ namespace PressPlay.FFWD
 
         public void Clear()
         {
-            vertices = null;
-            normals = null;
-            uv = null;
+            _vertices = null;
+            _normals = null;
+            _uv = null;
             triangles = null;
             triangleSets = null;
         }
@@ -144,40 +236,61 @@ namespace PressPlay.FFWD
         internal override UnityObject Clone()
         {
             Mesh clone = new Mesh();
-            clone.meshIndex = meshIndex;
-
-            if (vertices != null)
-            {
-                clone.vertices = (Microsoft.Xna.Framework.Vector3[])vertices.Clone();
-                clone.triangles = (short[])triangles.Clone();
-                clone.triangleSets = (short[][])triangleSets.Clone();
-                clone.uv = (Microsoft.Xna.Framework.Vector2[])uv.Clone();
-                if (normals != null)
-                {
-                    clone.normals = (Microsoft.Xna.Framework.Vector3[])normals.Clone();
-                }
-            }
-            clone.bounds = bounds;
-            // Note that these are not actually cloned as they will not be changed
-            clone.blendIndices = blendIndices;
-            clone.blendWeights = blendWeights;
+            CloneTo(this, clone);
             return clone;
+        }
+
+        private static void CloneTo(Mesh from, Mesh to)
+        {
+            if (from._vertices.HasElements())
+            {
+                to._vertices = (Microsoft.Xna.Framework.Vector3[])from._vertices.Clone();
+            }
+            if (from._normals.HasElements())
+            {
+                to._normals = (Microsoft.Xna.Framework.Vector3[])from._normals.Clone();
+            }
+            if (from._uv.HasElements())
+            {
+                to._uv = (Microsoft.Xna.Framework.Vector2[])from._uv.Clone();
+            }
+            if (from._uv2.HasElements())
+            {
+                to._uv2 = (Microsoft.Xna.Framework.Vector2[])from._uv2.Clone();
+            }
+            if (from.tangents.HasElements())
+            {
+                to.tangents = (Vector4[])from.tangents.Clone();
+            }
+            if (from.triangles.HasElements())
+            {
+                to.triangles = (short[])from.triangles.Clone();
+            }
+            if (from.triangleSets.HasElements())
+            {
+                to.triangleSets = (short[][])from.triangleSets.Clone();
+            }
+            to.bounds = from.bounds;
+            // Note that these are not actually cloned as they will not be changed
+            to.boneWeights = from.boneWeights;
+            to.bindPoses = from.bindPoses;
         }
         #endregion
 
         public override string ToString()
         {
-            return String.Format("{0} - {1}/{2} ({3})", GetType().Name, asset, name, GetInstanceID());
+            return String.Format("{0} - {1} ({3})", GetType().Name, name, GetInstanceID());
         }
 
         public void RecalculateBounds()
         {
             //TODO        
+            throw new NotImplementedException();
         }
 
         public int vertexCount
         {
-            get { return vertices.Length; }
+            get { return _vertices.Length; }
         }
     }
 }

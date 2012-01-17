@@ -59,6 +59,10 @@ namespace PressPlay.FFWD
         {
             get
             {
+                if (gameObject == null)
+                {
+                    return null;
+                }
                 return gameObject.renderer;
             }
         }
@@ -68,6 +72,10 @@ namespace PressPlay.FFWD
         {
             get
             {
+                if (gameObject == null)
+                {
+                    return null;
+                }
                 return gameObject.audio;
             }
         }
@@ -111,6 +119,7 @@ namespace PressPlay.FFWD
             }
         }
 
+        [ContentSerializerIgnore]
         public Light light
         {
             get

@@ -47,6 +47,7 @@
     <Compile Include="AssetHelper.cs" />
     <Compile Include="ComponentMap.cs" />
     <Compile Include="Configuration\TypeResolverSection.cs" />
+    <Compile Include="Extensions\ArrayExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Filter.cs" />
     <Compile Include="Interfaces\IComponentWriter.cs" />

@@ -58,7 +58,7 @@ namespace PressPlay.FFWD.Components
 
         internal bool CanBatch()
         {
-            return (meshToRender != null && meshToRender.vertices != null);
+            return (meshToRender != null && meshToRender._vertices != null);
         }
     }
 }

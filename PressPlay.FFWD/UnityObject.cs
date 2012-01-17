@@ -37,7 +37,7 @@ namespace PressPlay.FFWD
         [ContentSerializer(ElementName = "isPrefab", Optional = true)]
         internal bool isPrefab;
 
-        public bool enabled = true;
+        //public bool enabled = true;
 
         public HideFlags hideFlags;
 
@@ -77,6 +77,7 @@ namespace PressPlay.FFWD
 
         public static void DestroyImmediate(UnityObject obj)
         {
+            // TODO: This should be implemented properly
             Application.markedForDestruction.Add(obj);
         }
 
