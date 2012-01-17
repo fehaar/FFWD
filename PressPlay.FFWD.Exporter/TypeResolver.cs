@@ -83,7 +83,26 @@ namespace PressPlay.FFWD.Exporter
             }
 		}
 
-		public string ResolveTypeName(object component)
+        public string ResolveTypeName(string fullName)
+        {
+            int index = fullName.LastIndexOf('.');
+            string ns = (index > 0) ? fullName.Substring(0, index) : String.Empty;
+            string result = fullName;
+            foreach (NamespaceRule rule in NamespaceRules)
+            {
+                if (!String.IsNullOrEmpty(rule.Namespace) && rule.Namespace == ns && !String.IsNullOrEmpty(rule.To))
+                {
+                    result = result.Replace(rule.Namespace, rule.To);
+                }
+                if (!String.IsNullOrEmpty(rule.Type) && rule.Type == result && !String.IsNullOrEmpty(rule.To))
+                {
+                    result = rule.To;
+                }
+            }
+            return result;
+        }
+
+		public string ResolveObjectType(object component)
 		{
             Type type = component.GetType();
             string result = type.FullName;

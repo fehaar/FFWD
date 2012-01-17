@@ -56,10 +56,14 @@ namespace PressPlay.FFWD.Import
         private MeshDataContent meshData;
         private Matrix preTransform;
 
+        private Dictionary<string, BoneWeightCollection[]> boneWeights = new Dictionary<string, BoneWeightCollection[]>();
+
+        private ContentBuildLogger logger;
+
         public override MeshDataContent Process(NodeContent input, ContentProcessorContext context)
         {
             meshData = new MeshDataContent();
-
+            logger = context.Logger;
             if (SkinningHelpers.MeshHasSkinning(input))
             {
                 // This is a skinned model, so treat is as one
@@ -90,8 +94,9 @@ namespace PressPlay.FFWD.Import
                         throw new Exception("Scale of model is 0!");
                     }
                     preTransform = Matrix.CreateScale(new Microsoft.Xna.Framework.Vector3(Scale, Scale, -Scale)) * Matrix.CreateFromQuaternion(rotation);
-
                     ProcessNode(input);
+
+                    ProcessBoneWeights();
                 }
             }
             return meshData;
@@ -101,6 +106,7 @@ namespace PressPlay.FFWD.Import
         {
             // Is this node in fact a mesh?
             MeshContent mesh = node as MeshContent;
+            //logger.LogMessage("Node {0} - {3} abs: {1} - t: {2}", node.Name, node.AbsoluteTransform.Translation, node.Transform.Translation, node.Transform == node.AbsoluteTransform);
 
             if (mesh != null)
             {
@@ -108,10 +114,16 @@ namespace PressPlay.FFWD.Import
                 // an order that makes efficient use of the GPU vertex cache.
                 MeshHelper.OptimizeForCache(mesh);
 
+                
                 // Process all the geometry in the mesh.
                 foreach (GeometryContent geometry in mesh.Geometry)
                 {
-                    ProcessGeometry(node.Name, geometry);
+                    Matrix m = node.AbsoluteTransform;
+                    if (node.Parent == null)
+                    {
+                        m = m * Matrix.CreateScale(0.01f);
+                    }
+                    ProcessGeometry(node.Name, geometry, m);
                 }
             }
 
@@ -122,10 +134,63 @@ namespace PressPlay.FFWD.Import
             }
         }
 
-        void ProcessGeometry(string name, GeometryContent geometry)
+        private void ProcessBoneWeights()
+        {
+            meshData.boneIndices = new Dictionary<string, byte>();
+            // NOTE: It is assumed that every 
+            foreach (var mesh in boneWeights.Keys)
+            {
+                MeshDataPart part = meshData.meshParts[mesh];
+                part.blendIndices = new byte[4];
+                int blendWeightIndex = 0;
+                part.blendWeights = new Vector4[boneWeights[mesh].Length];
+                Dictionary<int, int> indexLookup = new Dictionary<int, int>();
+                foreach (var bwc in boneWeights[mesh])
+                {
+                    Vector4 w = new Vector4();
+                    foreach (var weight in bwc)
+                    {
+                        if (!meshData.boneIndices.ContainsKey(weight.BoneName))
+                        {
+                            meshData.boneIndices.Add(weight.BoneName, (byte)meshData.boneIndices.Count);
+                        }
+                        byte idx = meshData.boneIndices[weight.BoneName];
+                        if (!indexLookup.ContainsKey(idx))
+                        {
+                            indexLookup.Add(idx, indexLookup.Count);
+                        }
+                        switch (indexLookup[idx])
+                        {
+                            case 0:
+                                part.blendIndices[0] = idx;
+                                w.X = weight.Weight;
+                                break;
+                            case 1:
+                                part.blendIndices[1] = idx;
+                                w.Y = weight.Weight;
+                                break;
+                            case 2:
+                                part.blendIndices[2] = idx;
+                                w.Z = weight.Weight;
+                                break;
+                            case 3:
+                                part.blendIndices[3] = idx;
+                                w.W = weight.Weight;
+                                break;
+                            default:
+                                //throw new Exception("We have more than 4 bone indexes for a single mesh!");
+                                break;
+                        }
+                    }
+                    part.blendWeights[blendWeightIndex++] = w;
+                }
+            }
+        }
+
+        void ProcessGeometry(string name, GeometryContent geometry, Matrix transform)
         {
             MeshDataPart mesh = new MeshDataPart();
-
+            
             string normalName = VertexChannelNames.EncodeName(VertexElementUsage.Normal, 0);
             string texCoordName = VertexChannelNames.EncodeName(VertexElementUsage.TextureCoordinate, 0);
             foreach (var channel in geometry.Vertices.Channels)
@@ -134,7 +199,7 @@ namespace PressPlay.FFWD.Import
                 {
                     VertexChannel<Microsoft.Xna.Framework.Vector3> normals = channel as VertexChannel<Microsoft.Xna.Framework.Vector3>;
                     mesh.normals = new Microsoft.Xna.Framework.Vector3[normals.Count];
-                    normals.CopyTo(mesh.normals, 0);
+                    Microsoft.Xna.Framework.Vector3.TransformNormal(normals.ToArray(), ref preTransform, mesh.normals);
                 }
                 if (channel.Name == texCoordName)
                 {
@@ -142,11 +207,22 @@ namespace PressPlay.FFWD.Import
                     mesh.uv = new Microsoft.Xna.Framework.Vector2[texCoords.Count];
                     texCoords.CopyTo(mesh.uv, 0);
                 }
+                if (channel.Name == "Weights0")
+                {
+                    VertexChannel<BoneWeightCollection> weights = channel as VertexChannel<BoneWeightCollection>;
+                    BoneWeightCollection[] bwc = weights.ToArray<BoneWeightCollection>();
+                    boneWeights.Add(name, bwc);
+                }
             }
 
             Microsoft.Xna.Framework.Vector3[] verts = new Microsoft.Xna.Framework.Vector3[geometry.Vertices.Positions.Count];
+            Microsoft.Xna.Framework.Vector3[] verts1 = new Microsoft.Xna.Framework.Vector3[geometry.Vertices.Positions.Count];
             mesh.vertices = new Microsoft.Xna.Framework.Vector3[geometry.Vertices.Positions.Count];
             geometry.Vertices.Positions.CopyTo(verts, 0);
+            Matrix t = Matrix.Invert(transform);
+
+            //Microsoft.Xna.Framework.Vector3.Transform(verts, ref transform, mesh.vertices);
+            Microsoft.Xna.Framework.Vector3.Transform(verts, ref t, verts1);
             Microsoft.Xna.Framework.Vector3.Transform(verts, ref preTransform, mesh.vertices);
 
             mesh.triangles = new short[][] { new short[geometry.Indices.Count] };

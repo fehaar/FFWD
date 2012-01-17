@@ -196,6 +196,16 @@ namespace PressPlay.FFWD.Components
             return v;
         }
 
+        public Vector3 ScreenToViewportPoint(Vector3 v)
+        {
+            return new Vector3(v.x / viewPort.Width, v.y / viewPort.Height, v.z);
+        }
+
+        public Vector3 ViewportToScreenPoint(Vector3 v)
+        {
+            return new Vector3(v.x * viewPort.Width, v.y * viewPort.Height, v.z);
+        }
+
         #region Keeping track of renderers
         internal static List<Renderer> nonAssignedRenderers = new List<Renderer>();
         internal static void AddRenderer(Renderer renderer)

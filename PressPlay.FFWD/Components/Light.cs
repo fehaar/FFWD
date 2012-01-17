@@ -20,7 +20,7 @@ namespace PressPlay.FFWD.Components
 
         internal static List<Light> Lights = new List<Light>(ApplicationSettings.DefaultCapacities.Lights);
 
-        public void Initialize()
+        public void Initialize(AssetHelper assets)
         {
             Lights.Add(this);
         }

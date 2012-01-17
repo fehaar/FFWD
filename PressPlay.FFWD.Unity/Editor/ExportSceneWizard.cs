@@ -15,6 +15,7 @@ public class ExportSceneWizard : ScriptableWizard
     public class SceneGroup
     {
         public string name;
+        public string baseSceneDir;
         public List<string> scenes;
     }
 
@@ -110,10 +111,10 @@ public class ExportSceneWizard : ScriptableWizard
             }
 
             SceneWriter scene = new SceneWriter(resolver, assets);
-            scene.ExportDir = Path.Combine(xnaBaseDir, config.exportDir);
+            scene.ExportDir = Path.Combine(assets.XmlDir, "Scenes");
             ScriptTranslator.ScriptNamespace = config.scriptNamespace;
 
-            string path = Path.ChangeExtension(AssetDatabase.GetAssetPath(go).Replace("Assets/", ""), "xml");
+            string path = Path.ChangeExtension(AssetDatabase.GetAssetPath(go).Replace("Assets/", "../"), "xml");
             Debug.Log("Start resource export of " + path);
             scene.WriteResource(path, go);
         }
@@ -145,10 +146,10 @@ public class ExportSceneWizard : ScriptableWizard
             }
 
             SceneWriter scene = new SceneWriter(resolver, assets);
-            scene.ExportDir = Path.Combine(xnaBaseDir, config.exportDir);
+            scene.ExportDir = Path.Combine(assets.XmlDir, "Scenes");
             ScriptTranslator.ScriptNamespace = config.scriptNamespace;
 
-            string path = Path.ChangeExtension(AssetDatabase.GetAssetPath(mat).Replace("Assets/", ""), "xml");
+            string path = Path.ChangeExtension(AssetDatabase.GetAssetPath(mat).Replace("Assets/", "../"), "xml");
             Debug.Log("Start resource export of " + path);
             scene.WriteResource(path, mat);
         }
@@ -247,22 +248,27 @@ public class ExportSceneWizard : ScriptableWizard
             {
                 Debug.Log("************************ START LEVEL EXPORT FOR GROUP " + group.name + " ****************************");
 
+                // Find all Unity scenes starting from the base path and record the path to the scene
+                Dictionary<string, string> scenePaths = new Dictionary<string, string>();
+                foreach (string file in Directory.GetFiles(group.baseSceneDir, "*.unity", SearchOption.AllDirectories))
+                {
+                    scenePaths[Path.GetFileNameWithoutExtension(file)] = file;
+                }
+
                 foreach (string name in group.scenes)
                 {
-                    string levelName = name;
-
-                    if (!levelName.EndsWith(".unity"))
+                    if (!scenePaths.ContainsKey(name))
                     {
-                        levelName += ".unity";
+                        Debug.Log("Could not find scene " + name);
+                        continue;
                     }
-
-                    if (EditorApplication.OpenScene(levelName))
+                    if (EditorApplication.OpenScene(scenePaths[name]))
                     {
                         ExportOpenScene();
                     }
                     else
                     {
-                        Debug.Log("Could not open scene " + levelName);
+                        Debug.Log("Could not open scene " + scenePaths[name]);
                     }
                 }
             }
@@ -294,22 +300,27 @@ public class ExportSceneWizard : ScriptableWizard
 
             Debug.Log("************************ START LEVEL EXPORT FOR GROUP " + group.name + " ****************************");
 
+            // Find all Unity scenes starting from the base path and record the path to the scene
+            Dictionary<string, string> scenePaths = new Dictionary<string, string>();
+            foreach (string file in Directory.GetFiles(group.baseSceneDir, "*.unity", SearchOption.AllDirectories))
+            {
+                scenePaths[Path.GetFileNameWithoutExtension(file)] = file;
+            }
+
             foreach (string name in group.scenes)
             {
-                string levelName = name;
-
-                if (!levelName.EndsWith(".unity"))
+                if (!scenePaths.ContainsKey(name))
                 {
-                    levelName += ".unity";
+                    Debug.Log("Could not find scene " + name);
+                    continue;
                 }
-
-                if (EditorApplication.OpenScene(levelName))
+                if (EditorApplication.OpenScene(scenePaths[name]))
                 {
                     ExportOpenScene();
                 }
                 else
                 {
-                    Debug.Log("Could not open scene " + levelName);
+                    Debug.Log("Could not open scene " + scenePaths[name]);
                 }
             }
 

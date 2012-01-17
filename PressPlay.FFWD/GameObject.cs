@@ -7,14 +7,6 @@ using PressPlay.FFWD.Components;
 
 namespace PressPlay.FFWD
 {
-    public enum HideFlags
-    {
-        HideInHierarchy,
-        HideInInspector,
-        DontSave,
-        NotEditable,
-        HideAndDontSave
-    }
 
     public enum SendMessageOptions
     {
@@ -97,9 +89,6 @@ namespace PressPlay.FFWD
                 return components.Count;
             }
         }
-
-        [ContentSerializerIgnore]
-        public HideFlags hideFlags;
 
         #region Component shortcut methods
         private Rigidbody _rigidbody;
@@ -204,7 +193,6 @@ namespace PressPlay.FFWD
         [ContentSerializerIgnore]
         public Light light
         {
-            // CHECK THIS!
             get
             {
                 if (_light == null)

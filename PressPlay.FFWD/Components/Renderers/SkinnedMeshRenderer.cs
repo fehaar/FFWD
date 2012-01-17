@@ -2,19 +2,50 @@
 using Microsoft.Xna.Framework.Graphics;
 using PressPlay.FFWD;
 using PressPlay.FFWD.SkinnedModel;
+using Microsoft.Xna.Framework.Content;
 
 namespace PressPlay.FFWD.Components
 {
     public class SkinnedMeshRenderer : Renderer
     {
+        [ContentSerializer(ElementName="bones", Optional=true)]
+        internal int[] boneIds;
         public Mesh sharedMesh;
+        private Mesh mesh;
+        private Matrix[] bindPoses;
+        [ContentSerializerIgnore]
+        public Transform[] bones;
 
         private Animation animation;
+
+        internal override void FixReferences(System.Collections.Generic.Dictionary<int, UnityObject> idMap)
+        {
+            base.FixReferences(idMap);
+            if (boneIds != null)
+            {
+                bones = new Transform[boneIds.Length];
+                bindPoses = new Matrix[boneIds.Length];
+                for (int i = 0; i < boneIds.Length; i++)
+                {
+                    bones[i] = idMap[boneIds[i]] as Transform;
+                }
+            }
+        }
 
         public override void Awake()
         {
             base.Awake();
             animation = GetComponentInParents<Animation>();
+            mesh = (Mesh)sharedMesh.Clone();
+            if (sharedMesh.blendIndices != null)
+            {
+                bindPoses = new Matrix[sharedMesh.boneIndices.Count];
+                bones = new Transform[sharedMesh.boneIndices.Count];
+                foreach (var name in sharedMesh.boneIndices.Keys)
+                {
+                    bones[sharedMesh.boneIndices[name]] = transform.parent.FindChild("//" + name);
+                }
+            }
         }
 
         #region IRenderable Members
@@ -38,20 +69,35 @@ namespace PressPlay.FFWD.Components
                 return 0;
             }
 
-            if (sharedMesh.skinnedModel != null)
+            if (sharedMesh.boneWeights != null)
             {
-                // Draw the skinned model with the animation as CPU animation.
-                CpuSkinnedModelPart modelPart = sharedMesh.GetSkinnedModelPart();
-                Matrix world = transform.world;
-                modelPart.SetBones(animation.GetTransforms(), ref world, sharedMesh);
-                return cam.BatchRender(sharedMesh, materials, null);
-            }
-            else
-            {
-                // We do not have bone animation - so just render as a normal model
-                return cam.BatchRender(sharedMesh, materials, transform);
-            }
+                // This is the rendering of data gotten directly from Unity
+                //Matrix world = transform.world;
+                Matrix world = Matrix.Identity;
+                // Find the current bone data from the bone Transform.
+                for (int i = 0; i < bones.Length; i++)
+                {
+                    bindPoses[i] = Matrix.Identity;
+                    //bindPoses[i] = bones[i].world * Matrix.Invert(transform.world);
+                    bindPoses[i] = sharedMesh.bindPoses[i] * bones[i].world;
+                    //Debug.Log(bones[i].name + " : " + bones[i].localPosition);
+                }
 
+                // We have blended parts that does not come from a bone structure
+                for (int i = 0; i < sharedMesh.vertices.Length; i++)
+                {
+                    CpuSkinningHelpers.SkinVertex(
+                        bindPoses,
+                        ref sharedMesh.vertices[i],
+                        ref sharedMesh.normals[i],
+                        ref world,
+                        ref sharedMesh.boneWeights[i],
+                        out mesh.vertices[i],
+                        out mesh.normals[i]);
+                }
+                return cam.BatchRender(mesh, materials, null);
+            }
+            return 0;
         }
         #endregion
     }

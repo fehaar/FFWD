@@ -15,6 +15,7 @@ namespace PressPlay.FFWD.Import
             output.WriteObject(value.skinnedModel);
             output.WriteObject(value.model);
             output.WriteObject(value.meshParts);
+            output.WriteObject(value.boneIndices);
             output.WriteObject(value.boundingBox);
         }
 

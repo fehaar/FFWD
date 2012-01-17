@@ -7,6 +7,7 @@ using PressPlay.FFWD.Components;
 using System.Reflection;
 using PressPlay.FFWD.Attributes;
 using Microsoft.Xna.Framework;
+using System.Xml;
 
 namespace PressPlay.FFWD.Import
 {

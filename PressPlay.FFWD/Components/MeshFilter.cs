@@ -60,14 +60,5 @@ namespace PressPlay.FFWD.Components
         {
             return (meshToRender != null && meshToRender.vertices != null);
         }
-
-        public ModelMesh GetModelMesh()
-        {
-            if (sharedMesh != null)
-            {
-                return sharedMesh.GetModelMesh();
-            }
-            return null;
-        }
     }
 }

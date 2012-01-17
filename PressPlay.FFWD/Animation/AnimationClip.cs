@@ -10,6 +10,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
+using PressPlay.FFWD.Components;
 
 namespace PressPlay.FFWD
 {
@@ -18,77 +19,38 @@ namespace PressPlay.FFWD
     /// Microsoft.Xna.Framework.Content.Pipeline.Graphics.AnimationContent type.
     /// It holds all the keyframes needed to describe a single model animation.
     /// </summary>
-    public class AnimationClip
+    public class AnimationClip : UnityObject
     {
         internal AnimationClip(AnimationClip clip, string newName, int firstFrame, int lastFrame)
         {
-            this.name = newName;
-            if (firstFrame < 0)
-            {
-                firstFrame = 0;
-            }
-
-            float startTime = firstFrame * (1.0f / 30.0f);
-            float endTime = lastFrame * (1.0f / 30.0f);
-
-            if (clip.Keyframes != null)
-            {
-                Keyframes = new List<Keyframe>();
-                timeOffset = (float)startTime;
-                int cnt = clip.Keyframes.Count;
-                for (int i = 0; i < cnt; i++)
-                {
-                    Keyframe frame = clip.Keyframes[i];
-                    float keySecs = frame.Time;
-                    if (keySecs >= startTime && keySecs < endTime)
-                    {
-                        Keyframes.Add(frame);
-                    }
-                }
-            }
-            this.Duration = TimeSpan.FromSeconds(endTime - startTime);
+            // TODO: Reimplement this
+            throw new NotImplementedException();
         }
 
-        [ContentSerializerIgnore]
-        public float length
-        {
-            get
-            {
-                return (float)Duration.TotalSeconds;
-            }
-        }
-
+        [ContentSerializer]
+        public float length { get; internal set; }
         public string name;
         public WrapMode wrapMode = WrapMode.Once;
-        internal float timeOffset;
-
-        /// <summary>
-        /// Gets the total length of the model animation clip
-        /// </summary>
         [ContentSerializer]
-        public TimeSpan Duration { get; private set; }
-        
-        /// <summary>
-        /// Gets a combined list containing all the keyframes for all bones,
-        /// sorted by time.
-        /// </summary>
-        [ContentSerializer]
-        public List<Keyframe> Keyframes { get; private set; }
-
-        /// <summary>
-        /// Constructs a new model animation clip object.
-        /// </summary>
-        public AnimationClip(TimeSpan duration, List<Keyframe> keyframes)
-        {
-            Duration = duration;
-            Keyframes = keyframes;
-        }
+        internal AnimationClipCurveData[] curves;
 
         /// <summary>
         /// Private constructor for use by the XNB deserializer.
         /// </summary>
-        private AnimationClip()
+        internal AnimationClip()
         {
+        }
+
+        internal void Sample(Sampler[] samplers, float time)
+        {
+            if (samplers == null)
+            {
+                return;
+            }
+            for (int i = 0; i < samplers.Length; i++)
+            {
+                samplers[i].Sample(time);
+            }
         }
     }
 }

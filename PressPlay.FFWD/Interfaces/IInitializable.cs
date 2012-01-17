@@ -7,6 +7,6 @@ namespace PressPlay.FFWD.Interfaces
 {
     internal interface IInitializable
     {
-        void Initialize();
+        void Initialize(AssetHelper assets);
     }
 }

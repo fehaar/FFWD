@@ -60,8 +60,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(ProjectDir)\*.cs" "C:\HardPlastic\HardPlasticUnity\Assets\FFWD\"
-copy "$(ProjectDir)\Editor\*.cs" "C:\HardPlastic\HardPlasticUnity\Assets\Editor\FFWD\"
+    <PostBuildEvent>copy "$(ProjectDir)\*.cs" "$(SolutionDir)\..\..\Unity\Assets\FFWD\"
+copy "$(ProjectDir)\Editor\*.cs" "$(SolutionDir)\..\..\Unity\Assets\Editor\FFWD\"
 </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -9,72 +9,98 @@ using Microsoft.Xna.Framework;
 
 namespace PressPlay.FFWD.Components
 {
-	public class Animation : Behaviour, PressPlay.FFWD.Interfaces.IFixedUpdateable, IEnumerable<AnimationState>
+    public class Animation : Behaviour, IInitializable, IEnumerable<AnimationState>
 	{
+        [ContentSerializer(ElementName = "clip", Optional=true)]
+        private string clipId = string.Empty;
+        public bool playAutomatically;
+        public WrapMode wrapMode;
+        [ContentSerializer(ElementName = "clips")]
+        private string[] clipsId = null;
 
-		public bool playAutomatically;
-
-		// TODO: This should be moved to a content processor!
-		[ContentSerializer]
-		private string[] animations = null;
-
-		[ContentSerializerIgnore]
-		public AnimationClip clip
-		{
-			get
-			{
-				if (clips.Count == 0)
-				{
-					return null;
-				}
-				return clips[animationIndex];
-			}
-		}
-
+        private string defaultClip;
         [ContentSerializerIgnore]
-        public bool DoZFlip
+		public AnimationClip clip
         {
             get
             {
-                if (animationPlayer != null)
-                {
-                    return animationPlayer.DoZFlip;
-                }
-                return false;
+                return GetClip(defaultClip);
             }
             set
             {
-                if (animationPlayer != null)
-                {
-                    animationPlayer.DoZFlip = value;
-                }
+                AddClip(value, value.name);
+                defaultClip = value.name;
             }
         }
 
-		private Dictionary<string, AnimationClip> clips = new Dictionary<string, AnimationClip>();
-		private Dictionary<string, AnimationState> states = new Dictionary<string, AnimationState>();
-		private string animationIndex;
-		private SkinnedAnimationPlayer animationPlayer;
+		private Dictionary<string, int> stateIndexes = new Dictionary<string, int>();
+        private List<AnimationState> states;
 
-		public override void Awake()
-		{
-			SkinnedMeshRenderer smr = GetComponentInChildren<SkinnedMeshRenderer>();
-			if ((smr != null) && (smr.sharedMesh != null) && (smr.sharedMesh.skinnedModel != null))
-			{
-				if (smr.sharedMesh.skinnedModel.SkinningData.AnimationClips != null)
-				{
-					Initialize(smr.sharedMesh.skinnedModel.SkinningData, smr.sharedMesh.skinnedModel.BakedTransform);
-				}
-			}
-		}
+        #region Static members for doing the animation
+        private static List<Animation> animationComponents = new List<Animation>(ApplicationSettings.DefaultCapacities.AnimationComponents);
+
+        internal static void SampleAnimations()
+        {
+            for (int i = 0; i < animationComponents.Count; i++)
+            {
+                Animation a = animationComponents[i];
+                // TODO: Implement culling here
+                if (a.enabled)
+                {
+                    a.UpdateAnimationStates(Time.deltaTime);
+                    a.Sample();
+                }
+            }
+        }
+    	#endregion
+
+        public void Initialize(AssetHelper assets)
+        {
+            if (clipsId != null)
+            {
+                states = new List<AnimationState>(clipsId.Length);
+                for (int i = 0; i < clipsId.Length; i++)
+                {
+                    AnimationClip data = assets.LoadAsset<AnimationClip>(clipsId[i]);
+                    if (data != null)
+                    {
+                        AddClip(data, data.name);
+                        if (clipsId[i] == clipId)
+                        {
+                            defaultClip = data.name;
+                        }
+                    }
+                }
+            }
+            animationComponents.Add(this);
+        }
+
+        public override void Awake()
+        {
+            base.Awake();
+            for (int i = 0; i < states.Count; i++)
+            {
+                states[i].InitializeSamplers(gameObject);
+            }
+            if (playAutomatically && clip != null)
+            {
+                Play(defaultClip);
+            }
+        }
+
+        protected override void Destroy()
+        {
+            base.Destroy();
+            animationComponents.Remove(this);
+        }
 
 		public AnimationState this[string index]
 		{
 			get
 			{
-				if (states.ContainsKey(index))
+				if (stateIndexes.ContainsKey(index))
 				{
-					return states[index];
+					return states[stateIndexes[index]];
 				}
 				return null;
 			}
@@ -82,16 +108,23 @@ namespace PressPlay.FFWD.Components
 
 		public AnimationClip GetClip(string name)
 		{
-            if (clips.ContainsKey(name))
+            if (String.IsNullOrEmpty(name))
             {
-                return clips[name];
+                return null;
+            }
+            if (stateIndexes.ContainsKey(name))
+            {
+                return states[stateIndexes[name]].clip;
             }
             return null;
 		}
 
-		public bool isPlaying {
-			get { return true; } //TODO check if animation is playing or not
-			private set { }
+		public bool isPlaying
+        {
+			get 
+            {
+                return states.Any(s => s.enabled);
+            } 
 		}
 
 		public void Rewind()
@@ -100,18 +133,24 @@ namespace PressPlay.FFWD.Components
 			throw new NotImplementedException("Method not implemented.");
 		}
 
-		public void Play()
+		public bool Play()
 		{
-			Play(animations[0]);
+			return Play(defaultClip);
 		}
 
-		public void Play(string name)
+		public bool Play(string name)
 		{
-			if (animationPlayer != null)
-			{
-				animationPlayer.StartClip(clips[name], states[name]);
-			}
-		}
+            if (String.IsNullOrEmpty(name))
+            {
+                return false;
+            }            
+            if (!stateIndexes.ContainsKey(name))
+            {
+                return false;
+            }
+            this[name].enabled = true;
+            return true;
+        }
 
 		public void PlayQueued(string name)
 		{
@@ -121,38 +160,44 @@ namespace PressPlay.FFWD.Components
 		public void PlayQueued(string name, QueueMode mode)
 		{
 			// TODO : Add implementation of method
-			//throw new NotImplementedException("Method not implemented.");
+            throw new NotImplementedException("Method not implemented.");
 		}
 
 		public void Stop()
 		{
-			foreach (AnimationState state in states.Values)
-			{
-				state.enabled = false;
-			}
+            for (int i = 0; i < states.Count; i++)
+            {
+                states[i].enabled = false;
+            }
 		}
 
 		public void Stop(string name)
 		{
-			if (states.ContainsKey(name))
+			if (stateIndexes.ContainsKey(name))
 			{
-				states[name].enabled = false;
+				states[stateIndexes[name]].enabled = false;
 			}
 		}
-	
+
 		public void AddClip(AnimationClip clip, string newName)
 		{
 			if (String.IsNullOrEmpty(newName))
 			{
 				return;
 			}
-			clip.name = newName;
-			clips[newName] = clip;
-			states[newName] = new AnimationState() { length = (float)clip.Duration.TotalSeconds, wrapMode = clip.wrapMode };
-			if (String.IsNullOrEmpty(animationIndex))
-			{
-				animationIndex = newName;
-			}
+            if (states == null)
+            {
+                states = new List<AnimationState>(1);
+            }
+            if (stateIndexes.ContainsKey(newName))
+            {
+                states[stateIndexes[newName]] = new AnimationState(this, clip);
+            }
+            else
+            {
+                stateIndexes[newName] = states.Count;
+                states.Add(new AnimationState(this, clip));
+            }
 		}
 
 		public void AddClip(AnimationClip clip, string newName, int firstFrame, int lastFrame)
@@ -198,58 +243,44 @@ namespace PressPlay.FFWD.Components
 			Play(name);
 		}
 
-		internal void Initialize(SkinningData modelData, Matrix bakedTransform)
+		public void Sample()
 		{
-			foreach (string name in modelData.AnimationClips.Keys)
-			{
-				AddClip(modelData.AnimationClips[name], name);
-			}
-            animationPlayer = new SkinnedAnimationPlayer(modelData, bakedTransform);
-			animationPlayer.SetTransforms(transform.GetComponentsInChildren<Transform>());
-			if (playAutomatically)
-			{
-				animationPlayer.StartClip(clip, states[clip.name]);
-			}
-		}
-
-		#region IUpdateable Members
-		public void FixedUpdate()
-		{
-			if (animationPlayer != null)
-			{
-				animationPlayer.FixedUpdate();
-			}
-		}
-		#endregion
-
-		internal Microsoft.Xna.Framework.Matrix[] GetTransforms()
-		{
-			if (animationPlayer != null)
-			{
-				return animationPlayer.SkinTransforms;
-			}
-			return null;
+            for (int i = 0; i < states.Count; i++)
+            {
+                states[i].Sample();
+            }
 		}
 
         public bool IsPlaying(string name)
         {
-            // TODO: Implement this!
+            if (stateIndexes.ContainsKey(name))
+            {
+                return states[stateIndexes[name]].enabled;
+            }
             return false;
         }
 
         public int GetClipCount()
         {
-            return clips.Count;
+            return states.Count;
         }
 
         public IEnumerator<AnimationState> GetEnumerator()
         {
-            return states.Values.GetEnumerator();
+            return states.GetEnumerator();
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
-            return states.Values.GetEnumerator();
+            return stateIndexes.Values.GetEnumerator();
+        }
+
+        internal void UpdateAnimationStates(float deltaTime)
+        {
+            for (int i = 0; i < states.Count; i++)
+            {
+                states[i].Update(deltaTime);
+            }
         }
     }
 }

@@ -56,6 +56,14 @@ namespace PressPlay.FFWD.Test.Core_framework.Transforms
         }
 
         [Test]
+        public void WeCanUseAnXPathWildcardPathToFindChildrenInTheHierarchy()
+        {
+            Transform t = h.rootTrans.FindChild("//childOfChild");
+            Assert.That(t, Is.Not.Null);
+            Assert.That(t, Is.SameAs(h.childOfChildTrans));
+        }	
+
+        [Test]
         public void WeCanGetAChildByIndex()
         {
             Transform t = h.rootTrans.GetChild(0);
@@ -65,7 +73,7 @@ namespace PressPlay.FFWD.Test.Core_framework.Transforms
 
         [Test]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void QWeWillGetAnExceptionWhenAskingForAnOutOfRangeChild()
+        public void WeWillGetAnExceptionWhenAskingForAnOutOfRangeChild()
         {
             Transform t = h.rootTrans.GetChild(10);
         }

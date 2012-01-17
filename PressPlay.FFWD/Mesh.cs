@@ -14,10 +14,6 @@ namespace PressPlay.FFWD
         [ContentSerializer(Optional = true)]
         public string asset { get; set; }
 
-        [ContentSerializerIgnore]
-        public Model model; 
-        [ContentSerializerIgnore]
-        public CpuSkinnedModel skinnedModel;
         private int meshIndex;
 
         [ContentSerializer(Optional=true)]
@@ -30,6 +26,14 @@ namespace PressPlay.FFWD
         public short[] triangles;
         [ContentSerializer(Optional = true)]
         private short[][] triangleSets;
+        [ContentSerializer(Optional = true)]
+        internal BoneWeight[] boneWeights;
+        [ContentSerializer(Optional = true)]
+        internal Matrix[] bindPoses;
+
+        internal Dictionary<string, byte> boneIndices;
+        internal byte[] blendIndices;
+        internal Microsoft.Xna.Framework.Vector4[] blendWeights;
 
         [ContentSerializer(ElementName="bounds", Optional=true)]
         public Bounds bounds;
@@ -42,57 +46,29 @@ namespace PressPlay.FFWD
 
         protected override void DoLoadAsset(AssetHelper assetHelper)
         {
-            // TODO: Optimize this by bundling everything into the same structure.
+            // If this is a static mesh, we do not need to load the data
+            if (vertices != null)
+            {
+                if (triangleSets != null && triangles == null)
+                {
+                    FlattenTriangleSets();
+                }
+                return;
+            }
+
             if (!String.IsNullOrEmpty(asset))
             {
-                // If this is a static mesh, we do not need to load the data
-                if (vertices != null)
-                {
-                    if (triangleSets != null && triangles == null)
-                    {
-                        FlattenTriangleSets();
-                    }
-                    return;
-                }
-
                 MeshData data = assetHelper.Load<MeshData>("Models/" + asset);
                 if (data != null)
                 {
-                    bounds = new Bounds(data.boundingBox);
-                    skinnedModel = data.skinnedModel;
-                    if (skinnedModel != null)
-                    {
-                        for (int i = 0; i < skinnedModel.Parts.Count; i++)
-                        {
-                            if (skinnedModel.Parts[i].name == name)
-                            {
-                                meshIndex = i;
-
-                                skinnedModel.Parts[i].InitializeMesh(this);
-
-                                break;
-                            }
-                        }
-                    }
-                    model = data.model;
-                    if (model != null)
-                    {
-                        for (int i = 0; i < model.Meshes.Count; i++)
-                        {
-                            if (model.Meshes[i].Name == name)
-                            {
-                                meshIndex = i;
-                                bounds = new Bounds(model.Meshes[i].BoundingSphere.Center, new Vector3(model.Meshes[i].BoundingSphere.Radius));
-                                break;
-                            }
-                        }
-                    }
-
                     if (data.meshParts.Count > 0)
                     {
                         MeshDataPart part = data.meshParts[name];
                         if (part != null)
                         {
+                            boneIndices = data.boneIndices;
+                            blendIndices = part.blendIndices;
+                            blendWeights = part.blendWeights;
                             vertices = (Microsoft.Xna.Framework.Vector3[])part.vertices.Clone();
                             triangleSets = (short[][])part.triangles.Clone();
                             FlattenTriangleSets();
@@ -101,9 +77,8 @@ namespace PressPlay.FFWD
                             {
                                 normals = (Microsoft.Xna.Framework.Vector3[])part.normals.Clone();
                             }
-
-                            bounds = new Bounds(part.boundingBox);
                         }
+                        return;
                     }
                 }
 #if DEBUG
@@ -140,24 +115,6 @@ namespace PressPlay.FFWD
             triangleSets = null;
         }
 
-        internal ModelMesh GetModelMesh()
-        {
-            if (model != null)
-            {
-                return model.Meshes[meshIndex];
-            }
-            return null;
-        }
-
-        public CpuSkinnedModelPart GetSkinnedModelPart()
-        {
-            if (skinnedModel != null)
-            {
-                return skinnedModel.Parts[meshIndex];
-            }
-            return null;
-        }
-
         public int subMeshCount
         {
             get
@@ -187,8 +144,6 @@ namespace PressPlay.FFWD
         internal override UnityObject Clone()
         {
             Mesh clone = new Mesh();
-            clone.skinnedModel = skinnedModel;
-            clone.model = model;
             clone.meshIndex = meshIndex;
 
             if (vertices != null)
@@ -203,6 +158,9 @@ namespace PressPlay.FFWD
                 }
             }
             clone.bounds = bounds;
+            // Note that these are not actually cloned as they will not be changed
+            clone.blendIndices = blendIndices;
+            clone.blendWeights = blendWeights;
             return clone;
         }
         #endregion
