@@ -174,6 +174,12 @@ namespace PressPlay.FFWD.Components
             return viewPort.Unproject(vector3, projectionMatrix, view, Matrix.Identity);
         }
 
+        public Vector3 ScreenToViewportPoint(Vector3 position)
+        {
+            // TODO
+            return Vector3.zero;                
+        }
+
         public Vector3 WorldToViewportPoint(Vector3 position)
         {
             Vector3 v = viewPort.Project(position, projectionMatrix, view, Matrix.Identity);

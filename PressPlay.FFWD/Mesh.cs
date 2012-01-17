@@ -165,6 +165,12 @@ namespace PressPlay.FFWD
         [ContentSerializer(ElementName="bounds", Optional=true)]
         public Bounds bounds;
 
+        //[ContentSerializer(Optional = true)]
+        public Color[] colors; //TODO
+
+        //[ContentSerializer(Optional = true)]
+        public Vector4[] tangents; //TODO       
+
         protected override void DoLoadAsset(AssetHelper assetHelper)
         {
             if (!String.IsNullOrEmpty(name))
