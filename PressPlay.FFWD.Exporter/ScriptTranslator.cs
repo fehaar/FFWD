@@ -25,10 +25,13 @@ namespace PressPlay.FFWD.Exporter
             { "RequireComponent", "" },
             { "ExecuteInEditMode", "" },
             { "FFWD_ExportOptions", "" },
-            { "FFWD_DontExport", "" }
+            { "FFWD_DontExport", "" },
+            { "SerializeField" , "" }
         };
         public static Dictionary<string, string> ReplaceClasses = new Dictionary<string, string>() {
-            { "Object", "UnityObject" }
+            { "Object", "UnityObject" },
+            { "ArrayList", "List<object>" },
+            { "AudioListener", "UnityAudioListener" }
         };
         public static string[] MethodsToOverride = new string[] { "Start", "Update", "FixedUpdate", "LateUpdate", "Awake", "OnTriggerEnter", "OnTriggerExit", "OnTriggerStay", "OnCollisionEnter", "OnCollisionExit", "OnCollisionStay", "OnGUI", "OnEnable", "OnDisable" };
 

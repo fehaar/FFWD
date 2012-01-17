@@ -42,6 +42,10 @@ namespace PressPlay.FFWD
         /// </summary>
         public static readonly Vector3 forward = new Vector3(0f, 0f, 1f);
         /// <summary>
+        /// The back vector is negative-z (0, 0, 1)
+        /// </summary>
+        public static readonly Vector3 back = new Vector3(0f, 0f, -1f);
+        /// <summary>
         /// The up vector is positive-y (0, 1, 0)
         /// </summary>
         public static readonly Vector3 up = new Vector3(0f, 1f, 0f);

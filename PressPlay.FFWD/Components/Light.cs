@@ -16,7 +16,7 @@ namespace PressPlay.FFWD.Components
         public float intensity;
         public float range;
         public float spotAngle;
-        public LayerMask cullingMask;
+        public LayerMask cullingMask;        
 
         internal static List<Light> Lights = new List<Light>(ApplicationSettings.DefaultCapacities.Lights);
 

@@ -219,6 +219,8 @@
     <Compile Include="Components\Renderers\Renderer.cs" />
     <Compile Include="Components\Renderers\SkinnedMeshRenderer.cs" />
     <Compile Include="Components\Renderers\StaticBatchRenderer.cs" />
+    <Compile Include="Matrix4x4.cs" />
+    <Compile Include="UnityAudioListener.cs" />
     <Compile Include="DebugCamera.cs" />
     <Compile Include="Extensions\SendMessageMethodCache.cs" />
     <Compile Include="Farseer\Collision\Collision.cs" />
@@ -393,6 +395,7 @@
     <Compile Include="Vector3.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Vector4.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="button.PNG" />

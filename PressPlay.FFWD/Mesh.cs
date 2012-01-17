@@ -34,6 +34,12 @@ namespace PressPlay.FFWD
         [ContentSerializer(ElementName="bounds", Optional=true)]
         public Bounds bounds;
 
+        //[ContentSerializer(Optional = true)]
+        public Color[] colors; //TODO
+
+        //[ContentSerializer(Optional = true)]
+        public Vector4[] tangents; //TODO       
+
         protected override void DoLoadAsset(AssetHelper assetHelper)
         {
             // TODO: Optimize this by bundling everything into the same structure.
@@ -206,5 +212,14 @@ namespace PressPlay.FFWD
             return String.Format("{0} - {1}/{2} ({3})", GetType().Name, asset, name, GetInstanceID());
         }
 
+        public void RecalculateBounds()
+        {
+            //TODO        
+        }
+
+        public int vertexCount
+        {
+            get { return vertices.Length; }
+        }
     }
 }

@@ -221,6 +221,10 @@ namespace PressPlay.FFWD
         {
             return new Color(c.r * d, c.g * d, c.b * d, c.a * d);
         }
+        public static Color operator +(Color d, Color c)
+        {
+            return new Color(d.r + c.r, d.g + c.g, d.b + c.b, d.a + c.a);
+        }
 
         public static implicit operator Color(Microsoft.Xna.Framework.Vector4 v)
         {

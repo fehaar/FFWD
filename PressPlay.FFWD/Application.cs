@@ -16,6 +16,28 @@ using System.Reflection;
 
 namespace PressPlay.FFWD
 {
+    public enum RuntimePlatform
+    {
+        //Unity platforms
+        Android,
+        FlashPlayer,
+        IPhonePlayer,
+        LinuxPlayer,
+        NaCl,
+        OSXDashboardPlayer,
+        OSXEditor,
+        OSXPlayer,
+        OSXWebPlayer,
+        PS3,
+        WiiPlayer,
+        WindowsEditor,
+        WindowsPlayer,
+        WindowsWebPlayer,
+        XBOX360,
+        //     
+        WindowsPhone,        
+    }
+
     public class Application : DrawableGameComponent
     {
         public Application(Game game)
@@ -132,6 +154,20 @@ namespace PressPlay.FFWD
                 return !String.IsNullOrEmpty(sceneToLoad);
             }
         }
+
+        public static bool isPlaying
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+#if WINDOWS_PHONE
+        public static RuntimePlatform platform = RuntimePlatform.WindowsPhone;
+#else
+        public static RuntimePlatform platform = RuntimePlatform.WindowsPlayer;
+#endif
 
         public override void Initialize()
         {

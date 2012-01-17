@@ -78,5 +78,15 @@ namespace PressPlay.FFWD
             }
             return null;
         }
+
+        public static T[] FindObjectsOfTypeAll<T>() where T : UnityObject
+        {
+            return Application.FindObjectsOfType<T>();
+        }
+
+        public static UnityObject[] FindObjectsOfTypeAll(Type type)
+        {
+            return Application.FindObjectsOfType(type);
+        }
     }
 }

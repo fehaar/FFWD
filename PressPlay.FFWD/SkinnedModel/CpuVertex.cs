@@ -20,7 +20,7 @@ namespace PressPlay.FFWD.SkinnedModel
         public Microsoft.Xna.Framework.Vector3 Position;
         public Microsoft.Xna.Framework.Vector3 Normal;
         public Microsoft.Xna.Framework.Vector2 TextureCoordinate;
-        public Vector4 BlendWeights;
-        public Vector4 BlendIndices;
+        public Microsoft.Xna.Framework.Vector4 BlendWeights;
+        public Microsoft.Xna.Framework.Vector4 BlendIndices;
     }
 }

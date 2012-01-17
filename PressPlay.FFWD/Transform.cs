@@ -360,6 +360,9 @@ namespace PressPlay.FFWD
                 return children.Count;
             }
         }
+
+        public Matrix4x4 worldToLocalMatrix; // Implement this!
+        
         #endregion
 
         #region Private and internal methods

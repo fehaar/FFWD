@@ -110,6 +110,18 @@ namespace PressPlay.FFWD
                 return gameObject.camera;
             }
         }
+
+        public Light light
+        {
+            get
+            {
+                if (gameObject == null)
+                {
+                    return null;
+                }
+                return gameObject.light;
+            }
+        }
         #endregion
 
         #region Behaviour methods

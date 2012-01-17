@@ -93,5 +93,20 @@ namespace PressPlay.FFWD
         {
             return new Microsoft.Xna.Framework.Rectangle((int)r.x, (int)r.y, (int)r.width, (int)r.height);
         }
+
+        public static bool operator ==(Rect a, Rect b)
+        {
+            return (a._xMax == b._xMax
+                && a._yMax == b._yMax
+                && a.width == b.width
+                && a.height == b.height                
+                && a.x == b.x
+                && a.y == b.y);
+        }
+
+        public static bool operator !=(Rect a, Rect b)
+        {
+            return !(a == b);
+        }
     }
 }

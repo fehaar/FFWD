@@ -281,10 +281,15 @@ namespace PressPlay.FFWD
         }
 
         private static int _touchCount = 0;
+        public static int touchCount
+        {
+            get { return _touchCount; }
+        }
+
         private static Touch[] _touches;
         private static Touch[] _noTouch = new Touch[0];
-        public static Touch[] touches 
-        { 
+        public static Touch[] touches
+        {
             get
             {
                 if (_touchCount == 0)
@@ -302,6 +307,24 @@ namespace PressPlay.FFWD
 #else
             return _currentKeyboardState.IsKeyUp(key) && _lastKeyboardState.IsKeyDown(key);
 #endif
+        }
+
+        public static bool GetKeyDown(Keys key)
+        {
+#if WINDOWS_PHONE
+            return false;
+#else
+            return _currentKeyboardState.IsKeyDown(key) && _lastKeyboardState.IsKeyUp(key);
+#endif
+        }
+
+        private static string _inputString = ""; // TODO
+        public static string inputString
+        {
+            get
+            {
+                return _inputString;
+            }
         }
     }
 }

@@ -219,6 +219,7 @@
     <Compile Include="Material.cs" />
     <Compile Include="Input\Input.cs" />
     <Compile Include="Mathf.cs" />
+    <Compile Include="Matrix4x4.cs" />
     <Compile Include="Mesh.cs" />
     <Compile Include="MeshData.cs" />
     <Compile Include="MeshDataPart.cs" />
@@ -265,11 +266,13 @@
     <Compile Include="Time.cs" />
     <Compile Include="Transform.cs" />
     <Compile Include="TypeSet.cs" />
+    <Compile Include="UnityAudioListener.cs" />
     <Compile Include="UnityObject.cs" />
     <Compile Include="Vector2.cs" />
     <Compile Include="Vector3.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Vector4.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
