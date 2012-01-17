@@ -39,6 +39,7 @@ namespace PressPlay.FFWD
 
         //public bool enabled = true;
 
+        [ContentSerializerIgnore]
         public HideFlags hideFlags;
 
         internal virtual void AfterLoad(Dictionary<int, UnityObject> idMap)
