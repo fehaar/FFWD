@@ -10,6 +10,7 @@ using PressPlay.FFWD.Exporter.Interfaces;
 using UnityEditor;
 using UnityEngine;
 using System.Text.RegularExpressions;
+using PressPlay.FFWD.Exporter.Extensions;
 
 namespace PressPlay.FFWD.Exporter.Writers
 {
@@ -32,13 +33,7 @@ namespace PressPlay.FFWD.Exporter.Writers
         private List<int> writtenIds = new List<int>();
         public List<string> componentsNotWritten = new List<string>();
 
-        private struct MeshWriterData
-        {
-            internal Mesh mesh;
-            internal bool writeAsStatic;
-        }
-
-        private Dictionary<int, MeshWriterData> meshesToWrite = new Dictionary<int, MeshWriterData>();
+        private Dictionary<string, Mesh> meshesToWrite = new Dictionary<string, Mesh>();
         private Dictionary<string, AnimationClip> animationClipsToWrite = new Dictionary<string, AnimationClip>();
 
         public void Write(string path)
@@ -56,11 +51,11 @@ namespace PressPlay.FFWD.Exporter.Writers
                 writer.WriteAttributeString("Type", resolver.DefaultNamespace + ".Scene");
                 WriteGOs();
                 WritePrefabs();
-                WriteAssets();
                 writer.WriteEndElement();
                 writer.WriteEndElement();
             }
             WriteAnimations();
+            WriteMeshes();
         }
 
         public void WriteResource(string path, GameObject go)
@@ -78,11 +73,11 @@ namespace PressPlay.FFWD.Exporter.Writers
                 writer.WriteAttributeString("Type", resolver.DefaultNamespace + ".Scene");
                 Prefabs.Add(go);
                 WritePrefabs();
-                WriteAssets();
                 writer.WriteEndElement();
                 writer.WriteEndElement();
             }
             WriteAnimations();
+            WriteMeshes();
         }
 
         public void WriteResource(string path, Material mat)
@@ -151,40 +146,122 @@ namespace PressPlay.FFWD.Exporter.Writers
             }
         }
 
-        private void WriteAssets()
+        private void WriteAssets(string assetType, IDictionary dict)
         {
-            foreach (var item in meshesToWrite.Values)
+            if (dict.Count > 0)
             {
-                writer.WriteStartElement("asset");
-                WriteMeshData(item);
-                writer.WriteEndElement();
+                Debug.Log("Write " + dict.Count + " " + assetType);
             }
-        }
-
-        private void WriteAnimations()
-        {
-            if (animationClipsToWrite.Count > 0)
+            foreach (var key in dict.Keys)
             {
-                Debug.Log("Write " + animationClipsToWrite.Count + " animations");
-            }
-            foreach (string key in animationClipsToWrite.Keys)
-            {
-                string path = PreparePath(String.Format("../Assets/{0}.xml", key));
+                string path = PreparePath(String.Format("../Assets/{1}/{0}.xml", key, assetType));
                 XmlWriterSettings settings = new XmlWriterSettings();
                 settings.Indent = true;
                 settings.IndentChars = "  ";
-                //Debug.Log("Write animation " + key, animationClipsToWrite[key]);
                 using (writer = XmlWriter.Create(path, settings))
                 {
                     writer.WriteStartDocument();
                     writer.WriteStartElement("XnaContent");
                     writer.WriteStartElement("Asset");
-                    writer.WriteAttributeString("Type", resolver.DefaultNamespace + ".AnimationClip");
-                    WriteElement(null, animationClipsToWrite[key]);
+                    writer.WriteAttributeString("Type", resolver.DefaultNamespace + "." + dict[key].GetType().Name);
+                    WriteAsset(dict[key]);
                     writer.WriteEndElement();
                     writer.WriteEndElement();
                 }
             }
+        }
+
+        private void WriteMeshes()
+        {
+            WriteAssets("Meshes", meshesToWrite);
+        }
+
+        private void WriteAnimations()
+        {
+            WriteAssets("Animations", animationClipsToWrite);
+        }
+
+        private void WriteAsset(object obj)
+        {
+            if (obj is AnimationClip)
+            {
+                WriteAsset(obj as AnimationClip);
+            }
+            if (obj is Mesh)
+            {
+                WriteAsset(obj as Mesh);
+            }
+        }
+
+        private void WriteAsset(AnimationClip clip)
+        {
+            WriteElement("id", clip.GetInstanceID());
+            WriteElement("length", clip.length);
+            writer.WriteElementString("name", clip.name);
+            WriteElement("wrapMode", clip.wrapMode);
+            WriteElement("curves", AnimationUtility.GetAllCurves(clip));
+            return;
+        }
+
+        private void WriteAsset(Mesh mesh)
+        {
+            WriteElement("id", mesh.GetInstanceID());
+            WriteElement("name", mesh.name);
+            if (mesh.vertices.HasElements())
+            {
+                WriteElement("vertices", mesh.vertices);
+            }
+            if (mesh.normals.HasElements())
+            {
+                WriteElement("normals", mesh.normals);
+            }
+            // NOTE: Do not write these. They are of no use for WP7 games as there is no bump mapping.
+            //if (mesh.tangents.HasElements())
+            //{
+            //    WriteElement("tangents", mesh.tangents);
+            //}
+            if (mesh.uv.HasElements())
+            {
+                WriteElement("uv", TransformUV(mesh.uv));
+            }
+            if (!mesh.uv.HasElements() && mesh.uv1.HasElements())
+            {
+                WriteElement("uv", TransformUV(mesh.uv1));
+            }
+            if (mesh.uv2.HasElements())
+            {
+                WriteElement("uv2", TransformUV(mesh.uv2));
+            }
+            writer.WriteStartElement("triangleSets");
+            for (int i = 0; i < mesh.subMeshCount; i++)
+            {
+                WriteElement("Item", mesh.GetTriangles(i));
+            }
+            writer.WriteEndElement();
+            if (mesh.colors.HasElements())
+            {
+                WriteElement("colors", mesh.colors);
+            }
+            if (mesh.boneWeights.HasElements())
+            {
+                writer.WriteStartElement("boneWeights");
+                for (int i = 0; i < mesh.boneWeights.Length; i++)
+                {
+                    BoneWeight w = mesh.boneWeights[i];
+                    writer.WriteString(String.Format("{0} {1} {2} {3} {4} {5} {6} {7} ", w.weight0, w.weight1, w.weight2, w.weight3, w.boneIndex0, w.boneIndex1, w.boneIndex2, w.boneIndex3));
+                }
+                writer.WriteEndElement();
+            }
+            if (mesh.bindposes.HasElements())
+            {
+                writer.WriteStartElement("bindPoses");
+                for (int i = 0; i < mesh.bindposes.Length; i++)
+                {
+                    writer.WriteString(ToString(mesh.bindposes[i]) + " ");
+                }
+                writer.WriteEndElement();
+            }
+            WriteElement("bounds", mesh.bounds);
         }
 
         private void WriteGameObject(GameObject go)
@@ -354,71 +431,28 @@ namespace PressPlay.FFWD.Exporter.Writers
             }
         }
 
-        internal void WriteMesh(Mesh mesh, string name, bool staticMesh = false)
+        internal void WriteMesh(Mesh mesh, string name)
         {
-            int id = mesh.GetInstanceID();
+            string assetName = GetAssetName(mesh);
             writer.WriteStartElement(name);
-            writer.WriteElementString("id", id.ToString());
+            WriteElement("id", mesh.GetInstanceID());
+            writer.WriteElementString("name", assetName);
             writer.WriteEndElement();
 
-            if (!meshesToWrite.ContainsKey(id))
+            if (!meshesToWrite.ContainsKey(assetName))
             {
-                meshesToWrite[id] = new MeshWriterData() { mesh = mesh, writeAsStatic = staticMesh };
-            }
-            else
-            {
-                if (staticMesh && !meshesToWrite[id].writeAsStatic)
-                {
-                    MeshWriterData d = meshesToWrite[id];
-                    d.writeAsStatic = true;
-                    meshesToWrite[id] = d;
-                }
-            }
-            if (!staticMesh)
-            {
-                assetHelper.ExportMesh(mesh);
+                meshesToWrite[assetName] = mesh;
             }
         }
 
-        private void WriteMeshData(MeshWriterData data)
+        private string GetAssetName(Mesh mesh)
         {
-            writer.WriteAttributeString("Type", "PressPlay.FFWD.Mesh");
-            string asset = Path.GetFileNameWithoutExtension(AssetDatabase.GetAssetPath(data.mesh.GetInstanceID()));
-            writer.WriteElementString("id", data.mesh.GetInstanceID().ToString());
-            writer.WriteElementString("name", data.mesh.name);
-            writer.WriteElementString("asset", asset);
-            if (data.writeAsStatic || String.IsNullOrEmpty(asset))
+            string asset = Path.GetFileNameWithoutExtension(AssetDatabase.GetAssetPath(mesh.GetInstanceID()));
+            if (String.IsNullOrEmpty(asset))
             {
-                WriteElement("vertices", data.mesh.vertices);
-                WriteElement("normals", data.mesh.normals);
-                WriteElement("uv", TransformUV(data.mesh.uv));
-                writer.WriteStartElement("triangleSets");
-                for (int i = 0; i < data.mesh.subMeshCount; i++)
-                {
-                    WriteElement("Item", data.mesh.GetTriangles(i));
-                }
-                writer.WriteEndElement();
-                if (data.mesh.boneWeights != null)
-                {
-                    writer.WriteStartElement("boneWeights");
-                    for (int i = 0; i < data.mesh.boneWeights.Length; i++)
-                    {
-                        BoneWeight w = data.mesh.boneWeights[i];
-                        writer.WriteElementString("Item", String.Format("{0} {1} {2} {3} {4} {5} {6} {7}", w.weight0, w.weight1, w.weight2, w.weight3, w.boneIndex0, w.boneIndex1, w.boneIndex2, w.boneIndex3));
-                    }
-                    writer.WriteEndElement();
-                }
-                if (data.mesh.bindposes != null)
-                {
-                    writer.WriteStartElement("bindPoses");
-                    for (int i = 0; i < data.mesh.bindposes.Length; i++)
-                    {
-                        writer.WriteString(ToString(data.mesh.bindposes[i]) + " ");
-                    }
-                    writer.WriteEndElement();
-                }
+                return mesh.name;
             }
-            WriteElement("bounds", data.mesh.bounds);
+            return asset + "-" + mesh.name;
         }
 
         private Vector2[] TransformUV(Vector2[] uv)
@@ -542,24 +576,6 @@ namespace PressPlay.FFWD.Exporter.Writers
                 if (obj is LayerMask)
                 {
                     writer.WriteElementString(name, ((LayerMask)obj).value.ToString());
-                    return;
-                }
-                if (obj is AnimationClip)
-                {
-                    AnimationClip clip = obj as AnimationClip;
-                    if (name != null)
-                    {
-                        writer.WriteStartElement(name);
-                    }
-                    WriteElement("id", clip.GetInstanceID());
-                    WriteElement("length", clip.length);
-                    writer.WriteElementString("name", clip.name);
-                    WriteElement("wrapMode", clip.wrapMode);
-                    WriteElement("curves", AnimationUtility.GetAllCurves(clip));
-                    if (name != null)
-                    {
-                        writer.WriteEndElement();
-                    }
                     return;
                 }
                 if (obj is AnimationClipCurveData)

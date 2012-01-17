@@ -78,7 +78,7 @@ namespace PressPlay.FFWD.Components
             }
         }
 
-        public Rectangle rect { get; set; }
+        public Rect rect { get; set; } //public Rectangle rect { get; set; }
         public ClearFlags clearFlags { get; set; }
 
         public override void Awake()

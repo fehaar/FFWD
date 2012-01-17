@@ -45,7 +45,7 @@ namespace PressPlay.FFWD.Components
             {
                 throw new Exception("Trying to add null mesh to static batch");
             }
-            if (m.vertices == null)
+            if (m._vertices == null)
             {
                 throw new Exception("Mesh " + m.name + " does not have any vertices and is being added to a static batch");
             }
@@ -53,25 +53,25 @@ namespace PressPlay.FFWD.Components
             int vertexOffset = 0;
             if (vertices == null)
             {
-                vertices = new VertexPositionNormalTexture[m.vertices.Length];
+                vertices = new VertexPositionNormalTexture[m._vertices.Length];
             }
             else
             {
-                if (vertices.Length + m.vertices.Length > UInt16.MaxValue)
+                if (vertices.Length + m._vertices.Length > UInt16.MaxValue)
                 {
                     return false;
                 }
 
                 VertexPositionNormalTexture[] oldVerts = vertices;
-                vertices = new VertexPositionNormalTexture[oldVerts.Length + m.vertices.Length];
+                vertices = new VertexPositionNormalTexture[oldVerts.Length + m._vertices.Length];
                 oldVerts.CopyTo(vertices, 0);
                 vertexOffset = oldVerts.Length;
             }
-            for (int i = 0; i < m.vertices.Length; i++)
+            for (int i = 0; i < m._vertices.Length; i++)
             {                
-                vertices[vertexOffset + i].Position = Microsoft.Xna.Framework.Vector3.Transform(m.vertices[i], transform);
-                vertices[vertexOffset + i].Normal = Microsoft.Xna.Framework.Vector3.Normalize(Microsoft.Xna.Framework.Vector3.TransformNormal(m.normals[i], transform));
-                vertices[vertexOffset + i].TextureCoordinate = m.uv[i];
+                vertices[vertexOffset + i].Position = Microsoft.Xna.Framework.Vector3.Transform(m._vertices[i], transform);
+                vertices[vertexOffset + i].Normal = Microsoft.Xna.Framework.Vector3.Normalize(Microsoft.Xna.Framework.Vector3.TransformNormal(m._normals[i], transform));
+                vertices[vertexOffset + i].TextureCoordinate = m._uv[i];
             }
             if (indices == null)
             {

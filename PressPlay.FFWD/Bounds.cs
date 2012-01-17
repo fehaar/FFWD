@@ -82,6 +82,11 @@ namespace PressPlay.FFWD
             box = new Microsoft.Xna.Framework.BoundingBox(min, max);
         }
 
+        public void Encapsulate(Bounds bounds)
+        {
+            // TODO : Add implementation of method
+        }
+
         public void Encapsulate(Vector3 point)
         {
             // TODO : Add implementation of method

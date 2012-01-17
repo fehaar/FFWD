@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Content;
 using PressPlay.FFWD.Interfaces;
 using PressPlay.FFWD;
 using Microsoft.Xna.Framework;
+using System.IO;
 
 namespace PressPlay.FFWD.Components
 {
@@ -61,7 +62,11 @@ namespace PressPlay.FFWD.Components
                 states = new List<AnimationState>(clipsId.Length);
                 for (int i = 0; i < clipsId.Length; i++)
                 {
-                    AnimationClip data = assets.LoadAsset<AnimationClip>(clipsId[i]);
+                    if (clipsId[i] == null)
+                    {
+                        continue;
+                    }
+                    AnimationClip data = assets.LoadAsset<AnimationClip>(Path.Combine("Animations", clipsId[i]));
                     if (data != null)
                     {
                         AddClip(data, data.name);
