@@ -35,16 +35,8 @@ namespace PressPlay.FFWD.Components
         {
             base.Awake();
             animation = GetComponentInParents<Animation>();
+            // Get a local mesh copy that we can molest
             mesh = (Mesh)sharedMesh.Clone();
-            if (sharedMesh.blendIndices != null)
-            {
-                bindPoses = new Matrix[sharedMesh.boneIndices.Count];
-                bones = new Transform[sharedMesh.boneIndices.Count];
-                foreach (var name in sharedMesh.boneIndices.Keys)
-                {
-                    bones[sharedMesh.boneIndices[name]] = transform.parent.FindChild("//" + name);
-                }
-            }
         }
 
         #region IRenderable Members
@@ -83,7 +75,7 @@ namespace PressPlay.FFWD.Components
                 }
 
                 // We have blended parts that does not come from a bone structure
-                for (int i = 0; i < sharedMesh.vertices.Length; i++)
+                for (int i = 0; i < sharedMesh._vertices.Length; i++)
                 {
                     CpuSkinningHelpers.SkinVertex(
                         bindPoses,

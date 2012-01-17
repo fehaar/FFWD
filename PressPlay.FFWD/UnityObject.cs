@@ -66,6 +66,7 @@ namespace PressPlay.FFWD
 
         public static void DestroyImmediate(UnityObject obj)
         {
+            // TODO: This should be implemented properly
             Application.markedForDestruction.Add(obj);
         }
 

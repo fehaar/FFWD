@@ -112,7 +112,7 @@ namespace PressPlay.FFWD.Components
 
         private void PrepareMesh(Mesh mesh, int subMeshIndex, ref Matrix transform)
         {
-            batchVertexSize += mesh.vertices.Length;
+            batchVertexSize += mesh._vertices.Length;
             if (vertexData.Length < batchVertexSize)
             {
                 VertexPositionNormalTexture[] newVertexData = new VertexPositionNormalTexture[batchVertexSize];
@@ -133,11 +133,11 @@ namespace PressPlay.FFWD.Components
 #endif
             }
 
-            if (positionData.Length < mesh.vertices.Length)
+            if (positionData.Length < mesh._vertices.Length)
             {
-                positionData = new Microsoft.Xna.Framework.Vector3[mesh.vertices.Length];
+                positionData = new Microsoft.Xna.Framework.Vector3[mesh._vertices.Length];
 #if DEBUG
-                Debug.LogWarning("Increased size of Dynamic position buffer to " + mesh.vertices.Length);
+                Debug.LogWarning("Increased size of Dynamic position buffer to " + mesh._vertices.Length);
 #endif
             }
 
@@ -147,23 +147,23 @@ namespace PressPlay.FFWD.Components
             }
             else
             {
-                mesh.vertices.CopyTo(positionData, 0);
+                mesh._vertices.CopyTo(positionData, 0);
             }
 
-            for (int v = 0; v < mesh.vertices.Length; v++)
+            for (int v = 0; v < mesh._vertices.Length; v++)
             {
                 vertexData[currentVertexIndex + v].Position = positionData[v];
-                if (mesh.uv != null)
+                if (mesh._uv != null)
                 {
-                    vertexData[currentVertexIndex + v].TextureCoordinate = mesh.uv[v];
+                    vertexData[currentVertexIndex + v].TextureCoordinate = mesh._uv[v];
                 }
                 else
                 {
                     vertexData[currentVertexIndex + v].TextureCoordinate = Microsoft.Xna.Framework.Vector2.Zero;
                 }
-                if (mesh.normals != null)
+                if (mesh._normals != null)
                 {
-                    vertexData[currentVertexIndex + v].Normal = mesh.normals[v];
+                    vertexData[currentVertexIndex + v].Normal = mesh._normals[v];
                 }
                 else
                 {
@@ -181,7 +181,7 @@ namespace PressPlay.FFWD.Components
                 indexData[currentIndexIndex + t] = (short)(tris[t] + currentVertexIndex);
             }
 
-            currentVertexIndex += mesh.vertices.Length;
+            currentVertexIndex += mesh._vertices.Length;
             currentIndexIndex += tris.Length;
         }
     }

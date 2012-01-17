@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using PressPlay.FFWD.Extensions;
+using System.IO;
 
 namespace PressPlay.FFWD
 {
@@ -18,11 +19,30 @@ namespace PressPlay.FFWD
         {
             get
             {
-                return _vertices.Cast<Vector3>().ToArray();
+                if (_vertices == null)
+                {
+                    return null;
+                }
+                // NOTE: We could cache this if we use it too much
+                Vector3[] v = new Vector3[_vertices.Length];
+                for (int i = 0; i < _vertices.Length; i++)
+                {
+                    v[i] = _vertices[i];
+                }
+                return v;
             }
             set
             {
-                _vertices = value.Cast<Microsoft.Xna.Framework.Vector3>().ToArray();
+                if (value == null)
+                {
+                    _vertices = null;
+                    return;
+                }
+                _vertices = new Microsoft.Xna.Framework.Vector3[value.Length];
+                for (int i = 0; i < _vertices.Length; i++)
+                {
+                    _vertices[i] = value[i];
+                }
             }
         }
 
@@ -33,11 +53,30 @@ namespace PressPlay.FFWD
         {
             get
             {
-                return _normals.Cast<Vector3>().ToArray();
+                if (_normals == null)
+                {
+                    return null;
+                }
+                // NOTE: We could cache this if we use it too much
+                Vector3[] n = new Vector3[_normals.Length];
+                for (int i = 0; i < _normals.Length; i++)
+                {
+                    n[i] = _normals[i];
+                }
+                return n;
             }
             set
             {
-                _normals = value.Cast<Microsoft.Xna.Framework.Vector3>().ToArray();
+                if (value == null)
+                {
+                    _normals = null;
+                    return;
+                }
+                _normals = new Microsoft.Xna.Framework.Vector3[value.Length];
+                for (int i = 0; i < _normals.Length; i++)
+                {
+                    _normals[i] = value[i];
+                }
             }
         }
 
@@ -51,11 +90,30 @@ namespace PressPlay.FFWD
         {
             get
             {
-                return _uv.Cast<Vector2>().ToArray();
+                if (_uv == null)
+                {
+                    return null;
+                }
+                // NOTE: We could cache this if we use it too much
+                Vector2[] u = new Vector2[_uv.Length];
+                for (int i = 0; i < _uv.Length; i++)
+                {
+                    u[i] = _uv[i];
+                }
+                return u;
             }
             set
             {
-                _uv = value.Cast<Microsoft.Xna.Framework.Vector2>().ToArray();
+                if (value == null)
+                {
+                    _uv = null;
+                    return;
+                }
+                _uv = new Microsoft.Xna.Framework.Vector2[value.Length];
+                for (int i = 0; i < _uv.Length; i++)
+                {
+                    _uv[i] = value[i];
+                }
             }
         }
 
@@ -66,11 +124,30 @@ namespace PressPlay.FFWD
         {
             get
             {
-                return _uv2.Cast<Vector2>().ToArray();
+                if (_uv2 == null)
+                {
+                    return null;
+                }
+                // NOTE: We could cache this if we use it too much
+                Vector2[] u = new Vector2[_uv2.Length];
+                for (int i = 0; i < _uv2.Length; i++)
+                {
+                    u[i] = _uv2[i];
+                }
+                return u;
             }
             set
             {
-                _uv2 = value.Cast<Microsoft.Xna.Framework.Vector2>().ToArray();
+                if (value == null)
+                {
+                    _uv2 = null;
+                    return;
+                }
+                _uv2 = new Microsoft.Xna.Framework.Vector2[value.Length];
+                for (int i = 0; i < _uv2.Length; i++)
+                {
+                    _uv2[i] = value[i];
+                }
             }
         }
 
@@ -85,24 +162,28 @@ namespace PressPlay.FFWD
         [ContentSerializer(Optional = true)]
         internal Matrix[] bindPoses;
 
-        internal Dictionary<string, byte> boneIndices;
-        internal byte[] blendIndices;
-        internal Microsoft.Xna.Framework.Vector4[] blendWeights;
-
         [ContentSerializer(ElementName="bounds", Optional=true)]
         public Bounds bounds;
 
         protected override void DoLoadAsset(AssetHelper assetHelper)
         {
-            // If this is a static mesh, we do not need to load the data
-            if (triangleSets != null && triangles == null)
+            if (!String.IsNullOrEmpty(name))
             {
-                FlattenTriangleSets();
+                Mesh mesh = assetHelper.LoadAsset<Mesh>(Path.Combine("Meshes", name));
+                if (mesh != null)
+                {
+                    mesh.FlattenTriangleSets();
+                    CloneTo(mesh, this);
+                }
             }
         }
 
         private void FlattenTriangleSets()
         {
+            if (triangleSets == null)
+            {
+                return;
+            }
             int triCount = 0;
             int triIndex = 0;
             for (int i = 0; i < triangleSets.Length; i++)
@@ -119,9 +200,9 @@ namespace PressPlay.FFWD
 
         public void Clear()
         {
-            vertices = null;
-            normals = null;
-            uv = null;
+            _vertices = null;
+            _normals = null;
+            _uv = null;
             triangles = null;
             triangleSets = null;
         }
@@ -155,26 +236,44 @@ namespace PressPlay.FFWD
         internal override UnityObject Clone()
         {
             Mesh clone = new Mesh();
-            throw new NotImplementedException("WE NEED TO DO MORE HERE");
-            if (_vertices.HasElements())
-            {
-                clone._vertices = (Microsoft.Xna.Framework.Vector3[])_vertices.Clone();
-            }
-            if (vertices != null)
-            {
-                clone.triangles = (short[])triangles.Clone();
-                clone.triangleSets = (short[][])triangleSets.Clone();
-                clone._uv = (Microsoft.Xna.Framework.Vector2[])_uv.Clone();
-                if (normals != null)
-                {
-                    clone._normals = (Microsoft.Xna.Framework.Vector3[])_normals.Clone();
-                }
-            }
-            clone.bounds = bounds;
-            // Note that these are not actually cloned as they will not be changed
-            clone.blendIndices = blendIndices;
-            clone.blendWeights = blendWeights;
+            CloneTo(this, clone);
             return clone;
+        }
+
+        private static void CloneTo(Mesh from, Mesh to)
+        {
+            if (from._vertices.HasElements())
+            {
+                to._vertices = (Microsoft.Xna.Framework.Vector3[])from._vertices.Clone();
+            }
+            if (from._normals.HasElements())
+            {
+                to._normals = (Microsoft.Xna.Framework.Vector3[])from._normals.Clone();
+            }
+            if (from._uv.HasElements())
+            {
+                to._uv = (Microsoft.Xna.Framework.Vector2[])from._uv.Clone();
+            }
+            if (from._uv2.HasElements())
+            {
+                to._uv2 = (Microsoft.Xna.Framework.Vector2[])from._uv2.Clone();
+            }
+            if (from.tangents.HasElements())
+            {
+                to.tangents = (Vector4[])from.tangents.Clone();
+            }
+            if (from.triangles.HasElements())
+            {
+                to.triangles = (short[])from.triangles.Clone();
+            }
+            if (from.triangleSets.HasElements())
+            {
+                to.triangleSets = (short[][])from.triangleSets.Clone();
+            }
+            to.bounds = from.bounds;
+            // Note that these are not actually cloned as they will not be changed
+            to.boneWeights = from.boneWeights;
+            to.bindPoses = from.bindPoses;
         }
         #endregion
 
@@ -190,7 +289,7 @@ namespace PressPlay.FFWD
 
         public int vertexCount
         {
-            get { return vertices.Length; }
+            get { return _vertices.Length; }
         }
     }
 }
