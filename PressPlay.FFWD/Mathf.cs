@@ -144,5 +144,20 @@ namespace PressPlay.FFWD
         {
             throw new NotImplementedException("SmoothDamp is not implemented!");
         }
+
+        public static float Round(float f)
+        {
+            return (float)Math.Round((double)f);
+        }
+
+        public static int RoundToInt(float f)
+        {
+            return (int)Math.Round((double)f);
+        }
+
+        public static bool Approximately(float a, float b)
+        {
+            return Mathf.Abs((b - a)) < Mathf.Max(((float)1E-06 * Mathf.Max(Mathf.Abs(a), Mathf.Abs(b))), (float)1.121039E-44);
+        }
     }
 }

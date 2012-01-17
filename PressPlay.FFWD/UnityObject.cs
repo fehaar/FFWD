@@ -28,6 +28,8 @@ namespace PressPlay.FFWD
         [ContentSerializer(ElementName = "isPrefab", Optional = true)]
         internal bool isPrefab;
 
+        public bool enabled = true;
+
         internal virtual void AfterLoad(Dictionary<int, UnityObject> idMap)
         {
             if (idMap != null)
@@ -61,11 +63,12 @@ namespace PressPlay.FFWD
             Application.markedForDestruction.Add(this);
         }
 
-        protected virtual void DestroyImmediate(UnityObject obj)
+
+        public static void DestroyImmediate(UnityObject obj)
         {
-            // TODO: Implement this properly
-            Application.markedForDestruction.Add(this);
+            Application.markedForDestruction.Add(obj);
         }
+
 
         /// <summary>
         /// Clones the object original, places it at position and sets the rotation to rotation, then returns the cloned object. 
@@ -172,6 +175,16 @@ namespace PressPlay.FFWD
         public static UnityObject FindObjectOfType(Type type)
         {
             return Application.FindObjectOfType(type);
+        }
+
+        public static T[] FindSceneObjectsOfType<T>() where T : UnityObject
+        {
+            return Application.FindObjectsOfType<T>();   
+        }
+
+        public static UnityObject[] FindSceneObjectsOfType(Type type)
+        {
+            return Application.FindObjectsOfType(type);        
         }
 
         public static implicit operator bool(UnityObject obj)

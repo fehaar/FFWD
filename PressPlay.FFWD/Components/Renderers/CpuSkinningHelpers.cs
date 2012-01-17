@@ -23,8 +23,8 @@ namespace PressPlay.FFWD.Components
             ref Microsoft.Xna.Framework.Vector3 position,
             ref Microsoft.Xna.Framework.Vector3 normal,
             ref Matrix bakedTransform,
-            ref Vector4 blendIndices,
-            ref Vector4 blendWeights,
+            ref Microsoft.Xna.Framework.Vector4 blendIndices,
+            ref Microsoft.Xna.Framework.Vector4 blendWeights,
             out Microsoft.Xna.Framework.Vector3 outPosition,
             out Microsoft.Xna.Framework.Vector3 outNormal)
         {
@@ -100,9 +100,9 @@ namespace PressPlay.FFWD.Components
         /// <param name="m2">2nd input matrix for blending.</param>
         /// <param name="m3">3rd input matrix for blending.</param>
         /// <param name="m4">4th input matrix for blending.</param>
-        /// <param name="weights">4 Blend weights encoded in a Vector4 type.</param>
+        /// <param name="weights">4 Blend weights encoded in a Microsoft.Xna.Framework.Vector4 type.</param>
         /// <param name="blended">Output Blended result matrix.</param>
-        private static void Blend4x3Matrix(ref Matrix m1, ref Matrix m2, ref Matrix m3, ref Matrix m4, ref Vector4 weights, out Matrix blended)
+        private static void Blend4x3Matrix(ref Matrix m1, ref Matrix m2, ref Matrix m3, ref Matrix m4, ref Microsoft.Xna.Framework.Vector4 weights, out Matrix blended)
         {
             float w1 = weights.X;
             float w2 = weights.Y;

@@ -78,7 +78,7 @@ namespace PressPlay.FFWD.Components
             }
         }
 
-        public Rectangle rect { get; set; }
+        public Rect rect { get; set; } //public Rectangle rect { get; set; }
         public ClearFlags clearFlags { get; set; }
 
         public override void Awake()
@@ -172,6 +172,12 @@ namespace PressPlay.FFWD.Components
             vector3.z = normZ;
             vector3.y = pixelHeight - vector3.y;
             return viewPort.Unproject(vector3, projectionMatrix, view, Matrix.Identity);
+        }
+
+        public Vector3 ScreenToViewportPoint(Vector3 position)
+        {
+            // TODO
+            return Vector3.zero;                
         }
 
         public Vector3 WorldToViewportPoint(Vector3 position)
