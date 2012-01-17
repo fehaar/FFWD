@@ -4,6 +4,15 @@ using Microsoft.Xna.Framework.Content;
 
 namespace PressPlay.FFWD
 {
+    public enum HideFlags
+    {
+        HideInHierarchy,
+        HideInInspector,
+        DontSave,
+        NotEditable,
+        HideAndDontSave,
+    }
+
     public class UnityObject
     {
         public UnityObject()
@@ -29,6 +38,8 @@ namespace PressPlay.FFWD
         internal bool isPrefab;
 
         public bool enabled = true;
+
+        public HideFlags hideFlags;
 
         internal virtual void AfterLoad(Dictionary<int, UnityObject> idMap)
         {
