@@ -441,7 +441,7 @@ namespace PressPlay.FFWD
             if (scene != null)
             {
                 typeCaps.Add(scene.typeCaps);
-                tempAssets.AddRange(scene.assets);
+                //tempAssets.AddRange(scene.assets);
             }
             totalNumberOfAssetsToLoad = tempAssets.Count;
             numberOfAssetsLoaded = 0;

@@ -21,8 +21,6 @@ namespace PressPlay.FFWD
         public List<GameObject> gameObjects { get; set; }
         [ContentSerializer(FlattenContent = true, CollectionItemName = "p")]
         public List<GameObject> prefabs { get; set; }
-        [ContentSerializer(FlattenContent = true, CollectionItemName = "asset")]
-        public List<Asset> assets { get; set; }
         [ContentSerializer(Optional = true, ElementName = "tc")]
         internal List<string> typeCaps = new List<string>();
 
@@ -36,10 +34,6 @@ namespace PressPlay.FFWD
             {
                 prefabs[i].isPrefab = true;
                 prefabs[i].AfterLoad(idMap);
-            }
-            for (int i = 0; i < assets.Count; i++)
-            {
-                assets[i].AfterLoad(idMap);
             }
         }
 

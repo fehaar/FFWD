@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using PressPlay.FFWD.SkinnedModel;
 
 namespace PressPlay.FFWD.Components
 {
@@ -144,7 +143,7 @@ namespace PressPlay.FFWD.Components
 
             if (transform != Matrix.Identity)
             {
-                Microsoft.Xna.Framework.Vector3.Transform(mesh.vertices, ref transform, positionData);
+                Microsoft.Xna.Framework.Vector3.Transform(mesh._vertices, ref transform, positionData);
             }
             else
             {

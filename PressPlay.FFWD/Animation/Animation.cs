@@ -61,6 +61,10 @@ namespace PressPlay.FFWD.Components
                 states = new List<AnimationState>(clipsId.Length);
                 for (int i = 0; i < clipsId.Length; i++)
                 {
+                    if (clipsId[i] == null)
+                    {
+                        continue;
+                    }
                     AnimationClip data = assets.LoadAsset<AnimationClip>(clipsId[i]);
                     if (data != null)
                     {

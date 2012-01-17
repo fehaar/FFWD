@@ -5,27 +5,83 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using PressPlay.FFWD.SkinnedModel;
+using PressPlay.FFWD.Extensions;
 
 namespace PressPlay.FFWD
 {
     public class Mesh : Asset
     {
-        [ContentSerializer(Optional = true)]
-        public string asset { get; set; }
-
         private int meshIndex;
 
-        [ContentSerializer(Optional=true)]
-        public Microsoft.Xna.Framework.Vector3[] vertices;
+        [ContentSerializer(ElementName="vertices", Optional=true)]
+        internal Microsoft.Xna.Framework.Vector3[] _vertices;
+        [ContentSerializerIgnore]
+        public Vector3[] vertices
+        {
+            get
+            {
+                return _vertices.Cast<Vector3>().ToArray();
+            }
+            set
+            {
+                _vertices = value.Cast<Microsoft.Xna.Framework.Vector3>().ToArray();
+            }
+        }
+
+        [ContentSerializer(ElementName = "normals", Optional = true)]
+        internal Microsoft.Xna.Framework.Vector3[] _normals;
+        [ContentSerializerIgnore]
+        public Vector3[] normals
+        {
+            get
+            {
+                return _normals.Cast<Vector3>().ToArray();
+            }
+            set
+            {
+                _normals = value.Cast<Microsoft.Xna.Framework.Vector3>().ToArray();
+            }
+        }
+
         [ContentSerializer(Optional = true)]
-        public Microsoft.Xna.Framework.Vector3[] normals;
-        [ContentSerializer(Optional = true)]
-        public Microsoft.Xna.Framework.Vector2[] uv;
-        [ContentSerializer(Optional = true)]
+        public Vector4[] tangents;
+
+        [ContentSerializer(ElementName = "uv", Optional = true)]
+        internal Microsoft.Xna.Framework.Vector2[] _uv;
+        [ContentSerializerIgnore]
+        public Vector2[] uv
+        {
+            get
+            {
+                return _uv.Cast<Vector2>().ToArray();
+            }
+            set
+            {
+                _uv = value.Cast<Microsoft.Xna.Framework.Vector2>().ToArray();
+            }
+        }
+
+        [ContentSerializer(ElementName = "uv2", Optional = true)]
+        internal Microsoft.Xna.Framework.Vector2[] _uv2;
+        [ContentSerializerIgnore]
+        public Vector2[] uv2
+        {
+            get
+            {
+                return _uv2.Cast<Vector2>().ToArray();
+            }
+            set
+            {
+                _uv2 = value.Cast<Microsoft.Xna.Framework.Vector2>().ToArray();
+            }
+        }
+
+        [ContentSerializerIgnore]
         public short[] triangles;
         [ContentSerializer(Optional = true)]
         private short[][] triangleSets;
+        [ContentSerializer(Optional = true)]
+        public Color[] colors;
         [ContentSerializer(Optional = true)]
         internal BoneWeight[] boneWeights;
         [ContentSerializer(Optional = true)]
@@ -41,46 +97,9 @@ namespace PressPlay.FFWD
         protected override void DoLoadAsset(AssetHelper assetHelper)
         {
             // If this is a static mesh, we do not need to load the data
-            if (vertices != null)
+            if (triangleSets != null && triangles == null)
             {
-                if (triangleSets != null && triangles == null)
-                {
-                    FlattenTriangleSets();
-                }
-                return;
-            }
-
-            if (!String.IsNullOrEmpty(asset))
-            {
-                MeshData data = assetHelper.Load<MeshData>("Models/" + asset);
-                if (data != null)
-                {
-                    if (data.meshParts.Count > 0)
-                    {
-                        MeshDataPart part = data.meshParts[name];
-                        if (part != null)
-                        {
-                            boneIndices = data.boneIndices;
-                            blendIndices = part.blendIndices;
-                            blendWeights = part.blendWeights;
-                            vertices = (Microsoft.Xna.Framework.Vector3[])part.vertices.Clone();
-                            triangleSets = (short[][])part.triangles.Clone();
-                            FlattenTriangleSets();
-                            uv = (Microsoft.Xna.Framework.Vector2[])part.uv.Clone();
-                            if (part.normals != null)
-                            {
-                                normals = (Microsoft.Xna.Framework.Vector3[])part.normals.Clone();
-                            }
-                        }
-                        return;
-                    }
-                }
-#if DEBUG
-                else
-                {
-                    Debug.LogWarning("Cannot find a way to load the mesh " + asset + "/" + name);
-                }
-#endif
+                FlattenTriangleSets();
             }
         }
 
@@ -140,15 +159,19 @@ namespace PressPlay.FFWD
             Mesh clone = new Mesh();
             clone.meshIndex = meshIndex;
 
+            throw new NotImplementedException("WE NEED TO DO MORE HERE");
+            if (_vertices.HasElements())
+            {
+                clone._vertices = (Microsoft.Xna.Framework.Vector3[])_vertices.Clone();
+            }
             if (vertices != null)
             {
-                clone.vertices = (Microsoft.Xna.Framework.Vector3[])vertices.Clone();
                 clone.triangles = (short[])triangles.Clone();
                 clone.triangleSets = (short[][])triangleSets.Clone();
-                clone.uv = (Microsoft.Xna.Framework.Vector2[])uv.Clone();
+                clone._uv = (Microsoft.Xna.Framework.Vector2[])_uv.Clone();
                 if (normals != null)
                 {
-                    clone.normals = (Microsoft.Xna.Framework.Vector3[])normals.Clone();
+                    clone._normals = (Microsoft.Xna.Framework.Vector3[])_normals.Clone();
                 }
             }
             clone.bounds = bounds;
@@ -161,7 +184,7 @@ namespace PressPlay.FFWD
 
         public override string ToString()
         {
-            return String.Format("{0} - {1}/{2} ({3})", GetType().Name, asset, name, GetInstanceID());
+            return String.Format("{0} - {1} ({3})", GetType().Name, name, GetInstanceID());
         }
 
     }

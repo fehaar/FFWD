@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace PressPlay.FFWD.SkinnedModel
+namespace PressPlay.FFWD.Components
 {
     public static class CpuSkinningHelpers
     {

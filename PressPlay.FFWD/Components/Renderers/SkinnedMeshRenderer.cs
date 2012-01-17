@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PressPlay.FFWD;
-using PressPlay.FFWD.SkinnedModel;
 using Microsoft.Xna.Framework.Content;
 
 namespace PressPlay.FFWD.Components
@@ -88,12 +87,12 @@ namespace PressPlay.FFWD.Components
                 {
                     CpuSkinningHelpers.SkinVertex(
                         bindPoses,
-                        ref sharedMesh.vertices[i],
-                        ref sharedMesh.normals[i],
+                        ref sharedMesh._vertices[i],
+                        ref sharedMesh._normals[i],
                         ref world,
                         ref sharedMesh.boneWeights[i],
-                        out mesh.vertices[i],
-                        out mesh.normals[i]);
+                        out mesh._vertices[i],
+                        out mesh._normals[i]);
                 }
                 return cam.BatchRender(mesh, materials, null);
             }

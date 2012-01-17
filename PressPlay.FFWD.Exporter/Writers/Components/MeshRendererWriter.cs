@@ -30,7 +30,7 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
                     bones[i] = smr.bones[i].GetInstanceID();
 			    }
                 writer.WriteElement("bones", bones);
-                writer.WriteMesh(smr.sharedMesh, "sharedMesh", true);
+                writer.WriteMesh(smr.sharedMesh, "sharedMesh");
             }
             if (mr is LineRenderer)
             {

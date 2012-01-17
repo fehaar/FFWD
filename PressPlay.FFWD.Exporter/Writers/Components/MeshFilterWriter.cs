@@ -18,7 +18,7 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
             }
             if (filter.sharedMesh != null)
             {
-                scene.WriteMesh(filter.sharedMesh, "mesh", filter.gameObject.isStatic);
+                scene.WriteMesh(filter.sharedMesh, "mesh");
             }
         }
         #endregion
