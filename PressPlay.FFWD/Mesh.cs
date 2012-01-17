@@ -11,8 +11,6 @@ namespace PressPlay.FFWD
 {
     public class Mesh : Asset
     {
-        private int meshIndex;
-
         [ContentSerializer(ElementName="vertices", Optional=true)]
         internal Microsoft.Xna.Framework.Vector3[] _vertices;
         [ContentSerializerIgnore]
@@ -94,12 +92,6 @@ namespace PressPlay.FFWD
         [ContentSerializer(ElementName="bounds", Optional=true)]
         public Bounds bounds;
 
-        //[ContentSerializer(Optional = true)]
-        public Color[] colors; //TODO
-
-        //[ContentSerializer(Optional = true)]
-        public Vector4[] tangents; //TODO       
-
         protected override void DoLoadAsset(AssetHelper assetHelper)
         {
             // If this is a static mesh, we do not need to load the data
@@ -163,8 +155,6 @@ namespace PressPlay.FFWD
         internal override UnityObject Clone()
         {
             Mesh clone = new Mesh();
-            clone.meshIndex = meshIndex;
-
             throw new NotImplementedException("WE NEED TO DO MORE HERE");
             if (_vertices.HasElements())
             {

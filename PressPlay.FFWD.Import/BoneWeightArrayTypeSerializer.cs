@@ -21,10 +21,10 @@ namespace PressPlay.FFWD.Import
             for (int i = 0; i < s.Length; i+=8, index++)
             {
                 BoneWeight bw = new BoneWeight();
-                bw.weights.X = Single.Parse(s[i]);
-                bw.weights.Y = Single.Parse(s[i + 1]);
-                bw.weights.Z = Single.Parse(s[i + 2]);
-                bw.weights.W = Single.Parse(s[i + 3]);
+                bw.weights.x = Single.Parse(s[i]);
+                bw.weights.y = Single.Parse(s[i + 1]);
+                bw.weights.z = Single.Parse(s[i + 2]);
+                bw.weights.w = Single.Parse(s[i + 3]);
                 bw.boneIndex0 = Int32.Parse(s[i + 4]);
                 bw.boneIndex1 = Int32.Parse(s[i + 5]);
                 bw.boneIndex2 = Int32.Parse(s[i + 6]);

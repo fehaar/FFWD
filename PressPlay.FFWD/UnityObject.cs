@@ -28,7 +28,7 @@ namespace PressPlay.FFWD
         [ContentSerializer(ElementName = "isPrefab", Optional = true)]
         internal bool isPrefab;
 
-        public bool enabled = true;
+        //public bool enabled = true;
 
         internal virtual void AfterLoad(Dictionary<int, UnityObject> idMap)
         {

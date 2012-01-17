@@ -197,6 +197,7 @@
     <Compile Include="BoneWeightArrayTypeSerializer.cs" />
     <Compile Include="GuidSerializer.cs" />
     <Compile Include="MeshColliderSerializer.cs" />
+    <Compile Include="RectTypeSerializer.cs" />
     <Compile Include="SceneProcessor.cs" />
     <Compile Include="StaticBatchRendererSerializer.cs" />
     <Compile Include="TextAssetImporter.cs" />

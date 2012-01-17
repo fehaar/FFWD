@@ -361,8 +361,25 @@ namespace PressPlay.FFWD
             }
         }
 
-        public Matrix4x4 worldToLocalMatrix; // Implement this!
-        
+        [ContentSerializerIgnore]
+        public Matrix4x4 worldToLocalMatrix
+        {
+            get
+            {
+                // TODO: Implement this
+                throw new NotImplementedException();
+            }
+        }
+
+        [ContentSerializerIgnore]
+        public Matrix4x4 localToWorldMatrix
+        {
+            get
+            {
+                // TODO: Implement this
+                throw new NotImplementedException();
+            }
+        }
         #endregion
 
         #region Private and internal methods

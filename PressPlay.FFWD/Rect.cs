@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework.Content;
 
 namespace PressPlay.FFWD
 {
@@ -9,12 +10,10 @@ namespace PressPlay.FFWD
     {
         public Rect(float left, float top, float w, float h)
         {
-            _xMin = x = left;
-            _yMin = y = top;
+            x = left;
+            y = top;
             width = w;
             height = h;
-            _xMax = x + width;
-            _yMax = y + height;
         }
 
         public float x;
@@ -22,66 +21,66 @@ namespace PressPlay.FFWD
         public float width;
         public float height;
 
-        private float _xMin;
+        [ContentSerializerIgnore]
         public float xMin
         {
             get
             {
-                return _xMin;
+                return x;
             }
             set
             {
-                _xMin = value;
+                x = value;
             }
         }
 
-        private float _yMin;
+        [ContentSerializerIgnore]
         public float yMin
         {
             get
             {
-                return _yMin;
+                return y;
             }
             set
             {
-                _yMin = value;
+                y = value;
             }
         }
 
-        private float _xMax;
+        [ContentSerializerIgnore]
         public float xMax
         {
             get
             {
-                return _xMax;
+                return x + width;
             }
             set
             {
-                _xMax = value;
+                width = value - x;
             }
         }
 
-        private float _yMax;
+        [ContentSerializerIgnore]
         public float yMax
         {
             get
             {
-                return _yMax;
+                return y + height;
             }
             set
             {
-                _yMax = value;
+                height = value - y;
             }
         }
 
         public bool Contains(Vector2 point)
         {
-            return (point.x >= _xMin && point.y >= _yMin && point.x <= _xMax && point.y <= _yMax);
+            return (point.x >= xMin && point.y >= yMin && point.x <= xMax && point.y <= yMax);
         }
 
         public bool Contains(Vector3 point)
         {
-            return (point.x >= _xMin && point.y >= _yMin && point.x <= _xMax && point.y <= _yMax);
+            return (point.x >= xMin && point.y >= yMin && point.x <= xMax && point.y <= yMax);
         }
 
         public override string ToString()
@@ -96,9 +95,7 @@ namespace PressPlay.FFWD
 
         public static bool operator ==(Rect a, Rect b)
         {
-            return (a._xMax == b._xMax
-                && a._yMax == b._yMax
-                && a.width == b.width
+            return (a.width == b.width
                 && a.height == b.height                
                 && a.x == b.x
                 && a.y == b.y);
