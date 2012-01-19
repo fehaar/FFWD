@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
@@ -34,6 +35,8 @@ namespace PressPlay.FFWD.Exporter.Writers
         public List<string> componentsNotWritten = new List<string>();
 
         private Dictionary<string, object> assetsToWrite = new Dictionary<string, object>();
+        private Dictionary<int, Component> inlineResource = new Dictionary<int, Component>();
+        private bool writingResources = false;
 
         public void Write(string path)
         {
@@ -51,6 +54,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                 WriteGOs();
                 WritePrefabs();
                 writer.WriteEndElement();
+                WriteInlineResources();
                 writer.WriteEndElement();
             }
             WriteAssets();
@@ -72,6 +76,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                 Prefabs.Add(go);
                 WritePrefabs();
                 writer.WriteEndElement();
+                WriteInlineResources();
                 writer.WriteEndElement();
             }
             WriteAssets();
@@ -141,6 +146,23 @@ namespace PressPlay.FFWD.Exporter.Writers
                 WriteGameObject(Prefabs[i]);
                 writer.WriteEndElement();
             }
+        }
+
+        private void WriteInlineResources()
+        {
+            writingResources = true;
+            writer.WriteStartElement("Resources");
+            foreach (var key in inlineResource.Keys)
+            {
+                Component c = inlineResource[key];
+                writer.WriteStartElement("Resource");
+                writer.WriteAttributeString("ID", "#Resource" + key);
+                writer.WriteAttributeString("Type", resolver.ResolveObjectType(c));
+                WriteComponent(c, true);
+                writer.WriteEndElement();
+            }
+            writer.WriteEndElement();
+            writingResources = false;
         }
 
         private void WriteAssets()
@@ -366,6 +388,11 @@ namespace PressPlay.FFWD.Exporter.Writers
                     writer.WriteStartElement("c");
                     writer.WriteAttributeString("Type", resolver.ResolveObjectType(component));
                 }
+                if (!writingResources && component.GetType().GetCustomAttributes(false).Any(att => att.GetType().Name == "FFWD_ExportAsResourceAttribute"))
+                {
+                    WriteInlineResource(component);
+                    return true;
+                }
                 writer.WriteElementString("id", component.GetInstanceID().ToString());
                 if (isPrefab)
                 {
@@ -465,6 +492,13 @@ namespace PressPlay.FFWD.Exporter.Writers
             try
             {
                 if (obj == null)
+                {
+                    writer.WriteStartElement(name);
+                    writer.WriteAttributeString("Null", ToString(true));
+                    writer.WriteEndElement();
+                    return;
+                }
+                if (obj is UnityEngine.Object && (obj as UnityEngine.Object) == null)
                 {
                     writer.WriteStartElement(name);
                     writer.WriteAttributeString("Null", ToString(true));
@@ -613,10 +647,6 @@ namespace PressPlay.FFWD.Exporter.Writers
                 if (obj is Material)
                 {
                     Material mat = obj as Material;
-                    if (mat == null)
-                    {
-                        return;
-                    }
                     if (name != null)
                     {
                         writer.WriteStartElement(name);
@@ -816,11 +846,24 @@ namespace PressPlay.FFWD.Exporter.Writers
                 {
                     continue;
                 }
+                if (memInfo[m].FieldType.GetCustomAttributes(false).Any(att => att.GetType().Name == "FFWD_DontExportAttribute"))
+                {
+                    continue;
+                }
                 if (filter == null || filter.Includes(memInfo[m].Name))
                 {
                     WriteElement(memInfo[m].Name, memInfo[m].GetValue(obj), memInfo[m].FieldType);
                 }
             }
+        }
+
+        internal void WriteInlineResource(Component component)
+        {
+            if (!inlineResource.ContainsKey(component.GetInstanceID()))
+            {
+                inlineResource.Add(component.GetInstanceID(), component);
+            }
+            writer.WriteString("#Resource" + component.GetInstanceID());
         }
 
         private string AddPrefab(UnityEngine.Object theObject)

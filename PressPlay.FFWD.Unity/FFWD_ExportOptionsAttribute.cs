@@ -17,8 +17,4 @@ sealed class FFWD_ExportOptionsAttribute : Attribute
     /// This is to make sure that scripts that need heavy customization in XNA do not get overwritten.
     /// </summary>
     public bool DontOverwrite { get; set; }
-    /// <summary>
-    /// If this is a class that is normally only used as a prefab - or is extremely big and used in several places, you can export it as an asset so it will go in its own separate file.
-    /// </summary>
-    public bool ExportAsAsset { get; set; }
 }

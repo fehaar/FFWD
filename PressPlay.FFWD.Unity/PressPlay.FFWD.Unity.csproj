@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ContentSerializerIgnoreAttribute.cs" />
+    <Compile Include="FFWD_ExportAsResourceAttribute.cs" />
     <Compile Include="FFWD_DontExportAttribute.cs" />
     <Compile Include="FFWD_ExportOptionsAttribute.cs" />
     <Compile Include="Editor\ExportSceneWizard.cs" />
