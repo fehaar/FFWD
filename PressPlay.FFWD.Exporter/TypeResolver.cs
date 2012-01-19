@@ -133,6 +133,7 @@ namespace PressPlay.FFWD.Exporter
             {
                 MonoBehaviourWriter wr = new MonoBehaviourWriter();
                 wr.filter = new Filter() { filterType = wr.defaultFilterType };
+                // This is set because we at the moment are exporting scripts in a different manner.
                 wr.options = "noExport";
                 return wr;
             }

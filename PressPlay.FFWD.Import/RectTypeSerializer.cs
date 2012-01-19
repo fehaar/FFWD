@@ -14,13 +14,13 @@ namespace PressPlay.FFWD.Import
             string[] s = input.Xml.ReadContentAsString().Split(' ');
             if (s.Length != 4)
             {
-                throw new Exception("We need four ints to convert to a Rect. Was " + s);
+                throw new Exception("We need four floats to convert to a Rect. Was " + s);
             }
             Rect r = new Rect();
-            r.x = Int32.Parse(s[0]);
-            r.y = Int32.Parse(s[1]);
-            r.width = Int32.Parse(s[2]);
-            r.height = Int32.Parse(s[3]);
+            r.x = Single.Parse(s[0]);
+            r.y = Single.Parse(s[1]);
+            r.width = Single.Parse(s[2]);
+            r.height = Single.Parse(s[3]);
             return r;
         }
 

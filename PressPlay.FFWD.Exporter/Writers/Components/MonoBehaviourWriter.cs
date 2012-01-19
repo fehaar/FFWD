@@ -2,6 +2,7 @@
 using System.Reflection;
 using PressPlay.FFWD.Exporter.Interfaces;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace PressPlay.FFWD.Exporter.Writers.Components
 {
@@ -43,22 +44,7 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
             {
                 WriteFieldsForType(scene, component, t.BaseType);
             }
-            FieldInfo[] memInfo = t.GetFields(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance);
-            for (int m = 0; m < memInfo.Length; m++)
-            {
-                if (memInfo[m].GetCustomAttributes(typeof(HideInInspector), true).Length > 0)
-                {
-                    continue;
-                }
-                if (memInfo[m].FieldType.IsSubclassOf(typeof(Delegate)))
-                {
-                    continue;
-                }
-                if (filter.Includes(memInfo[m].Name))
-                {
-                    scene.WriteElement(memInfo[m].Name, memInfo[m].GetValue(component), memInfo[m].FieldType);
-                }
-            }
+            scene.WriteMembers(component, t, filter);
         }
 
         protected virtual void WriteElement(SceneWriter scene, string name, object value)

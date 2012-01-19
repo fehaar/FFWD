@@ -26,10 +26,11 @@ namespace PressPlay.FFWD.Exporter
             { "ExecuteInEditMode", "" },
             { "FFWD_ExportOptions", "" },
             { "FFWD_DontExport", "" },
-            { "SerializeField" , "" }
+            { "SerializeField" , "ContentSerializer" }
         };
         public static Dictionary<string, string> ReplaceClasses = new Dictionary<string, string>() {
             { "Object", "UnityObject" },
+            { "KeyCode", "Microsoft.Xna.Framework.Input.Keys" },
             { "ArrayList", "List<object>" },
             { "AudioListener", "UnityAudioListener" }
         };

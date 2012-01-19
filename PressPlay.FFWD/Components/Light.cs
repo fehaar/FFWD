@@ -16,7 +16,8 @@ namespace PressPlay.FFWD.Components
         public float intensity;
         public float range;
         public float spotAngle;
-        public LayerMask cullingMask;        
+        public LayerMask cullingMask;
+        public bool enabled;
 
         internal static List<Light> Lights = new List<Light>(ApplicationSettings.DefaultCapacities.Lights);
 
@@ -46,6 +47,10 @@ namespace PressPlay.FFWD.Components
             {
                 // TODO: We have only made directional lighting!
                 Light light = Lights[i];
+                if (!light.enabled)
+                {
+                    continue;
+                }
                 switch (light.type)
                 {
                     case LightType.Spot:

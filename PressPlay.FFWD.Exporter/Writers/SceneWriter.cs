@@ -33,8 +33,7 @@ namespace PressPlay.FFWD.Exporter.Writers
         private List<int> writtenIds = new List<int>();
         public List<string> componentsNotWritten = new List<string>();
 
-        private Dictionary<string, Mesh> meshesToWrite = new Dictionary<string, Mesh>();
-        private Dictionary<string, AnimationClip> animationClipsToWrite = new Dictionary<string, AnimationClip>();
+        private Dictionary<string, object> assetsToWrite = new Dictionary<string, object>();
 
         public void Write(string path)
         {
@@ -54,8 +53,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                 writer.WriteEndElement();
                 writer.WriteEndElement();
             }
-            WriteAnimations();
-            WriteMeshes();
+            WriteAssets();
         }
 
         public void WriteResource(string path, GameObject go)
@@ -76,8 +74,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                 writer.WriteEndElement();
                 writer.WriteEndElement();
             }
-            WriteAnimations();
-            WriteMeshes();
+            WriteAssets();
         }
 
         public void WriteResource(string path, Material mat)
@@ -146,15 +143,18 @@ namespace PressPlay.FFWD.Exporter.Writers
             }
         }
 
-        private void WriteAssets(string assetType, IDictionary dict)
+        private void WriteAssets()
         {
-            if (dict.Count > 0)
+            if (assetsToWrite.Count > 0)
             {
-                Debug.Log("Write " + dict.Count + " " + assetType);
+                Debug.Log("Write " + assetsToWrite.Count + " assets.");
             }
-            foreach (var key in dict.Keys)
+            foreach (var key in assetsToWrite.Keys)
             {
-                string path = PreparePath(String.Format("../Assets/{1}/{0}.xml", key, assetType));
+                object obj = assetsToWrite[key];
+                Type tp = obj.GetType();
+                string path = PreparePath(String.Format("../Assets/{0}.xml", key));
+                Debug.Log("Write asset to: " + path);
                 XmlWriterSettings settings = new XmlWriterSettings();
                 settings.Indent = true;
                 settings.IndentChars = "  ";
@@ -163,22 +163,12 @@ namespace PressPlay.FFWD.Exporter.Writers
                     writer.WriteStartDocument();
                     writer.WriteStartElement("XnaContent");
                     writer.WriteStartElement("Asset");
-                    writer.WriteAttributeString("Type", resolver.DefaultNamespace + "." + dict[key].GetType().Name);
-                    WriteAsset(dict[key]);
+                    writer.WriteAttributeString("Type", resolver.DefaultNamespace + "." + tp.Name);
+                    WriteAsset(obj);
                     writer.WriteEndElement();
                     writer.WriteEndElement();
                 }
             }
-        }
-
-        private void WriteMeshes()
-        {
-            WriteAssets("Meshes", meshesToWrite);
-        }
-
-        private void WriteAnimations()
-        {
-            WriteAssets("Animations", animationClipsToWrite);
         }
 
         private void WriteAsset(object obj)
@@ -439,9 +429,9 @@ namespace PressPlay.FFWD.Exporter.Writers
             writer.WriteElementString("name", assetName);
             writer.WriteEndElement();
 
-            if (!meshesToWrite.ContainsKey(assetName))
+            if (!assetsToWrite.ContainsKey(assetName))
             {
-                meshesToWrite[assetName] = mesh;
+                assetsToWrite[assetName] = mesh;
             }
         }
 
@@ -452,7 +442,7 @@ namespace PressPlay.FFWD.Exporter.Writers
             {
                 return mesh.name;
             }
-            return asset + "-" + mesh.name;
+            return Path.Combine("Mesh", asset + "-" + mesh.name);
         }
 
         private Vector2[] TransformUV(Vector2[] uv)
@@ -790,7 +780,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                 if (obj.GetType().GetCustomAttributes(typeof(SerializableAttribute), true).Length > 0 || (obj.GetType().IsValueType && !obj.GetType().IsEnum))
                 {
                     writer.WriteStartElement(name);
-                    WriteMembers(obj);
+                    WriteMembers(obj, obj.GetType(), null);
                     writer.WriteEndElement();
                     return;
                 }
@@ -804,16 +794,32 @@ namespace PressPlay.FFWD.Exporter.Writers
             }
         }
 
-        private void WriteMembers(object obj)
+        public void WriteMembers(object obj, Type t, Filter filter)
         {
-            FieldInfo[] memInfo = obj.GetType().GetFields(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance);
-            for (int m = 0; m < memInfo.Length; m++)
+            List<FieldInfo> memInfo = new List<FieldInfo>();
+            memInfo.AddRange(t.GetFields(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance));
+            // Also add non public fields that have the SerializeField attribute
+            foreach (var item in t.GetFields(BindingFlags.DeclaredOnly | BindingFlags.NonPublic | BindingFlags.Instance))
+            {
+                if (item.GetCustomAttributes(typeof(SerializeField), true).Length > 0)
+                {
+                    memInfo.Add(item);
+                }
+            }
+            for (int m = 0; m < memInfo.Count; m++)
             {
                 if (memInfo[m].GetCustomAttributes(typeof(HideInInspector), true).Length > 0)
                 {
                     continue;
                 }
-                WriteElement(memInfo[m].Name, memInfo[m].GetValue(obj));
+                if (memInfo[m].FieldType.IsSubclassOf(typeof(Delegate)))
+                {
+                    continue;
+                }
+                if (filter == null || filter.Includes(memInfo[m].Name))
+                {
+                    WriteElement(memInfo[m].Name, memInfo[m].GetValue(obj), memInfo[m].FieldType);
+                }
             }
         }
 
@@ -834,9 +840,10 @@ namespace PressPlay.FFWD.Exporter.Writers
 
         internal void AddAnimationClip(string name, AnimationClip animationClip)
         {
-            if (!animationClipsToWrite.ContainsKey(name))
+            name = Path.Combine("Animations", name);
+            if (!assetsToWrite.ContainsKey(name))
             {
-                animationClipsToWrite.Add(name, animationClip);
+                assetsToWrite.Add(name, animationClip);
             }
         }
 
