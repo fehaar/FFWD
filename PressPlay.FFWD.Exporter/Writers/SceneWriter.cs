@@ -150,6 +150,10 @@ namespace PressPlay.FFWD.Exporter.Writers
 
         private void WriteInlineResources()
         {
+            if (inlineResource.Count == 0)
+            {
+                return;
+            }
             writingResources = true;
             writer.WriteStartElement("Resources");
             foreach (var key in inlineResource.Keys)

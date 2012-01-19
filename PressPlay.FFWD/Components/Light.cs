@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using PressPlay.FFWD.Interfaces;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Content;
 
 namespace PressPlay.FFWD.Components
 {
@@ -17,6 +18,7 @@ namespace PressPlay.FFWD.Components
         public float range;
         public float spotAngle;
         public LayerMask cullingMask;
+        [ContentSerializer(Optional=true)]
         public bool enabled;
 
         internal static List<Light> Lights = new List<Light>(ApplicationSettings.DefaultCapacities.Lights);
