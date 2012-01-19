@@ -393,18 +393,24 @@ public class ExportSceneWizard : ScriptableWizard
 
         private void TranslateScriptFile(string scriptFile)
         {
-            Debug.Log("Converting script " + Path.GetFileName(scriptFile));
-            string scriptText = File.ReadAllText(scriptFile);
-            string[] textLines = scriptText.Split('\n');
-            PressPlay.FFWD.Exporter.ScriptTranslator trans = new ScriptTranslator(textLines);
-            trans.Translate();
-            string newText = trans.ToString();
-            string newPath = scriptFile.Replace(Path.Combine(Application.dataPath, config.unityScriptDir), Path.Combine(xnaBaseDir, config.xnaAssets.ScriptDir));
-            if (!Directory.Exists(Path.GetDirectoryName(newPath)))
+            try
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(newPath));
+                string scriptText = File.ReadAllText(scriptFile);
+                string[] textLines = scriptText.Split('\n');
+                PressPlay.FFWD.Exporter.ScriptTranslator trans = new ScriptTranslator(textLines);
+                trans.Translate();
+                string newText = trans.ToString();
+                string newPath = scriptFile.Replace(Path.Combine(Application.dataPath, config.unityScriptDir), Path.Combine(xnaBaseDir, config.xnaAssets.ScriptDir));
+                if (!Directory.Exists(Path.GetDirectoryName(newPath)))
+                {
+                    Directory.CreateDirectory(Path.GetDirectoryName(newPath));
+                }
+                File.WriteAllText(newPath, newText);
             }
-            File.WriteAllText(newPath, newText);
+            catch (Exception ex)
+            {
+                Debug.Log("Error when converting script " + Path.GetFileName(scriptFile) + ": " + ex.Message);
+            }
         }
     }
 
