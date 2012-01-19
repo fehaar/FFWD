@@ -22,6 +22,7 @@ namespace PressPlay.FFWD.Exporter.Test.ScriptTranslation
             "\t\tif (dir==Vector3.zero) return;",
             "\t}",
             "",
+            "[AttributeWithComment/*(Comment=true)*/]",
             "\tpublic void Update() {",
             "\t}",
             "\tvirtual protected void FixedUpdate() {",
@@ -75,7 +76,28 @@ namespace PressPlay.FFWD.Exporter.Test.ScriptTranslation
             Assert.That(newScript, Is.Not.StringContaining("[AddComponentMenu("));
             Assert.That(newScript, Is.StringContaining("[AddMenu("));
         }
-	
 
+        [Test]
+        public void IfAnAttributeHasACommentedSectionRemoveTheCommentMarkers()
+        {
+            ScriptTranslator.ReplaceAttributes = new System.Collections.Generic.Dictionary<string, string>() { { "AttributeWithComment", "ConvertedAttribute" } };
+            ScriptTranslator trans = new ScriptTranslator(testScript);
+            trans.Translate();
+            string newScript = trans.ToString();
+
+            Assert.That(newScript, Is.StringContaining("[ConvertedAttribute("));
+        }
+
+        [Test]
+        public void IfAnAttributeHasACommentedSectionItCanBeRemoved()
+        {
+            ScriptTranslator.ReplaceAttributes = new System.Collections.Generic.Dictionary<string, string>() { { "AttributeWithComment", "" } };
+            ScriptTranslator trans = new ScriptTranslator(testScript);
+            trans.Translate();
+            string newScript = trans.ToString();
+
+            Assert.That(newScript, Is.Not.StringContaining("[AttributeWithComment"));
+        }
+	
     }
 }

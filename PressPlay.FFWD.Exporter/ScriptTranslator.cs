@@ -26,6 +26,7 @@ namespace PressPlay.FFWD.Exporter
             { "ExecuteInEditMode", "" },
             { "FFWD_ExportOptions", "" },
             { "FFWD_DontExport", "" },
+            { "FFWD_ExportAsResource", "" },
             { "SerializeField" , "ContentSerializer" }
         };
         public static Dictionary<string, string> ReplaceClasses = new Dictionary<string, string>() {
@@ -85,7 +86,7 @@ namespace PressPlay.FFWD.Exporter
             foreach (var item in ReplaceAttributes)
             {
                 int line = -1;
-                Regex rex = new Regex(String.Format(@"(\[{0}(\(.+\))?\])", item.Key));
+                Regex rex = new Regex(String.Format(@"(\[{0}(/\*)?(\(.+\))?(\*/)?\])", item.Key));
                 Match m;
                 while ((line = scriptLines.FindIndex(s => (m = rex.Match(s)).Success)) > -1)
                 {                    
@@ -95,7 +96,7 @@ namespace PressPlay.FFWD.Exporter
                     }
                     else
                     {
-                        scriptLines[line] = rex.Replace(scriptLines[line], "[" + item.Value + "$2]");
+                        scriptLines[line] = rex.Replace(scriptLines[line], "[" + item.Value + "$3]");
                     }
                 }
             }
