@@ -241,7 +241,8 @@ namespace PressPlay.FFWD
 
             // We find all fields only - not properties as they cannot be set as references in Unity
             // We find all public fields and non-public fields that have the ContentSerializer property
-            List<FieldInfo> memInfo = new List<FieldInfo>(typeToFix.GetFields(BindingFlags.Public | BindingFlags.Instance));
+            List<FieldInfo> memInfo = new List<FieldInfo>(typeToFix.GetFields(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance));
+#if WINDOWS
             FieldInfo[] privates = typeToFix.GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
             for (int i = 0; i < privates.Length; i++)
             {
@@ -250,6 +251,7 @@ namespace PressPlay.FFWD
                     memInfo.Add(privates[i]);
                 }
             }
+#endif
             if (typeToFix.BaseType != null)
             {
                 memInfo.AddRange(GetMembersToFix(typeToFix.BaseType));
