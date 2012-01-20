@@ -80,18 +80,25 @@ namespace PressPlay.FFWD
         public void SetMinMax(Vector3 min, Vector3 max)
         {
             box = new Microsoft.Xna.Framework.BoundingBox(min, max);
+            _boundingSphere = null;
         }
 
         public void Encapsulate(Bounds bounds)
         {
-            // TODO : Add implementation of method
+            box = BoundingBox.CreateMerged(box, bounds.box);
+            _boundingSphere = null;
         }
 
         public void Encapsulate(Vector3 point)
         {
             // TODO : Add implementation of method
             throw new NotImplementedException("Method not implemented.");
+        }
 
+        internal void Encapsulate(Microsoft.Xna.Framework.Vector3[] points)
+        {
+            box = BoundingBox.CreateFromPoints(points);
+            _boundingSphere = null;
         }
 
         public void Expand(float amount)
@@ -110,9 +117,7 @@ namespace PressPlay.FFWD
 
         public bool Contains(Vector3 point)
         {
-            // TODO : Add implementation of method
-            throw new NotImplementedException("Method not implemented.");
-
+            return box.Contains(point) != ContainmentType.Disjoint;
         }
 
         public void SqrDistance(Vector3 point)

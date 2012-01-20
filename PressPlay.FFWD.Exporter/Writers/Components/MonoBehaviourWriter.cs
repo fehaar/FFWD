@@ -41,9 +41,17 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
 
         private void WriteFieldsForType(SceneWriter scene, MonoBehaviour component, Type t)
         {
-            if (t != typeof(MonoBehaviour))
+            if (t != typeof(Behaviour))
             {
                 WriteFieldsForType(scene, component, t.BaseType);
+            }
+            if (t == typeof(Behaviour))
+            {
+                if (!component.enabled)
+                {
+                    scene.WriteElement("enabled", component.enabled);
+                }
+                return;
             }
             scene.WriteMembers(component, t, filter);
         }

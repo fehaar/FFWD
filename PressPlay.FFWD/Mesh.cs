@@ -284,8 +284,8 @@ namespace PressPlay.FFWD
 
         public void RecalculateBounds()
         {
-            //TODO        
-            throw new NotImplementedException();
+            bounds = new Bounds();
+            bounds.Encapsulate(_vertices);
         }
 
         public int vertexCount
