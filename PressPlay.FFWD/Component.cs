@@ -170,11 +170,12 @@ namespace PressPlay.FFWD
             base.Destroy();
         }
 
+        private Dictionary<string, List<FieldInfo>> membersToFix = new Dictionary<string, List<FieldInfo>>();
+
         private void DoFixReferences(object objectToFix, Dictionary<int, UnityObject> idMap)
         {
-            // We find all fields only - not properties as they cannot be set as references in Unity
-            FieldInfo[] memInfo = objectToFix.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
-            for (int i = 0; i < memInfo.Length; i++)
+            List<FieldInfo> memInfo = GetMembersToFix(objectToFix.GetType());
+            for (int i = 0; i < memInfo.Count; i++)
             {
                 if (typeof(UnityObject).IsAssignableFrom(memInfo[i].FieldType))
                 {
@@ -229,6 +230,32 @@ namespace PressPlay.FFWD
                     DoFixReferences(memInfo[i].GetValue(objectToFix), idMap);
                 }
             }
+        }
+
+        private List<FieldInfo> GetMembersToFix(Type typeToFix)
+        {
+            if (membersToFix.ContainsKey(typeToFix.FullName))
+            {
+                return membersToFix[typeToFix.FullName];
+            }
+
+            // We find all fields only - not properties as they cannot be set as references in Unity
+            // We find all public fields and non-public fields that have the ContentSerializer property
+            List<FieldInfo> memInfo = new List<FieldInfo>(typeToFix.GetFields(BindingFlags.Public | BindingFlags.Instance));
+            FieldInfo[] privates = typeToFix.GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
+            for (int i = 0; i < privates.Length; i++)
+            {
+                if (privates[i].GetCustomAttributes(typeof(ContentSerializerAttribute), true).Length > 0)
+                {
+                    memInfo.Add(privates[i]);
+                }
+            }
+            if (typeToFix.BaseType != null)
+            {
+                memInfo.AddRange(GetMembersToFix(typeToFix.BaseType));
+            }
+            membersToFix[typeToFix.FullName] = memInfo;
+            return memInfo;
         }
 
         internal override void FixReferences(Dictionary<int, UnityObject> idMap)

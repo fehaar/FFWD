@@ -102,6 +102,37 @@ namespace PressPlay.FFWD.Test.Core_framework
 
             Assert.That(cmp.componentList[0], Is.SameAs(newCmp));
         }
-	
+
+        [Test]
+        public void WeWillAlsoFixUpNonPublicReferencesThatHaveTheContentSerializeAttribute()
+        {
+            GameObject go = new GameObject();
+            TestComponent testCmp = new TestComponent(true);
+            TestComponent newCmp = new TestComponent();
+            ReferencingComponent cmp = new ReferencingComponent(testCmp);
+            go.AddComponent(cmp);
+            Dictionary<int, UnityObject> dict = new Dictionary<int, UnityObject>();
+            dict.Add(testCmp.GetInstanceID(), newCmp);
+
+            go.FixReferences(dict);
+
+            Assert.That(cmp.GetSerializedProperty(), Is.SameAs(newCmp));
+        }
+
+        [Test]
+        public void WeWillAlsoFixUpNonPublicReferencesInBaseClassesThatHaveTheContentSerializeAttribute()
+        {
+            GameObject go = new GameObject();
+            TestComponent testCmp = new TestComponent(true);
+            TestComponent newCmp = new TestComponent();
+            ReferencingComponentSubClass cmp = new ReferencingComponentSubClass(testCmp);
+            go.AddComponent(cmp);
+            Dictionary<int, UnityObject> dict = new Dictionary<int, UnityObject>();
+            dict.Add(testCmp.GetInstanceID(), newCmp);
+
+            go.FixReferences(dict);
+
+            Assert.That(cmp.GetSerializedProperty(), Is.SameAs(newCmp));
+        }
     }
 }
