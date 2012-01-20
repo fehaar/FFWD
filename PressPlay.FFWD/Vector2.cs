@@ -203,6 +203,20 @@ namespace PressPlay.FFWD
             return sb.ToString();
         }
 
+        public Vector3 Convert(ApplicationSettings.To2dMode mode)
+        {
+            switch (mode)
+            {
+                case ApplicationSettings.To2dMode.DropX:
+                    return new Vector3(0, x, y);
+                case ApplicationSettings.To2dMode.DropY:
+                    return new Vector3(x, 0, y);
+                case ApplicationSettings.To2dMode.DropZ:
+                    return new Vector3(x, y, 0);
+                default:
+                    throw new Exception("Unknown enum " + ApplicationSettings.to2dMode);
+            }
+        }
         #endregion Public methods
 
         #region Operators
@@ -219,17 +233,7 @@ namespace PressPlay.FFWD
 
         public static implicit operator Vector3(Vector2 v)
         {
-            switch (ApplicationSettings.to2dMode)
-            {
-                case ApplicationSettings.To2dMode.DropX:
-                    return new Vector3(0, v.x, v.y);
-                case ApplicationSettings.To2dMode.DropY:
-                    return new Vector3(v.x, 0, v.y);
-                case ApplicationSettings.To2dMode.DropZ:
-                    return new Vector3(v.x, v.y, 0);
-                default:
-                    throw new Exception("Unknown enum " + ApplicationSettings.to2dMode);
-            }
+            return v.Convert(ApplicationSettings.to2dMode);
         }
 
         public static bool operator ==(Vector2 value1, Vector2 value2)

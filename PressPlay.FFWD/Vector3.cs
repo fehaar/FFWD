@@ -349,6 +349,45 @@ namespace PressPlay.FFWD
             return sb.ToString();
         }
 
+        /// <summary>
+        /// Converts the Vector3 to a Vector2 by dropping a given variable.
+        /// If Correct Zero Data is on, we will try to use a different mode if one of the axes are 0 after converting. Used primarily for collider sizing.
+        /// </summary>
+        /// <param name="mode"></param>
+        /// <param name="correctZeroData"></param>
+        /// <returns></returns>
+        public Vector2 Convert(ApplicationSettings.To2dMode mode, bool correctZeroData)
+        {
+            Vector2 v = Vector2.zero;
+            switch (mode)
+            {
+                case ApplicationSettings.To2dMode.DropX:
+                    v = new Vector2(y, z);
+                    break;
+                case ApplicationSettings.To2dMode.DropY:
+                    v = new Vector2(x, z);
+                    break;
+                case ApplicationSettings.To2dMode.DropZ:
+                    v = new Vector2(x, y);
+                    break;
+                default:
+                    throw new Exception("Unknown enum " + ApplicationSettings.to2dMode);
+            }
+            if (correctZeroData && v.x == 0)
+            {
+                v.x = (mode == ApplicationSettings.To2dMode.DropX) ? x : y;
+            }
+            if (correctZeroData && v.y == 0)
+            {
+                v.y = (mode == ApplicationSettings.To2dMode.DropZ) ? z : y;
+            }
+            return v;
+        }
+
+        public Vector2 Convert(bool correctZeroData)
+        {
+            return Convert(ApplicationSettings.to2dMode, correctZeroData);
+        }
         #endregion Public methods
 
         #region Operators
@@ -365,17 +404,7 @@ namespace PressPlay.FFWD
 
         public static implicit operator Vector2(Vector3 v)
         {
-            switch (ApplicationSettings.to2dMode)
-            {
-                case ApplicationSettings.To2dMode.DropX:
-                    return new Vector2(v.y, v.z);
-                case ApplicationSettings.To2dMode.DropY:
-                    return new Vector2(v.x, v.z);
-                case ApplicationSettings.To2dMode.DropZ:
-                    return new Vector2(v.x, v.y);
-                default:
-                    throw new Exception("Unknown enum " + ApplicationSettings.to2dMode);
-            }
+            return v.Convert(ApplicationSettings.to2dMode, false);
         }
 
         public static implicit operator Microsoft.Xna.Framework.Vector2(Vector3 v)

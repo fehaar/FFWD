@@ -141,13 +141,20 @@ namespace PressPlay.FFWD
                     GameObject go = g;
                     if (!String.IsNullOrEmpty(curveData.path))
                     {
-                        go = g.transform.Find(curveData.path).gameObject;
+                        Transform t = g.transform.Find(curveData.path);
+                        if (t != null)
+	                    {
+                            go = t.gameObject;
+	                    }
+                        else
+                        {
+                            continue;
+                        }
                     }
 
                     sampler = GetSampler(go, curveData);
                     if (sampler != null)
                     {
-                        Debug.Log("Added a sampler for " + sampleKey);
                         samps.Add(sampleKey, sampler);
                     }
                 }

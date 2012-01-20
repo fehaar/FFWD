@@ -45,5 +45,10 @@ namespace PressPlay.FFWD
             #endregion
         }
 
+        public static class DefaultValues
+        {
+            public static float minimumNearClipPlane = 0.1f;
+        }
+
     }
 }

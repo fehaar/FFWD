@@ -473,7 +473,7 @@ namespace PressPlay.FFWD.Exporter.Writers
             {
                 return mesh.name;
             }
-            return Path.Combine("Mesh", asset + "-" + mesh.name);
+            return Path.Combine("Meshes", asset + "-" + mesh.name);
         }
 
         private Vector2[] TransformUV(Vector2[] uv)

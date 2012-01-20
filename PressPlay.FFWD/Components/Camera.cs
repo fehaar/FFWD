@@ -153,7 +153,7 @@ namespace PressPlay.FFWD.Components
             {
                 if (_projectionMatrix == Matrix.Identity)
                 {
-                    Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(fieldOfView), FullScreen.AspectRatio, nearClipPlane, farClipPlane, out _projectionMatrix);
+                    Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(fieldOfView), FullScreen.AspectRatio, Mathf.Max(ApplicationSettings.DefaultValues.minimumNearClipPlane, nearClipPlane), farClipPlane, out _projectionMatrix);
                 }
                 return _projectionMatrix;
             }

@@ -169,7 +169,7 @@ namespace PressPlay.FFWD
         {
             if (!String.IsNullOrEmpty(name))
             {
-                Mesh mesh = assetHelper.LoadAsset<Mesh>(Path.Combine("Meshes", name));
+                Mesh mesh = assetHelper.LoadAsset<Mesh>(name);
                 if (mesh != null)
                 {
                     mesh.FlattenTriangleSets();
