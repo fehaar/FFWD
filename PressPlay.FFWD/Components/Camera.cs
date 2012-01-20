@@ -84,6 +84,7 @@ namespace PressPlay.FFWD.Components
         public override void Awake()
         {
             frustum = new BoundingFrustum(view * projectionMatrix);
+            RecalculateView();
             for (int i = nonAssignedRenderers.Count - 1; i >= 0; i--)
             {
                 if (nonAssignedRenderers[i] == null || nonAssignedRenderers[i].gameObject == null || addRenderer(nonAssignedRenderers[i]))
@@ -192,7 +193,10 @@ namespace PressPlay.FFWD.Components
 
         public Vector3 ScreenToViewportPoint(Vector3 v)
         {
-            return new Vector3(v.x / viewPort.Width, v.y / viewPort.Height, v.z);
+            Vector2 pt = v;
+            pt.x /= viewPort.Width;
+            pt.y /= viewPort.Height;
+            return new Vector3(pt.x, pt.y, (float)v);
         }
 
         public Vector3 ViewportToScreenPoint(Vector3 v)
@@ -328,12 +332,7 @@ namespace PressPlay.FFWD.Components
             }
 #endif
             // TODO: Do not recreate view matrix every frame. Only when camera is moved.
-            Matrix m = Matrix.CreateLookAt(
-                transform.position,
-                transform.position + transform.forward,
-                transform.up);
-            view = m * inverter;
-            frustum.Matrix = view * projectionMatrix;
+            RecalculateView();
 
             #region TextRenderer3D batching start
             // We are beginning the batching of TextRenderer3D calls
@@ -400,6 +399,16 @@ namespace PressPlay.FFWD.Components
             TextRenderer3D.batch.End(); 
 
             estimatedDrawCalls += dynamicBatchRenderer.DoDraw(device, this);
+        }
+
+        private void RecalculateView()
+        {
+            Matrix m = Matrix.CreateLookAt(
+                transform.position,
+                transform.position + transform.forward,
+                transform.up);
+            view = m * inverter;
+            frustum.Matrix = view * projectionMatrix;
         }
 
         private void Clear(GraphicsDevice device)
