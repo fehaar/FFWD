@@ -24,49 +24,50 @@ namespace PressPlay.FFWD.Import
             input.AfterLoad(idMap);
             scene = input;
 
-            // Create static batch renderers - CURRENTLY DISABLED AS WE REWORK MESH FORMAT
-            //Dictionary<string, StaticBatchRenderer> staticRenderers = new Dictionary<string, StaticBatchRenderer>();
-            //foreach (Renderer r in Application.newComponents.Where(c => (c is Renderer)).ToArray())
-            //{
-            //    if (r.gameObject == null)
-            //    {
-            //        Debug.LogError("The gameObject of " + r + " has vanished?!");
-            //        continue;
-            //    }
-            //    if (!r.gameObject.isStatic)
-            //    {
-            //        continue;
-            //    }
-            //    string key = GetMaterialKey(r.materials);
-            //    if (!staticRenderers.ContainsKey(key))
-            //    {
-            //        GameObject sbGo = new GameObject("Static - " + key);
-            //        while (idMap.ContainsKey(sbGo.GetInstanceID()))
-            //        {
-            //            sbGo.SetNewId(null);
-            //        }
-            //        StaticBatchRenderer sbr = sbGo.AddComponent<StaticBatchRenderer>();
-            //        while (idMap.ContainsKey(sbr.GetInstanceID()))
-            //        {
-            //            sbr.SetNewId(null);
-            //        }
-            //        staticRenderers[key] = sbr;
-            //        staticRenderers[key].materials = (Material[])r.materials.Clone();
-            //    }
+            // Create static batch renderers
+            Dictionary<string, StaticBatchRenderer> staticRenderers = new Dictionary<string, StaticBatchRenderer>();
+            foreach (Renderer r in Application.newComponents.Where(c => (c is Renderer)).ToArray())
+            {
+                if (r.gameObject == null)
+                {
+                    Debug.LogError("The gameObject of " + r + " has vanished?!");
+                    continue;
+                }
+                if (!r.gameObject.isStatic)
+                {
+                    continue;
+                }
+                string key = GetMaterialKey(r.materials);
+                if (!staticRenderers.ContainsKey(key))
+                {
+                    GameObject sbGo = new GameObject("Static - " + key);
+                    while (idMap.ContainsKey(sbGo.GetInstanceID()))
+                    {
+                        sbGo.SetNewId(null);
+                    }
+                    StaticBatchRenderer sbr = sbGo.AddComponent<StaticBatchRenderer>();
+                    while (idMap.ContainsKey(sbr.GetInstanceID()))
+                    {
+                        sbr.SetNewId(null);
+                    }
+                    staticRenderers[key] = sbr;
+                    staticRenderers[key].materials = (Material[])r.materials.Clone();
+                }
 
-            //    MeshFilter mf = r.gameObject.GetComponent<MeshFilter>();
-            //    int id = mf.meshToRender.GetInstanceID();
-            //    Mesh mesh = (Mesh)scene.assets.Where(a => a.GetInstanceID() == id).FirstOrDefault();
-            //    if (mesh == null)
-            //    {
-            //        throw new Exception("The mesh with Id " + id + " was not found in assets. Gotten from " + mf);
-            //    }
-            //    if (staticRenderers[key].AddMesh(mesh, r.transform.world))
-            //    {
-            //        r.isPartOfStaticBatch = true;
-            //    }
-            //}
-            //input.gameObjects.AddRange(staticRenderers.Values.Select(sbr => sbr.gameObject));
+                MeshFilter mf = r.gameObject.GetComponent<MeshFilter>();
+                int id = mf.meshToRender.GetInstanceID();
+                Mesh mesh = context.BuildAndLoadAsset<Mesh, Mesh>(new ExternalReference<Mesh>("Assets/" + mf.meshToRender.name + ".xml"), null, null, "XmlImporter");
+                if (mesh == null)
+                {
+                    throw new Exception("The mesh with Id " + id + " was not found in assets. Gotten from " + mf);
+                }
+                if (staticRenderers[key].AddMesh(mesh, r.transform.world))
+                {
+                    r.isPartOfStaticBatch = true;
+                    mf.mesh = null;
+                }
+            }
+            input.gameObjects.AddRange(staticRenderers.Values.Select(sbr => sbr.gameObject));
 
             foreach (Component cmp in Application.newComponents)
             {

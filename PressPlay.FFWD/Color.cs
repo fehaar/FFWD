@@ -274,5 +274,14 @@ namespace PressPlay.FFWD
         {
             return ((float)Int32.Parse(s.Substring(start, 2), System.Globalization.NumberStyles.HexNumber)) / 255f;
         }
+
+        public override string ToString()
+        {
+            if (A == 0)
+            {
+                return String.Format("{0:X}{1:X}{2:X}", R, G, B);
+            }
+            return String.Format("{0:X}{1:X}{2:X}{3:X}", A, R, G, B);
+        }
     }
 }

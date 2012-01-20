@@ -23,7 +23,13 @@ namespace PressPlay.FFWD.Import
 
         protected override void Serialize(IntermediateWriter output, Color[] value, ContentSerializerAttribute format)
         {
-            throw new NotImplementedException();
+            if (value != null)
+            {
+                for (int i = 0; i < value.Length; i++)
+                {
+                    output.Xml.WriteString(value[i].ToString() + " ");
+                }
+            }
         }
     }
 }
