@@ -20,6 +20,15 @@ namespace PressPlay.FFWD
         [ContentSerializer]
         public string text { get; private set; }
 
+        [ContentSerializerIgnore]
+        public byte[] bytes
+        {
+            get
+            {
+                return Encoding.UTF8.GetBytes(text);
+            }
+        }
+
         protected override void DoLoadAsset(AssetHelper assetHelper)
         {            
         }

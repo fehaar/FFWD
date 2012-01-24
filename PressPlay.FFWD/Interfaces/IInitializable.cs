@@ -5,7 +5,7 @@ using System.Text;
 
 namespace PressPlay.FFWD.Interfaces
 {
-    internal interface IInitializable
+    public interface IInitializable
     {
         void Initialize(AssetHelper assets);
     }
