@@ -61,7 +61,16 @@ namespace PressPlay.FFWD.Test.Core_framework.Transforms
             Transform t = h.rootTrans.FindChild("//childOfChild");
             Assert.That(t, Is.Not.Null);
             Assert.That(t, Is.SameAs(h.childOfChildTrans));
-        }	
+        }
+
+        [Test]
+        public void WeCanFindACloneByItsNameWithoutClone()
+        {
+            h.child.name = "MyChild(Clone)";
+            Transform t = h.rootTrans.FindChild("MyChild");
+            Assert.That(t, Is.Not.Null);
+            Assert.That(t, Is.SameAs(h.childTrans));
+        }
 
         [Test]
         public void WeCanGetAChildByIndex()

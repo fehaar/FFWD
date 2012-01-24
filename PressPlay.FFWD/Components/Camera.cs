@@ -31,18 +31,18 @@ namespace PressPlay.FFWD.Components
         public float aspect { get; set; }
         public int cullingMask { get; set; }
 
-        public int pixelWidth 
+        public float pixelWidth 
         { 
             get
             {
-                return viewPort.Width;
+                return viewPort.Width * rect.width;
             }
         }
-        public int pixelHeight
+        public float pixelHeight
         { 
             get
             {
-                return viewPort.Height;
+                return viewPort.Height * rect.height;
             }
         }
 
@@ -154,7 +154,20 @@ namespace PressPlay.FFWD.Components
             {
                 if (_projectionMatrix == Matrix.Identity)
                 {
-                    Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(fieldOfView), FullScreen.AspectRatio, Mathf.Max(ApplicationSettings.DefaultValues.minimumNearClipPlane, nearClipPlane), farClipPlane, out _projectionMatrix);
+                    if (orthographic)
+                    {
+                        _projectionMatrix = new Matrix(
+                            ((float)viewPort.Height / (float)viewPort.Width) / orthographicSize, 0.00000f, 0.00000f, 0.00000f,
+                            0.00000f, 1f / orthographicSize, 0.00000f, 0.00000f,
+                            0.00000f, 0.00000f, -2f / (farClipPlane - nearClipPlane), 0.00000f,
+                            0.00000f, 0.00000f, 0.0f, 1.00000f
+                        );
+                        //Matrix.CreateOrthographic(viewPort.Width * rect.width, viewPort.Height * rect.height, nearClipPlane, farClipPlane, out _projectionMatrix);
+                    }
+                    else
+                    {
+                        Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(fieldOfView), FullScreen.AspectRatio, Mathf.Max(ApplicationSettings.DefaultValues.minimumNearClipPlane, nearClipPlane), farClipPlane, out _projectionMatrix);
+                    }
                 }
                 return _projectionMatrix;
             }

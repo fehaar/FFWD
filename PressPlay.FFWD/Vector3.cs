@@ -338,15 +338,7 @@ namespace PressPlay.FFWD
 
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder(32);
-            sb.Append("{X=");
-            sb.Append(this.x + "f,");
-            sb.Append(" Y=");
-            sb.Append(this.y + "f,");
-            sb.Append(" Z=");
-            sb.Append(this.z +"f");
-            sb.Append("}");
-            return sb.ToString();
+            return String.Format("({0:F1}, {1:F1}, {2:F1})", x, y, z);
         }
 
         /// <summary>

@@ -117,5 +117,40 @@ namespace PressPlay.FFWD
                 basicEffect.DiffuseColor = color;
             }
         }
+
+        public static bool operator ==(Material value1, Material value2)
+        {
+            if ((object)value1 == null)
+            {
+                return ((object)value2 == null);
+            }
+            if ((object)value2 == null)
+            {
+                return ((object)value1 == null);
+            }
+            return value1.GetInstanceID() == value2.GetInstanceID();
+        }
+
+        public static bool operator !=(Material value1, Material value2)
+        {
+            if ((object)value1 == null)
+            {
+                return ((object)value2 != null);
+            }
+            if ((object)value2 == null)
+            {
+                return ((object)value1 != null);
+            }
+            return value1.GetInstanceID() != value2.GetInstanceID();
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Material)
+            {
+                return this == (Material)obj;
+            }
+            return base.Equals(obj);
+        }
     }
 }

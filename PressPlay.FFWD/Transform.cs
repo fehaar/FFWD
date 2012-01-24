@@ -169,7 +169,7 @@ namespace PressPlay.FFWD
         }
 
         [ContentSerializerIgnore]
-        internal Matrix world
+        public Matrix world
         {
             get
             {
@@ -744,7 +744,7 @@ namespace PressPlay.FFWD
                 }
                 else
                 {
-                    if (name == children[i].name)
+                    if (name == children[i].name || name + "(Clone)" == children[i].name)
                     {
                         return children[i].transform;
                     }
