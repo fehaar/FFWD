@@ -159,7 +159,7 @@ namespace PressPlay.FFWD.Components
                         _projectionMatrix = new Matrix(
                             ((float)viewPort.Height / (float)viewPort.Width) / orthographicSize, 0.00000f, 0.00000f, 0.00000f,
                             0.00000f, 1f / orthographicSize, 0.00000f, 0.00000f,
-                            0.00000f, 0.00000f, -2f / (farClipPlane - nearClipPlane), 0.00000f,
+                            0.00000f, 0.00000f, -2f / (farClipPlane - nearClipPlane), -nearClipPlane,
                             0.00000f, 0.00000f, 0.0f, 1.00000f
                         );
                         //Matrix.CreateOrthographic(viewPort.Width * rect.width, viewPort.Height * rect.height, nearClipPlane, farClipPlane, out _projectionMatrix);
@@ -182,7 +182,7 @@ namespace PressPlay.FFWD.Components
 
         public Vector3 ScreenToWorldPoint(Vector3 vector3)
         {
-            float normZ = (vector3.z - nearClipPlane) / (farClipPlane - nearClipPlane);
+            float normZ = ((vector3.z + nearClipPlane) - nearClipPlane) / (farClipPlane - nearClipPlane);
             vector3.z = normZ;
             vector3.y = pixelHeight - vector3.y;
             return viewPort.Unproject(vector3, projectionMatrix, view, Matrix.Identity);
