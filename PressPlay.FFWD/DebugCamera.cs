@@ -12,14 +12,12 @@ namespace PressPlay.FFWD
     public class DebugCamera : Renderer
     {
         private DebugViewXNA physicsDebugView;
-        public Camera activeCamera;
 
         public static bool activated = false;
 
         public override void Awake()
         {
             activated = true;
-            activeCamera = Camera.main;
             physicsDebugView = new DebugViewXNA(Physics.world);
             physicsDebugView.LoadContent(Application.screenManager.GraphicsDevice);
             material = new Material() { name = "Debug material", color = Color.white, renderQueue = 100000, shader = "Transparent" };
@@ -41,7 +39,8 @@ namespace PressPlay.FFWD
             if (ApplicationSettings.ShowDebugPhysics)
             {
                 Matrix proj = cam.projectionMatrix;
-                Matrix view = Matrix.CreateRotationX(MathHelper.ToRadians(90)) * cam.view;
+                //Matrix view = Matrix.CreateRotationX(MathHelper.ToRadians(90)) * cam.view;
+                Matrix view = cam.view;
                 physicsDebugView.RenderDebugData(ref proj, ref view);
             }
             return 0;

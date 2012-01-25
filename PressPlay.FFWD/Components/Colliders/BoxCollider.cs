@@ -28,9 +28,10 @@ namespace PressPlay.FFWD.Components
 
         protected override void DoAddCollider(Body body, float mass)
         {
-            Vector2 sz = (size * gameObject.transform.lossyScale).Convert(true);
+            Vector2 sz = (size * gameObject.transform.lossyScale).Convert(to2dMode, true);
             connectedBody = body;
-            Physics.AddBox(body, isTrigger, sz.x, sz.y, center * gameObject.transform.lossyScale, mass);
+            Physics.AddBox(body, isTrigger, sz.x, sz.y, center * transform.lossyScale, mass);
+            Debug.Log("Add collider box: " + name + " pos: " + transform.position + ", sz " + sz);
         }
     }
 }

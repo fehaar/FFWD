@@ -656,7 +656,7 @@ namespace PressPlay.FFWD
                     }
                     else
                     {
-                        if (go.name != name)
+                        if (go.name != name && go.name != name + "(Clone)")
                         {
                             continue;
                         }

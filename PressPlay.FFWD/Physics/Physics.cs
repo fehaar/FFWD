@@ -95,7 +95,7 @@ namespace PressPlay.FFWD
             for (int i = movingBodies.Count - 1; i >= 0; i--)
             {
                 Body body = movingBodies[i];
-                Component comp = (Component)body.UserData;
+                Collider comp = body.UserData;
                 BodyType bodyType = body.BodyType;
                 if (bodyType == BodyType.Static)
                 {
@@ -104,10 +104,10 @@ namespace PressPlay.FFWD
                 }
                 if (comp.gameObject.active && bodyType == BodyType.Kinematic)
                 {
-                    float rad = -MathHelper.ToRadians(comp.transform.eulerAngles.y);
-                    if (body.Position != (Microsoft.Xna.Framework.Vector2)comp.transform.position || body.Rotation != rad)
+                    float rad = -MathHelper.ToRadians((comp.to2dMode == ApplicationSettings.To2dMode.DropZ) ? comp.transform.eulerAngles.z : comp.transform.eulerAngles.y);
+                    Microsoft.Xna.Framework.Vector2 pos = comp.transform.position.Convert(comp.to2dMode, false);
+                    if (body.Position != pos || body.Rotation != rad)
                     {
-                        Microsoft.Xna.Framework.Vector2 pos = comp.transform.position;
                         body.SetTransformIgnoreContacts(ref pos, rad);
                     }
                 }

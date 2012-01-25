@@ -83,7 +83,7 @@ namespace PressPlay.FFWD.Components
 
             cam.BasicEffect.World = Matrix.Identity;
             cam.BasicEffect.VertexColorEnabled = hasColors;
-            cam.BasicEffect.LightingEnabled = Light.HasLights;
+            cam.BasicEffect.LightingEnabled = (!hasColors) && Light.HasLights;
 
             currentMaterial.SetTextureState(cam.BasicEffect);
             currentMaterial.SetBlendState(device);
@@ -133,7 +133,7 @@ namespace PressPlay.FFWD.Components
             batchVertexSize += mesh._vertices.Length;
             if (vertexData.Length < batchVertexSize)
             {
-                if (mesh.colors != null && mesh.colors.Length == mesh.vertices.Length)
+                if (hasColors)
                 {
                     VertexPositionColorTexture[] newVertexData = new VertexPositionColorTexture[batchVertexSize];
                     vertexColorData.CopyTo(newVertexData, 0);

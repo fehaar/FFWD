@@ -156,13 +156,7 @@ namespace PressPlay.FFWD.Components
                 {
                     if (orthographic)
                     {
-                        _projectionMatrix = new Matrix(
-                            ((float)viewPort.Height / (float)viewPort.Width) / orthographicSize, 0.00000f, 0.00000f, 0.00000f,
-                            0.00000f, 1f / orthographicSize, 0.00000f, 0.00000f,
-                            0.00000f, 0.00000f, -2f / (farClipPlane - nearClipPlane), -nearClipPlane,
-                            0.00000f, 0.00000f, 0.0f, 1.00000f
-                        );
-                        //Matrix.CreateOrthographic(viewPort.Width * rect.width, viewPort.Height * rect.height, nearClipPlane, farClipPlane, out _projectionMatrix);
+                        Matrix.CreateOrthographic(orthographicSize * 2 * (viewPort.AspectRatio), orthographicSize * 2, nearClipPlane, farClipPlane, out _projectionMatrix);
                     }
                     else
                     {

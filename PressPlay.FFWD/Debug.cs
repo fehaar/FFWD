@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework.Graphics;
 using PressPlay.FFWD.Components;
@@ -97,6 +98,10 @@ namespace PressPlay.FFWD
 
         public static void Display(string key, object value)
         {
+            if (value == null)
+            {
+                value = String.Empty;
+            }
             _debugDisplay[key] = value.ToString();
         }
 
