@@ -10,15 +10,15 @@ namespace PressPlay.FFWD.Test.Core_framework
     public class WhenDestroyingAComponent
     {
         [Test]
-        public void ItWillNotBeRemovedFromTheGameObject()
+        public void ItWillBeRemovedFromTheGameObject()
         {
             GameObject go = new GameObject();
             TestComponent cmp = go.AddComponent(new TestComponent());
 
             Component.Destroy(cmp);
 
-            Assert.That(cmp.gameObject, Is.Not.Null);
-            Assert.That(go.GetComponent<TestComponent>(), Is.Not.Null);
+            Assert.That(cmp.gameObject, Is.Null);
+            Assert.That(go.GetComponent<TestComponent>(), Is.Null);
         }
 
         [Test]

@@ -13,7 +13,8 @@ namespace PressPlay.FFWD.Test.Core_framework
         public void ItWillBeAwokenOnTheNextAwakeNewComponentsCall()
         {
             bool isAwoken = false;
-            TestComponent comp = new TestComponent();
+            GameObject go = new GameObject();
+            TestComponent comp = go.AddComponent<TestComponent>();
             comp.onAwake = () => isAwoken = true;
             Assert.That(isAwoken, Is.False);
             Application.AwakeNewComponents();
@@ -31,7 +32,8 @@ namespace PressPlay.FFWD.Test.Core_framework
         public void ItWillOnlyGetAwakeCalledOnce()
         {
             int awakeCount = 0;
-            TestComponent comp = new TestComponent();
+            GameObject go = new GameObject();
+            TestComponent comp = go.AddComponent<TestComponent>();
             comp.onAwake = () => awakeCount++;
             Assert.That(awakeCount, Is.EqualTo(0));
             Application.AwakeNewComponents();
@@ -43,7 +45,8 @@ namespace PressPlay.FFWD.Test.Core_framework
         [Test]
         public void WeCanFindTheNewComponentByIdAfterItHasBeenAwoken()
         {
-            TestComponent comp = new TestComponent();
+            GameObject go = new GameObject();
+            TestComponent comp = go.AddComponent<TestComponent>();
 
             Assert.That(Application.Find(comp.GetInstanceID()), Is.Null);
             Application.AwakeNewComponents();
@@ -54,7 +57,8 @@ namespace PressPlay.FFWD.Test.Core_framework
         [Test]
         public void WeCanRemoveComponentsByResettingTheApplication()
         {
-            TestComponent comp = new TestComponent();
+            GameObject go = new GameObject();
+            TestComponent comp = go.AddComponent<TestComponent>();
 
             Application.AwakeNewComponents();
             Assert.That(Application.Find(comp.GetInstanceID()), Is.Not.Null);

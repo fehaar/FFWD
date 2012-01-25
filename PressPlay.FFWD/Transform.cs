@@ -445,7 +445,8 @@ namespace PressPlay.FFWD
                 for (int i = 0; i < children.Count; i++)
                 {
                     GameObject child = children[i].Clone() as GameObject;
-                    child.transform.parent = obj;
+                    child.transform._parent = obj;
+                    obj.children.Add(child);
                 }
             }
             return obj;
