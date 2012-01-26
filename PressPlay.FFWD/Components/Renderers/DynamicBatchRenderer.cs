@@ -58,7 +58,7 @@ namespace PressPlay.FFWD.Components
             {
                 drawCalls = DoDraw(device, cam);
                 currentMaterial = material;
-                hasColors = (mesh.colors != null) && (mesh.colors.Length > 0);
+                hasColors = false;// (mesh.colors != null) && (mesh.colors.Length > 0);
             }
             Matrix world = (transform != null) ? transform.world : Matrix.Identity;
             PrepareMesh(mesh, subMeshIndex, ref world);

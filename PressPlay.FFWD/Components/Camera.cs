@@ -286,11 +286,11 @@ namespace PressPlay.FFWD.Components
         internal static void DoRender(GraphicsDevice device)
         {
 #if DEBUG && WINDOWS
-            if (Input.GetMouseButtonUp(1))
+            if (Input.GetKeyUp(Microsoft.Xna.Framework.Input.Keys.W))
             {
                 wireframeRender = !wireframeRender;
             }
-            if (Input.GetMouseButtonUp(2))
+            if (Input.GetMouseButtonUp(1))
             {
                 logRenderCalls = true;
                 Debug.Log("----------- Render log begin ---------------", Time.realtimeSinceStartup);
@@ -316,7 +316,8 @@ namespace PressPlay.FFWD.Components
             }
             else
             {
-                device.RasterizerState = RasterizerState.CullCounterClockwise;
+                device.RasterizerState = RasterizerState.CullNone;
+                //device.RasterizerState = RasterizerState.CullCounterClockwise;
             }
 
             // Render all cameras that use a render target
