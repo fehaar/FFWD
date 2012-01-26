@@ -320,15 +320,18 @@ namespace PressPlay.FFWD.Components
             }
 
             // Render all cameras that use a render target
+            int renderTargets = 0;
             for (int i = 0; i < _allCameras.Count; i++)
             {
                 Camera cam = _allCameras[i];
                 if (cam.gameObject.active && cam.target != null)
                 {
+                    renderTargets++;
                     cam.doRender(device);
                 }
             }
             // Now render everything
+            int directRender = 0;
             device.SetRenderTarget(null);
             for (int i = 0; i < _allCameras.Count; i++)
             {
@@ -337,6 +340,7 @@ namespace PressPlay.FFWD.Components
                 {
                     if (cam.target == null)
                     {
+                        directRender++;
                         cam.doRender(device);
                     }
                     else
@@ -353,7 +357,7 @@ namespace PressPlay.FFWD.Components
             GUI.EndRendering();
 
 #if DEBUG
-            Debug.Display("Estimated Draw calls", estimatedDrawCalls);
+            Debug.Display("Draw calls, Direct, RT", System.String.Format("{0}, {1}, {2}", estimatedDrawCalls, directRender, renderTargets));
             logRenderCalls = false;
 #endif
         }

@@ -177,9 +177,10 @@ namespace PressPlay.FFWD
             List<FieldInfo> memInfo = GetMembersToFix(objectToFix.GetType());
             for (int i = 0; i < memInfo.Count; i++)
             {
+                FieldInfo field = memInfo[i];
                 if (typeof(UnityObject).IsAssignableFrom(memInfo[i].FieldType))
                 {
-                    UnityObject val = (memInfo[i].GetValue(objectToFix) as UnityObject);
+                    UnityObject val = (field.GetValue(objectToFix) as UnityObject);
                     if (val == null)
                     {
                         continue;
@@ -188,12 +189,16 @@ namespace PressPlay.FFWD
                     {
                         if (val != idMap[val.GetInstanceID()])
                         {
-                            memInfo[i].SetValue(objectToFix, idMap[val.GetInstanceID()]);
+                            field.SetValue(objectToFix, idMap[val.GetInstanceID()]);
                         }
                     }
                 }
-                if (typeof(IList).IsAssignableFrom(memInfo[i].FieldType))
+                if (typeof(IList).IsAssignableFrom(field.FieldType))
                 {
+                    if (field.FieldType.HasElementType && !field.FieldType.GetElementType().IsSubclassOf(typeof(UnityObject)))
+                    {
+                        continue;
+                    }
                     IList list = (memInfo[i].GetValue(objectToFix) as IList);
                     if (list != null)
                     {
