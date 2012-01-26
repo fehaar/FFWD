@@ -94,7 +94,10 @@ namespace PressPlay.FFWD.Components
 
         public override void Awake()
         {
-            target = new RenderTarget2D(Device, Mathf.RoundToInt(Device.PresentationParameters.BackBufferWidth * rect.width), Mathf.RoundToInt(Device.PresentationParameters.BackBufferHeight * rect.height), false, Device.DisplayMode.Format, Device.PresentationParameters.DepthStencilFormat, Device.PresentationParameters.MultiSampleCount, RenderTargetUsage.DiscardContents);
+            if (rect != Rect.unit)
+            {
+                target = new RenderTarget2D(Device, Mathf.RoundToInt(Device.PresentationParameters.BackBufferWidth * rect.width), Mathf.RoundToInt(Device.PresentationParameters.BackBufferHeight * rect.height), false, Device.DisplayMode.Format, Device.PresentationParameters.DepthStencilFormat, Device.PresentationParameters.MultiSampleCount, RenderTargetUsage.DiscardContents);
+            }
             frustum = new BoundingFrustum(view * projectionMatrix);
             RecalculateView();
             for (int i = nonAssignedRenderers.Count - 1; i >= 0; i--)
@@ -161,7 +164,7 @@ namespace PressPlay.FFWD.Components
                 {
                     if (orthographic)
                     {
-                        float aspect = (float)target.Width / (float)target.Height;
+                        float aspect = (target != null) ? (float)target.Width / (float)target.Height : viewPort.AspectRatio;
                         Matrix.CreateOrthographic(orthographicSize * 2 * aspect, orthographicSize * 2, nearClipPlane, farClipPlane, out _projectionMatrix);
                     }
                     else
@@ -316,24 +319,34 @@ namespace PressPlay.FFWD.Components
                 device.RasterizerState = RasterizerState.CullCounterClockwise;
             }
 
+            // Render all cameras that use a render target
             for (int i = 0; i < _allCameras.Count; i++)
             {
-                if (_allCameras[i].gameObject.active)
+                Camera cam = _allCameras[i];
+                if (cam.gameObject.active && cam.target != null)
                 {
-                    _allCameras[i].doRender(device);
+                    cam.doRender(device);
                 }
             }
+            // Now render everything
             device.SetRenderTarget(null);
-            RenderBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
             for (int i = 0; i < _allCameras.Count; i++)
             {
                 Camera cam = _allCameras[i];
                 if (cam.gameObject.active)
                 {
-                    RenderBatch.Draw(cam.target, new Vector2(cam.rect.x * FullScreen.Width, cam.rect.y * FullScreen.Height), Microsoft.Xna.Framework.Color.White);
+                    if (cam.target == null)
+                    {
+                        cam.doRender(device);
+                    }
+                    else
+                    {
+                        RenderBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+                        RenderBatch.Draw(cam.target, new Vector2(cam.rect.x * FullScreen.Width, cam.rect.y * FullScreen.Height), Microsoft.Xna.Framework.Color.White);
+                        RenderBatch.End();
+                    }
                 }
             }
-            RenderBatch.End();
 
             GUI.StartRendering();
             GUI.RenderComponents(Application.guiComponents);
@@ -348,7 +361,11 @@ namespace PressPlay.FFWD.Components
         private readonly Matrix inverter = new Matrix(-1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
         internal void doRender(GraphicsDevice device)
         {
-            device.SetRenderTarget(target);
+            if (target != null)
+            {
+                device.SetRenderTarget(target);
+                device.Clear(Microsoft.Xna.Framework.Color.Transparent);
+            }
             Clear(device);
 
 #if DEBUG
@@ -429,8 +446,7 @@ namespace PressPlay.FFWD.Components
                     device.Clear(backgroundColor);
                     break;
                 case ClearFlags.Depth:
-                    device.Clear(backgroundColor);
-                    //device.Clear(ClearOptions.DepthBuffer, backgroundColor, 1.0f, 0);
+                    device.Clear(ClearOptions.DepthBuffer, backgroundColor, 1.0f, 0);
                     break;
             }
         }
