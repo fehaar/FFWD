@@ -172,12 +172,9 @@ namespace PressPlay.FFWD
         public override void Initialize()
         {
             base.Initialize();
-            //ContentHelper.Services = Game.Services;
-            //ContentHelper.StaticContent = new ContentManager(Game.Services, Game.Content.RootDirectory);
-            //ContentHelper.Content = new ContentManager(Game.Services, Game.Content.RootDirectory);
-            //ContentHelper.IgnoreMissingAssets = true;
             Camera.FullScreen = Game.GraphicsDevice.Viewport;
             Camera.Device = Game.GraphicsDevice;
+            Camera.RenderBatch = new SpriteBatch(Game.GraphicsDevice);
             Resources.AssetHelper = assetHelper;
             Physics.Initialize();
             Time.Reset();

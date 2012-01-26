@@ -81,10 +81,20 @@ namespace PressPlay.FFWD.Components
         public Rect rect { get; set; }
         public ClearFlags clearFlags { get; set; }
 
+        public static Camera main { get; private set; }
+        public static Camera mainCamera { get { return main; } }
+
+        internal static Viewport FullScreen;
+        internal static GraphicsDevice Device;
+        internal static SpriteBatch RenderBatch;
+
+        public Matrix view { get; private set; }
+
         private RenderTarget2D target = null;
 
         public override void Awake()
         {
+            target = new RenderTarget2D(Device, Mathf.RoundToInt(Device.PresentationParameters.BackBufferWidth * rect.width), Mathf.RoundToInt(Device.PresentationParameters.BackBufferHeight * rect.height), false, Device.DisplayMode.Format, Device.PresentationParameters.DepthStencilFormat, Device.PresentationParameters.MultiSampleCount, RenderTargetUsage.DiscardContents);
             frustum = new BoundingFrustum(view * projectionMatrix);
             RecalculateView();
             for (int i = nonAssignedRenderers.Count - 1; i >= 0; i--)
@@ -107,11 +117,6 @@ namespace PressPlay.FFWD.Components
             if (gameObject.CompareTag("MainCamera") && (main == null))
             {
                 main = this;
-            }
-
-            if (rect != Rect.unit && target == null)
-            {
-                target = new RenderTarget2D(Device, Mathf.RoundToInt(Device.PresentationParameters.BackBufferWidth * rect.width), Mathf.RoundToInt(Device.PresentationParameters.BackBufferHeight * rect.height), false, Device.DisplayMode.Format, Device.PresentationParameters.DepthStencilFormat);
             }
         }
 
@@ -137,14 +142,6 @@ namespace PressPlay.FFWD.Components
             }
         }
 
-        public static Camera main { get; private set; }
-        public static Camera mainCamera { get { return main; } }
-
-        internal static Viewport FullScreen;
-        internal static GraphicsDevice Device;
-
-        public Matrix view { get; private set; }
-
         [ContentSerializerIgnore]
         internal Viewport viewPort 
         { 
@@ -164,7 +161,8 @@ namespace PressPlay.FFWD.Components
                 {
                     if (orthographic)
                     {
-                        Matrix.CreateOrthographic((orthographicSize) * 2 * (viewPort.AspectRatio), (orthographicSize) * 2, nearClipPlane, farClipPlane, out _projectionMatrix);
+                        float aspect = (float)target.Width / (float)target.Height;
+                        Matrix.CreateOrthographic(orthographicSize * 2 * aspect, orthographicSize * 2, nearClipPlane, farClipPlane, out _projectionMatrix);
                     }
                     else
                     {
@@ -325,6 +323,17 @@ namespace PressPlay.FFWD.Components
                     _allCameras[i].doRender(device);
                 }
             }
+            device.SetRenderTarget(null);
+            RenderBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            for (int i = 0; i < _allCameras.Count; i++)
+            {
+                Camera cam = _allCameras[i];
+                if (cam.gameObject.active)
+                {
+                    RenderBatch.Draw(cam.target, new Vector2(cam.rect.x * FullScreen.Width, cam.rect.y * FullScreen.Height), Microsoft.Xna.Framework.Color.White);
+                }
+            }
+            RenderBatch.End();
 
             GUI.StartRendering();
             GUI.RenderComponents(Application.guiComponents);
@@ -339,10 +348,7 @@ namespace PressPlay.FFWD.Components
         private readonly Matrix inverter = new Matrix(-1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
         internal void doRender(GraphicsDevice device)
         {
-            if (target != null)
-            {
-                //device.SetRenderTarget(target);
-            }
+            device.SetRenderTarget(target);
             Clear(device);
 
 #if DEBUG
@@ -400,13 +406,6 @@ namespace PressPlay.FFWD.Components
             }
 
             estimatedDrawCalls += dynamicBatchRenderer.DoDraw(device, this);
-            // We are ending the batching of TextRenderer3D calls
-            if (target != null)
-            {
-                //device.SetRenderTarget(null);
-                //TextRenderer3D.batch.Draw(target, Vector2.zero, Microsoft.Xna.Framework.Color.White);
-            }
-
         }
 
         private void RecalculateView()
@@ -430,7 +429,8 @@ namespace PressPlay.FFWD.Components
                     device.Clear(backgroundColor);
                     break;
                 case ClearFlags.Depth:
-                    device.Clear(ClearOptions.DepthBuffer, backgroundColor, 1.0f, 0);
+                    device.Clear(backgroundColor);
+                    //device.Clear(ClearOptions.DepthBuffer, backgroundColor, 1.0f, 0);
                     break;
             }
         }
