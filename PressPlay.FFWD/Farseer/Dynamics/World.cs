@@ -1417,14 +1417,14 @@ namespace FarseerPhysics.Dynamics
             return myFixture;
         }
 
-        public PressPlay.FFWD.Components.Collider TestPointActive(Vector2 point, int layerMask)
+        public Fixture TestPointActive(Vector2 point, int layerMask)
         {
             AABB aabb;
             Vector2 d = new Vector2(Settings.Epsilon, Settings.Epsilon);
             aabb.LowerBound = point - d;
             aabb.UpperBound = point + d;
 
-            PressPlay.FFWD.Components.Collider coll = null;
+            Fixture myFixture = null;
 
             // Query the world for overlapping shapes.
             QueryAABB(
@@ -1433,19 +1433,19 @@ namespace FarseerPhysics.Dynamics
                     bool inside = fixture.TestPoint(ref point);
                     if (inside && (fixture.Body.UserData != null))
                     {
-                        coll = fixture.Body.UserData;
-                        if (coll.gameObject.active && (layerMask & (1 << coll.gameObject.layer)) > 0)
+                        PressPlay.FFWD.GameObject go = fixture.Body.UserData.gameObject;
+                        if (go.active && (layerMask & (1 << go.layer)) > 0)
                         {
+                            myFixture = fixture;
                             return false;
                         }
-                        coll = null;
                     }
 
                     // Continue the query.
                     return true;
                 }, ref aabb);
 
-            return coll;
+            return myFixture;
         }
 
 

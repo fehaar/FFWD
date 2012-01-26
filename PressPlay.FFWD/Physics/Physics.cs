@@ -16,7 +16,7 @@ namespace PressPlay.FFWD
     public static class Physics
     {
         private static World _world;
-        public static World world
+        internal static World world
         {
             get
             {
@@ -26,7 +26,7 @@ namespace PressPlay.FFWD
                 }
                 return _world;
             }
-            internal set
+            set
             {
                 // TODO: If we have an old world we must dispose it properly
                 _world = value;
@@ -457,15 +457,8 @@ namespace PressPlay.FFWD
 
         public static bool Pointcast(Vector2 point, int layerMask)
         {
-#if DEBUG
-            Application.raycastTimer.Start();
-#endif
-
-            RaycastHelper.SetValues(float.MaxValue, true, layerMask);
-
-            AABB aabb = new AABB(new Vector2(point.x - float.Epsilon, point.y - float.Epsilon), new Vector2(point.x + float.Epsilon, point.y + float.Epsilon));
-            world.QueryAABB(RaycastHelper.pointCastCallback, ref aabb);
-            return RaycastHelper.HitCount > 0;
+            RaycastHit hit;
+            return Pointcast(point, out hit, layerMask);
         }
 
         public static bool Pointcast(Vector2 point, out RaycastHit hitInfo)
@@ -478,42 +471,44 @@ namespace PressPlay.FFWD
 #if DEBUG
             Application.raycastTimer.Start();
 #endif
-            RaycastHelper.SetValues(float.MaxValue, true, layerMask);
-            
-            AABB aabb = new AABB(new Vector2(point.x - float.Epsilon, point.y - float.Epsilon), new Vector2(point.x + float.Epsilon, point.y + float.Epsilon));
-            world.QueryAABB(RaycastHelper.pointCastCallback, ref aabb);
-            if (RaycastHelper.HitCount > 0)
+            Fixture f = world.TestPointActive(point, layerMask);
+            hitInfo = new RaycastHit();
+            if (f != null)
             {
-                hitInfo = RaycastHelper.ClosestHit();
-#if DEBUG
-                Application.raycastTimer.Stop();
-#endif
-                return true;
+                hitInfo.body = f.Body;
+                hitInfo.collider = f.Body.UserData;
+                hitInfo.transform = f.Body.UserData.transform;
+                hitInfo.point = point;
             }
-            else
-            {
-                hitInfo = new RaycastHit();
 #if DEBUG
-                Application.raycastTimer.Stop();
+            Application.raycastTimer.Stop();
 #endif
-                return false;
-            }
+            return (f != null);
         }
 
+        private static List<Fixture> fList = new List<Fixture>(10);
         public static RaycastHit[] PointcastAll(Vector2 point, int layerMask)
         {
 #if DEBUG
             Application.raycastTimer.Start();
 #endif
-            RaycastHelper.SetValues(float.MaxValue, false, layerMask);
-
-            AABB aabb = new AABB(new Vector2(point.x - float.Epsilon, point.y - float.Epsilon), new Vector2(point.x + float.Epsilon, point.y + float.Epsilon));
-            RaycastHelper.pointCastPoint = point;
-            world.QueryAABB(RaycastHelper.pointCastCallback, ref aabb);
+            fList.Clear();
+            world.TestPointAllActive(point, fList);
+            RaycastHit[] hits = new RaycastHit[fList.Count];
+            for (int i = 0; i < fList.Count; i++)
+            {
+                Fixture f = fList[i];
+                RaycastHit hitInfo = new RaycastHit();
+                hitInfo.body = f.Body;
+                hitInfo.collider = f.Body.UserData;
+                hitInfo.transform = f.Body.UserData.transform;
+                hitInfo.point = point;
+                hits[i] = hitInfo;
+            }
 #if DEBUG
             Application.raycastTimer.Stop();
 #endif
-            return RaycastHelper.Hits;
+            return hits;
         }
         #endregion
 

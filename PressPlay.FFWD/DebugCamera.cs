@@ -55,10 +55,10 @@ namespace PressPlay.FFWD
                 physicsDebugView.DrawArrow(fromPos, castPos, 0.1f, 0.1f, false, Color.red);
                 physicsDebugView.EndCustomDraw();
 
-                Collider c = Physics.world.TestPointActive(castPos, cam.cullingMask);
-                if (c != null)
+                RaycastHit hit;
+                if (Physics.Pointcast(castPos, out hit, cam.cullingMask))
                 {
-                    Debug.Display("Over", c);
+                    Debug.Display("Over", hit.collider);
                 }
                 else
                 {
