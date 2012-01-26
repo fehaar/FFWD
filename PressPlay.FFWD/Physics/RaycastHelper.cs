@@ -43,7 +43,7 @@ namespace PressPlay.FFWD
             {
                 coll = (uo as Rigidbody).collider;
             }
-            if ((coll != null) && (coll.gameObject != null) && (_layerMask & (1 << coll.gameObject.layer)) > 0)
+            if ((coll != null) && (coll.gameObject != null) && (coll.gameObject.active) && (_layerMask & (1 << coll.gameObject.layer)) > 0)
             {
                 if (_findClosest)
                 {
@@ -93,6 +93,14 @@ namespace PressPlay.FFWD
             get
             {
                 return _hits.Take(_hitCount).ToArray();
+            }
+        }
+
+        internal static RaycastHit[] HitsByDistance
+        {
+            get
+            {
+                return _hits.Take(_hitCount).OrderByDescending(h => h.distance).ToArray();
             }
         }
 

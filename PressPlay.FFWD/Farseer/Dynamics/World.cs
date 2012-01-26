@@ -1417,6 +1417,38 @@ namespace FarseerPhysics.Dynamics
             return myFixture;
         }
 
+        public PressPlay.FFWD.Components.Collider TestPointActive(Vector2 point, int layerMask)
+        {
+            AABB aabb;
+            Vector2 d = new Vector2(Settings.Epsilon, Settings.Epsilon);
+            aabb.LowerBound = point - d;
+            aabb.UpperBound = point + d;
+
+            PressPlay.FFWD.Components.Collider coll = null;
+
+            // Query the world for overlapping shapes.
+            QueryAABB(
+                fixture =>
+                {
+                    bool inside = fixture.TestPoint(ref point);
+                    if (inside && (fixture.Body.UserData != null))
+                    {
+                        coll = fixture.Body.UserData;
+                        if (coll.gameObject.active && (layerMask & (1 << coll.gameObject.layer)) > 0)
+                        {
+                            return false;
+                        }
+                        coll = null;
+                    }
+
+                    // Continue the query.
+                    return true;
+                }, ref aabb);
+
+            return coll;
+        }
+
+
         /// <summary>
         /// Returns a list of fixtures that are at the specified point.
         /// </summary>
@@ -1444,6 +1476,34 @@ namespace FarseerPhysics.Dynamics
                 }, ref aabb);
 
             return fixtures;
+        }
+
+        /// <summary>
+        /// Returns a list of fixtures that are at the specified point.
+        /// </summary>
+        /// <param name="point">The point.</param>
+        /// <returns></returns>
+        public void TestPointAllActive(Vector2 point, List<Fixture> fixtures)
+        {
+            AABB aabb;
+            Vector2 d = new Vector2(Settings.Epsilon, Settings.Epsilon);
+            aabb.LowerBound = point - d;
+            aabb.UpperBound = point + d;
+            fixtures.Clear();
+
+            // Query the world for overlapping shapes.
+            QueryAABB(
+                fixture =>
+                {
+                    bool inside = fixture.TestPoint(ref point);
+                    if (inside && (fixture.Body.UserData != null) && fixture.Body.UserData.gameObject.active)
+                    {
+                        fixtures.Add(fixture);
+                    }
+
+                    // Continue the query.
+                    return true;
+                }, ref aabb);
         }
 
         public void Clear()

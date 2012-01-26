@@ -154,7 +154,6 @@ namespace PressPlay.FFWD
 
         public static void AddBox(Body body, bool isTrigger, float width, float height, Vector2 position, float density)
         {
-            Debug.Log(String.Format("Add box on {0} at {1} size {2},{3} ", body.UserData, position, width, height));
             if (world == null)
             {
                 throw new InvalidOperationException("You have to Initialize the Physics system before adding bodies");
@@ -396,6 +395,25 @@ namespace PressPlay.FFWD
             return RaycastHelper.Hits;
         }
 
+        public static RaycastHit[] RaycastFromTo(Vector2 from, Vector2 to, int layerMask)
+        {
+#if DEBUG
+            Application.raycastTimer.Start();
+#endif
+            if (from == to)
+            {
+                Application.raycastTimer.Stop();
+                return new RaycastHit[0];
+            }
+            RaycastHelper.SetValues(100f, false, layerMask);
+
+            world.RayCast(null, from, to);
+#if DEBUG
+            Application.raycastTimer.Stop();
+#endif
+            return RaycastHelper.HitsByDistance;
+        }
+
         public static RaycastHit[] RaycastAll(Vector3 origin, Vector3 direction)
         {
             return RaycastAll(origin, direction, Mathf.Infinity, kDefaultRaycastLayers);
@@ -461,7 +479,7 @@ namespace PressPlay.FFWD
             Application.raycastTimer.Start();
 #endif
             RaycastHelper.SetValues(float.MaxValue, true, layerMask);
-
+            
             AABB aabb = new AABB(new Vector2(point.x - float.Epsilon, point.y - float.Epsilon), new Vector2(point.x + float.Epsilon, point.y + float.Epsilon));
             world.QueryAABB(RaycastHelper.pointCastCallback, ref aabb);
             if (RaycastHelper.HitCount > 0)
