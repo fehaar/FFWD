@@ -78,8 +78,10 @@ namespace PressPlay.FFWD.Components
             }
         }
 
-        public Rect rect { get; set; } //public Rectangle rect { get; set; }
+        public Rect rect { get; set; }
         public ClearFlags clearFlags { get; set; }
+
+        private RenderTarget2D target = null;
 
         public override void Awake()
         {
@@ -105,6 +107,11 @@ namespace PressPlay.FFWD.Components
             if (gameObject.CompareTag("MainCamera") && (main == null))
             {
                 main = this;
+            }
+
+            if (rect != Rect.unit && target == null)
+            {
+                target = new RenderTarget2D(Device, Mathf.RoundToInt(Device.PresentationParameters.BackBufferWidth * rect.width), Mathf.RoundToInt(Device.PresentationParameters.BackBufferHeight * rect.height), false, Device.DisplayMode.Format, Device.PresentationParameters.DepthStencilFormat);
             }
         }
 
@@ -133,12 +140,13 @@ namespace PressPlay.FFWD.Components
         public static Camera main { get; private set; }
         public static Camera mainCamera { get { return main; } }
 
-        public static Viewport FullScreen;
+        internal static Viewport FullScreen;
+        internal static GraphicsDevice Device;
 
         public Matrix view { get; private set; }
 
         [ContentSerializerIgnore]
-        public Viewport viewPort 
+        internal Viewport viewPort 
         { 
             get
             {
@@ -331,7 +339,12 @@ namespace PressPlay.FFWD.Components
         private readonly Matrix inverter = new Matrix(-1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
         internal void doRender(GraphicsDevice device)
         {
+            if (target != null)
+            {
+                //device.SetRenderTarget(target);
+            }
             Clear(device);
+
 #if DEBUG
             if (logRenderCalls)
             {
@@ -340,22 +353,6 @@ namespace PressPlay.FFWD.Components
 #endif
             // TODO: Do not recreate view matrix every frame. Only when camera is moved.
             RecalculateView();
-
-            #region TextRenderer3D batching start
-            // We are beginning the batching of TextRenderer3D calls
-            // TODO: This code is particularly ugly and should be reworked...
-            if (wireframeRender)
-            {
-                RasterizerState state = new RasterizerState();
-                state.FillMode = FillMode.WireFrame;
-                state.CullMode = CullMode.None;
-                TextRenderer3D.batch.Begin(SpriteSortMode.Deferred, null, null, DepthStencilState.DepthRead, state, TextRenderer3D.basicEffect);
-            }
-            else
-            {
-                TextRenderer3D.batch.Begin(SpriteSortMode.Deferred, null, null, DepthStencilState.DepthRead, RasterizerState.CullNone, TextRenderer3D.basicEffect);
-            }
-            #endregion
 
             BasicEffect.View = view;
             BasicEffect.Projection = projectionMatrix;
@@ -401,11 +398,15 @@ namespace PressPlay.FFWD.Components
                     estimatedDrawCalls += renderQueue[i].Draw(device, this);
                 }
             }
-            
-            // We are ending the batching of TextRenderer3D calls
-            TextRenderer3D.batch.End(); 
 
             estimatedDrawCalls += dynamicBatchRenderer.DoDraw(device, this);
+            // We are ending the batching of TextRenderer3D calls
+            if (target != null)
+            {
+                //device.SetRenderTarget(null);
+                //TextRenderer3D.batch.Draw(target, Vector2.zero, Microsoft.Xna.Framework.Color.White);
+            }
+
         }
 
         private void RecalculateView()

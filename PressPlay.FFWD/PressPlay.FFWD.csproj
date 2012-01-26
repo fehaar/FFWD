@@ -225,7 +225,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Components\Renderers\LineRenderer.cs" />
-    <Compile Include="Components\Renderers\TextRenderer3D.cs" />
     <Compile Include="Components\Renderers\DynamicBatchRenderer.cs" />
     <Compile Include="Components\Renderers\ParticleRenderer.cs" />
     <Compile Include="Components\Renderers\MeshRenderer.cs" />
