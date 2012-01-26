@@ -42,6 +42,21 @@ namespace PressPlay.FFWD
                 //Matrix view = Matrix.CreateRotationX(MathHelper.ToRadians(90)) * cam.view;
                 Matrix view = cam.view;
                 physicsDebugView.RenderDebugData(ref proj, ref view);
+
+                PressPlay.FFWD.Vector3 inPos = Input.mousePosition;
+                inPos.y = inPos.z;
+                inPos.z = cam.nearClipPlane;
+                PressPlay.FFWD.Vector2 castPos = cam.ScreenToWorldPoint(inPos).Convert(ApplicationSettings.To2dMode.DropZ);
+                Debug.Display("Mouse / Physics", inPos + " / " + castPos);
+                RaycastHit hit;
+                if (Physics.Pointcast(castPos, out hit, cam.cullingMask))
+                {
+                    Debug.Display("Over", hit.collider);
+                }
+                else
+                {
+                    Debug.Display("Over", "");
+                }
             }
             return 0;
         }
