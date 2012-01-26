@@ -91,12 +91,19 @@ namespace PressPlay.FFWD
 
         public void Encapsulate(Vector3 point)
         {
-            // TODO : Add implementation of method
-            throw new NotImplementedException("Method not implemented.");
+            if (box.Contains(point) == ContainmentType.Disjoint)
+            {
+                box = BoundingBox.CreateFromPoints(new Microsoft.Xna.Framework.Vector3[] { point, box.Min, box.Max });
+            }
         }
 
-        internal void Encapsulate(Microsoft.Xna.Framework.Vector3[] points)
+        public void Encapsulate(Microsoft.Xna.Framework.Vector3[] points)
         {
+            if (points == null || points.Length == 0)
+            {
+                box = new BoundingBox();
+                return;
+            }
             box = BoundingBox.CreateFromPoints(points);
             _boundingSphere = null;
         }
@@ -129,14 +136,8 @@ namespace PressPlay.FFWD
 
         public bool IntersectRay(Microsoft.Xna.Framework.Ray r)
         {
-            // TODO : Add implementation of method
-            throw new NotImplementedException("Method not implemented.");
-
-        }
-
-        public void DebugDraw(Color color)
-        {
-            Debug.DrawFilledBox(center, size, color);
+            float? res = box.Intersects(r);
+            return res.HasValue;
         }
 
         public override string ToString()

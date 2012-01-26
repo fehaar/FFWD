@@ -216,6 +216,11 @@ namespace PressPlay.FFWD
             Debug.DrawRay(t.position + t.up * 0.1f, t.up * 5, Color.green);
         }
 
+        public static void DrawBounds(ref Bounds b, Color color)
+        {
+            DrawFilledBox(b.center, b.size, color);
+        }
+
         private static BasicEffect effect;
         [Conditional("DEBUG")]
         internal static void DrawLines(GraphicsDevice device, Camera cam)

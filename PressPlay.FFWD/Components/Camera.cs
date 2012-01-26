@@ -210,9 +210,9 @@ namespace PressPlay.FFWD.Components
         public Vector3 ScreenToViewportPoint(Vector3 v)
         {
             Vector2 pt = v;
-            pt.x /= viewPort.Width;
-            pt.y /= viewPort.Height;
-            return new Vector3(pt.x, pt.y, (float)v);
+            pt.x /= FullScreen.Width;
+            pt.y /= FullScreen.Height;
+            return new Vector3(pt.x / (rect.x + (rect.width - rect.x)), pt.y / (rect.y + (rect.height - rect.y)), (float)v);
         }
 
         public Vector3 ViewportToScreenPoint(Vector3 v)
