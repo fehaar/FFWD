@@ -380,6 +380,11 @@ namespace PressPlay.FFWD
         {
             return Convert(ApplicationSettings.to2dMode, correctZeroData);
         }
+
+        public Vector2 Convert(ApplicationSettings.To2dMode mode)
+        {
+            return Convert(mode, false);
+        }
         #endregion Public methods
 
         #region Operators

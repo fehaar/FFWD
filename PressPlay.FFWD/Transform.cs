@@ -252,6 +252,10 @@ namespace PressPlay.FFWD
                     Microsoft.Xna.Framework.Quaternion rot;
                     Microsoft.Xna.Framework.Vector3 pos;
                     world.Decompose(out scale, out rot, out pos);
+                    if (float.IsNaN(rot.X))
+                    {
+                        return Quaternion.identity;
+                    }
                     return rot;
                 }
             }

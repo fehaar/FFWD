@@ -154,6 +154,7 @@ namespace PressPlay.FFWD
 
         public static void AddBox(Body body, bool isTrigger, float width, float height, Vector2 position, float density)
         {
+            Debug.Log(String.Format("Add box on {0} at {1} size {2},{3} ", body.UserData, position, width, height));
             if (world == null)
             {
                 throw new InvalidOperationException("You have to Initialize the Physics system before adding bodies");
