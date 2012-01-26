@@ -31,7 +31,6 @@ namespace PressPlay.FFWD.Components
             Vector2 sz = (size * gameObject.transform.lossyScale).Convert(to2dMode, true);
             connectedBody = body;
             Physics.AddBox(body, isTrigger, sz.x, sz.y, center * transform.lossyScale, mass);
-            Debug.Log("Add collider box: " + name + " pos: " + transform.position + ", sz " + sz);
         }
     }
 }

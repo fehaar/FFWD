@@ -658,12 +658,11 @@ namespace PressPlay.FFWD
 
         public void SendMessage(string methodName, object value, SendMessageOptions sendMessageOptions)
         {
-            Debug.Log(String.Format("Send {0} to {1}", methodName, this));
             bool hadListener = false;
             for (int i = 0; i < components.Count; i++)
             {
                 Component cmp = components[i];
-                if (cmp is Transform)
+                if (!cmp.GetType().IsSubclassOf(typeof(MonoBehaviour)))
                 {
                     continue;
                 }
