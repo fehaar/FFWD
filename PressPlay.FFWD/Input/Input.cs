@@ -265,6 +265,7 @@ namespace PressPlay.FFWD
         public static bool GetMouseButtonUp(int button)
         {
 #if WINDOWS_PHONE
+            if (button != 0) return false;
             return !GetMouseButtonDown(button);
 #else
             switch (button)
