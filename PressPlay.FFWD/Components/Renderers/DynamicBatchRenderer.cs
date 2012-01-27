@@ -60,6 +60,12 @@ namespace PressPlay.FFWD.Components
                 currentMaterial = material;
                 hasColors = false;// (mesh.colors != null) && (mesh.colors.Length > 0);
             }
+#if DEBUG
+            if (Camera.logRenderCalls)
+            {
+                Debug.LogFormat("Dyn batch: {0} on {1} at {2}", (transform != null) ? transform.name : mesh.name, cam, (transform != null) ? transform.position : Vector3.zero);
+            }
+#endif
             Matrix world = (transform != null) ? transform.world : Matrix.Identity;
             PrepareMesh(mesh, subMeshIndex, ref world);
             return drawCalls;
@@ -91,7 +97,7 @@ namespace PressPlay.FFWD.Components
 #if DEBUG
             if (Camera.logRenderCalls)
             {
-                Debug.LogFormat("==> Dyn batch draw: {0} on {1} verts {2}, indices {3}", currentMaterial.mainTexture, cam.gameObject, currentVertexIndex, currentIndexIndex);
+                Debug.LogFormat("==> Dyn batch draw: {0} RQ {4} on {1} verts {2}, indices {3}", currentMaterial.mainTexture, cam.gameObject, currentVertexIndex, currentIndexIndex, currentMaterial.finalRenderQueue);
             }
 #endif
 

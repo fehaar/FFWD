@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Content;
+﻿using System;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 
@@ -151,6 +152,17 @@ namespace PressPlay.FFWD
                 return this == (Material)obj;
             }
             return base.Equals(obj);
+        }
+
+        internal static void LoadRenderIndices(AssetHelper helper)
+        {
+            textureRenderIndexes.Clear();
+            helper.AddStaticAsset("TextureRenderIndexes");
+            string[] names = helper.Load<String[]>("TextureRenderIndexes");
+            for (int i = 0; i < names.Length; i++)
+            {
+                textureRenderIndexes.Add(names[i], i);
+            }
         }
     }
 }

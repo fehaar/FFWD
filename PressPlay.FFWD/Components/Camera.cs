@@ -376,7 +376,14 @@ namespace PressPlay.FFWD.Components
 #if DEBUG
             if (logRenderCalls)
             {
-                Debug.Log("**** Camera begin : ", name, "****");
+                if (target == null)
+                {
+                    Debug.Log("**** Camera begin : ", name, "****");
+                }
+                else
+                {
+                    Debug.Log("**** Camera begin to texture : ", name, "****");
+                }
             }
 #endif
             // TODO: Do not recreate view matrix every frame. Only when camera is moved.
@@ -484,12 +491,6 @@ namespace PressPlay.FFWD.Components
 
         internal int BatchRender(Mesh data, Material[] materials, Transform transform)
         {
-#if DEBUG
-            if (Camera.logRenderCalls)
-            {
-                Debug.LogFormat("Dyn batch: {0} on {1} at {2}", data, gameObject, (transform != null) ? transform.position : Vector3.zero);
-            }
-#endif
             int calls = 0;
             for (int i = 0; i < data.subMeshCount; i++)
             {

@@ -183,6 +183,7 @@ namespace PressPlay.FFWD
             GUI.spriteBatch = new SpriteBatch(Game.GraphicsDevice);
             Camera.basicEffect = new BasicEffect(Game.GraphicsDevice);
             LayerMask.LoadLayerNames(assetHelper);
+            Material.LoadRenderIndices(assetHelper);
 
 #if DEBUG
             spriteBatch = new SpriteBatch(Game.GraphicsDevice);
