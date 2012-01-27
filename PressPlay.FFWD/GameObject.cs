@@ -662,7 +662,7 @@ namespace PressPlay.FFWD
             for (int i = 0; i < components.Count; i++)
             {
                 Component cmp = components[i];
-                if (cmp is Transform)
+                if (!cmp.GetType().IsSubclassOf(typeof(MonoBehaviour)))
                 {
                     continue;
                 }

@@ -58,8 +58,8 @@ namespace PressPlay.FFWD.Components
         {
             get
             {
-                //throw new NotImplementedException("Not implemented");
-                return new Bounds();
+                throw new NotImplementedException("Not implemented");
+                //return new Bounds();
             }
         }
 

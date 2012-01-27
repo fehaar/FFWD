@@ -31,18 +31,18 @@ namespace PressPlay.FFWD.Components
         public float aspect { get; set; }
         public int cullingMask { get; set; }
 
-        public int pixelWidth 
+        public float pixelWidth 
         { 
             get
             {
-                return viewPort.Width;
+                return viewPort.Width * rect.width;
             }
         }
-        public int pixelHeight
+        public float pixelHeight
         { 
             get
             {
-                return viewPort.Height;
+                return viewPort.Height * rect.height;
             }
         }
 
@@ -78,11 +78,26 @@ namespace PressPlay.FFWD.Components
             }
         }
 
-        public Rect rect { get; set; } //public Rectangle rect { get; set; }
+        public Rect rect { get; set; }
         public ClearFlags clearFlags { get; set; }
+
+        public static Camera main { get; private set; }
+        public static Camera mainCamera { get { return main; } }
+
+        internal static Viewport FullScreen;
+        internal static GraphicsDevice Device;
+        internal static SpriteBatch RenderBatch;
+
+        public Matrix view { get; private set; }
+
+        private RenderTarget2D target = null;
 
         public override void Awake()
         {
+            if (rect != Rect.unit)
+            {
+                target = new RenderTarget2D(Device, Mathf.RoundToInt(Device.PresentationParameters.BackBufferWidth * rect.width), Mathf.RoundToInt(Device.PresentationParameters.BackBufferHeight * rect.height), false, Device.DisplayMode.Format, Device.PresentationParameters.DepthStencilFormat, Device.PresentationParameters.MultiSampleCount, RenderTargetUsage.DiscardContents);
+            }
             frustum = new BoundingFrustum(view * projectionMatrix);
             RecalculateView();
             for (int i = nonAssignedRenderers.Count - 1; i >= 0; i--)
@@ -130,15 +145,8 @@ namespace PressPlay.FFWD.Components
             }
         }
 
-        public static Camera main { get; private set; }
-        public static Camera mainCamera { get { return main; } }
-
-        public static Viewport FullScreen;
-
-        public Matrix view { get; private set; }
-
         [ContentSerializerIgnore]
-        public Viewport viewPort 
+        internal Viewport viewPort 
         { 
             get
             {
@@ -154,7 +162,15 @@ namespace PressPlay.FFWD.Components
             {
                 if (_projectionMatrix == Matrix.Identity)
                 {
-                    Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(fieldOfView), FullScreen.AspectRatio, Mathf.Max(ApplicationSettings.DefaultValues.minimumNearClipPlane, nearClipPlane), farClipPlane, out _projectionMatrix);
+                    if (orthographic)
+                    {
+                        float aspect = (target != null) ? (float)target.Width / (float)target.Height : viewPort.AspectRatio;
+                        Matrix.CreateOrthographic(orthographicSize * 2 * aspect, orthographicSize * 2, nearClipPlane, farClipPlane, out _projectionMatrix);
+                    }
+                    else
+                    {
+                        Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(fieldOfView), FullScreen.AspectRatio, Mathf.Max(ApplicationSettings.DefaultValues.minimumNearClipPlane, nearClipPlane), farClipPlane, out _projectionMatrix);
+                    }
                 }
                 return _projectionMatrix;
             }
@@ -169,7 +185,7 @@ namespace PressPlay.FFWD.Components
 
         public Vector3 ScreenToWorldPoint(Vector3 vector3)
         {
-            float normZ = (vector3.z - nearClipPlane) / (farClipPlane - nearClipPlane);
+            float normZ = ((vector3.z + nearClipPlane) - nearClipPlane) / (farClipPlane - nearClipPlane);
             vector3.z = normZ;
             vector3.y = pixelHeight - vector3.y;
             return viewPort.Unproject(vector3, projectionMatrix, view, Matrix.Identity);
@@ -194,9 +210,9 @@ namespace PressPlay.FFWD.Components
         public Vector3 ScreenToViewportPoint(Vector3 v)
         {
             Vector2 pt = v;
-            pt.x /= viewPort.Width;
-            pt.y /= viewPort.Height;
-            return new Vector3(pt.x, pt.y, (float)v);
+            pt.x /= FullScreen.Width;
+            pt.y /= FullScreen.Height;
+            return new Vector3(pt.x / (rect.x + (rect.width - rect.x)), pt.y / (rect.y + (rect.height - rect.y)), (float)v);
         }
 
         public Vector3 ViewportToScreenPoint(Vector3 v)
@@ -270,11 +286,11 @@ namespace PressPlay.FFWD.Components
         internal static void DoRender(GraphicsDevice device)
         {
 #if DEBUG && WINDOWS
-            if (Input.GetMouseButtonUp(1))
+            if (Input.GetKeyUp(Microsoft.Xna.Framework.Input.Keys.W))
             {
                 wireframeRender = !wireframeRender;
             }
-            if (Input.GetMouseButtonUp(2))
+            if (Input.GetMouseButtonUp(1))
             {
                 logRenderCalls = true;
                 Debug.Log("----------- Render log begin ---------------", Time.realtimeSinceStartup);
@@ -300,14 +316,40 @@ namespace PressPlay.FFWD.Components
             }
             else
             {
-                device.RasterizerState = RasterizerState.CullCounterClockwise;
+                device.RasterizerState = RasterizerState.CullNone;
+                //device.RasterizerState = RasterizerState.CullCounterClockwise;
             }
 
+            // Render all cameras that use a render target
+            int renderTargets = 0;
             for (int i = 0; i < _allCameras.Count; i++)
             {
-                if (_allCameras[i].gameObject.active)
+                Camera cam = _allCameras[i];
+                if (cam.gameObject.active && cam.target != null)
                 {
-                    _allCameras[i].doRender(device);
+                    renderTargets++;
+                    cam.doRender(device);
+                }
+            }
+            // Now render everything
+            int directRender = 0;
+            device.SetRenderTarget(null);
+            for (int i = 0; i < _allCameras.Count; i++)
+            {
+                Camera cam = _allCameras[i];
+                if (cam.gameObject.active)
+                {
+                    if (cam.target == null)
+                    {
+                        directRender++;
+                        cam.doRender(device);
+                    }
+                    else
+                    {
+                        RenderBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+                        RenderBatch.Draw(cam.target, new Vector2(cam.rect.x * FullScreen.Width, cam.rect.y * FullScreen.Height), Microsoft.Xna.Framework.Color.White);
+                        RenderBatch.End();
+                    }
                 }
             }
 
@@ -316,7 +358,7 @@ namespace PressPlay.FFWD.Components
             GUI.EndRendering();
 
 #if DEBUG
-            Debug.Display("Estimated Draw calls", estimatedDrawCalls);
+            Debug.Display("Draw calls, Direct, RT", System.String.Format("{0}, {1}, {2}", estimatedDrawCalls, directRender, renderTargets));
             logRenderCalls = false;
 #endif
         }
@@ -324,31 +366,28 @@ namespace PressPlay.FFWD.Components
         private readonly Matrix inverter = new Matrix(-1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
         internal void doRender(GraphicsDevice device)
         {
+            if (target != null)
+            {
+                device.SetRenderTarget(target);
+                device.Clear(Microsoft.Xna.Framework.Color.Transparent);
+            }
             Clear(device);
+
 #if DEBUG
             if (logRenderCalls)
             {
-                Debug.Log("**** Camera begin : ", name, "****");
+                if (target == null)
+                {
+                    Debug.Log("**** Camera begin : ", name, "****");
+                }
+                else
+                {
+                    Debug.Log("**** Camera begin to texture : ", name, "****");
+                }
             }
 #endif
             // TODO: Do not recreate view matrix every frame. Only when camera is moved.
             RecalculateView();
-
-            #region TextRenderer3D batching start
-            // We are beginning the batching of TextRenderer3D calls
-            // TODO: This code is particularly ugly and should be reworked...
-            if (wireframeRender)
-            {
-                RasterizerState state = new RasterizerState();
-                state.FillMode = FillMode.WireFrame;
-                state.CullMode = CullMode.None;
-                TextRenderer3D.batch.Begin(SpriteSortMode.Deferred, null, null, DepthStencilState.DepthRead, state, TextRenderer3D.basicEffect);
-            }
-            else
-            {
-                TextRenderer3D.batch.Begin(SpriteSortMode.Deferred, null, null, DepthStencilState.DepthRead, RasterizerState.CullNone, TextRenderer3D.basicEffect);
-            }
-            #endregion
 
             BasicEffect.View = view;
             BasicEffect.Projection = projectionMatrix;
@@ -394,9 +433,6 @@ namespace PressPlay.FFWD.Components
                     estimatedDrawCalls += renderQueue[i].Draw(device, this);
                 }
             }
-            
-            // We are ending the batching of TextRenderer3D calls
-            TextRenderer3D.batch.End(); 
 
             estimatedDrawCalls += dynamicBatchRenderer.DoDraw(device, this);
         }
@@ -455,12 +491,6 @@ namespace PressPlay.FFWD.Components
 
         internal int BatchRender(Mesh data, Material[] materials, Transform transform)
         {
-#if DEBUG
-            if (Camera.logRenderCalls)
-            {
-                Debug.LogFormat("Dyn batch: {0} on {1} at {2}", data, gameObject, (transform != null) ? transform.position : Vector3.zero);
-            }
-#endif
             int calls = 0;
             for (int i = 0; i < data.subMeshCount; i++)
             {

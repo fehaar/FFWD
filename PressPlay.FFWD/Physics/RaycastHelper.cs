@@ -43,7 +43,7 @@ namespace PressPlay.FFWD
             {
                 coll = (uo as Rigidbody).collider;
             }
-            if ((coll != null) && (coll.gameObject != null) && (_layerMask & (1 << coll.gameObject.layer)) > 0)
+            if ((coll != null) && (coll.gameObject != null) && (coll.gameObject.active) && (_layerMask & (1 << coll.gameObject.layer)) > 0)
             {
                 if (_findClosest)
                 {
@@ -96,6 +96,14 @@ namespace PressPlay.FFWD
             }
         }
 
+        internal static RaycastHit[] HitsByDistance
+        {
+            get
+            {
+                return _hits.Take(_hitCount).OrderByDescending(h => h.distance).ToArray();
+            }
+        }
+
         internal static RaycastHit ClosestHit()
         {
             return _hit;
@@ -110,13 +118,14 @@ namespace PressPlay.FFWD
             {
                 coll = (uo as Rigidbody).collider;
             }
-            if ((coll != null) && (coll.gameObject != null) && (_layerMask & (1 << coll.gameObject.layer)) > 0)
+            if ((coll != null) && (coll.gameObject != null) && (coll.gameObject.active) && (_layerMask & (1 << coll.gameObject.layer)) > 0)
             {
                 _didHit = true;
                 _hit = new RaycastHit() { body = fixture.Body, collider = coll, transform = coll.transform, point = pointCastPoint };
                 _hits[_hitCount++] = _hit;
+                return !_findClosest;
             }
-            return !_findClosest;
+            return false;
         }
     }
 }

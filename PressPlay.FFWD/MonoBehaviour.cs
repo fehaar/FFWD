@@ -85,10 +85,16 @@ namespace PressPlay.FFWD.Components
             base.FixReferences(idMap);
         }
 
-        protected override sealed void Destroy()
+        protected override void Destroy()
         {
             OnDisable();
+            OnDestroy();
             base.Destroy();
+        }
+
+        public virtual void OnDestroy()
+        {
+            // NOTE: Do not make any code here. Typically base method is NOT called in MonoScripts so this will not be called either!!!!!
         }
         #endregion
 

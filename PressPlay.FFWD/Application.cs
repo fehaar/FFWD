@@ -172,11 +172,9 @@ namespace PressPlay.FFWD
         public override void Initialize()
         {
             base.Initialize();
-            //ContentHelper.Services = Game.Services;
-            //ContentHelper.StaticContent = new ContentManager(Game.Services, Game.Content.RootDirectory);
-            //ContentHelper.Content = new ContentManager(Game.Services, Game.Content.RootDirectory);
-            //ContentHelper.IgnoreMissingAssets = true;
             Camera.FullScreen = Game.GraphicsDevice.Viewport;
+            Camera.Device = Game.GraphicsDevice;
+            Camera.RenderBatch = new SpriteBatch(Game.GraphicsDevice);
             Resources.AssetHelper = assetHelper;
             Physics.Initialize();
             Time.Reset();
@@ -184,16 +182,8 @@ namespace PressPlay.FFWD
             assetHelper.CreateContentManager = CreateContentManager;
             GUI.spriteBatch = new SpriteBatch(Game.GraphicsDevice);
             Camera.basicEffect = new BasicEffect(Game.GraphicsDevice);
-            // Note we cannot share this as it is used in between cameras as it is done now
-            TextRenderer3D.basicEffect = new BasicEffect(Game.GraphicsDevice)
-            {
-                TextureEnabled = true,
-                VertexColorEnabled = true,
-                World = TextRenderer3D.invertY,
-                View = Matrix.Identity
-            };
-            TextRenderer3D.batch = new SpriteBatch(Game.GraphicsDevice);
             LayerMask.LoadLayerNames(assetHelper);
+            Material.LoadRenderIndices(assetHelper);
 
 #if DEBUG
             spriteBatch = new SpriteBatch(Game.GraphicsDevice);
@@ -656,7 +646,7 @@ namespace PressPlay.FFWD
                     }
                     else
                     {
-                        if (go.name != name)
+                        if (go.name != name && go.name != name + "(Clone)")
                         {
                             continue;
                         }

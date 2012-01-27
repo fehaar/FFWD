@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using PressPlay.FFWD.Exporter.Interfaces;
 using UnityEngine;
+using System.Reflection;
 
 namespace PressPlay.FFWD.Exporter.Writers.Components
 {
@@ -27,6 +28,11 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
                 {
                     scene.WriteElement("material", coll.sharedMaterial.name);
                 }
+            }
+            Component c = coll.GetComponent("XNAColliderOrientation");
+            if (c != null)
+            {
+                scene.WriteMembers(c, c.GetType(), null);
             }
         }
         #endregion

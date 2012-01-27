@@ -112,7 +112,7 @@ namespace PressPlay.FFWD
                 _uv = new Microsoft.Xna.Framework.Vector2[value.Length];
                 for (int i = 0; i < _uv.Length; i++)
                 {
-                    _uv[i] = value[i];
+                    _uv[i] = new Microsoft.Xna.Framework.Vector2(value[i].x, 1 - value[i].y);
                 }
             }
         }
@@ -167,7 +167,7 @@ namespace PressPlay.FFWD
 
         protected override void DoLoadAsset(AssetHelper assetHelper)
         {
-            if (!String.IsNullOrEmpty(name))
+            if (!String.IsNullOrEmpty(name) && _vertices == null)
             {
                 Mesh mesh = assetHelper.LoadAsset<Mesh>(name);
                 if (mesh != null)
@@ -279,7 +279,7 @@ namespace PressPlay.FFWD
 
         public override string ToString()
         {
-            return String.Format("{0} - {1} ({3})", GetType().Name, name, GetInstanceID());
+            return String.Format("{0} - {1} ({2})", GetType().Name, name, GetInstanceID());
         }
 
         public void RecalculateBounds()

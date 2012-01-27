@@ -15,10 +15,13 @@ namespace PressPlay.FFWD.Components
         public bool isTrigger;
         [ContentSerializer(Optional = true)]
         public string material;
+        [ContentSerializer(Optional = true)]
+        internal ApplicationSettings.To2dMode to2dMode = ApplicationSettings.To2dMode.DropZ;
         #endregion
 
         [ContentSerializerIgnore]
         public Body connectedBody;
+
 
         private bool _allowTurnOff = false;
         /// <summary>

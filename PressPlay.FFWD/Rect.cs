@@ -8,6 +8,8 @@ namespace PressPlay.FFWD
 {
     public struct Rect
     {
+        public static readonly Rect unit = new Rect(0f, 0f, 1f, 1f);
+
         public Rect(float left, float top, float w, float h)
         {
             x = left;
@@ -87,6 +89,8 @@ namespace PressPlay.FFWD
         {
             return base.ToString();
         }
+
+
 
         public static implicit operator Microsoft.Xna.Framework.Rectangle(Rect r)
         {

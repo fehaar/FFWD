@@ -22,8 +22,10 @@ namespace PressPlay.FFWD.Components
         private int batchIndexSize = 0;
         private int currentVertexIndex = 0;
         private int currentIndexIndex = 0;
+        private bool hasColors = false;
 
         private VertexPositionNormalTexture[] vertexData = new VertexPositionNormalTexture[20000];
+        private VertexPositionColorTexture[] vertexColorData = new VertexPositionColorTexture[1000];
         private Microsoft.Xna.Framework.Vector3[] positionData = new Microsoft.Xna.Framework.Vector3[600];
         private short[] indexData = new short[60000];
 
@@ -56,7 +58,14 @@ namespace PressPlay.FFWD.Components
             {
                 drawCalls = DoDraw(device, cam);
                 currentMaterial = material;
+                hasColors = false;// (mesh.colors != null) && (mesh.colors.Length > 0);
             }
+#if DEBUG
+            if (Camera.logRenderCalls)
+            {
+                Debug.LogFormat("Dyn batch: {0} on {1} at {2}", (transform != null) ? transform.name : mesh.name, cam, (transform != null) ? transform.position : Vector3.zero);
+            }
+#endif
             Matrix world = (transform != null) ? transform.world : Matrix.Identity;
             PrepareMesh(mesh, subMeshIndex, ref world);
             return drawCalls;
@@ -79,8 +88,8 @@ namespace PressPlay.FFWD.Components
             }
 
             cam.BasicEffect.World = Matrix.Identity;
-            cam.BasicEffect.VertexColorEnabled = false;
-            cam.BasicEffect.LightingEnabled = Light.HasLights;
+            cam.BasicEffect.VertexColorEnabled = hasColors;
+            cam.BasicEffect.LightingEnabled = (!hasColors) && Light.HasLights;
 
             currentMaterial.SetTextureState(cam.BasicEffect);
             currentMaterial.SetBlendState(device);
@@ -88,22 +97,37 @@ namespace PressPlay.FFWD.Components
 #if DEBUG
             if (Camera.logRenderCalls)
             {
-                Debug.LogFormat("==> Dyn batch draw: {0} on {1} verts {2}, indices {3}", currentMaterial.mainTexture, cam.gameObject, currentVertexIndex, currentIndexIndex);
+                Debug.LogFormat("==> Dyn batch draw: {0} RQ {4} on {1} verts {2}, indices {3}", currentMaterial.mainTexture, cam.gameObject, currentVertexIndex, currentIndexIndex, currentMaterial.finalRenderQueue);
             }
 #endif
 
             foreach (EffectPass pass in cam.BasicEffect.CurrentTechnique.Passes)
             {
                 pass.Apply();
-                device.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(
-                    PrimitiveType.TriangleList,
-                    vertexData,
-                    0,
-                    currentVertexIndex,
-                    indexData,
-                    0,
-                    currentIndexIndex / 3
-                );
+                if (hasColors)
+                {
+                    device.DrawUserIndexedPrimitives(
+                        PrimitiveType.TriangleList,
+                        vertexColorData,
+                        0,
+                        currentVertexIndex,
+                        indexData,
+                        0,
+                        currentIndexIndex / 3
+                    );
+                }
+                else
+                {
+                    device.DrawUserIndexedPrimitives(
+                        PrimitiveType.TriangleList,
+                        vertexData,
+                        0,
+                        currentVertexIndex,
+                        indexData,
+                        0,
+                        currentIndexIndex / 3
+                    );
+                }
             }
 
             EndBatch();
@@ -115,9 +139,18 @@ namespace PressPlay.FFWD.Components
             batchVertexSize += mesh._vertices.Length;
             if (vertexData.Length < batchVertexSize)
             {
-                VertexPositionNormalTexture[] newVertexData = new VertexPositionNormalTexture[batchVertexSize];
-                vertexData.CopyTo(newVertexData, 0);
-                vertexData = newVertexData;
+                if (hasColors)
+                {
+                    VertexPositionColorTexture[] newVertexData = new VertexPositionColorTexture[batchVertexSize];
+                    vertexColorData.CopyTo(newVertexData, 0);
+                    vertexColorData = newVertexData;
+                }
+                else
+                {
+                    VertexPositionNormalTexture[] newVertexData = new VertexPositionNormalTexture[batchVertexSize];
+                    vertexData.CopyTo(newVertexData, 0);
+                    vertexData = newVertexData;
+                }
 #if DEBUG
                 Debug.LogWarning("Increased size of Dynamic vertex buffer to " + batchVertexSize);
 #endif
@@ -152,22 +185,21 @@ namespace PressPlay.FFWD.Components
 
             for (int v = 0; v < mesh._vertices.Length; v++)
             {
-                vertexData[currentVertexIndex + v].Position = positionData[v];
-                if (mesh._uv != null)
+                if (hasColors)
                 {
-                    vertexData[currentVertexIndex + v].TextureCoordinate = mesh._uv[v];
+                    VertexPositionColorTexture vert = new VertexPositionColorTexture();
+                    vert.Position = positionData[v];
+                    vert.TextureCoordinate = (mesh._uv != null) ? mesh._uv[v] : Microsoft.Xna.Framework.Vector2.Zero;
+                    vert.Color = mesh.colors[v];
+                    vertexColorData[currentVertexIndex + v] = vert;
                 }
                 else
                 {
-                    vertexData[currentVertexIndex + v].TextureCoordinate = Microsoft.Xna.Framework.Vector2.Zero;
-                }
-                if (mesh._normals != null)
-                {
-                    vertexData[currentVertexIndex + v].Normal = mesh._normals[v];
-                }
-                else
-                {
-                    vertexData[currentVertexIndex + v].Normal = Microsoft.Xna.Framework.Vector3.Zero;
+                    VertexPositionNormalTexture vert = new VertexPositionNormalTexture();
+                    vert.Position = positionData[v];
+                    vert.TextureCoordinate = (mesh._uv != null) ? mesh._uv[v] : Microsoft.Xna.Framework.Vector2.Zero;
+                    vert.Normal = (mesh._normals != null) ? mesh._normals[v] : Microsoft.Xna.Framework.Vector3.Zero;
+                    vertexData[currentVertexIndex + v] = vert;
                 }
             }
 

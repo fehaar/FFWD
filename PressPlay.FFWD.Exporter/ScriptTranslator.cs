@@ -35,7 +35,7 @@ namespace PressPlay.FFWD.Exporter
             { "ArrayList", "List<object>" },
             { "AudioListener", "UnityAudioListener" }
         };
-        public static string[] MethodsToOverride = new string[] { "Start", "Update", "FixedUpdate", "LateUpdate", "Awake", "OnTriggerEnter", "OnTriggerExit", "OnTriggerStay", "OnCollisionEnter", "OnCollisionExit", "OnCollisionStay", "OnGUI", "OnEnable", "OnDisable" };
+        public static string[] MethodsToOverride = new string[] { "Start", "Update", "FixedUpdate", "LateUpdate", "Awake", "OnTriggerEnter", "OnTriggerExit", "OnTriggerStay", "OnCollisionEnter", "OnCollisionExit", "OnCollisionStay", "OnGUI", "OnEnable", "OnDisable", "OnDestroy" };
 
         public void Translate()
         {

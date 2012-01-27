@@ -169,7 +169,7 @@ namespace PressPlay.FFWD
         }
 
         [ContentSerializerIgnore]
-        internal Matrix world
+        public Matrix world
         {
             get
             {
@@ -252,6 +252,10 @@ namespace PressPlay.FFWD
                     Microsoft.Xna.Framework.Quaternion rot;
                     Microsoft.Xna.Framework.Vector3 pos;
                     world.Decompose(out scale, out rot, out pos);
+                    if (float.IsNaN(rot.X))
+                    {
+                        return Quaternion.identity;
+                    }
                     return rot;
                 }
             }
@@ -445,7 +449,8 @@ namespace PressPlay.FFWD
                 for (int i = 0; i < children.Count; i++)
                 {
                     GameObject child = children[i].Clone() as GameObject;
-                    child.transform.parent = obj;
+                    child.transform._parent = obj;
+                    obj.children.Add(child);
                 }
             }
             return obj;
@@ -744,7 +749,7 @@ namespace PressPlay.FFWD
                 }
                 else
                 {
-                    if (name == children[i].name)
+                    if (name == children[i].name || name + "(Clone)" == children[i].name)
                     {
                         return children[i].transform;
                     }

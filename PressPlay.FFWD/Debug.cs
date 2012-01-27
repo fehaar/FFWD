@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework.Graphics;
 using PressPlay.FFWD.Components;
@@ -97,6 +98,10 @@ namespace PressPlay.FFWD
 
         public static void Display(string key, object value)
         {
+            if (value == null)
+            {
+                value = String.Empty;
+            }
             _debugDisplay[key] = value.ToString();
         }
 
@@ -209,6 +214,11 @@ namespace PressPlay.FFWD
             Debug.DrawRay(t.position + t.up * 0.1f, t.forward * 5, Color.blue);
             Debug.DrawRay(t.position + t.up * 0.1f, t.right * 5, Color.red);
             Debug.DrawRay(t.position + t.up * 0.1f, t.up * 5, Color.green);
+        }
+
+        public static void DrawBounds(ref Bounds b, Color color)
+        {
+            DrawFilledBox(b.center, b.size, color);
         }
 
         private static BasicEffect effect;

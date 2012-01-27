@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Content;
+﻿using System;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 
@@ -11,7 +12,7 @@ namespace PressPlay.FFWD
         [ContentSerializer]
         public int renderQueue;
         [ContentSerializer(Optional = true)]
-        public Color color;
+        public Color color = Color.white;
         [ContentSerializer(Optional = true)]
         public Texture2D mainTexture;
         [ContentSerializer(Optional = true)]
@@ -115,6 +116,52 @@ namespace PressPlay.FFWD
             {
                 basicEffect.TextureEnabled = false;
                 basicEffect.DiffuseColor = color;
+            }
+        }
+
+        public static bool operator ==(Material value1, Material value2)
+        {
+            if ((object)value1 == null)
+            {
+                return ((object)value2 == null);
+            }
+            if ((object)value2 == null)
+            {
+                return ((object)value1 == null);
+            }
+            return value1.GetInstanceID() == value2.GetInstanceID();
+        }
+
+        public static bool operator !=(Material value1, Material value2)
+        {
+            if ((object)value1 == null)
+            {
+                return ((object)value2 != null);
+            }
+            if ((object)value2 == null)
+            {
+                return ((object)value1 != null);
+            }
+            return value1.GetInstanceID() != value2.GetInstanceID();
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Material)
+            {
+                return this == (Material)obj;
+            }
+            return base.Equals(obj);
+        }
+
+        internal static void LoadRenderIndices(AssetHelper helper)
+        {
+            textureRenderIndexes.Clear();
+            helper.AddStaticAsset("TextureRenderIndexes");
+            string[] names = helper.Load<String[]>("TextureRenderIndexes");
+            for (int i = 0; i < names.Length; i++)
+            {
+                textureRenderIndexes.Add(names[i], i);
             }
         }
     }

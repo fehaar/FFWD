@@ -78,10 +78,9 @@ namespace PressPlay.FFWD
 
         public static void DestroyImmediate(UnityObject obj)
         {
-            // TODO: This should be implemented properly
-            Application.markedForDestruction.Add(obj);
+            obj.Destroy();
+            // TODO: WE should probably clean up after this
         }
-
 
         /// <summary>
         /// Clones the object original, places it at position and sets the rotation to rotation, then returns the cloned object. 
