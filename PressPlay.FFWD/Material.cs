@@ -12,7 +12,7 @@ namespace PressPlay.FFWD
         [ContentSerializer]
         public int renderQueue;
         [ContentSerializer(Optional = true)]
-        public Color color;
+        public Color color = Color.white;
         [ContentSerializer(Optional = true)]
         public Texture2D mainTexture;
         [ContentSerializer(Optional = true)]
