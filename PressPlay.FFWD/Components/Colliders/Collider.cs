@@ -16,7 +16,7 @@ namespace PressPlay.FFWD.Components
         [ContentSerializer(Optional = true)]
         public string material;
         [ContentSerializer(Optional = true)]
-        internal ApplicationSettings.To2dMode to2dMode = ApplicationSettings.To2dMode.DropZ;
+        internal Physics.To2dMode to2dMode = Physics.To2dMode.DropY;
         #endregion
 
         [ContentSerializerIgnore]

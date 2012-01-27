@@ -245,6 +245,7 @@
     <Compile Include="Physics\QueryHelper.cs" />
     <Compile Include="Physics\RaycastHelper.cs" />
     <Compile Include="Physics\RaycastHit.cs" />
+    <Compile Include="Physics\VectorConverter.cs" />
     <Compile Include="Plane.cs" />
     <Compile Include="Profiler.cs" />
     <Compile Include="Quaternion.cs" />

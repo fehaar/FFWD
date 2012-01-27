@@ -46,9 +46,8 @@ namespace PressPlay.FFWD
                 physicsDebugView.RenderDebugData(ref proj, ref view);
 
                 PressPlay.FFWD.Vector3 inPos = Input.mousePosition;
-                inPos.y = inPos.z;
                 inPos.z = cam.nearClipPlane;
-                PressPlay.FFWD.Vector2 castPos = cam.ScreenToWorldPoint(inPos).Convert(ApplicationSettings.To2dMode.DropZ);
+                PressPlay.FFWD.Vector2 castPos = cam.ScreenToWorldPoint(inPos);
                 PressPlay.FFWD.Vector2 fromPos = cam.ScreenToWorldPoint(Vector2.zero);
                 Debug.Display("Mouse / Physics", inPos + " / " + castPos);
                 physicsDebugView.BeginCustomDraw(ref proj, ref view);

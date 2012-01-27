@@ -60,6 +60,8 @@ namespace PressPlay.FFWD
         private static readonly List<Body> movingBodies = new List<Body>(50);
         private static readonly List<Body> rigidBodies = new List<Body>(50);
 
+        internal enum To2dMode { DropX, DropY, DropZ };
+
         #region FFWD specific methods
         public static void Initialize()
         {
@@ -104,8 +106,8 @@ namespace PressPlay.FFWD
                 }
                 if (comp.gameObject.active && bodyType == BodyType.Kinematic)
                 {
-                    float rad = -MathHelper.ToRadians((comp.to2dMode == ApplicationSettings.To2dMode.DropZ) ? comp.transform.eulerAngles.z : comp.transform.eulerAngles.y);
-                    Microsoft.Xna.Framework.Vector2 pos = comp.transform.position.Convert(comp.to2dMode, false);
+                    float rad = -MathHelper.ToRadians((comp.to2dMode == To2dMode.DropZ) ? comp.transform.eulerAngles.z : comp.transform.eulerAngles.y);
+                    Microsoft.Xna.Framework.Vector2 pos = VectorConverter.Convert(comp.transform.position, comp.to2dMode);
                     if (body.Position != pos || body.Rotation != rad)
                     {
                         body.SetTransformIgnoreContacts(ref pos, rad);

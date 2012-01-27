@@ -232,6 +232,7 @@
     <Compile Include="Components\Renderers\SkinnedMeshRenderer.cs" />
     <Compile Include="Components\Renderers\StaticBatchRenderer.cs" />
     <Compile Include="Matrix4x4.cs" />
+    <Compile Include="Physics\VectorConverter.cs" />
     <Compile Include="UnityAudioListener.cs" />
     <Compile Include="DebugCamera.cs" />
     <Compile Include="Extensions\ArrayExtensions.cs" />

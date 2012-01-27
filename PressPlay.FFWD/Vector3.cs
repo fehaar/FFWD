@@ -152,26 +152,9 @@ namespace PressPlay.FFWD
 
         public Vector3(Vector2 position, float depth)
         {
-            switch (ApplicationSettings.to2dMode)
-            {
-                case ApplicationSettings.To2dMode.DropX:
-                    this.x = depth;
-                    this.y = position.x;
-                    this.z = position.y;
-                    break;
-                case ApplicationSettings.To2dMode.DropY:
-                    this.x = position.x;
-                    this.y = depth;
-                    this.z = position.y;
-                    break;
-                case ApplicationSettings.To2dMode.DropZ:
-                    this.x = position.x;
-                    this.y = position.y;
-                    this.z = depth;
-                    break;
-                default:
-                    throw new Exception("Unknown enum " + ApplicationSettings.to2dMode);
-            }
+            this.x = position.x;
+            this.y = position.y;
+            this.z = depth;
         }
 
         public Vector3(Microsoft.Xna.Framework.Vector3 v) : this(v.X, v.Y, v.Z) { }
@@ -340,51 +323,6 @@ namespace PressPlay.FFWD
         {
             return String.Format("({0:F1}, {1:F1}, {2:F1})", x, y, z);
         }
-
-        /// <summary>
-        /// Converts the Vector3 to a Vector2 by dropping a given variable.
-        /// If Correct Zero Data is on, we will try to use a different mode if one of the axes are 0 after converting. Used primarily for collider sizing.
-        /// </summary>
-        /// <param name="mode"></param>
-        /// <param name="correctZeroData"></param>
-        /// <returns></returns>
-        public Vector2 Convert(ApplicationSettings.To2dMode mode, bool correctZeroData)
-        {
-            Vector2 v = Vector2.zero;
-            switch (mode)
-            {
-                case ApplicationSettings.To2dMode.DropX:
-                    v = new Vector2(y, z);
-                    break;
-                case ApplicationSettings.To2dMode.DropY:
-                    v = new Vector2(x, z);
-                    break;
-                case ApplicationSettings.To2dMode.DropZ:
-                    v = new Vector2(x, y);
-                    break;
-                default:
-                    throw new Exception("Unknown enum " + ApplicationSettings.to2dMode);
-            }
-            if (correctZeroData && v.x == 0)
-            {
-                v.x = (mode == ApplicationSettings.To2dMode.DropX) ? x : y;
-            }
-            if (correctZeroData && v.y == 0)
-            {
-                v.y = (mode == ApplicationSettings.To2dMode.DropZ) ? z : y;
-            }
-            return v;
-        }
-
-        public Vector2 Convert(bool correctZeroData)
-        {
-            return Convert(ApplicationSettings.to2dMode, correctZeroData);
-        }
-
-        public Vector2 Convert(ApplicationSettings.To2dMode mode)
-        {
-            return Convert(mode, false);
-        }
         #endregion Public methods
 
         #region Operators
@@ -401,52 +339,22 @@ namespace PressPlay.FFWD
 
         public static implicit operator Vector2(Vector3 v)
         {
-            return v.Convert(ApplicationSettings.to2dMode, false);
+            return new Vector2(v.x, v.y);
         }
 
         public static implicit operator Microsoft.Xna.Framework.Vector2(Vector3 v)
         {
-            switch (ApplicationSettings.to2dMode)
-            {
-                case ApplicationSettings.To2dMode.DropX:
-                    return new Microsoft.Xna.Framework.Vector2(v.y, v.z);
-                case ApplicationSettings.To2dMode.DropY:
-                    return new Microsoft.Xna.Framework.Vector2(v.x, v.z);
-                case ApplicationSettings.To2dMode.DropZ:
-                    return new Microsoft.Xna.Framework.Vector2(v.x, v.y);
-                default:
-                    throw new Exception("Unknown enum " + ApplicationSettings.to2dMode);
-            }
+            return new Microsoft.Xna.Framework.Vector2(v.x, v.y);
         }
 
         public static implicit operator Vector3(Microsoft.Xna.Framework.Vector2 v)
         {
-            switch (ApplicationSettings.to2dMode)
-            {
-                case ApplicationSettings.To2dMode.DropX:
-                    return new Microsoft.Xna.Framework.Vector3(0, v.X, v.Y);
-                case ApplicationSettings.To2dMode.DropY:
-                    return new Microsoft.Xna.Framework.Vector3(v.X, 0, v.Y);
-                case ApplicationSettings.To2dMode.DropZ:
-                    return new Microsoft.Xna.Framework.Vector3(v.X, v.Y, 0);
-                default:
-                    throw new Exception("Unknown enum " + ApplicationSettings.to2dMode);
-            }
+            return new Vector3(v.X, v.Y, 0);
         }
 
         public static explicit operator float(Vector3 v)
         {
-            switch (ApplicationSettings.to2dMode)
-            {
-                case ApplicationSettings.To2dMode.DropX:
-                    return v.x;
-                case ApplicationSettings.To2dMode.DropY:
-                    return v.y;
-                case ApplicationSettings.To2dMode.DropZ:
-                    return v.z;
-                default:
-                    throw new Exception("Unknown enum " + ApplicationSettings.to2dMode);
-            }
+            return v.z;
         }
 
         public static bool operator ==(Vector3 value1, Vector3 value2)
