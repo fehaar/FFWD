@@ -54,12 +54,16 @@ namespace PressPlay.FFWD.Components
             }
         }
 
+        private Bounds _bounds;
         public Bounds bounds
         {
             get
             {
-                throw new NotImplementedException("Not implemented");
-                //return new Bounds();
+                return _bounds;
+            }
+            internal set
+            {
+                _bounds = value;
             }
         }
 

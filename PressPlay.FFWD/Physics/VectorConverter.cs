@@ -66,5 +66,35 @@ namespace PressPlay.FFWD
             }
             return v;
         }
+
+        /// <summary>
+        /// Converts the Vector3 to a Vector2 by dropping a given variable.
+        /// If Correct Zero Data is on, we will try to use a different mode if one of the axes are 0 after converting. Used primarily for collider sizing.
+        /// </summary>
+        /// <param name="mode"></param>
+        /// <param name="correctZeroData"></param>
+        /// <returns></returns>
+        internal static Vector3 Convert(Microsoft.Xna.Framework.Vector2 v2, Physics.To2dMode mode)
+        {
+            Vector3 v = Vector3.zero;
+            switch (mode)
+            {
+                case Physics.To2dMode.DropX:
+                    v.y = v2.X;
+                    v.z = v2.Y;
+                    break;
+                case Physics.To2dMode.DropY:
+                    v.x = v2.X;
+                    v.z = v2.Y;
+                    break;
+                case Physics.To2dMode.DropZ:
+                    v.x = v2.X;
+                    v.y = v2.Y;
+                    break;
+                default:
+                    throw new Exception("Unknown enum " + mode);
+            }
+            return v;
+        }
     }
 }

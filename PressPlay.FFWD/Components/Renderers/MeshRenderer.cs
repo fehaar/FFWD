@@ -11,6 +11,10 @@ namespace PressPlay.FFWD.Components
         {
             base.Start();
             filter = (MeshFilter)GetComponent(typeof(MeshFilter));
+            if (filter.meshToRender != null)
+            {
+                bounds = filter.meshToRender.bounds;
+            }
         }
 
         #region IRenderable Members

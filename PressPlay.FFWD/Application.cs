@@ -463,6 +463,7 @@ namespace PressPlay.FFWD
             loadedLevelName = sceneToLoad;
             scene = assetHelper.Load<Scene>("Scenes/" + sceneToLoad);
             sceneToLoad = "";
+            loadingScene = false;
 
             if (scene != null)
             {
@@ -524,7 +525,6 @@ namespace PressPlay.FFWD
             newComponents.AddRange(tempComponents);
             tempComponents.Clear();
 
-            loadingScene = false;
             isLoadingAssetBeforeSceneInitialize = false;
             loadIsComplete = false;
             isLoadingAdditive = false;

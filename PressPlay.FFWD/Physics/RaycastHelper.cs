@@ -51,8 +51,8 @@ namespace PressPlay.FFWD
                     {
                         _nearest = dist;
                         _hit.body = fixture.Body;
-                        _hit.point = VectorConverter.Convert((Vector2)point, coll.to2dMode);
-                        _hit.normal = normal;
+                        _hit.point = VectorConverter.Convert(point, coll.to2dMode);
+                        _hit.normal = VectorConverter.Convert(normal, coll.to2dMode);
                         _hit.distance = dist;
                         _hit.collider = coll;
                         _hit.transform = coll.transform;
@@ -65,8 +65,8 @@ namespace PressPlay.FFWD
                     _hits[_hitCount].body = fixture.Body;
                     _hits[_hitCount].collider = coll;
                     _hits[_hitCount].distance = dist;
-                    _hits[_hitCount].normal = normal;
-                    _hits[_hitCount].point = VectorConverter.Convert((Vector2)point, coll.to2dMode);
+                    _hits[_hitCount].normal = VectorConverter.Convert(normal, coll.to2dMode);
+                    _hits[_hitCount].point = VectorConverter.Convert(point, coll.to2dMode);
                     _hits[_hitCount].transform = coll.transform;
                     _hitCount++;
                     return 1;
