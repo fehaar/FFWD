@@ -20,7 +20,7 @@ namespace PressPlay.FFWD.Components
         internal override void FixReferences(System.Collections.Generic.Dictionary<int, UnityObject> idMap)
         {
             base.FixReferences(idMap);
-            if (boneIds != null)
+            if (boneIds != null && bones == null)
             {
                 bones = new Transform[boneIds.Length];
                 bindPoses = new Matrix[boneIds.Length];

@@ -60,6 +60,7 @@ namespace PressPlay.FFWD.Components
             if (clipsId != null)
             {
                 states = new List<AnimationState>(clipsId.Length);
+                stateIndexes = new Dictionary<string, int>();
                 for (int i = 0; i < clipsId.Length; i++)
                 {
                     if (clipsId[i] == null)
