@@ -51,7 +51,7 @@ namespace PressPlay.FFWD
                     {
                         _nearest = dist;
                         _hit.body = fixture.Body;
-                        _hit.point = point;
+                        _hit.point = VectorConverter.Convert((Vector2)point, coll.to2dMode);
                         _hit.normal = normal;
                         _hit.distance = dist;
                         _hit.collider = coll;
@@ -66,7 +66,7 @@ namespace PressPlay.FFWD
                     _hits[_hitCount].collider = coll;
                     _hits[_hitCount].distance = dist;
                     _hits[_hitCount].normal = normal;
-                    _hits[_hitCount].point = point;
+                    _hits[_hitCount].point = VectorConverter.Convert((Vector2)point, coll.to2dMode);
                     _hits[_hitCount].transform = coll.transform;
                     _hitCount++;
                     return 1;
@@ -107,25 +107,6 @@ namespace PressPlay.FFWD
         internal static RaycastHit ClosestHit()
         {
             return _hit;
-        }
-
-        internal static Vector3 pointCastPoint;
-        public static bool pointCastCallback(Fixture fixture)
-        {
-            Component uo = fixture.Body.UserData;
-            Collider coll = uo as Collider;
-            if (coll == null && (uo is Rigidbody))
-            {
-                coll = (uo as Rigidbody).collider;
-            }
-            if ((coll != null) && (coll.gameObject != null) && (coll.gameObject.active) && (_layerMask & (1 << coll.gameObject.layer)) > 0)
-            {
-                _didHit = true;
-                _hit = new RaycastHit() { body = fixture.Body, collider = coll, transform = coll.transform, point = pointCastPoint };
-                _hits[_hitCount++] = _hit;
-                return !_findClosest;
-            }
-            return false;
         }
     }
 }

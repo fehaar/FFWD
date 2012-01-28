@@ -440,9 +440,11 @@ namespace PressPlay.FFWD
             {
                 if (body.FixtureList[i].RayCast(out output, ref input, 0))
                 {
+                    hitInfo.collider = body.UserData;
+                    hitInfo.transform = body.UserData.transform;
                     hitInfo.normal = output.Normal;
                     hitInfo.distance = output.Fraction;
-                    hitInfo.point = ray.GetPoint(output.Fraction);
+                    hitInfo.point = VectorConverter.Convert(ray.GetPoint(output.Fraction), body.UserData.to2dMode);
                     return true;
                 }
             }
@@ -474,13 +476,13 @@ namespace PressPlay.FFWD
             Application.raycastTimer.Start();
 #endif
             Fixture f = world.TestPointActive(point, layerMask);
-            hitInfo = new RaycastHit();
+            hitInfo = new RaycastHit();            
             if (f != null)
             {
                 hitInfo.body = f.Body;
                 hitInfo.collider = f.Body.UserData;
                 hitInfo.transform = f.Body.UserData.transform;
-                hitInfo.point = point;
+                hitInfo.point = VectorConverter.Convert(point, f.Body.UserData.to2dMode);
             }
 #if DEBUG
             Application.raycastTimer.Stop();
@@ -504,7 +506,7 @@ namespace PressPlay.FFWD
                 hitInfo.body = f.Body;
                 hitInfo.collider = f.Body.UserData;
                 hitInfo.transform = f.Body.UserData.transform;
-                hitInfo.point = point;
+                hitInfo.point = VectorConverter.Convert(point, f.Body.UserData.to2dMode);
                 hits[i] = hitInfo;
             }
 #if DEBUG
