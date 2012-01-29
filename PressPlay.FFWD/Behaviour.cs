@@ -8,12 +8,22 @@ namespace PressPlay.FFWD
 {
     public class Behaviour : Component
     {
-        public Behaviour()
+        [ContentSerializer(Optional = true, ElementName = "enabled")]
+        private bool _enabled = true;
+        [ContentSerializerIgnore]
+        public bool enabled 
         {
-            enabled = true;
+            get
+            {
+                return _enabled;
+            }
+            set
+            {
+                _enabled = value;
+                Application.UpdateComponentActive(this);
+            }
         }
 
-        [ContentSerializer(Optional=true)]
-        public bool enabled { get; set; }
+        internal bool hasBeenEnabled = false;
     }
 }

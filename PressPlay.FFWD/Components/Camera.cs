@@ -78,7 +78,33 @@ namespace PressPlay.FFWD.Components
             }
         }
 
-        public Rect rect { get; set; }
+        private Rect _rect;
+        public Rect rect 
+        { 
+            get
+            {
+                return _rect;
+            }
+            set
+            {
+                _rect = value;
+                _pixelRect = new Rect(
+                    rect.x * FullScreen.Width,
+                    rect.y * FullScreen.Height,
+                    rect.width * FullScreen.Width,
+                    rect.height * FullScreen.Height
+                );
+            }
+        }
+        private Rect _pixelRect;
+        [ContentSerializerIgnore]
+        public Rect pixelRect 
+        {   
+            get
+            {
+                return _pixelRect;
+            }
+        }
         public ClearFlags clearFlags { get; set; }
 
         public static Camera main { get; private set; }
@@ -98,6 +124,7 @@ namespace PressPlay.FFWD.Components
             {
                 target = new RenderTarget2D(Device, Mathf.RoundToInt(Device.PresentationParameters.BackBufferWidth * rect.width), Mathf.RoundToInt(Device.PresentationParameters.BackBufferHeight * rect.height), false, Device.DisplayMode.Format, Device.PresentationParameters.DepthStencilFormat, Device.PresentationParameters.MultiSampleCount, RenderTargetUsage.DiscardContents);
             }
+
             frustum = new BoundingFrustum(view * projectionMatrix);
             RecalculateView();
             for (int i = nonAssignedRenderers.Count - 1; i >= 0; i--)
@@ -347,7 +374,7 @@ namespace PressPlay.FFWD.Components
                     else
                     {
                         RenderBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-                        RenderBatch.Draw(cam.target, new Vector2(cam.rect.x * FullScreen.Width, cam.rect.y * FullScreen.Height), Microsoft.Xna.Framework.Color.White);
+                        RenderBatch.Draw(cam.target, new Vector2(cam.pixelRect.x, FullScreen.Height - (cam.pixelRect.y + cam.pixelRect.height)), Microsoft.Xna.Framework.Color.White);
                         RenderBatch.End();
                     }
                 }

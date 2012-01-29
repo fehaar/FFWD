@@ -913,13 +913,24 @@ namespace PressPlay.FFWD
             }
         }
 
+        internal static void UpdateComponentActive(Component component)
+        {
+            componentsChangingActivity.Add(component);
+        }
+
         private static void ChangeComponentActivity()
         {
-            for (int i = 0; i < componentsChangingActivity.Count; i++)
+            int count = componentsChangingActivity.Count;
+            for (int i = 0; i < count; i++)
             {
                 Component cmp = componentsChangingActivity[i];
                 Type tp = cmp.GetType();
-                if (cmp.gameObject != null && cmp.gameObject.active)
+                bool isEnabledBehaviour = true;
+                if (cmp is Behaviour)
+                {
+                    isEnabledBehaviour = (cmp as Behaviour).enabled;
+                }
+                if (cmp.gameObject != null && cmp.gameObject.active && isEnabledBehaviour)
                 {
                     if (typeCaps.HasCaps(tp, TypeSet.TypeCapabilities.Update))
                     {
@@ -977,16 +988,19 @@ namespace PressPlay.FFWD
                     {
                         Camera.AddRenderer(cmp as Renderer);
                     }
-                    if (cmp is MonoBehaviour)
+                    MonoBehaviour mb = (cmp as MonoBehaviour);
+                    if (mb != null)
                     {
-                        (cmp as MonoBehaviour).OnEnable();
+                        mb.hasBeenEnabled = true;
+                        mb.OnEnable();
                     }
                 }
                 else
                 {
-                    if (cmp is MonoBehaviour && cmp.gameObject != null)
+                    MonoBehaviour mb = (cmp as MonoBehaviour);
+                    if (mb != null && mb.hasBeenEnabled && cmp.gameObject != null)
                     {
-                        (cmp as MonoBehaviour).OnDisable();
+                        mb.OnDisable();
                     }
                     if (typeCaps.HasCaps(tp, TypeSet.TypeCapabilities.Update))
                     {
