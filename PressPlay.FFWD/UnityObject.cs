@@ -78,7 +78,10 @@ namespace PressPlay.FFWD
 
         public static void DestroyImmediate(UnityObject obj)
         {
-            obj.Destroy();
+            if (obj != null)
+            {
+                obj.Destroy();
+            }            
             // TODO: WE should probably clean up after this
         }
 
