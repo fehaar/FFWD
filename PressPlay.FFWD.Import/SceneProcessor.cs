@@ -55,6 +55,14 @@ namespace PressPlay.FFWD.Import
                 }
 
                 MeshFilter mf = r.gameObject.GetComponent<MeshFilter>();
+                if (mf == null)
+                {
+                    throw new Exception("The statically marked renderer at " + r.gameObject + " does not have a meshfilter.");
+                }
+                if (mf.meshToRender == null)
+                {
+                    throw new Exception("The static meshfilter at " + r.gameObject + " does not have a mesh.");
+                }
                 int id = mf.meshToRender.GetInstanceID();
                 Mesh mesh = context.BuildAndLoadAsset<Mesh, Mesh>(new ExternalReference<Mesh>("Assets/" + mf.meshToRender.name + ".xml"), null, null, "XmlImporter");
                 if (mesh == null)
