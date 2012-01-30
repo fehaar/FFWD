@@ -29,7 +29,7 @@ namespace PressPlay.FFWD.Components
                     bones[i] = transform.parent.FindChild("//" + boneIds[i]);
                     if (bones[i] == null)
                     {
-                        throw new Exception("FUCK!");
+                        Debug.LogError(string.Format("The bone {0} did not exist for the renderer {1}.", boneIds[i], this));
                     }
                 }
             }
