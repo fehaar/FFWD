@@ -457,7 +457,10 @@ namespace PressPlay.FFWD
             isLoadingAssetBeforeSceneInitialize = true;
             loadIsComplete = false;
 
-            loadedLevelName = sceneToLoad;
+            if (!isLoadingAdditive)
+            {
+                loadedLevelName = sceneToLoad;
+            }
             scene = assetHelper.Load<Scene>("Scenes/" + sceneToLoad);
             sceneToLoad = "";
             loadingScene = false;
