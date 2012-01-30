@@ -73,8 +73,6 @@ namespace PressPlay.FFWD
         private Stopwatch updateTime = new Stopwatch();
         private Stopwatch fixedUpdateTime = new Stopwatch();
         private Stopwatch lateUpdateTime = new Stopwatch();
-        //private Stopwatch awakeTime = new Stopwatch();
-        //private Stopwatch startTime = new Stopwatch();
         private Stopwatch physics = new Stopwatch();
         private Stopwatch graphics = new Stopwatch();
         public static Stopwatch raycastTimer = new Stopwatch();
@@ -149,13 +147,7 @@ namespace PressPlay.FFWD
             }
         }
 
-        public static bool isLoadingLevel
-        {
-            get
-            {
-                return !loadIsComplete;
-            }
-        }
+        public static bool isLoadingLevel { get; internal set; }
 
         public static bool isPlaying
         {
@@ -534,8 +526,8 @@ namespace PressPlay.FFWD
             tempComponents.Clear();
 
             isLoadingAssetBeforeSceneInitialize = false;
-            loadIsComplete = false;
             isLoadingAdditive = false;
+            isLoadingLevel = false;
 
             if (scene != null)
             {
@@ -560,6 +552,7 @@ namespace PressPlay.FFWD
             Debug.Log("******************************** Call LoadLevelAdditive " + name + " ***********************************");
 #endif
             sceneToLoad = name;
+            isLoadingLevel = true;
             isLoadingAdditive = true;
         }
 
@@ -569,6 +562,7 @@ namespace PressPlay.FFWD
             Debug.Log("******************************** Call LoadLevel " + name + " ***********************************");
 #endif
             sceneToLoad = name;
+            isLoadingLevel = true;
             UnloadCurrentLevel();
         }
 
