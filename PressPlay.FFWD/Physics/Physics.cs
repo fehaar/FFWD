@@ -404,7 +404,9 @@ namespace PressPlay.FFWD
 #endif
             if (from == to)
             {
+                #if DEBUG
                 Application.raycastTimer.Stop();
+                #endif
                 return new RaycastHit[0];
             }
             RaycastHelper.SetValues(100f, false, layerMask);
