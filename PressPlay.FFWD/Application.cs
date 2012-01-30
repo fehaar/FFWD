@@ -547,6 +547,7 @@ namespace PressPlay.FFWD
                 newAssets[i].LoadAsset(assetHelper);
                 newAssets.RemoveAt(i);
             }
+            assetHelper.LoadingResources = false;
         }
 
         public static void LoadLevelAdditive(string name)

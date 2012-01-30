@@ -35,7 +35,7 @@ namespace PressPlay.FFWD
                 try
                 {
 #if DEBUG
-                    Debug.Log("loading asset from disk : " + contentPath);
+                    Debug.Log(String.Format("Loading asset {0} from content manager {1}.", contentPath, category));
 #endif
                     asset = manager.Load<T>(contentPath);
                 }
