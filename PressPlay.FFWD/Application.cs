@@ -200,8 +200,13 @@ namespace PressPlay.FFWD
             for (int i = 0; i < componentsToStart.Count; i++)
             {
                 Component cmp = componentsToStart[i];
-                componentsChangingActivity.Add(cmp);
-                cmp.Start();
+                // We can have objects destroyed before starting if it is done in another Awake.
+                // If that is so, just skip it.
+                if (cmp.gameObject != null)
+                {
+                    componentsChangingActivity.Add(cmp);
+                    cmp.Start();
+                }
             }
             componentsToStart.Clear();
         }
