@@ -34,5 +34,10 @@ namespace PressPlay.FFWD
         {
             return String.Format("{0} {2} ({1})", GetType().Name, GetInstanceID(), name);
         }
+
+        internal override void SetNewId(Dictionary<int, UnityObject> idMap)
+        {
+            throw new InvalidOperationException("This should not happen");
+        }
     }
 }

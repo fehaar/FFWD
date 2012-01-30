@@ -181,7 +181,7 @@ namespace PressPlay.FFWD
                 if (typeof(UnityObject).IsAssignableFrom(memInfo[i].FieldType))
                 {
                     UnityObject val = (field.GetValue(objectToFix) as UnityObject);
-                    if (val == null)
+                    if (val == null || (val is Asset))
                     {
                         continue;
                     }
@@ -218,7 +218,7 @@ namespace PressPlay.FFWD
                             {
                                 newList.Add(list[j]);
                             }
-                            if (list[j] is UnityObject)
+                            if (list[j] is UnityObject && !(list[j] is Asset))
                             {
                                 if (idMap.ContainsKey((list[j] as UnityObject).GetInstanceID()))
                                 {
