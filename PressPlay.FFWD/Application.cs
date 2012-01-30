@@ -115,10 +115,12 @@ namespace PressPlay.FFWD
 
         internal static bool loadingScene = false;
 
+        internal static ILifecycleTracker lifecycleTracker;
+
         // Lists and variables used for loading a scene
         public static bool isLoadingAssetBeforeSceneInitialize = false;
         private static bool doGarbageCollectAfterAwake = false;
-        internal static bool loadIsComplete = false;
+        private static bool loadIsComplete = true;
         internal static bool hasDrawBeenCalled = false;
         private static int totalNumberOfAssetsToLoad = 0;
         private static int numberOfAssetsLoaded = 0;
@@ -151,7 +153,7 @@ namespace PressPlay.FFWD
         {
             get
             {
-                return !String.IsNullOrEmpty(sceneToLoad);
+                return !loadIsComplete;
             }
         }
 
@@ -448,6 +450,9 @@ namespace PressPlay.FFWD
             //Debug.Log("DoSceneLoad: " + sceneToLoad);
 
             _loadingProgess = 0;
+#if DEBUG
+            Debug.Log("******************************** Do Scene Load " + sceneToLoad + " ***********************************");
+#endif
 
             if (!isLoadingAdditive && !String.IsNullOrEmpty(loadedLevelName))
             {
@@ -519,6 +524,9 @@ namespace PressPlay.FFWD
 
         private void OnSceneLoadComplete()
         {
+#if DEBUG
+            Debug.Log("******************************** Scene Load Complete ***********************************");
+#endif
             stopWatch.Stop();
             stopWatch.Reset();
 
@@ -546,17 +554,19 @@ namespace PressPlay.FFWD
             }
         }
 
-        public static void LoadLevelAdditive(string m_strLevelBase)
+        public static void LoadLevelAdditive(string name)
         {
-            //throw new NotImplementedException();
-            sceneToLoad = m_strLevelBase;
+#if DEBUG
+            Debug.Log("******************************** Call LoadLevelAdditive " + name + " ***********************************");
+#endif
+            sceneToLoad = name;
             isLoadingAdditive = true;
         }
 
         public static void LoadLevel(string name)
         {
 #if DEBUG
-            Debug.Log("******************************** Loading Level " + name + " ***********************************");
+            Debug.Log("******************************** Call LoadLevel " + name + " ***********************************");
 #endif
             sceneToLoad = name;
             UnloadCurrentLevel();
@@ -680,8 +690,10 @@ namespace PressPlay.FFWD
             for (int i = 0; i < componentCount; i++)
             {
                 Component cmp = newComponents[i];
+                LifecycleEvent(cmp, "Consider for awake");
                 if (cmp.gameObject != null)
                 {
+                    LifecycleEvent(cmp, "Add to objects");
                     objects.Add(cmp.GetInstanceID(), cmp);
 
                     if (!cmp.isPrefab)
@@ -716,6 +728,7 @@ namespace PressPlay.FFWD
                 while (instantiatedComponentsToAwake.Count > 0)
                 {
                     Component cmp = instantiatedComponentsToAwake.Dequeue();
+                    LifecycleEvent(cmp, "Awake instantiated");
                     cmp.Awake();
                 }
             }
@@ -724,6 +737,7 @@ namespace PressPlay.FFWD
                 while (componentsToAwake.Count > 0)
                 {
                     Component cmp = componentsToAwake.Dequeue();
+                    LifecycleEvent(cmp, "Awake as component");
                     cmp.Awake();
                 }
             }
@@ -1077,6 +1091,20 @@ namespace PressPlay.FFWD
                 {
                     invokeCalls[i] = call;
                 }
+            }
+        }
+
+        internal static void RegisterLifecycleTracker(LifecycleTracer lcTrack)
+        {
+            lifecycleTracker = lcTrack;
+        }
+
+        [Conditional("DEBUG")]
+        private static void LifecycleEvent(UnityObject obj, string evt)
+        {
+            if (lifecycleTracker != null)
+            {
+                lifecycleTracker.TrackEvent(obj, evt);
             }
         }
     }

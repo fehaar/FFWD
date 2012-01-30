@@ -224,7 +224,9 @@
     <Compile Include="GUI\RectOffset.cs" />
     <Compile Include="Input\Touch.cs" />
     <Compile Include="Interfaces\IInitializable.cs" />
+    <Compile Include="Interfaces\ILifecycleTracker.cs" />
     <Compile Include="InvokeCall.cs" />
+    <Compile Include="LifecycleTracer.cs" />
     <Compile Include="Material.cs" />
     <Compile Include="Input\Input.cs" />
     <Compile Include="Mathf.cs" />

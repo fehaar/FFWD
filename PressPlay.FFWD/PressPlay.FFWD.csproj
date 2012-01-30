@@ -231,6 +231,8 @@
     <Compile Include="Components\Renderers\Renderer.cs" />
     <Compile Include="Components\Renderers\SkinnedMeshRenderer.cs" />
     <Compile Include="Components\Renderers\StaticBatchRenderer.cs" />
+    <Compile Include="Interfaces\ILifecycleTracker.cs" />
+    <Compile Include="LifecycleTracer.cs" />
     <Compile Include="Matrix4x4.cs" />
     <Compile Include="Physics\VectorConverter.cs" />
     <Compile Include="UnityAudioListener.cs" />
