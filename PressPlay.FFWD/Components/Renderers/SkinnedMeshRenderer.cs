@@ -8,7 +8,7 @@ namespace PressPlay.FFWD.Components
     public class SkinnedMeshRenderer : Renderer
     {
         [ContentSerializer(ElementName="bones", Optional=true)]
-        internal int[] boneIds;
+        internal string[] boneIds;
         public Mesh sharedMesh;
         private Mesh mesh;
         private Matrix[] bindPoses;
@@ -17,23 +17,22 @@ namespace PressPlay.FFWD.Components
 
         private Animation animation;
 
-        internal override void FixReferences(System.Collections.Generic.Dictionary<int, UnityObject> idMap)
+        public override void Awake()
         {
-            base.FixReferences(idMap);
+            base.Awake();
             if (boneIds != null && bones == null)
             {
                 bones = new Transform[boneIds.Length];
                 bindPoses = new Matrix[boneIds.Length];
                 for (int i = 0; i < boneIds.Length; i++)
                 {
-                    bones[i] = idMap[boneIds[i]] as Transform;
+                    bones[i] = transform.parent.FindChild("//" + boneIds[i]);
+                    if (bones[i] == null)
+                    {
+                        Debug.LogError(string.Format("The bone {0} did not exist for the renderer {1}.", boneIds[i], this));
+                    }
                 }
             }
-        }
-
-        public override void Awake()
-        {
-            base.Awake();
             animation = GetComponentInParents<Animation>();
             // Get a local mesh copy that we can molest
             mesh = (Mesh)sharedMesh.Clone();

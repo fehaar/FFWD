@@ -24,10 +24,10 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
             SkinnedMeshRenderer smr = mr as SkinnedMeshRenderer;
             if (smr != null)
             {
-                int[] bones = new int[smr.bones.Length];
+                string[] bones = new string[smr.bones.Length];
                 for (int i = 0; i < smr.bones.Length; i++)
 			    {
-                    bones[i] = smr.bones[i].GetInstanceID();
+                    bones[i] = smr.bones[i].name;
 			    }
                 writer.WriteElement("bones", bones);
                 writer.WriteMesh(smr.sharedMesh, "sharedMesh");

@@ -766,10 +766,17 @@ namespace PressPlay.FFWD
             return null;
         }
 
-        public bool IsChildOf(Transform parent)
+        public bool IsChildOf(Transform trans)
         {
-            // TODO : Add implementation of method
-            throw new NotImplementedException("Method not implemented.");
+            if (parent == null)
+            {
+                return false;
+            }
+            if (parent == trans)
+            {
+                return true;
+            }
+            return parent.IsChildOf(trans);
         }
 
         public Transform FindChild(string name)
