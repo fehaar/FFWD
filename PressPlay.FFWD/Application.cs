@@ -907,14 +907,9 @@ namespace PressPlay.FFWD
             assetHelper.AddStaticAsset(name);
         }
 
-        public static void Preload<T>(string name)
+        public static T Preload<T>(string name)
         {
-            assetHelper.Preload<T>(name);
-        }
-
-        public static T PreloadInstant<T>(string name)
-        {
-            return assetHelper.PreloadInstant<T>(name);
+            return assetHelper.Preload<T>(name);
         }
 
         internal static void UpdateGameObjectActive(List<Component> components)

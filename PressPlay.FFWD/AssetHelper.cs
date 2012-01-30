@@ -10,8 +10,6 @@ namespace PressPlay.FFWD
     public class AssetHelper
     {
         private Dictionary<string, ContentManager> contentManagers = new Dictionary<string, ContentManager>();
-        private Dictionary<string, List<string>> managerContent = new Dictionary<string, List<string>>();
-        private Dictionary<string, object> content = new Dictionary<string, object>();
 
         public Func<ContentManager> CreateContentManager;
         private static List<string> staticAssets = new List<string>();
@@ -24,42 +22,29 @@ namespace PressPlay.FFWD
 
         public T Load<T>(string category, string contentPath)
         {
-            if (!content.ContainsKey(contentPath))
+            if (staticAssets.Contains(contentPath) || staticAssets.Contains(category))
             {
-                if (staticAssets.Contains(contentPath) || staticAssets.Contains(category))
-                {
-                    category = "Static";
-                }
-                ContentManager manager = GetContentManager(category);
-                T asset = default(T);
-                try
-                {
-#if DEBUG
-                    Debug.Log(String.Format("Loading asset {0} from content manager {1}.", contentPath, category));
-#endif
-                    asset = manager.Load<T>(contentPath);
-                }
-                catch (Exception ex)
-                {
-#if DEBUG
-                    Debug.Log("Asset not found. " + typeof(T).Name + " at " + contentPath + ". " + ex.Message);
-#endif
-                }
-                if (asset == null && category == "Resources")
-                {
-                    return default(T);
-                }
-                content.Add(contentPath, asset);
-                managerContent[category].Add(contentPath);
+                category = "Static";
             }
-            else
+            ContentManager manager = GetContentManager(category);
+            T asset = default(T);
+            try
             {
-                if (!(content[contentPath] is T))
+#if DEBUG
+                if (ApplicationSettings.LogAssetLoads)
                 {
-                    return default(T);
+                    Debug.Log(String.Format("Loading asset {0} from content manager {1}.", contentPath, category));                    
                 }
+#endif              
+                asset = manager.Load<T>(contentPath);
             }
-            return (T)content[contentPath];
+            catch (Exception ex)
+            {
+#if DEBUG
+                Debug.Log("Asset not found. " + typeof(T).Name + " at " + contentPath + ". " + ex.Message);
+#endif
+            }
+            return asset;
         }
 
         internal T LoadAsset<T>(string name)
@@ -73,12 +58,6 @@ namespace PressPlay.FFWD
             {
                 ContentManager manager = GetContentManager(category);
                 contentManagers.Remove(category);
-                List<string> contentInManager = managerContent[category];
-                for (int i = 0; i < contentInManager.Count; i++)
-                {
-                    content.Remove(contentInManager[i]);
-                }
-                managerContent.Remove(category);
                 manager.Unload();
             }
         }
@@ -88,26 +67,16 @@ namespace PressPlay.FFWD
             if (!contentManagers.ContainsKey(category))
             {
                 contentManagers.Add(category, CreateContentManager());
-                managerContent.Add(category, new List<string>());
             }
             return contentManagers[category];
         }
 
         public void AddStaticAsset(string name)
-        {
-            
+        {            
             staticAssets.Add(name);
-            
-            //Load<T>(name);
         }
 
-        public void Preload<T>(string name)
-        {
-            staticAssets.Add(name);
-            //Load<T>(name);
-        }
-
-        public T PreloadInstant<T>(string name)
+        public T Preload<T>(string name)
         {
             staticAssets.Add(name);
             return Load<T>(name);
