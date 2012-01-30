@@ -156,9 +156,13 @@ namespace PressPlay.FFWD.Components
             if (cam == main)
             {
                 main = null;
-                if (_allCameras.Count > 0)
+                for (int i = 0; i < _allCameras.Count; i++)
                 {
-                    main = _allCameras[0];
+                    if (_allCameras[i].CompareTag("MainCamera"))
+                    {
+                        main = _allCameras[i];
+                        return;
+                    }
                 }
             }
         }
