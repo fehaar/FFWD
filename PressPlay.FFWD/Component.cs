@@ -383,7 +383,12 @@ namespace PressPlay.FFWD
                 MethodInfo info = tp.GetCachedMethod(methodName, flags);
                 if (info != null)
                 {
-                    //Debug.Log(String.Format("Sent {0} to {1}", methodName, this));
+#if DEBUG
+                    if (ApplicationSettings.LogSendMessage)
+                    {
+                        Debug.Log(String.Format("Sent {0} to {1}", methodName, this));
+                    }
+#endif
                     info.Invoke(this, (value == null) ? null : new object[1] { value });
                     return true;
                 }
