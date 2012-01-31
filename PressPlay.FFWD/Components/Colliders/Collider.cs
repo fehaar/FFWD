@@ -68,8 +68,8 @@ namespace PressPlay.FFWD.Components
             if (rigidbody == null)
             {
                 connectedBody = Physics.AddBody();
-                connectedBody.Position = transform.position;
-                connectedBody.Rotation = -MathHelper.ToRadians(transform.rotation.eulerAngles.y);
+                connectedBody.Position = VectorConverter.Convert(transform.position, to2dMode);
+                connectedBody.Rotation = -MathHelper.ToRadians(VectorConverter.Reduce(transform.rotation.eulerAngles, to2dMode));
                 connectedBody.UserData = this;
                 connectedBody.BodyType = (gameObject.isStatic) ? BodyType.Static : BodyType.Kinematic;
                 AddCollider(connectedBody, 1);
@@ -133,7 +133,7 @@ namespace PressPlay.FFWD.Components
             if (connectedBody != null && connectedBody.BodyType != BodyType.Static)
             {
                 //connectedBody.SetTransform(position, connectedBody.GetAngle());
-                Microsoft.Xna.Framework.Vector2 pos = position;
+                Microsoft.Xna.Framework.Vector2 pos = VectorConverter.Convert(position, to2dMode);
                 connectedBody.SetTransformIgnoreContacts(ref pos, connectedBody.Rotation);
                 Physics.RemoveStays(this);
             }

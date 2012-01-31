@@ -106,7 +106,7 @@ namespace PressPlay.FFWD
                 }
                 if (comp.gameObject.active && bodyType == BodyType.Kinematic)
                 {
-                    float rad = -MathHelper.ToRadians((comp.to2dMode == To2dMode.DropZ) ? comp.transform.eulerAngles.z : comp.transform.eulerAngles.y);
+                    float rad = -MathHelper.ToRadians(VectorConverter.Reduce(comp.transform.eulerAngles, comp.to2dMode));
                     Microsoft.Xna.Framework.Vector2 pos = VectorConverter.Convert(comp.transform.position, comp.to2dMode);
                     if (body.Position != pos || body.Rotation != rad)
                     {
@@ -130,10 +130,10 @@ namespace PressPlay.FFWD
             for (int i = rigidBodies.Count - 1; i >= 0; i--)
             {
                 Body body = rigidBodies[i];
-                Component comp = (Component)body.UserData;
+                Collider comp = (Collider)body.UserData;
                 FarseerPhysics.Common.Transform t;
                 body.GetTransform(out t);
-                comp.transform.SetPositionFromPhysics(t.Position, t.Angle);
+                comp.transform.SetPositionFromPhysics(VectorConverter.Convert(t.Position, comp.to2dMode), t.Angle);
             }
 
             contactProcessor.Update();
@@ -444,9 +444,9 @@ namespace PressPlay.FFWD
                 {
                     hitInfo.collider = body.UserData;
                     hitInfo.transform = body.UserData.transform;
-                    hitInfo.normal = output.Normal;
+                    hitInfo.normal = VectorConverter.Convert(output.Normal, body.UserData.to2dMode);
                     hitInfo.distance = output.Fraction;
-                    hitInfo.point = VectorConverter.Convert(ray.GetPoint(output.Fraction), body.UserData.to2dMode);
+                    hitInfo.point = ray.GetPoint(output.Fraction);
                     return true;
                 }
             }
@@ -570,12 +570,12 @@ namespace PressPlay.FFWD
         #endregion
 
         #region OverlapSpehere methods
-        public static Collider[] OverlapSphere(Vector3 position, float radius)
+        public static Collider[] OverlapSphere(Vector2 position, float radius)
         {
             return OverlapSphere(position, radius, kDefaultRaycastLayers);
         }
 
-        public static Collider[] OverlapSphere(Vector3 position, float radius, LayerMask layermask)
+        public static Collider[] OverlapSphere(Vector2 position, float radius, LayerMask layermask)
         {
             AABB aabb = new AABB(position, radius, radius);
             QueryHelper.layermask = layermask;

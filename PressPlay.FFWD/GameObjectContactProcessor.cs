@@ -111,8 +111,8 @@ namespace PressPlay.FFWD
                     {
                         coll.contacts[j].thisCollider = compA.collider;
                         coll.contacts[j].otherCollider = compB.collider;
-                        coll.contacts[j].point = points[j];
-                        coll.contacts[j].normal = normal;
+                        coll.contacts[j].point = VectorConverter.Convert(points[j], compA.collider.to2dMode);
+                        coll.contacts[j].normal = VectorConverter.Convert(normal, compA.collider.to2dMode);
                     }
                     compA.gameObject.OnCollisionExit(coll);
                     coll.SetColliders(compB.collider, compA.collider);
@@ -197,13 +197,13 @@ namespace PressPlay.FFWD
                     {
                         collisionBToA.contacts[j].thisCollider = compB.collider;
                         collisionBToA.contacts[j].otherCollider = compA.collider;
-                        collisionBToA.contacts[j].point = points[j];
-                        collisionBToA.contacts[j].normal = -normal;
+                        collisionBToA.contacts[j].point = VectorConverter.Convert(points[j], compB.collider.to2dMode);
+                        collisionBToA.contacts[j].normal = VectorConverter.Convert(-normal, compB.collider.to2dMode);
 
                         collisionAToB.contacts[j].thisCollider = compA.collider;
                         collisionAToB.contacts[j].otherCollider = compB.collider;
-                        collisionAToB.contacts[j].point = points[j];
-                        collisionAToB.contacts[j].normal = normal;
+                        collisionAToB.contacts[j].point = VectorConverter.Convert(points[j], compA.collider.to2dMode);
+                        collisionAToB.contacts[j].normal = VectorConverter.Convert(normal, compA.collider.to2dMode);
                     }
                     Stay s = new Stay(collisionAToB, collisionBToA, compA.gameObject, compB.gameObject);
                     staying.Add(s);

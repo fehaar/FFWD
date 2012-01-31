@@ -96,5 +96,19 @@ namespace PressPlay.FFWD
             }
             return v;
         }
+
+        internal static float Reduce(Vector3 v, Physics.To2dMode mode)
+        {
+            switch (mode)
+            {
+                case Physics.To2dMode.DropX:
+                    return v.x;
+                case Physics.To2dMode.DropY:
+                    return v.y;
+                case Physics.To2dMode.DropZ:
+                    return v.z;
+            }
+            return 0f;
+        }
     }
 }

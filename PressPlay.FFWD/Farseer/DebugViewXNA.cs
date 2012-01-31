@@ -40,6 +40,7 @@ namespace FarseerPhysics
         public Color SleepingShapeColor = new Color(0.6f, 0.6f, 0.6f);
         public Color StaticShapeColor = new Color(0.5f, 0.9f, 0.5f);
         public Color TextColor = Color.White;
+        public bool DrawSolidShapes = true;
 
         //Contacts
         private int _pointCount;
@@ -145,12 +146,17 @@ namespace FarseerPhysics
         /// <summary>
         /// Call this to draw shapes and other debug draw data.
         /// </summary>
-        private void DrawDebugData()
+        private void DrawDebugData(Predicate<Body> bodyFilter)
         {
             if ((Flags & DebugViewFlags.Shape) == DebugViewFlags.Shape)
             {
                 foreach (Body b in World.BodyList)
                 {
+                    if (bodyFilter != null && bodyFilter(b))
+                    {
+                        continue;
+                    }
+
                     Transform xf;
                     b.GetTransform(out xf);
                     foreach (Fixture f in b.FixtureList)
@@ -496,7 +502,14 @@ namespace FarseerPhysics
                         float radius = circle.Radius;
                         Vector2 axis = xf.R.Col1;
 
-                        DrawSolidCircle(center, radius, axis, color);
+                        if (DrawSolidShapes)
+                        {
+                            DrawSolidCircle(center, radius, axis, color);
+                        }
+                        else
+                        {
+                            DrawCircle(center, radius, color);
+                        }
                     }
                     break;
 
@@ -511,7 +524,14 @@ namespace FarseerPhysics
                             _tempVertices[i] = MathUtils.Multiply(ref xf, poly.Vertices[i]);
                         }
 
-                        DrawSolidPolygon(_tempVertices, vertexCount, color);
+                        if (DrawSolidShapes)
+                        {
+                            DrawSolidPolygon(_tempVertices, vertexCount, color);
+                        }
+                        else
+                        {
+                            DrawPolygon(_tempVertices, vertexCount, color);
+                        }
                     }
                     break;
 
@@ -761,7 +781,7 @@ namespace FarseerPhysics
             }
         }
 
-        public void RenderDebugData(ref Matrix projection, ref Matrix view)
+        public void RenderDebugData(ref Matrix projection, ref Matrix view, Predicate<Body> bodyFilter)
         {
             //Nothing is enabled - don't draw the debug view.
              if (Flags == 0)
@@ -772,7 +792,7 @@ namespace FarseerPhysics
             _device.BlendState = BlendState.AlphaBlend;
 
             _primitiveBatch.Begin(ref projection, ref view);
-            DrawDebugData();
+            DrawDebugData(bodyFilter);
             _primitiveBatch.End();
 
             if ((Flags & DebugViewFlags.PerformanceGraph) == DebugViewFlags.PerformanceGraph)
@@ -804,7 +824,7 @@ namespace FarseerPhysics
         public void RenderDebugData(ref Matrix projection)
         {
             Matrix view = Matrix.Identity;
-            RenderDebugData(ref projection, ref view);
+            RenderDebugData(ref projection, ref view, null);
         }
 
         public void LoadContent(GraphicsDevice device)

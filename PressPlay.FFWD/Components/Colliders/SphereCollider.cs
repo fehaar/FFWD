@@ -20,7 +20,7 @@ namespace PressPlay.FFWD.Components
         {
             float rad = radius * Math.Max(transform.lossyScale.x, Math.Max(transform.lossyScale.y, transform.lossyScale.z));
             connectedBody = body;
-            Physics.AddCircle(body, isTrigger, rad, center * transform.lossyScale, mass);
+            Physics.AddCircle(body, isTrigger, rad, VectorConverter.Convert(center * transform.lossyScale, to2dMode), mass);
         }
     }
 }

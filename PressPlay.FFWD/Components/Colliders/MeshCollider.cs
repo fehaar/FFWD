@@ -15,7 +15,7 @@ namespace PressPlay.FFWD.Components
 
         protected override void DoAddCollider(Body body, float mass)
         {
-            Microsoft.Xna.Framework.Vector2 scale = transform.lossyScale;
+            Microsoft.Xna.Framework.Vector2 scale = VectorConverter.Convert(transform.lossyScale, to2dMode);
             for (int i = 0; i < vertices.Count; i++)
             {
                 Vertices v = vertices[i];

@@ -59,8 +59,8 @@ namespace PressPlay.FFWD.Components
                 if (body == null)
                 {
                     body = Physics.AddBody();
-                    body.Position = transform.position;
-                    body.Rotation = -MathHelper.ToRadians(transform.rotation.eulerAngles.y);
+                    body.Position = VectorConverter.Convert(transform.position, collider.to2dMode);
+                    body.Rotation = -MathHelper.ToRadians(VectorConverter.Reduce(transform.rotation.eulerAngles, collider.to2dMode));
                     body.UserData = collider;
                     collider.AddCollider(body, mass);
                 }
@@ -112,13 +112,13 @@ namespace PressPlay.FFWD.Components
                 {
                     return Vector3.zero;
                 }
-                return body.LinearVelocity;
+                return VectorConverter.Convert(body.LinearVelocity, body.UserData.to2dMode);
             }
             set
             {
                 if (body != null)
                 {
-                    body.LinearVelocity = value;
+                    body.LinearVelocity = VectorConverter.Convert(value, body.UserData.to2dMode);
                 }
             }
         }
@@ -130,18 +130,19 @@ namespace PressPlay.FFWD.Components
 
         public void AddForce(Vector3 elasticityForce, ForceMode mode)
         {
+            Vector2 ef = VectorConverter.Convert(elasticityForce, body.UserData.to2dMode);
             switch (mode)
             {
                 case ForceMode.Force:
-                    body.ApplyForce(elasticityForce, gameObject.transform.position);
+                    body.ApplyForce(ef, VectorConverter.Convert(gameObject.transform.position, body.UserData.to2dMode));
                     break;
                 case ForceMode.Acceleration:
-                    break;
+                    throw new NotImplementedException();
                 case ForceMode.Impulse:
-                    body.ApplyLinearImpulse(elasticityForce, gameObject.transform.position);
+                    body.ApplyLinearImpulse(ef, VectorConverter.Convert(gameObject.transform.position, body.UserData.to2dMode));
                     break;
                 case ForceMode.VelocityChange:
-                    break;
+                    throw new NotImplementedException();
             }
         }
 
@@ -149,7 +150,7 @@ namespace PressPlay.FFWD.Components
         {
             if (body != null)
             {
-                Microsoft.Xna.Framework.Vector2 pos = position;
+                Microsoft.Xna.Framework.Vector2 pos = VectorConverter.Convert(position, body.UserData.to2dMode);
                 body.SetTransformIgnoreContacts(ref pos, body.Rotation);
                 Physics.RemoveStays(collider);
             }

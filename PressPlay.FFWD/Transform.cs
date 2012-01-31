@@ -423,6 +423,7 @@ namespace PressPlay.FFWD
             {
                 localPosition = pos - parent.position;
             }
+            //  TODO: There is probably something here regarding what is up...
             localRotation = Quaternion.AngleAxis(ang, Vector3.up);
         }
 

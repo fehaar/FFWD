@@ -19,7 +19,7 @@ namespace PressPlay.FFWD.Components
         protected override void DoAddCollider(Body body, float mass)
         {
             connectedBody = body;
-            Vector3 cen = center * transform.lossyScale;
+            Vector2 cen = VectorConverter.Convert(center * transform.lossyScale, to2dMode);
 
             if (direction == 0 || height <= radius * 2)
 	        {
@@ -37,8 +37,8 @@ namespace PressPlay.FFWD.Components
                     sz /= 2;
                     float rad = sz.y;
                     sz.y = 0;
-                    Physics.AddCircle(body, isTrigger, rad, cen + (Vector3)sz, mass);
-                    Physics.AddCircle(body, isTrigger, rad, cen - (Vector3)sz, mass);
+                    Physics.AddCircle(body, isTrigger, rad, cen + sz, mass);
+                    Physics.AddCircle(body, isTrigger, rad, cen - sz, mass);
                 }
                 else
 	            {
@@ -48,8 +48,8 @@ namespace PressPlay.FFWD.Components
                     sz /= 2;
                     float rad = sz.x;
                     sz.x = 0;
-                    Physics.AddCircle(body, isTrigger, rad, cen + (Vector3)sz, mass);
-                    Physics.AddCircle(body, isTrigger, rad, cen - (Vector3)sz, mass);
+                    Physics.AddCircle(body, isTrigger, rad, cen + sz, mass);
+                    Physics.AddCircle(body, isTrigger, rad, cen - sz, mass);
                 }
 	        }
         }
