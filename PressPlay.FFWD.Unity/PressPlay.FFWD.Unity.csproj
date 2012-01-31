@@ -51,7 +51,9 @@
     <Compile Include="FFWD_DontExportAttribute.cs" />
     <Compile Include="FFWD_ExportOptionsAttribute.cs" />
     <Compile Include="Editor\ExportSceneWizard.cs" />
+    <Compile Include="Editor\PolygonColliderEditor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="FFWD_PolygonCollider.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PressPlay.FFWD.Exporter\PressPlay.FFWD.Exporter.csproj">
