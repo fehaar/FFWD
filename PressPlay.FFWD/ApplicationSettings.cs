@@ -20,6 +20,7 @@ namespace PressPlay.FFWD
         public static bool ShowDebugDisplays = true;
         public static bool ShowDebugLines = true;
         public static bool ShowDebugPhysics = false;
+        public static bool ShowDebugPhysicsCustom = false;
 #if DEBUG
         public static bool LogActivatedComponents = false;
         public static bool LogAssetLoads = false;

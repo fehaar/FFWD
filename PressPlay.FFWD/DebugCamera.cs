@@ -87,6 +87,11 @@ namespace PressPlay.FFWD
                 //    Debug.Display("Over", "");
                 //}
             }
+
+            if(ApplicationSettings.ShowDebugPhysicsCustom)
+            {
+                Physics.DrawDebug();
+            }
             return 0;
         }
     }

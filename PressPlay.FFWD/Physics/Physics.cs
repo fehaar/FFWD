@@ -686,5 +686,40 @@ namespace PressPlay.FFWD
         {
             Initialize();
         }
+
+        public static void DrawDebug()
+        {
+          List<Body> Bodies = world.BodyList;
+
+          for(int i = 0; i < Bodies.Count; ++i)
+          {
+            FarseerPhysics.Common.Transform Transf;
+            Bodies[i].GetTransform(out Transf);
+            List<Fixture> Fixtures = Bodies[i].FixtureList;
+            
+            for(int j = 0; j < Fixtures.Count; ++j)
+            {
+              FixtureProxy[] Proxies = Fixtures[j].Proxies;
+
+              for(int k = 0; k < Proxies.Length; ++k)
+              {
+                Microsoft.Xna.Framework.Vector2[] Vertices = Proxies[k].AABB.GetVertices();
+
+                for(int l = 0; l < Vertices.Length; ++l)
+                {
+                  Vector3 vOriginBot = new Vector3(Vertices[l].X,  0.0f, Vertices[l].Y);
+                  Vector3 vOriginTop = new Vector3(Vertices[l].X,  9.0f, Vertices[l].Y);
+                  int     iNext   = (l + 1) % Vertices.Length;
+                  Vector3 vEndBot = new Vector3(Vertices[iNext].X, 0.0f, Vertices[iNext].Y);
+                  Vector3 vEndTop = new Vector3(Vertices[iNext].X, 9.0f, Vertices[iNext].Y);
+                  
+                  Debug.DrawLine(vOriginBot, vEndBot,    Color.red);
+                  Debug.DrawLine(vOriginTop, vEndTop,    Color.red);
+                  Debug.DrawLine(vOriginBot, vOriginTop, Color.red);
+                }
+              }
+            }
+          }
+        }
     }
 }

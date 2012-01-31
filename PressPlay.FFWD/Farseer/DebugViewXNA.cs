@@ -155,7 +155,7 @@ namespace FarseerPhysics
                     b.GetTransform(out xf);
                     foreach (Fixture f in b.FixtureList)
                     {
-                        if (b.Enabled == false || (!b.UserData.gameObject.active))
+                        if (b.Enabled == false || ((bool)b.UserData && !b.UserData.gameObject.active))
                         {
                             DrawShape(f, xf, InactiveShapeColor);
                         }
