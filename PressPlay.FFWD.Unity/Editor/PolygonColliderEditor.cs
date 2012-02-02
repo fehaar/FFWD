@@ -11,6 +11,10 @@ public class PolygonColliderEditor : Editor
     void OnSceneGUI()
     {
         FFWD_PolygonCollider pc = (FFWD_PolygonCollider)target;
+        if (pc.relativePoints == null)
+        {
+            return;
+        }
         for (int i = 0; i < pc.relativePoints.Length; i++)
         {
             Vector3 absPos = pc.transform.position + pc.convertPoint(pc.relativePoints[i]);

@@ -25,6 +25,33 @@ namespace PressPlay.FFWD.Import
             scene = input;
 
             // Create static batch renderers
+            CreateStaticBatchRenderers(context, idMap);
+            PurgeColliders();
+
+            foreach (Component cmp in Application.newComponents)
+            {
+                Type tp = cmp.GetType();
+                if (!assembliesUsed.Contains(tp.Assembly))
+                {
+                    assembliesUsed.Add(tp.Assembly);
+                }
+            }
+
+            TypeSet tc = new TypeSet();
+            foreach (Assembly ass in assembliesUsed)
+            {
+                foreach (Type type in ass.GetTypes())
+                {
+                    tc.Add(type);
+                }
+            }
+            scene.typeCaps = tc.ToList();
+            Application.Reset();
+            return input;
+        }
+
+        private void CreateStaticBatchRenderers(ContentProcessorContext context, Dictionary<int, UnityObject> idMap)
+        {
             Dictionary<string, StaticBatchRenderer> staticRenderers = new Dictionary<string, StaticBatchRenderer>();
             foreach (Renderer r in Application.newComponents.Where(c => (c is Renderer)).ToArray())
             {
@@ -75,28 +102,24 @@ namespace PressPlay.FFWD.Import
                     mf.mesh = null;
                 }
             }
-            input.gameObjects.AddRange(staticRenderers.Values.Select(sbr => sbr.gameObject));
+            scene.gameObjects.AddRange(staticRenderers.Values.Select(sbr => sbr.gameObject));
+        }
 
-            foreach (Component cmp in Application.newComponents)
+        /// <summary>
+        /// This will search for object that have PolygonColliders and purge other colliders on that GameObject
+        /// </summary>
+        private void PurgeColliders()
+        {
+            foreach (PolygonCollider pc in Application.newComponents.Where(c => (c is PolygonCollider)).ToArray())
             {
-                Type tp = cmp.GetType();
-                if (!assembliesUsed.Contains(tp.Assembly))
+                foreach (Collider item in pc.GetComponents<Collider>())
                 {
-                    assembliesUsed.Add(tp.Assembly);
+                    if (item != pc)
+                    {
+                        pc.gameObject.RemoveComponent(item);
+                    }
                 }
-            }
-
-            TypeSet tc = new TypeSet();
-            foreach (Assembly ass in assembliesUsed)
-            {
-                foreach (Type type in ass.GetTypes())
-                {
-                    tc.Add(type);
-                }
-            }
-            scene.typeCaps = tc.ToList();
-            Application.Reset();
-            return input;
+            }            
         }
 
         private string GetMaterialKey(Material[] material)
