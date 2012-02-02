@@ -50,6 +50,11 @@ namespace PressPlay.FFWD
             return (float)Math.Abs(x);
         }
 
+        public static float Acos(float x)
+        {
+            return (float)Math.Acos(x);
+        }
+
         public static float Asin(float x)
         {
             return (float)Math.Asin(x);
