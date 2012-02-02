@@ -17,6 +17,7 @@ namespace PressPlay.FFWD
             prefabs = new List<GameObject>();
         }
 
+        public bool hasBeenProcessed { get; set; }
         [ContentSerializer(FlattenContent = true, CollectionItemName = "go")]
         public List<GameObject> gameObjects { get; set; }
         [ContentSerializer(FlattenContent = true, CollectionItemName = "p")]

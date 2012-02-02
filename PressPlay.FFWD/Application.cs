@@ -467,14 +467,14 @@ namespace PressPlay.FFWD
                 loadedLevelName = sceneToLoad;
             }
             scene = assetHelper.Load<Scene>("Scenes/" + sceneToLoad);
-            sceneToLoad = "";
             loadingScene = false;
-
             if (scene != null)
             {
+                System.Diagnostics.Debug.Assert(scene.hasBeenProcessed, String.Format("The scene {0} is not being processed by the SceneProcessor. Please fix this!", sceneToLoad));
                 typeCaps.Add(scene.typeCaps);
                 //tempAssets.AddRange(scene.assets);
             }
+            sceneToLoad = "";
             totalNumberOfAssetsToLoad = tempAssets.Count;
             numberOfAssetsLoaded = 0;
 

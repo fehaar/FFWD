@@ -47,6 +47,7 @@ namespace PressPlay.FFWD.Import
             }
             scene.typeCaps = tc.ToList();
             Application.Reset();
+            scene.hasBeenProcessed = true;
             return input;
         }
 

@@ -53,6 +53,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                 writer.WriteAttributeString("xmlns", "c", null, "PressPlay.FFWD.Components");
                 writer.WriteStartElement("Asset");
                 writer.WriteAttributeString("Type", resolver.DefaultNamespace + "Scene");
+                writer.WriteElementString("hasBeenProcessed", "false");
                 WriteGOs();
                 WritePrefabs();
                 writer.WriteEndElement();
@@ -77,6 +78,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                 writer.WriteAttributeString("xmlns", "c", null, "PressPlay.FFWD.Components");
                 writer.WriteStartElement("Asset");
                 writer.WriteAttributeString("Type", resolver.DefaultNamespace + "Scene");
+                writer.WriteElementString("hasBeenProcessed", "true");
                 Prefabs.Add(go);
                 WritePrefabs();
                 writer.WriteEndElement();
