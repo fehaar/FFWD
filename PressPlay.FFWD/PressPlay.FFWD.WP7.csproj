@@ -88,6 +88,7 @@
     <Compile Include="Components\Colliders\Collider.cs" />
     <Compile Include="Components\Colliders\ForceMode.cs" />
     <Compile Include="Components\Colliders\MeshCollider.cs" />
+    <Compile Include="Components\Colliders\PolygonCollider.cs" />
     <Compile Include="Components\Colliders\Rigidbody.cs" />
     <Compile Include="Components\Colliders\SphereCollider.cs" />
     <Compile Include="Components\IdMap.cs" />

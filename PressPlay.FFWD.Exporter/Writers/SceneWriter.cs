@@ -49,8 +49,10 @@ namespace PressPlay.FFWD.Exporter.Writers
             {
                 writer.WriteStartDocument();
                 writer.WriteStartElement("XnaContent");
+                writer.WriteAttributeString("xmlns", "f", null, "PressPlay.FFWD");
+                writer.WriteAttributeString("xmlns", "c", null, "PressPlay.FFWD.Components");
                 writer.WriteStartElement("Asset");
-                writer.WriteAttributeString("Type", resolver.DefaultNamespace + ".Scene");
+                writer.WriteAttributeString("Type", resolver.DefaultNamespace + "Scene");
                 WriteGOs();
                 WritePrefabs();
                 writer.WriteEndElement();
@@ -71,8 +73,10 @@ namespace PressPlay.FFWD.Exporter.Writers
             {
                 writer.WriteStartDocument();
                 writer.WriteStartElement("XnaContent");
+                writer.WriteAttributeString("xmlns", "f", null, "PressPlay.FFWD");
+                writer.WriteAttributeString("xmlns", "c", null, "PressPlay.FFWD.Components");
                 writer.WriteStartElement("Asset");
-                writer.WriteAttributeString("Type", resolver.DefaultNamespace + ".Scene");
+                writer.WriteAttributeString("Type", resolver.DefaultNamespace + "Scene");
                 Prefabs.Add(go);
                 WritePrefabs();
                 writer.WriteEndElement();
@@ -93,8 +97,10 @@ namespace PressPlay.FFWD.Exporter.Writers
             {
                 writer.WriteStartDocument();
                 writer.WriteStartElement("XnaContent");
+                writer.WriteAttributeString("xmlns", "f", null, "PressPlay.FFWD");
+                writer.WriteAttributeString("xmlns", "c", null, "PressPlay.FFWD.Components");
                 writer.WriteStartElement("Asset");
-                writer.WriteAttributeString("Type", resolver.DefaultNamespace + ".Material");
+                writer.WriteAttributeString("Type", resolver.DefaultNamespace + "Material");
                 WriteElement(null, mat);
                 writer.WriteEndElement();
                 writer.WriteEndElement();
@@ -188,8 +194,10 @@ namespace PressPlay.FFWD.Exporter.Writers
                 {
                     writer.WriteStartDocument();
                     writer.WriteStartElement("XnaContent");
+                    writer.WriteAttributeString("xmlns", "f", null, "PressPlay.FFWD");
+                    writer.WriteAttributeString("xmlns", "c", null, "PressPlay.FFWD.Components");
                     writer.WriteStartElement("Asset");
-                    writer.WriteAttributeString("Type", resolver.DefaultNamespace + "." + tp.Name);
+                    writer.WriteAttributeString("Type", resolver.DefaultNamespace + tp.Name);
                     WriteAsset(obj);
                     writer.WriteEndElement();
                     writer.WriteEndElement();
@@ -318,7 +326,7 @@ namespace PressPlay.FFWD.Exporter.Writers
             if (!isPrefab)
             {
                 writer.WriteStartElement("c");
-                writer.WriteAttributeString("Type", "PressPlay.FFWD.Transform");
+                writer.WriteAttributeString("Type", "f:Transform");
             }
             writer.WriteElementString("id", transform.GetInstanceID().ToString());
             if (isPrefab)
@@ -851,6 +859,10 @@ namespace PressPlay.FFWD.Exporter.Writers
                     continue;
                 }
                 if (memInfo[m].FieldType.GetCustomAttributes(false).Any(att => att.GetType().Name == "FFWD_DontExportAttribute"))
+                {
+                    continue;
+                }
+                if (memInfo[m].GetCustomAttributes(false).Any(att => att.GetType().Name == "ContentSerializerIgnoreAttribute"))
                 {
                     continue;
                 }

@@ -186,7 +186,7 @@ namespace PressPlay.FFWD
             fix.IsSensor = isTrigger;
         }
 
-        public static void AddTriangle(Body body, bool isTrigger, Vertices vertices, float density)
+        public static void AddPolygon(Body body, bool isTrigger, Vertices vertices, float density)
         {
             if (world == null)
             {

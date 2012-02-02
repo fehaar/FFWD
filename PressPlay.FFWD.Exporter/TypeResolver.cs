@@ -19,7 +19,7 @@ namespace PressPlay.FFWD.Exporter
 		public TypeResolver()
 		{
 			NamespaceRules = new List<NamespaceRule>();
-			DefaultNamespace = "PressPlay.FFWD";
+			DefaultNamespace = "f:";
             ComponentWriters = new List<ComponentMap>();
 		}
 
@@ -92,7 +92,14 @@ namespace PressPlay.FFWD.Exporter
             {
                 if (!String.IsNullOrEmpty(rule.Namespace) && rule.Namespace == ns && !String.IsNullOrEmpty(rule.To))
                 {
-                    result = result.Replace(rule.Namespace, rule.To);
+                    if (rule.To.EndsWith(":"))
+                    {
+                        result = result.Replace(rule.Namespace + ".", rule.To);
+                    }
+                    else
+                    {
+                        result = result.Replace(rule.Namespace, rule.To);
+                    }
                 }
                 if (!String.IsNullOrEmpty(rule.Type) && rule.Type == result && !String.IsNullOrEmpty(rule.To))
                 {
@@ -110,7 +117,14 @@ namespace PressPlay.FFWD.Exporter
             {
                 if (!String.IsNullOrEmpty(rule.Namespace) && rule.Namespace == type.Namespace && !String.IsNullOrEmpty(rule.To))
                 {
-                    result = result.Replace(rule.Namespace, rule.To);
+                    if (rule.To.EndsWith(":"))
+                    {
+                        result = result.Replace(rule.Namespace + ".", rule.To);
+                    }
+                    else
+                    {
+                        result = result.Replace(rule.Namespace, rule.To);
+                    }
                 }
                 if (!String.IsNullOrEmpty(rule.Type) && rule.Type == result && !String.IsNullOrEmpty(rule.To))
                 {
@@ -121,7 +135,14 @@ namespace PressPlay.FFWD.Exporter
             {
                 if (!String.IsNullOrEmpty(ScriptTranslator.ScriptNamespace))
                 {
-                    result = ScriptTranslator.ScriptNamespace + "." + result;
+                    if (ScriptTranslator.ScriptNamespace.EndsWith(":"))
+                    {
+                        result = ScriptTranslator.ScriptNamespace + result;
+                    }
+                    else
+                    {
+                        result = ScriptTranslator.ScriptNamespace + "." + result;
+                    }
                 }
             }
             return result;

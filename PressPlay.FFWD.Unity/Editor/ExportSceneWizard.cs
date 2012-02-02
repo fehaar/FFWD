@@ -115,7 +115,7 @@ public class ExportSceneWizard : ScriptableWizard
             ScriptTranslator.ScriptNamespace = config.scriptNamespace;
 
             string path = Path.ChangeExtension(AssetDatabase.GetAssetPath(go).Replace("Assets/", "../"), "xml");
-            Debug.Log("Start resource export of " + path);
+            //Debug.Log("Start resource export of " + path);
             scene.WriteResource(path, go);
         }
 
@@ -134,7 +134,7 @@ public class ExportSceneWizard : ScriptableWizard
                 Directory.CreateDirectory(Path.GetDirectoryName(exportPath));
             }
             File.WriteAllBytes(exportPath, asset.bytes);
-            Debug.Log("Exported Text asset to " + exportPath);
+            //Debug.Log("Exported Text asset to " + exportPath);
         }
 
         public void ExportMaterial(Material mat)
@@ -150,7 +150,7 @@ public class ExportSceneWizard : ScriptableWizard
             ScriptTranslator.ScriptNamespace = config.scriptNamespace;
 
             string path = Path.ChangeExtension(AssetDatabase.GetAssetPath(mat).Replace("Assets/", "../"), "xml");
-            Debug.Log("Start resource export of " + path);
+            //Debug.Log("Start resource export of " + path);
             scene.WriteResource(path, mat);
         }
 
@@ -163,7 +163,7 @@ public class ExportSceneWizard : ScriptableWizard
                 Directory.CreateDirectory(Path.GetDirectoryName(exportPath));
             }
             File.Copy(assetPath, exportPath, true);
-            Debug.Log("Exported Audio asset to " + exportPath);
+            //Debug.Log("Exported Audio asset to " + exportPath);
         }
 
         public void ExportTexture(Texture2D asset)
@@ -192,7 +192,7 @@ public class ExportSceneWizard : ScriptableWizard
                     File.WriteAllBytes(exportPath, tex2.EncodeToPNG());
                 }
             }
-            Debug.Log("Exported Texture asset to " + exportPath);
+            //Debug.Log("Exported Texture asset to " + exportPath);
         }
 
         public void ExportTags()
