@@ -384,7 +384,7 @@ namespace PressPlay.FFWD
                 if (info != null)
                 {
 #if DEBUG
-                    if (ApplicationSettings.LogSendMessage)
+                    if (DebugSettings.LogSendMessage)
                     {
                         Debug.Log(String.Format("Sent {0} to {1}", methodName, this));
                     }

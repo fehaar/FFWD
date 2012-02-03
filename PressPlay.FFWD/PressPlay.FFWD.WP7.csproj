@@ -106,6 +106,7 @@
     <Compile Include="Components\Renderers\SkinnedMeshRenderer.cs" />
     <Compile Include="Components\Renderers\StaticBatchRenderer.cs" />
     <Compile Include="DebugCamera.cs" />
+    <Compile Include="DebugSettings.cs" />
     <Compile Include="Extensions\ArrayExtensions.cs" />
     <Compile Include="Extensions\SendMessageMethodCache.cs" />
     <Compile Include="Farseer\Collision\Collision.cs" />

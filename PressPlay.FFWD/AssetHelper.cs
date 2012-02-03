@@ -31,7 +31,7 @@ namespace PressPlay.FFWD
             try
             {
 #if DEBUG
-                if (ApplicationSettings.LogAssetLoads)
+                if (DebugSettings.LogAssetLoads)
                 {
                     Debug.Log(String.Format("Loading asset {0} from content manager {1}.", contentPath, category));                    
                 }

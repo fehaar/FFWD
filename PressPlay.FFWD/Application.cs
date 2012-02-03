@@ -950,7 +950,7 @@ namespace PressPlay.FFWD
                         {
                             updateComponents.Add(cmp as PressPlay.FFWD.Interfaces.IUpdateable);
 #if DEBUG
-                            if (ApplicationSettings.LogActivatedComponents)
+                            if (DebugSettings.LogActivatedComponents)
                             {
                                 Debug.Log("Added to update: " + cmp);
                             }
@@ -963,7 +963,7 @@ namespace PressPlay.FFWD
                         {
                             lateUpdateComponents.Add(cmp as PressPlay.FFWD.Interfaces.IUpdateable);
 #if DEBUG
-                            if (ApplicationSettings.LogActivatedComponents)
+                            if (DebugSettings.LogActivatedComponents)
                             {
                                 Debug.Log("Added to lateupdate: " + cmp);
                             }
@@ -976,7 +976,7 @@ namespace PressPlay.FFWD
                         {
                             fixedUpdateComponents.Add(cmp as PressPlay.FFWD.Interfaces.IFixedUpdateable);
 #if DEBUG
-                            if (ApplicationSettings.LogActivatedComponents)
+                            if (DebugSettings.LogActivatedComponents)
                             {
                                 Debug.Log("Added to fixedupdate: " + cmp);
                             }
@@ -989,7 +989,7 @@ namespace PressPlay.FFWD
                         {
                             guiComponents.Add(cmp as MonoBehaviour);
 #if DEBUG
-                            if (ApplicationSettings.LogActivatedComponents)
+                            if (DebugSettings.LogActivatedComponents)
                             {
                                 Debug.Log("Added to GUI: " + cmp);
                             }
