@@ -22,5 +22,10 @@ namespace PressPlay.FFWD.Components
             connectedBody = body;
             Physics.AddCircle(body, isTrigger, rad, VectorConverter.Convert(center * transform.lossyScale, to2dMode), mass);
         }
+
+        protected override Vector3 GetSize()
+        {
+            return base.GetSize() * radius * 2;
+        }
     }
 }

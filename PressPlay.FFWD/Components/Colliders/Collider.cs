@@ -48,18 +48,21 @@ namespace PressPlay.FFWD.Components
         protected Vector3 lastResizeScale;
 
         public Bounds bounds
-        {
+        { 
             get
             {
-                // TODO: TEST this!
-                if (connectedBody == null) 
+                if (connectedBody == null)
                 {
-                    return new Bounds(); 
+                    return new Bounds();
                 }
-
-                AABB aabb;
-                connectedBody.FixtureList[0].GetAABB(out aabb, 0);
-                return Physics.BoundsFromAABB(aabb, 10);
+                AABB aabb_full = new AABB();
+                for (int i = 0; i < connectedBody.FixtureList.Count; i++)
+                {
+                    AABB aabb;
+                    connectedBody.FixtureList[0].Shape.ComputeAABB(out aabb, ref connectedBody.Xf, 0);
+                    aabb_full.Combine(ref aabb);
+                }
+                return Bounds.FromAABB(ref aabb_full, to2dMode, GetSize());
             }
         }
 
@@ -111,6 +114,11 @@ namespace PressPlay.FFWD.Components
                     Physics.AddRigidBody(body);
                 }
             }
+        }
+
+        protected virtual Vector3 GetSize()
+        {
+            return transform.lossyScale;
         }
 
         protected abstract void DoAddCollider(Body body, float mass);

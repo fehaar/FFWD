@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
+using FarseerPhysics.Collision;
 
 namespace PressPlay.FFWD
 {
@@ -157,6 +158,25 @@ namespace PressPlay.FFWD
                 }
                 return _boundingSphere.Value;
             }
+        }
+
+        internal static Bounds FromAABB(ref AABB aabb, Physics.To2dMode to2dMode, Vector3 size)
+        {
+            Vector3 center = VectorConverter.Convert(aabb.Center, to2dMode);
+            Vector3 sz = VectorConverter.Convert(aabb.Extents * 2, to2dMode);
+            switch (to2dMode)
+            {
+                case Physics.To2dMode.DropX:
+                    sz.x = size.x;
+                    break;
+                case Physics.To2dMode.DropY:
+                    sz.y = size.y;
+                    break;
+                case Physics.To2dMode.DropZ:
+                    sz.z = size.z;
+                    break;
+            }
+            return new Bounds(center, sz);
         }
     }
 }

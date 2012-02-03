@@ -32,9 +32,14 @@ namespace PressPlay.FFWD.Components
             {
                 to2dMode = Physics.To2dMode.DropZ;
             }
-            Vector2 sz = VectorConverter.Convert(size * gameObject.transform.lossyScale, to2dMode);
+            Vector2 sz = VectorConverter.Convert(size * transform.lossyScale, to2dMode);
             connectedBody = body;
             Physics.AddBox(body, isTrigger, sz.x, sz.y, VectorConverter.Convert(center * transform.lossyScale, to2dMode), mass);
+        }
+
+        protected override Vector3 GetSize()
+        {
+            return base.GetSize() * size;
         }
     }
 }

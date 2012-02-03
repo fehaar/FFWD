@@ -142,19 +142,12 @@ namespace PressPlay.FFWD
 
         #region Helper methods to create physics objects
 
-        public static Bounds BoundsFromAABB(AABB aabb, float width)
-        {
-            Vector2 center = aabb.Center;
-            Vector2 size = aabb.Extents;
-            return new Bounds(new Vector3(center.x, 0, center.y),new Vector3(size.x*2, width, size.y*2));
-        }
-
-        public static Body AddBody()
+        internal static Body AddBody()
         {
             return new Body(world);
         }
 
-        public static void AddBox(Body body, bool isTrigger, float width, float height, Vector2 position, float density)
+        internal static void AddBox(Body body, bool isTrigger, float width, float height, Vector2 position, float density)
         {
             if (world == null)
             {
@@ -174,7 +167,7 @@ namespace PressPlay.FFWD
             fix.IsSensor = isTrigger;            
         }
 
-        public static void AddCircle(Body body, bool isTrigger, float radius, Vector2 position, float density)
+        internal static void AddCircle(Body body, bool isTrigger, float radius, Vector2 position, float density)
         {
             if (world == null)
             {
@@ -186,7 +179,7 @@ namespace PressPlay.FFWD
             fix.IsSensor = isTrigger;
         }
 
-        public static void AddPolygon(Body body, bool isTrigger, Vertices vertices, float density)
+        internal static void AddPolygon(Body body, bool isTrigger, Vertices vertices, float density)
         {
             if (world == null)
             {
@@ -197,7 +190,7 @@ namespace PressPlay.FFWD
             fix.IsSensor = isTrigger;
         }
 
-        public static void AddMesh(Body body, bool isTrigger, List<Microsoft.Xna.Framework.Vector2[]> tris, float density)
+        internal static void AddMesh(Body body, bool isTrigger, List<Microsoft.Xna.Framework.Vector2[]> tris, float density)
         {
             if (world == null)
             {
@@ -219,7 +212,7 @@ namespace PressPlay.FFWD
             }
         }
 
-        public static void AddMesh(Body body, bool isTrigger, List<Vertices> tris, float density)
+        internal static void AddMesh(Body body, bool isTrigger, List<Vertices> tris, float density)
         {
             if (world == null)
             {
