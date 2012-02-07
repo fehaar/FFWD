@@ -25,7 +25,19 @@ namespace PressPlay.FFWD.Components
         public float fieldOfView { get; set; }
         public float nearClipPlane { get; set; }
         public float farClipPlane { get; set; }
-        public float orthographicSize { get; set; }
+        private float _orthographicSize;
+        public float orthographicSize 
+        { 
+            get
+            {
+                return _orthographicSize;
+            }
+            set
+            {
+                _orthographicSize = value;
+                _projectionMatrix = Matrix.Identity;
+            }
+        }
         public bool orthographic { get; set; }
         public int depth { get; set; }
         public float aspect { get; set; }
@@ -87,6 +99,10 @@ namespace PressPlay.FFWD.Components
             }
             set
             {
+                if (value == _rect)
+                {
+                    return;
+                }
                 _rect = value;
                 _pixelRect = new Rect(
                     rect.x * FullScreen.Width,
@@ -94,6 +110,8 @@ namespace PressPlay.FFWD.Components
                     rect.width * FullScreen.Width,
                     rect.height * FullScreen.Height
                 );
+                viewPort = new Viewport((int)_pixelRect.x, (int)_pixelRect.y, Mathf.RoundToInt(_pixelRect.width), Mathf.RoundToInt(_pixelRect.height));
+                targetChanged = true;
             }
         }
         private Rect _pixelRect;
@@ -116,14 +134,12 @@ namespace PressPlay.FFWD.Components
 
         public Matrix view { get; private set; }
 
+        private bool targetChanged = true;
         private RenderTarget2D target = null;
 
         public override void Awake()
         {
-            if (rect != Rect.unit)
-            {
-                target = new RenderTarget2D(Device, Mathf.RoundToInt(Device.PresentationParameters.BackBufferWidth * rect.width), Mathf.RoundToInt(Device.PresentationParameters.BackBufferHeight * rect.height), false, Device.DisplayMode.Format, Device.PresentationParameters.DepthStencilFormat, Device.PresentationParameters.MultiSampleCount, RenderTargetUsage.DiscardContents);
-            }
+            CreateRenderTarget();
 
             frustum = new BoundingFrustum(view * projectionMatrix);
             RecalculateView();
@@ -148,6 +164,20 @@ namespace PressPlay.FFWD.Components
             {
                 main = this;
             }
+        }
+
+        private void CreateRenderTarget()
+        {
+            if (target != null)
+            {
+                target.Dispose();
+            }
+            if (rect != Rect.unit)
+            {
+                target = new RenderTarget2D(Device, Mathf.RoundToInt(Device.PresentationParameters.BackBufferWidth * rect.width), Mathf.RoundToInt(Device.PresentationParameters.BackBufferHeight * rect.height), false, Device.DisplayMode.Format, Device.PresentationParameters.DepthStencilFormat, Device.PresentationParameters.MultiSampleCount, RenderTargetUsage.DiscardContents);
+            }
+            _projectionMatrix = Matrix.Identity;
+            targetChanged = false;
         }
 
         public static void RemoveCamera(Camera cam)
@@ -177,13 +207,7 @@ namespace PressPlay.FFWD.Components
         }
 
         [ContentSerializerIgnore]
-        internal Viewport viewPort 
-        { 
-            get
-            {
-                return FullScreen;
-            }
-        }
+        internal Viewport viewPort; 
 
         private Matrix _projectionMatrix = Matrix.Identity;
         [ContentSerializerIgnore]
@@ -195,7 +219,7 @@ namespace PressPlay.FFWD.Components
                 {
                     if (orthographic)
                     {
-                        float aspect = (target != null) ? (float)target.Width / (float)target.Height : viewPort.AspectRatio;
+                        float aspect = (target != null) ? (rect.width * Device.PresentationParameters.BackBufferWidth) / (rect.height * Device.PresentationParameters.BackBufferHeight) : viewPort.AspectRatio;
                         Matrix.CreateOrthographic(orthographicSize * 2 * aspect, orthographicSize * 2, nearClipPlane, farClipPlane, out _projectionMatrix);
                     }
                     else
@@ -218,7 +242,7 @@ namespace PressPlay.FFWD.Components
         {
             float normZ = ((vector3.z + nearClipPlane) - nearClipPlane) / (farClipPlane - nearClipPlane);
             vector3.z = normZ;
-            vector3.y = pixelHeight - vector3.y;
+            vector3.y = (pixelRect.yMin - vector3.y) + pixelRect.height + pixelRect.yMin;
             return viewPort.Unproject(vector3, projectionMatrix, view, Matrix.Identity);
         }
 
@@ -396,6 +420,10 @@ namespace PressPlay.FFWD.Components
         private readonly Matrix inverter = new Matrix(-1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
         internal void doRender(GraphicsDevice device)
         {
+            if (targetChanged)
+            {
+                CreateRenderTarget();
+            }
             if (target != null)
             {
                 device.SetRenderTarget(target);
