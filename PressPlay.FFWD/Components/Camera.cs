@@ -233,8 +233,9 @@ namespace PressPlay.FFWD.Components
 
         public Ray ScreenPointToRay(Vector2 screen)
         {
-            Vector3 near = viewPort.Unproject(new Vector3(screen.x, viewPort.Height - screen.y, 0), projectionMatrix, view, Matrix.Identity);
-            Vector3 far = viewPort.Unproject(new Vector3(screen.x, viewPort.Height - screen.y, 1), projectionMatrix, view, Matrix.Identity);
+            screen.y = (pixelRect.yMin - screen.y) + pixelRect.height + pixelRect.yMin;
+            Vector3 near = viewPort.Unproject(new Vector3(screen.x, screen.y, 0), projectionMatrix, view, Matrix.Identity);
+            Vector3 far = viewPort.Unproject(new Vector3(screen.x, screen.y, 1), projectionMatrix, view, Matrix.Identity);
             return new Ray(near, (far - near).normalized);
         }
 
