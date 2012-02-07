@@ -87,10 +87,8 @@ namespace PressPlay.FFWD
 
         public override string ToString()
         {
-            return base.ToString();
+            return String.Format("(left:{0:F2}, top:{1:F2}, width:{2:F2}, height:{3:F2})", x, y, width, height);
         }
-
-
 
         public static implicit operator Microsoft.Xna.Framework.Rectangle(Rect r)
         {

@@ -120,7 +120,6 @@ namespace PressPlay.FFWD
         {
             // TODO : Add implementation of method
             throw new NotImplementedException("Method not implemented.");
-
         }
 
         public bool Contains(Vector3 point)
@@ -132,7 +131,6 @@ namespace PressPlay.FFWD
         {
             // TODO : Add implementation of method
             throw new NotImplementedException("Method not implemented.");
-
         }
 
         public bool IntersectRay(Microsoft.Xna.Framework.Ray r)
@@ -143,7 +141,7 @@ namespace PressPlay.FFWD
 
         public override string ToString()
         {
-            return box.ToString();
+            return String.Format("Center: {0}, Extents: {1}", center, extents);
         }
         #endregion
 

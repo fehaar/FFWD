@@ -231,10 +231,9 @@ namespace PressPlay.FFWD.Components
 
         public Vector3 WorldToScreenPoint(Vector3 position)
         {
-            // TODO: If the viewport of the camera is not the same as the screen, this will give an issue.
-            // I am not sue if it can happen at all at the moment...
             Vector3 v = viewPort.Project(position, projectionMatrix, view, Matrix.Identity);
             v.y = pixelHeight - v.y;
+            v.z = MathHelper.Lerp(nearClipPlane, farClipPlane, v.z);
             return v;
         }
 

@@ -47,22 +47,13 @@ namespace PressPlay.FFWD.Components
 
         protected Vector3 lastResizeScale;
 
+        private Bounds _bodyBounds = new Bounds();
         public Bounds bounds
         { 
             get
             {
-                if (connectedBody == null)
-                {
-                    return new Bounds();
-                }
-                AABB aabb_full = new AABB();
-                for (int i = 0; i < connectedBody.FixtureList.Count; i++)
-                {
-                    AABB aabb;
-                    connectedBody.FixtureList[0].Shape.ComputeAABB(out aabb, ref connectedBody.Xf, 0);
-                    aabb_full.Combine(ref aabb);
-                }
-                return Bounds.FromAABB(ref aabb_full, to2dMode, GetSize());
+                _bodyBounds.center = transform.position;
+                return _bodyBounds;
             }
         }
 
@@ -114,6 +105,7 @@ namespace PressPlay.FFWD.Components
                     Physics.AddRigidBody(body);
                 }
             }
+            CalculateBounds();
         }
 
         protected virtual Vector3 GetSize()
@@ -153,5 +145,35 @@ namespace PressPlay.FFWD.Components
             hitInfo.collider = this;
             return result;
         }
+
+        public void CalculateBounds()
+        {
+            if (connectedBody == null)
+            {
+                _bodyBounds = new Bounds();
+                return;
+            }
+            AABB aabb_full = new AABB();
+            bool combine = false;
+            for (int i = 0; i < connectedBody.FixtureList.Count; i++)
+            {
+                for (int j = 0; j < connectedBody.FixtureList[i].Shape.ChildCount; j++)
+                {
+                    AABB aabb;
+                    connectedBody.FixtureList[i].Shape.ComputeAABB(out aabb, ref connectedBody.Xf, j);
+                    if (!combine)
+                    {
+                        combine = true;
+                        aabb_full = aabb;
+                    }
+                    else
+                    {
+                        aabb_full.Combine(ref aabb);
+                    }
+                }
+            }
+            _bodyBounds = Bounds.FromAABB(ref aabb_full, to2dMode, GetSize());
+        }
+	
     }
 }
