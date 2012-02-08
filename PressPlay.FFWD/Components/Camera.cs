@@ -445,8 +445,10 @@ namespace PressPlay.FFWD.Components
                 }
             }
 #endif
-            // TODO: Do not recreate view matrix every frame. Only when camera is moved.
-            RecalculateView();
+            if (transform.changes != TransformChanges.None)
+            {
+                RecalculateView();
+            }
 
             BasicEffect.View = view;
             BasicEffect.Projection = projectionMatrix;
