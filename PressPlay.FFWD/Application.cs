@@ -294,7 +294,7 @@ namespace PressPlay.FFWD
         {
             base.Draw(gameTime);
             Time.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
-            Input.BeginFixedUpdate();
+            Input.IsInDraw();
 
             hasDrawBeenCalled = true;
 
@@ -341,7 +341,6 @@ namespace PressPlay.FFWD
                 }
             }
             ChangeComponentActivity();
-
             CleanUp();
 #if DEBUG
             lateUpdateTime.Stop();
@@ -424,8 +423,9 @@ namespace PressPlay.FFWD
 
             timeUpdateEndUpdateStart.Start(); //measure time from draw ended to beginning of Update, to try and measure graphics performance
 #endif
-            //Debug.ClearLines();
             Input.ClearStates();
+
+            Transform.ClearChanges();
         }
 
         private void UpdateFPS(GameTime gameTime)

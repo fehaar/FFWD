@@ -110,5 +110,18 @@ namespace PressPlay.FFWD
             }
             return 0f;
         }
+
+        // Gets the up vector in relation to the physics mode. This is the vector that is getting dropped.
+        internal static Vector3 GetUp(Physics.To2dMode mode)
+        {
+            switch (mode)
+            {
+                case Physics.To2dMode.DropX:
+                    return Vector3.right;
+                case Physics.To2dMode.DropZ:
+                    return Vector3.forward;
+            }
+            return Vector3.up;
+        }
     }
 }

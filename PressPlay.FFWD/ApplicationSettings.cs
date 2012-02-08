@@ -40,6 +40,7 @@ namespace PressPlay.FFWD
             public static int GestureSamples = 4;
             public static int Touches = 4;
             public static int AnimationComponents = 30;
+            public static int TransformChanges = 500;
             #endregion
         }
 

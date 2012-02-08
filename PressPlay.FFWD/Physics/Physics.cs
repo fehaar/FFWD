@@ -133,7 +133,7 @@ namespace PressPlay.FFWD
                 Collider comp = (Collider)body.UserData;
                 FarseerPhysics.Common.Transform t;
                 body.GetTransform(out t);
-                comp.transform.SetPositionFromPhysics(VectorConverter.Convert(t.Position, comp.to2dMode), t.Angle);
+                comp.transform.SetPositionFromPhysics(VectorConverter.Convert(t.Position, comp.to2dMode), t.Angle, VectorConverter.GetUp(comp.to2dMode));
             }
 
             contactProcessor.Update();
