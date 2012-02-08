@@ -208,6 +208,27 @@ namespace PressPlay.FFWD
         }
 
         [Conditional("DEBUG")]
+        public static void DrawBBox(ref BoundingBox bbox, Color color)
+        {
+          Microsoft.Xna.Framework.Vector3[] corners = bbox.GetCorners();
+
+          Debug.DrawLine(corners[0], corners[1], color);
+          Debug.DrawLine(corners[1], corners[2], color);
+          Debug.DrawLine(corners[2], corners[3], color);
+          Debug.DrawLine(corners[3], corners[0], color);
+
+          Debug.DrawLine(corners[4], corners[5], color);
+          Debug.DrawLine(corners[5], corners[6], color);
+          Debug.DrawLine(corners[6], corners[7], color);
+          Debug.DrawLine(corners[7], corners[4], color);
+
+          Debug.DrawLine(corners[0], corners[4], color);
+          Debug.DrawLine(corners[1], corners[5], color);
+          Debug.DrawLine(corners[2], corners[6], color);
+          Debug.DrawLine(corners[3], corners[7], color);
+        }
+
+        [Conditional("DEBUG")]
         public static void DrawTransform(Transform t)
         {
             // TODO: Scale so it can be seen in the viewport no matter the distance

@@ -103,6 +103,12 @@ namespace PressPlay.FFWD.Import
                     mf.mesh = null;
                 }
             }
+
+            foreach (KeyValuePair<string, StaticBatchRenderer> sbr in staticRenderers)
+            {
+              sbr.Value.PrepareQuadTree();
+            }
+
             scene.gameObjects.AddRange(staticRenderers.Values.Select(sbr => sbr.gameObject));
         }
 

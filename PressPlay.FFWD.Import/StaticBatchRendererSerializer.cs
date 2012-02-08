@@ -18,7 +18,7 @@ namespace PressPlay.FFWD.Import
         {
             StaticBatchRenderer renderer = new StaticBatchRenderer();
 
-            ContentSerializerAttribute attr = new ContentSerializerAttribute();
+            /*ContentSerializerAttribute attr = new ContentSerializerAttribute();
             attr.ElementName = "id";
 
             // SET ID
@@ -50,7 +50,7 @@ namespace PressPlay.FFWD.Import
             //    u.Y = 1 - u.Y;
             //    buffer[i] = new VertexPositionTexture(v, u);
             //}
-            //renderer.vertices = buffer;
+            //renderer.vertices = buffer;*/
 
             return renderer;
         }

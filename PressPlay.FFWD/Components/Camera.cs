@@ -578,5 +578,22 @@ namespace PressPlay.FFWD.Components
             }
             return false;
         }
+
+        internal bool DoFrustumCulling(ref BoundingBox bbox)
+        {
+          if (bbox.Min == Microsoft.Xna.Framework.Vector3.Zero &&
+              bbox.Max == Microsoft.Xna.Framework.Vector3.Zero)
+          {
+            return false;
+          }
+
+          ContainmentType contain;
+          frustum.Contains(ref bbox, out contain);
+          if (contain == ContainmentType.Disjoint)
+          {
+            return true;
+          }
+          return false;
+        }
     }
 }
