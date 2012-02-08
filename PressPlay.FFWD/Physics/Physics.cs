@@ -57,7 +57,6 @@ namespace PressPlay.FFWD
         public static int velocityIterations = 2;
         public static int positionIterations = 2;
 
-        private static readonly List<Body> movingBodies = new List<Body>(50);
         private static readonly List<Body> rigidBodies = new List<Body>(50);
 
         internal enum To2dMode { DropX, DropY, DropZ };
@@ -94,30 +93,6 @@ namespace PressPlay.FFWD
 
         public static void Update(float elapsedTime)
         {
-            for (int i = movingBodies.Count - 1; i >= 0; i--)
-            {
-                Body body = movingBodies[i];
-                Collider comp = body.UserData;
-                BodyType bodyType = body.BodyType;
-                if (bodyType == BodyType.Static)
-                {
-                    movingBodies.RemoveAt(i);
-                    continue;
-                }
-                if (comp.gameObject.active && bodyType == BodyType.Kinematic)
-                {
-                    float rad = -MathHelper.ToRadians(VectorConverter.Reduce(comp.transform.eulerAngles, comp.to2dMode));
-                    Microsoft.Xna.Framework.Vector2 pos = VectorConverter.Convert(comp.transform.position, comp.to2dMode);
-                    if (body.Position != pos || body.Rotation != rad)
-                    {
-                        body.SetTransformIgnoreContacts(ref pos, rad);
-                    }
-                }
-                if (comp.collider.allowTurnOff)
-                {
-                    body.Enabled = comp.gameObject.active;
-                }
-            }
 #if DEBUG
             if (ApplicationSettings.ShowBodyCounter)
 	        {
@@ -605,14 +580,6 @@ namespace PressPlay.FFWD
             contactProcessor.ResetStays(collider);
         }
 
-        internal static void AddMovingBody(Body body)
-        {
-            if (!movingBodies.Contains(body) && body.UserData != null)
-            {
-                movingBodies.Add(body);
-            }
-        }
-
         internal static void AddRigidBody(Body body)
         {
             if (!rigidBodies.Contains(body) && body.UserData != null)
@@ -629,10 +596,6 @@ namespace PressPlay.FFWD
             }
             world.RemoveBody(body);
             body.UserData = null;
-            if (movingBodies.Contains(body))
-            {
-                movingBodies.Remove(body);
-            }
             if (rigidBodies.Contains(body))
             {
                 rigidBodies.Remove(body);

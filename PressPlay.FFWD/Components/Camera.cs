@@ -445,11 +445,6 @@ namespace PressPlay.FFWD.Components
                 }
             }
 #endif
-            if (transform.changes != TransformChanges.None)
-            {
-                RecalculateView();
-            }
-
             BasicEffect.View = view;
             BasicEffect.Projection = projectionMatrix;
 
@@ -498,7 +493,7 @@ namespace PressPlay.FFWD.Components
             estimatedDrawCalls += dynamicBatchRenderer.DoDraw(device, this);
         }
 
-        private void RecalculateView()
+        internal void RecalculateView()
         {
             Matrix m = Matrix.CreateLookAt(
                 transform.position,

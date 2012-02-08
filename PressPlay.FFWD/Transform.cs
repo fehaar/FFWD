@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using PressPlay.FFWD.Components;
+using FarseerPhysics.Dynamics;
 
 namespace PressPlay.FFWD
 {
@@ -21,7 +23,7 @@ namespace PressPlay.FFWD
         #endregion
 
         #region Static members
-        internal static List<Transform> transformsChanged = new List<Transform>(ApplicationSettings.DefaultCapacities.TransformChanges);
+        private static Queue<Transform> transformsChanged = new Queue<Transform>(ApplicationSettings.DefaultCapacities.TransformChanges);
         #endregion
 
         #region Properties
@@ -357,26 +359,25 @@ namespace PressPlay.FFWD
             {
                 return;
             }
-            if (changes == TransformChanges.None)
+            if (changes != TransformChanges.None)
             {
-                Transform.transformsChanged.Add(this);
+                Transform.transformsChanged.Enqueue(this);
             }
             changes |= transformChanges;
+            if (childCount > 0)
+            {
+                TransformChanges childChanges = changes;
+                // If we rotate, we can change the child position as well
+                if ((changes & TransformChanges.Rotation) == TransformChanges.Rotation)
+                {
+                    changes |= TransformChanges.Position;
+                }
+                for (int i = 0; i < children.Count; i++)
+                {
+                    children[i].transform.RecordChanges(childChanges);
+                }
+            }
             hasDirtyWorld = true;
-        }
-
-        internal static void ClearChanges()
-        {
-            int c = transformsChanged.Count;
-            if (c == 0)
-            {
-                return;
-            }
-            for (int i = 0; i < c; i++)
-            {
-                transformsChanged[i].changes = TransformChanges.None;
-            }
-            transformsChanged.Clear();
         }
 
         internal void SetPositionFromPhysics(Vector3 pos, float ang, Vector3 up)
@@ -767,6 +768,37 @@ namespace PressPlay.FFWD
                 for (int i = 0; i < children.Count; i++)
                 {
                     children[i].BroadcastMessage(methodName, value, sendMessageOptions);
+                }
+            }
+        }
+
+        internal static void ApplyPositionChanges()
+        {
+            while (transformsChanged.Count > 0)
+            {
+                Transform t = transformsChanged.Dequeue();
+                if (t.camera != null)
+                {
+                    t.camera.RecalculateView();
+                }
+                Collider coll = t.collider;
+                if (coll != null)
+                {
+                    Body body = coll.connectedBody;
+                    BodyType bodyType = body.BodyType;
+                    if (bodyType == BodyType.Kinematic)
+                    {
+                        if (((t.changes & TransformChanges.Position) == TransformChanges.Position) || ((t.changes & TransformChanges.Rotation) == TransformChanges.Rotation))
+                        {
+                            float rad = MathHelper.ToRadians(VectorConverter.Reduce(t.eulerAngles, coll.to2dMode));
+                            Microsoft.Xna.Framework.Vector2 pos = VectorConverter.Convert(t.position, coll.to2dMode);
+                            body.SetTransformIgnoreContacts(ref pos, rad);
+                        }
+                        if ((t.changes & TransformChanges.Scale) == TransformChanges.Scale)
+                        {
+                            coll.ResizeConnectedBody();
+                        }
+                    }
                 }
             }
         }

@@ -278,6 +278,9 @@ namespace PressPlay.FFWD
                 }
             }
             ChangeComponentActivity();
+
+            Transform.ApplyPositionChanges();
+
 #if DEBUG
             fixedUpdateTime.Stop();
             physics.Start();
@@ -424,8 +427,6 @@ namespace PressPlay.FFWD
             timeUpdateEndUpdateStart.Start(); //measure time from draw ended to beginning of Update, to try and measure graphics performance
 #endif
             Input.ClearStates();
-
-            Transform.ClearChanges();
         }
 
         private void UpdateFPS(GameTime gameTime)
@@ -1000,6 +1001,10 @@ namespace PressPlay.FFWD
                     {
                         Camera.AddRenderer(cmp as Renderer);
                     }
+                    if (cmp is Collider)
+                    {
+                        (cmp as Collider).connectedBody.Enabled = true;
+                    }
                     MonoBehaviour mb = (cmp as MonoBehaviour);
                     if (mb != null)
                     {
@@ -1045,6 +1050,10 @@ namespace PressPlay.FFWD
                     if (cmp is Renderer)
                     {
                         Camera.RemoveRenderer(cmp as Renderer);
+                    }
+                    if (cmp is Collider)
+                    {
+                        (cmp as Collider).connectedBody.Enabled = false;
                     }
                     for (int j = invokeCalls.Count - 1; j >= 0; j--)
                     {
