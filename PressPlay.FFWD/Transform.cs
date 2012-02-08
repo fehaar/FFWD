@@ -790,7 +790,7 @@ namespace PressPlay.FFWD
                     {
                         if (((t.changes & TransformChanges.Position) == TransformChanges.Position) || ((t.changes & TransformChanges.Rotation) == TransformChanges.Rotation))
                         {
-                            float rad = MathHelper.ToRadians(VectorConverter.Reduce(t.eulerAngles, coll.to2dMode));
+                            float rad = MathHelper.ToRadians(VectorConverter.Angle(t.eulerAngles, coll.to2dMode));
                             Microsoft.Xna.Framework.Vector2 pos = VectorConverter.Convert(t.position, coll.to2dMode);
                             body.SetTransformIgnoreContacts(ref pos, rad);
                         }

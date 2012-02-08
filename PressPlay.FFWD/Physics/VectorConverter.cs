@@ -111,6 +111,26 @@ namespace PressPlay.FFWD
             return 0f;
         }
 
+        /// <summary>
+        /// This is essentially the same as Reduce, but some angles are inverted.
+        /// </summary>
+        /// <param name="v"></param>
+        /// <param name="mode"></param>
+        /// <returns></returns>
+        internal static float Angle(Vector3 v, Physics.To2dMode mode)
+        {
+            switch (mode)
+            {
+                case Physics.To2dMode.DropX:
+                    return v.x;
+                case Physics.To2dMode.DropY:
+                    return -v.y;
+                case Physics.To2dMode.DropZ:
+                    return v.z;
+            }
+            return 0f;
+        }
+
         // Gets the up vector in relation to the physics mode. This is the vector that is getting dropped.
         internal static Vector3 GetUp(Physics.To2dMode mode)
         {
