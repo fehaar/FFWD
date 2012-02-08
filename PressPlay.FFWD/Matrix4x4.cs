@@ -94,8 +94,6 @@ namespace PressPlay.FFWD
 
         #endregion Properties
 
-
-
         #region Public Methods
 
         public override int GetHashCode()
@@ -263,6 +261,37 @@ namespace PressPlay.FFWD
         #endregion Public Static Methods
 
         #region Operators
+        public static explicit operator Matrix(Matrix4x4 m)
+        {
+            return new Matrix(
+                m.m00, m.m01, m.m02, m.m03,
+                m.m10, m.m11, m.m12, m.m13,
+                m.m20, m.m21, m.m22, m.m23,
+                m.m30, m.m31, m.m32, m.m33);
+        }
+
+        public static explicit operator Matrix4x4(Matrix m)
+        {
+            return new Matrix4x4()
+            {
+                m00 = m.M11,
+                m01 = m.M12,
+                m02 = m.M13,
+                m03 = m.M14,
+                m10 = m.M21,
+                m11 = m.M22,
+                m12 = m.M23,
+                m13 = m.M24,
+                m20 = m.M31,
+                m21 = m.M32,
+                m22 = m.M33,
+                m23 = m.M34,
+                m30 = m.M41,
+                m31 = m.M42,
+                m32 = m.M43,
+                m33 = m.M44
+            };
+        }
 
         public static bool operator ==(Matrix4x4 matrix1, Matrix4x4 matrix2)
         {

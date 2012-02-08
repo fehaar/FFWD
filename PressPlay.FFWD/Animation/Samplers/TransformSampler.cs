@@ -24,16 +24,18 @@ namespace PressPlay.FFWD
             if (position != null)
             {
                 position.GetSampleValue(time, ref transform._localPosition);
+                transform.RecordChanges(TransformChanges.Position);
             }
             if (rotation != null)
             {
                 rotation.GetSampleValue(time, ref transform._localRotation);
+                transform.RecordChanges(TransformChanges.Rotation);
             }
             if (scale != null)
             {
                 scale.GetSampleValue(time, ref transform._localScale);
+                transform.RecordChanges(TransformChanges.Scale);
             }
-            transform.hasDirtyWorld = true;
             return null;
         }
 

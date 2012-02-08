@@ -22,31 +22,6 @@ namespace PressPlay.FFWD.Components
         [ContentSerializerIgnore]
         public Body connectedBody;
 
-
-        private bool _allowTurnOff = false;
-        /// <summary>
-        /// Do we allow the game to turn off the collider when the game object becomes inactive.
-        /// Usually this is not needed, as it can be a costly affair. So only do it when nessecary.
-        /// </summary>
-        [ContentSerializerIgnore]
-        public bool allowTurnOff
-        {
-            get
-            {
-                return _allowTurnOff;
-            }
-            set
-            {
-                _allowTurnOff = value;
-                if (_allowTurnOff)
-                {
-                    Physics.AddMovingBody(connectedBody);
-                }
-            }
-        }
-
-        protected Vector3 lastResizeScale;
-
         private Bounds _bodyBounds = new Bounds();
         public Bounds bounds
         { 
@@ -84,10 +59,6 @@ namespace PressPlay.FFWD.Components
             if (connectedBody != null)
             {
                 connectedBody.BodyType = (isStatic) ? BodyType.Static : BodyType.Kinematic;
-                if (!isStatic)
-                {
-                    Physics.AddMovingBody(connectedBody);
-                }
             }
         }
 
@@ -96,11 +67,7 @@ namespace PressPlay.FFWD.Components
             DoAddCollider(body, mass);
             if (body.BodyType != BodyType.Static)
             {
-                if (rigidbody == null)
-                {
-                    Physics.AddMovingBody(body);
-                }
-                else
+                if (rigidbody != null)
                 {
                     Physics.AddRigidBody(body);
                 }
@@ -117,14 +84,11 @@ namespace PressPlay.FFWD.Components
 
         internal void ResizeConnectedBody()
         {
-            if (lastResizeScale == transform.lossyScale) { return; }
-
             for (int i = 0; i < connectedBody.FixtureList.Count; i++)
             {
                 Fixture fixture = connectedBody.FixtureList[i];
                 connectedBody.DestroyFixture(fixture);
             }
-            
             AddCollider(connectedBody, connectedBody.Mass);
         }
 

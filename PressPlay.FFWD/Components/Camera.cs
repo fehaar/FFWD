@@ -445,9 +445,6 @@ namespace PressPlay.FFWD.Components
                 }
             }
 #endif
-            // TODO: Do not recreate view matrix every frame. Only when camera is moved.
-            RecalculateView();
-
             BasicEffect.View = view;
             BasicEffect.Projection = projectionMatrix;
 
@@ -496,7 +493,7 @@ namespace PressPlay.FFWD.Components
             estimatedDrawCalls += dynamicBatchRenderer.DoDraw(device, this);
         }
 
-        private void RecalculateView()
+        internal void RecalculateView()
         {
             Matrix m = Matrix.CreateLookAt(
                 transform.position,

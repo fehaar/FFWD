@@ -109,7 +109,7 @@ namespace PressPlay.FFWD
             isInDraw = false;
         }
 
-        internal static void BeginFixedUpdate()
+        internal static void IsInDraw()
         {
             isInDraw = true;
         }
