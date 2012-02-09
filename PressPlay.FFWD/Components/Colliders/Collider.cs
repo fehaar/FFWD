@@ -36,6 +36,7 @@ namespace PressPlay.FFWD.Components
         {
             if (rigidbody == null)
             {
+                CheckDropAxis();
                 connectedBody = Physics.AddBody();
                 connectedBody.Position = VectorConverter.Convert(transform.position, to2dMode);
                 connectedBody.Rotation = -MathHelper.ToRadians(VectorConverter.Reduce(transform.rotation.eulerAngles, to2dMode));
@@ -73,6 +74,10 @@ namespace PressPlay.FFWD.Components
                 }
             }
             CalculateBounds();
+        }
+
+        protected virtual void CheckDropAxis()
+        {
         }
 
         protected virtual Vector3 GetSize()

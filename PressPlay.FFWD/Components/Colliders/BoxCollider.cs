@@ -28,13 +28,18 @@ namespace PressPlay.FFWD.Components
 
         protected override void DoAddCollider(Body body, float mass)
         {
+            CheckDropAxis();
+            Vector2 sz = VectorConverter.Convert(size * transform.lossyScale, to2dMode);
+            connectedBody = body;
+            Physics.AddBox(body, isTrigger, sz.x, sz.y, VectorConverter.Convert(center * transform.lossyScale, to2dMode), mass);
+        }
+
+        protected override void CheckDropAxis()
+        {
             if (to2dMode == Physics.To2dMode.DropY && size.z == 0f)
             {
                 to2dMode = Physics.To2dMode.DropZ;
             }
-            Vector2 sz = VectorConverter.Convert(size * transform.lossyScale, to2dMode);
-            connectedBody = body;
-            Physics.AddBox(body, isTrigger, sz.x, sz.y, VectorConverter.Convert(center * transform.lossyScale, to2dMode), mass);
         }
 
         protected override Vector3 GetSize()
