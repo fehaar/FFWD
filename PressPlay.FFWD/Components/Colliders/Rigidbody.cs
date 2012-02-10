@@ -55,12 +55,13 @@ namespace PressPlay.FFWD.Components
         {
             if (collider != null)
             {
+                collider.CheckDropAxis();
                 body = collider.connectedBody;
                 if (body == null)
                 {
                     body = Physics.AddBody();
                     body.Position = VectorConverter.Convert(transform.position, collider.to2dMode);
-                    body.Rotation = -MathHelper.ToRadians(VectorConverter.Reduce(transform.rotation.eulerAngles, collider.to2dMode));
+                    body.Rotation = MathHelper.ToRadians(VectorConverter.Angle(transform.rotation.eulerAngles, collider.to2dMode));
                     body.UserData = collider;
                     collider.AddCollider(body, mass);
                 }

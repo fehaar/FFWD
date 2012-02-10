@@ -29,11 +29,6 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
                     scene.WriteElement("material", coll.sharedMaterial.name);
                 }
             }
-            Component c = coll.GetComponent("XNAColliderOrientation");
-            if (c != null)
-            {
-                scene.WriteMembers(c, c.GetType(), null);
-            }
         }
         #endregion
     }

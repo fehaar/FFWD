@@ -34,7 +34,7 @@ namespace PressPlay.FFWD.Components
             Physics.AddBox(body, isTrigger, sz.x, sz.y, VectorConverter.Convert(center * transform.lossyScale, to2dMode), mass);
         }
 
-        protected override void CheckDropAxis()
+        internal override void CheckDropAxis()
         {
             if (to2dMode == Physics.To2dMode.DropY && size.z == 0f)
             {

@@ -15,7 +15,6 @@ namespace PressPlay.FFWD.Components
         public bool isTrigger;
         [ContentSerializer(Optional = true)]
         public string material;
-        [ContentSerializer(Optional = true)]
         internal Physics.To2dMode to2dMode = Physics.To2dMode.DropY;
         #endregion
 
@@ -39,7 +38,7 @@ namespace PressPlay.FFWD.Components
                 CheckDropAxis();
                 connectedBody = Physics.AddBody();
                 connectedBody.Position = VectorConverter.Convert(transform.position, to2dMode);
-                connectedBody.Rotation = -MathHelper.ToRadians(VectorConverter.Reduce(transform.rotation.eulerAngles, to2dMode));
+                connectedBody.Rotation = MathHelper.ToRadians(VectorConverter.Angle(transform.rotation.eulerAngles, to2dMode));
                 connectedBody.UserData = this;
                 connectedBody.BodyType = (gameObject.isStatic) ? BodyType.Static : BodyType.Kinematic;
                 AddCollider(connectedBody, 1);
@@ -76,7 +75,7 @@ namespace PressPlay.FFWD.Components
             CalculateBounds();
         }
 
-        protected virtual void CheckDropAxis()
+        internal virtual void CheckDropAxis()
         {
         }
 
