@@ -1273,7 +1273,7 @@ namespace FarseerPhysics.Dynamics
         internal bool ShouldCollide(Body other)
         {
             // At least one body should be dynamic.
-            if (_bodyType != BodyType.Dynamic && other._bodyType != BodyType.Dynamic)
+            if (_bodyType != BodyType.Dynamic && other._bodyType != BodyType.Dynamic && !IsKinematicToTriggerCollision(other))
             {
                 return false;
             }
@@ -1291,6 +1291,19 @@ namespace FarseerPhysics.Dynamics
             }
 
             return true;
+        }
+
+        internal bool IsKinematicToTriggerCollision(Body other)
+        {
+            if (other.UserData.isTrigger && _bodyType == Dynamics.BodyType.Kinematic)
+            {
+                return true;
+            }
+            if (UserData.isTrigger && other._bodyType == Dynamics.BodyType.Kinematic)
+            {
+                return true;
+            }
+            return false;
         }
 
         internal void Advance(float alpha)
@@ -1364,6 +1377,15 @@ namespace FarseerPhysics.Dynamics
                     f.RestoreCollisionWith(f2);
                 }
             }
+        }
+
+        public override string ToString()
+        {
+            if (UserData != null)
+            {
+                return UserData.ToString();
+            }
+            return base.ToString();
         }
     }
 }

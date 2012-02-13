@@ -152,6 +152,13 @@ namespace PressPlay.FFWD
                     continue;
                 }
 
+#if DEBUG
+                if (DebugSettings.LogCollisions)
+                {
+                    Debug.Log(string.Format("Collision Begin: {0} <-> {1}", fixtureA.Body, fixtureB.Body));
+                }
+#endif
+
                 if (fixtureA.Body.BodyType == BodyType.Static && fixtureB.Body.BodyType == BodyType.Static)
                 {
                     continue;

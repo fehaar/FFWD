@@ -243,7 +243,11 @@ namespace FarseerPhysics.Dynamics
 
                 if (bodyA.Awake == false && bodyB.Awake == false)
                 {
-                    continue;
+                    // If one or both of the fixtures are sensors, it is OK that they are not awake.
+                    if (!fixtureA.IsSensor && !fixtureB.IsSensor)
+                    {
+                        continue;
+                    }
                 }
 
                 // Is this contact flagged for filtering?

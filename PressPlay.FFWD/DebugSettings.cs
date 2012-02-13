@@ -12,6 +12,7 @@ namespace PressPlay.FFWD
         public static bool LogActivatedComponents = false;
         public static bool LogAssetLoads = false;
         public static bool LogSendMessage = false;
+        public static bool LogCollisions = false;
     }
 #endif
 }
