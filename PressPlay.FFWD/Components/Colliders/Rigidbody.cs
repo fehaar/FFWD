@@ -71,6 +71,10 @@ namespace PressPlay.FFWD.Components
                 body.AngularDamping = angularDrag;
                 body.FixedRotation = freezeRotation;
                 RescaleMass();
+                if (!isKinematic)
+                {
+                    Physics.AddRigidBody(body);
+                }
             }
             else
             {

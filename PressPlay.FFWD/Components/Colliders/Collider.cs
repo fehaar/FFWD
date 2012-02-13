@@ -40,7 +40,7 @@ namespace PressPlay.FFWD.Components
                 connectedBody.Position = VectorConverter.Convert(transform.position, to2dMode);
                 connectedBody.Rotation = MathHelper.ToRadians(VectorConverter.Angle(transform.rotation.eulerAngles, to2dMode));
                 connectedBody.UserData = this;
-                connectedBody.BodyType = (gameObject.isStatic) ? BodyType.Static : BodyType.Kinematic;
+                connectedBody.BodyType = BodyType.Static;
                 AddCollider(connectedBody, 1);
             }
         }
@@ -54,24 +54,9 @@ namespace PressPlay.FFWD.Components
             }
         }
 
-        internal void SetStatic(bool isStatic)
-        {
-            if (connectedBody != null)
-            {
-                connectedBody.BodyType = (isStatic) ? BodyType.Static : BodyType.Kinematic;
-            }
-        }
-
         internal void AddCollider(Body body, float mass)
         {
             DoAddCollider(body, mass);
-            if (body.BodyType != BodyType.Static)
-            {
-                if (rigidbody != null)
-                {
-                    Physics.AddRigidBody(body);
-                }
-            }
             CalculateBounds();
         }
 

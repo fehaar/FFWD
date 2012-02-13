@@ -74,10 +74,10 @@ namespace PressPlay.FFWD
             {
                 if (value == _isStatic) { return; }
                 _isStatic = value;
-                if (collider != null && rigidbody == null)
-                {
-                    collider.SetStatic(_isStatic);
-                }
+                //if (collider != null && rigidbody == null)
+                //{
+                //    collider.SetStatic(_isStatic);
+                //}
             }
         }
 
