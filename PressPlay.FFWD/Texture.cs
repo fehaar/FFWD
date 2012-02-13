@@ -72,9 +72,13 @@ namespace PressPlay.FFWD
 
         protected override void DoLoadAsset(AssetHelper assetHelper)
         {
+            if (name == null)
+            {
+                return;
+            }
             if (tex == null)
             {
-                tex = assetHelper.Load<Microsoft.Xna.Framework.Graphics.Texture2D>(name);
+                tex = assetHelper.LoadAsset<Microsoft.Xna.Framework.Graphics.Texture2D>(name);
             }
         }
 

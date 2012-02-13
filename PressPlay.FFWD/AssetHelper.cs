@@ -49,6 +49,12 @@ namespace PressPlay.FFWD
 
         internal T LoadAsset<T>(string name)
         {
+            // TODO: We should have textures put in Assets when exporting.
+            if (name.StartsWith("Textures") || name.StartsWith("Resources") || name.Contains("Textures"))
+            {
+                return Load<T>("Assets", name);
+            }
+
             return Load<T>("Assets", Path.Combine("Assets", name));
         }
 
