@@ -786,6 +786,7 @@ namespace PressPlay.FFWD
                 {
                     Physics.MoveCollider(coll);
                 }
+                t.changes = TransformChanges.None;
             }
         }
     }
