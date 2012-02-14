@@ -677,5 +677,27 @@ namespace PressPlay.FFWD
             }
           }
         }
+
+        internal static void MoveCollider(Collider coll)
+        {
+            Body body = coll.connectedBody;
+            BodyType bodyType = body.BodyType;
+            Transform t = coll.transform;
+            if (bodyType != BodyType.Dynamic)
+            {
+                if (((t.changes & TransformChanges.Position) == TransformChanges.Position) || ((t.changes & TransformChanges.Rotation) == TransformChanges.Rotation))
+                {
+                    float rad = MathHelper.ToRadians(VectorConverter.Angle(t.eulerAngles, coll.to2dMode));
+                    Microsoft.Xna.Framework.Vector2 pos = VectorConverter.Convert(t.position, coll.to2dMode);
+                    Debug.LogIf(DebugSettings.LogColliderChanges, String.Format("Move {0} to {1} and rotate to {2}", coll, pos, rad));
+                    body.SetTransformIgnoreContacts(ref pos, rad);
+                }
+                if ((t.changes & TransformChanges.Scale) == TransformChanges.Scale)
+                {
+                    Debug.LogIf(DebugSettings.LogColliderChanges, String.Format("Resize collider {0}", coll));
+                    coll.ResizeConnectedBody();
+                }
+            }
+        }
     }
 }

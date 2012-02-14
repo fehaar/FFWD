@@ -86,6 +86,14 @@ namespace PressPlay.FFWD
 #endif
         }
 
+        public static void LogIf(bool condition, string message)
+        {
+            if (condition)
+            {
+                Log(message);
+            }
+        }
+
         public static void LogError(string message)
         {
             System.Diagnostics.Debug.WriteLine("ERROR: " + message.ToString());

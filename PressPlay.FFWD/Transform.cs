@@ -359,7 +359,7 @@ namespace PressPlay.FFWD
             {
                 return;
             }
-            if (changes != TransformChanges.None)
+            if (changes == TransformChanges.None)
             {
                 Transform.transformsChanged.Enqueue(this);
             }
@@ -370,7 +370,7 @@ namespace PressPlay.FFWD
                 // If we rotate, we can change the child position as well
                 if ((changes & TransformChanges.Rotation) == TransformChanges.Rotation)
                 {
-                    changes |= TransformChanges.Position;
+                    childChanges |= TransformChanges.Position;
                 }
                 for (int i = 0; i < children.Count; i++)
                 {
@@ -784,21 +784,7 @@ namespace PressPlay.FFWD
                 Collider coll = t.collider;
                 if (coll != null)
                 {
-                    Body body = coll.connectedBody;
-                    BodyType bodyType = body.BodyType;
-                    if (bodyType == BodyType.Kinematic)
-                    {
-                        if (((t.changes & TransformChanges.Position) == TransformChanges.Position) || ((t.changes & TransformChanges.Rotation) == TransformChanges.Rotation))
-                        {
-                            float rad = MathHelper.ToRadians(VectorConverter.Angle(t.eulerAngles, coll.to2dMode));
-                            Microsoft.Xna.Framework.Vector2 pos = VectorConverter.Convert(t.position, coll.to2dMode);
-                            body.SetTransformIgnoreContacts(ref pos, rad);
-                        }
-                        if ((t.changes & TransformChanges.Scale) == TransformChanges.Scale)
-                        {
-                            coll.ResizeConnectedBody();
-                        }
-                    }
+                    Physics.MoveCollider(coll);
                 }
             }
         }
