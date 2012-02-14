@@ -27,6 +27,12 @@ namespace PressPlay.FFWD
         public static int AssetLoadInterval = 50; // In Milliseconds
 #endif
 
+        /// <summary>
+        /// This can be disabled to avoid moving static colliders, which is pretty expensive.
+        /// If you do it a lot, consider flipping this and making the colliders kinematic.
+        /// </summary>
+        public static bool Physics_MoveStaticColliders = true;
+
         public static class DefaultCapacities
         {
             /// <summary>
