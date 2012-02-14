@@ -267,7 +267,7 @@ namespace PressPlay.FFWD.Components
             Vector2 pt = v;
             pt.x /= FullScreen.Width;
             pt.y /= FullScreen.Height;
-            return new Vector3(pt.x / (rect.x + (rect.width - rect.x)), pt.y / (rect.y + (rect.height - rect.y)), (float)v);
+            return new Vector3((pt.x - rect.x) / rect.width, (pt.y - rect.y) / rect.height, (float)v);
         }
 
         public Vector3 ViewportToScreenPoint(Vector3 v)
