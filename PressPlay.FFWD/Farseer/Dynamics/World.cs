@@ -1506,6 +1506,34 @@ namespace FarseerPhysics.Dynamics
                 }, ref aabb);
         }
 
+       /// <summary>
+        /// Returns a list of fixtures that are at the specified point.
+        /// </summary>
+        /// <param name="point">The point.</param>
+        /// <returns></returns>
+        public void TestPointAllActive(Vector2 point, List<Fixture> fixtures, int layerMask)
+        {
+            AABB aabb;
+            Vector2 d = new Vector2(Settings.Epsilon, Settings.Epsilon);
+            aabb.LowerBound = point - d;
+            aabb.UpperBound = point + d;
+            fixtures.Clear();
+
+            // Query the world for overlapping shapes.
+            QueryAABB(
+                fixture =>
+                {
+                    bool inside = fixture.TestPoint(ref point);
+                    if (inside && (fixture.Body.UserData != null) && fixture.Body.UserData.gameObject.active && (layerMask & (1 << fixture.Body.UserData.gameObject.layer)) > 0)
+                    {
+                        fixtures.Add(fixture);
+                    }
+
+                    // Continue the query.
+                    return true;
+                }, ref aabb);
+        }
+
         public void Clear()
         {
             ProcessChanges();

@@ -467,7 +467,7 @@ namespace PressPlay.FFWD
             Application.raycastTimer.Start();
 #endif
             fList.Clear();
-            world.TestPointAllActive(point, fList);
+            world.TestPointAllActive(point, fList, layerMask);
             RaycastHit[] hits = new RaycastHit[fList.Count];
             for (int i = 0; i < fList.Count; i++)
             {
