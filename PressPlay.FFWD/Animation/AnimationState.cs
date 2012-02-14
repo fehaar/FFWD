@@ -183,7 +183,8 @@ namespace PressPlay.FFWD
 
         private Sampler GetSampler(GameObject g, AnimationClipCurveData curveData)
         {
-            if (curveData.type == typeof(Transform).FullName)
+            string tp = curveData.type.Replace("c:", "PressPlay.FFWD.");            
+            if (tp == typeof(Transform).FullName)
             {
                 return new TransformSampler(g.transform);
             }
