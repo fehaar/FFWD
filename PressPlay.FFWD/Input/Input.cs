@@ -19,6 +19,8 @@ namespace PressPlay.FFWD
         private static MouseState _currentMouseState;
         private static KeyboardState _lastKeyboardState;
         private static KeyboardState _currentKeyboardState;
+        private static GamePadState _lastGamepadState;
+        private static GamePadState _currentGamePadState;
 
         private static bool[] mouseHolds = new bool[3];
         private static bool[] mouseDowns = new bool[3];
@@ -61,6 +63,7 @@ namespace PressPlay.FFWD
 #else
             UpdateMouseStates();
 #endif
+            UpdateGamepadStates();
         }
 
         private static void UpdateMouseStates()
@@ -95,6 +98,12 @@ namespace PressPlay.FFWD
                 mouseDowns[2] = false;
                 mouseUps[2] = true;
             }
+        }
+
+        private static void UpdateGamepadStates()
+        {
+            _lastGamepadState = _currentGamePadState;
+            _currentGamePadState = GamePad.GetState(PlayerIndex.One);
         }
 
         internal static void ClearStates()
@@ -304,6 +313,10 @@ namespace PressPlay.FFWD
         public static bool GetKeyUp(Keys key)
         {
 #if WINDOWS_PHONE
+            if (key == Keys.Back)
+            {
+                return (_lastGamepadState.Buttons.Back == ButtonState.Pressed) && (_currentGamePadState.Buttons.Back == ButtonState.Released);
+            }
             return false;
 #else
             return _currentKeyboardState.IsKeyUp(key) && _lastKeyboardState.IsKeyDown(key);
@@ -313,6 +326,10 @@ namespace PressPlay.FFWD
         public static bool GetKeyDown(Keys key)
         {
 #if WINDOWS_PHONE
+            if (key == Keys.Back)
+            {
+                return (_lastGamepadState.Buttons.Back == ButtonState.Released) && (_currentGamePadState.Buttons.Back == ButtonState.Pressed);
+            }
             return false;
 #else
             return _currentKeyboardState.IsKeyDown(key) && _lastKeyboardState.IsKeyUp(key);
