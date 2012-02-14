@@ -689,12 +689,16 @@ namespace PressPlay.FFWD
                 {
                     float rad = MathHelper.ToRadians(VectorConverter.Angle(t.eulerAngles, coll.to2dMode));
                     Microsoft.Xna.Framework.Vector2 pos = VectorConverter.Convert(t.position, coll.to2dMode);
+#if DEBUG
                     Debug.LogIf(DebugSettings.LogColliderChanges, String.Format("Move {0} to {1} and rotate to {2}", coll, pos, rad));
+#endif
                     body.SetTransformIgnoreContacts(ref pos, rad);
                 }
                 if ((t.changes & TransformChanges.Scale) == TransformChanges.Scale)
                 {
+#if DEBUG
                     Debug.LogIf(DebugSettings.LogColliderChanges, String.Format("Resize collider {0}", coll));
+#endif
                     coll.ResizeConnectedBody();
                 }
             }
