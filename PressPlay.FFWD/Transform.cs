@@ -359,7 +359,7 @@ namespace PressPlay.FFWD
             {
                 return;
             }
-            if (changes == TransformChanges.None)
+            if (changes == TransformChanges.None && WillChangesBeRecorded())
             {
                 Transform.transformsChanged.Enqueue(this);
             }
@@ -378,6 +378,11 @@ namespace PressPlay.FFWD
                 }
             }
             hasDirtyWorld = true;
+        }
+
+        private bool WillChangesBeRecorded()
+        {
+            return (camera != null) || (collider != null);
         }
 
         internal void SetPositionFromPhysics(Vector3 pos, float ang, Vector3 up)
