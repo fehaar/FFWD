@@ -190,5 +190,11 @@ namespace PressPlay.FFWD
             }
             return null;
         }
+
+        public override string ToString()
+        {
+            return animation.name + " - " + clip.name + ". Enabled: " + enabled + ". Time: " + time;
+        }
+
     }
 }

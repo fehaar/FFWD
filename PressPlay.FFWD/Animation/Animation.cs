@@ -154,6 +154,7 @@ namespace PressPlay.FFWD.Components
             {
                 return false;
             }
+            Stop();
             this[name].enabled = true;
             return true;
         }
