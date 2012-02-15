@@ -1430,11 +1430,12 @@ namespace FarseerPhysics.Dynamics
             QueryAABB(
                 fixture =>
                 {
-                    bool inside = fixture.TestPoint(ref point);
-                    if (inside && (fixture.Body.UserData != null))
+                    if ((fixture.Body.UserData != null))
                     {
                         PressPlay.FFWD.GameObject go = fixture.Body.UserData.gameObject;
-                        if (go.active && (layerMask & (1 << go.layer)) > 0)
+                        if (go.active                           &&
+                            ((layerMask & (1 << go.layer)) > 0) &&
+                            fixture.TestPoint(ref point))
                         {
                             myFixture = fixture;
                             return false;
@@ -1495,8 +1496,9 @@ namespace FarseerPhysics.Dynamics
             QueryAABB(
                 fixture =>
                 {
-                    bool inside = fixture.TestPoint(ref point);
-                    if (inside && (fixture.Body.UserData != null) && fixture.Body.UserData.gameObject.active)
+                    if ((fixture.Body.UserData != null)         &&
+                        fixture.Body.UserData.gameObject.active &&
+                        fixture.TestPoint(ref point))
                     {
                         fixtures.Add(fixture);
                     }
@@ -1523,8 +1525,10 @@ namespace FarseerPhysics.Dynamics
             QueryAABB(
                 fixture =>
                 {
-                    bool inside = fixture.TestPoint(ref point);
-                    if (inside && (fixture.Body.UserData != null) && fixture.Body.UserData.gameObject.active && (layerMask & (1 << fixture.Body.UserData.gameObject.layer)) > 0)
+                    if ((fixture.Body.UserData != null)                                    &&
+                        fixture.Body.UserData.gameObject.active                            &&
+                        ((layerMask & (1 << fixture.Body.UserData.gameObject.layer)) > 0)  &&
+                        (fixture.TestPoint(ref point)))
                     {
                         fixtures.Add(fixture);
                     }
