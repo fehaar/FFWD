@@ -34,6 +34,7 @@ namespace PressPlay.FFWD.Test.Core_framework.Animation
             Assert.That(state.enabled, Is.True);
             Assert.That(state.playQueuedReference, Is.True);
             Assert.That(state, Is.Not.SameAs(animation[name]));
+            Assert.That(animation[name].playQueuedReference, Is.False);
         }
 
         [Test]
@@ -53,6 +54,7 @@ namespace PressPlay.FFWD.Test.Core_framework.Animation
         {
             string name = "MyClip";
             animation.AddClip(new AnimationClip() { length = 2, wrapMode = WrapMode.Once }, name);
+            animation.Play(name);
             AnimationState state = animation.PlayQueued(name);
             for (int i = 0; i < 4; i++)
             {
@@ -65,9 +67,14 @@ namespace PressPlay.FFWD.Test.Core_framework.Animation
         [Test]
         public void WhenTheQueuedAnimationHasEndedTheStateWillNotExistAnymore()
         {
-            // TODO : Add implementation of test
-            Assert.Ignore("Test not implemented");
-
+            string name = "MyClip";
+            animation.AddClip(new AnimationClip() { length = 2, wrapMode = WrapMode.Once }, name);
+            AnimationState state = animation.PlayQueued(name);
+            for (int i = 0; i < 4; i++)
+            {
+                animation.UpdateAnimationStates(0.55f);
+            }
+            Assert.That(animation[state.name], Is.Null);
         }
 	
 	
