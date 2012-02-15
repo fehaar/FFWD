@@ -40,8 +40,8 @@ namespace PressPlay.FFWD.Test.Core_framework.Animation
         [Test]
         public void WillUpdateTimeOnAllEnabledClips()
         {
-            animation.Play("Clip1");
-            animation.Play("Clip2");
+            animation["Clip1"].enabled = true;
+            animation["Clip2"].enabled = true;
 
             animation.UpdateAnimationStates(1.0f);
             Assert.That(animation["Clip1"].time, Is.EqualTo(1.0f));
@@ -58,9 +58,9 @@ namespace PressPlay.FFWD.Test.Core_framework.Animation
         [Test]
         public void WithSpeedSetWillUpdateTimeAccordingly()
         {
-            animation.Play("Clip1");
-            animation.Play("Clip2");
-            animation.Play("Clip3");
+            animation["Clip1"].enabled = true;
+            animation["Clip2"].enabled = true;
+            animation["Clip3"].enabled = true;
             animation["Clip1"].speed = 2.0f;
             animation["Clip2"].speed = 0.5f;
             animation["Clip3"].speed = 0f;

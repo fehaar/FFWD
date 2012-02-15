@@ -46,7 +46,7 @@ namespace PressPlay.FFWD.Components
             {
                 Animation a = animationComponents[i];
                 // TODO: Implement culling here
-                if (a.enabled)
+                if (a.enabled && a.isPlaying)
                 {
                     a.UpdateAnimationStates(Time.deltaTime);
                     a.Sample();
@@ -78,7 +78,6 @@ namespace PressPlay.FFWD.Components
                     }
                 }
             }
-            animationComponents.Add(this);
         }
 
         public override void Awake()
@@ -135,11 +134,21 @@ namespace PressPlay.FFWD.Components
 
 		public void Rewind()
 		{
-			// TODO : Add implementation of method
-			throw new NotImplementedException("Method not implemented.");
+            for (int i = 0; i < states.Count; i++)
+            {
+                states[i].time = 0;
+            }
 		}
 
-		public bool Play()
+        public void Rewind(string name)
+        {
+            if (stateIndexes.ContainsKey(name))
+            {
+                this[name].time = 0;
+            }
+        }
+
+        public bool Play()
 		{
 			return Play(defaultClip);
 		}
@@ -156,18 +165,30 @@ namespace PressPlay.FFWD.Components
             }
             Stop();
             this[name].enabled = true;
+            if (!animationComponents.Contains(this))
+            {
+                animationComponents.Add(this);
+            }
             return true;
         }
 
-		public void PlayQueued(string name)
+		public AnimationState PlayQueued(string name)
 		{
-			PlayQueued(name, QueueMode.CompleteOthers);
+			return PlayQueued(name, QueueMode.CompleteOthers);
 		}
 
-		public void PlayQueued(string name, QueueMode mode)
+        public AnimationState PlayQueued(string name, QueueMode mode)
 		{
-			// TODO : Add implementation of method
-            throw new NotImplementedException("Method not implemented.");
+            AnimationState state = this[name];
+            if (state != null)
+            {
+                state = new AnimationState(this, state.clip);
+                state.enabled = (!isPlaying);
+                state.playQueuedReference = true;
+                AddState(Guid.NewGuid().ToString(), state);
+                return state;
+            }
+            return null;
 		}
 
 		public void Stop()
@@ -192,20 +213,26 @@ namespace PressPlay.FFWD.Components
 			{
 				return;
 			}
+            AddState(newName, new AnimationState(this, clip));
+		}
+
+        private void AddState(string newName, AnimationState state)
+        {
             if (states == null)
             {
                 states = new List<AnimationState>(1);
             }
+            state.name = newName;
             if (stateIndexes.ContainsKey(newName))
             {
-                states[stateIndexes[newName]] = new AnimationState(this, clip);
+                states[stateIndexes[newName]] = state;
             }
             else
             {
                 stateIndexes[newName] = states.Count;
-                states.Add(new AnimationState(this, clip));
+                states.Add(state);
             }
-		}
+        }
 
 		public void AddClip(AnimationClip clip, string newName, int firstFrame, int lastFrame)
 		{
@@ -232,8 +259,6 @@ namespace PressPlay.FFWD.Components
 		public void Blend(string name, float weight, float length)
 		{
 			// TODO : Add implementation of method
-			//throw new NotImplementedException("Method not implemented.");
-            //Rewind();
             Stop();
             Play(name);
 		}
@@ -245,7 +270,7 @@ namespace PressPlay.FFWD.Components
 
 		public void CrossFade(string name, float fadeLength)
 		{
-            //Rewind();
+            // TODO : Add implementation of method
             Stop();
 			Play(name);
 		}
@@ -284,9 +309,34 @@ namespace PressPlay.FFWD.Components
 
         internal void UpdateAnimationStates(float deltaTime)
         {
-            for (int i = 0; i < states.Count; i++)
+            bool playQueued = false;
+            bool hasQueued = false;
+            for (int i = states.Count - 1; i >= 0; i--)
             {
-                states[i].Update(deltaTime);
+                AnimationState state = states[i];
+                hasQueued |= state.playQueuedReference;
+                if (state.Update(deltaTime))
+                {
+                    if (state.playQueuedReference)
+                    {
+                        stateIndexes.Remove(state.name);
+                        states.RemoveAt(i);
+                    }
+                    else
+                    {
+                        playQueued = true;
+                    }
+                }
+            }
+            if (hasQueued && playQueued)
+            {
+                for (int i = 0; i < states.Count; i++)
+                {
+                    if (states[i].playQueuedReference)
+                    {
+                        states[i].enabled = true;
+                    }
+                }
             }
         }
     }

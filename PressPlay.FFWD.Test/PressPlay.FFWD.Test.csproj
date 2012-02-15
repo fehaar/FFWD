@@ -130,6 +130,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core framework\Animation\WhenPlayingAClipQueued.cs" />
     <Compile Include="Core framework\Animation\SampleTester.cs" />
     <Compile Include="Core framework\Animation\WhenAClipReachesTheEnd.cs" />
     <Compile Include="Core framework\Animation\TheDefaultAnimationClip.cs" />
