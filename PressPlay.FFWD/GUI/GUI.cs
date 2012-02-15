@@ -37,6 +37,7 @@ namespace PressPlay.FFWD
         public static Color backgroundColor = Color.white;
         public static Color color = Color.white;
         public static SpriteFont spriteFont;
+        public static SpriteFont spriteBombardierFont;
 
         
 
@@ -48,6 +49,21 @@ namespace PressPlay.FFWD
                 if (Camera.FullScreen.Bounds.Contains(r))
                 {
                     spriteBatch.Draw((Microsoft.Xna.Framework.Graphics.Texture2D)texture, r, color);
+                }
+            }
+        }
+
+        public static void DrawTexture(Rect rect, Rect source, Vector2 origin, Vector2 size, Texture texture, float rot)
+        {
+            if (isRendering)
+            {
+                Rectangle r = new Rectangle((int)rect.x + (int)(size.x * origin.x), (int)rect.y + (int)(size.y * origin.y), (int)rect.width, (int)rect.height);                  
+                Rectangle s = source;
+                Vector2 o = new Vector2(texture.width * origin.x, texture.height * origin.y);
+
+                if (Camera.FullScreen.Bounds.Contains(r))
+                {   
+                    spriteBatch.Draw((Microsoft.Xna.Framework.Graphics.Texture2D)texture, r, s, color, rot, o, SpriteEffects.None, 0.0f);                    
                 }
             }
         }
@@ -68,11 +84,11 @@ namespace PressPlay.FFWD
 
                     if (style.alignment == TextAnchor.MiddleCenter)
                     {
-                        Microsoft.Xna.Framework.Vector2 sz = GUI.spriteFont.MeasureString(text);
+                        Microsoft.Xna.Framework.Vector2 sz = GUI.spriteBombardierFont.MeasureString(text);
                         pos += new Microsoft.Xna.Framework.Vector2(Mathf.Floor((rect.width - sz.X) / 2), Mathf.Floor((rect.height - sz.Y) / 2));
                     }
 
-                    spriteBatch.DrawString(GUI.spriteFont, text ?? "", pos, color);
+                    spriteBatch.DrawString(GUI.spriteBombardierFont, text ?? "", pos, color);
                 }
             }
         }

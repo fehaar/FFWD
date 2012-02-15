@@ -187,7 +187,8 @@ namespace PressPlay.FFWD
         protected override void LoadContent()
         {
             base.LoadContent();
-            GUI.spriteFont = Game.Content.Load<SpriteFont>("GUIFont");
+            GUI.spriteFont              = Game.Content.Load<SpriteFont>("GUIFont");
+            GUI.spriteBombardierFont    = Game.Content.Load<SpriteFont>("Bombardier");
         }
 
         private ContentManager CreateContentManager()
