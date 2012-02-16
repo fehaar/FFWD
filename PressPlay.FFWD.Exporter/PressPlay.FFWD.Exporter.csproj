@@ -51,6 +51,7 @@
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Filter.cs" />
     <Compile Include="Interfaces\IComponentWriter.cs" />
+    <Compile Include="Interfaces\ILevelValidation.cs" />
     <Compile Include="NamespaceRule.cs" />
     <Compile Include="ScriptTranslator.cs" />
     <Compile Include="TypeResolver.cs" />

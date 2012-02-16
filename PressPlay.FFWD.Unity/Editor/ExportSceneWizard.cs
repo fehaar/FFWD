@@ -8,6 +8,7 @@ using System;
 using System.Xml.Serialization;
 using System.Text;
 using System.Linq;
+using PressPlay.FFWD.Exporter.Interfaces;
 
 public class ExportSceneWizard : ScriptableWizard
 {
@@ -16,6 +17,7 @@ public class ExportSceneWizard : ScriptableWizard
     {
         public string name;
         public string baseSceneDir;
+        public string validationScript; 
         public List<string> scenes;
     }
 
@@ -216,7 +218,16 @@ public class ExportSceneWizard : ScriptableWizard
             ScriptTranslator.ScriptNamespace = config.scriptNamespace;
 
             Debug.Log("----------------------- " + Path.GetFileName(EditorApplication.currentScene) + " -------------------------Start scene export");
-            scene.Write(Path.ChangeExtension(Path.GetFileName(EditorApplication.currentScene), "xml"));
+
+            if (ValidateOpenScene())
+            {
+                scene.Write(Path.ChangeExtension(Path.GetFileName(EditorApplication.currentScene), "xml"));
+            }
+            else
+            {
+                Debug.LogError("Scene validation failed. Scene not exported!");
+                return;
+            }
 
             if (config.showComponentsNotWritten)
             {
@@ -237,7 +248,20 @@ public class ExportSceneWizard : ScriptableWizard
                 }
             }
             scene.componentsNotWritten.Clear();
-            //Debug.Log("---End scene export of " + Path.GetFileName(EditorApplication.currentScene));
+        }
+
+        private bool ValidateOpenScene()
+        {
+            foreach (var group in config.groups)
+            {
+                string levelName = Path.GetFileNameWithoutExtension(EditorApplication.currentScene);
+                if (!String.IsNullOrEmpty(group.validationScript) && group.scenes.Contains(levelName))
+                {
+                    ILevelValidation validator = (ILevelValidation)Activator.CreateInstance(null, group.validationScript).Unwrap();
+                    return validator.ValidateLevel(levelName);
+                }
+            }
+            return true;
         }
 
         public void ExportAllScenes()
