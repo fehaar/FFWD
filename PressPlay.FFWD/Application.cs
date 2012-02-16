@@ -86,12 +86,14 @@ namespace PressPlay.FFWD
         public static ScreenManager.ScreenManager screenManager;
 
         private static readonly Dictionary<int, UnityObject> objects = new Dictionary<int, UnityObject>(5000);
-        internal static readonly List<Asset> newAssets = new List<Asset>(100);
 
-        internal static readonly List<Component> newComponents = new List<Component>();
+        internal static readonly Queue<Component> newComponents = new Queue<Component>(2500);
         private static readonly Queue<Component> componentsToAwake = new Queue<Component>(2500);
         private static readonly Queue<Component> instantiatedComponentsToAwake = new Queue<Component>(50);
-        private static readonly List<Component> componentsToStart = new List<Component>();
+        private static readonly Queue<Component> componentsToStart = new Queue<Component>(2500);
+        internal static readonly Queue<Component> loadedComponents = new Queue<Component>(2500);
+        internal static readonly Queue<Asset> newAssets = new Queue<Asset>(100);
+        internal static readonly Queue<Asset> sceneAssets = new Queue<Asset>(100);
         private static readonly List<PressPlay.FFWD.Interfaces.IUpdateable> updateComponents = new List<PressPlay.FFWD.Interfaces.IUpdateable>(500);
         private static readonly List<PressPlay.FFWD.Interfaces.IFixedUpdateable> fixedUpdateComponents = new List<PressPlay.FFWD.Interfaces.IFixedUpdateable>(100);
         private static readonly List<PressPlay.FFWD.Interfaces.IUpdateable> lateUpdateComponents = new List<PressPlay.FFWD.Interfaces.IUpdateable>(100);
@@ -133,8 +135,6 @@ namespace PressPlay.FFWD
         }
         private static Scene scene;
         private static Stopwatch stopWatch = new Stopwatch();
-        internal static readonly List<Component> tempComponents = new List<Component>();
-        internal static readonly List<Asset> tempAssets = new List<Asset>();
         internal static bool isLoadingAdditive = false;
 
         private static AssetHelper assetHelper = new AssetHelper();
@@ -198,10 +198,10 @@ namespace PressPlay.FFWD
 
         private void StartComponents()
         {
-            for (int i = 0; i < componentsToStart.Count; i++)
+            while (componentsToStart.Count > 0)
             {
-                Component cmp = componentsToStart[i];
-                // We can have objects destroyed before starting if it is done in another Awake.
+                Component cmp = componentsToStart.Dequeue();
+                // We can have objects destroyed before starting if it is done in another Start call.
                 // If that is so, just skip it.
                 if (cmp.gameObject != null)
                 {
@@ -209,7 +209,6 @@ namespace PressPlay.FFWD
                     cmp.Start();
                 }
             }
-            componentsToStart.Clear();
         }
 
         public override void Update(GameTime gameTime)
@@ -242,7 +241,6 @@ namespace PressPlay.FFWD
                     {
                         LoadSceneAssets();
                     }
-
                     CalculateLoadingProgress();
                 }
             }
@@ -477,7 +475,7 @@ namespace PressPlay.FFWD
                 //tempAssets.AddRange(scene.assets);
             }
             sceneToLoad = "";
-            totalNumberOfAssetsToLoad = tempAssets.Count;
+            totalNumberOfAssetsToLoad = sceneAssets.Count;
             numberOfAssetsLoaded = 0;
 
             if (scene == null)
@@ -489,13 +487,8 @@ namespace PressPlay.FFWD
 
         private void LoadSceneAssets()
         {
-            //Debug.Log("Application > LoadSceneAssets. Assets left to load: "+tempAssets.Count);
-
             stopWatch.Start();
-
-            int count = 0;
-
-            for (int i = tempAssets.Count - 1; i >= 0; i--)
+            while (sceneAssets.Count > 0)
             {
                 if (ApplicationSettings.AssetLoadInterval > 0 && stopWatch.ElapsedMilliseconds > ApplicationSettings.AssetLoadInterval)
                 {
@@ -503,11 +496,9 @@ namespace PressPlay.FFWD
                     stopWatch.Reset();
                     return;
                 }
-
-                tempAssets[i].LoadAsset(assetHelper);
-                tempAssets.RemoveAt(i);
+                Asset a = assetQueue.Dequeue();
+                a.LoadAsset(assetHelper);
                 numberOfAssetsLoaded++;
-                count++;
             }
             loadIsComplete = true;
         }
@@ -531,9 +522,6 @@ namespace PressPlay.FFWD
 #endif
             stopWatch.Stop();
             stopWatch.Reset();
-
-            newComponents.AddRange(tempComponents);
-            tempComponents.Clear();
 
             isLoadingAssetBeforeSceneInitialize = false;
             isLoadingAdditive = false;
@@ -765,11 +753,11 @@ namespace PressPlay.FFWD
         {
             if (isLoadingAssetBeforeSceneInitialize)
             {
-                tempComponents.Add(component);
+                loadedComponents.Enqueue(component);
             }
             else
             {
-                newComponents.Add(component);
+                newComponents.Enqueue(component);
             }
         }
 
@@ -777,11 +765,11 @@ namespace PressPlay.FFWD
         {
             if (isLoadingAssetBeforeSceneInitialize)
             {
-                tempAssets.Add(asset);
+                sceneAssets.Enqueue(asset);
             }
             else
             {
-                newAssets.Add(asset);
+                newAssets.Enqueue(asset);
             }
         }
 
