@@ -37,7 +37,7 @@ namespace PressPlay.FFWD.Test.Core_framework
         {
             GameObject go = new GameObject();
             TestComponent cmp = go.AddComponent(new TestComponent());
-            Application.AwakeNewComponents();
+            Application.AwakeNewComponents(false);
             Assert.That((bool)cmp, Is.True);
 
             Component.Destroy(cmp);

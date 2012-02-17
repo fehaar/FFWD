@@ -13,7 +13,6 @@ namespace PressPlay.FFWD.Test.Core_framework
         [TearDown]
         public void TearDown()
         {
-            Application.AwakeNewComponents();
             Application.Reset();
         }
 
@@ -234,12 +233,12 @@ namespace PressPlay.FFWD.Test.Core_framework
             GameObject obj = new GameObject();
             TestComponent comp = new TestComponent() { onAwake = () => { awakeCalls++; } };
             obj.AddComponent(comp);
-            Application.AwakeNewComponents();
+            Application.AwakeNewComponents(false);
 
             Assert.That(awakeCalls, Is.EqualTo(1));
             TestComponent cmp = (TestComponent)UnityObject.Instantiate(comp);
             Assert.That(cmp, Is.Not.Null);
-            Application.AwakeNewComponents();
+            Application.AwakeNewComponents(false);
             Assert.That(awakeCalls, Is.EqualTo(2));
         }
 

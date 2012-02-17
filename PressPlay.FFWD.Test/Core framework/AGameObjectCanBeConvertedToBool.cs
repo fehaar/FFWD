@@ -19,7 +19,7 @@ namespace PressPlay.FFWD.Test.Core_framework
         public void AnExistingGameObjectWillBeTrue()
         {
             GameObject go = new GameObject();
-            Application.AwakeNewComponents();
+            Application.AwakeNewComponents(false);
             bool exists = go;
             Assert.That(exists, Is.True);
         }

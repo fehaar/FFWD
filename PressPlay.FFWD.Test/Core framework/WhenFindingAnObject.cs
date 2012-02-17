@@ -35,7 +35,7 @@ namespace PressPlay.FFWD.Test.Core_framework
         {
             GameObject go = new GameObject();
             go.AddComponent(typeof(TestComponent));
-            Application.AwakeNewComponents();
+            Application.AwakeNewComponents(false);
 
             UnityObject obj = Application.FindObjectOfType(typeof(TestComponent));
 
@@ -49,7 +49,7 @@ namespace PressPlay.FFWD.Test.Core_framework
             GameObject go = new GameObject();
             go.AddComponent(typeof(TestComponent));
             go.AddComponent(typeof(MyTestComponent));
-            Application.AwakeNewComponents();
+            Application.AwakeNewComponents(false);
 
             UnityObject obj = Application.FindObjectOfType(typeof(MyTestComponent));
 

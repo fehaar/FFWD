@@ -124,7 +124,7 @@ namespace PressPlay.FFWD.Test.Core_framework
         {
             GameObject go = new GameObject();
             go.AddComponent(typeof(TestComponent));
-            Application.AwakeNewComponents();
+            Application.AwakeNewComponents(false);
 
             UnityObject[] uo = go.GetComponents(typeof(Component));
 

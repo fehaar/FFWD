@@ -665,11 +665,6 @@ namespace PressPlay.FFWD
             return objects.Values.Where(o => o is GameObject && !(o as GameObject).isPrefab && (o as GameObject).tag == tag).Cast<GameObject>();
         }
 
-        internal static void AwakeNewComponents()
-        {
-            AwakeNewComponents(false);
-        }
-
         internal static void AwakeNewComponents(bool onInstantiate)
         {
             Queue<Component> awakeQueue = (onInstantiate) ? instantiatedComponentsToAwake : componentsToAwake;
@@ -701,7 +696,7 @@ namespace PressPlay.FFWD
         private static void RegisterComponent(Component cmp, Queue<Component> awakeQueue)
         {
             LifecycleEvent(cmp, "Consider for awake");
-            if (cmp.gameObject != null)
+            if (cmp.gameObject != null && !cmp.isPrefab)
             {
                 LifecycleEvent(cmp, "Add to objects");
                 objects.Add(cmp.GetInstanceID(), cmp);

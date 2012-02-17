@@ -18,7 +18,7 @@ namespace PressPlay.FFWD.Test.Core_framework
         public void Setup()
         {
             Assert.Inconclusive("This will only work when loading with the intermediate serializer, so we need to do a test like that.");
-            Application.AwakeNewComponents();
+            Application.AwakeNewComponents(false);
             Application.Reset();
 
             h = new TestHierarchy();
@@ -35,7 +35,7 @@ namespace PressPlay.FFWD.Test.Core_framework
         [TearDown]
         public void TearDown( )
         {
-            Application.AwakeNewComponents();
+            Application.AwakeNewComponents(false);
             Application.Reset();
         }
 
@@ -232,7 +232,7 @@ namespace PressPlay.FFWD.Test.Core_framework
             Assert.That(newComponent, Is.Not.Null);
             Assert.That(awakeCalled, Is.False);
 
-            Application.AwakeNewComponents();
+            Application.AwakeNewComponents(false);
             Assert.That(awakeCalled, Is.True);
         }
 	

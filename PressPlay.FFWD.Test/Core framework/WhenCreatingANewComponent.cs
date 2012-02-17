@@ -17,14 +17,14 @@ namespace PressPlay.FFWD.Test.Core_framework
             TestComponent comp = go.AddComponent<TestComponent>();
             comp.onAwake = () => isAwoken = true;
             Assert.That(isAwoken, Is.False);
-            Application.AwakeNewComponents();
+            Application.AwakeNewComponents(false);
             Assert.That(isAwoken, Is.True);
         }
 
         [TearDown]
         public void TearDown()
         {
-            Application.AwakeNewComponents();
+            Application.AwakeNewComponents(false);
             Application.Reset();
         }
 
@@ -36,9 +36,9 @@ namespace PressPlay.FFWD.Test.Core_framework
             TestComponent comp = go.AddComponent<TestComponent>();
             comp.onAwake = () => awakeCount++;
             Assert.That(awakeCount, Is.EqualTo(0));
-            Application.AwakeNewComponents();
+            Application.AwakeNewComponents(false);
             Assert.That(awakeCount, Is.EqualTo(1));
-            Application.AwakeNewComponents();
+            Application.AwakeNewComponents(false);
             Assert.That(awakeCount, Is.EqualTo(1));
         }
 
@@ -49,7 +49,7 @@ namespace PressPlay.FFWD.Test.Core_framework
             TestComponent comp = go.AddComponent<TestComponent>();
 
             Assert.That(Application.Find(comp.GetInstanceID()), Is.Null);
-            Application.AwakeNewComponents();
+            Application.AwakeNewComponents(false);
             Assert.That(Application.Find(comp.GetInstanceID()), Is.Not.Null);
             Assert.That(Application.Find(comp.GetInstanceID()), Is.SameAs(comp));
         }
@@ -60,7 +60,7 @@ namespace PressPlay.FFWD.Test.Core_framework
             GameObject go = new GameObject();
             TestComponent comp = go.AddComponent<TestComponent>();
 
-            Application.AwakeNewComponents();
+            Application.AwakeNewComponents(false);
             Assert.That(Application.Find(comp.GetInstanceID()), Is.Not.Null);
             Application.Reset();
             Assert.That(Application.Find(comp.GetInstanceID()), Is.Null);

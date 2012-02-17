@@ -218,13 +218,13 @@ namespace PressPlay.FFWD
 
         internal void AfterLoad(Dictionary<int, UnityObject> idMap, List<Component> comps)
         {
-            AfterLoad(idMap);
+            base.AfterLoad(idMap, comps);
 
             for (int j = 0; j < components.Count; j++)
             {
                 Component cmp = components[j];
                 cmp.isPrefab = isPrefab;
-                cmp.AfterLoad(idMap);
+                cmp.AfterLoad(idMap, comps);
                 cmp.gameObject = this;
                 if (comps != null)
                 {

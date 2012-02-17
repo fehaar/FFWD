@@ -29,7 +29,7 @@ namespace PressPlay.FFWD.Test.Core_framework
         public void ItWillBeRemovedFromExistanceWhenTheApplicationCleansUp()
         {
             GameObject go = new GameObject();
-            Application.AwakeNewComponents();
+            Application.AwakeNewComponents(false);
             Assert.That((bool)go, Is.True);
 
             UnityObject.Destroy(go);

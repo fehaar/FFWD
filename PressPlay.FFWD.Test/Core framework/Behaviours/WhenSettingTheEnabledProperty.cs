@@ -18,7 +18,7 @@ namespace PressPlay.FFWD.Test.Core_framework.Behaviours
             GameObject go = new GameObject();
             behaviour = go.AddComponent<TestBehaviour>();
             hasUpdated = false;
-            Application.AwakeNewComponents();
+            Application.AwakeNewComponents(false);
         }
 
         [Test]
