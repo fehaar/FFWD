@@ -230,7 +230,6 @@ namespace PressPlay.FFWD.Test.Core_framework
         [Test]
         public void InstantiatingComponentsWillPutThemInTheAwakeQueue()
         {
-            Application.hasAwake.Add(typeof(TestComponent));
             int awakeCalls = 0;
             GameObject obj = new GameObject();
             TestComponent comp = new TestComponent() { onAwake = () => { awakeCalls++; } };
@@ -247,7 +246,6 @@ namespace PressPlay.FFWD.Test.Core_framework
         [Test]
         public void InstantiatingAComponentInAwakeWillAwakeThemImmidiately()
         {
-            Application.hasAwake.Add(typeof(TestComponent));
             int awakeCalls = 0;
             GameObject objPrefab = new GameObject(true);
             TestComponent compPrefab = new TestComponent() { onAwake = () => { awakeCalls++; } };

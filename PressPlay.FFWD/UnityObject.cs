@@ -72,9 +72,8 @@ namespace PressPlay.FFWD
 
         protected virtual void Destroy()
         {
-            Application.markedForDestruction.Add(this);
+            Application.markedForDestruction.Enqueue(this);
         }
-
 
         public static void DestroyImmediate(UnityObject obj)
         {
@@ -163,8 +162,8 @@ namespace PressPlay.FFWD
                 {
                     idMap[_id] = this;
                 }
+                _id = nextId++;
             }
-            _id = nextId++;
         }
 
         internal virtual void FixReferences(Dictionary<int, UnityObject> idMap)

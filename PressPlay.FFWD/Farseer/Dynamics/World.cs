@@ -1430,7 +1430,7 @@ namespace FarseerPhysics.Dynamics
             QueryAABB(
                 fixture =>
                 {
-                    if ((fixture.Body.UserData != null))
+                    if (fixture.Body.UserData != null)
                     {
                         PressPlay.FFWD.GameObject go = fixture.Body.UserData.gameObject;
                         if (go.active                           &&

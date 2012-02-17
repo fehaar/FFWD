@@ -43,10 +43,11 @@ namespace PressPlay.FFWD.Test.Core_framework
         public void AllItsComponentsWillBeMarkedForDestruction()
         {
             GameObject go = new GameObject();
+            Transform t = go.transform;
 
             UnityObject.Destroy(go);
 
-            Assert.That(Application.markedForDestruction.Contains(go.transform));
+            Assert.That(Application.markedForDestruction.Contains(t));
         }
 
 

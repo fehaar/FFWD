@@ -68,7 +68,7 @@ namespace PressPlay.FFWD.Test.Core_framework.Transforms
         }
 
         [Test]
-        public void AChildWillBeScaledRelativielyToItsParent()
+        public void AChildWillKeepItsScaleWhenAddedToAParent()
         {
             GameObject obj = new GameObject();
             Transform trans = obj.transform;
@@ -81,7 +81,7 @@ namespace PressPlay.FFWD.Test.Core_framework.Transforms
             Assert.That(trans.lossyScale, Is.EqualTo(new Vector3(2, 2, 2)));
             Assert.That(child.lossyScale, Is.EqualTo(new Vector3(3, 2, 1)));
             child.parent = trans;
-            Assert.That(child.lossyScale, Is.EqualTo(new Vector3(2, 2, 2) * new Vector3(3, 2, 1)));
+            Assert.That(child.lossyScale, Is.EqualTo(new Vector3(3, 2, 1)));
         }
 
         [Test]

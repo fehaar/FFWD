@@ -14,6 +14,7 @@ namespace PressPlay.FFWD.Test.Core_framework
         [SetUp]
         public void Setup()
         {
+            Assert.Inconclusive("We need to separate the Application from the Game in order to do this!");
             GameObject go = new GameObject();
             component = new TestComponent();
             go.AddComponent(component);

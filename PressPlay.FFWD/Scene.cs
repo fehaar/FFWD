@@ -18,6 +18,8 @@ namespace PressPlay.FFWD
         }
 
         public bool hasBeenProcessed { get; set; }
+        [ContentSerializer(Optional = true)]
+        public int componentCount { get; set; }
         [ContentSerializer(FlattenContent = true, CollectionItemName = "go")]
         public List<GameObject> gameObjects { get; set; }
         [ContentSerializer(FlattenContent = true, CollectionItemName = "p")]
@@ -25,16 +27,19 @@ namespace PressPlay.FFWD
         [ContentSerializer(Optional = true, ElementName = "tc")]
         internal List<string> typeCaps = new List<string>();
 
+        private List<Component> components;
+
         public void AfterLoad(Dictionary<int, UnityObject> idMap)
-        {            
+        {
+            components = new List<Component>((componentCount > 0) ? componentCount : ApplicationSettings.DefaultCapacities.ComponentLists);
             for (int i = 0; i < gameObjects.Count; i++)
             {
-                gameObjects[i].AfterLoad(idMap);
+                gameObjects[i].AfterLoad(idMap, components);
             }
             for (int i = 0; i < prefabs.Count; i++)
             {
                 prefabs[i].isPrefab = true;
-                prefabs[i].AfterLoad(idMap);
+                prefabs[i].AfterLoad(idMap, components);
             }
         }
 
@@ -43,29 +48,37 @@ namespace PressPlay.FFWD
             Dictionary<int, UnityObject> idMap = new Dictionary<int, UnityObject>();
             AfterLoad(idMap);
             // Remove placeholder references and replace them with live ones
-            List<IdMap> idMaps = new List<IdMap>();
-            for (int i = 0; i < Application.newComponents.Count; i++)
+            Queue<IdMap> idMaps = new Queue<IdMap>();
+            int count = components.Count;
+            for (int i = 0; i < count; i++)
             {
-                Application.newComponents[i].FixReferences(idMap);
-                if (Application.newComponents[i] is IdMap)
+                Component cmp = components[i];
+                cmp.FixReferences(idMap);
+                if (cmp is IdMap)
                 {
-                    idMaps.Add(Application.newComponents[i] as IdMap);
+                    idMaps.Enqueue(cmp as IdMap);
+                }
+                else
+                {
+                    Application.newComponents.Enqueue(cmp);
                 }
             }
             idMap.Clear();
             // Issue new ids to all objects from a scene now that references have been fixed
-            for (int i = 0; i < gameObjects.Count; i++)
+            count = gameObjects.Count;
+            for (int i = 0; i < count; i++)
             {
                 gameObjects[i].SetNewId(idMap);
             }
-            for (int i = 0; i < prefabs.Count; i++)
+            count = prefabs.Count;
+            for (int i = 0; i < count; i++)
             {
                 prefabs[i].SetNewId(idMap);
             }
-            for (int i = 0; i < idMaps.Count; i++)
+            while (idMaps.Count > 0)
             {
-                idMaps[i].UpdateIdReferences(idMap);
-                Application.newComponents.Remove(idMaps[i]);
+                IdMap map = idMaps.Dequeue();
+                map.UpdateIdReferences(idMap);
             }
         }
     }
