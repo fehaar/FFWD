@@ -9,9 +9,9 @@ namespace PressPlay.FFWD.Components
     {
         public Camera()
         {
-            fieldOfView = MathHelper.ToRadians(60);
-            nearClipPlane = 0.3f;
-            farClipPlane = 1000;
+            _fieldOfView = MathHelper.ToRadians(60);
+            _nearClipPlane = 0.3f;
+            _farClipPlane = 1000;
         }
 
         public enum ClearFlags
@@ -21,10 +21,45 @@ namespace PressPlay.FFWD.Components
             Depth,
             Nothing
         }
+        private float _fieldOfView;
+        public float fieldOfView { 
+            get
+            {
+                return _fieldOfView;
+            }
+            set
+            {
+                _fieldOfView = value;
+                _projectionMatrix = Matrix.Identity;
+            }
+        }
+        private float _nearClipPlane;
+        public float nearClipPlane
+        {
+            get
+            {
+                return _nearClipPlane;
+            }
+            set
+            {
+                _nearClipPlane = value;
+                _projectionMatrix = Matrix.Identity;
+            }
+        }
+        private float _farClipPlane;
+        public float farClipPlane 
+        { 
+            get
+            {
+                return _farClipPlane;
+            }
+            set
+            {
+                _farClipPlane = value;
+                _projectionMatrix = Matrix.Identity;
+            }
+        }
 
-        public float fieldOfView { get; set; }
-        public float nearClipPlane { get; set; }
-        public float farClipPlane { get; set; }
         private float _orthographicSize;
         public float orthographicSize 
         { 
