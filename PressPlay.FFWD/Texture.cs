@@ -20,7 +20,7 @@ namespace PressPlay.FFWD
 
         internal Texture(int _width, int _height)
         {            
-            tex = new Microsoft.Xna.Framework.Graphics.Texture2D(Application.Instance.GraphicsDevice, _width, _height);               
+            tex = new Microsoft.Xna.Framework.Graphics.Texture2D(Application.Instance.GraphicsDevice, _width, _height, false, Microsoft.Xna.Framework.Graphics.SurfaceFormat.Color);               
         }
 
         public int Width
@@ -57,7 +57,8 @@ namespace PressPlay.FFWD
 
         public void SetPixel(int x, int y, Color color)
         {
-            // TODO: Implement this
+            byte[] buffer = new byte[4] { color.R, color.G, color.B, color.A };
+            tex.SetData<byte>(buffer, (y - 1) * tex.Width + (x - 1), 4);
         }
 
         public void Apply()

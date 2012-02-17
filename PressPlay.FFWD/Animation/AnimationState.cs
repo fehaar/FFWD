@@ -36,6 +36,10 @@ namespace PressPlay.FFWD
 
         internal bool wasUpdated = false;
         internal Animation animation;
+        /// <summary>
+        /// This is to indicate that it is a temporary animation state created by PlayQueued.
+        /// </summary>
+        internal bool playQueuedReference = false;
 
         private Sampler[] samplers;
 
@@ -55,8 +59,14 @@ namespace PressPlay.FFWD
             }
         }
 
-        internal void Update(float deltaTime)
+        /// <summary>
+        /// Update the animation time.
+        /// </summary>
+        /// <param name="deltaTime"></param>
+        /// <returns>Return true if the animation stops due to this update.</returns>
+        internal bool Update(float deltaTime)
         {
+            bool result = false;
             wasUpdated = enabled;
             if (enabled)
             {
@@ -81,6 +91,7 @@ namespace PressPlay.FFWD
                         case WrapMode.Once:
                             time = (speed > 0) ? length : 0;
                             enabled = false;
+                            result = true;
                             break;
                         case WrapMode.Loop:
                             if (speed > 0)
@@ -109,6 +120,7 @@ namespace PressPlay.FFWD
                     }
                 }
             }
+            return result;
         }
 
         internal void Sample()
@@ -189,6 +201,11 @@ namespace PressPlay.FFWD
                 return new TransformSampler(g.transform);
             }
             return null;
+        }
+
+        public override string ToString()
+        {
+            return animation.name + " - " + clip.name + ". Enabled: " + enabled + ". Time: " + time;
         }
     }
 }

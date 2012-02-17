@@ -46,5 +46,20 @@ namespace PressPlay.FFWD.Test.Core_framework.Animation
             Assert.That(animation.IsPlaying(name), Is.True);
             Assert.That(animation.isPlaying, Is.True);
         }
+
+        [Test]
+        public void OtherRunningClipsWillBeStopped()
+        {
+            string name1 = "MyClip";
+            animation.AddClip(new AnimationClip(), name1);
+            string name2 = "MyNewClip";
+            animation.AddClip(new AnimationClip(), name2);
+
+            animation.Play(name1);
+            Assert.That(animation.Play(name2), Is.True);
+            Assert.That(animation.IsPlaying(name1), Is.False);
+            Assert.That(animation.IsPlaying(name2), Is.True);
+        }
+	
     }
 }
