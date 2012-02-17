@@ -165,6 +165,13 @@ namespace PressPlay.FFWD.Components
             }
             Stop();
             this[name].enabled = true;
+
+            //If wrapMode is Once, restart the time
+            if (this[name].clip.wrapMode == WrapMode.Once)
+            {
+                this[name].time = 0;
+            }
+
             if (!animationComponents.Contains(this))
             {
                 animationComponents.Add(this);
