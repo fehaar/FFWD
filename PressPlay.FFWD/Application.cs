@@ -89,7 +89,6 @@ namespace PressPlay.FFWD
 
         internal static readonly Queue<Component> newComponents = new Queue<Component>(ApplicationSettings.DefaultCapacities.ComponentLists);
         private static readonly Queue<Component> componentsToAwake = new Queue<Component>(ApplicationSettings.DefaultCapacities.ComponentLists);
-        private static readonly Queue<Component> instantiatedComponentsToAwake = new Queue<Component>(50);
         private static readonly Queue<Component> componentsToStart = new Queue<Component>(ApplicationSettings.DefaultCapacities.ComponentLists);
         internal static readonly Queue<Component> loadedComponents = new Queue<Component>(ApplicationSettings.DefaultCapacities.ComponentLists);
         internal static readonly Queue<Asset> newAssets = new Queue<Asset>(100);
@@ -247,7 +246,7 @@ namespace PressPlay.FFWD
 #if DEBUG
             fixedUpdateTime.Start();
 #endif
-            AwakeNewComponents(false);
+            AwakeNewComponents(null);
             StartComponents();
             ChangeComponentActivity();
             if (Time.timeScale > 0)
@@ -665,32 +664,40 @@ namespace PressPlay.FFWD
             return objects.Values.Where(o => o is GameObject && !(o as GameObject).isPrefab && (o as GameObject).tag == tag).Cast<GameObject>();
         }
 
-        internal static void AwakeNewComponents(bool onInstantiate)
+        internal static void AwakeNewComponents(Queue<Component> newQueue)
         {
-            Queue<Component> awakeQueue = (onInstantiate) ? instantiatedComponentsToAwake : componentsToAwake;
-            while (newComponents.Count > 0)
+            if (newQueue == null)
             {
-                Component cmp = newComponents.Dequeue();
-                LifecycleEvent(cmp, "Consider for awake");
-                RegisterComponent(cmp, awakeQueue);
+                newQueue = newComponents;
             }
-            while (awakeQueue.Count > 0)
+            while (newQueue.Count > 0)
             {
-                Component cmp = awakeQueue.Dequeue();
+                Component cmp = newQueue.Dequeue();
+                LifecycleEvent(cmp, "Consider for awake");
+                RegisterComponent(cmp, componentsToAwake);
+            }
+            while (componentsToAwake.Count > 0)
+            {
+                Component cmp = componentsToAwake.Dequeue();
                 LifecycleEvent(cmp, "Awake");
                 cmp.Awake();
             }
             // Do a recursive awake to awake components instantiated in the previous awake.
             // In this way we will make sure that everything is instantiated before the first run.
-            if (newComponents.Count > 0)
+            if (newQueue.Count > 0)
             {
-                AwakeNewComponents(onInstantiate);
+                AwakeNewComponents(newQueue);
             }
-            if (!onInstantiate && doGarbageCollectAfterAwake)
+            if ((newQueue != newComponents) && doGarbageCollectAfterAwake)
             {
                 GC.Collect();
                 doGarbageCollectAfterAwake = false;
             }
+        }
+
+        internal static void RegisterComponent(Component cmp)
+        {
+            RegisterComponent(cmp, componentsToAwake);
         }
 
         private static void RegisterComponent(Component cmp, Queue<Component> awakeQueue)
@@ -754,7 +761,6 @@ namespace PressPlay.FFWD
         {            
             objects.Clear();
             componentsToAwake.Clear();
-            instantiatedComponentsToAwake.Clear();
             componentsToStart.Clear();
             newComponents.Clear();
             newAssets.Clear();

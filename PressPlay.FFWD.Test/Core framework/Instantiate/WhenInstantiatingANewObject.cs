@@ -227,31 +227,16 @@ namespace PressPlay.FFWD.Test.Core_framework
         }
 
         [Test]
-        public void InstantiatingComponentsWillPutThemInTheAwakeQueue()
-        {
-            int awakeCalls = 0;
-            GameObject obj = new GameObject();
-            TestComponent comp = new TestComponent() { onAwake = () => { awakeCalls++; } };
-            obj.AddComponent(comp);
-            Application.AwakeNewComponents(false);
-
-            Assert.That(awakeCalls, Is.EqualTo(1));
-            TestComponent cmp = (TestComponent)UnityObject.Instantiate(comp);
-            Assert.That(cmp, Is.Not.Null);
-            Application.AwakeNewComponents(false);
-            Assert.That(awakeCalls, Is.EqualTo(2));
-        }
-
-        [Test]
         public void InstantiatingAComponentInAwakeWillAwakeThemImmidiately()
         {
             int awakeCalls = 0;
             GameObject objPrefab = new GameObject(true);
             TestComponent compPrefab = new TestComponent() { onAwake = () => { awakeCalls++; } };
             objPrefab.AddComponent(compPrefab);
+            Assert.That(awakeCalls, Is.EqualTo(1));
 
             TestComponent inst = (TestComponent)UnityObject.Instantiate(compPrefab);
-            Assert.That(awakeCalls, Is.EqualTo(1));
+            Assert.That(awakeCalls, Is.EqualTo(2));
         }
 
         [Test]

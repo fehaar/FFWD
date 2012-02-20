@@ -247,7 +247,20 @@ namespace PressPlay.FFWD
             components.Add(component);
             component.gameObject = this;
             component.isPrefab = isPrefab;
-            Application.newComponents.Enqueue(component);
+            Application.RegisterComponent(component);
+            return component;
+        }
+
+        internal T AddInstantiatedComponent<T>(T component) where T : Component
+        {
+            if (component is Transform && components.Count > 0)
+            {
+                throw new InvalidOperationException("A GameObject already has a Transform");
+            }
+            components.Add(component);
+            component.gameObject = this;
+            component.isPrefab = isPrefab;
+            newInstantiatedComponents.Enqueue(component);
             return component;
         }
 
@@ -282,7 +295,7 @@ namespace PressPlay.FFWD
             obj.components = new List<Component>();
             for (int i = 0; i < components.Count; i++)
             {
-                obj.AddComponent(components[i].Clone() as Component);
+                obj.AddInstantiatedComponent(components[i].Clone() as Component);
             }
             obj.active = true;
             return obj;

@@ -28,6 +28,7 @@ namespace PressPlay.FFWD
         private int _id = -1;
 
         private static int nextId = 1;
+        protected static readonly Queue<Component> newInstantiatedComponents = new Queue<Component>(50);
 
         public int GetInstanceID()
         {
@@ -148,8 +149,7 @@ namespace PressPlay.FFWD
             clone.SetNewId(idMap);
             clone.FixReferences(idMap);
 
-            // HACK THIS NEEDS TO BE REWORKED AS IT WILL RESULT IN RECURSIVE AWAKENEWCOMPS CALLS. DANGER DANGER!
-            Application.AwakeNewComponents(true);
+            Application.AwakeNewComponents(newInstantiatedComponents);
 
             return idMap[original.GetInstanceID()];
         }

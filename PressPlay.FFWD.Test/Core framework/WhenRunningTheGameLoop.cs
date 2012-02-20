@@ -92,7 +92,6 @@ namespace PressPlay.FFWD.Test.Core_framework
         {
             bool updateCalled = false;
             component.onUpdate = () => { updateCalled = true; };
-            Application.AwakeNewComponents(false);
 
             Assert.That(updateCalled, Is.False);
             app.Draw(new GameTime());
@@ -104,7 +103,6 @@ namespace PressPlay.FFWD.Test.Core_framework
         {
             bool updateCalled = false;
             childComponent.onUpdate = () => { updateCalled = true; };
-            Application.AwakeNewComponents(false);
 
             Assert.That(updateCalled, Is.False);
             app.Draw(new GameTime());
