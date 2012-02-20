@@ -43,7 +43,7 @@ namespace PressPlay.FFWD
         [ContentSerializerIgnore]
         public HideFlags hideFlags;
 
-        internal virtual void AfterLoad(Dictionary<int, UnityObject> idMap, List<Component> comps)
+        internal virtual void AfterLoad(Dictionary<int, UnityObject> idMap, Queue<Component> comps)
         {
             if (idMap != null)
             {
@@ -149,7 +149,8 @@ namespace PressPlay.FFWD
             clone.SetNewId(idMap);
             clone.FixReferences(idMap);
 
-            Application.AwakeNewComponents(newInstantiatedComponents);
+            Application.RegisterComponents(newInstantiatedComponents);
+            Application.AwakeNewComponents();
 
             return idMap[original.GetInstanceID()];
         }

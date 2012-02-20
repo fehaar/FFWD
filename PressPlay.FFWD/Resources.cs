@@ -68,7 +68,7 @@ namespace PressPlay.FFWD
         private static UnityObject LoadScene(Scene scene)
         {
             // This is removed here. It is called in scene.Initialize just below.
-            scene.Initialize();
+            scene.Initialize(false);
             Application.LoadNewAssets(true);
             if (scene.prefabs.Count > 0)
             {

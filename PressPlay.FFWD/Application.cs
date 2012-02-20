@@ -87,10 +87,8 @@ namespace PressPlay.FFWD
 
         private static readonly Dictionary<int, UnityObject> objects = new Dictionary<int, UnityObject>(5000);
 
-        internal static readonly Queue<Component> newComponents = new Queue<Component>(ApplicationSettings.DefaultCapacities.ComponentLists);
         private static readonly Queue<Component> componentsToAwake = new Queue<Component>(ApplicationSettings.DefaultCapacities.ComponentLists);
         private static readonly Queue<Component> componentsToStart = new Queue<Component>(ApplicationSettings.DefaultCapacities.ComponentLists);
-        internal static readonly Queue<Component> loadedComponents = new Queue<Component>(ApplicationSettings.DefaultCapacities.ComponentLists);
         internal static readonly Queue<Asset> newAssets = new Queue<Asset>(100);
         internal static readonly Queue<Asset> sceneAssets = new Queue<Asset>(100);
         private static readonly List<PressPlay.FFWD.Interfaces.IUpdateable> updateComponents = new List<PressPlay.FFWD.Interfaces.IUpdateable>(500);
@@ -111,7 +109,6 @@ namespace PressPlay.FFWD
 
         // Lists and variables used for loading a scene
         public static bool isLoadingAssetBeforeSceneInitialize = false;
-        private static bool doGarbageCollectAfterAwake = false;
         private static bool loadIsComplete = true;
         internal static bool hasDrawBeenCalled = false;
         private static int totalNumberOfAssetsToLoad = 0;
@@ -246,7 +243,6 @@ namespace PressPlay.FFWD
 #if DEBUG
             fixedUpdateTime.Start();
 #endif
-            AwakeNewComponents(null);
             StartComponents();
             ChangeComponentActivity();
             if (Time.timeScale > 0)
@@ -521,9 +517,8 @@ namespace PressPlay.FFWD
 
             if (scene != null)
             {
-                scene.Initialize();
+                scene.Initialize(true);
             }
-            doGarbageCollectAfterAwake = true;
         }
 
         internal static void LoadNewAssets(bool loadResources)
@@ -664,43 +659,7 @@ namespace PressPlay.FFWD
             return objects.Values.Where(o => o is GameObject && !(o as GameObject).isPrefab && (o as GameObject).tag == tag).Cast<GameObject>();
         }
 
-        internal static void AwakeNewComponents(Queue<Component> newQueue)
-        {
-            if (newQueue == null)
-            {
-                newQueue = newComponents;
-            }
-            while (newQueue.Count > 0)
-            {
-                Component cmp = newQueue.Dequeue();
-                LifecycleEvent(cmp, "Consider for awake");
-                RegisterComponent(cmp, componentsToAwake);
-            }
-            while (componentsToAwake.Count > 0)
-            {
-                Component cmp = componentsToAwake.Dequeue();
-                LifecycleEvent(cmp, "Awake");
-                cmp.Awake();
-            }
-            // Do a recursive awake to awake components instantiated in the previous awake.
-            // In this way we will make sure that everything is instantiated before the first run.
-            if (newQueue.Count > 0)
-            {
-                AwakeNewComponents(newQueue);
-            }
-            if ((newQueue != newComponents) && doGarbageCollectAfterAwake)
-            {
-                GC.Collect();
-                doGarbageCollectAfterAwake = false;
-            }
-        }
-
         internal static void RegisterComponent(Component cmp)
-        {
-            RegisterComponent(cmp, componentsToAwake);
-        }
-
-        private static void RegisterComponent(Component cmp, Queue<Component> awakeQueue)
         {
             LifecycleEvent(cmp, "Consider for awake");
 
@@ -728,22 +687,32 @@ namespace PressPlay.FFWD
                 }
                 if (!cmp.isPrefab && typeCaps.HasCaps(cmp.GetType(), TypeSet.TypeCapabilities.Awake))
                 {
-                    awakeQueue.Enqueue(cmp);
+                    componentsToAwake.Enqueue(cmp);
                 }
             }
         }
 
-        //internal static void AddNewComponent(Component component)
-        //{
-        //    if (isLoadingAssetBeforeSceneInitialize)
-        //    {
-        //        loadedComponents.Enqueue(component);
-        //    }
-        //    else
-        //    {
-        //        newComponents.Enqueue(component);
-        //    }
-        //}
+        internal static void RegisterComponents(Queue<Component> components)
+        {
+            while (components.Count > 0)
+            {
+                RegisterComponent(components.Dequeue());
+            }
+        }
+
+        internal static void AwakeNewComponents()
+        {
+            while (componentsToAwake.Count > 0)
+            {
+                AwakeNewComponent(componentsToAwake.Dequeue());
+            }
+        }
+
+        internal static void AwakeNewComponent(Component cmp)
+        {
+            LifecycleEvent(cmp, "Awake");
+            cmp.Awake();
+        }
 
         internal static void AddNewAsset(Asset asset)
         {
@@ -762,7 +731,6 @@ namespace PressPlay.FFWD
             objects.Clear();
             componentsToAwake.Clear();
             componentsToStart.Clear();
-            newComponents.Clear();
             newAssets.Clear();
             updateComponents.Clear();
             fixedUpdateComponents.Clear();

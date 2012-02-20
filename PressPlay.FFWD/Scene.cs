@@ -27,11 +27,11 @@ namespace PressPlay.FFWD
         [ContentSerializer(Optional = true, ElementName = "tc")]
         internal List<string> typeCaps = new List<string>();
 
-        private List<Component> components;
+        private Queue<Component> components;
 
         public void AfterLoad(Dictionary<int, UnityObject> idMap)
         {
-            components = new List<Component>((componentCount > 0) ? componentCount : ApplicationSettings.DefaultCapacities.ComponentLists);
+            components = new Queue<Component>((componentCount > 0) ? componentCount : ApplicationSettings.DefaultCapacities.ComponentLists);
             for (int i = 0; i < gameObjects.Count; i++)
             {
                 gameObjects[i].AfterLoad(idMap, components);
@@ -43,7 +43,7 @@ namespace PressPlay.FFWD
             }
         }
 
-        internal void Initialize()
+        internal void Initialize(bool doGarbageCollectAfterAwake)
         {
             Dictionary<int, UnityObject> idMap = new Dictionary<int, UnityObject>();
             AfterLoad(idMap);
@@ -52,16 +52,13 @@ namespace PressPlay.FFWD
             int count = components.Count;
             for (int i = 0; i < count; i++)
             {
-                Component cmp = components[i];
+                Component cmp = components.Dequeue();
                 cmp.FixReferences(idMap);
                 if (cmp is IdMap)
                 {
                     idMaps.Enqueue(cmp as IdMap);
                 }
-                else
-                {
-                    Application.newComponents.Enqueue(cmp);
-                }
+                components.Enqueue(cmp);
             }
             idMap.Clear();
             // Issue new ids to all objects from a scene now that references have been fixed
@@ -79,6 +76,13 @@ namespace PressPlay.FFWD
             {
                 IdMap map = idMaps.Dequeue();
                 map.UpdateIdReferences(idMap);
+            }
+            // Register and awake all components
+            Application.RegisterComponents(components);
+            Application.AwakeNewComponents();
+            if (doGarbageCollectAfterAwake)
+            {
+                GC.Collect();
             }
         }
     }

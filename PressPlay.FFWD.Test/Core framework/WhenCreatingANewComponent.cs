@@ -26,18 +26,6 @@ namespace PressPlay.FFWD.Test.Core_framework
         }
 
         [Test]
-        public void ItWillOnlyGetAwakeCalledOnce()
-        {
-            int awakeCount = 0;
-            GameObject go = new GameObject();
-            TestComponent comp = go.AddComponent<TestComponent>();
-            comp.onAwake = () => awakeCount++;
-            Assert.That(awakeCount, Is.EqualTo(0));
-            Application.AwakeNewComponents(null);
-            Assert.That(awakeCount, Is.EqualTo(0));
-        }
-
-        [Test]
         public void WeCanFindTheNewComponentById()
         {
             GameObject go = new GameObject();

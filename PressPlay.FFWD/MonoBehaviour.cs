@@ -75,7 +75,7 @@ namespace PressPlay.FFWD.Components
             base.SetNewId(idMap);
         }
 
-        internal override sealed void AfterLoad(Dictionary<int, UnityObject> idMap, List<Component> comps)
+        internal override sealed void AfterLoad(Dictionary<int, UnityObject> idMap, Queue<Component> comps)
         {
             base.AfterLoad(idMap, comps);
         }

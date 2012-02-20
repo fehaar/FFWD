@@ -391,7 +391,7 @@ namespace PressPlay.FFWD
             rotation = Quaternion.AngleAxis(ang, up);
         }
 
-        internal override void AfterLoad(Dictionary<int, UnityObject> idMap, List<Component> comps)
+        internal override void AfterLoad(Dictionary<int, UnityObject> idMap, Queue<Component> comps)
         {
             base.AfterLoad(idMap, comps);
             if (children != null)

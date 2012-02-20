@@ -41,15 +41,14 @@ namespace PressPlay.FFWD.Test.Core_framework.Animation
         [Test]
         public void AnimationWillAlterTheTransforms()
         {
-            h.root.AddComponent(animation);
             leftRight.curves = new AnimationClipCurveData[] { 
                 new AnimationClipCurveData() { propertyName = "m_LocalPosition.x", type = "PressPlay.FFWD.Transform", curve = simple },
                 new AnimationClipCurveData() { propertyName = "m_LocalPosition.y", type = "PressPlay.FFWD.Transform", curve = empty },
                 new AnimationClipCurveData() { propertyName = "m_LocalPosition.z", type = "PressPlay.FFWD.Transform", curve = empty }
             };
             animation.AddClip(leftRight, "left/right");
+            h.root.AddComponent(animation);
 
-            animation.Awake();
             animation.Play("left/right");
             Vector3 position = h.rootTrans.localPosition;
 
@@ -71,15 +70,14 @@ namespace PressPlay.FFWD.Test.Core_framework.Animation
         [Test]
         public void AnimationCanAlterThePathOfASubcomponent()
         {
-            h.root.AddComponent(animation);
             leftRight.curves = new AnimationClipCurveData[] { 
                 new AnimationClipCurveData() { path = h.child.name, propertyName = "m_LocalPosition.x", type = "PressPlay.FFWD.Transform", curve = simple },
                 new AnimationClipCurveData() { path = h.child.name + "/" + h.childOfChild.name, propertyName = "m_LocalPosition.y", type = "PressPlay.FFWD.Transform", curve = simple },
                 new AnimationClipCurveData() { path = h.child.name, propertyName = "m_LocalPosition.z", type = "PressPlay.FFWD.Transform", curve = empty }
             };
             animation.AddClip(leftRight, "left/right");
+            h.root.AddComponent(animation);
 
-            animation.Awake();
             animation.Play("left/right");
             Vector3 rootPosition = h.rootTrans.localPosition;
             Vector3 childPosition = h.childTrans.localPosition;

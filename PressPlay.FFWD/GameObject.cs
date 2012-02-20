@@ -216,7 +216,7 @@ namespace PressPlay.FFWD
         [ContentSerializer(ElementName = "cs", CollectionItemName = "c", Optional = true)]
         private List<Component> components;
 
-        internal void AfterLoad(Dictionary<int, UnityObject> idMap, List<Component> comps)
+        internal override void AfterLoad(Dictionary<int, UnityObject> idMap, Queue<Component> comps)
         {
             base.AfterLoad(idMap, comps);
 
@@ -228,7 +228,7 @@ namespace PressPlay.FFWD
                 cmp.gameObject = this;
                 if (comps != null)
                 {
-                    comps.Add(cmp);
+                    comps.Enqueue(cmp);
                 }
             }
         }
@@ -248,6 +248,7 @@ namespace PressPlay.FFWD
             component.gameObject = this;
             component.isPrefab = isPrefab;
             Application.RegisterComponent(component);
+            Application.AwakeNewComponent(component);
             return component;
         }
 

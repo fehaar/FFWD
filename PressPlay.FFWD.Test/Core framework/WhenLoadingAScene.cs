@@ -218,7 +218,7 @@ namespace PressPlay.FFWD.Test.Core_framework
         }
 
         [Test]
-        public void IfAComponentIsCreatedDuringAwakeItWillBeAwokenOneNextCall()
+        public void IfAComponentIsCreatedDuringAwakeItWillStillBeAwoken()
         {
             bool awakeCalled = false;
             TestComponent newComponent = null;
@@ -227,8 +227,6 @@ namespace PressPlay.FFWD.Test.Core_framework
             Assert.That(awakeCalled, Is.False);
             Assert.That(newComponent, Is.Not.Null);
             Assert.That(awakeCalled, Is.False);
-
-            Application.AwakeNewComponents(null);
             Assert.That(awakeCalled, Is.True);
         }
 	
