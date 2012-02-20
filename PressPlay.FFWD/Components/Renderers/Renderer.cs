@@ -51,6 +51,8 @@ namespace PressPlay.FFWD.Components
                     materials = new Material[1]; 
                 }
                 materials[0] = value;
+                renderQueue = material.finalRenderQueue;
+                Camera.ChangeRenderQueue(this);
             }
         }
 
