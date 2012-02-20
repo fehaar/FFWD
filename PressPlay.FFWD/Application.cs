@@ -696,6 +696,16 @@ namespace PressPlay.FFWD
         private static void RegisterComponent(Component cmp, Queue<Component> awakeQueue)
         {
             LifecycleEvent(cmp, "Consider for awake");
+
+            if (cmp is IInitializable)
+            {
+                IInitializable init = cmp as IInitializable;
+                if (!cmp.isPrefab || (cmp.isPrefab && init.InitializePrefabs()))
+                {
+                    init.Initialize(assetHelper);
+                }
+            }
+
             if (cmp.gameObject != null && !cmp.isPrefab)
             {
                 LifecycleEvent(cmp, "Add to objects");
@@ -712,10 +722,6 @@ namespace PressPlay.FFWD
                 if (!cmp.isPrefab && typeCaps.HasCaps(cmp.GetType(), TypeSet.TypeCapabilities.Awake))
                 {
                     awakeQueue.Enqueue(cmp);
-                }
-                if (cmp is IInitializable)
-                {
-                    (cmp as IInitializable).Initialize(assetHelper);
                 }
             }
         }

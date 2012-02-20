@@ -28,6 +28,11 @@ namespace PressPlay.FFWD.Components
             Lights.Add(this);
         }
 
+        public bool InitializePrefabs()
+        {
+            return false;
+        }
+
         protected override void Destroy()
         {
             base.Destroy();

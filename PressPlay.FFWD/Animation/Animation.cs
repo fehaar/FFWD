@@ -80,6 +80,11 @@ namespace PressPlay.FFWD.Components
             }
         }
 
+        public bool InitializePrefabs()
+        {
+            return false;
+        }
+
         public override void Awake()
         {
             base.Awake();

@@ -8,5 +8,6 @@ namespace PressPlay.FFWD.Interfaces
     public interface IInitializable
     {
         void Initialize(AssetHelper assets);
+        bool InitializePrefabs();
     }
 }
