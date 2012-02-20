@@ -46,7 +46,7 @@ namespace PressPlay.FFWD
             if (isRendering)
             {
                 Rectangle r = rect;
-                if (Camera.FullScreen.Bounds.Contains(r))
+                if (Camera.FullScreen.Bounds.Intersects(r))
                 {
                     spriteBatch.Draw((Microsoft.Xna.Framework.Graphics.Texture2D)texture, r, color);
                 }
@@ -61,7 +61,7 @@ namespace PressPlay.FFWD
                 Rectangle s = source;
                 Vector2 o = new Vector2(texture.width * origin.x, texture.height * origin.y);
 
-                if (Camera.FullScreen.Bounds.Contains(r))
+                if (Camera.FullScreen.Bounds.Intersects(r))
                 {   
                     spriteBatch.Draw((Microsoft.Xna.Framework.Graphics.Texture2D)texture, r, s, color, rot, o, SpriteEffects.None, 0.0f);                    
                 }
