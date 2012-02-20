@@ -1,12 +1,13 @@
 ﻿using System.IO;
 using NUnit.Framework;
+using PressPlay.FFWD.Components;
 
 namespace PressPlay.FFWD.Test.Core_framework
 {
     [TestFixture]
     public class WhenSendingAMessage
     {
-        class MessageComponent : Component
+        class MessageComponent : MonoBehaviour
         {
             public bool messageCalled = false;
             public int value = 0;

@@ -12,7 +12,6 @@ namespace PressPlay.FFWD.Test.Core_framework
         [TearDown]
         public void TearDown()
         {
-            Application.AwakeNewComponents();
             Application.Reset();
         }
     }

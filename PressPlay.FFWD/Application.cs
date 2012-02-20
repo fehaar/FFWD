@@ -86,12 +86,11 @@ namespace PressPlay.FFWD
         public static ScreenManager.ScreenManager screenManager;
 
         private static readonly Dictionary<int, UnityObject> objects = new Dictionary<int, UnityObject>(5000);
-        internal static readonly List<Asset> newAssets = new List<Asset>(100);
 
-        internal static readonly List<Component> newComponents = new List<Component>();
-        private static readonly Queue<Component> componentsToAwake = new Queue<Component>(2500);
-        private static readonly Queue<Component> instantiatedComponentsToAwake = new Queue<Component>(50);
-        private static readonly List<Component> componentsToStart = new List<Component>();
+        private static readonly Queue<Component> componentsToAwake = new Queue<Component>(ApplicationSettings.DefaultCapacities.ComponentLists);
+        private static readonly Queue<Component> componentsToStart = new Queue<Component>(ApplicationSettings.DefaultCapacities.ComponentLists);
+        internal static readonly Queue<Asset> newAssets = new Queue<Asset>(100);
+        internal static readonly Queue<Asset> sceneAssets = new Queue<Asset>(100);
         private static readonly List<PressPlay.FFWD.Interfaces.IUpdateable> updateComponents = new List<PressPlay.FFWD.Interfaces.IUpdateable>(500);
         private static readonly List<PressPlay.FFWD.Interfaces.IFixedUpdateable> fixedUpdateComponents = new List<PressPlay.FFWD.Interfaces.IFixedUpdateable>(100);
         private static readonly List<PressPlay.FFWD.Interfaces.IUpdateable> lateUpdateComponents = new List<PressPlay.FFWD.Interfaces.IUpdateable>(100);
@@ -99,16 +98,9 @@ namespace PressPlay.FFWD
         private static readonly List<Component> componentsChangingActivity = new List<Component>(50);
 
         internal static readonly TypeSet typeCaps = new TypeSet(100);
-        private static readonly TypeSet isUpdateable = new TypeSet(100);
-        private static readonly TypeSet isFixedUpdateable = new TypeSet(25);
-        private static readonly TypeSet isLateUpdateable = new TypeSet(25);
-        private static readonly TypeSet hasGUI = new TypeSet(25);
-        internal static readonly TypeSet hasAwake = new TypeSet(50);
-        internal static readonly TypeSet fixReferences = new TypeSet(5);
 
         private static readonly List<InvokeCall> invokeCalls = new List<InvokeCall>(10);
-
-        internal static readonly List<UnityObject> markedForDestruction = new List<UnityObject>();
+        internal static readonly Queue<UnityObject> markedForDestruction = new Queue<UnityObject>(ApplicationSettings.DefaultCapacities.ComponentLists);
         internal static readonly List<GameObject> dontDestroyOnLoad = new List<GameObject>(50);
 
         internal static bool loadingScene = false;
@@ -117,7 +109,6 @@ namespace PressPlay.FFWD
 
         // Lists and variables used for loading a scene
         public static bool isLoadingAssetBeforeSceneInitialize = false;
-        private static bool doGarbageCollectAfterAwake = false;
         private static bool loadIsComplete = true;
         internal static bool hasDrawBeenCalled = false;
         private static int totalNumberOfAssetsToLoad = 0;
@@ -133,8 +124,6 @@ namespace PressPlay.FFWD
         }
         private static Scene scene;
         private static Stopwatch stopWatch = new Stopwatch();
-        internal static readonly List<Component> tempComponents = new List<Component>();
-        internal static readonly List<Asset> tempAssets = new List<Asset>();
         internal static bool isLoadingAdditive = false;
 
         private static AssetHelper assetHelper = new AssetHelper();
@@ -198,10 +187,10 @@ namespace PressPlay.FFWD
 
         private void StartComponents()
         {
-            for (int i = 0; i < componentsToStart.Count; i++)
+            while (componentsToStart.Count > 0)
             {
-                Component cmp = componentsToStart[i];
-                // We can have objects destroyed before starting if it is done in another Awake.
+                Component cmp = componentsToStart.Dequeue();
+                // We can have objects destroyed before starting if it is done in another Start call.
                 // If that is so, just skip it.
                 if (cmp.gameObject != null)
                 {
@@ -209,7 +198,6 @@ namespace PressPlay.FFWD
                     cmp.Start();
                 }
             }
-            componentsToStart.Clear();
         }
 
         public override void Update(GameTime gameTime)
@@ -242,7 +230,6 @@ namespace PressPlay.FFWD
                     {
                         LoadSceneAssets();
                     }
-
                     CalculateLoadingProgress();
                 }
             }
@@ -256,7 +243,6 @@ namespace PressPlay.FFWD
 #if DEBUG
             fixedUpdateTime.Start();
 #endif
-            AwakeNewComponents(false);
             StartComponents();
             ChangeComponentActivity();
             if (Time.timeScale > 0)
@@ -477,7 +463,7 @@ namespace PressPlay.FFWD
                 //tempAssets.AddRange(scene.assets);
             }
             sceneToLoad = "";
-            totalNumberOfAssetsToLoad = tempAssets.Count;
+            totalNumberOfAssetsToLoad = sceneAssets.Count;
             numberOfAssetsLoaded = 0;
 
             if (scene == null)
@@ -489,13 +475,8 @@ namespace PressPlay.FFWD
 
         private void LoadSceneAssets()
         {
-            //Debug.Log("Application > LoadSceneAssets. Assets left to load: "+tempAssets.Count);
-
             stopWatch.Start();
-
-            int count = 0;
-
-            for (int i = tempAssets.Count - 1; i >= 0; i--)
+            while (sceneAssets.Count > 0)
             {
                 if (ApplicationSettings.AssetLoadInterval > 0 && stopWatch.ElapsedMilliseconds > ApplicationSettings.AssetLoadInterval)
                 {
@@ -503,11 +484,9 @@ namespace PressPlay.FFWD
                     stopWatch.Reset();
                     return;
                 }
-
-                tempAssets[i].LoadAsset(assetHelper);
-                tempAssets.RemoveAt(i);
+                Asset a = sceneAssets.Dequeue();
+                a.LoadAsset(assetHelper);
                 numberOfAssetsLoaded++;
-                count++;
             }
             loadIsComplete = true;
         }
@@ -532,27 +511,23 @@ namespace PressPlay.FFWD
             stopWatch.Stop();
             stopWatch.Reset();
 
-            newComponents.AddRange(tempComponents);
-            tempComponents.Clear();
-
             isLoadingAssetBeforeSceneInitialize = false;
             isLoadingAdditive = false;
             isLoadingLevel = false;
 
             if (scene != null)
             {
-                scene.Initialize();
+                scene.Initialize(true);
             }
-            doGarbageCollectAfterAwake = true;
         }
 
         internal static void LoadNewAssets(bool loadResources)
         {
             assetHelper.LoadingResources = loadResources;
-            for (int i = newAssets.Count - 1; i >= 0; i--)
+            while (newAssets.Count > 0)
             {
-                newAssets[i].LoadAsset(assetHelper);
-                newAssets.RemoveAt(i);
+                Asset a = newAssets.Dequeue();
+                a.LoadAsset(assetHelper);
             }
             assetHelper.LoadingResources = false;
         }
@@ -684,104 +659,70 @@ namespace PressPlay.FFWD
             return objects.Values.Where(o => o is GameObject && !(o as GameObject).isPrefab && (o as GameObject).tag == tag).Cast<GameObject>();
         }
 
+        internal static void RegisterComponent(Component cmp)
+        {
+            LifecycleEvent(cmp, "Consider for awake");
+
+            if (cmp is IInitializable)
+            {
+                IInitializable init = cmp as IInitializable;
+                if (!cmp.isPrefab || (cmp.isPrefab && init.InitializePrefabs()))
+                {
+                    init.Initialize(assetHelper);
+                }
+            }
+
+            if (cmp.gameObject != null && !cmp.isPrefab)
+            {
+                LifecycleEvent(cmp, "Add to objects");
+                objects.Add(cmp.GetInstanceID(), cmp);
+                if (!cmp.isPrefab)
+                {
+                    LifecycleEvent(cmp, "Add to start");
+                    componentsToStart.Enqueue(cmp);
+                }
+                if (!objects.ContainsKey(cmp.gameObject.GetInstanceID()))
+                {
+                    objects.Add(cmp.gameObject.GetInstanceID(), cmp.gameObject);
+                }
+                if (!cmp.isPrefab && typeCaps.HasCaps(cmp.GetType(), TypeSet.TypeCapabilities.Awake))
+                {
+                    componentsToAwake.Enqueue(cmp);
+                }
+            }
+        }
+
+        internal static void RegisterComponents(Queue<Component> components)
+        {
+            while (components.Count > 0)
+            {
+                RegisterComponent(components.Dequeue());
+            }
+        }
+
         internal static void AwakeNewComponents()
         {
-            AwakeNewComponents(false);
-        }
-
-        internal static void AwakeNewComponents(bool onInstantiate)
-        {
-            int componentCount = newComponents.Count;
-            for (int i = 0; i < componentCount; i++)
+            while (componentsToAwake.Count > 0)
             {
-                Component cmp = newComponents[i];
-                LifecycleEvent(cmp, "Consider for awake");
-                if (cmp.gameObject != null)
-                {
-                    LifecycleEvent(cmp, "Add to objects");
-                    objects.Add(cmp.GetInstanceID(), cmp);
-
-                    if (!cmp.isPrefab)
-                    {
-                        componentsToStart.Add(cmp);
-                    }
-                    if (!objects.ContainsKey(cmp.gameObject.GetInstanceID()))
-                    {
-                        objects.Add(cmp.gameObject.GetInstanceID(), cmp.gameObject);
-                    }
-                    if (!cmp.isPrefab && typeCaps.HasCaps(cmp.GetType(), TypeSet.TypeCapabilities.Awake))
-                    {
-                        if (onInstantiate)
-                        {
-                            instantiatedComponentsToAwake.Enqueue(cmp);
-                        }
-                        else
-                        {
-                            componentsToAwake.Enqueue(cmp);
-                        }
-                    }
-                    if (cmp is IInitializable)
-                    {
-                        (cmp as IInitializable).Initialize(assetHelper);
-                    }
-                }
-            }
-            newComponents.Clear();
-
-            if (onInstantiate)
-            {
-                while (instantiatedComponentsToAwake.Count > 0)
-                {
-                    Component cmp = instantiatedComponentsToAwake.Dequeue();
-                    LifecycleEvent(cmp, "Awake instantiated");
-                    cmp.Awake();
-                }
-            }
-            else
-            {
-                while (componentsToAwake.Count > 0)
-                {
-                    Component cmp = componentsToAwake.Dequeue();
-                    LifecycleEvent(cmp, "Awake as component");
-                    cmp.Awake();
-                }
-            }
-
-            // Do a recursive awake to awake components instantiated in the previous awake.
-            // In this way we will make sure that everything is instantiated before the first run.
-            if (newComponents.Count > 0)
-            {
-                AwakeNewComponents(onInstantiate);
-            }
-
-            if (!onInstantiate && doGarbageCollectAfterAwake)
-            {
-                GC.Collect();
-                doGarbageCollectAfterAwake = false;
+                AwakeNewComponent(componentsToAwake.Dequeue());
             }
         }
 
-        internal static void AddNewComponent(Component component)
+        internal static void AwakeNewComponent(Component cmp)
         {
-            if (isLoadingAssetBeforeSceneInitialize)
-            {
-                tempComponents.Add(component);
-            }
-            else
-            {
-                newComponents.Add(component);
-            }
+            LifecycleEvent(cmp, "Awake");
+            cmp.Awake();
         }
 
         internal static void AddNewAsset(Asset asset)
         {
             if (isLoadingAssetBeforeSceneInitialize)
             {
-                tempAssets.Add(asset);
+                sceneAssets.Enqueue(asset);
             }
             else
             {
-                newAssets.Add(asset);
+                newAssets.Enqueue(asset);
             }
         }
 
@@ -789,9 +730,7 @@ namespace PressPlay.FFWD
         {            
             objects.Clear();
             componentsToAwake.Clear();
-            instantiatedComponentsToAwake.Clear();
             componentsToStart.Clear();
-            newComponents.Clear();
             newAssets.Clear();
             updateComponents.Clear();
             fixedUpdateComponents.Clear();
@@ -801,13 +740,13 @@ namespace PressPlay.FFWD
 
         internal static void CleanUp()
         {
-            for (int i = 0; i < markedForDestruction.Count; i++)
+            while (markedForDestruction.Count > 0)
             {
-                objects.Remove(markedForDestruction[i].GetInstanceID());
-
-                if (markedForDestruction[i] is Component)
-	            {
-                    Component cmp = (markedForDestruction[i] as Component);
+                UnityObject obj = markedForDestruction.Dequeue();
+                objects.Remove(obj.GetInstanceID());
+                Component cmp = (obj as Component);
+                if (cmp != null)
+                {
                     if (cmp is Renderer)
                     {
                         Camera.RemoveRenderer(cmp as Renderer);
@@ -821,16 +760,6 @@ namespace PressPlay.FFWD
                     if (cmp.gameObject != null)
                     {
                         cmp.gameObject.RemoveComponent(cmp);
-                    }
-
-                    if (newComponents.Contains(cmp))
-                    {
-                        newComponents.Remove(cmp);
-                    }
-
-                    if (componentsToStart.Contains(cmp))
-                    {
-                        componentsToStart.Remove(cmp);
                     }
 
                     if (cmp is PressPlay.FFWD.Interfaces.IUpdateable)
@@ -855,12 +784,12 @@ namespace PressPlay.FFWD
                     }
 
                     if (cmp is MonoBehaviour)
-	                {
+                    {
                         if (guiComponents.Contains(cmp as MonoBehaviour))
                         {
                             guiComponents.Remove(cmp as MonoBehaviour);
                         }
-	                }
+                    }
 
                     for (int j = invokeCalls.Count - 1; j >= 0; j--)
                     {
@@ -869,9 +798,8 @@ namespace PressPlay.FFWD
                             invokeCalls.RemoveAt(j);
                         }
                     }
-	            }
+                }
             }
-            markedForDestruction.Clear();
         }
 
         public static string loadedLevelName { get; private set; }

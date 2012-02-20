@@ -216,15 +216,20 @@ namespace PressPlay.FFWD
         [ContentSerializer(ElementName = "cs", CollectionItemName = "c", Optional = true)]
         private List<Component> components;
 
-        internal override void AfterLoad(Dictionary<int, UnityObject> idMap)
+        internal override void AfterLoad(Dictionary<int, UnityObject> idMap, Queue<Component> comps)
         {
-            base.AfterLoad(idMap);
+            base.AfterLoad(idMap, comps);
 
             for (int j = 0; j < components.Count; j++)
             {
-                components[j].isPrefab = isPrefab;
-                components[j].AfterLoad(idMap);
-                components[j].gameObject = this;
+                Component cmp = components[j];
+                cmp.isPrefab = isPrefab;
+                cmp.AfterLoad(idMap, comps);
+                cmp.gameObject = this;
+                if (comps != null)
+                {
+                    comps.Enqueue(cmp);
+                }
             }
         }
 
@@ -242,6 +247,21 @@ namespace PressPlay.FFWD
             components.Add(component);
             component.gameObject = this;
             component.isPrefab = isPrefab;
+            Application.RegisterComponent(component);
+            Application.AwakeNewComponent(component);
+            return component;
+        }
+
+        internal T AddInstantiatedComponent<T>(T component) where T : Component
+        {
+            if (component is Transform && components.Count > 0)
+            {
+                throw new InvalidOperationException("A GameObject already has a Transform");
+            }
+            components.Add(component);
+            component.gameObject = this;
+            component.isPrefab = isPrefab;
+            newInstantiatedComponents.Enqueue(component);
             return component;
         }
 
@@ -276,7 +296,7 @@ namespace PressPlay.FFWD
             obj.components = new List<Component>();
             for (int i = 0; i < components.Count; i++)
             {
-                obj.AddComponent(components[i].Clone() as Component);
+                obj.AddInstantiatedComponent(components[i].Clone() as Component);
             }
             obj.active = true;
             return obj;

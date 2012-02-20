@@ -391,16 +391,16 @@ namespace PressPlay.FFWD
             rotation = Quaternion.AngleAxis(ang, up);
         }
 
-        internal override void AfterLoad(Dictionary<int, UnityObject> idMap)
+        internal override void AfterLoad(Dictionary<int, UnityObject> idMap, Queue<Component> comps)
         {
-            base.AfterLoad(idMap);
+            base.AfterLoad(idMap, comps);
             if (children != null)
             {
                 for (int i = 0; i < children.Count; i++)
                 {
                     children[i].isPrefab = isPrefab;
                     children[i].transform._parent = this;
-                    children[i].AfterLoad(idMap);
+                    children[i].AfterLoad(idMap, comps);
                 }
             }
         }

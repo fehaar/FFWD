@@ -28,6 +28,7 @@ namespace PressPlay.FFWD
         private int _id = -1;
 
         private static int nextId = 1;
+        protected static readonly Queue<Component> newInstantiatedComponents = new Queue<Component>(50);
 
         public int GetInstanceID()
         {
@@ -42,7 +43,7 @@ namespace PressPlay.FFWD
         [ContentSerializerIgnore]
         public HideFlags hideFlags;
 
-        internal virtual void AfterLoad(Dictionary<int, UnityObject> idMap)
+        internal virtual void AfterLoad(Dictionary<int, UnityObject> idMap, Queue<Component> comps)
         {
             if (idMap != null)
             {
@@ -72,9 +73,8 @@ namespace PressPlay.FFWD
 
         protected virtual void Destroy()
         {
-            Application.markedForDestruction.Add(this);
+            Application.markedForDestruction.Enqueue(this);
         }
-
 
         public static void DestroyImmediate(UnityObject obj)
         {
@@ -149,8 +149,8 @@ namespace PressPlay.FFWD
             clone.SetNewId(idMap);
             clone.FixReferences(idMap);
 
-            // HACK THIS NEEDS TO BE REWORKED AS IT WILL RESULT IN RECURSIVE AWAKENEWCOMPS CALLS. DANGER DANGER!
-            Application.AwakeNewComponents(true);
+            Application.RegisterComponents(newInstantiatedComponents);
+            Application.AwakeNewComponents();
 
             return idMap[original.GetInstanceID()];
         }
@@ -163,8 +163,8 @@ namespace PressPlay.FFWD
                 {
                     idMap[_id] = this;
                 }
+                _id = nextId++;
             }
-            _id = nextId++;
         }
 
         internal virtual void FixReferences(Dictionary<int, UnityObject> idMap)

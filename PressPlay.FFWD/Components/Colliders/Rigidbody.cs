@@ -46,8 +46,35 @@ namespace PressPlay.FFWD.Components
             } 
         }
         public float angularDrag { get; set; }
-        public bool isKinematic { get; set; }
+        [ContentSerializer(Optional = true)]
         public bool freezeRotation { get; set; }
+        [ContentSerializer(ElementName = "isKinematic", Optional = true)]
+        private bool _isKinematic = false;
+        [ContentSerializerIgnore]
+        public bool isKinematic
+        { 
+            get
+            {
+                return _isKinematic;
+            }
+            set
+            {
+                if (_isKinematic != value)
+                {
+                    _isKinematic = value;
+                    if (_isKinematic)
+                    {
+                        Physics.RemoveRigidBody(body);
+                        body.BodyType = BodyType.Kinematic;
+                    }
+                    else
+                    {
+                        Physics.AddRigidBody(body);
+                        body.BodyType = BodyType.Dynamic;
+                    }
+                }
+            }
+        }
 
         private Body body;
 

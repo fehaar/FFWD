@@ -18,9 +18,6 @@ namespace PressPlay.FFWD.Test.Core_framework
         public void Setup()
         {
             Assert.Inconclusive("This will only work when loading with the intermediate serializer, so we need to do a test like that.");
-            Application.AwakeNewComponents();
-            Application.Reset();
-
             h = new TestHierarchy();
             rootComponent = new TestComponent();
             h.root.AddComponent(rootComponent);
@@ -33,9 +30,8 @@ namespace PressPlay.FFWD.Test.Core_framework
         }
 
         [TearDown]
-        public void TearDown( )
+        public void TearDown()
         {
-            Application.AwakeNewComponents();
             Application.Reset();
         }
 
@@ -222,7 +218,7 @@ namespace PressPlay.FFWD.Test.Core_framework
         }
 
         [Test]
-        public void IfAComponentIsCreatedDuringAwakeItWillBeAwokenOneNextCall()
+        public void IfAComponentIsCreatedDuringAwakeItWillStillBeAwoken()
         {
             bool awakeCalled = false;
             TestComponent newComponent = null;
@@ -231,8 +227,6 @@ namespace PressPlay.FFWD.Test.Core_framework
             Assert.That(awakeCalled, Is.False);
             Assert.That(newComponent, Is.Not.Null);
             Assert.That(awakeCalled, Is.False);
-
-            Application.AwakeNewComponents();
             Assert.That(awakeCalled, Is.True);
         }
 	

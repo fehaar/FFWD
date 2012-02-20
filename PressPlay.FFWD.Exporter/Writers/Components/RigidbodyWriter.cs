@@ -19,8 +19,14 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
             scene.WriteElement("mass", body.mass);
             scene.WriteElement("drag", body.drag);
             scene.WriteElement("angularDrag", body.angularDrag);
-            scene.WriteElement("isKinematic", body.isKinematic);
-            scene.WriteElement("freezeRotation", body.freezeRotation);
+            if (body.freezeRotation)
+            {
+                scene.WriteElement("freezeRotation", body.freezeRotation);
+            }
+            if (body.isKinematic)
+            {
+                scene.WriteElement("isKinematic", body.isKinematic);
+            }
         }
         #endregion
     }

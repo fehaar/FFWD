@@ -9,47 +9,27 @@ namespace PressPlay.FFWD.Test.Core_framework
     [TestFixture]
     public class WhenCreatingANewComponent
     {
-        [Test]
-        public void ItWillBeAwokenOnTheNextAwakeNewComponentsCall()
-        {
-            bool isAwoken = false;
-            GameObject go = new GameObject();
-            TestComponent comp = go.AddComponent<TestComponent>();
-            comp.onAwake = () => isAwoken = true;
-            Assert.That(isAwoken, Is.False);
-            Application.AwakeNewComponents();
-            Assert.That(isAwoken, Is.True);
-        }
-
         [TearDown]
         public void TearDown()
         {
-            Application.AwakeNewComponents();
             Application.Reset();
         }
 
         [Test]
-        public void ItWillOnlyGetAwakeCalledOnce()
+        public void ItWillBeAwokenWhenAddedToTheGameObject()
         {
-            int awakeCount = 0;
+            bool isAwoken = false;
             GameObject go = new GameObject();
-            TestComponent comp = go.AddComponent<TestComponent>();
-            comp.onAwake = () => awakeCount++;
-            Assert.That(awakeCount, Is.EqualTo(0));
-            Application.AwakeNewComponents();
-            Assert.That(awakeCount, Is.EqualTo(1));
-            Application.AwakeNewComponents();
-            Assert.That(awakeCount, Is.EqualTo(1));
+            TestComponent comp = new TestComponent() { onAwake = () => isAwoken = true };
+            go.AddComponent(comp);
+            Assert.That(isAwoken, Is.True);
         }
 
         [Test]
-        public void WeCanFindTheNewComponentByIdAfterItHasBeenAwoken()
+        public void WeCanFindTheNewComponentById()
         {
             GameObject go = new GameObject();
             TestComponent comp = go.AddComponent<TestComponent>();
-
-            Assert.That(Application.Find(comp.GetInstanceID()), Is.Null);
-            Application.AwakeNewComponents();
             Assert.That(Application.Find(comp.GetInstanceID()), Is.Not.Null);
             Assert.That(Application.Find(comp.GetInstanceID()), Is.SameAs(comp));
         }
@@ -59,9 +39,6 @@ namespace PressPlay.FFWD.Test.Core_framework
         {
             GameObject go = new GameObject();
             TestComponent comp = go.AddComponent<TestComponent>();
-
-            Application.AwakeNewComponents();
-            Assert.That(Application.Find(comp.GetInstanceID()), Is.Not.Null);
             Application.Reset();
             Assert.That(Application.Find(comp.GetInstanceID()), Is.Null);
         }

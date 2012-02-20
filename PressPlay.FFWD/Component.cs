@@ -14,7 +14,7 @@ namespace PressPlay.FFWD
         public Component()
             : base()
         {
-            Application.AddNewComponent(this);
+            //Application.AddNewComponent(this);
         }
 
         public GameObject gameObject { get; internal set; }
@@ -157,7 +157,6 @@ namespace PressPlay.FFWD
         {
             UnityObject obj = base.Clone();
             obj.isPrefab = false;
-            Application.AddNewComponent(obj as Component);
             return obj;
         }
 

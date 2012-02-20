@@ -28,7 +28,7 @@ namespace PressPlay.FFWD.Import
             CreateStaticBatchRenderers(context, idMap);
             PurgeColliders();
 
-            foreach (Component cmp in Application.newComponents)
+            foreach (Component cmp in scene.components)
             {
                 Type tp = cmp.GetType();
                 if (!assembliesUsed.Contains(tp.Assembly))
@@ -54,7 +54,7 @@ namespace PressPlay.FFWD.Import
         private void CreateStaticBatchRenderers(ContentProcessorContext context, Dictionary<int, UnityObject> idMap)
         {
             Dictionary<string, StaticBatchRenderer> staticRenderers = new Dictionary<string, StaticBatchRenderer>();
-            foreach (Renderer r in Application.newComponents.Where(c => (c is Renderer)).ToArray())
+            foreach (Renderer r in scene.components.Where(c => (c is Renderer)).ToArray())
             {
                 if (r.gameObject == null)
                 {
@@ -117,7 +117,7 @@ namespace PressPlay.FFWD.Import
         /// </summary>
         private void PurgeColliders()
         {
-            foreach (PolygonCollider pc in Application.newComponents.Where(c => (c is PolygonCollider)).ToArray())
+            foreach (PolygonCollider pc in scene.components.Where(c => (c is PolygonCollider)).ToArray())
             {
                 foreach (Collider item in pc.GetComponents<Collider>())
                 {

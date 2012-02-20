@@ -14,6 +14,7 @@ namespace PressPlay.FFWD.Test.Core_framework
         [SetUp]
         public void Setup()
         {
+            Assert.Inconclusive("We need to separate the Application from the Game in order to do this!");
             GameObject go = new GameObject();
             component = new TestComponent();
             go.AddComponent(component);
@@ -91,7 +92,6 @@ namespace PressPlay.FFWD.Test.Core_framework
         {
             bool updateCalled = false;
             component.onUpdate = () => { updateCalled = true; };
-            Application.AwakeNewComponents();
 
             Assert.That(updateCalled, Is.False);
             app.Draw(new GameTime());
@@ -103,7 +103,6 @@ namespace PressPlay.FFWD.Test.Core_framework
         {
             bool updateCalled = false;
             childComponent.onUpdate = () => { updateCalled = true; };
-            Application.AwakeNewComponents();
 
             Assert.That(updateCalled, Is.False);
             app.Draw(new GameTime());
@@ -186,4 +185,4 @@ namespace PressPlay.FFWD.Test.Core_framework
         }
         #endregion
     }
-}
+}   

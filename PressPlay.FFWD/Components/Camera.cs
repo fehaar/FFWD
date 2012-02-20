@@ -367,6 +367,20 @@ namespace PressPlay.FFWD.Components
         {
             renderQueue.Remove(renderer);
         }
+
+        internal static void ChangeRenderQueue(Renderer renderer)
+        {
+            for (int i = 0; i < _allCameras.Count; i++)
+            {
+                Camera cam = _allCameras[i];
+                // If the camera has the renderer readd it to the queue
+                if (cam.renderQueue.Contains(renderer))
+                {
+                    cam.removeRenderer(renderer);
+                    cam.addRenderer(renderer);
+                }
+            }
+        }
         #endregion
 
 #if DEBUG

@@ -16,28 +16,25 @@ namespace PressPlay.FFWD.Test.Core_framework
         }
 
         [Test]
-        public void AnExistingGameObjectWillBeTrue()
+        public void ANewlyCreatedGameObjectWillBeTrue()
         {
             GameObject go = new GameObject();
-            Application.AwakeNewComponents();
             bool exists = go;
             Assert.That(exists, Is.True);
         }
 
         [Test]
-        public void ADisconnectedGameObjectWillBeFalse()
-        {
-            GameObject go = new GameObject();
-            bool exists = go;
-            Assert.That(exists, Is.False);
-        }
-
-        [Test]
         public void ADestroyedGameObjectWillBeFalse()
         {
-            // TODO : Add implementation of test
-            Assert.Ignore("Test not implemented");
+            GameObject go = new GameObject();
+            TestComponent cmp = go.AddComponent(new TestComponent());
+            Assert.That((bool)cmp, Is.True);
 
+            GameObject.Destroy(go);
+
+            Application.CleanUp();
+
+            Assert.That((bool)go, Is.False);
         }
 	
 	

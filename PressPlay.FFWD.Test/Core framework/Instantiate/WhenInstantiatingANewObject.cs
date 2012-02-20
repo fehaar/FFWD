@@ -13,7 +13,6 @@ namespace PressPlay.FFWD.Test.Core_framework
         [TearDown]
         public void TearDown()
         {
-            Application.AwakeNewComponents();
             Application.Reset();
         }
 
@@ -228,33 +227,16 @@ namespace PressPlay.FFWD.Test.Core_framework
         }
 
         [Test]
-        public void InstantiatingComponentsWillPutThemInTheAwakeQueue()
-        {
-            Application.hasAwake.Add(typeof(TestComponent));
-            int awakeCalls = 0;
-            GameObject obj = new GameObject();
-            TestComponent comp = new TestComponent() { onAwake = () => { awakeCalls++; } };
-            obj.AddComponent(comp);
-            Application.AwakeNewComponents();
-
-            Assert.That(awakeCalls, Is.EqualTo(1));
-            TestComponent cmp = (TestComponent)UnityObject.Instantiate(comp);
-            Assert.That(cmp, Is.Not.Null);
-            Application.AwakeNewComponents();
-            Assert.That(awakeCalls, Is.EqualTo(2));
-        }
-
-        [Test]
         public void InstantiatingAComponentInAwakeWillAwakeThemImmidiately()
         {
-            Application.hasAwake.Add(typeof(TestComponent));
             int awakeCalls = 0;
             GameObject objPrefab = new GameObject(true);
             TestComponent compPrefab = new TestComponent() { onAwake = () => { awakeCalls++; } };
             objPrefab.AddComponent(compPrefab);
+            Assert.That(awakeCalls, Is.EqualTo(1));
 
             TestComponent inst = (TestComponent)UnityObject.Instantiate(compPrefab);
-            Assert.That(awakeCalls, Is.EqualTo(1));
+            Assert.That(awakeCalls, Is.EqualTo(2));
         }
 
         [Test]

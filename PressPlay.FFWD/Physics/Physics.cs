@@ -588,6 +588,14 @@ namespace PressPlay.FFWD
             }
         }
 
+        internal static void RemoveRigidBody(Body body)
+        {
+            if (rigidBodies.Contains(body))
+            {
+                rigidBodies.Remove(body);
+            }
+        }
+
         internal static void RemoveBody(Body body)
         {
             if (body.UserData == null)

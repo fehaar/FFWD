@@ -29,7 +29,6 @@ namespace PressPlay.FFWD.Test.Core_framework
         public void ItWillBeRemovedFromExistanceWhenTheApplicationCleansUp()
         {
             GameObject go = new GameObject();
-            Application.AwakeNewComponents();
             Assert.That((bool)go, Is.True);
 
             UnityObject.Destroy(go);
@@ -43,10 +42,11 @@ namespace PressPlay.FFWD.Test.Core_framework
         public void AllItsComponentsWillBeMarkedForDestruction()
         {
             GameObject go = new GameObject();
+            Transform t = go.transform;
 
             UnityObject.Destroy(go);
 
-            Assert.That(Application.markedForDestruction.Contains(go.transform));
+            Assert.That(Application.markedForDestruction.Contains(t));
         }
 
 
