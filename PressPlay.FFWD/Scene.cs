@@ -27,7 +27,7 @@ namespace PressPlay.FFWD
         [ContentSerializer(Optional = true, ElementName = "tc")]
         internal List<string> typeCaps = new List<string>();
 
-        private Queue<Component> components;
+        internal Queue<Component> components;
 
         public void AfterLoad(Dictionary<int, UnityObject> idMap)
         {
@@ -66,11 +66,6 @@ namespace PressPlay.FFWD
             for (int i = 0; i < count; i++)
             {
                 gameObjects[i].SetNewId(idMap);
-            }
-            count = prefabs.Count;
-            for (int i = 0; i < count; i++)
-            {
-                prefabs[i].SetNewId(idMap);
             }
             while (idMaps.Count > 0)
             {
