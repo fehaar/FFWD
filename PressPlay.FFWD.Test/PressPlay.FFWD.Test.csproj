@@ -1,0 +1,208 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3EF6CEED-AFCF-449D-BD9D-7A9B08A44C9A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PressPlay.FFWD.Test</RootNamespace>
+    <AssemblyName>PressPlay.FFWD.Test</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugWithContent|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\DebugWithContent\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Debug\PressPlay.FFWD.Test.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'PipelineDebug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\PipelineDebug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Debug\PressPlay.FFWD.Test.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release all levels unlocked|AnyCPU'">
+    <OutputPath>bin\Release all levels unlocked\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug - component profiler|AnyCPU'">
+    <OutputPath>bin\Debug - component profiler\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug- component profiler|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug- component profiler\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release-LOWDEF|AnyCPU'">
+    <OutputPath>bin\Release-LOWDEF\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Release\PressPlay.FFWD.Test.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d5c3888ef60e27d, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d5c3888ef60e27d, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d5c3888ef60e27d, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\packages\NUnit.2.5.7.10213\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.mocks">
+      <HintPath>..\packages\NUnit.2.5.7.10213\lib\nunit.mocks.dll</HintPath>
+    </Reference>
+    <Reference Include="pnunit.framework">
+      <HintPath>..\packages\NUnit.2.5.7.10213\lib\pnunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Core framework\Animation\WhenPlayingAClipQueued.cs" />
+    <Compile Include="Core framework\Animation\SampleTester.cs" />
+    <Compile Include="Core framework\Animation\WhenAClipReachesTheEnd.cs" />
+    <Compile Include="Core framework\Animation\TheDefaultAnimationClip.cs" />
+    <Compile Include="Core framework\Animation\UpdatingAnimationStates.cs" />
+    <Compile Include="Core framework\Animation\WhenAddingANewClip.cs" />
+    <Compile Include="Core framework\Animation\WhenPlayingAClip.cs" />
+    <Compile Include="Core framework\Animation\WhenSamplingTheAnimationState.cs" />
+    <Compile Include="Core framework\Animation\WithTheColorSampler.cs" />
+    <Compile Include="Core framework\Animation\WithTheFloatSampler.cs" />
+    <Compile Include="Core framework\Animation\WithTheVector3Sampler.cs" />
+    <Compile Include="Core framework\Bounds\WhenCheckingBoundsContainment.cs" />
+    <Compile Include="Core framework\Bounds\WhenBuildingBounds.cs" />
+    <Compile Include="Core framework\Helpers\ApplicationTestBase.cs" />
+    <Compile Include="Core framework\Behaviours\WhenSettingTheEnabledProperty.cs" />
+    <Compile Include="Core framework\Bounds\WhenSettingTheCenterOfBounds.cs" />
+    <Compile Include="Core framework\Helpers\TestBehaviour.cs" />
+    <Compile Include="Core framework\Helpers\TestScriptableObject.cs" />
+    <Compile Include="Core framework\Instantiate\WhenAnInstantiatedObjectHaveReferences.cs" />
+    <Compile Include="Core framework\Invoke\WhenInvokingAMethod.cs" />
+    <Compile Include="Core framework\Helpers\ReferencingComponent.cs" />
+    <Compile Include="Core framework\Helpers\TestComponent.cs" />
+    <Compile Include="Core framework\Helpers\TestHierarchy.cs" />
+    <Compile Include="Core framework\ScriptableObject\WhenCreatingAScriptableObject.cs" />
+    <Compile Include="Core framework\Transforms\WhenGettingChildren.cs" />
+    <Compile Include="Core framework\Transforms\WhenManipulatingTransforms.cs" />
+    <Compile Include="Core framework\Transforms\WhenManipulatingTheTransformHierarchy.cs" />
+    <Compile Include="Core framework\WhenAddingAComponentToAGameObject.cs" />
+    <Compile Include="Core framework\AGameObjectCanBeConvertedToBool.cs" />
+    <Compile Include="Core framework\WhenComparingTags.cs" />
+    <Compile Include="Core framework\Colors\WhenConvertingAColor.cs" />
+    <Compile Include="Core framework\WhenCreatingANewComponent.cs" />
+    <Compile Include="Core framework\WhenCreatingANewGameObject.cs" />
+    <Compile Include="Core framework\WhenDestroyingAComponent.cs" />
+    <Compile Include="Core framework\WhenDestroyingAGameObject.cs" />
+    <Compile Include="Core framework\WhenFindingAnObject.cs" />
+    <Compile Include="Core framework\SceneLoading\WhenFixingUpReferences.cs" />
+    <Compile Include="Core framework\WhenGettingTheComponentName.cs" />
+    <Compile Include="Core framework\Instantiate\WhenInstantiatingANewObject.cs" />
+    <Compile Include="Core framework\WhenLoadingAScene.cs" />
+    <Compile Include="Core framework\WhenLocatingAComponent.cs" />
+    <Compile Include="Core framework\WhenRunningTheGameLoop.cs" />
+    <Compile Include="Core framework\WhenSendingAMessage.cs" />
+    <Compile Include="Core framework\WhenSettingActiveOnAGameObject.cs" />
+    <Compile Include="Core framework\WhenSettingNewIds.cs" />
+    <Compile Include="Core framework\Bounds\WhenChangingValuesOnBounds.cs" />
+    <Compile Include="Core framework\WhenTransformingQuaternionsToAndFromEulers.cs" />
+    <Compile Include="Core framework\Bounds\WhenCreatingBounds.cs" />
+    <Compile Include="Core framework\WhenUsingDoNotDestroyOnLoad.cs" />
+    <Compile Include="Core framework\WhenUsingTheComponentShortcutMethods.cs" />
+    <Compile Include="Core framework\WhenUsingTheGameObjectShortcutProperties.cs" />
+    <Compile Include="Physics facts\WhenCollisionsOccur.cs" />
+    <Compile Include="Physics facts\WhenDeterminingWhatIsAtAPoint.cs" />
+    <Compile Include="Physics facts\WhenInitializingPhysics.cs" />
+    <Compile Include="Physics facts\WhenPerformingARaycast.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PressPlay.FFWD\PressPlay.FFWD.csproj">
+      <Project>{A02BD389-79AE-4975-9A5E-DEDC66B8A0CB}</Project>
+      <Name>PressPlay.FFWD</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
