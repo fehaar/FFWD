@@ -5,7 +5,6 @@ using System.Text;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
 using PressPlay.FFWD;
-using PressPlay.FFWD.ScreenManager;
 using PressPlay.FFWD.Components;
 #if WINDOWS_PHONE
 using Microsoft.Xna.Framework.Input.Touch;
@@ -21,6 +20,9 @@ namespace PressPlay.FFWD
         private static KeyboardState _currentKeyboardState;
         private static GamePadState _lastGamepadState;
         private static GamePadState _currentGamePadState;
+        private static int _activeTouches;
+        private static Touch[] _touches;
+        private static readonly Touch[] _noTouch = new Touch[0];
 
         private static bool[] mouseHolds = new bool[3];
         private static bool[] mouseDowns = new bool[3];
@@ -30,6 +32,9 @@ namespace PressPlay.FFWD
         internal static void Initialize()
         {
             _touches = new Touch[ApplicationSettings.DefaultCapacities.Touches];
+#if WINDOWS_PHONE
+            TouchPanel.EnabledGestures = GestureType.None;
+#endif
         }
 
         public static void Update()
@@ -46,43 +51,67 @@ namespace PressPlay.FFWD
                 gestures[gestureCount++] = TouchPanel.ReadGesture();
             }
 
-            _touchCount = 0;
             TouchCollection tc = TouchPanel.GetState();
-            if (tc.Count > 0)
-                Debug.Log("Touches: " + tc.Count);
+            _activeTouches = 0;
+            // Check old touches to see if they are gone
+            for (int i = 0; i < _touches.Length; i++)
+            {
+                TouchLocation tl;
+                Touch t = _touches[i];
+                if (tc.FindById(t.fingerId, out tl))
+	            {
+                    Vector2 position = new Vector2(tl.Position.X, Camera.FullScreen.Height - tl.Position.Y);
+                    t.deltaPosition = position - t.position;
+                    t.position = position;
+                    t.cleanPosition = tl.Position;
+                    if ((t.phase = ToPhase(tl.State)) == TouchPhase.Moved && t.deltaPosition == Vector2.zero)
+                    {
+                        t.phase = TouchPhase.Stationary;
+                    }
+                    if (_activeTouches != i)
+                    {
+                        _touches[i].fingerId = -1;
+                    }
+                    _touches[_activeTouches++] = t;
+	            }
+                else
+                {
+                    _touches[i].fingerId = -1;
+                }
+            }
+            // Add new touches
             for (int i = 0; i < tc.Count; i++)
             {
-                // TODO: Add support for deltas and stationary touches
-                //_touches[i].phase = TouchPhase.Canceled;
                 TouchLocation tl = tc[i];
                 if (tl.State == TouchLocationState.Invalid)
                 {
                     continue;
                 }
-                Touch t = new Touch() { fingerId = tl.Id, position = new Vector2(tl.Position.X, Camera.FullScreen.Height - tl.Position.Y), cleanPosition = tl.Position, phase = ToPhase(tl.State) };
-                if (t.phase == TouchPhase.Moved)
+                bool existing = false;
+                for (int j = 0; j < _activeTouches; j++)
                 {
-                    bool found = false;
-                    for (int ti = 0; i < _touches.Length; i++)
+                    if (_touches[j].fingerId == tl.Id)
                     {
-                        if (_touches[ti].fingerId == tl.Id)
-                        {
-                            t.deltaPosition = _touches[ti].position - t.position;
-                            if (t.deltaPosition == Vector2.zero)
-                            {
-                                t.phase = TouchPhase.Stationary;
-                            }
-                            Debug.Log(String.Format("Touch {0} - {1} -> {2} = {3}", t.fingerId, _touches[ti].position, t.position, t.deltaPosition));
-                            found = true;
-                            break;
-                        }
-                    }
-                    if (!found)
-                    {
-                        Debug.Log("We did not find a touch for " + t.fingerId + " tc: " + touchCount);
+                        existing = true;
+                        break;
                     }
                 }
-                _touches[_touchCount++] = t;
+                if (existing)
+                {
+                    continue;
+                }
+                Touch t = new Touch() { fingerId = tl.Id, position = new Vector2(tl.Position.X, Camera.FullScreen.Height - tl.Position.Y), cleanPosition = tl.Position, phase = ToPhase(tl.State) };
+                _touches[_activeTouches++] = t;
+            }
+            if (_activeTouches > 0)
+            {
+                mouseDowns[0] = (_touches[_activeTouches].phase == TouchPhase.Began);
+                mouseUps[0] = (_touches[_activeTouches].phase == TouchPhase.Ended);
+            }
+            else
+            {
+                mouseDowns[0] = false;
+                mouseUps[0] = false;
             }
 #else
             UpdateMouseStates();
@@ -92,6 +121,8 @@ namespace PressPlay.FFWD
 
         private static void UpdateMouseStates()
         {
+            _mousePosition = new Vector2(_currentMouseState.X, Camera.FullScreen.Height - _currentMouseState.Y);
+            _mousePositionXna = new Vector2(_currentMouseState.X, _currentMouseState.Y);
             mouseHolds[0] &= (_currentMouseState.LeftButton == ButtonState.Pressed);
             mouseHolds[1] &= (_currentMouseState.MiddleButton == ButtonState.Pressed);
             mouseHolds[2] &= (_currentMouseState.RightButton == ButtonState.Pressed);
@@ -194,41 +225,24 @@ namespace PressPlay.FFWD
         }
 #endif
 
+        private static Vector2 _mousePosition;
         public static Vector2 mousePosition
         {
             get
             {
-#if WINDOWS_PHONE
-                if (_touchCount > 0)
-                {
-                    for (int i = 0; i < _touchCount; i++)
-                    {
-                        return _touches[0].position;
-                    }
-                }
-                return Vector2.zero;
-#else
-                return new Vector2(_currentMouseState.X, Camera.FullScreen.Height - _currentMouseState.Y);
-#endif
+                return _mousePosition;
             }
         }
 
-        public static Vector2 mousePositionClean
+        private static Vector2 _mousePositionXna;
+        /// <summary>
+        /// This is the mouse position in XNA terms where Y is not inverted.
+        /// </summary>
+        internal static Vector2 mousePositionXna
         {
             get
             {
-#if WINDOWS_PHONE
-                if (_touchCount > 0)
-                {
-                    for (int i = 0; i < _touchCount; i++)
-                    {
-                        return _touches[0].position;
-                    }
-                }
-                return Vector2.zero;
-#else
-                return new Vector2(_currentMouseState.X, _currentMouseState.Y);
-#endif
+                return _mousePositionXna;
             }
         }
 
@@ -255,7 +269,7 @@ namespace PressPlay.FFWD
         public static bool GetMouseButton(int button)
         {
 #if WINDOWS_PHONE
-            return _touchCount > 0;
+            return touchCount > 0;
 #else
             switch (button)
             {
@@ -273,14 +287,7 @@ namespace PressPlay.FFWD
         public static bool GetMouseButtonDown(int button)
         {
 #if WINDOWS_PHONE
-            for (int i = 0; i < _touchCount; i++)
-            {
-                if (_touches[i].phase == TouchPhase.Began)
-                {
-                    return true;
-                }
-            }
-            return false;
+            return mouseDowns[0];
 #else
             switch (button)
             {
@@ -314,23 +321,20 @@ namespace PressPlay.FFWD
 #endif
         }
 
-        private static int _touchCount = 0;
         public static int touchCount
         {
-            get { return _touchCount; }
+            get { return _activeTouches; }
         }
 
-        private static Touch[] _touches;
-        private static readonly Touch[] _noTouch = new Touch[0];
         public static Touch[] touches
         {
             get
             {
-                if (_touchCount == 0)
+                if (_activeTouches == 0)
                 {
                     return _noTouch;
                 }
-                return _touches.Take(_touchCount).ToArray();
+                return _touches;
             }
         }
 
