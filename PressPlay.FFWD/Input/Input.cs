@@ -106,8 +106,8 @@ namespace PressPlay.FFWD
             }
             if (_activeTouches > 0)
             {
-                mouseDowns[0] = (_touches[_activeTouches].phase == TouchPhase.Began);
-                mouseUps[0] = (_touches[_activeTouches].phase == TouchPhase.Ended);
+                mouseDowns[0] = (_touches[0].phase == TouchPhase.Began);
+                mouseUps[0] = (_touches[0].phase == TouchPhase.Ended);
             }
             else
             {
@@ -335,7 +335,7 @@ namespace PressPlay.FFWD
                 {
                     return _noTouch;
                 }
-                return _touches;
+                return _touches.Take(_activeTouches).ToArray();
             }
         }
 
