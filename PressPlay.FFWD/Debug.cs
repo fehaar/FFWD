@@ -30,6 +30,7 @@ namespace PressPlay.FFWD
 
         private static List<Line> lines;
 
+        public static SpriteFont debugFont;
         public static bool DisplayLog = false;
 
 #if DEBUG
@@ -111,14 +112,6 @@ namespace PressPlay.FFWD
                 value = String.Empty;
             }
             _debugDisplay[key] = value.ToString();
-        }
-
-        public static IEnumerable<KeyValuePair<string, string>> DisplayStrings
-        {
-            get
-            {
-                return _debugDisplay.Concat(ObjectDisplays);
-            }
         }
 
         public static void DisplayHierarchy(UnityObject obj)
@@ -330,6 +323,20 @@ namespace PressPlay.FFWD
 #else
                 return false;
 #endif
+            }
+        }
+
+        internal static void DrawStrings(SpriteBatch spriteBatch)
+        {
+            KeyValuePair<string, string>[] displayStrings = _debugDisplay.Concat(ObjectDisplays).ToArray();
+            Microsoft.Xna.Framework.Vector2 Position = new Microsoft.Xna.Framework.Vector2(32, 32);
+            Microsoft.Xna.Framework.Vector2 offset = Microsoft.Xna.Framework.Vector2.Zero;
+            for (int i = 0; i < displayStrings.Length; i++)
+            {
+                string text = displayStrings[i].Key + ": " + displayStrings[i].Value;
+                spriteBatch.DrawString(Debug.debugFont, text, Position + Microsoft.Xna.Framework.Vector2.One + offset, Microsoft.Xna.Framework.Color.Black);
+                spriteBatch.DrawString(Debug.debugFont, text, Position + offset, Microsoft.Xna.Framework.Color.White);
+                offset.Y += Debug.debugFont.MeasureString(text).Y * 0.75f;
             }
         }
     }
