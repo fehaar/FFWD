@@ -91,10 +91,10 @@
     </ProjectReference>
     <ProjectReference Include="..\FFWD.WP7.XmlContent\FFWD.WP7.XmlContent.contentproj">
       <Project>{6EB53C80-298C-4169-8E3F-712A188A7F38}</Project>
-      <Name>FFWD.WP7.XmlContent</Name>
+      <Name>FFWD.WP7.XmlContent %28Content%29</Name>
       <XnaReferenceType>Content</XnaReferenceType>
     </ProjectReference>
-    <ProjectReference Include="..\FFWD.WP7Content\FFWD.WP7.Content.contentproj">
+    <ProjectReference Include="..\FFWD.WP7.Content\FFWD.WP7.Content.contentproj">
       <Name>FFWD.WP7.Content %28Content%29</Name>
       <XnaReferenceType>Content</XnaReferenceType>
       <Project>{CE645851-15C7-41B2-ABD0-400D8B663959}</Project>
