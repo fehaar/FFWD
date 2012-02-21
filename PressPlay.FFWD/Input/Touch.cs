@@ -13,7 +13,7 @@ namespace PressPlay.FFWD
         public Vector2 position;
         internal Vector2 cleanPosition;
         public Vector2 deltaPosition;
-        public Vector2 deltaTime;
+        public float deltaTime;
         public int tapCount;
         public TouchPhase phase;
     }

@@ -262,10 +262,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SceneLoader.cs" />
     <Compile Include="Screen.cs" />
-    <Compile Include="ScreenManager\GameScreen.cs" />
-    <Compile Include="ScreenManager\ScreenManager.cs" />
-    <Compile Include="ScreenManager\Screens\LoadingScreen.cs" />
-    <Compile Include="ScreenManager\Screens\PlayerIndexEventArgs.cs" />
     <Compile Include="ScriptableObject.cs" />
     <Compile Include="TextAsset.cs" />
     <Compile Include="Texture.cs" />

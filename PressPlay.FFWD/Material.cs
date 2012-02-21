@@ -159,9 +159,12 @@ namespace PressPlay.FFWD
             textureRenderIndexes.Clear();
             helper.AddStaticAsset("TextureRenderIndexes");
             string[] names = helper.Load<String[]>("TextureRenderIndexes");
-            for (int i = 0; i < names.Length; i++)
+            if (names != null)
             {
-                textureRenderIndexes.Add(names[i], i);
+                for (int i = 0; i < names.Length; i++)
+                {
+                    textureRenderIndexes.Add(names[i], i);
+                }
             }
         }
     }

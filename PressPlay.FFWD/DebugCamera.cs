@@ -25,7 +25,7 @@ namespace PressPlay.FFWD
             activated = true;
             physicsDebugView = new DebugViewXNA(Physics.world);
             //physicsDebugView.DrawSolidShapes = false;
-            physicsDebugView.LoadContent(Application.screenManager.GraphicsDevice);
+            physicsDebugView.LoadContent(Application.Instance.GraphicsDevice);
             material = new Material() { name = "Debug material", color = Color.white, renderQueue = 100000, shader = "Transparent" };
             base.Awake();
         }

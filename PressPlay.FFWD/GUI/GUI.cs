@@ -37,9 +37,6 @@ namespace PressPlay.FFWD
         public static Color backgroundColor = Color.white;
         public static Color color = Color.white;
         public static SpriteFont spriteFont;
-        public static SpriteFont spriteBombardierFont;
-
-        
 
         public static void DrawTexture(Rect rect, Texture texture)
         {
@@ -84,11 +81,11 @@ namespace PressPlay.FFWD
 
                     if (style.alignment == TextAnchor.MiddleCenter)
                     {
-                        Microsoft.Xna.Framework.Vector2 sz = GUI.spriteBombardierFont.MeasureString(text);
+                        Microsoft.Xna.Framework.Vector2 sz = GUI.spriteFont.MeasureString(text);
                         pos += new Microsoft.Xna.Framework.Vector2(Mathf.Floor((rect.width - sz.X) / 2), Mathf.Floor((rect.height - sz.Y) / 2));
                     }
 
-                    spriteBatch.DrawString(GUI.spriteBombardierFont, text ?? "", pos, color);
+                    spriteBatch.DrawString(GUI.spriteFont, text ?? "", pos, color);
                 }
             }
         }
@@ -124,7 +121,7 @@ namespace PressPlay.FFWD
                 {
                     spriteBatch.Draw((Texture2D)texture, r, color);
                 }
-                if (Input.GetMouseButtonDown(0) && rect.Contains(Input.mousePositionClean))
+                if (Input.GetMouseButtonDown(0) && rect.Contains(Input.mousePositionXna))
                 {
                     return true;
                 }
