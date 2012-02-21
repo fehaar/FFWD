@@ -62,6 +62,7 @@ namespace PressPlay.FFWD
 	            {
                     Vector2 position = new Vector2(tl.Position.X, Camera.FullScreen.Height - tl.Position.Y);
                     t.deltaPosition = position - t.position;
+                    t.deltaTime = Time.deltaTime;
                     t.position = position;
                     t.cleanPosition = tl.Position;
                     if ((t.phase = ToPhase(tl.State)) == TouchPhase.Moved && t.deltaPosition == Vector2.zero)
