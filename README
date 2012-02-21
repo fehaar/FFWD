@@ -1,0 +1,5 @@
+Welcome to the FFWD framework
+
+This is an XNA framework that will help you port existing games made with Unity3D to XNA for running on WP7 or XB0x 360 (XBLIG).
+
+The framework has been used for creating the games Max and the Magic Marker and Tentacles for Windows Phone 7, and is currently being used by another project at Press Play.
