@@ -48,6 +48,8 @@ namespace PressPlay.FFWD
 
             _touchCount = 0;
             TouchCollection tc = TouchPanel.GetState();
+            if (tc.Count > 0)
+                Debug.Log("Touches: " + tc.Count);
             for (int i = 0; i < tc.Count; i++)
             {
                 // TODO: Add support for deltas and stationary touches
@@ -58,11 +60,26 @@ namespace PressPlay.FFWD
                     continue;
                 }
                 Touch t = new Touch() { fingerId = tl.Id, position = new Vector2(tl.Position.X, Camera.FullScreen.Height - tl.Position.Y), cleanPosition = tl.Position, phase = ToPhase(tl.State) };
-                for (int ti = 0; i < _touches.Length; i++)
+                if (t.phase == TouchPhase.Moved)
                 {
-                    if (_touches[ti].fingerId == tl.Id)
+                    bool found = false;
+                    for (int ti = 0; i < _touches.Length; i++)
                     {
-                        
+                        if (_touches[ti].fingerId == tl.Id)
+                        {
+                            t.deltaPosition = _touches[ti].position - t.position;
+                            if (t.deltaPosition == Vector2.zero)
+                            {
+                                t.phase = TouchPhase.Stationary;
+                            }
+                            Debug.Log(String.Format("Touch {0} - {1} -> {2} = {3}", t.fingerId, _touches[ti].position, t.position, t.deltaPosition));
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found)
+                    {
+                        Debug.Log("We did not find a touch for " + t.fingerId + " tc: " + touchCount);
                     }
                 }
                 _touches[_touchCount++] = t;
@@ -304,7 +321,7 @@ namespace PressPlay.FFWD
         }
 
         private static Touch[] _touches;
-        private static Touch[] _noTouch = new Touch[0];
+        private static readonly Touch[] _noTouch = new Touch[0];
         public static Touch[] touches
         {
             get
