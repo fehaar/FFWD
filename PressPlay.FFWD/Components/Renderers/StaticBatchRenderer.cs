@@ -54,12 +54,12 @@ namespace PressPlay.FFWD.Components
               if (quadTreeTiles[uTile].vertices != null &&
                   quadTreeTiles[uTile].indices != null)
               {
-                quadTreeTiles[uTile].vertexBuffer = new VertexBuffer(Application.screenManager.GraphicsDevice, quadTreeTiles[uTile].vertices.GetType().GetElementType(), quadTreeTiles[uTile].vertices.Length, BufferUsage.WriteOnly);
+                quadTreeTiles[uTile].vertexBuffer = new VertexBuffer(Application.Instance.GraphicsDevice, quadTreeTiles[uTile].vertices.GetType().GetElementType(), quadTreeTiles[uTile].vertices.Length, BufferUsage.WriteOnly);
                 quadTreeTiles[uTile].vertexBuffer.SetData(quadTreeTiles[uTile].vertices);
                 quadTreeTiles[uTile].indexBuffer = new IndexBuffer[quadTreeTiles[uTile].indices.Length];
                 for (int i = 0; i < quadTreeTiles[uTile].indices.Length; i++)
                 {
-                  quadTreeTiles[uTile].indexBuffer[i] = new IndexBuffer(Application.screenManager.GraphicsDevice, IndexElementSize.SixteenBits, quadTreeTiles[uTile].indices[i].Length, BufferUsage.WriteOnly);
+                  quadTreeTiles[uTile].indexBuffer[i] = new IndexBuffer(Application.Instance.GraphicsDevice, IndexElementSize.SixteenBits, quadTreeTiles[uTile].indices[i].Length, BufferUsage.WriteOnly);
                   quadTreeTiles[uTile].indexBuffer[i].SetData(quadTreeTiles[uTile].indices[i]);
                 }
                 if (materials.Length > quadTreeTiles[uTile].indexBuffer.Length)

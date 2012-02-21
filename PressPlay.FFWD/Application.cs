@@ -83,8 +83,6 @@ namespace PressPlay.FFWD
         public static int particleDraws = 0;
 #endif
 
-        public static ScreenManager.ScreenManager screenManager;
-
         private static readonly Dictionary<int, UnityObject> objects = new Dictionary<int, UnityObject>(5000);
 
         private static readonly Queue<Component> componentsToAwake = new Queue<Component>(ApplicationSettings.DefaultCapacities.ComponentLists);
@@ -177,7 +175,6 @@ namespace PressPlay.FFWD
         {
             base.LoadContent();
             GUI.spriteFont              = Game.Content.Load<SpriteFont>("GUIFont");
-            GUI.spriteBombardierFont    = Game.Content.Load<SpriteFont>("Bombardier");
         }
 
         private ContentManager CreateContentManager()

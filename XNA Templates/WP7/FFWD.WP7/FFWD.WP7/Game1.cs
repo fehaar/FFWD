@@ -41,6 +41,7 @@ namespace FFWD.WP7
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            Components.Add(new PressPlay.FFWD.Application(this));
 
             base.Initialize();
         }
@@ -66,6 +67,7 @@ namespace FFWD.WP7
             // TODO: Unload any non ContentManager content here
         }
 
+        System.Text.StringBuilder sb = new System.Text.StringBuilder();
         /// <summary>
         /// Allows the game to run logic such as updating the world,
         /// checking for collisions, gathering input, and playing audio.
@@ -74,10 +76,8 @@ namespace FFWD.WP7
         protected override void Update(GameTime gameTime)
         {
             // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+            if (PressPlay.FFWD.Input.GetKeyDown(Keys.Back))
                 this.Exit();
-
-            // TODO: Add your update logic here
 
             base.Update(gameTime);
         }
