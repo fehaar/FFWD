@@ -92,6 +92,126 @@ namespace PressPlay.FFWD
             }
         }        
 
+        public Matrix4x4 inverse
+        {
+            get
+            {
+                return Matrix4x4.Inverse(this);
+            }
+        }
+
+        public float this[int index]
+        {
+            get
+            {
+                switch (index)
+                {
+                    case 0:
+                        return m00;
+                    case 1:
+                        return m10;
+                    case 2:
+                        return m20;
+                    case 3:
+                        return m30;
+                    case 4:
+                        return m01;
+                    case 5:
+                        return m11;
+                    case 6:
+                        return m21;
+                    case 7:
+                        return m31;
+                    case 8:
+                        return m02;
+                    case 9:
+                        return m12;
+                    case 10:
+                        return m22;
+                    case 11:
+                        return m32;
+                    case 12:
+                        return m03;
+                    case 13:
+                        return m13;
+                    case 14:
+                        return m23;
+                    case 15:
+                        return m33;
+                    default:
+                        throw new IndexOutOfRangeException("You must use an index between 0 and 15 to access the data");
+                }
+            }
+            set
+            {
+                switch (index)
+                {
+                    case 0:
+                        m00 = value;
+                        break;
+                    case 1:
+                        m10 = value;
+                        break;
+                    case 2:
+                        m20 = value;
+                        break;
+                    case 3:
+                        m30 = value;
+                        break;
+                    case 4:
+                        m01 = value;
+                        break;
+                    case 5:
+                        m11 = value;
+                        break;
+                    case 6:
+                        m21 = value;
+                        break;
+                    case 7:
+                        m31 = value;
+                        break;
+                    case 8:
+                        m02 = value;
+                        break;
+                    case 9:
+                        m12 = value;
+                        break;
+                    case 10:
+                        m22 = value;
+                        break;
+                    case 11:
+                        m32 = value;
+                        break;
+                    case 12:
+                        m03 = value;
+                        break;
+                    case 13:
+                        m13 = value;
+                        break;
+                    case 14:
+                        m23 = value;
+                        break;
+                    case 15:
+                        m33 = value;
+                        break;
+                    default:
+                        throw new IndexOutOfRangeException("You must use an index between 0 and 15 to access the data");
+                }
+            }
+        }
+
+        public float this[int row, int col]
+        {
+            get
+            {
+                return this[row + col * 4];
+            }
+            set
+            {
+                this[row + col * 4] = value;
+            }
+        }
+
         #endregion Properties
 
         #region Public Methods

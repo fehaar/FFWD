@@ -21,6 +21,7 @@ namespace PressPlay.FFWD.Exporter
             { "System.Serializable", "" },
             { "System.NonSerialized", "ContentSerializerIgnore" },
             { "AddComponentMenu", "" },
+            { "ContextMenu", "" },
             { "RequireComponent", "" },
             { "ExecuteInEditMode", "" },
             { "FFWD_ExportOptions", "" },

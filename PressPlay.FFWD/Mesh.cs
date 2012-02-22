@@ -292,5 +292,10 @@ namespace PressPlay.FFWD
         {
             get { return _vertices.Length; }
         }
+
+        public void RecalculateNormals()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

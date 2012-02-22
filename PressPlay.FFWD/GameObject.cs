@@ -271,6 +271,16 @@ namespace PressPlay.FFWD
             return AddComponent(cmp);
         }
 
+        public Component AddComponent(string type)
+        {
+            Type t = Type.GetType(type);
+            if (t == null)
+            {
+                throw new NotImplementedException("Could not find type of component to add");
+            }
+            return AddComponent(t);
+        }
+
         internal void RemoveComponent(Component component)
         {
             if (components.Remove(component))
@@ -477,6 +487,11 @@ namespace PressPlay.FFWD
 
         public T[] GetComponentsInChildren<T>() where T: Component
         {
+            return GetComponentsInChildren<T>(false);
+        }
+
+        public T[] GetComponentsInChildren<T>(bool includeInactive) where T : Component
+        {
             for (int i = 0; i < components.Count; i++)
             {
                 T cmp = components[i] as T;
@@ -485,7 +500,7 @@ namespace PressPlay.FFWD
                     locatorList.Add(cmp);
                 }
             }
-            transform.GetComponentsInChildrenInt<T>(locatorList);
+            transform.GetComponentsInChildrenInt<T>(locatorList, includeInactive);
 
             T[] arr = new T[locatorList.Count];
             for (int i = 0; i < locatorList.Count; i++)
@@ -496,17 +511,20 @@ namespace PressPlay.FFWD
             return arr;
         }
 
-        internal void GetComponentsInChildren<T>(List<Component> list) where T : Component
+        internal void GetComponentsInChildren<T>(List<Component> list, bool includeInactive) where T : Component
         {
-            for (int i = 0; i < components.Count; i++)
+            if (active || (!active && includeInactive))
             {
-                T cmp = components[i] as T;
-                if (cmp != null)
+                for (int i = 0; i < components.Count; i++)
                 {
-                    list.Add(cmp);
+                    T cmp = components[i] as T;
+                    if (cmp != null)
+                    {
+                        list.Add(cmp);
+                    }
                 }
             }
-            transform.GetComponentsInChildrenInt<T>(list);
+            transform.GetComponentsInChildrenInt<T>(list, includeInactive);
         }
 
         public Component GetComponentInChildren(Type type)
