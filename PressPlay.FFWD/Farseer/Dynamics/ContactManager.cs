@@ -26,6 +26,7 @@
 using System.Collections.Generic;
 using FarseerPhysics.Collision;
 using FarseerPhysics.Dynamics.Contacts;
+using PressPlay.FFWD;
 
 namespace FarseerPhysics.Dynamics
 {
@@ -88,6 +89,13 @@ namespace FarseerPhysics.Dynamics
             {
                 return;
             }
+
+#if DEBUG
+            if (DebugSettings.LogCollisions)
+            {
+                Debug.Log(string.Format("Consider collision between: {0} <-> {1}", bodyA, bodyB));
+            }
+#endif
 
             // Does a contact already exist?
             ContactEdge edge = bodyB.ContactList;
