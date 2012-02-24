@@ -55,9 +55,19 @@ namespace PressPlay.FFWD
             return (float)Math.Acos(x);
         }
 
+        public static bool Approximately(float a, float b)
+        {
+            return Mathf.Abs((b - a)) < Mathf.Max(((float)1E-06 * Mathf.Max(Mathf.Abs(a), Mathf.Abs(b))), (float)1.121039E-44);
+        }
+
         public static float Asin(float x)
         {
             return (float)Math.Asin(x);
+        }
+
+        public static float Exp(float power)
+        {
+            return (float)Math.Exp(power);
         }
 
         public static float Min(float x, float y)
@@ -123,10 +133,15 @@ namespace PressPlay.FFWD
             return (float)Math.Floor((double)f);
         }
 
-        //TODO Implement Lerp function
         public static float Lerp(float from, float to, float t)
         {
             return MathHelper.Lerp(from, to, t);
+        }
+
+        public static float Repeat(float t, float length)
+        {
+            int times = (int)(t / length);
+            return t - (times * length);
         }
 
         public static float SmoothDamp(float current, float target, ref float currentVelocity, float smoothTime)
@@ -160,9 +175,17 @@ namespace PressPlay.FFWD
             return (int)Math.Round((double)f);
         }
 
-        public static bool Approximately(float a, float b)
+        public static float PingPong(float t, float length)
         {
-            return Mathf.Abs((b - a)) < Mathf.Max(((float)1E-06 * Mathf.Max(Mathf.Abs(a), Mathf.Abs(b))), (float)1.121039E-44);
+            int times = (int)(t / length);
+            if (times % 2 == 0)
+            {
+                return t - (times * length);
+            }
+            else
+            {
+                return length - (times * length);
+            }
         }
     }
 }
