@@ -92,9 +92,9 @@ namespace PressPlay.FFWD.Components
 
             Type tp = GetType();
             List<FieldInfo> fields;
-            if (CloneMemberCache.ContainsKey(tp))
+            if (cloneMemberCache.ContainsKey(tp))
             {
-                fields = CloneMemberCache[tp];
+                fields = cloneMemberCache[tp];
             }
             else
             {
@@ -124,7 +124,7 @@ namespace PressPlay.FFWD.Components
                         fields.RemoveAt(i);
                     }
                 }
-                CloneMemberCache.Add(tp, fields);
+                cloneMemberCache.Add(tp, fields);
             }
             for (int i = 0; i < fields.Count; i++)
             {
@@ -147,7 +147,7 @@ namespace PressPlay.FFWD.Components
         }
         #endregion
 
-        private static Dictionary<Type, List<FieldInfo>> CloneMemberCache = new Dictionary<Type, List<FieldInfo>>();
+        private static Dictionary<Type, List<FieldInfo>> cloneMemberCache = new Dictionary<Type, List<FieldInfo>>();
 
         #region Invoke
         public void Invoke(string methodName, float time)
