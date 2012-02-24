@@ -169,7 +169,7 @@ namespace PressPlay.FFWD
             base.Destroy();
         }
 
-        private Dictionary<string, List<FieldInfo>> membersToFix = new Dictionary<string, List<FieldInfo>>();
+        private static Dictionary<string, List<FieldInfo>> membersToFix = new Dictionary<string, List<FieldInfo>>();
 
         private void DoFixReferences(object objectToFix, Dictionary<int, UnityObject> idMap)
         {
