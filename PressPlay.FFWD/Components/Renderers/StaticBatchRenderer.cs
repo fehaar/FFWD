@@ -252,7 +252,7 @@ namespace PressPlay.FFWD.Components
 #if DEBUG
             if (Camera.logRenderCalls && quadTreeTiles[i].visible)
             {
-                Debug.LogFormat("Static batch: Tile {0] on {1} on {2}", i, gameObject, cam.gameObject);
+                Debug.LogFormat("Static batch: Tile {0} on {1} on {2}", i, gameObject, cam.gameObject);
             }
 #endif
           }
