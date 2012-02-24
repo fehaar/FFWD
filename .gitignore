@@ -43,3 +43,5 @@ obj/
 
 
 /Unity.Tests/Library
+/PressPlay.FFWD.Unity.AfterBuild.bat
+/PressPlay.FFWD.Exporter.AfterBuild.bat

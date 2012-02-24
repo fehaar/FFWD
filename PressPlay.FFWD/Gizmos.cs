@@ -5,9 +5,13 @@ using System.Text;
 
 namespace PressPlay.FFWD
 {
+    /// <summary>
+    /// TODO: Determine if this should be used for drawing debug information.
+    /// </summary>
     public class Gizmos
     {
         public static Color color;
+        public static Matrix4x4 matrix;
 
         public static void DrawLine(Vector3 from, Vector3 to)
         { }

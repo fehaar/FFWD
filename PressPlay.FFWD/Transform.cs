@@ -738,13 +738,13 @@ namespace PressPlay.FFWD
             }
         }
 
-        internal void GetComponentsInChildrenInt<T>(List<Component> list) where T : Component
+        internal void GetComponentsInChildrenInt<T>(List<Component> list, bool includeInactive) where T : Component
         {
             if (children != null)
             {
                 for (int childIndex = 0; childIndex < children.Count; childIndex++)
                 {
-                    children[childIndex].GetComponentsInChildren<T>(list);
+                    children[childIndex].GetComponentsInChildren<T>(list, includeInactive);
                 }
             }
         }
