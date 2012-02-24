@@ -169,7 +169,7 @@ namespace PressPlay.FFWD
             base.Destroy();
         }
 
-        private static Dictionary<string, List<FieldInfo>> membersToFix = new Dictionary<string, List<FieldInfo>>();
+        private static Dictionary<Type, List<FieldInfo>> membersToFix = new Dictionary<Type, List<FieldInfo>>();
 
         private void DoFixReferences(object objectToFix, Dictionary<int, UnityObject> idMap)
         {
@@ -238,9 +238,9 @@ namespace PressPlay.FFWD
 
         private List<FieldInfo> GetMembersToFix(Type typeToFix)
         {
-            if (membersToFix.ContainsKey(typeToFix.FullName))
+            if (membersToFix.ContainsKey(typeToFix))
             {
-                return membersToFix[typeToFix.FullName];
+                return membersToFix[typeToFix];
             }
 
             // We find all fields only - not properties as they cannot be set as references in Unity
@@ -260,7 +260,7 @@ namespace PressPlay.FFWD
             {
                 memInfo.AddRange(GetMembersToFix(typeToFix.BaseType));
             }
-            membersToFix[typeToFix.FullName] = memInfo;
+            membersToFix[typeToFix] = memInfo;
             return memInfo;
         }
 
