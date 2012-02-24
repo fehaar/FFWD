@@ -107,6 +107,10 @@ namespace PressPlay.FFWD.Components
                     {
                         remove = true;
                     }
+                    if (f.FieldType == typeof(string))
+                    {
+                        remove = false;
+                    }
                     if (f.FieldType.HasElementType && f.FieldType.GetElementType().IsSubclassOf(typeof(UnityObject)))
                     {
                         remove = false;
