@@ -65,7 +65,7 @@
     <XnaCompressContent>false</XnaCompressContent>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\FFWD\PressPlay.FFWD\PressPlay.FFWD.WP7.csproj">
+    <ProjectReference Include="..\..\..\Framework\PressPlay.FFWD\PressPlay.FFWD.WP7.csproj">
       <Project>{2370CE44-C54A-4553-B0C1-5971DA50254A}</Project>
       <Name>PressPlay.FFWD.WP7</Name>
     </ProjectReference>

@@ -9,11 +9,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FFWD.Unity.Tests.WP7", "FFW
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FFWD.Unity.Tests.X360", "FFWD.Unity.Tests\FFWD.Unity.Tests.X360.csproj", "{41F2F85E-F5CE-42E9-B371-173DAC39D79A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PressPlay.FFWD", "..\FFWD\PressPlay.FFWD\PressPlay.FFWD.csproj", "{A02BD389-79AE-4975-9A5E-DEDC66B8A0CB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PressPlay.FFWD", "..\..\Framework\PressPlay.FFWD\PressPlay.FFWD.csproj", "{A02BD389-79AE-4975-9A5E-DEDC66B8A0CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PressPlay.FFWD.WP7", "..\FFWD\PressPlay.FFWD\PressPlay.FFWD.WP7.csproj", "{2370CE44-C54A-4553-B0C1-5971DA50254A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PressPlay.FFWD.WP7", "..\..\Framework\PressPlay.FFWD\PressPlay.FFWD.WP7.csproj", "{2370CE44-C54A-4553-B0C1-5971DA50254A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PressPlay.FFWD.Import", "..\FFWD\PressPlay.FFWD.Import\PressPlay.FFWD.Import.csproj", "{2B962BD4-23CF-4151-8A3F-DF40C4BCC75D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PressPlay.FFWD.Import", "..\..\Framework\PressPlay.FFWD.Import\PressPlay.FFWD.Import.csproj", "{2B962BD4-23CF-4151-8A3F-DF40C4BCC75D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FFWD.Unity.Tests.Scripts", "FFWD.Unity.Tests.Scripts\FFWD.Unity.Tests.Scripts.csproj", "{FC08EA5C-C1E1-4F96-ACF2-581859E8CD09}"
 EndProject

@@ -30,7 +30,7 @@
     <Reference Include="Microsoft.Xna.Framework.Content.Pipeline.VideoImporters, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\FFWD\PressPlay.FFWD.Import\PressPlay.FFWD.Import.csproj">
+    <ProjectReference Include="..\..\..\Framework\PressPlay.FFWD.Import\PressPlay.FFWD.Import.csproj">
       <Project>{2B962BD4-23CF-4151-8A3F-DF40C4BCC75D}</Project>
       <Name>PressPlay.FFWD.Import</Name>
     </ProjectReference>

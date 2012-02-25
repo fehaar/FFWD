@@ -68,7 +68,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\FFWD\PressPlay.FFWD\PressPlay.FFWD.csproj">
+    <ProjectReference Include="..\..\..\Framework\PressPlay.FFWD\PressPlay.FFWD.csproj">
       <Project>{A02BD389-79AE-4975-9A5E-DEDC66B8A0CB}</Project>
       <Name>PressPlay.FFWD</Name>
     </ProjectReference>
