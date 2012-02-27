@@ -14,7 +14,7 @@ namespace PressPlay.FFWD.Exporter
 
         public static string ScriptNamespace { get; set; }
         private List<string> scriptLines;
-        public static List<string> UsingsThatShouldBeKept = new List<string> { "System", "System.Collections.Generic", "System.Text", "System.Diagnostics", "System.Xml", "System.Xml.Linq", "System.IO", "Microsoft.Xna.Framework.Media", "System.Collections.Specialized", "System.Linq", "System.IO.IsolatedStorage", "System.Runtime.Serialization", "System.Runtime.Serialization.Formatters.Binary" };
+        public static List<string> UsingsThatShouldBeKept = new List<string> { "System", "System.Collections.Generic", "System.Text", "System.Diagnostics", "System.Xml", "System.Xml.Linq", "System.Xml.Serialization", "System.IO", "Microsoft.Xna.Framework.Media", "System.Collections.Specialized", "System.Linq", "System.IO.IsolatedStorage", "System.Runtime.Serialization", "System.Runtime.Serialization.Formatters.Binary" };
         public static List<string> DefaultUsings = new List<string> { "PressPlay.FFWD", "PressPlay.FFWD.Components", "Microsoft.Xna.Framework.Content" };
         public static Dictionary<string, string> ReplaceAttributes = new Dictionary<string, string>() { 
             { "HideInInspector", "ContentSerializerIgnore" },
