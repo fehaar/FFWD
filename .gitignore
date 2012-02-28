@@ -46,3 +46,5 @@ obj/
 /Tests/Unity.Tests/Temp
 /Exporter/PressPlay.FFWD.Unity.AfterBuild.bat
 /Exporter/PressPlay.FFWD.Exporter.AfterBuild.bat
+/Demos/*/Temp
+/Demos/*/Library
