@@ -7,6 +7,6 @@ namespace PressPlay.FFWD
 {
     public static class RenderSettings
     {
-        public static Color ambientLight = Color.black;
+        public static Color ambientLight = new Color(0.2f, 0.2f, 0.2f, 1);
     }
 }

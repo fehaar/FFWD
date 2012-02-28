@@ -12,14 +12,14 @@ namespace PressPlay.FFWD.Components
 
     public class Light : Component, IInitializable
     {
+        [ContentSerializer(Optional = true)]
+        public bool enabled;
         public LightType type;
         public Color color;
         public float intensity;
         public float range;
         public float spotAngle;
         public LayerMask cullingMask;
-        [ContentSerializer(Optional=true)]
-        public bool enabled;
 
         internal static List<Light> Lights = new List<Light>(ApplicationSettings.DefaultCapacities.Lights);
 
@@ -101,7 +101,7 @@ namespace PressPlay.FFWD.Components
         private static void EnableDirectionalLight(DirectionalLight directionalLight, Light light)
         {
             directionalLight.Enabled = true;
-            directionalLight.DiffuseColor = light.color * light.intensity;
+            directionalLight.DiffuseColor = light.color * light.intensity * 2;
             directionalLight.Direction = light.transform.forward;
         }
     }
