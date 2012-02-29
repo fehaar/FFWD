@@ -143,7 +143,6 @@
     <Compile Include="Core framework\Animation\WithTheVector3Sampler.cs" />
     <Compile Include="Core framework\Bounds\WhenCheckingBoundsContainment.cs" />
     <Compile Include="Core framework\Bounds\WhenBuildingBounds.cs" />
-    <Compile Include="Core framework\GameObjects\WhenGettingComponents.cs" />
     <Compile Include="Core framework\Helpers\ApplicationTestBase.cs" />
     <Compile Include="Core framework\Behaviours\WhenSettingTheEnabledProperty.cs" />
     <Compile Include="Core framework\Bounds\WhenSettingTheCenterOfBounds.cs" />

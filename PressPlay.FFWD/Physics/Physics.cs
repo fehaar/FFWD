@@ -691,7 +691,7 @@ namespace PressPlay.FFWD
             Body body = coll.connectedBody;
             BodyType bodyType = body.BodyType;
             Transform t = coll.transform;
-            if ((bodyType == BodyType.Kinematic) || (ApplicationSettings.Physics_MoveStaticColliders && bodyType == BodyType.Static))
+            if ((bodyType == BodyType.Dynamic) || (ApplicationSettings.Physics_MoveStaticColliders && bodyType == BodyType.Static))
             {
                 if (((t.changes & TransformChanges.Position) == TransformChanges.Position) || ((t.changes & TransformChanges.Rotation) == TransformChanges.Rotation))
                 {

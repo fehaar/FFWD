@@ -1,2 +1,0 @@
-copy %1\*.cs %2\..\Unity.Tests\Assets\FFWD\
-copy %1\Editor\*.cs %2\..\Unity.Tests\Assets\Editor\FFWD\

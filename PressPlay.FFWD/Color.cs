@@ -57,46 +57,6 @@ namespace PressPlay.FFWD
             }
         }
 
-        public float this[int index]
-        {
-            get
-            {
-                switch (index)
-                {
-                    case 0:
-                        return r;
-                    case 1:
-                        return g;
-                    case 2:
-                        return b;
-                    case 3:
-                        return a;
-                    default:
-                        throw new IndexOutOfRangeException("You must use an index between 0 and 3 to access color info.");
-                }
-            }
-            set
-            {
-                switch (index)
-                {
-                    case 0:
-                        r = value;
-                        break;
-                    case 1:
-                        g = value;
-                        break;
-                    case 2:
-                        b = value;
-                        break;
-                    case 3:
-                        a = value;
-                        break;
-                    default:
-                        throw new IndexOutOfRangeException("You must use an index between 0 and 3 to access color info.");
-                }
-            }
-        }
-
         public float greyscale
         {
             get

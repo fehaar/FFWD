@@ -63,7 +63,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>IF EXIST "$(SolutionDir)PressPlay.FFWD.Unity.AfterBuild.bat" "$(SolutionDir)PressPlay.FFWD.Unity.AfterBuild.bat" "$(ProjectDir)" "$(SolutionDir)"</PostBuildEvent>
+    <PostBuildEvent>copy "$(ProjectDir)\*.cs" "$(SolutionDir)\..\..\Unity\Assets\FFWD\"
+copy "$(ProjectDir)\Editor\*.cs" "$(SolutionDir)\..\..\Unity\Assets\Editor\FFWD\"
+</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

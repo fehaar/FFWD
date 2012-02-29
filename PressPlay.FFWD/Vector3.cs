@@ -314,7 +314,7 @@ namespace PressPlay.FFWD
             this.z *= factor;
         }
 
-        public static Vector3 Normalize(Vector3 vector){
+        private static Vector3 Normalize(Vector3 vector){
             vector.Normalize();
             return vector;
         }
