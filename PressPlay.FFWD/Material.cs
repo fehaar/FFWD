@@ -111,11 +111,13 @@ namespace PressPlay.FFWD
                 basicEffect.TextureEnabled = true;
                 basicEffect.Texture = mainTexture;
                 basicEffect.DiffuseColor = color;
+                basicEffect.Alpha = color.a;
             }
             else
             {
                 basicEffect.TextureEnabled = false;
                 basicEffect.DiffuseColor = color;
+                basicEffect.Alpha = color.a;
             }
         }
 
