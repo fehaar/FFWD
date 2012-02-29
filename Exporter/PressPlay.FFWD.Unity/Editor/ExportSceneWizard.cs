@@ -466,20 +466,20 @@ public class ExportSceneWizard : ScriptableWizard
     {
     }
 
-    [MenuItem("Press Play/FFWD/Configuration")]
+    [MenuItem("FFWD/Configuration")]
     static void CreateWizard()
     {
         ScriptableWizard.DisplayWizard("Edit FFWD Configuration", typeof(ExportSceneWizard), "Save", "Cancel");
     }
 
-    [MenuItem("Press Play/FFWD/Export settings")]
+    [MenuItem("FFWD/Export settings")]
     static void ExportRenderSettings()
     {
         ExportCommands cmd = new ExportCommands();
         cmd.ExportTags();        
     }
 
-    [MenuItem("Press Play/FFWD/Export all resources")]
+    [MenuItem("FFWD/Export all resources")]
     static void ExportAllResources()
     {
         ExportCommands cmd = new ExportCommands();
@@ -517,35 +517,35 @@ public class ExportSceneWizard : ScriptableWizard
         Resources.UnloadUnusedAssets();
     }
 
-    [MenuItem("Press Play/FFWD/Export open scene")]
+    [MenuItem("FFWD/Export open scene")]
     static void ExportOpenScene()
     {
         ExportCommands cmd = new ExportCommands();
         cmd.ExportOpenScene();
     }
 
-    [MenuItem("Press Play/FFWD/Export all scenes")]
+    [MenuItem("FFWD/Export all scenes")]
     static void ExportAllScenes()
     {
         ExportCommands cmd = new ExportCommands();
         cmd.ExportAllScenes();
     }
 
-    [MenuItem("Press Play/FFWD/Export active scene group")]
+    [MenuItem("FFWD/Export active scene group")]
     static void ExportActiveScenes()
     {
         ExportCommands cmd = new ExportCommands();
         cmd.ExportActiveScenes();
     }
 
-    [MenuItem("Press Play/FFWD/Export all scripts")]
+    [MenuItem("FFWD/Export all scripts")]
     static void ExportAllScripts()
     {
         ExportCommands cmd = new ExportCommands();
         cmd.ExportAllScripts();
     }
 
-    [MenuItem("Press Play/FFWD/Full export")]
+    [MenuItem("FFWD/Full export")]
     static void FullExport()
     {
         ExportAllScenes();
