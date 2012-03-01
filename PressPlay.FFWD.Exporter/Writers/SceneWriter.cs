@@ -561,6 +561,11 @@ namespace PressPlay.FFWD.Exporter.Writers
                         return;
                     }
                 }
+                if (obj is List<int>)
+                {
+                    writer.WriteElementString(name, ToString((obj as List<int>).ToArray()));
+                    return;
+                }
                 if (obj is Guid)
                 {
                     writer.WriteElementString(name, ToString((Guid)obj));
