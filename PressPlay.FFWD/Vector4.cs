@@ -327,11 +327,6 @@ namespace PressPlay.FFWD
             return new Vector4(v);
         }
 
-        public static implicit operator Vector4(Vector3 v)
-        {
-            return new Vector4(v.x, v.y, v.z);
-        }
-
         public static bool operator ==(Vector4 value1, Vector4 value2)
         {
             return value1.w == value2.w

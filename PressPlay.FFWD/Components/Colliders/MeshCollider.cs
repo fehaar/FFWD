@@ -11,7 +11,6 @@ namespace PressPlay.FFWD.Components
     {
         #region ContentProperties
         public List<Vertices> vertices { get; set; }
-        public Mesh sharedMesh;
         #endregion
 
         protected override void DoAddCollider(Body body, float mass)

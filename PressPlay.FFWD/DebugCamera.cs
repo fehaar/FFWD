@@ -76,10 +76,10 @@ namespace PressPlay.FFWD
                 }
                 Debug.Display("Mouse / Physics", inPos + " / " + castPos);
 
-                RaycastHit[] hits = Physics.PointcastAll(castPos, cam.cullingMask);
-                if (hits.Length > 0)
+                RaycastHit hit;
+                if (Physics.Pointcast(castPos, out hit, cam.cullingMask))
                 {
-                    Debug.Display("Over", String.Join("\n", hits.Select(h => h.collider.ToString()).OrderBy(s => s)));
+                    Debug.Display("Over", hit.collider);
                 }
                 else
                 {
