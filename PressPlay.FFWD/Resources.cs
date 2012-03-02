@@ -37,7 +37,11 @@ namespace PressPlay.FFWD
             }
             if (o is Microsoft.Xna.Framework.Graphics.Texture2D)
             {
-                return new Texture2D(o as Microsoft.Xna.Framework.Graphics.Texture2D);
+                Texture2D Tex = new Texture2D(o as Microsoft.Xna.Framework.Graphics.Texture2D);
+                int iIndex = name.LastIndexOf('/');
+                iIndex = Mathf.Clamp(iIndex, iIndex, name.Length);
+                Tex.name = name.Substring(iIndex + 1); 
+                return Tex;
             }
             if (o is SoundEffect)
             {
