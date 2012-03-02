@@ -29,21 +29,6 @@ namespace PressPlay.FFWD
             this.color = color;
         }
 
-        public Material()
-        {
-        }
-
-        public Material(Material otherMaterial)
-        {
-          shader = otherMaterial.shader;
-          renderQueue = otherMaterial.renderQueue;
-          color = otherMaterial.color;
-          mainTexture = otherMaterial.mainTexture;
-          mainTextureOffset = otherMaterial.mainTextureOffset;
-          mainTextureScale = otherMaterial.mainTextureScale;
-          wrapRepeat = otherMaterial.wrapRepeat;
-        }
-
         protected override void DoLoadAsset(AssetHelper assetHelper)
         {
             // NOTE: We have hardcoded shader values here that should be configurable in some other way
