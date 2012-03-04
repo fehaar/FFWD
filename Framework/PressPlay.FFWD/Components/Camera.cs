@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace PressPlay.FFWD.Components
 {
-    public class Camera : Component, IComparer<Camera>, IComparer<Renderer>
+    public class Camera : Behaviour, IComparer<Camera>, IComparer<Renderer>
     {
         public Camera()
         {

@@ -10,10 +10,8 @@ namespace PressPlay.FFWD.Components
 {
     public enum LightType { Spot, Directional, Point }
 
-    public class Light : Component, IInitializable
+    public class Light : Behaviour, IInitializable
     {
-        [ContentSerializer(Optional = true)]
-        public bool enabled;
         public LightType type;
         public Color color;
         public float intensity;

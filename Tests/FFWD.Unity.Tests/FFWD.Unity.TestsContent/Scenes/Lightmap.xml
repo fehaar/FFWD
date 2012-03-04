@@ -1,0 +1,235 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:f="PressPlay.FFWD" xmlns:c="PressPlay.FFWD.Components">
+  <Asset Type="f:Scene">
+    <hasBeenProcessed>false</hasBeenProcessed>
+    <go>
+      <id>4818</id>
+      <name>Sphere</name>
+      <layer>0</layer>
+      <tag>Untagged</tag>
+      <static>true</static>
+      <cs>
+        <c Type="f:Transform">
+          <id>4820</id>
+          <p>1.27747 0.60953 0.60931</p>
+        </c>
+        <c Type="PressPlay.FFWD.Components.MeshFilter">
+          <id>4824</id>
+          <mesh>
+            <id>142</id>
+            <name>Sphere</name>
+          </mesh>
+        </c>
+        <c Type="PressPlay.FFWD.Components.SphereCollider">
+          <id>4826</id>
+          <isTrigger>false</isTrigger>
+          <center>0 0 0</center>
+          <radius>0.5</radius>
+        </c>
+        <c Type="PressPlay.FFWD.Components.MeshRenderer">
+          <id>4822</id>
+          <enabled>true</enabled>
+          <materials>
+            <material>
+              <id>398</id>
+              <name>Item red</name>
+              <shader>Diffuse</shader>
+              <renderQueue>2000</renderQueue>
+              <color>FFFF0000</color>
+              <mainTexture>
+                <id>418</id>
+                <name>Assets/DSC_5866</name>
+              </mainTexture>
+              <mainTextureOffset>0 0</mainTextureOffset>
+              <mainTextureScale>1 1</mainTextureScale>
+              <wrapRepeat>true</wrapRepeat>
+            </material>
+          </materials>
+        </c>
+      </cs>
+    </go>
+    <go>
+      <id>4828</id>
+      <name>Cylinder</name>
+      <layer>0</layer>
+      <tag>Untagged</tag>
+      <static>true</static>
+      <cs>
+        <c Type="f:Transform">
+          <id>4830</id>
+          <p>1.37486 0.60953 -0.65056</p>
+        </c>
+        <c Type="PressPlay.FFWD.Components.MeshFilter">
+          <id>4834</id>
+          <mesh>
+            <id>140</id>
+            <name>Cylinder</name>
+          </mesh>
+        </c>
+        <c Type="PressPlay.FFWD.Components.CapsuleCollider">
+          <id>4836</id>
+          <isTrigger>false</isTrigger>
+          <center>0 0 0</center>
+          <radius>0.5</radius>
+          <height>2</height>
+          <direction>1</direction>
+        </c>
+        <c Type="PressPlay.FFWD.Components.MeshRenderer">
+          <id>4832</id>
+          <enabled>true</enabled>
+          <materials>
+            <material>
+              <id>412</id>
+              <name>Item</name>
+              <shader>Diffuse</shader>
+              <renderQueue>2000</renderQueue>
+              <color>FFFFFFFF</color>
+              <mainTexture>
+                <id>418</id>
+                <name>Assets/DSC_5866</name>
+              </mainTexture>
+              <mainTextureOffset>0 0</mainTextureOffset>
+              <mainTextureScale>1 1</mainTextureScale>
+              <wrapRepeat>true</wrapRepeat>
+            </material>
+          </materials>
+        </c>
+      </cs>
+    </go>
+    <go>
+      <id>4838</id>
+      <name>Plane</name>
+      <layer>0</layer>
+      <tag>Untagged</tag>
+      <static>true</static>
+      <cs>
+        <c Type="f:Transform">
+          <id>4840</id>
+        </c>
+        <c Type="PressPlay.FFWD.Components.MeshFilter">
+          <id>4844</id>
+          <mesh>
+            <id>146</id>
+            <name>Plane</name>
+          </mesh>
+        </c>
+        <c Type="PressPlay.FFWD.Components.MeshRenderer">
+          <id>4842</id>
+          <enabled>true</enabled>
+          <materials>
+            <material>
+              <id>402</id>
+              <name>Floor</name>
+              <shader>Diffuse</shader>
+              <renderQueue>2000</renderQueue>
+              <color>FFFFFFFF</color>
+              <mainTexture>
+                <id>388</id>
+                <name>Assets/stone_pavement_texture_02-512x512</name>
+              </mainTexture>
+              <mainTextureOffset>0 0</mainTextureOffset>
+              <mainTextureScale>5 5</mainTextureScale>
+              <wrapRepeat>true</wrapRepeat>
+            </material>
+          </materials>
+        </c>
+      </cs>
+    </go>
+    <go>
+      <id>4848</id>
+      <name>Directional light</name>
+      <layer>0</layer>
+      <tag>Untagged</tag>
+      <cs>
+        <c Type="f:Transform">
+          <id>4850</id>
+          <p>0 3.86035 -2.38731</p>
+          <r>0.40822 -0.23457 0.10938 0.87543</r>
+        </c>
+        <c Type="PressPlay.FFWD.Components.Light">
+          <id>4852</id>
+          <enabled>true</enabled>
+          <type>Directional</type>
+          <color>FFFFFFFF</color>
+          <intensity>0.5</intensity>
+          <range>10</range>
+          <spotAngle>30</spotAngle>
+          <cullingMask>-1</cullingMask>
+        </c>
+      </cs>
+    </go>
+    <go>
+      <id>4854</id>
+      <name>Cube</name>
+      <layer>0</layer>
+      <tag>Untagged</tag>
+      <static>true</static>
+      <cs>
+        <c Type="f:Transform">
+          <id>4856</id>
+          <p>0 0.5 0</p>
+        </c>
+        <c Type="PressPlay.FFWD.Components.MeshFilter">
+          <id>4860</id>
+          <mesh>
+            <id>138</id>
+            <name>Cube</name>
+          </mesh>
+        </c>
+        <c Type="PressPlay.FFWD.Components.BoxCollider">
+          <id>4862</id>
+          <isTrigger>false</isTrigger>
+          <center>0 0 0</center>
+          <size>1 1 1</size>
+        </c>
+        <c Type="PressPlay.FFWD.Components.MeshRenderer">
+          <id>4858</id>
+          <enabled>true</enabled>
+          <materials>
+            <material>
+              <id>366</id>
+              <name>Item blue</name>
+              <shader>Diffuse</shader>
+              <renderQueue>2000</renderQueue>
+              <color>FF4C00FF</color>
+              <mainTexture>
+                <id>418</id>
+                <name>Assets/DSC_5866</name>
+              </mainTexture>
+              <mainTextureOffset>0 0</mainTextureOffset>
+              <mainTextureScale>1 1</mainTextureScale>
+              <wrapRepeat>true</wrapRepeat>
+            </material>
+          </materials>
+        </c>
+      </cs>
+    </go>
+    <go>
+      <id>4864</id>
+      <name>Main Camera</name>
+      <layer>0</layer>
+      <tag>MainCamera</tag>
+      <cs>
+        <c Type="f:Transform">
+          <id>4866</id>
+          <p>-0.11295 2.39331 -3.58757</p>
+          <r>0.28976 0 0 0.9571</r>
+        </c>
+        <c Type="PressPlay.FFWD.Components.Camera">
+          <id>4868</id>
+          <fieldOfView>60</fieldOfView>
+          <nearClipPlane>0.3</nearClipPlane>
+          <farClipPlane>1000</farClipPlane>
+          <orthographicSize>100</orthographicSize>
+          <orthographic>false</orthographic>
+          <depth>-1</depth>
+          <aspect>63.4</aspect>
+          <cullingMask>-1</cullingMask>
+          <backgroundColor>05314D79</backgroundColor>
+          <rect>0 0 1 1</rect>
+          <clearFlags>Skybox</clearFlags>
+        </c>
+      </cs>
+    </go>
+  </Asset>
+</XnaContent>

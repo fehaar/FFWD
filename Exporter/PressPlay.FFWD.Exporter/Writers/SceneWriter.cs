@@ -187,7 +187,7 @@ namespace PressPlay.FFWD.Exporter.Writers
             {
                 object obj = assetsToWrite[key];
                 Type tp = obj.GetType();
-                string path = PreparePath(String.Format("../Assets/{0}.xml", key));
+                string path = PreparePath(String.Format("../{0}.xml", key));
                 //Debug.Log("Write asset to: " + path);
                 XmlWriterSettings settings = new XmlWriterSettings();
                 settings.Indent = true;
