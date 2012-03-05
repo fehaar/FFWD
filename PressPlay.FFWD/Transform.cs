@@ -651,10 +651,9 @@ namespace PressPlay.FFWD
             return Microsoft.Xna.Framework.Vector3.Transform(new Microsoft.Xna.Framework.Vector3(x, y, z), Matrix.Invert(world));
         }
 
-        public void RotateAround(Vector3 vector3, float rotateThisFrame)
+        public void RotateAround(Vector3 vector3, float fAngle)
         {
-            // TODO: Implement this
-            throw new NotImplementedException("Not implemented yet");
+            _localRotation *= (Quaternion)Microsoft.Xna.Framework.Quaternion.CreateFromAxisAngle(vector3, Mathf.Deg2Rad * fAngle);
         }
 
         public void DetachChildren()
