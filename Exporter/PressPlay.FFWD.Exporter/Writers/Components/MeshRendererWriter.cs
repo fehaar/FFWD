@@ -19,8 +19,16 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
             {
                 throw new Exception(GetType() + " cannot export components of type " + component.GetType());
             }
-            writer.WriteElement("enabled", mr.enabled);
-            writer.WriteElement("materials", mr.sharedMaterials);
+            if (!mr.enabled)
+            {
+                writer.WriteElement("enabled", mr.enabled);
+            }
+            if (mr.lightmapIndex > -1)
+            {
+                writer.WriteElement("lightmapIndex", mr.lightmapIndex);
+                writer.WriteElement("lightmapTilingOffset", mr.lightmapTilingOffset);
+            }
+            writer.WriteElement("sharedMaterials", mr.sharedMaterials);
             SkinnedMeshRenderer smr = mr as SkinnedMeshRenderer;
             if (smr != null)
             {

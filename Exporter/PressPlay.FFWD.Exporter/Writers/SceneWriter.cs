@@ -54,6 +54,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                 writer.WriteStartElement("Asset");
                 writer.WriteAttributeString("Type", resolver.DefaultNamespace + "Scene");
                 writer.WriteElementString("hasBeenProcessed", "false");
+                WriteLightmapData();
                 WriteGOs();
                 WritePrefabs();
                 writer.WriteEndElement();
@@ -118,6 +119,29 @@ namespace PressPlay.FFWD.Exporter.Writers
                 Debug.Log("Created directory " + Path.GetDirectoryName(path));
             }
             return path;
+        }
+
+        private void WriteLightmapData()
+        {
+            if (LightmapSettings.lightmaps != null)
+            {
+                writer.WriteStartElement("LightmapSettings");
+                for (int i = 0; i < LightmapSettings.lightmaps.Length; i++)
+                {
+                    writer.WriteStartElement("LightmapData");
+                    if (LightmapSettings.lightmaps[i].lightmapFar != null)
+                    {
+                        WriteElement("lightmapFar", LightmapSettings.lightmaps[i].lightmapFar);
+                    }
+                    if (LightmapSettings.lightmaps[i].lightmapNear != null)
+                    {
+                        WriteElement("lightmapNear", LightmapSettings.lightmaps[i].lightmapNear);
+                    }
+                    writer.WriteEndElement();
+                }
+                WriteElement("lightmapsMode", LightmapSettings.lightmapsMode);
+                writer.WriteEndElement();
+            }
         }
 
         private void WriteGOs()
@@ -241,11 +265,10 @@ namespace PressPlay.FFWD.Exporter.Writers
             {
                 WriteElement("normals", mesh.normals);
             }
-            // NOTE: Do not write these. They are of no use for WP7 games as there is no bump mapping.
-            //if (mesh.tangents.HasElements())
-            //{
-            //    WriteElement("tangents", mesh.tangents);
-            //}
+            if (mesh.tangents.HasElements())
+            {
+                WriteElement("tangents", mesh.tangents);
+            }
             if (mesh.uv.HasElements())
             {
                 WriteElement("uv", TransformUV(mesh.uv));
@@ -545,7 +568,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                 }
                 if (obj is bool[])
                 {
-                    writer.WriteElementString(name, ToString(obj as bool[]));
+                    writer.WriteElementString(name, ToString(obj as bool[], (b) => ToString(b)));
                     return;
                 }
                 if (obj is int)
@@ -557,7 +580,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                 {
                     if (!obj.GetType().GetElementType().IsEnum)
                     {
-                        writer.WriteElementString(name, ToString(obj as int[]));
+                        writer.WriteElementString(name, ToString(obj as int[], (i) => ToString(i)));
                         return;
                     }
                 }
@@ -573,7 +596,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                 }
                 if (obj is Vector2[])
                 {
-                    writer.WriteElementString(name, ToString(obj as Vector2[]));
+                    writer.WriteElementString(name, ToString(obj as Vector2[], (v) => ToString(v)));
                     return;
                 }
                 if (obj is Vector3)
@@ -583,7 +606,17 @@ namespace PressPlay.FFWD.Exporter.Writers
                 }
                 if (obj is Vector3[])
                 {
-                    writer.WriteElementString(name, ToString(obj as Vector3[]));
+                    writer.WriteElementString(name, ToString(obj as Vector3[], (v) => ToString(v)));
+                    return;
+                }
+                if (obj is Vector4)
+                {
+                    writer.WriteElementString(name, ToString((Vector4)obj));
+                    return;
+                }
+                if (obj is Vector4[])
+                {
+                    writer.WriteElementString(name, ToString(obj as Vector4[], (v) => ToString(v)));
                     return;
                 }
                 if (obj is Matrix4x4)
@@ -598,7 +631,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                 }
                 if (obj is Color[])
                 {
-                    writer.WriteElementString(name, ToString(obj as Color[]));
+                    writer.WriteElementString(name, ToString(obj as Color[], (c) => ToString(c)));
                     return;
                 }
                 if (obj is Rect)
@@ -904,56 +937,12 @@ namespace PressPlay.FFWD.Exporter.Writers
         }
 
         #region ToString methods
-        private string ToString(bool[] array)
+        private string ToString<T>(T[] array, Func<T, string> f)
         {
             StringBuilder sb = new StringBuilder();
-            foreach (bool item in array)
+            foreach (T item in array)
             {
-                sb.Append(ToString(item));
-                sb.Append(" ");
-            }
-            return sb.ToString();
-        }
-
-        private string ToString(int[] array)
-        {
-            StringBuilder sb = new StringBuilder();
-            foreach (int item in array)
-            {
-                sb.Append(item);
-                sb.Append(" ");
-            }
-            return sb.ToString();
-        }
-
-        private string ToString(Vector2[] array)
-        {
-            StringBuilder sb = new StringBuilder();
-            foreach (Vector2 item in array)
-            {
-                sb.Append(ToString(item));
-                sb.Append(" ");
-            }
-            return sb.ToString();
-        }
-
-        private string ToString(Vector3[] array)
-        {
-            StringBuilder sb = new StringBuilder();
-            foreach (Vector3 item in array)
-            {
-                sb.Append(ToString(item));
-                sb.Append(" ");
-            }
-            return sb.ToString();
-        }
-
-        private string ToString(Color[] array)
-        {
-            StringBuilder sb = new StringBuilder();
-            foreach (Color item in array)
-            {
-                sb.Append(ToString(item));
+                sb.Append(f(item));
                 sb.Append(" ");
             }
             return sb.ToString();
@@ -978,6 +967,11 @@ namespace PressPlay.FFWD.Exporter.Writers
         private string ToString(Vector3 vector3)
         {
             return vector3.x.ToString("0.#####", CultureInfo.InvariantCulture) + " " + vector3.y.ToString("0.#####", CultureInfo.InvariantCulture) + " " + vector3.z.ToString("0.#####", CultureInfo.InvariantCulture);
+        }
+
+        private string ToString(Vector4 vector4)
+        {
+            return vector4.x.ToString("0.#####", CultureInfo.InvariantCulture) + " " + vector4.y.ToString("0.#####", CultureInfo.InvariantCulture) + " " + vector4.z.ToString("0.#####", CultureInfo.InvariantCulture) + " " + vector4.w.ToString("0.#####", CultureInfo.InvariantCulture);
         }
 
         private string ToString(Rect rect)

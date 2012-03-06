@@ -85,7 +85,7 @@ namespace PressPlay.FFWD.Components
                         out mesh._vertices[i],
                         out mesh._normals[i]);
                 }
-                return cam.BatchRender(mesh, materials, null);
+                return cam.BatchRender(mesh, sharedMaterials, null);
             }
             return 0;
         }

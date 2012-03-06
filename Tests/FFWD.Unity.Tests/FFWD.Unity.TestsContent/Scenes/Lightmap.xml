@@ -2,34 +2,44 @@
 <XnaContent xmlns:f="PressPlay.FFWD" xmlns:c="PressPlay.FFWD.Components">
   <Asset Type="f:Scene">
     <hasBeenProcessed>false</hasBeenProcessed>
+    <!--<LightmapSettings>
+      <LightmapData>
+        <lightmapFar>
+          <id>384</id>
+          <name>Scenes/Lightmap/LightmapFar-0</name>
+        </lightmapFar>
+      </LightmapData>
+      <lightmapsMode>Single</lightmapsMode>
+    </LightmapSettings>-->
     <go>
-      <id>4818</id>
+      <id>4802</id>
       <name>Sphere</name>
       <layer>0</layer>
       <tag>Untagged</tag>
       <static>true</static>
       <cs>
         <c Type="f:Transform">
-          <id>4820</id>
+          <id>4804</id>
           <p>1.27747 0.60953 0.60931</p>
         </c>
         <c Type="PressPlay.FFWD.Components.MeshFilter">
-          <id>4824</id>
+          <id>4808</id>
           <mesh>
             <id>142</id>
             <name>Sphere</name>
           </mesh>
         </c>
         <c Type="PressPlay.FFWD.Components.SphereCollider">
-          <id>4826</id>
+          <id>4810</id>
           <isTrigger>false</isTrigger>
           <center>0 0 0</center>
           <radius>0.5</radius>
         </c>
         <c Type="PressPlay.FFWD.Components.MeshRenderer">
-          <id>4822</id>
-          <enabled>true</enabled>
-          <materials>
+          <id>4806</id>
+          <lightmapIndex>0</lightmapIndex>
+          <lightmapTilingOffset>0.08594 0.17188 0.62515 -0.00074</lightmapTilingOffset>
+          <sharedMaterials>
             <material>
               <id>398</id>
               <name>Item red</name>
@@ -44,30 +54,30 @@
               <mainTextureScale>1 1</mainTextureScale>
               <wrapRepeat>true</wrapRepeat>
             </material>
-          </materials>
+          </sharedMaterials>
         </c>
       </cs>
     </go>
     <go>
-      <id>4828</id>
+      <id>4812</id>
       <name>Cylinder</name>
       <layer>0</layer>
       <tag>Untagged</tag>
       <static>true</static>
       <cs>
         <c Type="f:Transform">
-          <id>4830</id>
+          <id>4814</id>
           <p>1.37486 0.60953 -0.65056</p>
         </c>
         <c Type="PressPlay.FFWD.Components.MeshFilter">
-          <id>4834</id>
+          <id>4818</id>
           <mesh>
             <id>140</id>
             <name>Cylinder</name>
           </mesh>
         </c>
         <c Type="PressPlay.FFWD.Components.CapsuleCollider">
-          <id>4836</id>
+          <id>4820</id>
           <isTrigger>false</isTrigger>
           <center>0 0 0</center>
           <radius>0.5</radius>
@@ -75,9 +85,10 @@
           <direction>1</direction>
         </c>
         <c Type="PressPlay.FFWD.Components.MeshRenderer">
-          <id>4832</id>
-          <enabled>true</enabled>
-          <materials>
+          <id>4816</id>
+          <lightmapIndex>0</lightmapIndex>
+          <lightmapTilingOffset>0.13574 0.27148 0.48915 0.00027</lightmapTilingOffset>
+          <sharedMaterials>
             <material>
               <id>412</id>
               <name>Item</name>
@@ -92,31 +103,32 @@
               <mainTextureScale>1 1</mainTextureScale>
               <wrapRepeat>true</wrapRepeat>
             </material>
-          </materials>
+          </sharedMaterials>
         </c>
       </cs>
     </go>
     <go>
-      <id>4838</id>
+      <id>4822</id>
       <name>Plane</name>
       <layer>0</layer>
       <tag>Untagged</tag>
       <static>true</static>
       <cs>
         <c Type="f:Transform">
-          <id>4840</id>
+          <id>4824</id>
         </c>
         <c Type="PressPlay.FFWD.Components.MeshFilter">
-          <id>4844</id>
+          <id>4828</id>
           <mesh>
             <id>146</id>
             <name>Plane</name>
           </mesh>
         </c>
         <c Type="PressPlay.FFWD.Components.MeshRenderer">
-          <id>4842</id>
-          <enabled>true</enabled>
-          <materials>
+          <id>4826</id>
+          <lightmapIndex>0</lightmapIndex>
+          <lightmapTilingOffset>0.48828 0.97656 0.00049 0.00098</lightmapTilingOffset>
+          <sharedMaterials>
             <material>
               <id>402</id>
               <name>Floor</name>
@@ -131,23 +143,23 @@
               <mainTextureScale>5 5</mainTextureScale>
               <wrapRepeat>true</wrapRepeat>
             </material>
-          </materials>
+          </sharedMaterials>
         </c>
       </cs>
     </go>
     <go>
-      <id>4848</id>
+      <id>4832</id>
       <name>Directional light</name>
       <layer>0</layer>
       <tag>Untagged</tag>
       <cs>
         <c Type="f:Transform">
-          <id>4850</id>
+          <id>4834</id>
           <p>0 3.86035 -2.38731</p>
           <r>0.40822 -0.23457 0.10938 0.87543</r>
         </c>
         <c Type="PressPlay.FFWD.Components.Light">
-          <id>4852</id>
+          <id>4836</id>
           <enabled>true</enabled>
           <type>Directional</type>
           <color>FFFFFFFF</color>
@@ -159,33 +171,34 @@
       </cs>
     </go>
     <go>
-      <id>4854</id>
+      <id>4848</id>
       <name>Cube</name>
       <layer>0</layer>
       <tag>Untagged</tag>
       <static>true</static>
       <cs>
         <c Type="f:Transform">
-          <id>4856</id>
+          <id>4850</id>
           <p>0 0.5 0</p>
         </c>
         <c Type="PressPlay.FFWD.Components.MeshFilter">
-          <id>4860</id>
+          <id>4854</id>
           <mesh>
             <id>138</id>
             <name>Cube</name>
           </mesh>
         </c>
         <c Type="PressPlay.FFWD.Components.BoxCollider">
-          <id>4862</id>
+          <id>4856</id>
           <isTrigger>false</isTrigger>
           <center>0 0 0</center>
           <size>1 1 1</size>
         </c>
         <c Type="PressPlay.FFWD.Components.MeshRenderer">
-          <id>4858</id>
-          <enabled>true</enabled>
-          <materials>
+          <id>4852</id>
+          <lightmapIndex>0</lightmapIndex>
+          <lightmapTilingOffset>0.11914 0.23828 0.48926 0.84181</lightmapTilingOffset>
+          <sharedMaterials>
             <material>
               <id>366</id>
               <name>Item blue</name>
@@ -200,30 +213,30 @@
               <mainTextureScale>1 1</mainTextureScale>
               <wrapRepeat>true</wrapRepeat>
             </material>
-          </materials>
+          </sharedMaterials>
         </c>
       </cs>
     </go>
     <go>
-      <id>4864</id>
+      <id>4858</id>
       <name>Main Camera</name>
       <layer>0</layer>
       <tag>MainCamera</tag>
       <cs>
         <c Type="f:Transform">
-          <id>4866</id>
+          <id>4860</id>
           <p>-0.11295 2.39331 -3.58757</p>
           <r>0.28976 0 0 0.9571</r>
         </c>
         <c Type="PressPlay.FFWD.Components.Camera">
-          <id>4868</id>
+          <id>4862</id>
           <fieldOfView>60</fieldOfView>
           <nearClipPlane>0.3</nearClipPlane>
           <farClipPlane>1000</farClipPlane>
           <orthographicSize>100</orthographicSize>
           <orthographic>false</orthographic>
           <depth>-1</depth>
-          <aspect>63.4</aspect>
+          <aspect>2.32645</aspect>
           <cullingMask>-1</cullingMask>
           <backgroundColor>05314D79</backgroundColor>
           <rect>0 0 1 1</rect>

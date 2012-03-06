@@ -65,7 +65,7 @@ namespace PressPlay.FFWD.Import
                 {
                     continue;
                 }
-                string key = GetMaterialKey(r.materials);
+                string key = GetMaterialKey(r.sharedMaterials);
                 if (!staticRenderers.ContainsKey(key))
                 {
                     GameObject sbGo = new GameObject("Static - " + key);
@@ -79,7 +79,7 @@ namespace PressPlay.FFWD.Import
                         sbr.SetNewId(null);
                     }
                     staticRenderers[key] = sbr;
-                    staticRenderers[key].materials = (Material[])r.materials.Clone();
+                    staticRenderers[key].sharedMaterials = (Material[])r.sharedMaterials.Clone();
                 }
 
                 MeshFilter mf = r.gameObject.GetComponent<MeshFilter>();
@@ -92,7 +92,7 @@ namespace PressPlay.FFWD.Import
                     throw new Exception("The static meshfilter at " + r.gameObject + " does not have a mesh.");
                 }
                 int id = mf.meshToRender.GetInstanceID();
-                Mesh mesh = context.BuildAndLoadAsset<Mesh, Mesh>(new ExternalReference<Mesh>("Assets/" + mf.meshToRender.name + ".xml"), null, null, "XmlImporter");
+                Mesh mesh = context.BuildAndLoadAsset<Mesh, Mesh>(new ExternalReference<Mesh>(mf.meshToRender.name + ".xml"), null, null, "XmlImporter");
                 if (mesh == null)
                 {
                     throw new Exception("The mesh with Id " + id + " was not found in assets. Gotten from " + mf);

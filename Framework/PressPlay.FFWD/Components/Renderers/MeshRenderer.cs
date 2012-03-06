@@ -39,7 +39,7 @@ namespace PressPlay.FFWD.Components
 
             if (filter.CanBatch())
             {
-                return cam.BatchRender(filter.meshToRender, materials, transform);
+                return cam.BatchRender(filter.meshToRender, sharedMaterials, transform);
             }
             return 0;
         }

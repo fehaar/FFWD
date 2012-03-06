@@ -9,64 +9,82 @@ namespace PressPlay.FFWD.Components
         public Renderer()
             :base()
         {
-            enabled = true;
         }
 
         [ContentSerializer(Optional=true)]
         public bool isPartOfStaticBatch = false;
+        [ContentSerializer(Optional = true)]
+        public bool enabled = true;
+        [ContentSerializer(Optional = true)]
+        public int lightmapIndex = -1;
+        [ContentSerializer(Optional = true)]
+        public Vector4 lightmapTilingOffset = Vector4.zero;
 
-        public bool enabled { get; set; }
-
-        [ContentSerializer(CollectionItemName = "material")]
-        public Material[] materials{ get; set; }
+        [ContentSerializer(ElementName = "sharedMaterials", CollectionItemName = "material")]
+        private Material[] _sharedMaterials;
+        [ContentSerializerIgnore]
+        public Material[] sharedMaterials
+        {
+            get
+            {
+                return (_sharedMaterials == null) ? null : (Material[])_sharedMaterials.Clone();
+            }
+            set
+            {
+                _sharedMaterials = value;
+            }
+        }
 
         [ContentSerializerIgnore]
         public Material sharedMaterial
         {
             get 
             {
-                return material;
-            }
-            set
-            {
-                material = value;
-            }
-        }
-
-        [ContentSerializerIgnore]
-        public Material material
-        {
-            get
-            {
-                if (materials == null || materials.Length == 0)
+                if (sharedMaterials == null || sharedMaterials.Length == 0)
                 {
                     return null;
                 }
-                return materials[0];
+                return sharedMaterials[0];
             }
             set
             {
-                if (materials == null)
+                if (sharedMaterials == null || sharedMaterials.Length == 0)
                 {
-                    materials = new Material[1]; 
+                    sharedMaterials = new Material[1];
                 }
-                materials[0] = value;
+                sharedMaterials[0] = value;
                 renderQueue = material.finalRenderQueue;
                 Camera.ChangeRenderQueue(this);
             }
         }
 
-        private Bounds _bounds;
-        public Bounds bounds
+        private Material _material;
+        [ContentSerializerIgnore]
+        public Material material
         {
             get
             {
-                return _bounds;
+                if (_material != null)
+                {
+                    return _material;
+                }
+                else
+                {
+                    return sharedMaterial;
+                }
             }
-            internal set
+            set
             {
-                _bounds = value;
+                _material = value;
+                renderQueue = material.finalRenderQueue;
+                Camera.ChangeRenderQueue(this);
             }
+        }
+
+        public Bounds bounds
+        {
+            get;
+            internal set;
         }
 
         internal float renderQueue = 0f;

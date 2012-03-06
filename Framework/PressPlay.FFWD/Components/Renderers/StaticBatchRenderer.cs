@@ -62,7 +62,7 @@ namespace PressPlay.FFWD.Components
                   quadTreeTiles[uTile].indexBuffer[i] = new IndexBuffer(Application.Instance.GraphicsDevice, IndexElementSize.SixteenBits, quadTreeTiles[uTile].indices[i].Length, BufferUsage.WriteOnly);
                   quadTreeTiles[uTile].indexBuffer[i].SetData(quadTreeTiles[uTile].indices[i]);
                 }
-                if (materials.Length > quadTreeTiles[uTile].indexBuffer.Length)
+                if (sharedMaterials.Length > quadTreeTiles[uTile].indexBuffer.Length)
                 {
                   throw new Exception("The static batch renderer does not have enough submeshes for all materials!");
                 }
@@ -261,10 +261,10 @@ namespace PressPlay.FFWD.Components
           cam.BasicEffect.VertexColorEnabled = false;
           cam.BasicEffect.LightingEnabled = Light.HasLights;
 
-          for (int i = 0; i < materials.Length; i++)
+          for (int i = 0; i < sharedMaterials.Length; i++)
           {
-            materials[i].SetTextureState(cam.BasicEffect);
-            materials[i].SetBlendState(device);
+            sharedMaterials[i].SetTextureState(cam.BasicEffect);
+            sharedMaterials[i].SetBlendState(device);
 
             foreach (EffectPass pass in cam.BasicEffect.CurrentTechnique.Passes)
             {
