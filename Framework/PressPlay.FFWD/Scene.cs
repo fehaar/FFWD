@@ -26,6 +26,8 @@ namespace PressPlay.FFWD
         public List<GameObject> prefabs { get; set; }
         [ContentSerializer(Optional = true, ElementName = "tc")]
         internal List<string> typeCaps = new List<string>();
+        [ContentSerializer(Optional = true)]
+        internal LightmapSettings lightmapSettings;
 
         internal Queue<Component> components;
 

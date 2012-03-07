@@ -72,6 +72,18 @@ namespace PressPlay.FFWD.Exporter
                     else
                     {
                         Color[] texPixels = asset.GetPixels();
+                        if (Path.GetExtension(assetPath) == ".exr")
+                        {
+                            // Post-process lightmap data. We do it like this for WP7 as we have to use the DualTexture effect.
+                            for (int i = 0; i < texPixels.Length; i++)
+                            {
+                                Color color = texPixels[i];
+                                color.r = (8.0f * color.a) * color.r;
+                                color.g = (8.0f * color.a) * color.g;
+                                color.b = (8.0f * color.a) * color.b;
+                                texPixels[i] = color;
+                            }
+                        }
                         Texture2D tex2 = new Texture2D(asset.width, asset.height, TextureFormat.ARGB32, false);
                         tex2.SetPixels(texPixels);
                         File.WriteAllBytes(path, tex2.EncodeToPNG());

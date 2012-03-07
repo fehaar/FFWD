@@ -195,7 +195,6 @@
     <Compile Include="ColorTypeSerializer.cs" />
     <Compile Include="ColorArrayTypeSerializer.cs" />
     <Compile Include="BoneWeightArrayTypeSerializer.cs" />
-    <Compile Include="ExrContentImporter.cs" />
     <Compile Include="Vector4ArrayTypeSerializer.cs" />
     <Compile Include="Vector4TypeSerializer.cs" />
     <Compile Include="Vector2ArrayTypeSerializer.cs" />

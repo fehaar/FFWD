@@ -225,6 +225,8 @@
     <Compile Include="Components\Renderers\CpuSkinningHelpers.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Components\Renderers\LightmapData.cs" />
+    <Compile Include="Components\Renderers\LightmapSettings.cs" />
     <Compile Include="Components\Renderers\LineRenderer.cs" />
     <Compile Include="Components\Renderers\DynamicBatchRenderer.cs" />
     <Compile Include="Components\Renderers\ParticleRenderer.cs" />

@@ -97,9 +97,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Scenes\Lightmap\LightmapFar-0.exr">
+    <Compile Include="Scenes\Lightmap\LightmapFar-0.png">
       <Name>LightmapFar-0</Name>
-      <Importer>ExrContentImporter</Importer>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <ProcessorParameters_TextureFormat>DxtCompressed</ProcessorParameters_TextureFormat>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />

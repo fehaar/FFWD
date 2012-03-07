@@ -54,9 +54,9 @@ namespace PressPlay.FFWD.Exporter.Writers
                 writer.WriteStartElement("Asset");
                 writer.WriteAttributeString("Type", resolver.DefaultNamespace + "Scene");
                 writer.WriteElementString("hasBeenProcessed", "false");
-                WriteLightmapData();
                 WriteGOs();
                 WritePrefabs();
+                WriteLightmapData();
                 writer.WriteEndElement();
                 WriteInlineResources();
                 writer.WriteEndElement();
@@ -125,10 +125,10 @@ namespace PressPlay.FFWD.Exporter.Writers
         {
             if (LightmapSettings.lightmaps != null)
             {
-                writer.WriteStartElement("LightmapSettings");
+                writer.WriteStartElement("lightmapSettings");
                 for (int i = 0; i < LightmapSettings.lightmaps.Length; i++)
                 {
-                    writer.WriteStartElement("LightmapData");
+                    writer.WriteStartElement("lightmapData");
                     if (LightmapSettings.lightmaps[i].lightmapFar != null)
                     {
                         WriteElement("lightmapFar", LightmapSettings.lightmaps[i].lightmapFar);

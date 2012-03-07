@@ -2,15 +2,6 @@
 <XnaContent xmlns:f="PressPlay.FFWD" xmlns:c="PressPlay.FFWD.Components">
   <Asset Type="f:Scene">
     <hasBeenProcessed>false</hasBeenProcessed>
-    <!--<LightmapSettings>
-      <LightmapData>
-        <lightmapFar>
-          <id>384</id>
-          <name>Scenes/Lightmap/LightmapFar-0</name>
-        </lightmapFar>
-      </LightmapData>
-      <lightmapsMode>Single</lightmapsMode>
-    </LightmapSettings>-->
     <go>
       <id>4802</id>
       <name>Sphere</name>
@@ -244,5 +235,14 @@
         </c>
       </cs>
     </go>
+    <lightmapSettings>
+      <lightmapData>
+        <lightmapFar>
+          <id>384</id>
+          <name>Scenes/Lightmap/LightmapFar-0</name>
+        </lightmapFar>
+      </lightmapData>
+      <lightmapsMode>Single</lightmapsMode>
+    </lightmapSettings>
   </Asset>
 </XnaContent>
