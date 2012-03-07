@@ -578,7 +578,17 @@ namespace PressPlay.FFWD.Components
         #region IComparer<IRenderable> Members
         public int Compare(Renderer x, Renderer y)
         {
-            return x.renderQueue.CompareTo(y.renderQueue);
+            int iRet = x.renderQueue.CompareTo(y.renderQueue);
+
+            if((iRet == 0) && (x.material != null) && (x.material.IsTransparent()))
+            {
+              Vector3 vPosRendererX = WorldToViewportPoint(x.bounds.min);
+              Vector3 vPosRendererY = WorldToViewportPoint(y.bounds.min);
+
+              iRet = vPosRendererY.z.CompareTo(vPosRendererX.z);
+            }
+
+            return iRet;
         }
         #endregion
 

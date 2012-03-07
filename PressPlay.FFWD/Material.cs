@@ -62,7 +62,7 @@ namespace PressPlay.FFWD
             {
                 device.BlendState = blendState;
             }
-            if (renderQueue == 3000 || (shader ?? "").StartsWith("Trans"))
+            if (IsTransparent())
             {
                 device.DepthStencilState = DepthStencilState.DepthRead;
             }
@@ -79,6 +79,11 @@ namespace PressPlay.FFWD
             {
                 device.SamplerStates[0] = SamplerState.LinearClamp;
             }
+        }
+
+        internal bool IsTransparent()
+        {
+          return (renderQueue == 3000 || (shader ?? "").StartsWith("Trans"));
         }
 
         internal float finalRenderQueue = float.MinValue;
