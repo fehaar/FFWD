@@ -222,6 +222,7 @@
     <Compile Include="Components\Particle.cs" />
     <Compile Include="Components\ParticleAnimator.cs" />
     <Compile Include="Components\ParticleEmitter.cs" />
+    <Compile Include="Components\Renderers\BasicEffectShader.cs" />
     <Compile Include="Components\Renderers\CpuSkinningHelpers.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -232,6 +233,7 @@
     <Compile Include="Components\Renderers\ParticleRenderer.cs" />
     <Compile Include="Components\Renderers\MeshRenderer.cs" />
     <Compile Include="Components\Renderers\Renderer.cs" />
+    <Compile Include="Components\Renderers\Shader.cs" />
     <Compile Include="Components\Renderers\SkinnedMeshRenderer.cs" />
     <Compile Include="Components\Renderers\StaticBatchRenderer.cs" />
     <Compile Include="DebugSettings.cs" />

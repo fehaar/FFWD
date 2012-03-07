@@ -13,20 +13,20 @@
           <id>4804</id>
           <p>1.27747 0.60953 0.60931</p>
         </c>
-        <c Type="PressPlay.FFWD.Components.MeshFilter">
+        <c Type="c:MeshFilter">
           <id>4808</id>
           <mesh>
             <id>142</id>
             <name>Sphere</name>
           </mesh>
         </c>
-        <c Type="PressPlay.FFWD.Components.SphereCollider">
+        <c Type="c:SphereCollider">
           <id>4810</id>
           <isTrigger>false</isTrigger>
           <center>0 0 0</center>
           <radius>0.5</radius>
         </c>
-        <c Type="PressPlay.FFWD.Components.MeshRenderer">
+        <c Type="c:MeshRenderer">
           <id>4806</id>
           <lightmapIndex>0</lightmapIndex>
           <lightmapTilingOffset>0.08594 0.17188 0.62515 -0.00074</lightmapTilingOffset>
@@ -60,14 +60,14 @@
           <id>4814</id>
           <p>1.37486 0.60953 -0.65056</p>
         </c>
-        <c Type="PressPlay.FFWD.Components.MeshFilter">
+        <c Type="c:MeshFilter">
           <id>4818</id>
           <mesh>
             <id>140</id>
             <name>Cylinder</name>
           </mesh>
         </c>
-        <c Type="PressPlay.FFWD.Components.CapsuleCollider">
+        <c Type="c:CapsuleCollider">
           <id>4820</id>
           <isTrigger>false</isTrigger>
           <center>0 0 0</center>
@@ -75,7 +75,7 @@
           <height>2</height>
           <direction>1</direction>
         </c>
-        <c Type="PressPlay.FFWD.Components.MeshRenderer">
+        <c Type="c:MeshRenderer">
           <id>4816</id>
           <lightmapIndex>0</lightmapIndex>
           <lightmapTilingOffset>0.13574 0.27148 0.48915 0.00027</lightmapTilingOffset>
@@ -108,14 +108,14 @@
         <c Type="f:Transform">
           <id>4824</id>
         </c>
-        <c Type="PressPlay.FFWD.Components.MeshFilter">
+        <c Type="c:MeshFilter">
           <id>4828</id>
           <mesh>
             <id>146</id>
             <name>Plane</name>
           </mesh>
         </c>
-        <c Type="PressPlay.FFWD.Components.MeshRenderer">
+        <c Type="c:MeshRenderer">
           <id>4826</id>
           <lightmapIndex>0</lightmapIndex>
           <lightmapTilingOffset>0.48828 0.97656 0.00049 0.00098</lightmapTilingOffset>
@@ -149,7 +149,7 @@
           <p>0 3.86035 -2.38731</p>
           <r>0.40822 -0.23457 0.10938 0.87543</r>
         </c>
-        <c Type="PressPlay.FFWD.Components.Light">
+        <c Type="c:Light">
           <id>4836</id>
           <enabled>true</enabled>
           <type>Directional</type>
@@ -172,20 +172,20 @@
           <id>4850</id>
           <p>0 0.5 0</p>
         </c>
-        <c Type="PressPlay.FFWD.Components.MeshFilter">
+        <c Type="c:MeshFilter">
           <id>4854</id>
           <mesh>
             <id>138</id>
             <name>Cube</name>
           </mesh>
         </c>
-        <c Type="PressPlay.FFWD.Components.BoxCollider">
+        <c Type="c:BoxCollider">
           <id>4856</id>
           <isTrigger>false</isTrigger>
           <center>0 0 0</center>
           <size>1 1 1</size>
         </c>
-        <c Type="PressPlay.FFWD.Components.MeshRenderer">
+        <c Type="c:MeshRenderer">
           <id>4852</id>
           <lightmapIndex>0</lightmapIndex>
           <lightmapTilingOffset>0.11914 0.23828 0.48926 0.84181</lightmapTilingOffset>
@@ -219,7 +219,7 @@
           <p>-0.11295 2.39331 -3.58757</p>
           <r>0.28976 0 0 0.9571</r>
         </c>
-        <c Type="PressPlay.FFWD.Components.Camera">
+        <c Type="c:Camera">
           <id>4862</id>
           <fieldOfView>60</fieldOfView>
           <nearClipPlane>0.3</nearClipPlane>

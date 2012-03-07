@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using PressPlay.FFWD.Extensions;
 using System.IO;
+using PressPlay.FFWD.Components;
 
 namespace PressPlay.FFWD
 {
@@ -151,8 +152,20 @@ namespace PressPlay.FFWD
             }
         }
 
+        private short[] _triangles;
         [ContentSerializerIgnore]
-        public short[] triangles;
+        public short[] triangles
+        {
+            get
+            {
+                return _triangles;
+            }
+            set
+            {
+                _triangles = value;
+                iBuffer = null;
+            }
+        }
         [ContentSerializer(Optional = true)]
         private short[][] triangleSets;
         [ContentSerializer(Optional = true)]
@@ -164,6 +177,8 @@ namespace PressPlay.FFWD
 
         [ContentSerializer(ElementName="bounds", Optional=true)]
         public Bounds bounds;
+
+        private IndexBuffer iBuffer;
 
         protected override void DoLoadAsset(AssetHelper assetHelper)
         {
@@ -296,6 +311,19 @@ namespace PressPlay.FFWD
         public void RecalculateNormals()
         {
             throw new NotImplementedException();
+        }
+
+        internal IndexBuffer GetIndexBuffer()
+        {
+            if (iBuffer == null)
+	        {
+                if (Camera.Device != null && triangles != null)
+                {
+                    iBuffer = new IndexBuffer(Camera.Device, IndexElementSize.SixteenBits, triangles.Length, BufferUsage.WriteOnly);
+                    iBuffer.SetData(triangles);
+                }
+	        }
+            return iBuffer;
         }
     }
 }

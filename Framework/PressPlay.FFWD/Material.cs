@@ -2,13 +2,14 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using PressPlay.FFWD.Components;
 
 namespace PressPlay.FFWD
 {
     public class Material : Asset
     {
-        [ContentSerializer]
-        internal string shader;
+        [ContentSerializer(ElementName="shader")]
+        internal string shaderName;
         [ContentSerializer]
         public int renderQueue;
         [ContentSerializer(Optional = true)]
@@ -23,6 +24,7 @@ namespace PressPlay.FFWD
         internal bool wrapRepeat;
 
         private static readonly Dictionary<string, int> textureRenderIndexes = new Dictionary<string, int>();
+        internal Shader shader;
 
         public void SetColor(string name, Color color)
         {
@@ -31,17 +33,19 @@ namespace PressPlay.FFWD
 
         protected override void DoLoadAsset(AssetHelper assetHelper)
         {
+            shader = Shader.GetShader(this);
+
             // NOTE: We have hardcoded shader values here that should be configurable in some other way
             blendState = BlendState.Opaque;
-            if (shader == "iPhone/Particles/Additive Culled" || shader == "Particles/Additive")
+            if (shaderName == "iPhone/Particles/Additive Culled" || shaderName == "Particles/Additive")
             {
                 blendState = BlendState.Additive;
             }
-            else if (renderQueue == 3000 || (shader ?? "").StartsWith("Trans") || shader == "Particles/VertexLit Blended" || shader == "Particles/Alpha Blended")
+            else if (renderQueue == 3000 || (shaderName ?? "").StartsWith("Trans") || shaderName == "Particles/VertexLit Blended" || shaderName == "Particles/Alpha Blended")
             {
                 blendState = BlendState.AlphaBlend;
             }
-            if (shader == "Particles/Multiply (Double)")
+            if (shaderName == "Particles/Multiply (Double)")
             {
                 color = new Color(color.r, color.g, color.b, 0.5f);
             }
@@ -62,7 +66,7 @@ namespace PressPlay.FFWD
             {
                 device.BlendState = blendState;
             }
-            if (renderQueue == 3000 || (shader ?? "").StartsWith("Trans"))
+            if (renderQueue == 3000 || (shaderName ?? "").StartsWith("Trans"))
             {
                 device.DepthStencilState = DepthStencilState.DepthRead;
             }
