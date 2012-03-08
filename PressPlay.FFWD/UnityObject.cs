@@ -144,6 +144,10 @@ namespace PressPlay.FFWD
                 //GameObject toClone = original as GameObject;
                 clone = toClone.Clone() as GameObject;
             }
+            else
+            {
+                return original.Clone();
+            }
             // NOTE: It is very important that this is done at the end otherwise we cannot find the correct object to return.
             Dictionary<int, UnityObject> idMap = new Dictionary<int, UnityObject>();
             clone.SetNewId(idMap);
