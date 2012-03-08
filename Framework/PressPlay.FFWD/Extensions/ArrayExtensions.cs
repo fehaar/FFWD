@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Collections;
 
 namespace PressPlay.FFWD.Extensions
 {
@@ -10,6 +11,11 @@ namespace PressPlay.FFWD.Extensions
         public static bool HasElements(this Array array)
         {
             return array != null && array.Length > 0;
+        }
+
+        public static bool HasElements(this IDictionary dict)
+        {
+            return dict != null && dict.Count > 0;
         }
     }
 }

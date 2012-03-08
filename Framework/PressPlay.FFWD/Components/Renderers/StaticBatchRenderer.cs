@@ -19,15 +19,15 @@ namespace PressPlay.FFWD.Components
     {
         public BoundingBox boundingBox;
         public Array vertices;
-        private Type vertexType;
-        //public VertexPositionNormalDualTexture[] lightmappedVertices;
         public short[][] indices;
 
         public VertexBuffer vertexBuffer;
         public IndexBuffer[] indexBuffer;
         public bool visible;
 
-        public bool useLightMap;
+        public int lightmapIndex;
+
+        public bool useLightMap { get { return lightmapIndex > -1; } }
 
         private int vertexIndex;
 
@@ -111,13 +111,16 @@ namespace PressPlay.FFWD.Components
                 indexBuffer[i] = new IndexBuffer(graphicsDevice, IndexElementSize.SixteenBits, indices[i].Length, BufferUsage.WriteOnly);
                 indexBuffer[i].SetData(indices[i]);
             }
+            vertices = null;
+            indices = null;
         }
     }
 
     public class StaticBatchRenderer : Renderer
     {
         internal List<SMeshInfo> tmpMeshes;
-        private Effect eff;
+        private Effect effect;
+        private Microsoft.Xna.Framework.Graphics.Texture2D grey;
         
         [ContentSerializer]
         internal BoundingBox boundingBox;
@@ -136,6 +139,7 @@ namespace PressPlay.FFWD.Components
             base.Awake();
 
             UInt32 uTile = 0;
+            bool hasLightMaps = false;
             for (UInt32 v = 0; v < tilesV; ++v)
             {
                 for (UInt32 u = 0; u < tilesU; ++u)
@@ -143,6 +147,7 @@ namespace PressPlay.FFWD.Components
                     if (quadTreeTiles[uTile].vertices != null &&
                         quadTreeTiles[uTile].indices != null)
                     {
+                        hasLightMaps |= quadTreeTiles[uTile].useLightMap;
                         quadTreeTiles[uTile].InitializeBuffers(Application.Instance.GraphicsDevice);
                         if (sharedMaterials.Length > quadTreeTiles[uTile].indexBuffer.Length)
                         {
@@ -151,6 +156,23 @@ namespace PressPlay.FFWD.Components
                     }
                     ++uTile;
                 }
+            }
+            if (Application.Instance != null)
+            {
+                if (hasLightMaps)
+                {
+                    DualTextureEffect dtEffect = new DualTextureEffect(Application.Instance.GraphicsDevice);
+                    dtEffect.VertexColorEnabled = false;
+                    effect = dtEffect;
+                }
+                else
+                {
+                    BasicEffect bEffect = new BasicEffect(Application.Instance.GraphicsDevice);
+                    bEffect.VertexColorEnabled = false;
+                    effect = bEffect;
+                }
+                grey = new Microsoft.Xna.Framework.Graphics.Texture2D(Application.Instance.GraphicsDevice, 1, 1);
+                grey.SetData(new Microsoft.Xna.Framework.Color[] { new Microsoft.Xna.Framework.Color(128, 128, 128, 255) });
             }
         }
 
@@ -239,7 +261,8 @@ namespace PressPlay.FFWD.Components
 
                 UInt32 uTileIdx = uTileV * tilesU + uTileU;
 
-                quadTreeTiles[uTileIdx].useLightMap = false;// (meshInfo.renderer.lightmapIndex > -1);
+                quadTreeTiles[uTileIdx].lightmapIndex = meshInfo.renderer.lightmapIndex;
+                lightmapIndex = quadTreeTiles[uTileIdx].lightmapIndex;
 
                 int vertexOffset = 0;
                 if (!quadTreeTiles[uTileIdx].InitializeArray(meshInfo.mesh._vertices.Length))
@@ -248,12 +271,19 @@ namespace PressPlay.FFWD.Components
                 }
                 for (int i = 0; i < meshInfo.mesh._vertices.Length; i++)
                 {
+                    Vector2 uv2 = Vector2.zero;
+                    if (quadTreeTiles[uTileIdx].useLightMap)
+                    {
+                        uv2 = new Vector2(
+                            meshInfo.mesh._uv2[i].X * meshInfo.renderer.lightmapTilingOffset.x + meshInfo.renderer.lightmapTilingOffset.z,
+                            1 - ((1 - meshInfo.mesh._uv2[i].Y) * meshInfo.renderer.lightmapTilingOffset.y + meshInfo.renderer.lightmapTilingOffset.w));
+                    }
+
                     quadTreeTiles[uTileIdx].AddVertex(
                         Microsoft.Xna.Framework.Vector3.Transform(meshInfo.mesh._vertices[i], meshInfo.renderer.transform.world),
                         Microsoft.Xna.Framework.Vector3.Normalize(Microsoft.Xna.Framework.Vector3.TransformNormal(meshInfo.mesh._normals[i], meshInfo.renderer.transform.world)),
                         meshInfo.mesh._uv[i],
-                        Vector2.zero
-                        );
+                        uv2);
                 }
                 if (quadTreeTiles[uTileIdx].indices == null)
                 {
@@ -303,16 +333,31 @@ namespace PressPlay.FFWD.Components
 #endif
             }
 
-            cam.BasicEffect.World = Matrix.Identity;
-            cam.BasicEffect.VertexColorEnabled = false;
-            cam.BasicEffect.LightingEnabled = Light.HasLights;
+            (effect as IEffectMatrices).World = Matrix.Identity;
+            (effect as IEffectMatrices).View = cam.view;
+            (effect as IEffectMatrices).Projection = cam.projectionMatrix;
+
+            if (effect is IEffectLights)
+            {
+                (effect as IEffectLights).LightingEnabled = Light.HasLights;
+            }
 
             for (int i = 0; i < sharedMaterials.Length; i++)
             {
-                sharedMaterials[i].SetTextureState(cam.BasicEffect);
+                if (effect is DualTextureEffect)
+                {
+                    (effect as DualTextureEffect).DiffuseColor = sharedMaterials[i].color;
+                    (effect as DualTextureEffect).Alpha = sharedMaterials[i].color.a;
+                    (effect as DualTextureEffect).Texture = sharedMaterials[i].mainTexture; // grey;
+                    (effect as DualTextureEffect).Texture2 = LightmapSettings.lightmaps[lightmapIndex].lightmapFar; // grey;
+                }
+                else
+                {
+                    sharedMaterials[i].SetTextureState(effect as BasicEffect);
+                }
                 sharedMaterials[i].SetBlendState(device);
 
-                foreach (EffectPass pass in cam.BasicEffect.CurrentTechnique.Passes)
+                foreach (EffectPass pass in effect.CurrentTechnique.Passes)
                 {
                     pass.Apply();
 

@@ -81,6 +81,7 @@ namespace PressPlay.FFWD.Exporter
                                 color.r = (8.0f * color.a) * color.r;
                                 color.g = (8.0f * color.a) * color.g;
                                 color.b = (8.0f * color.a) * color.b;
+                                color.a = 0.5f;
                                 texPixels[i] = color;
                             }
                         }

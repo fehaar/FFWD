@@ -3,6 +3,54 @@
   <Asset Type="f:Scene">
     <hasBeenProcessed>false</hasBeenProcessed>
     <go>
+      <id>-61164</id>
+      <name>Cube</name>
+      <layer>0</layer>
+      <tag>Untagged</tag>
+      <static>true</static>
+      <cs>
+        <c Type="f:Transform">
+          <id>-61166</id>
+          <p>-0.73991 0.5 -1.85552</p>
+          <r>0 0.40286 0 0.91526</r>
+        </c>
+        <c Type="c:MeshFilter">
+          <id>-61170</id>
+          <mesh>
+            <id>138</id>
+            <name>Cube</name>
+          </mesh>
+        </c>
+        <c Type="c:BoxCollider">
+          <id>-61172</id>
+          <isTrigger>false</isTrigger>
+          <center>0 0 0</center>
+          <size>1 1 1</size>
+        </c>
+        <c Type="c:MeshRenderer">
+          <id>-61168</id>
+          <lightmapIndex>0</lightmapIndex>
+          <lightmapTilingOffset>0.11914 0.23828 0.48926 0.84181</lightmapTilingOffset>
+          <sharedMaterials>
+            <material>
+              <id>366</id>
+              <name>Item blue</name>
+              <shader>Diffuse</shader>
+              <renderQueue>2000</renderQueue>
+              <color>FF4C00FF</color>
+              <mainTexture>
+                <id>418</id>
+                <name>Assets/DSC_5866</name>
+              </mainTexture>
+              <mainTextureOffset>0 0</mainTextureOffset>
+              <mainTextureScale>1 1</mainTextureScale>
+              <wrapRepeat>true</wrapRepeat>
+            </material>
+          </sharedMaterials>
+        </c>
+      </cs>
+    </go>
+    <go>
       <id>4802</id>
       <name>Sphere</name>
       <layer>0</layer>
@@ -188,7 +236,7 @@
         <c Type="c:MeshRenderer">
           <id>4852</id>
           <lightmapIndex>0</lightmapIndex>
-          <lightmapTilingOffset>0.11914 0.23828 0.48926 0.84181</lightmapTilingOffset>
+          <lightmapTilingOffset>0.11914 0.23828 0.60938 0.84181</lightmapTilingOffset>
           <sharedMaterials>
             <material>
               <id>366</id>
@@ -227,7 +275,7 @@
           <orthographicSize>100</orthographicSize>
           <orthographic>false</orthographic>
           <depth>-1</depth>
-          <aspect>2.32645</aspect>
+          <aspect>2.30996</aspect>
           <cullingMask>-1</cullingMask>
           <backgroundColor>05314D79</backgroundColor>
           <rect>0 0 1 1</rect>

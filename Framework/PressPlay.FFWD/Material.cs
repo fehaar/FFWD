@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using PressPlay.FFWD.Components;
+using PressPlay.FFWD.Extensions;
 
 namespace PressPlay.FFWD
 {
@@ -24,11 +25,38 @@ namespace PressPlay.FFWD
         internal bool wrapRepeat;
 
         private static readonly Dictionary<string, int> textureRenderIndexes = new Dictionary<string, int>();
+        private Dictionary<string, Texture> textures;
         internal Shader shader;
 
         public void SetColor(string name, Color color)
         {
             this.color = color;
+        }
+
+        public Texture GetTexture(string propertyName)
+        {
+            if (propertyName == "_MainTex")
+            {
+                return mainTexture;
+            }
+            if (textures.HasElements() && textures.ContainsKey(propertyName))
+            {
+                return textures[propertyName];
+            }
+            return null;
+        }
+
+        public void SetTexture(string propertyName, Texture texture)
+        {
+            if (propertyName == "_MainTex")
+            {
+                mainTexture = (Texture2D)texture;
+            }
+            if (textures == null)
+            {
+                textures = new Dictionary<string, Texture>(1);
+            }
+            textures[propertyName] = texture;
         }
 
         protected override void DoLoadAsset(AssetHelper assetHelper)

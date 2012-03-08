@@ -448,6 +448,13 @@ namespace PressPlay.FFWD
                 System.Diagnostics.Debug.Assert(scene.hasBeenProcessed, String.Format("The scene {0} is not being processed by the SceneProcessor. Please fix this!", sceneToLoad));
                 typeCaps.Add(scene.typeCaps);
                 //tempAssets.AddRange(scene.assets);
+
+                LightmapSettings.lightmaps = scene.lightmapSettings.lightmapData;
+                LightmapSettings.lightmapsMode = scene.lightmapSettings.lightmapMode;
+            }
+            else
+            {
+                LightmapSettings.lightmaps = null;
             }
             sceneToLoad = "";
             totalNumberOfAssetsToLoad = sceneAssets.Count;
