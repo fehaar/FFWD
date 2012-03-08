@@ -18,8 +18,9 @@ namespace PressPlay.FFWD.Components
     internal struct SQuadTreeTile
     {
         public BoundingBox boundingBox;
-        public VertexPositionNormalTexture[] vertices;
-        public VertexPositionNormalDualTexture[] lightmappedVertices;
+        public Array vertices;
+        private Type vertexType;
+        //public VertexPositionNormalDualTexture[] lightmappedVertices;
         public short[][] indices;
 
         public VertexBuffer vertexBuffer;
@@ -38,26 +39,26 @@ namespace PressPlay.FFWD.Components
             }
             if (useLightMap)
             {
-                MakeRoomInArray(ref lightmappedVertices, size);
+                MakeRoomInArray<VertexPositionNormalDualTexture>(size);
             }
             else
             {
-                MakeRoomInArray(ref vertices, size);
+                MakeRoomInArray<VertexPositionNormalTexture>(size);
             }
             return true;
         }
 
-        private void MakeRoomInArray<T>(ref T[] arr, int size)
+        private void MakeRoomInArray<T>(int size)
         {
-            if (arr == null)
+            if (vertices == null)
             {
-                arr = new T[size];
+                vertices = new T[size];
             }
             else
             {
-                T[] oldVerts = arr;
-                arr = new T[lightmappedVertices.Length + size];
-                oldVerts.CopyTo(arr, 0);
+                Array oldVerts = vertices;
+                vertices = new T[oldVerts.Length + size];
+                oldVerts.CopyTo(vertices, 0);
             }
         }
 
@@ -65,9 +66,10 @@ namespace PressPlay.FFWD.Components
         {
             boundingBox.Min = Vector3.Min(boundingBox.Min, position);
             boundingBox.Max = Vector3.Max(boundingBox.Max, position);
+            object vert;
             if (useLightMap)
             {
-                lightmappedVertices[vertexIndex++] = new VertexPositionNormalDualTexture()
+                vert = new VertexPositionNormalDualTexture()
                 {
                     Position = position,
                     Normal = normal,
@@ -77,12 +79,37 @@ namespace PressPlay.FFWD.Components
             }
             else
             {
-                vertices[vertexIndex++] = new VertexPositionNormalTexture()
+                vert = new VertexPositionNormalTexture()
                 {
                     Position = position,
                     Normal = normal,
                     TextureCoordinate = tex0
                 };
+            }
+            vertices.SetValue(vert, vertexIndex++);
+        }
+
+        internal void InitializeBuffers(GraphicsDevice graphicsDevice)
+        {
+            if (useLightMap)
+            {
+                InitializeBuffers<VertexPositionNormalDualTexture>(graphicsDevice);
+            }
+            else
+            {
+                InitializeBuffers<VertexPositionNormalTexture>(graphicsDevice);
+            }
+        }
+
+        private void InitializeBuffers<T>(GraphicsDevice graphicsDevice) where T : struct
+        {
+            vertexBuffer = new VertexBuffer(graphicsDevice, typeof(T), vertices.Length, BufferUsage.WriteOnly);
+            vertexBuffer.SetData<T>(vertices.Cast<T>().ToArray());
+            indexBuffer = new IndexBuffer[indices.Length];
+            for (int i = 0; i < indices.Length; i++)
+            {
+                indexBuffer[i] = new IndexBuffer(graphicsDevice, IndexElementSize.SixteenBits, indices[i].Length, BufferUsage.WriteOnly);
+                indexBuffer[i].SetData(indices[i]);
             }
         }
     }
@@ -90,7 +117,8 @@ namespace PressPlay.FFWD.Components
     public class StaticBatchRenderer : Renderer
     {
         internal List<SMeshInfo> tmpMeshes;
-
+        private Effect eff;
+        
         [ContentSerializer]
         internal BoundingBox boundingBox;
 
@@ -115,14 +143,7 @@ namespace PressPlay.FFWD.Components
                     if (quadTreeTiles[uTile].vertices != null &&
                         quadTreeTiles[uTile].indices != null)
                     {
-                        quadTreeTiles[uTile].vertexBuffer = new VertexBuffer(Application.Instance.GraphicsDevice, quadTreeTiles[uTile].vertices.GetType().GetElementType(), quadTreeTiles[uTile].vertices.Length, BufferUsage.WriteOnly);
-                        quadTreeTiles[uTile].vertexBuffer.SetData(quadTreeTiles[uTile].vertices);
-                        quadTreeTiles[uTile].indexBuffer = new IndexBuffer[quadTreeTiles[uTile].indices.Length];
-                        for (int i = 0; i < quadTreeTiles[uTile].indices.Length; i++)
-                        {
-                            quadTreeTiles[uTile].indexBuffer[i] = new IndexBuffer(Application.Instance.GraphicsDevice, IndexElementSize.SixteenBits, quadTreeTiles[uTile].indices[i].Length, BufferUsage.WriteOnly);
-                            quadTreeTiles[uTile].indexBuffer[i].SetData(quadTreeTiles[uTile].indices[i]);
-                        }
+                        quadTreeTiles[uTile].InitializeBuffers(Application.Instance.GraphicsDevice);
                         if (sharedMaterials.Length > quadTreeTiles[uTile].indexBuffer.Length)
                         {
                             throw new Exception("The static batch renderer does not have enough submeshes for all materials!");
@@ -218,7 +239,7 @@ namespace PressPlay.FFWD.Components
 
                 UInt32 uTileIdx = uTileV * tilesU + uTileU;
 
-                quadTreeTiles[uTileIdx].useLightMap = false; //(meshInfo.renderer.lightmapIndex > -1);
+                quadTreeTiles[uTileIdx].useLightMap = false;// (meshInfo.renderer.lightmapIndex > -1);
 
                 int vertexOffset = 0;
                 if (!quadTreeTiles[uTileIdx].InitializeArray(meshInfo.mesh._vertices.Length))
