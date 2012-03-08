@@ -106,7 +106,7 @@ namespace PressPlay.FFWD.Import
 
             foreach (KeyValuePair<string, StaticBatchRenderer> sbr in staticRenderers)
             {
-              sbr.Value.PrepareQuadTree();
+                sbr.Value.PrepareQuadTree(scene.lightmapSettings != null);
             }
 
             scene.gameObjects.AddRange(staticRenderers.Values.Select(sbr => sbr.gameObject));

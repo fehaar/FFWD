@@ -123,7 +123,7 @@ namespace PressPlay.FFWD.Exporter.Writers
 
         private void WriteLightmapData()
         {
-            if (LightmapSettings.lightmaps != null)
+            if (LightmapSettings.lightmaps.HasElements() && (LightmapSettings.lightmaps[0].lightmapFar != null || LightmapSettings.lightmaps[0].lightmapNear != null))
             {
                 writer.WriteStartElement("lightmapSettings");
                 for (int i = 0; i < LightmapSettings.lightmaps.Length; i++)
@@ -488,6 +488,11 @@ namespace PressPlay.FFWD.Exporter.Writers
             writer.WriteElementString("name", assetName);
             writer.WriteEndElement();
 
+            if (assetName.Contains("StandarPlane"))
+            {
+                Debug.Log(assetName + ": " + mesh.GetInstanceID() + ". uv2 " + mesh.uv2.HasElements());
+            }
+
             if (!assetsToWrite.ContainsKey(assetName))
             {
                 assetsToWrite[assetName] = mesh;
@@ -586,7 +591,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                 }
                 if (obj is List<int>)
                 {
-                    writer.WriteElementString(name, ToString((obj as List<int>).ToArray()));
+                    writer.WriteElementString(name, ToString((obj as List<int>).ToArray(), (i) => ToString(i)));
                     return;
                 }
                 if (obj is Guid)

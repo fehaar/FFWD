@@ -12,6 +12,8 @@ namespace PressPlay.FFWD.Components
     public abstract class Collider : Component
     {
         #region ContentProperties
+        [ContentSerializer(Optional = true)]
+        public bool enabled;
         public bool isTrigger;
         [ContentSerializer(Optional = true)]
         public string material;

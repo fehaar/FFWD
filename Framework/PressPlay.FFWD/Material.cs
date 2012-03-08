@@ -115,7 +115,7 @@ namespace PressPlay.FFWD
 
         internal bool IsTransparent()
         {
-          return (renderQueue == 3000 || (shader ?? "").StartsWith("Trans"));
+          return (renderQueue == 3000 || (shaderName ?? "").StartsWith("Trans"));
         }
 
         internal float finalRenderQueue = float.MinValue;

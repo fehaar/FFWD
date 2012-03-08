@@ -121,10 +121,12 @@ namespace PressPlay.FFWD.Components
                 return 0;
             }
 
-            if (vBuffer != null)
+            // NOTE: I don't want to look at this now... Use the old rendering method.
+            if (false /*vBuffer != null */)
 	        {
                 device.SetVertexBuffer(vBuffer);
                 IndexBuffer iBuffer = filter.mesh.GetIndexBuffer();
+                device.Indices = iBuffer;
                 if (material != null)
                 {
                     Render(device, cam, material, vBuffer.VertexCount, iBuffer.IndexCount / 3);

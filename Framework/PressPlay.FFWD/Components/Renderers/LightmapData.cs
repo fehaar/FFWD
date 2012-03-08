@@ -8,6 +8,7 @@ namespace PressPlay.FFWD.Components
 {
     internal class LightmapData
     {
+        [ContentSerializer(Optional = true)]
         public Texture2D lightmapFar;
         [ContentSerializer(Optional = true)]
         public Texture2D lightmapNear;

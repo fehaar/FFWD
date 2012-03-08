@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
+using PressPlay.FFWD.Extensions;
 
 namespace PressPlay.FFWD.Components
 {
@@ -214,7 +215,7 @@ namespace PressPlay.FFWD.Components
             return false;
         }
 
-        internal bool PrepareQuadTree()
+        internal bool PrepareQuadTree(bool sceneHasLightmaps)
         {
             // initialize quad tree
             float tileSize = 50.0f;
@@ -261,7 +262,14 @@ namespace PressPlay.FFWD.Components
 
                 UInt32 uTileIdx = uTileV * tilesU + uTileU;
 
-                quadTreeTiles[uTileIdx].lightmapIndex = meshInfo.renderer.lightmapIndex;
+                if (sceneHasLightmaps)
+                {
+                    quadTreeTiles[uTileIdx].lightmapIndex = meshInfo.renderer.lightmapIndex;
+                }
+                else
+                {
+                    quadTreeTiles[uTileIdx].lightmapIndex = -1;
+                }
                 lightmapIndex = quadTreeTiles[uTileIdx].lightmapIndex;
 
                 int vertexOffset = quadTreeTiles[uTileIdx].vertexIndex;
@@ -275,12 +283,12 @@ namespace PressPlay.FFWD.Components
                             meshInfo.mesh._uv[i].X * meshInfo.renderer.material.mainTextureScale.x + meshInfo.renderer.material.mainTextureOffset.x,
                             1 - ((1 - meshInfo.mesh._uv[i].Y) * meshInfo.renderer.material.mainTextureScale.y + meshInfo.renderer.material.mainTextureOffset.y));
 
-                    Vector2 uv2 = Vector2.zero;
+                    Vector2 uv2 = (meshInfo.mesh._uv2.HasElements()) ? meshInfo.mesh._uv2[i] : meshInfo.mesh._uv[i];
                     if (quadTreeTiles[uTileIdx].useLightMap)
                     {
                         uv2 = new Vector2(
-                            meshInfo.mesh._uv2[i].X * meshInfo.renderer.lightmapTilingOffset.x + meshInfo.renderer.lightmapTilingOffset.z,
-                            1 - ((1 - meshInfo.mesh._uv2[i].Y) * meshInfo.renderer.lightmapTilingOffset.y + meshInfo.renderer.lightmapTilingOffset.w));
+                            uv2.x * meshInfo.renderer.lightmapTilingOffset.x + meshInfo.renderer.lightmapTilingOffset.z,
+                            1 - ((1 - uv2.y) * meshInfo.renderer.lightmapTilingOffset.y + meshInfo.renderer.lightmapTilingOffset.w));
                     }
 
                     quadTreeTiles[uTileIdx].AddVertex(

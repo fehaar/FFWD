@@ -21,7 +21,7 @@ namespace PressPlay.FFWD.Components
         public Vector4 lightmapTilingOffset = Vector4.zero;
 
         [ContentSerializer(ElementName = "sharedMaterials", CollectionItemName = "material")]
-        private Material[] _sharedMaterials;
+        protected Material[] _sharedMaterials;
         [ContentSerializerIgnore]
         public Material[] sharedMaterials
         {
@@ -53,8 +53,11 @@ namespace PressPlay.FFWD.Components
                     sharedMaterials = new Material[1];
                 }
                 sharedMaterials[0] = value;
-                renderQueue = material.finalRenderQueue;
-                Camera.ChangeRenderQueue(this);
+                if (value != null)
+                {
+                    renderQueue = value.finalRenderQueue;
+                    Camera.ChangeRenderQueue(this);
+                }
             }
         }
 
@@ -78,6 +81,20 @@ namespace PressPlay.FFWD.Components
                 _material = value;
                 renderQueue = material.finalRenderQueue;
                 Camera.ChangeRenderQueue(this);
+            }
+        }
+
+        protected Material[] _materials;
+        [ContentSerializerIgnore]
+        public Material[] materials
+        {
+            get
+            {
+                return (_materials == null) ? sharedMaterials : (Material[])_materials.Clone();
+            }
+            set
+            {
+                _materials = value;
             }
         }
 

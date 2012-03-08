@@ -25,7 +25,7 @@ namespace PressPlay.FFWD.Exporter.Writers.Components.Extensions
             Mesh mesh = new Mesh();
             mesh.CombineMeshes(combine);
             MeshRenderer mr = script.GetComponentInChildren<MeshRenderer>();
-            writer.WriteElement("materials", mr.sharedMaterials);
+            writer.WriteElement("sharedMaterials", mr.sharedMaterials);
             writer.WriteElement("triangles", mesh.triangles);
             writer.WriteElement("vertices", mesh.vertices);
             //writer.WriteElement("normals", mesh.normals);
