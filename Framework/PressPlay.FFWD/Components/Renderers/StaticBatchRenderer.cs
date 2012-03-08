@@ -271,6 +271,10 @@ namespace PressPlay.FFWD.Components
                 }
                 for (int i = 0; i < meshInfo.mesh._vertices.Length; i++)
                 {
+                    Vector2 uv1 = new Vector2(
+                            meshInfo.mesh._uv[i].X * meshInfo.renderer.material.mainTextureScale.x + meshInfo.renderer.material.mainTextureOffset.x,
+                            1 - ((1 - meshInfo.mesh._uv[i].Y) * meshInfo.renderer.material.mainTextureScale.y + meshInfo.renderer.material.mainTextureOffset.y));
+
                     Vector2 uv2 = Vector2.zero;
                     if (quadTreeTiles[uTileIdx].useLightMap)
                     {
@@ -282,7 +286,7 @@ namespace PressPlay.FFWD.Components
                     quadTreeTiles[uTileIdx].AddVertex(
                         Microsoft.Xna.Framework.Vector3.Transform(meshInfo.mesh._vertices[i], meshInfo.renderer.transform.world),
                         Microsoft.Xna.Framework.Vector3.Normalize(Microsoft.Xna.Framework.Vector3.TransformNormal(meshInfo.mesh._normals[i], meshInfo.renderer.transform.world)),
-                        meshInfo.mesh._uv[i],
+                        uv1,
                         uv2);
                 }
                 if (quadTreeTiles[uTileIdx].indices == null)

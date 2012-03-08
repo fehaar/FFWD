@@ -58,6 +58,7 @@
       <Name>Lightmap</Name>
       <Importer>XmlImporter</Importer>
       <Processor>SceneProcessor</Processor>
+      <SubType>Designer</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
