@@ -139,12 +139,13 @@ namespace PressPlay.FFWD.Components
             {
                 float colorScale = 1 - (particle.Energy / particle.StartingEnergy);
                 float startIndex = colorScale * 4;
-                if (startIndex == 4)
+                int iStartIndex = (int)Mathf.Floor(startIndex);
+                if (iStartIndex == 4)
                 {
-                    startIndex = 3;
+                    iStartIndex = 3;
                 }
-                colorScale = startIndex - (int)startIndex;
-                Microsoft.Xna.Framework.Color nonPremul = Microsoft.Xna.Framework.Color.Lerp(_colorAnimation[(int)startIndex], _colorAnimation[(int)startIndex + 1], colorScale);
+                colorScale = startIndex - iStartIndex;
+                Microsoft.Xna.Framework.Color nonPremul = Microsoft.Xna.Framework.Color.Lerp(_colorAnimation[iStartIndex], _colorAnimation[iStartIndex + 1], colorScale);
                 particle.Color = Microsoft.Xna.Framework.Color.FromNonPremultiplied(nonPremul.R, nonPremul.G, nonPremul.B, nonPremul.A);
             }
             else

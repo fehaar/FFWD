@@ -1043,5 +1043,10 @@ namespace PressPlay.FFWD
                 lifecycleTracker.TrackEvent(obj, evt);
             }
         }
+
+        public static void OpenURL(string url)
+        {
+            // TODO: Open an external browser with this URL
+        }
     }
 }

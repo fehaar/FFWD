@@ -8,6 +8,7 @@ namespace PressPlay.FFWD
     public class Gizmos
     {
         public static Color color;
+        public static Matrix4x4 matrix;
 
         public static void DrawLine(Vector3 from, Vector3 to)
         { }

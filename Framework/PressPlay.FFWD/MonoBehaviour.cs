@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace PressPlay.FFWD.Components
 {
@@ -83,6 +84,59 @@ namespace PressPlay.FFWD.Components
         internal override sealed void FixReferences(Dictionary<int, UnityObject> idMap)
         {
             base.FixReferences(idMap);
+        }
+
+        private static Dictionary<Type, List<FieldInfo>> cloneMemberCache = new Dictionary<Type, List<FieldInfo>>();
+        internal override UnityObject Clone()
+        {
+            UnityObject obj = Clone(GetInstanceID());
+
+            Type tp = GetType();
+            List<FieldInfo> fields;
+            if (cloneMemberCache.ContainsKey(tp))
+            {
+                fields = cloneMemberCache[tp];
+            }
+            else
+            {
+                fields = new List<FieldInfo>(tp.GetFields(BindingFlags.Public | BindingFlags.Instance));
+                for (int i = fields.Count - 1; i >= 0; i--)
+                {
+                    FieldInfo f = fields[i];
+                    bool remove = false;
+                    if (f.FieldType.IsClass && !typeof(UnityObject).IsAssignableFrom(f.FieldType))
+                    {
+                        remove = true;
+                    }
+                    if (f.FieldType == typeof(string))
+                    {
+                        remove = false;
+                    }
+                    if (f.FieldType.HasElementType && f.FieldType.GetElementType().IsSubclassOf(typeof(UnityObject)))
+                    {
+                        remove = false;
+                    }
+                    if (f.FieldType.IsGenericType)
+                    {
+                        Type[] gs = f.FieldType.GetGenericArguments();
+                        if (gs.Length == 1 && typeof(UnityObject).IsAssignableFrom(gs[0]))
+                        {
+                            remove = false;
+                        }
+                    }
+                    if (remove)
+                    {
+                        fields.RemoveAt(i);
+                    }
+                }
+                cloneMemberCache.Add(tp, fields);
+            }
+            for (int i = 0; i < fields.Count; i++)
+            {
+                FieldInfo f = fields[i];
+                f.SetValue(obj, f.GetValue(this));
+            }
+            return obj;
         }
 
         protected override void Destroy()

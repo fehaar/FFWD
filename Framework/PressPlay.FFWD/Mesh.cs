@@ -308,6 +308,11 @@ namespace PressPlay.FFWD
             get { return _vertices.Length; }
         }
 
+        public void RecalculateNormals()
+        {
+            throw new NotImplementedException();
+        }
+
         internal IndexBuffer GetIndexBuffer()
         {
             if (iBuffer == null)

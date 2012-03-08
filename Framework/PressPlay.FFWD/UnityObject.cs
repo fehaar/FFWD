@@ -181,6 +181,13 @@ namespace PressPlay.FFWD
             return obj;
         }
 
+        internal virtual UnityObject Clone(int id)
+        {
+            UnityObject obj = (UnityObject)Activator.CreateInstance(GetType());
+            obj._id = id;
+            return obj;
+        }
+
         public static T[] FindObjectsOfType<T>() where T : UnityObject
         {
             return Application.FindObjectsOfType<T>();
