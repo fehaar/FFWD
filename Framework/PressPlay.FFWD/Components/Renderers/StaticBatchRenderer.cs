@@ -29,7 +29,7 @@ namespace PressPlay.FFWD.Components
 
         public bool useLightMap { get { return lightmapIndex > -1; } }
 
-        private int vertexIndex;
+        public int vertexIndex;
 
         public bool InitializeArray(int size)
         {
@@ -264,7 +264,7 @@ namespace PressPlay.FFWD.Components
                 quadTreeTiles[uTileIdx].lightmapIndex = meshInfo.renderer.lightmapIndex;
                 lightmapIndex = quadTreeTiles[uTileIdx].lightmapIndex;
 
-                int vertexOffset = 0;
+                int vertexOffset = quadTreeTiles[uTileIdx].vertexIndex;
                 if (!quadTreeTiles[uTileIdx].InitializeArray(meshInfo.mesh._vertices.Length))
                 {
                     return false;
