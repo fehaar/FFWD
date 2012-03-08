@@ -94,7 +94,7 @@ namespace PipelineDebug
         ///       Example:
         ///               private const string SingleItem = @"dude.fbx";
         /// </summary>
-        private const string SingleItem = @"Scenes\Lightmap\LightmapFar-0.exr";
+        private const string SingleItem = @"Scenes\Lightmap.xml";
 
         /// <summary>
         /// TODO: Set the XnaProfile to HiDef or Reach, depending on your target graphics profile.

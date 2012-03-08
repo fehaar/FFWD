@@ -109,6 +109,7 @@
     <Compile Include="Components\Renderers\Shader.cs" />
     <Compile Include="Components\Renderers\SkinnedMeshRenderer.cs" />
     <Compile Include="Components\Renderers\StaticBatchRenderer.cs" />
+    <Compile Include="Components\Renderers\VertexPositionNormalDualTexture.cs" />
     <Compile Include="DebugCamera.cs" />
     <Compile Include="DebugSettings.cs" />
     <Compile Include="Extensions\ArrayExtensions.cs" />

@@ -97,7 +97,7 @@ namespace PressPlay.FFWD.Import
                 {
                     throw new Exception("The mesh with Id " + id + " was not found in assets. Gotten from " + mf);
                 }
-                if (staticRenderers[key].AddMesh(mesh, r.transform.world))
+                if (staticRenderers[key].AddMesh(mesh, r))
                 {
                     r.isPartOfStaticBatch = true;
                     mf.mesh = null;

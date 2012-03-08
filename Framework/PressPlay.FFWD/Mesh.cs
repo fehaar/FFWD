@@ -24,7 +24,7 @@ namespace PressPlay.FFWD
                 {
                     return null;
                 }
-                // NOTE: We could cache this if we use it too much
+                // NOTE: We could cache this if we use it too much, but the renderer is always using the XNA verts
                 Vector3[] v = new Vector3[_vertices.Length];
                 for (int i = 0; i < _vertices.Length; i++)
                 {
