@@ -1,0 +1,14 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\GameObjects\CloningAGameObject.cs">
+    <Files>
+      <File FileName="Assets\Scripts\GameObjects\CloningAGameObject.cs" Line="42" Column="29" />
+      <File FileName="Assets\Scripts\GameObjects\AGameObjectCanBeConvertedToBool.cs" Line="19" Column="1" />
+      <File FileName="Assets\Scripts\GameObjects\CloningHelper.cs" Line="15" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
