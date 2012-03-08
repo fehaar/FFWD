@@ -178,8 +178,8 @@
                 <id>388</id>
                 <name>Assets/stone_pavement_texture_02-512x512</name>
               </mainTexture>
-              <mainTextureOffset>0 0</mainTextureOffset>
-              <mainTextureScale>5 5</mainTextureScale>
+              <mainTextureOffset>0.5 0</mainTextureOffset>
+              <mainTextureScale>5 4</mainTextureScale>
               <wrapRepeat>true</wrapRepeat>
             </material>
           </sharedMaterials>
