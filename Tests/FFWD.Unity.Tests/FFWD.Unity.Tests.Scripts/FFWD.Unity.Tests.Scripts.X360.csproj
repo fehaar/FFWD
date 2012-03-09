@@ -62,6 +62,12 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Framework\PressPlay.FFWD\PressPlay.FFWD.X360.csproj">
+      <Project>{1034C53A-128D-4F83-BAC0-706151EAEC94}</Project>
+      <Name>PressPlay.FFWD.X360</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <!--

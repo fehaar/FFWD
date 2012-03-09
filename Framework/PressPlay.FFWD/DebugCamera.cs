@@ -79,7 +79,7 @@ namespace PressPlay.FFWD
                 RaycastHit[] hits = Physics.PointcastAll(castPos, cam.cullingMask);
                 if (hits.Length > 0)
                 {
-                    Debug.Display("Over", String.Join("\n", hits.Select(h => h.collider.ToString()).OrderBy(s => s)));
+                    Debug.Display("Over", String.Join("\n", hits.Select(h => h.collider.ToString()).OrderBy(s => s).ToArray()));
                 }
                 else
                 {

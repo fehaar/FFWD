@@ -1,0 +1,315 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{1034C53A-128D-4F83-BAC0-706151EAEC94}</ProjectGuid>
+    <ProjectTypeGuids>{6D335F3A-9D43-41b4-9D22-F6F17C4BE596};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">Xbox 360</Platform>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PressPlay.FFWD</RootNamespace>
+    <AssemblyName>PressPlay.FFWD</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <XnaFrameworkVersion>v4.0</XnaFrameworkVersion>
+    <XnaPlatform>Xbox 360</XnaPlatform>
+    <XnaProfile>HiDef</XnaProfile>
+    <XnaCrossPlatformGroupID>e07b1fa1-e65a-44e4-9b95-f2facf1f170c</XnaCrossPlatformGroupID>
+    <XnaOutputType>Library</XnaOutputType>
+    <XapFilename Condition="$(XnaOutputType)=='Game'">$(AssemblyName).xap</XapFilename>
+    <SilverlightManifestTemplate Condition="$(XnaOutputType)=='Game'">Properties\AppManifest.xml</SilverlightManifestTemplate>
+    <XnaWindowsPhoneManifestTemplate Condition="$(XnaOutputType)=='Game'">Properties\WMAppManifest.xml</XnaWindowsPhoneManifestTemplate>
+    <TileImage Condition="$(XnaOutputType)=='Game'">Background.png</TileImage>
+    <TileTitle Condition="$(XnaOutputType)=='Game'">$(AssemblyName)</TileTitle>
+    <Thumbnail Condition="$(XnaOutputType)=='Game'">PhoneGameThumb.png</Thumbnail>
+    <SupportedCultures />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|Xbox 360' ">
+    <OutputPath>bin\Xbox 360\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoStdLib>true</NoStdLib>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE;XBOX;XBOX360</DefineConstants>
+    <XnaCompressContent>true</XnaCompressContent>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|Xbox 360' ">
+    <OutputPath>bin\Xbox 360\Debug</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoStdLib>true</NoStdLib>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TRACE;XBOX;XBOX360</DefineConstants>
+    <XnaCompressContent>true</XnaCompressContent>
+  </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="button.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Animation\Animation.cs" />
+    <Compile Include="Animation\AnimationClip.cs" />
+    <Compile Include="Animation\AnimationClipCurveData.cs" />
+    <Compile Include="Animation\AnimationCullingType.cs" />
+    <Compile Include="Animation\AnimationCurve.cs" />
+    <Compile Include="Animation\AnimationState.cs" />
+    <Compile Include="Animation\Keyframe.cs" />
+    <Compile Include="Animation\QueueMode.cs" />
+    <Compile Include="Animation\Samplers\ColorSampler.cs" />
+    <Compile Include="Animation\Samplers\FloatSampler.cs" />
+    <Compile Include="Animation\Samplers\QuaternionSampler.cs" />
+    <Compile Include="Animation\Samplers\Sampler.cs" />
+    <Compile Include="Animation\Samplers\TransformSampler.cs" />
+    <Compile Include="Animation\Samplers\Vector3Sampler.cs" />
+    <Compile Include="Animation\SkinningData.cs" />
+    <Compile Include="Animation\WrapMode.cs" />
+    <Compile Include="Application.cs" />
+    <Compile Include="ApplicationSettings.cs" />
+    <Compile Include="Asset.cs" />
+    <Compile Include="AssetHelper.cs" />
+    <Compile Include="Attributes\FixReferencesAttribute.cs" />
+    <Compile Include="AudioClip.cs" />
+    <Compile Include="AudioSource.cs" />
+    <Compile Include="Behaviour.cs" />
+    <Compile Include="BoneWeight.cs" />
+    <Compile Include="Bounds.cs" />
+    <Compile Include="CachedContent.cs" />
+    <Compile Include="Color.cs" />
+    <Compile Include="Component.cs" />
+    <Compile Include="ComponentProfiler.cs" />
+    <Compile Include="Components\Camera.cs" />
+    <Compile Include="Components\Colliders\BoxCollider.cs" />
+    <Compile Include="Components\Colliders\CapsuleCollider.cs" />
+    <Compile Include="Components\Colliders\Collider.cs" />
+    <Compile Include="Components\Colliders\ForceMode.cs" />
+    <Compile Include="Components\Colliders\MeshCollider.cs" />
+    <Compile Include="Components\Colliders\PolygonCollider.cs" />
+    <Compile Include="Components\Colliders\Rigidbody.cs" />
+    <Compile Include="Components\Colliders\SphereCollider.cs" />
+    <Compile Include="Components\IdMap.cs" />
+    <Compile Include="Components\Light.cs" />
+    <Compile Include="Components\MeshFilter.cs" />
+    <Compile Include="Components\Particle.cs" />
+    <Compile Include="Components\ParticleAnimator.cs" />
+    <Compile Include="Components\ParticleEmitter.cs" />
+    <Compile Include="Components\Renderers\BasicEffectShader.cs" />
+    <Compile Include="Components\Renderers\CpuSkinningHelpers.cs" />
+    <Compile Include="Components\Renderers\LightmapData.cs" />
+    <Compile Include="Components\Renderers\LightmapSettings.cs" />
+    <Compile Include="Components\Renderers\LineRenderer.cs" />
+    <Compile Include="Components\Renderers\DynamicBatchRenderer.cs" />
+    <Compile Include="Components\Renderers\ParticleRenderer.cs" />
+    <Compile Include="Components\Renderers\MeshRenderer.cs" />
+    <Compile Include="Components\Renderers\Renderer.cs" />
+    <Compile Include="Components\Renderers\Shader.cs" />
+    <Compile Include="Components\Renderers\SkinnedMeshRenderer.cs" />
+    <Compile Include="Components\Renderers\StaticBatchRenderer.cs" />
+    <Compile Include="Components\Renderers\VertexPositionNormalDualTexture.cs" />
+    <Compile Include="DebugCamera.cs" />
+    <Compile Include="DebugSettings.cs" />
+    <Compile Include="Extensions\ArrayExtensions.cs" />
+    <Compile Include="Extensions\SendMessageMethodCache.cs" />
+    <Compile Include="Farseer\Collision\Collision.cs" />
+    <Compile Include="Farseer\Collision\Distance.cs" />
+    <Compile Include="Farseer\Collision\DynamicTree.cs" />
+    <Compile Include="Farseer\Collision\DynamicTreeBroadPhase.cs" />
+    <Compile Include="Farseer\Collision\IBroadPhase.cs" />
+    <Compile Include="Farseer\Collision\IRayCastCallback.cs" />
+    <Compile Include="Farseer\Collision\QuadTree.cs" />
+    <Compile Include="Farseer\Collision\QuadTreeBroadPhase.cs" />
+    <Compile Include="Farseer\Collision\Shapes\CircleShape.cs" />
+    <Compile Include="Farseer\Collision\Shapes\EdgeShape.cs" />
+    <Compile Include="Farseer\Collision\Shapes\LoopShape.cs" />
+    <Compile Include="Farseer\Collision\Shapes\PolygonShape.cs" />
+    <Compile Include="Farseer\Collision\Shapes\Shape.cs" />
+    <Compile Include="Farseer\Collision\TimeOfImpact.cs" />
+    <Compile Include="Farseer\Common\ConvexHull\ChainHull.cs" />
+    <Compile Include="Farseer\Common\ConvexHull\GiftWrap.cs" />
+    <Compile Include="Farseer\Common\ConvexHull\Melkman.cs" />
+    <Compile Include="Farseer\Common\Decomposition\BayazitDecomposer.cs" />
+    <Compile Include="Farseer\Common\Decomposition\CDTDecomposer.cs" />
+    <Compile Include="Farseer\Common\Decomposition\CDT\Delaunay\DelaunayTriangle.cs" />
+    <Compile Include="Farseer\Common\Decomposition\CDT\Delaunay\Sweep\AdvancingFront.cs" />
+    <Compile Include="Farseer\Common\Decomposition\CDT\Delaunay\Sweep\AdvancingFrontNode.cs" />
+    <Compile Include="Farseer\Common\Decomposition\CDT\Delaunay\Sweep\DTSweep.cs" />
+    <Compile Include="Farseer\Common\Decomposition\CDT\Delaunay\Sweep\DTSweepConstraint.cs" />
+    <Compile Include="Farseer\Common\Decomposition\CDT\Delaunay\Sweep\DTSweepContext.cs" />
+    <Compile Include="Farseer\Common\Decomposition\CDT\Delaunay\Sweep\DTSweepPointComparator.cs" />
+    <Compile Include="Farseer\Common\Decomposition\CDT\Delaunay\Sweep\PointOnEdgeException.cs" />
+    <Compile Include="Farseer\Common\Decomposition\CDT\ITriangulatable.cs" />
+    <Compile Include="Farseer\Common\Decomposition\CDT\Orientation.cs" />
+    <Compile Include="Farseer\Common\Decomposition\CDT\Polygon\Polygon.cs" />
+    <Compile Include="Farseer\Common\Decomposition\CDT\Polygon\PolygonPoint.cs" />
+    <Compile Include="Farseer\Common\Decomposition\CDT\Polygon\PolygonSet.cs" />
+    <Compile Include="Farseer\Common\Decomposition\CDT\Sets\ConstrainedPointSet.cs" />
+    <Compile Include="Farseer\Common\Decomposition\CDT\Sets\PointSet.cs" />
+    <Compile Include="Farseer\Common\Decomposition\CDT\TriangulationConstraint.cs" />
+    <Compile Include="Farseer\Common\Decomposition\CDT\TriangulationContext.cs" />
+    <Compile Include="Farseer\Common\Decomposition\CDT\TriangulationMode.cs" />
+    <Compile Include="Farseer\Common\Decomposition\CDT\TriangulationPoint.cs" />
+    <Compile Include="Farseer\Common\Decomposition\CDT\TriangulationUtil.cs" />
+    <Compile Include="Farseer\Common\Decomposition\CDT\Util\FixedArray3.cs" />
+    <Compile Include="Farseer\Common\Decomposition\CDT\Util\FixedBitArray3.cs" />
+    <Compile Include="Farseer\Common\Decomposition\CDT\Util\PointGenerator.cs" />
+    <Compile Include="Farseer\Common\Decomposition\CDT\Util\PolygonGenerator.cs" />
+    <Compile Include="Farseer\Common\Decomposition\EarclipDecomposer.cs" />
+    <Compile Include="Farseer\Common\Decomposition\FlipcodeDecomposer.cs" />
+    <Compile Include="Farseer\Common\Decomposition\SeidelDecomposer.cs" />
+    <Compile Include="Farseer\Common\FixedArray.cs" />
+    <Compile Include="Farseer\Common\HashSet.cs" />
+    <Compile Include="Farseer\Common\LineTools.cs" />
+    <Compile Include="Farseer\Common\Math.cs" />
+    <Compile Include="Farseer\Common\Path.cs" />
+    <Compile Include="Farseer\Common\PathManager.cs" />
+    <Compile Include="Farseer\Common\PhysicsLogic\Explosion.cs" />
+    <Compile Include="Farseer\Common\PhysicsLogic\PhysicsLogic.cs" />
+    <Compile Include="Farseer\Common\PolygonManipulation\CuttingTools.cs" />
+    <Compile Include="Farseer\Common\PolygonManipulation\SimplifyTools.cs" />
+    <Compile Include="Farseer\Common\PolygonManipulation\YuPengClipper.cs" />
+    <Compile Include="Farseer\Common\PolygonTools.cs" />
+    <Compile Include="Farseer\Common\Serialization.cs" />
+    <Compile Include="Farseer\Common\TextureTools\MarchingSquares.cs" />
+    <Compile Include="Farseer\Common\TextureTools\MSTerrain.cs" />
+    <Compile Include="Farseer\Common\TextureTools\TextureConverter.cs" />
+    <Compile Include="Farseer\Common\Vertices.cs" />
+    <Compile Include="Farseer\Controllers\AbstractForceController.cs" />
+    <Compile Include="Farseer\Controllers\BuoyancyController.cs" />
+    <Compile Include="Farseer\Controllers\Controller.cs" />
+    <Compile Include="Farseer\Controllers\GravityController.cs" />
+    <Compile Include="Farseer\Controllers\SimpleWindForce.cs" />
+    <Compile Include="Farseer\Controllers\VelocityLimitController.cs" />
+    <Compile Include="Farseer\DebugView.cs" />
+    <Compile Include="Farseer\DebugViewXNA.cs" />
+    <Compile Include="Farseer\Dynamics\Body.cs" />
+    <Compile Include="Farseer\Dynamics\BreakableBody.cs" />
+    <Compile Include="Farseer\Dynamics\ContactManager.cs" />
+    <Compile Include="Farseer\Dynamics\Contacts\Contact.cs" />
+    <Compile Include="Farseer\Dynamics\Contacts\ContactSolver.cs" />
+    <Compile Include="Farseer\Dynamics\Fixture.cs" />
+    <Compile Include="Farseer\Dynamics\Island.cs" />
+    <Compile Include="Farseer\Dynamics\Joints\AngleJoint.cs" />
+    <Compile Include="Farseer\Dynamics\Joints\DistanceJoint.cs" />
+    <Compile Include="Farseer\Dynamics\Joints\FixedAngleJoint.cs" />
+    <Compile Include="Farseer\Dynamics\Joints\FixedDistanceJoint.cs" />
+    <Compile Include="Farseer\Dynamics\Joints\FixedFrictionJoint.cs" />
+    <Compile Include="Farseer\Dynamics\Joints\FixedLineJoint.cs" />
+    <Compile Include="Farseer\Dynamics\Joints\FixedMouseJoint.cs" />
+    <Compile Include="Farseer\Dynamics\Joints\FixedPrismaticJoint.cs" />
+    <Compile Include="Farseer\Dynamics\Joints\FixedRevoluteJoint.cs" />
+    <Compile Include="Farseer\Dynamics\Joints\FrictionJoint.cs" />
+    <Compile Include="Farseer\Dynamics\Joints\GearJoint.cs" />
+    <Compile Include="Farseer\Dynamics\Joints\Joint.cs" />
+    <Compile Include="Farseer\Dynamics\Joints\LineJoint.cs" />
+    <Compile Include="Farseer\Dynamics\Joints\PrismaticJoint.cs" />
+    <Compile Include="Farseer\Dynamics\Joints\PulleyJoint.cs" />
+    <Compile Include="Farseer\Dynamics\Joints\RevoluteJoint.cs" />
+    <Compile Include="Farseer\Dynamics\Joints\RopeJoint.cs" />
+    <Compile Include="Farseer\Dynamics\Joints\SliderJoint.cs" />
+    <Compile Include="Farseer\Dynamics\Joints\WeldJoint.cs" />
+    <Compile Include="Farseer\Dynamics\TimeStep.cs" />
+    <Compile Include="Farseer\Dynamics\World.cs" />
+    <Compile Include="Farseer\Dynamics\WorldCallbacks.cs" />
+    <Compile Include="Farseer\Factories\BodyFactory.cs" />
+    <Compile Include="Farseer\Factories\FixtureFactory.cs" />
+    <Compile Include="Farseer\Factories\JointFactory.cs" />
+    <Compile Include="Farseer\Factories\LinkFactory.cs" />
+    <Compile Include="Farseer\PrimitiveBatch.cs" />
+    <Compile Include="Farseer\Settings.cs" />
+    <Compile Include="Gizmos.cs" />
+    <Compile Include="GUI\GUI.cs" />
+    <Compile Include="GUI\GUIContent.cs" />
+    <Compile Include="GUI\GUILayout.cs" />
+    <Compile Include="GUI\GUILayoutOption.cs" />
+    <Compile Include="GUI\GUISkin.cs" />
+    <Compile Include="GUI\GUIStyle.cs" />
+    <Compile Include="GUI\GUIStyleState.cs" />
+    <Compile Include="GUI\RectOffset.cs" />
+    <Compile Include="Input\Touch.cs" />
+    <Compile Include="Interfaces\IInitializable.cs" />
+    <Compile Include="Interfaces\ILifecycleTracker.cs" />
+    <Compile Include="InvokeCall.cs" />
+    <Compile Include="LifecycleTracer.cs" />
+    <Compile Include="Material.cs" />
+    <Compile Include="Input\Input.cs" />
+    <Compile Include="Mathf.cs" />
+    <Compile Include="Matrix4x4.cs" />
+    <Compile Include="Mesh.cs" />
+    <Compile Include="MonoBehaviour.cs" />
+    <Compile Include="Debug.cs" />
+    <Compile Include="GameObject.cs" />
+    <Compile Include="Interfaces\IContactProcessor.cs" />
+    <Compile Include="Interfaces\IFixedUpdateable.cs" />
+    <Compile Include="Interfaces\IUpdateable.cs" />
+    <Compile Include="GameObjectContactProcessor.cs" />
+    <Compile Include="Physics\Collision.cs" />
+    <Compile Include="Physics\ContactPoint.cs" />
+    <Compile Include="Physics\LayerMask.cs" />
+    <Compile Include="Physics\LayerMaskOperations.cs" />
+    <Compile Include="Physics\Physics.cs" />
+    <Compile Include="Physics\QueryHelper.cs" />
+    <Compile Include="Physics\RaycastHelper.cs" />
+    <Compile Include="Physics\RaycastHit.cs" />
+    <Compile Include="Physics\VectorConverter.cs" />
+    <Compile Include="Plane.cs" />
+    <Compile Include="Profiler.cs" />
+    <Compile Include="Quaternion.cs" />
+    <Compile Include="Random.cs" />
+    <Compile Include="Ray.cs" />
+    <Compile Include="Rect.cs" />
+    <Compile Include="RenderSettings.cs" />
+    <Compile Include="Resources.cs" />
+    <Compile Include="Scene.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SceneLoader.cs" />
+    <Compile Include="Screen.cs" />
+    <Compile Include="ScriptableObject.cs" />
+    <Compile Include="TextAsset.cs" />
+    <Compile Include="Texture.cs" />
+    <Compile Include="Texture2D.cs" />
+    <Compile Include="Time.cs" />
+    <Compile Include="Transform.cs" />
+    <Compile Include="TypeSet.cs" />
+    <Compile Include="UnityAudioListener.cs" />
+    <Compile Include="UnityObject.cs" />
+    <Compile Include="Vector2.cs" />
+    <Compile Include="Vector3.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Vector4.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup />
+  <ItemGroup>
+    <Reference Include="Microsoft.Xna.Framework" />
+    <Reference Include="Microsoft.Xna.Framework.Avatar" />
+    <Reference Include="Microsoft.Xna.Framework.Game" />
+    <Reference Include="Microsoft.Xna.Framework.GamerServices" />
+    <Reference Include="Microsoft.Xna.Framework.Graphics" />
+    <Reference Include="Microsoft.Xna.Framework.Input.Touch" />
+    <Reference Include="mscorlib" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml.Serialization" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <!--
+      To modify your build process, add your task inside one of the targets below and uncomment it. 
+      Other similar extension points exist, see Microsoft.Common.targets.
+      <Target Name="BeforeBuild">
+      </Target>
+      <Target Name="AfterBuild">
+      </Target>
+    -->
+</Project>

@@ -58,6 +58,10 @@
     <XnaCompressContent>true</XnaCompressContent>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Framework\PressPlay.FFWD\PressPlay.FFWD.X360.csproj">
+      <Project>{1034C53A-128D-4F83-BAC0-706151EAEC94}</Project>
+      <Name>PressPlay.FFWD.X360</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FFWD.Unity.Tests.Scripts\FFWD.Unity.Tests.Scripts.X360.csproj">
       <Project>{1C8FE13D-BEAF-437C-908A-5AC780102B31}</Project>
       <Name>FFWD.Unity.Tests.Scripts.X360</Name>
