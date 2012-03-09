@@ -503,39 +503,42 @@ namespace PressPlay.FFWD.Components
             }
 
             int q = 0;
-            for (int i = 0; i < renderQueue.Count; i++)
+            int count = renderQueue.Count;
+            for (int i = 0; i < count; i++)
             {
-                if (renderQueue[i].gameObject == null)
+                Renderer r = renderQueue[i];
+
+                if (r.gameObject == null)
                 {
                     // This will happen if the game object has been destroyed in update.
                     // It is acceptable behaviour.
                     continue;
                 }
 
-                if (renderQueue[i].material == null)
+                if (r.material == null)
                 {
                     // We have no material, so we will skip rendering
                     continue;
                 }
 
-                if (renderQueue[i].isPartOfStaticBatch)
+                if (r.isPartOfStaticBatch)
                 {
                     // The object is statically batched, so we will skip it
                     continue;
                 }
 
-                if (renderQueue[i].material.renderQueue != q)
+                if (r.material.renderQueue != q)
                 {
                     if (q > 0)
                     {
                         estimatedDrawCalls += dynamicBatchRenderer.DoDraw(device, this);
                     }
-                    q = renderQueue[i].material.renderQueue;
+                    q = r.material.renderQueue;
                 }
 
-                if (renderQueue[i].gameObject.active && renderQueue[i].enabled)
+                if (r.gameObject.active && r.enabled)
                 {
-                    estimatedDrawCalls += renderQueue[i].Draw(device, this);
+                    estimatedDrawCalls += r.Draw(device, this);
                 }
             }
 

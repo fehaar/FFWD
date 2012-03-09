@@ -40,19 +40,19 @@ namespace PressPlay.FFWD.Components
         {
             get 
             {
-                if (sharedMaterials == null || sharedMaterials.Length == 0)
+                if (_sharedMaterials == null || _sharedMaterials.Length == 0)
                 {
                     return null;
                 }
-                return sharedMaterials[0];
+                return _sharedMaterials[0];
             }
             set
             {
-                if (sharedMaterials == null || sharedMaterials.Length == 0)
+                if (_sharedMaterials == null || _sharedMaterials.Length == 0)
                 {
-                    sharedMaterials = new Material[1];
+                    _sharedMaterials = new Material[1];
                 }
-                sharedMaterials[0] = value;
+                _sharedMaterials[0] = value;
                 if (value != null)
                 {
                     renderQueue = value.finalRenderQueue;
