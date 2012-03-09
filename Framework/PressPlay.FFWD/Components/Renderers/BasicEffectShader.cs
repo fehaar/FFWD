@@ -9,9 +9,17 @@ namespace PressPlay.FFWD.Components
 {
     internal class BasicEffectShader : Shader
     {
+        public static int Count = 0;
+
+        private static BasicEffect Effect;
+
         public BasicEffectShader()
         {
-            effect = new BasicEffect(Camera.Device);
+            Count++;
+            if (Effect == null)
+            {
+                Effect = new BasicEffect(Camera.Device);
+            }
             supportsLights = true;
             supportsTextures = true;
             supportsVertexColor = true;
@@ -19,25 +27,23 @@ namespace PressPlay.FFWD.Components
 
         public override void Configure(Material mat)
         {
-            BasicEffect e = (effect as BasicEffect);
             if (mat.mainTexture != null)
             {
-                e.TextureEnabled = true;
-                e.Texture = mat.mainTexture;
+                Effect.TextureEnabled = true;
+                Effect.Texture = mat.mainTexture;
             }
             else
             {
-                e.TextureEnabled = false;
+                Effect.TextureEnabled = false;
             }
-            e.DiffuseColor = mat.color;
-            e.Alpha = mat.color.a;
+            Effect.DiffuseColor = mat.color;
+            Effect.Alpha = mat.color.a;
         }
 
         internal override void ApplyPreRenderSettings(bool useVertexColor)
         {
-            BasicEffect e = (effect as BasicEffect);
-            e.VertexColorEnabled = useVertexColor;
-            e.LightingEnabled = Light.HasLights;
+            Effect.VertexColorEnabled = useVertexColor;
+            Effect.LightingEnabled = Light.HasLights;
         }
     }
 }
