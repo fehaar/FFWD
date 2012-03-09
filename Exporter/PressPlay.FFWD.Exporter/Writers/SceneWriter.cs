@@ -217,7 +217,6 @@ namespace PressPlay.FFWD.Exporter.Writers
             foreach (var key in assetsToWrite.Keys)
             {
                 List<AssetToWrite> objects = assetsToWrite[key];
-                Type tp = objects[0].GetType();
                 string path = PreparePath(String.Format("../{0}.xml", key));
                 XmlWriterSettings settings = new XmlWriterSettings();
                 settings.Indent = true;
@@ -229,6 +228,8 @@ namespace PressPlay.FFWD.Exporter.Writers
                     writer.WriteStartElement("XnaContent");
                     writer.WriteAttributeString("xmlns", "f", null, "PressPlay.FFWD");
                     writer.WriteAttributeString("xmlns", "c", null, "PressPlay.FFWD.Components");
+                    writer.WriteStartElement("Asset");
+                    writer.WriteAttributeString("Type", resolver.DefaultNamespace + objects[0].asset.GetType().Name + "[]");
                     foreach (var item in objects)
                     {
                         if (written.Contains(item.name))
@@ -236,11 +237,11 @@ namespace PressPlay.FFWD.Exporter.Writers
                             continue;
                         }
                         written.Add(item.name);
-                        writer.WriteStartElement("Asset");
-                        writer.WriteAttributeString("Type", resolver.DefaultNamespace + tp.Name);
+                        writer.WriteStartElement("Item");
                         WriteAsset(item.asset);
                         writer.WriteEndElement();
                     }
+                    writer.WriteEndElement();
                     writer.WriteEndElement();
                 }
             }
