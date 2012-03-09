@@ -65,8 +65,6 @@ namespace PressPlay.FFWD.Components
 
         public void AddVertex(Vector3 position, Vector3 normal, Vector2 tex0, Vector2 tex1)
         {
-            boundingBox.Min = Vector3.Min(boundingBox.Min, position);
-            boundingBox.Max = Vector3.Max(boundingBox.Max, position);
             object vert;
             if (useLightMap)
             {
@@ -114,6 +112,24 @@ namespace PressPlay.FFWD.Components
             }
             vertices = null;
             indices = null;
+        }
+
+        internal void ComputeBoundingBox()
+        {
+            if (vertices == null)
+            {
+                return;
+            }
+            List<Microsoft.Xna.Framework.Vector3> points = new List<Microsoft.Xna.Framework.Vector3>(vertices.Length);
+            if (useLightMap)
+            {
+                points.AddRange(vertices.Cast<VertexPositionNormalDualTexture>().Select(v => v.Position));
+            }
+            else
+            {
+                points.AddRange(vertices.Cast<VertexPositionNormalTexture>().Select(v => v.Position));
+            }
+            boundingBox = BoundingBox.CreateFromPoints(points);
         }
     }
 
@@ -277,6 +293,7 @@ namespace PressPlay.FFWD.Components
                 {
                     return false;
                 }
+
                 for (int i = 0; i < meshInfo.mesh._vertices.Length; i++)
                 {
                     Vector2 uv1 = new Vector2(
@@ -322,6 +339,10 @@ namespace PressPlay.FFWD.Components
                     }
                 }
             }
+            for (int i = 0; i < quadTreeTiles.Length; i++)
+            {
+                quadTreeTiles[i].ComputeBoundingBox();
+            }
 
             tmpMeshes.Clear();
 
@@ -338,10 +359,17 @@ namespace PressPlay.FFWD.Components
                 quadTreeTiles[i].visible = !cam.DoFrustumCulling(ref quadTreeTiles[i].boundingBox);
 
 #if DEBUG
-                if (Camera.logRenderCalls && quadTreeTiles[i].visible)
+                if (Camera.logRenderCalls)
                 {
-                    Debug.LogFormat("Static batch: Tile {0} on {1} on {2}", i, gameObject, cam.gameObject);
-                }
+                    if (quadTreeTiles[i].visible)
+                    {
+                        Debug.LogFormat("Static batch: Tile {0} on {1} on {2}.", i, gameObject, cam.gameObject);
+                    }
+                    else
+                    {
+                        Debug.LogFormat("VP Cull Static batch: Tile {0} on {1} on {2}.", i, gameObject, cam.gameObject);
+                    }
+                }                
 #endif
             }
 
