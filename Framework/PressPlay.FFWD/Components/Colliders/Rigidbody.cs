@@ -188,11 +188,9 @@ namespace PressPlay.FFWD.Components
             }
         }
 
-        internal void MoveRotation(Quaternion localRotation)
+        public Vector3 GetPointVelocity(Vector3 worldPoint)
         {
-            // TODO: This does not work yet...
-            //body.SetTransform(body.GetPosition(), localRotation.eulerAngles.y);
-            //Physics.RemoveStays(collider);
+            return body.GetLinearVelocityFromWorldPoint(VectorConverter.Convert(worldPoint, collider.to2dMode));
         }
     }
 }

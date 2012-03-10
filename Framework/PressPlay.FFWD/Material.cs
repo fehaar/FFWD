@@ -59,6 +59,25 @@ namespace PressPlay.FFWD
             textures[propertyName] = texture;
         }
 
+        public Vector2 GetTextureOffset(string propertyName)
+        {
+            if (propertyName == "_MainTex")
+            {
+                return mainTextureOffset;
+            }
+            // TODO: We should do this properly
+            return Vector2.zero;
+        }
+
+        public void SetTextureOffset(string propertyName, Vector2 offset)
+        {
+            if (propertyName == "_MainTex")
+            {
+                mainTextureOffset = offset;
+            }
+            // TODO: We should set this properly
+        }
+
         protected override void DoLoadAsset(AssetHelper assetHelper)
         {
             shader = Shader.GetShader(this);
