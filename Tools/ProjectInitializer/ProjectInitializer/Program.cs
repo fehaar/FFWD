@@ -85,10 +85,14 @@ namespace ProjectInitializer
                 }
                 if (!ignoreFileTypes.Contains(Path.GetExtension(newFileName)))
                 {
-                    File.Copy(item, Path.Combine(newDir, newFileName));
+                    string completeNewName = Path.Combine(newDir, newFileName);
+                    if (!item.Equals(completeNewName, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        File.Copy(item, completeNewName);
+                    }
                     if (fixFileContentsOfFileTypes.Contains(Path.GetExtension(newFileName)))
                     {
-                        FixFileContents(Path.Combine(newDir, newFileName));                       
+                        FixFileContents(completeNewName);
                     }
                 }
             }
@@ -97,9 +101,9 @@ namespace ProjectInitializer
 
         private void FixFileContents(string newFileName)
         {
-            string text = File.ReadAllText(newFileName);
+            string text = File.ReadAllText(newFileName, Encoding.UTF8);
             text = text.Replace(templateName, projectName);
-            File.WriteAllText(newFileName, text);
+            File.WriteAllText(newFileName, text, Encoding.UTF8);
         }
     }
 }
