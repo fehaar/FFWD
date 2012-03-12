@@ -499,6 +499,18 @@ namespace PressPlay.FFWD.Components
                 }
             }
 #endif
+            RenderStats.Clear();
+
+            if (RenderQueue.Count > 0)
+            {
+                int rqCount = RenderQueue.Count;
+                for (int i = 0; i < rqCount; i++)
+                {
+                    RenderQueue[i].Render(device, this);
+                }
+                return;
+            }
+
             BasicEffect.View = view;
             BasicEffect.Projection = projectionMatrix;
 

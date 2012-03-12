@@ -235,6 +235,7 @@
     <Compile Include="Components\Renderers\Renderer.cs" />
     <Compile Include="Components\Renderers\RenderItem.cs" />
     <Compile Include="Components\Renderers\RenderQueue.cs" />
+    <Compile Include="Components\Renderers\RenderStats.cs" />
     <Compile Include="Components\Renderers\Shader.cs" />
     <Compile Include="Components\Renderers\SkinnedMeshRenderer.cs" />
     <Compile Include="Components\Renderers\StaticBatchRenderer.cs" />

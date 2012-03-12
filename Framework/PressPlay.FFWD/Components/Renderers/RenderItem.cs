@@ -13,6 +13,7 @@ namespace PressPlay.FFWD.Components
         public Material Material;
         public Transform Transform;
         public Bounds? Bounds;
+        protected int batches = 0;
         public bool Enabled;
         protected bool UseVertexColor = false;
 
@@ -43,12 +44,12 @@ namespace PressPlay.FFWD.Components
             return item;
         }
 
-        public void Render(GraphicsDevice device, Camera cam, Effect e)
+        public void Render(GraphicsDevice device, Camera cam)
         {
             device.SetVertexBuffer(VertexBuffer);
             device.Indices = IndexBuffer;
 
-            e = Material.shader.effect;
+            Effect e = Material.shader.effect;
             Material.shader.ApplyPreRenderSettings(Material, UseVertexColor);
             Material.SetBlendState(device);
 
@@ -71,6 +72,7 @@ namespace PressPlay.FFWD.Components
                     IndexBuffer.IndexCount / 3
                 );
             }
+            RenderStats.AddDrawCall(batches, VertexBuffer.VertexCount, IndexBuffer.IndexCount / 3);
         }
 
         private static VertexPositionNormalTexture AddVertexPositionNormalTexture(Microsoft.Xna.Framework.Vector3 position, Microsoft.Xna.Framework.Vector3 normal, Microsoft.Xna.Framework.Vector2 tex0, Microsoft.Xna.Framework.Vector2 tex1, Microsoft.Xna.Framework.Color c)
@@ -127,6 +129,8 @@ namespace PressPlay.FFWD.Components
                 vertexData = new T[vertexOffset + mesh.vertexCount];
                 oldVerts.CopyTo(vertexData, 0);
             }
+            batches++;
+
             Microsoft.Xna.Framework.Vector3[] transformedVertices = new Microsoft.Xna.Framework.Vector3[mesh._vertices.Length];
             Microsoft.Xna.Framework.Vector3.Transform(mesh._vertices, ref matrix, transformedVertices);
             Microsoft.Xna.Framework.Vector3[] transformedNormals = new Microsoft.Xna.Framework.Vector3[mesh._normals.Length];
