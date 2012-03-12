@@ -323,7 +323,7 @@ namespace PressPlay.FFWD.Components
         {
             bool isAdded = false;
 
-            if (renderer.isPartOfStaticBatch || !(renderer is MeshRenderer))
+            if (renderer.isPartOfStaticBatch || (renderer is MeshRenderer))
             {
                 return;
             }
