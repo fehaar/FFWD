@@ -77,6 +77,8 @@ namespace PressPlay.FFWD.Components
         public int depth { get; set; }
         public float aspect { get; set; }
         public int cullingMask { get; set; }
+        private readonly List<Renderer> renderQueue = new List<Renderer>(50);
+        private readonly RenderQueue renderQ = new RenderQueue();
 
         public float pixelWidth 
         { 
@@ -330,8 +332,6 @@ namespace PressPlay.FFWD.Components
                 nonAssignedRenderers.Add(renderer);
             }
         }
-
-        private readonly List<Renderer> renderQueue = new List<Renderer>(50);
 
         private bool addRenderer(Renderer renderer)
         {

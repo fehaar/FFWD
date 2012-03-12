@@ -58,7 +58,7 @@ namespace FFWD.Unity.Tests
         protected override void LoadContent()
         {
             // TODO: use this.Content to load your game content here
-            Application.LoadLevel("Lightmap");
+            Application.LoadLevel("BasicRendering");
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace FFWD.Unity.Tests
         /// all content.
         /// </summary>
         protected override void UnloadContent()
-        {
+        {            
             // TODO: Unload any non ContentManager content here
         }
 

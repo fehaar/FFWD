@@ -106,6 +106,8 @@
     <Compile Include="Components\Renderers\ParticleRenderer.cs" />
     <Compile Include="Components\Renderers\MeshRenderer.cs" />
     <Compile Include="Components\Renderers\Renderer.cs" />
+    <Compile Include="Components\Renderers\RenderItem.cs" />
+    <Compile Include="Components\Renderers\RenderQueue.cs" />
     <Compile Include="Components\Renderers\Shader.cs" />
     <Compile Include="Components\Renderers\SkinnedMeshRenderer.cs" />
     <Compile Include="Components\Renderers\StaticBatchRenderer.cs" />
