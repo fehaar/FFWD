@@ -24,10 +24,7 @@ namespace PressPlay.FFWD.Components
             {
                 BatchedDrawCalls += batched;
             }
-            else
-            {
-                DrawCalls++;
-            }
+            DrawCalls++;
             VerticesDrawn += vertices;
             TrianglesDrawn += triangles;
         }

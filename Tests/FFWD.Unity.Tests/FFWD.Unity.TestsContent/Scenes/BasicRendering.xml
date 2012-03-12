@@ -3,17 +3,105 @@
   <Asset Type="f:Scene">
     <hasBeenProcessed>false</hasBeenProcessed>
     <go>
-      <id>4962</id>
+      <id>-55198</id>
+      <name>Cube</name>
+      <layer>0</layer>
+      <tag>Untagged</tag>
+      <cs>
+        <c Type="f:Transform">
+          <id>-55196</id>
+          <p>-7.8332 -1 -3</p>
+        </c>
+        <c Type="c:MeshFilter">
+          <id>-55192</id>
+          <mesh>
+            <id>138</id>
+            <name>Cube</name>
+          </mesh>
+        </c>
+        <c Type="c:BoxCollider">
+          <id>-55190</id>
+          <isTrigger>false</isTrigger>
+          <center>0 0 0</center>
+          <size>1 1 1</size>
+        </c>
+        <c Type="c:MeshRenderer">
+          <id>-55194</id>
+          <sharedMaterials>
+            <material>
+              <id>368</id>
+              <name>Item blue</name>
+              <shader>Diffuse</shader>
+              <renderQueue>2000</renderQueue>
+              <color>FF4C00FF</color>
+              <mainTexture>
+                <id>420</id>
+                <name>Assets/DSC_5866</name>
+              </mainTexture>
+              <mainTextureOffset>0 0</mainTextureOffset>
+              <mainTextureScale>1 1</mainTextureScale>
+              <wrapRepeat>true</wrapRepeat>
+            </material>
+          </sharedMaterials>
+        </c>
+      </cs>
+    </go>
+    <go>
+      <id>-48810</id>
+      <name>Cube</name>
+      <layer>0</layer>
+      <tag>Untagged</tag>
+      <cs>
+        <c Type="f:Transform">
+          <id>-48812</id>
+          <p>7.19052 -1 -3</p>
+        </c>
+        <c Type="c:MeshFilter">
+          <id>-48816</id>
+          <mesh>
+            <id>138</id>
+            <name>Cube</name>
+          </mesh>
+        </c>
+        <c Type="c:BoxCollider">
+          <id>-48818</id>
+          <isTrigger>false</isTrigger>
+          <center>0 0 0</center>
+          <size>1 1 1</size>
+        </c>
+        <c Type="c:MeshRenderer">
+          <id>-48814</id>
+          <sharedMaterials>
+            <material>
+              <id>368</id>
+              <name>Item blue</name>
+              <shader>Diffuse</shader>
+              <renderQueue>2000</renderQueue>
+              <color>FF4C00FF</color>
+              <mainTexture>
+                <id>420</id>
+                <name>Assets/DSC_5866</name>
+              </mainTexture>
+              <mainTextureOffset>0 0</mainTextureOffset>
+              <mainTextureScale>1 1</mainTextureScale>
+              <wrapRepeat>true</wrapRepeat>
+            </material>
+          </sharedMaterials>
+        </c>
+      </cs>
+    </go>
+    <go>
+      <id>5098</id>
       <name>Main Camera</name>
       <layer>0</layer>
       <tag>MainCamera</tag>
       <cs>
         <c Type="f:Transform">
-          <id>4964</id>
+          <id>5100</id>
           <p>0 1 -10</p>
         </c>
         <c Type="c:Camera">
-          <id>4966</id>
+          <id>5102</id>
           <fieldOfView>60</fieldOfView>
           <nearClipPlane>0.3</nearClipPlane>
           <farClipPlane>1000</farClipPlane>
@@ -29,24 +117,25 @@
       </cs>
     </go>
     <go>
-      <id>4974</id>
+      <id>5110</id>
       <name>Plane</name>
       <layer>0</layer>
       <tag>Untagged</tag>
       <cs>
         <c Type="f:Transform">
-          <id>4976</id>
+          <id>5112</id>
           <p>0 -1.5 0</p>
+          <s>5 1 1</s>
         </c>
         <c Type="c:MeshFilter">
-          <id>4980</id>
+          <id>5116</id>
           <mesh>
             <id>146</id>
             <name>Plane</name>
           </mesh>
         </c>
         <c Type="c:MeshRenderer">
-          <id>4978</id>
+          <id>5114</id>
           <sharedMaterials>
             <material>
               <id>400</id>
@@ -59,7 +148,7 @@
                 <name>Assets/DSC_5866</name>
               </mainTexture>
               <mainTextureOffset>0 0</mainTextureOffset>
-              <mainTextureScale>1 1</mainTextureScale>
+              <mainTextureScale>5 1</mainTextureScale>
               <wrapRepeat>true</wrapRepeat>
             </material>
           </sharedMaterials>
@@ -67,18 +156,18 @@
       </cs>
     </go>
     <go>
-      <id>4984</id>
+      <id>5120</id>
       <name>Directional light</name>
       <layer>0</layer>
       <tag>Untagged</tag>
       <cs>
         <c Type="f:Transform">
-          <id>4986</id>
+          <id>5122</id>
           <p>-6.5032 2.0592 0</p>
           <r>0.4118 -0.20371 0.09499 0.88312</r>
         </c>
         <c Type="c:Light">
-          <id>4988</id>
+          <id>5124</id>
           <enabled>true</enabled>
           <type>Directional</type>
           <color>FFFFFFFF</color>
@@ -90,30 +179,30 @@
       </cs>
     </go>
     <go>
-      <id>4990</id>
+      <id>5126</id>
       <name>Cube</name>
       <layer>0</layer>
       <tag>Untagged</tag>
       <cs>
         <c Type="f:Transform">
-          <id>4992</id>
+          <id>5128</id>
           <p>3 -1 -3</p>
         </c>
         <c Type="c:MeshFilter">
-          <id>4996</id>
+          <id>5132</id>
           <mesh>
             <id>138</id>
             <name>Cube</name>
           </mesh>
         </c>
         <c Type="c:BoxCollider">
-          <id>4998</id>
+          <id>5134</id>
           <isTrigger>false</isTrigger>
           <center>0 0 0</center>
           <size>1 1 1</size>
         </c>
         <c Type="c:MeshRenderer">
-          <id>4994</id>
+          <id>5130</id>
           <sharedMaterials>
             <material>
               <id>368</id>
@@ -134,30 +223,30 @@
       </cs>
     </go>
     <go>
-      <id>5000</id>
+      <id>5136</id>
       <name>Cube</name>
       <layer>0</layer>
       <tag>Untagged</tag>
       <cs>
         <c Type="f:Transform">
-          <id>5002</id>
+          <id>5138</id>
           <p>-3 -1 3</p>
         </c>
         <c Type="c:MeshFilter">
-          <id>5006</id>
+          <id>5142</id>
           <mesh>
             <id>138</id>
             <name>Cube</name>
           </mesh>
         </c>
         <c Type="c:BoxCollider">
-          <id>5008</id>
+          <id>5144</id>
           <isTrigger>false</isTrigger>
           <center>0 0 0</center>
           <size>1 1 1</size>
         </c>
         <c Type="c:MeshRenderer">
-          <id>5004</id>
+          <id>5140</id>
           <sharedMaterials>
             <material>
               <id>368</id>
@@ -178,30 +267,30 @@
       </cs>
     </go>
     <go>
-      <id>5010</id>
+      <id>5146</id>
       <name>Cube</name>
       <layer>0</layer>
       <tag>Untagged</tag>
       <cs>
         <c Type="f:Transform">
-          <id>5012</id>
+          <id>5148</id>
           <p>0 -1 0</p>
         </c>
         <c Type="c:MeshFilter">
-          <id>5016</id>
+          <id>5152</id>
           <mesh>
             <id>138</id>
             <name>Cube</name>
           </mesh>
         </c>
         <c Type="c:BoxCollider">
-          <id>5018</id>
+          <id>5154</id>
           <isTrigger>false</isTrigger>
           <center>0 0 0</center>
           <size>1 1 1</size>
         </c>
         <c Type="c:MeshRenderer">
-          <id>5014</id>
+          <id>5150</id>
           <sharedMaterials>
             <material>
               <id>368</id>

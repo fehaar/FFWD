@@ -143,7 +143,12 @@ namespace PressPlay.FFWD.Components
 
             for (int i = 0; i < mesh._vertices.Length; i++)
             {
-                vertexData[i + vertexOffset] = addVertex(mesh._vertices[i], mesh._normals[i], mesh._uv[i], (mesh._uv2.HasElements()) ? mesh._uv2[i] : Microsoft.Xna.Framework.Vector2.Zero, (mesh.colors.HasElements()) ? mesh.colors[i] : Color.white);
+                // Modify UV coordinates for tiling
+                Microsoft.Xna.Framework.Vector2 uv1 = new Vector2(
+                        mesh._uv[i].X * Material.mainTextureScale.x + Material.mainTextureOffset.x,
+                        1 - ((1 - mesh._uv[i].Y) * Material.mainTextureScale.y + Material.mainTextureOffset.y));
+
+                vertexData[i + vertexOffset] = addVertex(mesh._vertices[i], mesh._normals[i], uv1, (mesh._uv2.HasElements()) ? mesh._uv2[i] : Microsoft.Xna.Framework.Vector2.Zero, (mesh.colors.HasElements()) ? mesh.colors[i] : Color.white);
             }
 
 #if XBOX

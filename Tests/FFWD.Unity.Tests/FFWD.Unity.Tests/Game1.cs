@@ -60,8 +60,8 @@ namespace FFWD.Unity.Tests
         protected override void LoadContent()
         {
             // TODO: use this.Content to load your game content here
-            //Application.LoadLevel("BasicRendering");
-            Application.LoadLevel("Lightmap");
+            Application.LoadLevel("BasicRendering");
+            //Application.LoadLevel("Lightmap");
         }
 
         /// <summary>
