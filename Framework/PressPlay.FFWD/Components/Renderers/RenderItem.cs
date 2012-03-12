@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using PressPlay.FFWD.Extensions;
+using Microsoft.Xna.Framework;
 
 namespace PressPlay.FFWD.Components
 {
@@ -11,7 +12,7 @@ namespace PressPlay.FFWD.Components
     {
         public Material Material;
         public Transform Transform;
-        public Bounds Bounds;
+        public Bounds? Bounds;
         public bool Enabled;
         protected bool UseVertexColor = false;
 
@@ -26,7 +27,7 @@ namespace PressPlay.FFWD.Components
         internal short[] indexData;
 #endif
 
-        public abstract bool AddMesh(Mesh mesh);
+        public abstract bool AddMesh(Mesh mesh, Matrix matrix);
         public abstract void Initialize(GraphicsDevice device);
 
         internal static RenderItem Create(Material material, Mesh mesh, Transform t)
@@ -37,7 +38,7 @@ namespace PressPlay.FFWD.Components
             item = new RenderItem<VertexPositionNormalTexture>(material, AddVertexPositionNormalTexture);
 
             item.Transform = t;
-            item.AddMesh(mesh);
+            item.AddMesh(mesh, t.world);
 
             return item;
         }
@@ -99,8 +100,13 @@ namespace PressPlay.FFWD.Components
         /// </summary>
         /// <param name="m"></param>
         /// <returns></returns>
-        public override bool AddMesh(Mesh mesh)
+        public override bool AddMesh(Mesh mesh, Matrix matrix)
         {
+            if (!mesh._vertices.HasElements())
+	        {
+                return false;
+	        }
+
             int vertexOffset = 0;
             if (vertexData == null)
             {
@@ -121,9 +127,14 @@ namespace PressPlay.FFWD.Components
                 vertexData = new T[vertexOffset + mesh.vertexCount];
                 oldVerts.CopyTo(vertexData, 0);
             }
+            Microsoft.Xna.Framework.Vector3[] transformedVertices = new Microsoft.Xna.Framework.Vector3[mesh._vertices.Length];
+            Microsoft.Xna.Framework.Vector3.Transform(mesh._vertices, ref matrix, transformedVertices);
+            Microsoft.Xna.Framework.Vector3[] transformedNormals = new Microsoft.Xna.Framework.Vector3[mesh._normals.Length];
+            Microsoft.Xna.Framework.Vector3.TransformNormal(mesh._normals, ref matrix, transformedNormals);
+
             for (int i = 0; i < mesh.vertices.Length; i++)
             {
-                vertexData[i + vertexOffset] = addVertex(mesh.vertices[i], mesh.normals[i], mesh.uv[i], (mesh.uv2.HasElements()) ? mesh.uv2[i] : Vector2.zero, (mesh.colors.HasElements()) ? mesh.colors[i] : Color.white);
+                vertexData[i + vertexOffset] = addVertex(transformedVertices[i], transformedNormals[i], mesh._uv[i], (mesh._uv2.HasElements()) ? mesh._uv2[i] : Microsoft.Xna.Framework.Vector2.Zero, (mesh.colors.HasElements()) ? mesh.colors[i] : Color.white);
             }
             return true;
         }
