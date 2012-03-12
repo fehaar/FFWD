@@ -85,10 +85,14 @@ namespace ProjectInitializer
                 }
                 if (!ignoreFileTypes.Contains(Path.GetExtension(newFileName)))
                 {
-                    File.Copy(item, Path.Combine(newDir, newFileName));
+                    string completeNewName = Path.Combine(newDir, newFileName);
+                    if (!item.Equals(completeNewName, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        File.Copy(item, completeNewName);
+                    }
                     if (fixFileContentsOfFileTypes.Contains(Path.GetExtension(newFileName)))
                     {
-                        FixFileContents(Path.Combine(newDir, newFileName));                       
+                        FixFileContents(completeNewName);
                     }
                 }
             }
