@@ -24,14 +24,17 @@ namespace PressPlay.FFWD.Components
             }
             else
             {
-                list.Insert(index, item);
+                if (list[index] != item)
+                {
+                    list.Insert(index, item);
+                }
             }
         }
 
         public void Remove(RenderItem item)
         {
             int index = list.BinarySearch(item, this);
-            if (index > 0)
+            if (index >= 0)
             {
                 list.RemoveAt(index);
             }
@@ -55,7 +58,12 @@ namespace PressPlay.FFWD.Components
 
         public int Compare(RenderItem x, RenderItem y)
         {
-            return x.Priority.CompareTo(y.Priority);
+            int idx = x.Priority.CompareTo(y.Priority);
+            if (idx == 0)
+	        {
+                return x.ToString().CompareTo(y.ToString());
+	        }
+            return idx;
         }
 
         internal static void ReconsiderForCulling(RenderItem r)

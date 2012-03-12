@@ -224,6 +224,7 @@ namespace PressPlay.FFWD.Components
         public static void RemoveCamera(Camera cam)
         {
             _allCameras.Remove(cam);
+            cam.CulledRenderQueue.Clear();
             if (cam == main)
             {
                 main = null;

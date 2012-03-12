@@ -4,7 +4,7 @@
     <hasBeenProcessed>false</hasBeenProcessed>
     <go>
       <id>-55198</id>
-      <name>Cube</name>
+      <name>MovingCube</name>
       <layer>0</layer>
       <tag>Untagged</tag>
       <cs>
@@ -58,7 +58,7 @@
     </go>
     <go>
       <id>-48810</id>
-      <name>Cube</name>
+      <name>OnCameraEdgeCube</name>
       <layer>0</layer>
       <tag>Untagged</tag>
       <cs>
@@ -190,7 +190,7 @@
     </go>
     <go>
       <id>5126</id>
-      <name>Cube</name>
+      <name>DisablingCube</name>
       <layer>0</layer>
       <tag>Untagged</tag>
       <cs>
@@ -282,7 +282,7 @@
     </go>
     <go>
       <id>5146</id>
-      <name>Cube</name>
+      <name>LayerCube</name>
       <layer>8</layer>
       <tag>Untagged</tag>
       <cs>

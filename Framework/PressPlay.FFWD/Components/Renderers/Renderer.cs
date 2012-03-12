@@ -144,6 +144,10 @@ namespace PressPlay.FFWD.Components
         /// </summary>
         internal void ReconsiderForCulling()
         {
+            if (renderItems == null)
+            {
+                return;
+            }
             for (int i = 0; i < renderItems.Length; i++)
             {
                 RenderQueue.ReconsiderForCulling(renderItems[i]);
@@ -152,6 +156,10 @@ namespace PressPlay.FFWD.Components
 
         internal void AddRenderItems(RenderQueue rq)
         {
+            if (renderItems == null)
+            {
+                return;
+            }
             for (int i = 0; i < renderItems.Length; i++)
             {
                 rq.Add(renderItems[i]);
@@ -160,6 +168,10 @@ namespace PressPlay.FFWD.Components
 
         internal void RemoveRenderItems(RenderQueue rq)
         {
+            if (renderItems == null)
+            {
+                return;
+            }
             for (int i = 0; i < renderItems.Length; i++)
             {
                 rq.Remove(renderItems[i]);

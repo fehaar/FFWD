@@ -50,8 +50,13 @@ namespace FFWD.Unity.Tests
 
 //            PressPlay.FFWD.Components.Camera.wireframeRender = true;
 
+            levelQueue.Enqueue("BasicRendering");
+            levelQueue.Enqueue("Lightmap");
+
             base.Initialize();
         }
+
+        protected Queue<string> levelQueue = new Queue<string>();
 
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
@@ -59,9 +64,15 @@ namespace FFWD.Unity.Tests
         /// </summary>
         protected override void LoadContent()
         {
+            SwitchLevel();
             // TODO: use this.Content to load your game content here
-            Application.LoadLevel("BasicRendering");
-            //Application.LoadLevel("Lightmap");
+        }
+
+        private void SwitchLevel()
+        {
+            string name = levelQueue.Dequeue();
+            Application.LoadLevel(name);
+            levelQueue.Enqueue(name);
         }
 
         /// <summary>
@@ -83,6 +94,11 @@ namespace FFWD.Unity.Tests
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
+
+            if (Input.GetKeyUp(Keys.Back))
+            {
+                SwitchLevel();
+            }
 
             // TODO: Add your update logic here
             base.Update(gameTime);
