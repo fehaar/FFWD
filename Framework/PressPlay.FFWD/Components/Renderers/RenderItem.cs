@@ -15,7 +15,7 @@ namespace PressPlay.FFWD.Components
         public Material Material;
         public Transform Transform;
         public Bounds? Bounds;
-        protected int batches = 0;
+        protected int batches = -1;
         public int Priority;
         public bool Enabled;
         protected bool UseVertexColor = false;

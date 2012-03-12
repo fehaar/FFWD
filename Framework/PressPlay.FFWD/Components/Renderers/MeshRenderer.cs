@@ -36,11 +36,11 @@ namespace PressPlay.FFWD.Components
         }
 
         #region IRenderable Members
-        public override int Draw(GraphicsDevice device, Camera cam)
+        public override void Draw(GraphicsDevice device, Camera cam)
         {
             if (filter == null)
             {                
-                return 0;
+                return;
             }
 
             BoundingSphere sphere = new BoundingSphere((Microsoft.Xna.Framework.Vector3)transform.position + filter.boundingSphere.Center, filter.boundingSphere.Radius * transform.lossyScale.sqrMagnitude);
@@ -52,15 +52,13 @@ namespace PressPlay.FFWD.Components
                     Debug.LogFormat("VP cull {0} with radius {1} pos {2} cam {3} at {4}", gameObject, filter.boundingSphere.Radius, transform.position, cam.gameObject, cam.transform.position);
                 }
 #endif
-                return 0;
+                return;
             }
 
             if (filter.CanBatch())
             {
-                return cam.BatchRender(filter.meshToRender, sharedMaterials, transform);
+                cam.BatchRender(filter.meshToRender, sharedMaterials, transform);
             }
-
-            return 0;
         }
         #endregion
     }

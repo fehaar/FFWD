@@ -114,7 +114,7 @@ namespace PressPlay.FFWD.Components
         /// <param name="device"></param>
         /// <param name="cam"></param>
         /// <returns>Returns an estimated number of draw calls that we make in the draw routine.</returns>
-        public abstract int Draw(GraphicsDevice device, Camera cam);
+        public abstract void Draw(GraphicsDevice device, Camera cam);
         #endregion
 
         public override void Awake()

@@ -18,11 +18,11 @@ namespace PressPlay.FFWD.Components
             DrawCalls = BatchedDrawCalls = VerticesDrawn = TrianglesDrawn = RenderTextures = 0;
         }
 
-        internal static void AddDrawCall(int batches, int vertices, int triangles)
+        internal static void AddDrawCall(int batched, int vertices, int triangles)
         {
-            if (batches > 1)
+            if (batched > 1)
             {
-                BatchedDrawCalls++;
+                BatchedDrawCalls += batched;
             }
             else
             {

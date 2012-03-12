@@ -117,7 +117,7 @@ namespace PressPlay.FFWD.Components
             positions[index] = position;
         }
 
-        public override int Draw(Microsoft.Xna.Framework.Graphics.GraphicsDevice device, Camera cam)
+        public override void Draw(Microsoft.Xna.Framework.Graphics.GraphicsDevice device, Camera cam)
         {
             if (!useWorldSpace)
             {
@@ -152,8 +152,6 @@ namespace PressPlay.FFWD.Components
                     (pointCnt-1) * 2
                 );
             }
-
-            return 1;
         }
 
         void Rebuild(Vector3[] positions, int pointCnt, Vector3 cameraPosition)

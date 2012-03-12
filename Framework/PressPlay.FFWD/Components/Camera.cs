@@ -101,8 +101,6 @@ namespace PressPlay.FFWD.Components
 
         public static bool wireframeRender = false;
 
-        private static int estimatedDrawCalls = 0;
-
         private static DynamicBatchRenderer dynamicBatchRenderer;
 
         internal static BasicEffect basicEffect;
@@ -410,7 +408,6 @@ namespace PressPlay.FFWD.Components
                 dynamicBatchRenderer = new DynamicBatchRenderer(device);
             }
 
-            estimatedDrawCalls = 0;
             if (device == null)
             {
                 return;
@@ -467,7 +464,7 @@ namespace PressPlay.FFWD.Components
             GUI.EndRendering();
 
 #if DEBUG
-            Debug.Display("Draw calls, Direct, RT", System.String.Format("{0}, {1}, {2}", estimatedDrawCalls, directRender, renderTargets));
+            Debug.Display("Draw stats", System.String.Format("Draw {0}, Batch draw {1}, Tris {2}, Verts {3}, RTs {4}", RenderStats.DrawCalls, RenderStats.BatchedDrawCalls, RenderStats.TrianglesDrawn, RenderStats.VerticesDrawn, renderTargets));
             logRenderCalls = false;
 #endif
         }
@@ -551,18 +548,18 @@ namespace PressPlay.FFWD.Components
                 {
                     if (q > 0)
                     {
-                        estimatedDrawCalls += dynamicBatchRenderer.DoDraw(device, this);
+                        dynamicBatchRenderer.DoDraw(device, this);
                     }
                     q = r.material.renderQueue;
                 }
 
                 if (r.gameObject.active && r.enabled)
                 {
-                    estimatedDrawCalls += r.Draw(device, this);
+                    r.Draw(device, this);
                 }
             }
 
-            estimatedDrawCalls += dynamicBatchRenderer.DoDraw(device, this);
+            dynamicBatchRenderer.DoDraw(device, this);
         }
 
         internal void RecalculateView()

@@ -31,9 +31,11 @@ namespace PressPlay.FFWD.Components
         public bool useLightMap { get { return lightmapIndex > -1; } }
 
         public int vertexIndex;
+        public int batches;
 
         public bool InitializeArray(int size)
         {
+            batches++;
             if (vertexIndex + size > UInt16.MaxValue)
             {
                 return false;
@@ -349,10 +351,8 @@ namespace PressPlay.FFWD.Components
             return true;
         }
 
-        public override int Draw(GraphicsDevice device, Camera cam)
+        public override void Draw(GraphicsDevice device, Camera cam)
         {
-            int iAcum = 0;
-
             UInt32 tiles = tilesV * tilesU;
             for (UInt32 i = 0; i < tiles; ++i)
             {
@@ -421,13 +421,10 @@ namespace PressPlay.FFWD.Components
                             0,
                             quadTreeTiles[j].indexBuffer[i].IndexCount / 3
                         );
-
-                        iAcum++;
+                        RenderStats.AddDrawCall(quadTreeTiles[j].batches, quadTreeTiles[j].vertexBuffer.VertexCount, quadTreeTiles[j].indexBuffer[i].IndexCount / 3);
                     }
                 }
             }
-
-            return iAcum;
         }
     }
 }
