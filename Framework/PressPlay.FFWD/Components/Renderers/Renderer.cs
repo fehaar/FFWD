@@ -106,6 +106,7 @@ namespace PressPlay.FFWD.Components
         }
 
         internal float renderQueue = 0f;
+        internal RenderItem[] renderItems;
 
         #region IRenderable Members
         /// <summary>
@@ -138,8 +139,28 @@ namespace PressPlay.FFWD.Components
             throw new NotImplementedException();
         }
 
-        internal virtual void RendererMoved()
-        {            
+        internal void RendererMoved()
+        {
+            for (int i = 0; i < renderItems.Length; i++)
+            {
+                RenderQueue.RenderItemMoved(renderItems[i]);
+            }
+        }
+
+        internal void AddRenderItems(RenderQueue rq)
+        {
+            for (int i = 0; i < renderItems.Length; i++)
+            {
+                rq.Add(renderItems[i]);
+            }
+        }
+
+        internal void RemoveRenderItems(RenderQueue rq)
+        {
+            for (int i = 0; i < renderItems.Length; i++)
+            {
+                rq.Remove(renderItems[i]);
+            }            
         }
     }
 }

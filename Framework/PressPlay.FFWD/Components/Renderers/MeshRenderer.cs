@@ -9,8 +9,6 @@ namespace PressPlay.FFWD.Components
     {
         private MeshFilter filter;
 
-        private RenderItem[] renderItems;
-
         public override void Initialize(AssetHelper assets)
         {
             if (isPartOfStaticBatch)
@@ -58,15 +56,6 @@ namespace PressPlay.FFWD.Components
             {
                 cam.BatchRender(filter.meshToRender, sharedMaterials, transform);
             }
-        }
-
-        internal override void RendererMoved()
-        {
-            base.RendererMoved();
-            for (int i = 0; i < renderItems.Length; i++)
-			{
-                RenderQueue.RenderItemMoved(renderItems[i]);
-			}
         }
     }
 }

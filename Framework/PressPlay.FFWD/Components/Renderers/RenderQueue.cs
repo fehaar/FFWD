@@ -28,6 +28,15 @@ namespace PressPlay.FFWD.Components
             }
         }
 
+        public void Remove(RenderItem item)
+        {
+            int index = list.BinarySearch(item, this);
+            if (index > 0)
+            {
+                list.RemoveAt(index);
+            }
+        }
+
         public RenderItem this[int index]
         {
             get

@@ -322,8 +322,13 @@ namespace PressPlay.FFWD.Components
         {
             bool isAdded = false;
 
-            if (renderer.isPartOfStaticBatch || (renderer is MeshRenderer))
+            if (renderer.isPartOfStaticBatch)
             {
+                return;
+            }
+            if (renderer is MeshRenderer)
+            {
+                renderer.AddRenderItems(RenderQueue);
                 return;
             }
 
@@ -365,11 +370,13 @@ namespace PressPlay.FFWD.Components
             {
                 _allCameras[i].removeRenderer(renderer);
             }
+            renderer.RemoveRenderItems(RenderQueue);
         }
 
         private void removeRenderer(Renderer renderer)
         {
             oldRenderQueue.Remove(renderer);
+            renderer.RemoveRenderItems(CulledRenderQueue);
         }
 
         internal static void ChangeRenderQueue(Renderer renderer)
@@ -713,19 +720,19 @@ namespace PressPlay.FFWD.Components
 
         internal bool DoFrustumCulling(ref BoundingBox bbox)
         {
-          if (bbox.Min == Microsoft.Xna.Framework.Vector3.Zero &&
-              bbox.Max == Microsoft.Xna.Framework.Vector3.Zero)
-          {
-            return false;
-          }
+            if (bbox.Min == Microsoft.Xna.Framework.Vector3.Zero &&
+                bbox.Max == Microsoft.Xna.Framework.Vector3.Zero)
+            {
+                return false;
+            }
 
-          ContainmentType contain;
-          frustum.Contains(ref bbox, out contain);
-          if (contain == ContainmentType.Disjoint)
-          {
-            return true;
-          }
-          return false;
+            ContainmentType contain;
+            frustum.Contains(ref bbox, out contain);
+            if (contain == ContainmentType.Disjoint)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

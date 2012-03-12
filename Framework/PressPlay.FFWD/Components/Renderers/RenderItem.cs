@@ -201,9 +201,6 @@ namespace PressPlay.FFWD.Components
 #endif
             IndexBuffer.SetData(indexData);
             indexData = null;
-
-            // Add to the global render queue
-            Camera.RenderQueue.Add(this);
         }
     }
 }
