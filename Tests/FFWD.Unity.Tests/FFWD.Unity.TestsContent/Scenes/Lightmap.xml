@@ -3,90 +3,42 @@
   <Asset Type="f:Scene">
     <hasBeenProcessed>false</hasBeenProcessed>
     <go>
-      <id>-61164</id>
-      <name>Cube</name>
-      <layer>0</layer>
-      <tag>Untagged</tag>
-      <static>true</static>
-      <cs>
-        <c Type="f:Transform">
-          <id>-61166</id>
-          <p>-0.73991 0.5 -1.85552</p>
-          <r>0 0.40286 0 0.91526</r>
-        </c>
-        <c Type="c:MeshFilter">
-          <id>-61170</id>
-          <mesh>
-            <id>138</id>
-            <name>Cube</name>
-          </mesh>
-        </c>
-        <c Type="c:BoxCollider">
-          <id>-61172</id>
-          <isTrigger>false</isTrigger>
-          <center>0 0 0</center>
-          <size>1 1 1</size>
-        </c>
-        <c Type="c:MeshRenderer">
-          <id>-61168</id>
-          <lightmapIndex>0</lightmapIndex>
-          <lightmapTilingOffset>0.11914 0.23828 0.48926 0.84181</lightmapTilingOffset>
-          <sharedMaterials>
-            <material>
-              <id>366</id>
-              <name>Item blue</name>
-              <shader>Diffuse</shader>
-              <renderQueue>2000</renderQueue>
-              <color>FF4C00FF</color>
-              <mainTexture>
-                <id>418</id>
-                <name>Assets/DSC_5866</name>
-              </mainTexture>
-              <mainTextureOffset>0 0</mainTextureOffset>
-              <mainTextureScale>1 1</mainTextureScale>
-              <wrapRepeat>true</wrapRepeat>
-            </material>
-          </sharedMaterials>
-        </c>
-      </cs>
-    </go>
-    <go>
-      <id>4802</id>
+      <id>7490</id>
       <name>Sphere</name>
       <layer>0</layer>
       <tag>Untagged</tag>
       <static>true</static>
       <cs>
         <c Type="f:Transform">
-          <id>4804</id>
+          <id>7492</id>
           <p>1.27747 0.60953 0.60931</p>
         </c>
         <c Type="c:MeshFilter">
-          <id>4808</id>
+          <id>7496</id>
           <mesh>
             <id>142</id>
             <name>Sphere</name>
           </mesh>
         </c>
         <c Type="c:SphereCollider">
-          <id>4810</id>
+          <id>7498</id>
           <isTrigger>false</isTrigger>
           <center>0 0 0</center>
           <radius>0.5</radius>
         </c>
         <c Type="c:MeshRenderer">
-          <id>4806</id>
+          <id>7494</id>
           <lightmapIndex>0</lightmapIndex>
           <lightmapTilingOffset>0.08594 0.17188 0.62515 -0.00074</lightmapTilingOffset>
           <sharedMaterials>
             <material>
-              <id>398</id>
+              <id>406</id>
               <name>Item red</name>
               <shader>Diffuse</shader>
               <renderQueue>2000</renderQueue>
               <color>FFFF0000</color>
               <mainTexture>
-                <id>418</id>
+                <id>428</id>
                 <name>Assets/DSC_5866</name>
               </mainTexture>
               <mainTextureOffset>0 0</mainTextureOffset>
@@ -98,25 +50,25 @@
       </cs>
     </go>
     <go>
-      <id>4812</id>
+      <id>7500</id>
       <name>Cylinder</name>
       <layer>0</layer>
       <tag>Untagged</tag>
       <static>true</static>
       <cs>
         <c Type="f:Transform">
-          <id>4814</id>
+          <id>7502</id>
           <p>1.37486 0.60953 -0.65056</p>
         </c>
         <c Type="c:MeshFilter">
-          <id>4818</id>
+          <id>7506</id>
           <mesh>
             <id>140</id>
             <name>Cylinder</name>
           </mesh>
         </c>
         <c Type="c:CapsuleCollider">
-          <id>4820</id>
+          <id>7508</id>
           <isTrigger>false</isTrigger>
           <center>0 0 0</center>
           <radius>0.5</radius>
@@ -124,18 +76,18 @@
           <direction>1</direction>
         </c>
         <c Type="c:MeshRenderer">
-          <id>4816</id>
+          <id>7504</id>
           <lightmapIndex>0</lightmapIndex>
           <lightmapTilingOffset>0.13574 0.27148 0.48915 0.00027</lightmapTilingOffset>
           <sharedMaterials>
             <material>
-              <id>412</id>
+              <id>422</id>
               <name>Item</name>
               <shader>Diffuse</shader>
               <renderQueue>2000</renderQueue>
               <color>FFFFFFFF</color>
               <mainTexture>
-                <id>418</id>
+                <id>428</id>
                 <name>Assets/DSC_5866</name>
               </mainTexture>
               <mainTextureOffset>0 0</mainTextureOffset>
@@ -147,35 +99,35 @@
       </cs>
     </go>
     <go>
-      <id>4822</id>
+      <id>7510</id>
       <name>Plane</name>
       <layer>0</layer>
       <tag>Untagged</tag>
       <static>true</static>
       <cs>
         <c Type="f:Transform">
-          <id>4824</id>
+          <id>7512</id>
         </c>
         <c Type="c:MeshFilter">
-          <id>4828</id>
+          <id>7516</id>
           <mesh>
             <id>146</id>
             <name>Plane</name>
           </mesh>
         </c>
         <c Type="c:MeshRenderer">
-          <id>4826</id>
+          <id>7514</id>
           <lightmapIndex>0</lightmapIndex>
           <lightmapTilingOffset>0.48828 0.97656 0.00049 0.00098</lightmapTilingOffset>
           <sharedMaterials>
             <material>
-              <id>402</id>
+              <id>410</id>
               <name>Floor</name>
               <shader>Diffuse</shader>
               <renderQueue>2000</renderQueue>
               <color>FFFFFFFF</color>
               <mainTexture>
-                <id>388</id>
+                <id>394</id>
                 <name>Assets/stone_pavement_texture_02-512x512</name>
               </mainTexture>
               <mainTextureOffset>0.5 0</mainTextureOffset>
@@ -187,18 +139,18 @@
       </cs>
     </go>
     <go>
-      <id>4832</id>
+      <id>7520</id>
       <name>Directional light</name>
       <layer>0</layer>
       <tag>Untagged</tag>
       <cs>
         <c Type="f:Transform">
-          <id>4834</id>
+          <id>7522</id>
           <p>0 3.86035 -2.38731</p>
           <r>0.40822 -0.23457 0.10938 0.87543</r>
         </c>
         <c Type="c:Light">
-          <id>4836</id>
+          <id>7524</id>
           <enabled>true</enabled>
           <type>Directional</type>
           <color>FFFFFFFF</color>
@@ -210,42 +162,42 @@
       </cs>
     </go>
     <go>
-      <id>4848</id>
+      <id>7526</id>
       <name>Cube</name>
       <layer>0</layer>
       <tag>Untagged</tag>
       <static>true</static>
       <cs>
         <c Type="f:Transform">
-          <id>4850</id>
+          <id>7528</id>
           <p>0 0.5 0</p>
         </c>
         <c Type="c:MeshFilter">
-          <id>4854</id>
+          <id>7532</id>
           <mesh>
             <id>138</id>
             <name>Cube</name>
           </mesh>
         </c>
         <c Type="c:BoxCollider">
-          <id>4856</id>
+          <id>7534</id>
           <isTrigger>false</isTrigger>
           <center>0 0 0</center>
           <size>1 1 1</size>
         </c>
         <c Type="c:MeshRenderer">
-          <id>4852</id>
+          <id>7530</id>
           <lightmapIndex>0</lightmapIndex>
           <lightmapTilingOffset>0.11914 0.23828 0.60938 0.84181</lightmapTilingOffset>
           <sharedMaterials>
             <material>
-              <id>366</id>
+              <id>368</id>
               <name>Item blue</name>
               <shader>Diffuse</shader>
               <renderQueue>2000</renderQueue>
               <color>FF4C00FF</color>
               <mainTexture>
-                <id>418</id>
+                <id>428</id>
                 <name>Assets/DSC_5866</name>
               </mainTexture>
               <mainTextureOffset>0 0</mainTextureOffset>
@@ -257,25 +209,25 @@
       </cs>
     </go>
     <go>
-      <id>4858</id>
+      <id>7536</id>
       <name>Main Camera</name>
       <layer>0</layer>
       <tag>MainCamera</tag>
       <cs>
         <c Type="f:Transform">
-          <id>4860</id>
+          <id>7538</id>
           <p>-0.11295 2.39331 -3.58757</p>
           <r>0.28976 0 0 0.9571</r>
         </c>
         <c Type="c:Camera">
-          <id>4862</id>
+          <id>7540</id>
           <fieldOfView>60</fieldOfView>
           <nearClipPlane>0.3</nearClipPlane>
           <farClipPlane>1000</farClipPlane>
           <orthographicSize>100</orthographicSize>
           <orthographic>false</orthographic>
           <depth>-1</depth>
-          <aspect>2.30996</aspect>
+          <aspect>0.52341</aspect>
           <cullingMask>-1</cullingMask>
           <backgroundColor>05314D79</backgroundColor>
           <rect>0 0 1 1</rect>
@@ -283,10 +235,58 @@
         </c>
       </cs>
     </go>
+    <go>
+      <id>7548</id>
+      <name>Cube</name>
+      <layer>0</layer>
+      <tag>Untagged</tag>
+      <static>true</static>
+      <cs>
+        <c Type="f:Transform">
+          <id>7550</id>
+          <p>-0.73991 0.5 -1.85552</p>
+          <r>0 0.40286 0 0.91526</r>
+        </c>
+        <c Type="c:MeshFilter">
+          <id>7554</id>
+          <mesh>
+            <id>138</id>
+            <name>Cube</name>
+          </mesh>
+        </c>
+        <c Type="c:BoxCollider">
+          <id>7556</id>
+          <isTrigger>false</isTrigger>
+          <center>0 0 0</center>
+          <size>1 1 1</size>
+        </c>
+        <c Type="c:MeshRenderer">
+          <id>7552</id>
+          <lightmapIndex>0</lightmapIndex>
+          <lightmapTilingOffset>0.11914 0.23828 0.48926 0.84181</lightmapTilingOffset>
+          <sharedMaterials>
+            <material>
+              <id>368</id>
+              <name>Item blue</name>
+              <shader>Diffuse</shader>
+              <renderQueue>2000</renderQueue>
+              <color>FF4C00FF</color>
+              <mainTexture>
+                <id>428</id>
+                <name>Assets/DSC_5866</name>
+              </mainTexture>
+              <mainTextureOffset>0 0</mainTextureOffset>
+              <mainTextureScale>1 1</mainTextureScale>
+              <wrapRepeat>true</wrapRepeat>
+            </material>
+          </sharedMaterials>
+        </c>
+      </cs>
+    </go>
     <lightmapSettings>
       <lightmapData>
         <lightmapFar>
-          <id>384</id>
+          <id>390</id>
           <name>Scenes/Lightmap/LightmapFar-0</name>
         </lightmapFar>
       </lightmapData>
