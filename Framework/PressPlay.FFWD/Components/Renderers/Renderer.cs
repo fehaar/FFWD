@@ -1,10 +1,11 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using PressPlay.FFWD.Interfaces;
 
 namespace PressPlay.FFWD.Components
 {
-    public abstract class Renderer : Component
+    public abstract class Renderer : Component, IInitializable
     {
         public Renderer()
             :base()
@@ -126,6 +127,15 @@ namespace PressPlay.FFWD.Components
             {
                 renderQueue = material.finalRenderQueue;
             }
+        }
+
+        public virtual void Initialize(AssetHelper assets)
+        {
+        }
+
+        public bool InitializePrefabs()
+        {
+            throw new NotImplementedException();
         }
     }
 }

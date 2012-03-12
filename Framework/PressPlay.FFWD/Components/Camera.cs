@@ -78,7 +78,8 @@ namespace PressPlay.FFWD.Components
         public float aspect { get; set; }
         public int cullingMask { get; set; }
         private readonly List<Renderer> renderQueue = new List<Renderer>(50);
-        private readonly RenderQueue renderQ = new RenderQueue();
+        internal static readonly RenderQueue RenderQueue = new RenderQueue();
+        private readonly List<int> RenderPriorities = new List<int>(50);
 
         public float pixelWidth 
         { 
@@ -180,6 +181,8 @@ namespace PressPlay.FFWD.Components
 
             frustum = new BoundingFrustum(view * projectionMatrix);
             RecalculateView();
+
+            // This code will be replaced with the new render queue
             for (int i = nonAssignedRenderers.Count - 1; i >= 0; i--)
             {
                 if (nonAssignedRenderers[i] == null || nonAssignedRenderers[i].gameObject == null || addRenderer(nonAssignedRenderers[i]))
@@ -194,6 +197,8 @@ namespace PressPlay.FFWD.Components
                     addRenderer(_allCameras[i].renderQueue[j]);
                 }
             }
+            // This code will be replaced with the new render queue END
+
             _allCameras.Add(this);
             _allCameras.Sort(this);
 
