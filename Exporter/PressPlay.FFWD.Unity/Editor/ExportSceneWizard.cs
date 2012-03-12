@@ -362,9 +362,16 @@ public class ExportSceneWizard : ScriptableWizard
 
         private void FindAllUnityScripts()
         {
-            foreach (string file in Directory.GetFiles(Path.Combine(Application.dataPath, config.unityScriptDir), "*.cs", SearchOption.AllDirectories))
+            if (Directory.Exists(Path.Combine(Application.dataPath, config.unityScriptDir)))
             {
-                unityScriptFiles[Path.GetFileNameWithoutExtension(file)] = file;
+                foreach (string file in Directory.GetFiles(Path.Combine(Application.dataPath, config.unityScriptDir), "*.cs", SearchOption.AllDirectories))
+                {
+                    unityScriptFiles[Path.GetFileNameWithoutExtension(file)] = file;
+                }
+            }
+            else
+            {
+                Debug.LogError("Unity scripts folder '" + config.unityScriptDir + "' not found.");
             }
         }
 
