@@ -58,7 +58,7 @@ namespace PressPlay.FFWD.Components
             return x.Priority.CompareTo(y.Priority);
         }
 
-        internal static void RenderItemMoved(RenderItem r)
+        internal static void ReconsiderForCulling(RenderItem r)
         {
             reconsiderForCulling.Enqueue(r);
         }

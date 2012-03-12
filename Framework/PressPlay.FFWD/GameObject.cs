@@ -43,8 +43,24 @@ namespace PressPlay.FFWD
 
         [ContentSerializer(Optional = true)]
         public string name;
-        [ContentSerializer(Optional = true)]
-        public int layer;
+        [ContentSerializer(ElementName = "layer", Optional = true)]
+        private int _layer;
+        [ContentSerializerIgnore]
+        public int layer
+        {
+            get
+            {
+                return _layer;
+            }
+            set
+            {
+                _layer = value;
+                if (renderer != null)
+                {
+                    renderer.ReconsiderForCulling();
+                }
+            }
+        }
 
         [ContentSerializer(ElementName = "active", Optional = true)]
         private bool _active = true;
@@ -74,10 +90,6 @@ namespace PressPlay.FFWD
             {
                 if (value == _isStatic) { return; }
                 _isStatic = value;
-                //if (collider != null && rigidbody == null)
-                //{
-                //    collider.SetStatic(_isStatic);
-                //}
             }
         }
 

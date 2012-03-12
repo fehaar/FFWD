@@ -139,11 +139,14 @@ namespace PressPlay.FFWD.Components
             throw new NotImplementedException();
         }
 
-        internal void RendererMoved()
+        /// <summary>
+        /// Flag that the renderer has changed in some way so we need to reconsider it for culling.
+        /// </summary>
+        internal void ReconsiderForCulling()
         {
             for (int i = 0; i < renderItems.Length; i++)
             {
-                RenderQueue.RenderItemMoved(renderItems[i]);
+                RenderQueue.ReconsiderForCulling(renderItems[i]);
             }
         }
 

@@ -793,7 +793,7 @@ namespace PressPlay.FFWD
                 Renderer r = t.renderer;
                 if (r != null)
                 {
-                    r.RendererMoved();
+                    r.ReconsiderForCulling();
                 }
                 t.changes = TransformChanges.None;
             }
