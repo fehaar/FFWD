@@ -13,6 +13,11 @@ namespace PressPlay.FFWD.Components
 
         public override void Initialize(AssetHelper assets)
         {
+            if (isPartOfStaticBatch)
+            {
+                return;
+            }
+
             filter = (MeshFilter)GetComponent(typeof(MeshFilter));
             Material[] mats = materials;
             if (filter.meshToRender != null && mats.HasElements())

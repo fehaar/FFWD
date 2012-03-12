@@ -323,7 +323,7 @@ namespace PressPlay.FFWD.Components
         {
             bool isAdded = false;
 
-            if (renderer.isPartOfStaticBatch)
+            if (renderer.isPartOfStaticBatch || !(renderer is MeshRenderer))
             {
                 return;
             }
@@ -508,19 +508,22 @@ namespace PressPlay.FFWD.Components
                 {
                     RenderQueue[i].Render(device, this);
                 }
-                return;
-            }
-
-            BasicEffect.View = view;
-            BasicEffect.Projection = projectionMatrix;
-
-            if (Light.HasLights)
-            {
-                Light.EnableLighting(BasicEffect);
             }
 
             int q = 0;
             int count = renderQueue.Count;
+
+            if (count > 0)
+            {
+                BasicEffect.View = view;
+                BasicEffect.Projection = projectionMatrix;
+
+                if (Light.HasLights)
+                {
+                    Light.EnableLighting(BasicEffect);
+                }
+            }
+
             for (int i = 0; i < count; i++)
             {
                 Renderer r = renderQueue[i];
