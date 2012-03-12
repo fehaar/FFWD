@@ -95,11 +95,6 @@ namespace FFWD.Unity.Tests
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            if (Input.GetMouseButtonUp(0))
-            {
-                SwitchLevel();
-            }
-
             // TODO: Add your update logic here
             base.Update(gameTime);
 
