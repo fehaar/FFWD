@@ -81,8 +81,13 @@ namespace FFWD.Unity.Tests
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            // TODO: Add your update logic here
             base.Update(gameTime);
+
+            // NOTE: If you want to read FFWD input do it after the Update call 
+            if (Input.GetMouseButtonUp(0))
+            {
+                SwitchLevel();
+            }
         }
 
         /// <summary>
@@ -92,8 +97,6 @@ namespace FFWD.Unity.Tests
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Microsoft.Xna.Framework.Color.CornflowerBlue);
-
-            // TODO: Add your drawing code here
 
             base.Draw(gameTime);
         }
