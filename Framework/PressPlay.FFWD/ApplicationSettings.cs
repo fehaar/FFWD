@@ -49,6 +49,7 @@ namespace PressPlay.FFWD
             public static int TransformChanges = 500;
             public static int ComponentLists = 1500;
             public static int RenderQueues = 100;
+            public static int RenderCullingQueue = 20;
             #endregion
         }
 

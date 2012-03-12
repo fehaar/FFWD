@@ -334,6 +334,7 @@ namespace PressPlay.FFWD
             lateUpdateTime.Stop();
             graphics.Start();
 #endif
+            Camera.Culling();
             Camera.DoRender(GraphicsDevice);
             ChangeComponentActivity();
             CleanUp();

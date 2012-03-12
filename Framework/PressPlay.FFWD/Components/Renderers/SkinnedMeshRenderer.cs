@@ -47,6 +47,7 @@ namespace PressPlay.FFWD.Components
             }
 
             // Check the frustum of the camera
+            // When we kill this code we can kill the BoundingSphere in mesh and filter
             BoundingSphere sphere = new BoundingSphere(transform.position, sharedMesh.bounds.boundingSphere.Radius * transform.lossyScale.sqrMagnitude);
             if (cam.DoFrustumCulling(ref sphere))
             {

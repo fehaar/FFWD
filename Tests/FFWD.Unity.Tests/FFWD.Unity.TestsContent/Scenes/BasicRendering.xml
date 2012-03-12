@@ -109,7 +109,7 @@
           <orthographic>false</orthographic>
           <depth>-1</depth>
           <aspect>2.30996</aspect>
-          <cullingMask>-1</cullingMask>
+          <cullingMask>-257</cullingMask>
           <backgroundColor>05314D79</backgroundColor>
           <rect>0 0 1 1</rect>
           <clearFlags>Skybox</clearFlags>
@@ -269,7 +269,7 @@
     <go>
       <id>5146</id>
       <name>Cube</name>
-      <layer>0</layer>
+      <layer>8</layer>
       <tag>Untagged</tag>
       <cs>
         <c Type="f:Transform">

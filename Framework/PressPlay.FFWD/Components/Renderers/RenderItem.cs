@@ -149,6 +149,15 @@ namespace PressPlay.FFWD.Components
                         1 - ((1 - mesh._uv[i].Y) * Material.mainTextureScale.y + Material.mainTextureOffset.y));
 
                 vertexData[i + vertexOffset] = addVertex(mesh._vertices[i], mesh._normals[i], uv1, (mesh._uv2.HasElements()) ? mesh._uv2[i] : Microsoft.Xna.Framework.Vector2.Zero, (mesh.colors.HasElements()) ? mesh.colors[i] : Color.white);
+
+            }
+            if (Bounds.HasValue)
+	        {
+                Bounds.Value.Encapsulate(mesh.bounds);
+	        }
+            else
+	        {
+                Bounds = mesh.bounds;
             }
 
 #if XBOX

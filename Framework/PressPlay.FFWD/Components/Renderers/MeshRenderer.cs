@@ -35,7 +35,6 @@ namespace PressPlay.FFWD.Components
             }
         }
 
-        #region IRenderable Members
         public override void Draw(GraphicsDevice device, Camera cam)
         {
             if (filter == null)
@@ -60,6 +59,14 @@ namespace PressPlay.FFWD.Components
                 cam.BatchRender(filter.meshToRender, sharedMaterials, transform);
             }
         }
-        #endregion
+
+        internal override void RendererMoved()
+        {
+            base.RendererMoved();
+            for (int i = 0; i < renderItems.Length; i++)
+			{
+                Camera.RenderQueue.RenderItemMoved(renderItems[i]);
+			}
+        }
     }
 }

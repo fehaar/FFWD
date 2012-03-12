@@ -137,5 +137,9 @@ namespace PressPlay.FFWD.Components
         {
             throw new NotImplementedException();
         }
+
+        internal virtual void RendererMoved()
+        {            
+        }
     }
 }
