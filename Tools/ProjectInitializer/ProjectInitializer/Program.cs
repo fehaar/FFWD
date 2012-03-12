@@ -15,7 +15,7 @@ namespace ProjectInitializer
         public string templateName = "FFWD.Template";
         public string startingDir = "XNA";
         public string[] ignoreDirs = new string[] { "bin", "obj" };
-        public string[] ignoreFileTypes = new string[] { ".ncrunchsolution", ".user", ".cachefile", ".docstates" };
+        public string[] ignoreFileTypes = new string[] { ".ncrunchsolution", ".user", ".cachefile", ".docstates", ".suo" };
         public string[] fixFileContentsOfFileTypes = new string[] { ".csproj", ".sln" };
 
         static void Main(string[] args)
@@ -30,14 +30,23 @@ namespace ProjectInitializer
             {
                 p.projectName = args[0];
             }
+
 #if DEBUG
             p.startingDir = @"..\..\..\..\..\..\XNA";
 #endif
             p.Execute();
+
+            Console.WriteLine("Press a key to close the window.");
+            Console.ReadKey();
         }
 
         private void Execute()
         {
+            if (String.IsNullOrEmpty(projectName))
+            {
+                Console.WriteLine("You did not provide a name for the project.");
+                return;
+            }
             if (!Directory.Exists(startingDir))
             {
                 Console.WriteLine("This program needs to be run in the root of the FFWD template project.");
@@ -45,6 +54,7 @@ namespace ProjectInitializer
             }
 
             CopyContents(startingDir, startingDir);
+            Console.WriteLine("The project was copied successfully.");
         }
 
         private void RenameSubdirs(string path)
