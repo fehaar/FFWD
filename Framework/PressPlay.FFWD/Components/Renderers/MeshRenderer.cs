@@ -38,11 +38,6 @@ namespace PressPlay.FFWD.Components
                 return 0;
             }
 
-            if (renderItems != null)
-            {
-                return 0;
-            }
-
             BoundingSphere sphere = new BoundingSphere((Microsoft.Xna.Framework.Vector3)transform.position + filter.boundingSphere.Center, filter.boundingSphere.Radius * transform.lossyScale.sqrMagnitude);
             if (cam.DoFrustumCulling(ref sphere))
             {

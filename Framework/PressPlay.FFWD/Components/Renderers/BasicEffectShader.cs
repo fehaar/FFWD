@@ -38,6 +38,10 @@ namespace PressPlay.FFWD.Components
             Effect.Alpha = mat.color.a;
             Effect.VertexColorEnabled = useVertexColor;
             Effect.LightingEnabled = Light.HasLights;
+            if (Light.HasLights)
+            {
+                Light.EnableLighting(Effect);
+            }
         }
     }
 }
