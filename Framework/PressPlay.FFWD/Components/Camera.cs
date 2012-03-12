@@ -80,7 +80,7 @@ namespace PressPlay.FFWD.Components
         private readonly List<Renderer> oldRenderQueue = new List<Renderer>(50);
         internal static readonly RenderQueue RenderQueue = new RenderQueue(ApplicationSettings.DefaultCapacities.RenderQueues);
         internal readonly RenderQueue CulledRenderQueue = new RenderQueue(ApplicationSettings.DefaultCapacities.RenderCullingQueue);
-        private bool doFullCullingScan = true;
+        private bool doFullCullingScan;
 
         public float pixelWidth 
         { 
@@ -412,9 +412,12 @@ namespace PressPlay.FFWD.Components
 
             for (int i = 0; i < camCount; i++)
             {
-                if (_allCameras[i].doFullCullingScan)
+                Camera cam = _allCameras[i];
+                if (cam.doFullCullingScan)
                 {
-                    _allCameras[i].doFullCullingScan = false;
+                    cam.doFullCullingScan = false;
+                    cam.CulledRenderQueue.Clear();
+
                     // Initialize the culling queue for this camera
                     // TODO: Here we should use something like an octtree to make full scanning faster
                     int rqCount = RenderQueue.Count;
@@ -622,6 +625,7 @@ namespace PressPlay.FFWD.Components
                 transform.up);
             view = m * inverter;
             frustum.Matrix = view * projectionMatrix;
+            doFullCullingScan = true;
         }
 
         private void Clear(GraphicsDevice device)

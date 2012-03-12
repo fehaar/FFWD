@@ -65,7 +65,7 @@ namespace PressPlay.FFWD.Components
             base.RendererMoved();
             for (int i = 0; i < renderItems.Length; i++)
 			{
-                Camera.RenderQueue.RenderItemMoved(renderItems[i]);
+                RenderQueue.RenderItemMoved(renderItems[i]);
 			}
         }
     }
