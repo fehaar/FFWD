@@ -74,7 +74,6 @@ namespace PressPlay.FFWD
                     if (t.phase == TouchPhase.Ended)
                     {
                         mouseUps[0] = true;
-                        Debug.Log("Mouse up");
                     }
                     if (_activeTouches != i)
                     {
@@ -112,7 +111,6 @@ namespace PressPlay.FFWD
                 if (t.phase == TouchPhase.Began)
 	            {
                     mouseDowns[0] = true;
-                    Debug.Log("Mouse down");
                 }
                 _touches[_activeTouches++] = t;
             }
