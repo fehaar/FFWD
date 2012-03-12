@@ -485,7 +485,6 @@ namespace PressPlay.FFWD.Components
             }
             else
             {
-                //device.RasterizerState = RasterizerState.CullNone;
                 device.RasterizerState = RasterizerState.CullCounterClockwise;
             }
 

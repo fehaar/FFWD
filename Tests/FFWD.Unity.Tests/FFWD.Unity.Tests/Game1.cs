@@ -95,7 +95,7 @@ namespace FFWD.Unity.Tests
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            if (Input.GetKeyUp(Keys.Back))
+            if (Input.GetMouseButtonUp(0))
             {
                 SwitchLevel();
             }
