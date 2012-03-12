@@ -34,9 +34,16 @@ namespace PressPlay.FFWD.Exporter.Writers
         private List<int> writtenIds = new List<int>();
         public List<string> componentsNotWritten = new List<string>();
 
-        private Dictionary<string, object> assetsToWrite = new Dictionary<string, object>();
+        class AssetToWrite
+        {
+            public string name;
+            public object asset;
+        }
+
+        private Dictionary<string, List<AssetToWrite>> assetsToWrite = new Dictionary<string, List<AssetToWrite>>();
         private Dictionary<int, Component> inlineResource = new Dictionary<int, Component>();
         private bool writingResources = false;
+
 
         public void Write(string path)
         {
@@ -209,13 +216,12 @@ namespace PressPlay.FFWD.Exporter.Writers
             }
             foreach (var key in assetsToWrite.Keys)
             {
-                object obj = assetsToWrite[key];
-                Type tp = obj.GetType();
+                List<AssetToWrite> objects = assetsToWrite[key];
                 string path = PreparePath(String.Format("../{0}.xml", key));
-                //Debug.Log("Write asset to: " + path);
                 XmlWriterSettings settings = new XmlWriterSettings();
                 settings.Indent = true;
                 settings.IndentChars = "  ";
+                HashSet<string> written = new HashSet<string>();
                 using (writer = XmlWriter.Create(path, settings))
                 {
                     writer.WriteStartDocument();
@@ -223,8 +229,18 @@ namespace PressPlay.FFWD.Exporter.Writers
                     writer.WriteAttributeString("xmlns", "f", null, "PressPlay.FFWD");
                     writer.WriteAttributeString("xmlns", "c", null, "PressPlay.FFWD.Components");
                     writer.WriteStartElement("Asset");
-                    writer.WriteAttributeString("Type", resolver.DefaultNamespace + tp.Name);
-                    WriteAsset(obj);
+                    writer.WriteAttributeString("Type", resolver.DefaultNamespace + objects[0].asset.GetType().Name + "[]");
+                    foreach (var item in objects)
+                    {
+                        if (written.Contains(item.name))
+                        {
+                            continue;
+                        }
+                        written.Add(item.name);
+                        writer.WriteStartElement("Item");
+                        WriteAsset(item.asset);
+                        writer.WriteEndElement();
+                    }
                     writer.WriteEndElement();
                     writer.WriteEndElement();
                 }
@@ -488,25 +504,26 @@ namespace PressPlay.FFWD.Exporter.Writers
             writer.WriteElementString("name", assetName);
             writer.WriteEndElement();
 
-            if (assetName.Contains("StandarPlane"))
-            {
-                Debug.Log(assetName + ": " + mesh.GetInstanceID() + ". uv2 " + mesh.uv2.HasElements());
-            }
-
             if (!assetsToWrite.ContainsKey(assetName))
             {
-                assetsToWrite[assetName] = mesh;
+                assetsToWrite.Add(assetName, new List<AssetToWrite>());
             }
+            assetsToWrite[assetName].Add(new AssetToWrite() { name = mesh.name, asset = mesh });
         }
 
         private string GetAssetName(Mesh mesh)
         {
-            string asset = Path.GetFileNameWithoutExtension(AssetDatabase.GetAssetPath(mesh.GetInstanceID()));
+            string asset = AssetDatabase.GetAssetPath(mesh.GetInstanceID());
             if (String.IsNullOrEmpty(asset))
             {
                 return mesh.name;
             }
-            return Path.Combine("Meshes", asset + "-" + mesh.name);
+            asset = asset.Replace("Assets/", "");
+            if (asset.Contains("Instance"))
+            {
+                asset = asset.Replace("Instance", "").TrimEnd();
+            }
+            return asset;
         }
 
         private Vector2[] TransformUV(Vector2[] uv)
@@ -942,8 +959,9 @@ namespace PressPlay.FFWD.Exporter.Writers
             name = Path.Combine("Animations", name);
             if (!assetsToWrite.ContainsKey(name))
             {
-                assetsToWrite.Add(name, animationClip);
+                assetsToWrite.Add(name, new List<AssetToWrite>());
             }
+            assetsToWrite[name].Add(new AssetToWrite() { name = animationClip.name, asset = animationClip });
         }
 
         #region ToString methods

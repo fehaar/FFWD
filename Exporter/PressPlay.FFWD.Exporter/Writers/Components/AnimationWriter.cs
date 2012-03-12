@@ -32,7 +32,7 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
                 {
                     continue;
                 }
-                clipNames[i] = scene.SanitizeFileName(anim.name + "-" + clips[i].name);
+                clipNames[i] = scene.SanitizeFileName(anim.name);
                 scene.AddAnimationClip(clipNames[i], clips[i]);
             }
             scene.WriteElement("clips", clipNames);
