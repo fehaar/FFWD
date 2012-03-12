@@ -10,10 +10,13 @@ namespace PressPlay.FFWD.Components
 {
     internal abstract class RenderItem
     {
+        private string name;
+
         public Material Material;
         public Transform Transform;
         public Bounds? Bounds;
         protected int batches = 0;
+        public int Priority;
         public bool Enabled;
         protected bool UseVertexColor = false;
 
@@ -28,10 +31,10 @@ namespace PressPlay.FFWD.Components
         internal short[] indexData;
 #endif
 
-        public abstract bool AddMesh(Mesh mesh, Matrix matrix);
+        public abstract bool AddMesh(Mesh mesh, Matrix matrix, int subMeshIndex);
         public abstract void Initialize(GraphicsDevice device);
 
-        internal static RenderItem Create(Material material, Mesh mesh, Transform t)
+        internal static RenderItem Create(Material material, Mesh mesh, int subMeshIndex, Transform t)
         {
             RenderItem item;
 
@@ -39,7 +42,9 @@ namespace PressPlay.FFWD.Components
             item = new RenderItem<VertexPositionNormalTexture>(material, AddVertexPositionNormalTexture);
 
             item.Transform = t;
-            item.AddMesh(mesh, t.world);
+            item.Priority = material.shader.renderQueue;
+            item.AddMesh(mesh, t.world, subMeshIndex);
+            item.name = String.Format("{0} - {1} on {2} rendering {3}", item.Priority, item.Material.name, t.ToString(), mesh.name);
 
             return item;
         }
@@ -79,6 +84,11 @@ namespace PressPlay.FFWD.Components
         {
             return new VertexPositionNormalTexture(position, normal, tex0);
         }
+
+        public override string ToString()
+        {
+            return name;
+        }
     }
 
     /// <summary>
@@ -102,7 +112,7 @@ namespace PressPlay.FFWD.Components
         /// </summary>
         /// <param name="m"></param>
         /// <returns></returns>
-        public override bool AddMesh(Mesh mesh, Matrix matrix)
+        public override bool AddMesh(Mesh mesh, Matrix matrix, int subMeshIndex)
         {
             if (!mesh._vertices.HasElements())
 	        {
@@ -131,14 +141,32 @@ namespace PressPlay.FFWD.Components
             }
             batches++;
 
-            Microsoft.Xna.Framework.Vector3[] transformedVertices = new Microsoft.Xna.Framework.Vector3[mesh._vertices.Length];
-            Microsoft.Xna.Framework.Vector3.Transform(mesh._vertices, ref matrix, transformedVertices);
-            Microsoft.Xna.Framework.Vector3[] transformedNormals = new Microsoft.Xna.Framework.Vector3[mesh._normals.Length];
-            Microsoft.Xna.Framework.Vector3.TransformNormal(mesh._normals, ref matrix, transformedNormals);
-
-            for (int i = 0; i < mesh.vertices.Length; i++)
+            for (int i = 0; i < mesh._vertices.Length; i++)
             {
-                vertexData[i + vertexOffset] = addVertex(transformedVertices[i], transformedNormals[i], mesh._uv[i], (mesh._uv2.HasElements()) ? mesh._uv2[i] : Microsoft.Xna.Framework.Vector2.Zero, (mesh.colors.HasElements()) ? mesh.colors[i] : Color.white);
+                vertexData[i + vertexOffset] = addVertex(mesh._vertices[i], mesh._normals[i], mesh._uv[i], (mesh._uv2.HasElements()) ? mesh._uv2[i] : Microsoft.Xna.Framework.Vector2.Zero, (mesh.colors.HasElements()) ? mesh.colors[i] : Color.white);
+            }
+
+#if XBOX
+            int[] 
+#else
+            short[]
+#endif
+            tris = mesh.GetTriangles(subMeshIndex);
+            if (indexData == null)
+            {
+                indexData = tris.ToArray();
+            }
+            else
+            {
+#if XBOX
+                int[] oldIndexData = indexData;
+                indexData = new short[oldIndexData.Length + tris.Length];
+#else
+                short[] oldIndexData = indexData;
+                indexData = new short[oldIndexData.Length + tris.Length];
+#endif
+                oldIndexData.CopyTo(indexData, 0);
+                tris.CopyTo(indexData, oldIndexData.Length);
             }
             return true;
         }
@@ -150,9 +178,18 @@ namespace PressPlay.FFWD.Components
         {
             VertexBuffer = new VertexBuffer(device, typeof(T), vertexData.Length, BufferUsage.WriteOnly);
             VertexBuffer.SetData<T>(vertexData);
+            vertexData = null;
+
+#if XBOX
+            IndexBuffer = new IndexBuffer(device, IndexElementSize.ThirtyTwoBits, indexData.Length, BufferUsage.WriteOnly);
+#else
+            IndexBuffer = new IndexBuffer(device, IndexElementSize.SixteenBits, indexData.Length, BufferUsage.WriteOnly);
+#endif
+            IndexBuffer.SetData(indexData);
+            indexData = null;
 
             // Add to the global render queue
-            Camera.RenderQueue.Add(Material.shader.renderQueue, this);
+            Camera.RenderQueue.Add(this);
         }
     }
 }

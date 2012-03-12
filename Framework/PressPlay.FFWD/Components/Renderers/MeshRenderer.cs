@@ -19,10 +19,13 @@ namespace PressPlay.FFWD.Components
             {
                 bounds = filter.meshToRender.bounds;
 
+                // TODO: The thought is that this can actually be done at compile time so the initialization will occur at runtime
                 renderItems = new RenderItem[mats.Length];
                 for (int i = 0; i < mats.Length; i++)
                 {
-                    renderItems[i] = RenderItem.Create(mats[i], filter.meshToRender, transform);
+                    RenderItem item = RenderItem.Create(mats[i], filter.meshToRender, i, transform);
+                    item.Initialize(Camera.Device);
+                    renderItems[i] = item;
                 }
             }
         }

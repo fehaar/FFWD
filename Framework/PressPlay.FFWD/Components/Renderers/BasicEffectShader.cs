@@ -17,6 +17,7 @@ namespace PressPlay.FFWD.Components
             {
                 Effect = new BasicEffect(Camera.Device);
             }
+            effect = Effect;
             supportsLights = true;
             supportsTextures = true;
             supportsVertexColor = true;

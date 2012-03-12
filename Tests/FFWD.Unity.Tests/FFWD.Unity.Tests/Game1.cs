@@ -48,6 +48,8 @@ namespace FFWD.Unity.Tests
             // TODO: Add your initialization logic here
             Components.Add(new Application(this));
 
+//            PressPlay.FFWD.Components.Camera.wireframeRender = true;
+
             base.Initialize();
         }
 
