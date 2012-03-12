@@ -101,9 +101,9 @@ namespace ProjectInitializer
 
         private void FixFileContents(string newFileName)
         {
-            string text = File.ReadAllText(newFileName);
+            string text = File.ReadAllText(newFileName, Encoding.UTF8);
             text = text.Replace(templateName, projectName);
-            File.WriteAllText(newFileName, text);
+            File.WriteAllText(newFileName, text, Encoding.UTF8);
         }
     }
 }
