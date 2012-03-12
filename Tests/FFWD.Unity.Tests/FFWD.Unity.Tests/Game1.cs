@@ -99,10 +99,6 @@ namespace FFWD.Unity.Tests
             base.Update(gameTime);
 
             // NOTE: If you want to read FFWD input do it after the Update call 
-            if (Input.GetMouseButtonUp(0))
-            {
-                SwitchLevel();
-            }
         }
 
         /// <summary>
