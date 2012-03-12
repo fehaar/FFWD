@@ -44,6 +44,16 @@
             </material>
           </sharedMaterials>
         </c>
+        <c Type="MoveTimer">
+          <id>-84642</id>
+          <interval>5</interval>
+          <moveTarget>0 -1 -3</moveTarget>
+        </c>
+        <c Type="LayerChangeTimer">
+          <id>-111318</id>
+          <interval>0</interval>
+          <layerToChangeTo>0</layerToChangeTo>
+        </c>
       </cs>
     </go>
     <go>
@@ -220,6 +230,10 @@
             </material>
           </sharedMaterials>
         </c>
+        <c Type="DisableTimer">
+          <id>-120258</id>
+          <interval>1</interval>
+        </c>
       </cs>
     </go>
     <go>
@@ -307,6 +321,11 @@
               <wrapRepeat>true</wrapRepeat>
             </material>
           </sharedMaterials>
+        </c>
+        <c Type="LayerChangeTimer">
+          <id>-111772</id>
+          <interval>2</interval>
+          <layerToChangeTo>0</layerToChangeTo>
         </c>
       </cs>
     </go>

@@ -51,6 +51,11 @@ namespace PressPlay.FFWD.Components
 
         public void Render(GraphicsDevice device, Camera cam)
         {
+            if (!Transform.renderer.enabled)
+            {
+                return;
+            }
+
             device.SetVertexBuffer(VertexBuffer);
             device.Indices = IndexBuffer;
 

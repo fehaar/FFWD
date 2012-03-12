@@ -3,9 +3,7 @@ using PressPlay.FFWD.Components;
 using Microsoft.Xna.Framework.Content;
 using System;
 using System.Collections.Generic;
-#if !XBOX
 using FluentAssertions;
-#endif
 
 public class CloningAGameObject : MonoBehaviour {
 
@@ -18,7 +16,6 @@ public class CloningAGameObject : MonoBehaviour {
 	
 	// Update is called once per frame
 	public override void Update () {
-#if !XBOX
 		if (!tested.HasValue) {
 			tested = true;
 			
@@ -61,6 +58,5 @@ public class CloningAGameObject : MonoBehaviour {
 				Destroy(helpClone.gameObject);
 			}
 		}
-#endif
-    }
+	}
 }

@@ -185,7 +185,7 @@ namespace PressPlay.FFWD
             }
             else
             {
-                return length - (times * length);
+                return length - (t - (times * length));
             }
         }
     }

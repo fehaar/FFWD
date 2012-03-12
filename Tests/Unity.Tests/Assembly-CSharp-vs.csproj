@@ -49,9 +49,12 @@
      <Compile Include="Assets\FFWD\FFWD_ExportAsResourceAttribute.cs" />
      <Compile Include="Assets\FFWD\FFWD_ExportOptionsAttribute.cs" />
      <Compile Include="Assets\FFWD\FFWD_PolygonCollider.cs" />
+     <Compile Include="Assets\Scripts\DisableTimer.cs" />
      <Compile Include="Assets\Scripts\GameObjects\AGameObjectCanBeConvertedToBool.cs" />
      <Compile Include="Assets\Scripts\GameObjects\CloningAGameObject.cs" />
      <Compile Include="Assets\Scripts\GameObjects\CloningHelper.cs" />
+     <Compile Include="Assets\Scripts\LayerChangeTimer.cs" />
+     <Compile Include="Assets\Scripts\MoveTimer.cs" />
  <Reference Include="FluentAssertions">
  <HintPath>Assets\Scripts\FluentAssertions.dll</HintPath>
  </Reference>
