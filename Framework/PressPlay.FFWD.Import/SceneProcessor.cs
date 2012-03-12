@@ -92,7 +92,12 @@ namespace PressPlay.FFWD.Import
                     throw new Exception("The static meshfilter at " + r.gameObject + " does not have a mesh.");
                 }
                 int id = mf.meshToRender.GetInstanceID();
-                Mesh mesh = context.BuildAndLoadAsset<Mesh, Mesh>(new ExternalReference<Mesh>(mf.meshToRender.name + ".xml"), null, null, "XmlImporter");
+                Mesh[] meshes = context.BuildAndLoadAsset<Mesh[], Mesh[]>(new ExternalReference<Mesh[]>(mf.meshToRender.name + ".xml"), null, null, "XmlImporter");
+                if (meshes == null)
+                {
+                    throw new Exception("The mesh with Id " + id + " was not found in assets. Gotten from " + mf);
+                }
+                Mesh mesh = meshes.First(m => m.GetInstanceID() == id);
                 if (mesh == null)
                 {
                     throw new Exception("The mesh with Id " + id + " was not found in assets. Gotten from " + mf);
