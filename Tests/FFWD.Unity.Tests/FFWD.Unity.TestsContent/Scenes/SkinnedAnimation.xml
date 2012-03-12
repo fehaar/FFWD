@@ -3,17 +3,43 @@
   <Asset Type="f:Scene">
     <hasBeenProcessed>false</hasBeenProcessed>
     <go>
-      <id>-16512</id>
+      <id>8742</id>
+      <name>Main Camera</name>
+      <layer>0</layer>
+      <tag>MainCamera</tag>
+      <cs>
+        <c Type="f:Transform">
+          <id>8744</id>
+          <p>0 1 -10</p>
+        </c>
+        <c Type="c:Camera">
+          <id>8746</id>
+          <fieldOfView>60</fieldOfView>
+          <nearClipPlane>0.3</nearClipPlane>
+          <farClipPlane>1000</farClipPlane>
+          <orthographicSize>100</orthographicSize>
+          <orthographic>false</orthographic>
+          <depth>-1</depth>
+          <aspect>2.58799</aspect>
+          <cullingMask>-1</cullingMask>
+          <backgroundColor>05314D79</backgroundColor>
+          <rect>0 0 1 1</rect>
+          <clearFlags>Skybox</clearFlags>
+        </c>
+      </cs>
+    </go>
+    <go>
+      <id>8850</id>
       <name>Key</name>
       <layer>0</layer>
       <tag>Untagged</tag>
       <cs>
         <c Type="f:Transform">
-          <id>-16514</id>
+          <id>8852</id>
           <p>0 1 -10</p>
         </c>
         <c Type="c:Light">
-          <id>-16516</id>
+          <id>8854</id>
           <enabled>true</enabled>
           <type>Directional</type>
           <color>FFFFF4CF</color>
@@ -25,126 +51,80 @@
       </cs>
     </go>
     <go>
-      <id>-16322</id>
-      <name>Back</name>
-      <layer>0</layer>
-      <tag>Untagged</tag>
-      <cs>
-        <c Type="f:Transform">
-          <id>-16320</id>
-          <p>0 1 10</p>
-          <r>-1 0 0 0</r>
-        </c>
-        <c Type="c:Light">
-          <id>-16318</id>
-          <enabled>true</enabled>
-          <type>Directional</type>
-          <color>FF525C63</color>
-          <intensity>0.5</intensity>
-          <range>10</range>
-          <spotAngle>30</spotAngle>
-          <cullingMask>-1</cullingMask>
-        </c>
-      </cs>
-    </go>
-    <go>
-      <id>-16094</id>
-      <name>Fill</name>
-      <layer>0</layer>
-      <tag>Untagged</tag>
-      <cs>
-        <c Type="f:Transform">
-          <id>-16096</id>
-          <p>-9.7227 1 0</p>
-          <r>0 0.70711 0 0.70711</r>
-        </c>
-        <c Type="c:Light">
-          <id>-16098</id>
-          <enabled>true</enabled>
-          <type>Directional</type>
-          <color>FFF4C2CF</color>
-          <intensity>0.5</intensity>
-          <range>10</range>
-          <spotAngle>30</spotAngle>
-          <cullingMask>-1</cullingMask>
-        </c>
-      </cs>
-    </go>
-    <go>
-      <id>-4754</id>
+      <id>8892</id>
       <name>dude</name>
       <layer>0</layer>
       <tag>Untagged</tag>
       <cs>
         <c Type="f:Transform">
-          <id>-4756</id>
+          <id>8894</id>
           <go>
-            <id>-4750</id>
+            <id>8766</id>
             <name>him</name>
             <layer>0</layer>
             <tag>Untagged</tag>
             <cs>
               <c Type="f:Transform">
-                <id>-4752</id>
+                <id>8768</id>
               </c>
             </cs>
           </go>
           <go>
-            <id>-4518</id>
+            <id>8792</id>
             <name>Root</name>
             <layer>0</layer>
             <tag>Untagged</tag>
             <cs>
               <c Type="f:Transform">
-                <id>-4520</id>
+                <id>8794</id>
                 <go>
-                  <id>-4522</id>
+                  <id>8770</id>
                   <name>Pelvis</name>
                   <layer>0</layer>
                   <tag>Untagged</tag>
                   <cs>
                     <c Type="f:Transform">
-                      <id>-4524</id>
+                      <id>8772</id>
                       <go>
-                        <id>-4526</id>
+                        <id>8902</id>
                         <name>Spine</name>
                         <layer>0</layer>
                         <tag>Untagged</tag>
                         <cs>
                           <c Type="f:Transform">
-                            <id>-4528</id>
+                            <id>8904</id>
                             <go>
-                              <id>-4718</id>
+                              <id>8784</id>
                               <name>L_Thigh1</name>
                               <layer>0</layer>
                               <tag>Untagged</tag>
                               <cs>
                                 <c Type="f:Transform">
-                                  <id>-4720</id>
+                                  <id>8786</id>
                                   <go>
-                                    <id>-4722</id>
+                                    <id>8666</id>
                                     <name>L_Knee2</name>
                                     <layer>0</layer>
                                     <tag>Untagged</tag>
                                     <cs>
                                       <c Type="f:Transform">
-                                        <id>-4724</id>
+                                        <id>8668</id>
                                         <go>
-                                          <id>-4726</id>
+                                          <id>8734</id>
                                           <name>L_Ankle1</name>
                                           <layer>0</layer>
                                           <tag>Untagged</tag>
                                           <cs>
                                             <c Type="f:Transform">
-                                              <id>-4728</id>
+                                              <id>8736</id>
                                               <go>
-                                                <id>-4730</id>
+                                                <id>8906</id>
                                                 <name>L_Ball</name>
                                                 <layer>0</layer>
                                                 <tag>Untagged</tag>
                                                 <cs>
                                                   <c Type="f:Transform">
-                                                    <id>-4732</id>
+                                                    <id>8908</id>
                                                     <p>-0.52502 0.62738 0</p>
                                                     <r>0 0 -0.7912 0.61156</r>
                                                   </c>
@@ -166,37 +146,37 @@
                               </cs>
                             </go>
                             <go>
-                              <id>-4734</id>
+                              <id>8924</id>
                               <name>R_Thigh</name>
                               <layer>0</layer>
                               <tag>Untagged</tag>
                               <cs>
                                 <c Type="f:Transform">
-                                  <id>-4736</id>
+                                  <id>8926</id>
                                   <go>
-                                    <id>-4738</id>
+                                    <id>8898</id>
                                     <name>R_Knee</name>
                                     <layer>0</layer>
                                     <tag>Untagged</tag>
                                     <cs>
                                       <c Type="f:Transform">
-                                        <id>-4740</id>
+                                        <id>8900</id>
                                         <go>
-                                          <id>-4742</id>
+                                          <id>8868</id>
                                           <name>R_Ankle</name>
                                           <layer>0</layer>
                                           <tag>Untagged</tag>
                                           <cs>
                                             <c Type="f:Transform">
-                                              <id>-4744</id>
+                                              <id>8870</id>
                                               <go>
-                                                <id>-4746</id>
+                                                <id>8670</id>
                                                 <name>R_Ball</name>
                                                 <layer>0</layer>
                                                 <tag>Untagged</tag>
                                                 <cs>
                                                   <c Type="f:Transform">
-                                                    <id>-4748</id>
+                                                    <id>8672</id>
                                                     <p>-0.52502 0.62739 0</p>
                                                     <r>0 0 -0.7912 0.61156</r>
                                                   </c>
@@ -218,92 +198,92 @@
                               </cs>
                             </go>
                             <go>
-                              <id>-4530</id>
+                              <id>8842</id>
                               <name>Spine1</name>
                               <layer>0</layer>
                               <tag>Untagged</tag>
                               <cs>
                                 <c Type="f:Transform">
-                                  <id>-4532</id>
+                                  <id>8844</id>
                                   <go>
-                                    <id>-4534</id>
+                                    <id>8826</id>
                                     <name>Spine2</name>
                                     <layer>0</layer>
                                     <tag>Untagged</tag>
                                     <cs>
                                       <c Type="f:Transform">
-                                        <id>-4536</id>
+                                        <id>8828</id>
                                         <go>
-                                          <id>-4538</id>
+                                          <id>8698</id>
                                           <name>Spine3</name>
                                           <layer>0</layer>
                                           <tag>Untagged</tag>
                                           <cs>
                                             <c Type="f:Transform">
-                                              <id>-4540</id>
+                                              <id>8700</id>
                                               <go>
-                                                <id>-4542</id>
+                                                <id>8876</id>
                                                 <name>Neck</name>
                                                 <layer>0</layer>
                                                 <tag>Untagged</tag>
                                                 <cs>
                                                   <c Type="f:Transform">
-                                                    <id>-4544</id>
+                                                    <id>8878</id>
                                                     <go>
-                                                      <id>-4546</id>
+                                                      <id>8788</id>
                                                       <name>Head</name>
                                                       <layer>0</layer>
                                                       <tag>Untagged</tag>
                                                       <cs>
                                                         <c Type="f:Transform">
-                                                          <id>-4548</id>
+                                                          <id>8790</id>
                                                           <go>
-                                                            <id>-4550</id>
+                                                            <id>8758</id>
                                                             <name>L_eye_joint1</name>
                                                             <layer>0</layer>
                                                             <tag>Untagged</tag>
                                                             <cs>
                                                               <c Type="f:Transform">
-                                                                <id>-4552</id>
+                                                                <id>8760</id>
                                                                 <p>-0.42207 0.14061 0.13948</p>
                                                                 <r>0.03908 0.70708 -0.0067 0.70603</r>
                                                               </c>
                                                             </cs>
                                                           </go>
                                                           <go>
-                                                            <id>-4558</id>
+                                                            <id>8884</id>
                                                             <name>L_eyeBall_joint2</name>
                                                             <layer>0</layer>
                                                             <tag>Untagged</tag>
                                                             <cs>
                                                               <c Type="f:Transform">
-                                                                <id>-4560</id>
+                                                                <id>8886</id>
                                                                 <p>-0.44826 0.32479 0.12746</p>
                                                                 <r>0.00942 0 -0.00005 0.99996</r>
                                                               </c>
                                                             </cs>
                                                           </go>
                                                           <go>
-                                                            <id>-4554</id>
+                                                            <id>8718</id>
                                                             <name>R_eye_joint</name>
                                                             <layer>0</layer>
                                                             <tag>Untagged</tag>
                                                             <cs>
                                                               <c Type="f:Transform">
-                                                                <id>-4556</id>
+                                                                <id>8720</id>
                                                                 <p>-0.42963 0.13332 -0.10661</p>
                                                                 <r>0.03908 0.70708 -0.0067 0.70603</r>
                                                               </c>
                                                             </cs>
                                                           </go>
                                                           <go>
-                                                            <id>-4562</id>
+                                                            <id>8722</id>
                                                             <name>R_eyeBall_joint</name>
                                                             <layer>0</layer>
                                                             <tag>Untagged</tag>
                                                             <cs>
                                                               <c Type="f:Transform">
-                                                                <id>-4564</id>
+                                                                <id>8724</id>
                                                                 <p>-0.4577 0.31071 -0.12077</p>
                                                                 <r>0.00255 -0.00057 -0.00263 0.99999</r>
                                                               </c>
@@ -315,61 +295,61 @@
                                                       </cs>
                                                     </go>
                                                     <go>
-                                                      <id>-4566</id>
+                                                      <id>8846</id>
                                                       <name>L_Clavicle</name>
                                                       <layer>0</layer>
                                                       <tag>Untagged</tag>
                                                       <cs>
                                                         <c Type="f:Transform">
-                                                          <id>-4568</id>
+                                                          <id>8848</id>
                                                           <go>
-                                                            <id>-4570</id>
+                                                            <id>8702</id>
                                                             <name>L_UpperArm</name>
                                                             <layer>0</layer>
                                                             <tag>Untagged</tag>
                                                             <cs>
                                                               <c Type="f:Transform">
-                                                                <id>-4572</id>
+                                                                <id>8704</id>
                                                                 <go>
-                                                                  <id>-4574</id>
+                                                                  <id>8814</id>
                                                                   <name>L_Forearm</name>
                                                                   <layer>0</layer>
                                                                   <tag>Untagged</tag>
                                                                   <cs>
                                                                     <c Type="f:Transform">
-                                                                      <id>-4576</id>
+                                                                      <id>8816</id>
                                                                       <go>
-                                                                        <id>-4578</id>
+                                                                        <id>8674</id>
                                                                         <name>L_Hand</name>
                                                                         <layer>0</layer>
                                                                         <tag>Untagged</tag>
                                                                         <cs>
                                                                           <c Type="f:Transform">
-                                                                            <id>-4580</id>
+                                                                            <id>8676</id>
                                                                             <go>
-                                                                              <id>-4594</id>
+                                                                              <id>8838</id>
                                                                               <name>L_Index1</name>
                                                                               <layer>0</layer>
                                                                               <tag>Untagged</tag>
                                                                               <cs>
                                                                                 <c Type="f:Transform">
-                                                                                  <id>-4596</id>
+                                                                                  <id>8840</id>
                                                                                   <go>
-                                                                                    <id>-4598</id>
+                                                                                    <id>8778</id>
                                                                                     <name>L_Index2</name>
                                                                                     <layer>0</layer>
                                                                                     <tag>Untagged</tag>
                                                                                     <cs>
                                                                                       <c Type="f:Transform">
-                                                                                        <id>-4600</id>
+                                                                                        <id>8780</id>
                                                                                         <go>
-                                                                                          <id>-4602</id>
+                                                                                          <id>8762</id>
                                                                                           <name>L_Index3</name>
                                                                                           <layer>0</layer>
                                                                                           <tag>Untagged</tag>
                                                                                           <cs>
                                                                                             <c Type="f:Transform">
-                                                                                              <id>-4604</id>
+                                                                                              <id>8764</id>
                                                                                               <p>-0.10628 0 0</p>
                                                                                             </c>
                                                                                           </cs>
@@ -385,29 +365,29 @@
                                                                               </cs>
                                                                             </go>
                                                                             <go>
-                                                                              <id>-4606</id>
+                                                                              <id>8822</id>
                                                                               <name>L_Middle1</name>
                                                                               <layer>0</layer>
                                                                               <tag>Untagged</tag>
                                                                               <cs>
                                                                                 <c Type="f:Transform">
-                                                                                  <id>-4608</id>
+                                                                                  <id>8824</id>
                                                                                   <go>
-                                                                                    <id>-4610</id>
+                                                                                    <id>8864</id>
                                                                                     <name>L_Middle2</name>
                                                                                     <layer>0</layer>
                                                                                     <tag>Untagged</tag>
                                                                                     <cs>
                                                                                       <c Type="f:Transform">
-                                                                                        <id>-4612</id>
+                                                                                        <id>8866</id>
                                                                                         <go>
-                                                                                          <id>-4614</id>
+                                                                                          <id>8802</id>
                                                                                           <name>L_Middle3</name>
                                                                                           <layer>0</layer>
                                                                                           <tag>Untagged</tag>
                                                                                           <cs>
                                                                                             <c Type="f:Transform">
-                                                                                              <id>-4616</id>
+                                                                                              <id>8804</id>
                                                                                               <p>-0.15291 0 0</p>
                                                                                               <r>0 0 -0.03321 0.99945</r>
                                                                                             </c>
@@ -424,29 +404,29 @@
                                                                               </cs>
                                                                             </go>
                                                                             <go>
-                                                                              <id>-4630</id>
+                                                                              <id>8888</id>
                                                                               <name>L_Pinky1</name>
                                                                               <layer>0</layer>
                                                                               <tag>Untagged</tag>
                                                                               <cs>
                                                                                 <c Type="f:Transform">
-                                                                                  <id>-4632</id>
+                                                                                  <id>8890</id>
                                                                                   <go>
-                                                                                    <id>-4634</id>
+                                                                                    <id>8690</id>
                                                                                     <name>L_Pinky2</name>
                                                                                     <layer>0</layer>
                                                                                     <tag>Untagged</tag>
                                                                                     <cs>
                                                                                       <c Type="f:Transform">
-                                                                                        <id>-4636</id>
+                                                                                        <id>8692</id>
                                                                                         <go>
-                                                                                          <id>-4638</id>
+                                                                                          <id>8806</id>
                                                                                           <name>L_Pinky3</name>
                                                                                           <layer>0</layer>
                                                                                           <tag>Untagged</tag>
                                                                                           <cs>
                                                                                             <c Type="f:Transform">
-                                                                                              <id>-4640</id>
+                                                                                              <id>8808</id>
                                                                                               <p>-0.0859 0 0</p>
                                                                                               <r>0 0 -0.03377 0.99943</r>
                                                                                             </c>
@@ -462,29 +442,29 @@
                                                                               </cs>
                                                                             </go>
                                                                             <go>
-                                                                              <id>-4618</id>
+                                                                              <id>8694</id>
                                                                               <name>L_Ring1</name>
                                                                               <layer>0</layer>
                                                                               <tag>Untagged</tag>
                                                                               <cs>
                                                                                 <c Type="f:Transform">
-                                                                                  <id>-4620</id>
+                                                                                  <id>8696</id>
                                                                                   <go>
-                                                                                    <id>-4622</id>
+                                                                                    <id>8834</id>
                                                                                     <name>L_Ring2</name>
                                                                                     <layer>0</layer>
                                                                                     <tag>Untagged</tag>
                                                                                     <cs>
                                                                                       <c Type="f:Transform">
-                                                                                        <id>-4624</id>
+                                                                                        <id>8836</id>
                                                                                         <go>
-                                                                                          <id>-4626</id>
+                                                                                          <id>8860</id>
                                                                                           <name>L_Ring3</name>
                                                                                           <layer>0</layer>
                                                                                           <tag>Untagged</tag>
                                                                                           <cs>
                                                                                             <c Type="f:Transform">
-                                                                                              <id>-4628</id>
+                                                                                              <id>8862</id>
                                                                                               <p>-0.13883 0 0</p>
                                                                                               <r>0 0 -0.07864 0.9969</r>
                                                                                             </c>
@@ -501,29 +481,29 @@
                                                                               </cs>
                                                                             </go>
                                                                             <go>
-                                                                              <id>-4582</id>
+                                                                              <id>8678</id>
                                                                               <name>L_Thumb1</name>
                                                                               <layer>0</layer>
                                                                               <tag>Untagged</tag>
                                                                               <cs>
                                                                                 <c Type="f:Transform">
-                                                                                  <id>-4584</id>
+                                                                                  <id>8680</id>
                                                                                   <go>
-                                                                                    <id>-4586</id>
+                                                                                    <id>8818</id>
                                                                                     <name>L_Thumb2</name>
                                                                                     <layer>0</layer>
                                                                                     <tag>Untagged</tag>
                                                                                     <cs>
                                                                                       <c Type="f:Transform">
-                                                                                        <id>-4588</id>
+                                                                                        <id>8820</id>
                                                                                         <go>
-                                                                                          <id>-4590</id>
+                                                                                          <id>8726</id>
                                                                                           <name>L_Thumb3</name>
                                                                                           <layer>0</layer>
                                                                                           <tag>Untagged</tag>
                                                                                           <cs>
                                                                                             <c Type="f:Transform">
-                                                                                              <id>-4592</id>
+                                                                                              <id>8728</id>
                                                                                               <p>-0.13825 0 0</p>
                                                                                               <r>0 0 -0.07816 0.99694</r>
                                                                                             </c>
@@ -560,61 +540,61 @@
                                                       </cs>
                                                     </go>
                                                     <go>
-                                                      <id>-4642</id>
+                                                      <id>8938</id>
                                                       <name>R_Clavicle</name>
                                                       <layer>0</layer>
                                                       <tag>Untagged</tag>
                                                       <cs>
                                                         <c Type="f:Transform">
-                                                          <id>-4644</id>
+                                                          <id>8940</id>
                                                           <go>
-                                                            <id>-4646</id>
+                                                            <id>8774</id>
                                                             <name>R_UpperArm</name>
                                                             <layer>0</layer>
                                                             <tag>Untagged</tag>
                                                             <cs>
                                                               <c Type="f:Transform">
-                                                                <id>-4648</id>
+                                                                <id>8776</id>
                                                                 <go>
-                                                                  <id>-4650</id>
+                                                                  <id>8754</id>
                                                                   <name>R_Forearm</name>
                                                                   <layer>0</layer>
                                                                   <tag>Untagged</tag>
                                                                   <cs>
                                                                     <c Type="f:Transform">
-                                                                      <id>-4652</id>
+                                                                      <id>8756</id>
                                                                       <go>
-                                                                        <id>-4654</id>
+                                                                        <id>8928</id>
                                                                         <name>R_Hand</name>
                                                                         <layer>0</layer>
                                                                         <tag>Untagged</tag>
                                                                         <cs>
                                                                           <c Type="f:Transform">
-                                                                            <id>-4656</id>
+                                                                            <id>8930</id>
                                                                             <go>
-                                                                              <id>-4670</id>
+                                                                              <id>8856</id>
                                                                               <name>R_Index1</name>
                                                                               <layer>0</layer>
                                                                               <tag>Untagged</tag>
                                                                               <cs>
                                                                                 <c Type="f:Transform">
-                                                                                  <id>-4672</id>
+                                                                                  <id>8858</id>
                                                                                   <go>
-                                                                                    <id>-4674</id>
+                                                                                    <id>8810</id>
                                                                                     <name>R_Index2</name>
                                                                                     <layer>0</layer>
                                                                                     <tag>Untagged</tag>
                                                                                     <cs>
                                                                                       <c Type="f:Transform">
-                                                                                        <id>-4676</id>
+                                                                                        <id>8812</id>
                                                                                         <go>
-                                                                                          <id>-4678</id>
+                                                                                          <id>8910</id>
                                                                                           <name>R_Index3</name>
                                                                                           <layer>0</layer>
                                                                                           <tag>Untagged</tag>
                                                                                           <cs>
                                                                                             <c Type="f:Transform">
-                                                                                              <id>-4680</id>
+                                                                                              <id>8912</id>
                                                                                               <p>-0.10628 0 0</p>
                                                                                               <r>0 0 -0.11503 0.99336</r>
                                                                                             </c>
@@ -631,29 +611,29 @@
                                                                               </cs>
                                                                             </go>
                                                                             <go>
-                                                                              <id>-4682</id>
+                                                                              <id>8872</id>
                                                                               <name>R_Middle1</name>
                                                                               <layer>0</layer>
                                                                               <tag>Untagged</tag>
                                                                               <cs>
                                                                                 <c Type="f:Transform">
-                                                                                  <id>-4684</id>
+                                                                                  <id>8874</id>
                                                                                   <go>
-                                                                                    <id>-4686</id>
+                                                                                    <id>8830</id>
                                                                                     <name>R_Middle2</name>
                                                                                     <layer>0</layer>
                                                                                     <tag>Untagged</tag>
                                                                                     <cs>
                                                                                       <c Type="f:Transform">
-                                                                                        <id>-4688</id>
+                                                                                        <id>8832</id>
                                                                                         <go>
-                                                                                          <id>-4690</id>
+                                                                                          <id>8920</id>
                                                                                           <name>R_Middle3</name>
                                                                                           <layer>0</layer>
                                                                                           <tag>Untagged</tag>
                                                                                           <cs>
                                                                                             <c Type="f:Transform">
-                                                                                              <id>-4692</id>
+                                                                                              <id>8922</id>
                                                                                               <p>-0.15291 0 0</p>
                                                                                               <r>0 0 -0.03141 0.99951</r>
                                                                                             </c>
@@ -670,29 +650,29 @@
                                                                               </cs>
                                                                             </go>
                                                                             <go>
-                                                                              <id>-4706</id>
+                                                                              <id>8682</id>
                                                                               <name>R_Pinky1</name>
                                                                               <layer>0</layer>
                                                                               <tag>Untagged</tag>
                                                                               <cs>
                                                                                 <c Type="f:Transform">
-                                                                                  <id>-4708</id>
+                                                                                  <id>8684</id>
                                                                                   <go>
-                                                                                    <id>-4710</id>
+                                                                                    <id>8710</id>
                                                                                     <name>R_Pinky2</name>
                                                                                     <layer>0</layer>
                                                                                     <tag>Untagged</tag>
                                                                                     <cs>
                                                                                       <c Type="f:Transform">
-                                                                                        <id>-4712</id>
+                                                                                        <id>8712</id>
                                                                                         <go>
-                                                                                          <id>-4714</id>
+                                                                                          <id>8880</id>
                                                                                           <name>R_Pinky3</name>
                                                                                           <layer>0</layer>
                                                                                           <tag>Untagged</tag>
                                                                                           <cs>
                                                                                             <c Type="f:Transform">
-                                                                                              <id>-4716</id>
+                                                                                              <id>8882</id>
                                                                                               <p>-0.0859 0 0</p>
                                                                                               <r>0 0 -0.05024 0.99874</r>
                                                                                             </c>
@@ -709,29 +689,29 @@
                                                                               </cs>
                                                                             </go>
                                                                             <go>
-                                                                              <id>-4694</id>
+                                                                              <id>8686</id>
                                                                               <name>R_Ring1</name>
                                                                               <layer>0</layer>
                                                                               <tag>Untagged</tag>
                                                                               <cs>
                                                                                 <c Type="f:Transform">
-                                                                                  <id>-4696</id>
+                                                                                  <id>8688</id>
                                                                                   <go>
-                                                                                    <id>-4698</id>
+                                                                                    <id>8730</id>
                                                                                     <name>R_Ring2</name>
                                                                                     <layer>0</layer>
                                                                                     <tag>Untagged</tag>
                                                                                     <cs>
                                                                                       <c Type="f:Transform">
-                                                                                        <id>-4700</id>
+                                                                                        <id>8732</id>
                                                                                         <go>
-                                                                                          <id>-4702</id>
+                                                                                          <id>8714</id>
                                                                                           <name>R_Ring3</name>
                                                                                           <layer>0</layer>
                                                                                           <tag>Untagged</tag>
                                                                                           <cs>
                                                                                             <c Type="f:Transform">
-                                                                                              <id>-4704</id>
+                                                                                              <id>8716</id>
                                                                                               <p>-0.13883 0 0</p>
                                                                                               <r>0 0 -0.11359 0.99353</r>
                                                                                             </c>
@@ -748,29 +728,29 @@
                                                                               </cs>
                                                                             </go>
                                                                             <go>
-                                                                              <id>-4658</id>
+                                                                              <id>8738</id>
                                                                               <name>R_Thumb1</name>
                                                                               <layer>0</layer>
                                                                               <tag>Untagged</tag>
                                                                               <cs>
                                                                                 <c Type="f:Transform">
-                                                                                  <id>-4660</id>
+                                                                                  <id>8740</id>
                                                                                   <go>
-                                                                                    <id>-4662</id>
+                                                                                    <id>8706</id>
                                                                                     <name>R_Thumb2</name>
                                                                                     <layer>0</layer>
                                                                                     <tag>Untagged</tag>
                                                                                     <cs>
                                                                                       <c Type="f:Transform">
-                                                                                        <id>-4664</id>
+                                                                                        <id>8708</id>
                                                                                         <go>
-                                                                                          <id>-4666</id>
+                                                                                          <id>8798</id>
                                                                                           <name>R_Thumb3</name>
                                                                                           <layer>0</layer>
                                                                                           <tag>Untagged</tag>
                                                                                           <cs>
                                                                                             <c Type="f:Transform">
-                                                                                              <id>-4668</id>
+                                                                                              <id>8800</id>
                                                                                               <p>-0.13825 0 0</p>
                                                                                               <r>0 0 -0.01758 0.99985</r>
                                                                                             </c>
@@ -840,7 +820,7 @@
                 <r>0.5 -0.5 -0.5 -0.5</r>
               </c>
               <c Type="c:SkinnedMeshRenderer">
-                <id>-4760</id>
+                <id>8796</id>
                 <sharedMaterials>
                   <material>
                     <id>-1080</id>
@@ -975,7 +955,8 @@
                 </bones>
                 <sharedMesh>
                   <id>4832</id>
-                  <name>Meshes\dude-him</name>
+                  <name>him</name>
+                  <asset>dude.fbx</asset>
                 </sharedMesh>
               </c>
             </cs>
@@ -983,40 +964,61 @@
           <p>0 -2.35088 -2.38851</p>
         </c>
         <c Type="c:Animation">
-          <id>-4758</id>
+          <id>8896</id>
           <enabled>true</enabled>
-          <clip>dude-Take 001</clip>
+          <asset>dude</asset>
+          <clip>Take 001</clip>
           <playAutomatically>true</playAutomatically>
           <wrapMode>Default</wrapMode>
           <clips>
-            <Item>dude-Take 001</Item>
+            <Item>Take 001</Item>
           </clips>
         </c>
       </cs>
     </go>
     <go>
-      <id>-650</id>
-      <name>Main Camera</name>
+      <id>8914</id>
+      <name>Back</name>
       <layer>0</layer>
-      <tag>MainCamera</tag>
+      <tag>Untagged</tag>
       <cs>
         <c Type="f:Transform">
-          <id>-652</id>
-          <p>0 1 -10</p>
+          <id>8916</id>
+          <p>0 1 10</p>
+          <r>-1 0 0 0</r>
         </c>
-        <c Type="c:Camera">
-          <id>-654</id>
-          <fieldOfView>60</fieldOfView>
-          <nearClipPlane>0.3</nearClipPlane>
-          <farClipPlane>1000</farClipPlane>
-          <orthographicSize>100</orthographicSize>
-          <orthographic>false</orthographic>
-          <depth>-1</depth>
-          <aspect>2.30996</aspect>
+        <c Type="c:Light">
+          <id>8918</id>
+          <enabled>true</enabled>
+          <type>Directional</type>
+          <color>FF525C63</color>
+          <intensity>0.5</intensity>
+          <range>10</range>
+          <spotAngle>30</spotAngle>
           <cullingMask>-1</cullingMask>
-          <backgroundColor>05314D79</backgroundColor>
-          <rect>0 0 1 1</rect>
-          <clearFlags>Skybox</clearFlags>
+        </c>
+      </cs>
+    </go>
+    <go>
+      <id>8932</id>
+      <name>Fill</name>
+      <layer>0</layer>
+      <tag>Untagged</tag>
+      <cs>
+        <c Type="f:Transform">
+          <id>8934</id>
+          <p>-9.7227 1 0</p>
+          <r>0 0.70711 0 0.70711</r>
+        </c>
+        <c Type="c:Light">
+          <id>8936</id>
+          <enabled>true</enabled>
+          <type>Directional</type>
+          <color>FFF4C2CF</color>
+          <intensity>0.5</intensity>
+          <range>10</range>
+          <spotAngle>30</spotAngle>
+          <cullingMask>-1</cullingMask>
         </c>
       </cs>
     </go>

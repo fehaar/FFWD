@@ -274,7 +274,7 @@ public class ExportSceneWizard : ScriptableWizard
 
                 // Find all Unity scenes starting from the base path and record the path to the scene
                 Dictionary<string, string> scenePaths = new Dictionary<string, string>();
-                foreach (string file in Directory.GetFiles(group.baseSceneDir, "*.unity", SearchOption.AllDirectories))
+                foreach (string file in Directory.GetFiles(Path.Combine(Application.dataPath, group.baseSceneDir), "*.unity", SearchOption.AllDirectories))
                 {
                     scenePaths[Path.GetFileNameWithoutExtension(file)] = file;
                 }
@@ -326,7 +326,7 @@ public class ExportSceneWizard : ScriptableWizard
 
             // Find all Unity scenes starting from the base path and record the path to the scene
             Dictionary<string, string> scenePaths = new Dictionary<string, string>();
-            foreach (string file in Directory.GetFiles(group.baseSceneDir, "*.unity", SearchOption.AllDirectories))
+            foreach (string file in Directory.GetFiles(Path.Combine(Application.dataPath, group.baseSceneDir), "*.unity", SearchOption.AllDirectories))
             {
                 scenePaths[Path.GetFileNameWithoutExtension(file)] = file;
             }

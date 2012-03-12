@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Content;
 using PressPlay.FFWD.Interfaces;
+using PressPlay.FFWD.Extensions;
 using PressPlay.FFWD;
 using Microsoft.Xna.Framework;
 using System.IO;
@@ -12,6 +13,8 @@ namespace PressPlay.FFWD.Components
 {
     public class Animation : Behaviour, IInitializable, IEnumerable<AnimationState>
 	{
+        [ContentSerializer]
+        private string asset;
         [ContentSerializer(ElementName = "clip", Optional=true)]
         private string clipId = string.Empty;
         public bool playAutomatically;
@@ -61,19 +64,23 @@ namespace PressPlay.FFWD.Components
             {
                 states = new List<AnimationState>(clipsId.Length);
                 stateIndexes = new Dictionary<string, int>();
+                AnimationClip[] data = assets.LoadAsset<AnimationClip[]>(Path.Combine("Animations", asset));
                 for (int i = 0; i < clipsId.Length; i++)
                 {
                     if (clipsId[i] == null)
                     {
                         continue;
                     }
-                    AnimationClip data = assets.LoadAsset<AnimationClip>(Path.Combine("Animations", clipsId[i]));
-                    if (data != null)
+                    if (data.HasElements())
                     {
-                        AddClip(data, data.name);
-                        if (clipsId[i] == clipId)
+                        AnimationClip clip = data.FirstOrDefault(c => c.name == clipsId[i]);
+                        if (clip != null)
                         {
-                            defaultClip = data.name;
+                            AddClip(clip, clip.name);
+                            if (clip.name == clipId)
+                            {
+                                defaultClip = clip.name;
+                            }
                         }
                     }
                 }

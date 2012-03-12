@@ -3,31 +3,32 @@
   <Asset Type="f:Scene">
     <hasBeenProcessed>false</hasBeenProcessed>
     <go>
-      <id>7490</id>
+      <id>8588</id>
       <name>Sphere</name>
       <layer>0</layer>
       <tag>Untagged</tag>
       <static>true</static>
       <cs>
         <c Type="f:Transform">
-          <id>7492</id>
+          <id>8590</id>
           <p>1.27747 0.60953 0.60931</p>
         </c>
         <c Type="c:MeshFilter">
-          <id>7496</id>
+          <id>8594</id>
           <mesh>
             <id>142</id>
             <name>Sphere</name>
+            <asset>Sphere</asset>
           </mesh>
         </c>
         <c Type="c:SphereCollider">
-          <id>7498</id>
+          <id>8596</id>
           <isTrigger>false</isTrigger>
           <center>0 0 0</center>
           <radius>0.5</radius>
         </c>
         <c Type="c:MeshRenderer">
-          <id>7494</id>
+          <id>8592</id>
           <lightmapIndex>0</lightmapIndex>
           <lightmapTilingOffset>0.08594 0.17188 0.62515 -0.00074</lightmapTilingOffset>
           <sharedMaterials>
@@ -42,7 +43,7 @@
                 <name>Assets/DSC_5866</name>
               </mainTexture>
               <mainTextureOffset>0 0</mainTextureOffset>
-              <mainTextureScale>1 1</mainTextureScale>
+              <mainTextureScale>5 1</mainTextureScale>
               <wrapRepeat>true</wrapRepeat>
             </material>
           </sharedMaterials>
@@ -50,25 +51,26 @@
       </cs>
     </go>
     <go>
-      <id>7500</id>
+      <id>8598</id>
       <name>Cylinder</name>
       <layer>0</layer>
       <tag>Untagged</tag>
       <static>true</static>
       <cs>
         <c Type="f:Transform">
-          <id>7502</id>
+          <id>8600</id>
           <p>1.37486 0.60953 -0.65056</p>
         </c>
         <c Type="c:MeshFilter">
-          <id>7506</id>
+          <id>8604</id>
           <mesh>
             <id>140</id>
             <name>Cylinder</name>
+            <asset>Cylinder</asset>
           </mesh>
         </c>
         <c Type="c:CapsuleCollider">
-          <id>7508</id>
+          <id>8606</id>
           <isTrigger>false</isTrigger>
           <center>0 0 0</center>
           <radius>0.5</radius>
@@ -76,7 +78,7 @@
           <direction>1</direction>
         </c>
         <c Type="c:MeshRenderer">
-          <id>7504</id>
+          <id>8602</id>
           <lightmapIndex>0</lightmapIndex>
           <lightmapTilingOffset>0.13574 0.27148 0.48915 0.00027</lightmapTilingOffset>
           <sharedMaterials>
@@ -99,24 +101,25 @@
       </cs>
     </go>
     <go>
-      <id>7510</id>
+      <id>8608</id>
       <name>Plane</name>
       <layer>0</layer>
       <tag>Untagged</tag>
       <static>true</static>
       <cs>
         <c Type="f:Transform">
-          <id>7512</id>
+          <id>8610</id>
         </c>
         <c Type="c:MeshFilter">
-          <id>7516</id>
+          <id>8614</id>
           <mesh>
             <id>146</id>
             <name>Plane</name>
+            <asset>Plane</asset>
           </mesh>
         </c>
         <c Type="c:MeshRenderer">
-          <id>7514</id>
+          <id>8612</id>
           <lightmapIndex>0</lightmapIndex>
           <lightmapTilingOffset>0.48828 0.97656 0.00049 0.00098</lightmapTilingOffset>
           <sharedMaterials>
@@ -139,18 +142,18 @@
       </cs>
     </go>
     <go>
-      <id>7520</id>
+      <id>8618</id>
       <name>Directional light</name>
       <layer>0</layer>
       <tag>Untagged</tag>
       <cs>
         <c Type="f:Transform">
-          <id>7522</id>
+          <id>8620</id>
           <p>0 3.86035 -2.38731</p>
           <r>0.40822 -0.23457 0.10938 0.87543</r>
         </c>
         <c Type="c:Light">
-          <id>7524</id>
+          <id>8622</id>
           <enabled>true</enabled>
           <type>Directional</type>
           <color>FFFFFFFF</color>
@@ -162,31 +165,32 @@
       </cs>
     </go>
     <go>
-      <id>7526</id>
+      <id>8624</id>
       <name>Cube</name>
       <layer>0</layer>
       <tag>Untagged</tag>
       <static>true</static>
       <cs>
         <c Type="f:Transform">
-          <id>7528</id>
+          <id>8626</id>
           <p>0 0.5 0</p>
         </c>
         <c Type="c:MeshFilter">
-          <id>7532</id>
+          <id>8630</id>
           <mesh>
             <id>138</id>
             <name>Cube</name>
+            <asset>Cube</asset>
           </mesh>
         </c>
         <c Type="c:BoxCollider">
-          <id>7534</id>
+          <id>8632</id>
           <isTrigger>false</isTrigger>
           <center>0 0 0</center>
           <size>1 1 1</size>
         </c>
         <c Type="c:MeshRenderer">
-          <id>7530</id>
+          <id>8628</id>
           <lightmapIndex>0</lightmapIndex>
           <lightmapTilingOffset>0.11914 0.23828 0.60938 0.84181</lightmapTilingOffset>
           <sharedMaterials>
@@ -209,25 +213,25 @@
       </cs>
     </go>
     <go>
-      <id>7536</id>
+      <id>8634</id>
       <name>Main Camera</name>
       <layer>0</layer>
       <tag>MainCamera</tag>
       <cs>
         <c Type="f:Transform">
-          <id>7538</id>
+          <id>8636</id>
           <p>-0.11295 2.39331 -3.58757</p>
           <r>0.28976 0 0 0.9571</r>
         </c>
         <c Type="c:Camera">
-          <id>7540</id>
+          <id>8638</id>
           <fieldOfView>60</fieldOfView>
           <nearClipPlane>0.3</nearClipPlane>
           <farClipPlane>1000</farClipPlane>
           <orthographicSize>100</orthographicSize>
           <orthographic>false</orthographic>
           <depth>-1</depth>
-          <aspect>0.52341</aspect>
+          <aspect>2.58799</aspect>
           <cullingMask>-1</cullingMask>
           <backgroundColor>05314D79</backgroundColor>
           <rect>0 0 1 1</rect>
@@ -236,32 +240,33 @@
       </cs>
     </go>
     <go>
-      <id>7548</id>
+      <id>8646</id>
       <name>Cube</name>
       <layer>0</layer>
       <tag>Untagged</tag>
       <static>true</static>
       <cs>
         <c Type="f:Transform">
-          <id>7550</id>
+          <id>8648</id>
           <p>-0.73991 0.5 -1.85552</p>
           <r>0 0.40286 0 0.91526</r>
         </c>
         <c Type="c:MeshFilter">
-          <id>7554</id>
+          <id>8652</id>
           <mesh>
             <id>138</id>
             <name>Cube</name>
+            <asset>Cube</asset>
           </mesh>
         </c>
         <c Type="c:BoxCollider">
-          <id>7556</id>
+          <id>8654</id>
           <isTrigger>false</isTrigger>
           <center>0 0 0</center>
           <size>1 1 1</size>
         </c>
         <c Type="c:MeshRenderer">
-          <id>7552</id>
+          <id>8650</id>
           <lightmapIndex>0</lightmapIndex>
           <lightmapTilingOffset>0.11914 0.23828 0.48926 0.84181</lightmapTilingOffset>
           <sharedMaterials>

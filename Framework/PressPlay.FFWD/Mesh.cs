@@ -184,16 +184,14 @@ namespace PressPlay.FFWD
         {
             if (!String.IsNullOrEmpty(name) && _vertices == null)
             {
-                Mesh[] meshes = assetHelper.LoadAsset<Mesh[]>(name);
+                Mesh[] meshes = assetHelper.LoadAsset<Mesh[]>(asset);
                 if (meshes.HasElements())
                 {
-                    for (int i = 0; i < meshes.Length; i++)
+                    Mesh mesh = meshes.FirstOrDefault(m => m.name == name);
+                    if (mesh != null)
                     {
-                        if (meshes[i].name == name)
-                        {
-                            meshes[i].FlattenTriangleSets();
-                            CloneTo(meshes[i], this);
-                        }
+                        mesh.FlattenTriangleSets();
+                        CloneTo(mesh, this);
                     }
                 }
             }

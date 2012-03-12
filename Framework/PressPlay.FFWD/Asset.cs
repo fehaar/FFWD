@@ -14,7 +14,9 @@ namespace PressPlay.FFWD
             Application.AddNewAsset(this);
         }
 
-        [ContentSerializer(Optional=true)]
+        [ContentSerializer(Optional = true)]
+        protected string asset;
+        [ContentSerializer(Optional = true)]
         public string name { get; set; }
 
         private bool _isLoaded = false;

@@ -501,7 +501,8 @@ namespace PressPlay.FFWD.Exporter.Writers
             string assetName = GetAssetName(mesh);
             writer.WriteStartElement(name);
             WriteElement("id", mesh.GetInstanceID());
-            writer.WriteElementString("name", assetName);
+            writer.WriteElementString("name", mesh.name);
+            writer.WriteElementString("asset", assetName);
             writer.WriteEndElement();
 
             if (!assetsToWrite.ContainsKey(assetName))
