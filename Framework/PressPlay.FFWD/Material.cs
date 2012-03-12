@@ -158,7 +158,7 @@ namespace PressPlay.FFWD
             finalRenderQueue += textureRenderIndexes[texName];
         }
 
-        public static readonly Material Default = new Material();
+        public static readonly Material Default = new Material() { name = "DefaultDiffuse", shaderName = "Diffuse" };
 
         internal void SetTextureState(BasicEffect basicEffect)
         {
