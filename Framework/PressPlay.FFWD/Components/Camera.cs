@@ -579,7 +579,7 @@ namespace PressPlay.FFWD.Components
 
                 if (Light.HasLights)
                 {
-                    Light.EnableLighting(BasicEffect);
+                    Light.EnableLighting(BasicEffect, 0);
                 }
             }
 

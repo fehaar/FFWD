@@ -50,6 +50,7 @@ namespace FFWD.Unity.Tests
 
 //            PressPlay.FFWD.Components.Camera.wireframeRender = true;
 
+            levelQueue.Enqueue("SkinnedAnimation");
             levelQueue.Enqueue("BasicRendering");
             levelQueue.Enqueue("Lightmap");
 

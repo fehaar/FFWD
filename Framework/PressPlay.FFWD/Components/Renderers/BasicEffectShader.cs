@@ -40,7 +40,7 @@ namespace PressPlay.FFWD.Components
             Effect.LightingEnabled = Light.HasLights;
             if (Light.HasLights)
             {
-                Light.EnableLighting(Effect);
+                Light.EnableLighting(Effect, 0);
             }
         }
     }
