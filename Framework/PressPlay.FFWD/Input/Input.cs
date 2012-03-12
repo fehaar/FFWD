@@ -288,7 +288,7 @@ namespace PressPlay.FFWD
         public static bool GetMouseButtonDown(int button)
         {
 #if WINDOWS_PHONE
-            return mouseDowns[0];
+            return mouseDowns[button];
 #else
             switch (button)
             {
@@ -306,8 +306,7 @@ namespace PressPlay.FFWD
         public static bool GetMouseButtonUp(int button)
         {
 #if WINDOWS_PHONE
-            if (button != 0) return false;
-            return !GetMouseButtonDown(button);
+            return mouseUps[button];
 #else
             switch (button)
             {
