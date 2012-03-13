@@ -1,13 +1,13 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using PressPlay.FFWD.Interfaces;
 using PressPlay.FFWD.Extensions;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace PressPlay.FFWD.Components
 {
-    public class MeshRenderer : Renderer
+    public class MeshRenderer : Renderer, IUpdateable
     {
         private MeshFilter filter;
 
@@ -19,11 +19,17 @@ namespace PressPlay.FFWD.Components
             }
 
             filter = (MeshFilter)GetComponent(typeof(MeshFilter));
+            CreateRenderItems();
+        }
+
+        protected virtual void CreateRenderItems()
+        {
+            base.CreateRenderItems();
             Material[] mats = materials;
             if (mats.HasElements())
-	        {
+            {
                 mats = mats.Where(m => m != null).ToArray();
-	        }
+            }
             if (filter.meshToRender != null && mats.HasElements())
             {
                 bounds = filter.meshToRender.bounds;
@@ -37,31 +43,25 @@ namespace PressPlay.FFWD.Components
                     renderItems[i] = item;
                 }
             }
+            createRenderItems = false;
         }
 
         public override void Draw(GraphicsDevice device, Camera cam)
         {
-            if (filter == null)
-            {                
-                return;
-            }
+            int i = 0;
+        }
 
-            BoundingSphere sphere = new BoundingSphere((Microsoft.Xna.Framework.Vector3)transform.position + filter.boundingSphere.Center, filter.boundingSphere.Radius * transform.lossyScale.sqrMagnitude);
-            if (cam.DoFrustumCulling(ref sphere))
+        public void Update()
+        {
+            if (filter != null && createRenderItems)
             {
-#if DEBUG
-                if (Camera.logRenderCalls)
-                {
-                    Debug.LogFormat("VP cull {0} with radius {1} pos {2} cam {3} at {4}", gameObject, filter.boundingSphere.Radius, transform.position, cam.gameObject, cam.transform.position);
-                }
-#endif
-                return;
+                CreateRenderItems();
+                ReconsiderForCulling();
             }
+        }
 
-            if (filter.CanBatch())
-            {
-                cam.BatchRender(filter.meshToRender, sharedMaterials, transform);
-            }
+        public void LateUpdate()
+        {
         }
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using PressPlay.FFWD.Interfaces;
+using PressPlay.FFWD.Extensions;
 
 namespace PressPlay.FFWD.Components
 {
@@ -33,6 +34,7 @@ namespace PressPlay.FFWD.Components
             set
             {
                 _sharedMaterials = value;
+                createRenderItems = true;
             }
         }
 
@@ -59,6 +61,7 @@ namespace PressPlay.FFWD.Components
                     renderQueue = value.finalRenderQueue;
                     Camera.ChangeRenderQueue(this);
                 }
+                createRenderItems = true;
             }
         }
 
@@ -82,6 +85,7 @@ namespace PressPlay.FFWD.Components
                 _material = value;
                 renderQueue = material.finalRenderQueue;
                 Camera.ChangeRenderQueue(this);
+                createRenderItems = true;
             }
         }
 
@@ -96,6 +100,7 @@ namespace PressPlay.FFWD.Components
             set
             {
                 _materials = value;
+                createRenderItems = true;
             }
         }
 
@@ -107,6 +112,7 @@ namespace PressPlay.FFWD.Components
 
         internal float renderQueue = 0f;
         internal RenderItem[] renderItems;
+        protected bool createRenderItems = true;
 
         #region IRenderable Members
         /// <summary>
@@ -130,6 +136,18 @@ namespace PressPlay.FFWD.Components
             }
         }
 
+        protected virtual void CreateRenderItems()
+        {
+            if (renderItems.HasElements())
+            {
+                for (int i = 0; i < renderItems.Length; i++)
+                {
+                    renderItems[i].RemoveReference();
+                }
+                renderItems = null;
+            }
+        }
+
         public virtual void Initialize(AssetHelper assets)
         {
         }
@@ -144,38 +162,35 @@ namespace PressPlay.FFWD.Components
         /// </summary>
         internal void ReconsiderForCulling()
         {
-            if (renderItems == null)
+            if (renderItems.HasElements())
             {
-                return;
-            }
-            for (int i = 0; i < renderItems.Length; i++)
-            {
-                RenderQueue.ReconsiderForCulling(renderItems[i]);
+                for (int i = 0; i < renderItems.Length; i++)
+                {
+                    RenderQueue.ReconsiderForCulling(renderItems[i]);
+                }
             }
         }
 
         internal void AddRenderItems(RenderQueue rq)
         {
-            if (renderItems == null)
+            if (renderItems.HasElements())
             {
-                return;
-            }
-            for (int i = 0; i < renderItems.Length; i++)
-            {
-                rq.Add(renderItems[i]);
+                for (int i = 0; i < renderItems.Length; i++)
+                {
+                    rq.Add(renderItems[i]);
+                }
             }
         }
 
         internal void RemoveRenderItems(RenderQueue rq)
         {
-            if (renderItems == null)
+            if (renderItems.HasElements())
             {
-                return;
+                for (int i = 0; i < renderItems.Length; i++)
+                {
+                    rq.Remove(renderItems[i]);
+                }
             }
-            for (int i = 0; i < renderItems.Length; i++)
-            {
-                rq.Remove(renderItems[i]);
-            }            
         }
     }
 }

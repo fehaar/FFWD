@@ -23,6 +23,8 @@ namespace PressPlay.FFWD.Components
         public VertexBuffer VertexBuffer;
         public IndexBuffer IndexBuffer;
 
+        private int referenceCount = 0;
+
 #if XBOX
         protected const int MAX_INDEX_BUFFER_SIZE = Int32.MaxValue;
         internal int[] indexData;
@@ -34,19 +36,65 @@ namespace PressPlay.FFWD.Components
         public abstract bool AddMesh(Mesh mesh, Matrix matrix, int subMeshIndex);
         public abstract void Initialize(GraphicsDevice device);
 
+        private static Dictionary<string, RenderItem> RenderItemPool = new Dictionary<string, RenderItem>();
+
+        private static int hitPool = 0;
+        private static int missPool = 0;
+
         internal static RenderItem Create(Material material, Mesh mesh, int subMeshIndex, Transform t)
         {
             RenderItem item;
 
-            // TODO: Select actural render item based on what material we are using
-            item = new RenderItem<VertexPositionNormalTexture>(material, AddVertexPositionNormalTexture);
+            string id = material.GetInstanceID() + ":" + mesh.GetInstanceID();
+            if (RenderItemPool.ContainsKey(id))
+            {
+                item = RenderItemPool[id];
+                hitPool++;
+            }
+            else
+            {
+                missPool++;
+                // TODO: The selection needs to be configurable from outside
+                if (material.shaderName.StartsWith("Unlit") || !mesh._normals.HasElements())
+                {
+                    if (mesh.colors.HasElements())
+                    {
+                        item = new RenderItem<VertexPositionColorTexture>(material, AddVertexPositionColorTexture);
+                    }
+                    else
+                    {
+                        item = new RenderItem<VertexPositionTexture>(material, AddVertexPositionTexture);
+                    }
+                }
+                else
+                {
+                    item = new RenderItem<VertexPositionNormalTexture>(material, AddVertexPositionNormalTexture);
+                }
 
-            item.Transform = t;
-            item.Priority = material.shader.renderQueue;
-            item.AddMesh(mesh, t.world, subMeshIndex);
-            item.name = String.Format("{0} - {1} on {2} rendering {3}", item.Priority, item.Material.name, t.ToString(), mesh.name);
+                item.Transform = t;
+                item.Priority = material.shader.renderQueue;
+                item.AddMesh(mesh, t.world, subMeshIndex);
+                item.name = String.Format("{0} - {1} on {2} rendering {3}", item.Priority, item.Material.name, t.ToString(), mesh.name);
+                RenderItemPool[id] = item;
+            }
 
+            item.AddReference();
             return item;
+        }
+
+        private void AddReference()
+        {
+            referenceCount++;
+        }
+
+        internal void RemoveReference()
+        {
+            referenceCount--;
+        }
+
+        private bool Alive()
+        {
+            return referenceCount > 0;
         }
 
         public void Render(GraphicsDevice device, Camera cam)
@@ -88,6 +136,21 @@ namespace PressPlay.FFWD.Components
         private static VertexPositionNormalTexture AddVertexPositionNormalTexture(Microsoft.Xna.Framework.Vector3 position, Microsoft.Xna.Framework.Vector3 normal, Microsoft.Xna.Framework.Vector2 tex0, Microsoft.Xna.Framework.Vector2 tex1, Microsoft.Xna.Framework.Color c)
         {
             return new VertexPositionNormalTexture(position, normal, tex0);
+        }
+
+        private static VertexPositionTexture AddVertexPositionTexture(Microsoft.Xna.Framework.Vector3 position, Microsoft.Xna.Framework.Vector3 normal, Microsoft.Xna.Framework.Vector2 tex0, Microsoft.Xna.Framework.Vector2 tex1, Microsoft.Xna.Framework.Color c)
+        {
+            return new VertexPositionTexture(position, tex0);
+        }
+
+        private static VertexPositionColorTexture AddVertexPositionColorTexture(Microsoft.Xna.Framework.Vector3 position, Microsoft.Xna.Framework.Vector3 normal, Microsoft.Xna.Framework.Vector2 tex0, Microsoft.Xna.Framework.Vector2 tex1, Microsoft.Xna.Framework.Color c)
+        {
+            return new VertexPositionColorTexture(position, c, tex0);
+        }
+
+        private static VertexPositionColor AddVertexPositionColor(Microsoft.Xna.Framework.Vector3 position, Microsoft.Xna.Framework.Vector3 normal, Microsoft.Xna.Framework.Vector2 tex0, Microsoft.Xna.Framework.Vector2 tex1, Microsoft.Xna.Framework.Color c)
+        {
+            return new VertexPositionColor(position, c);
         }
 
         public override string ToString()
@@ -153,7 +216,7 @@ namespace PressPlay.FFWD.Components
                         mesh._uv[i].X * Material.mainTextureScale.x + Material.mainTextureOffset.x,
                         1 - ((1 - mesh._uv[i].Y) * Material.mainTextureScale.y + Material.mainTextureOffset.y));
 
-                vertexData[i + vertexOffset] = addVertex(mesh._vertices[i], mesh._normals[i], uv1, (mesh._uv2.HasElements()) ? mesh._uv2[i] : Microsoft.Xna.Framework.Vector2.Zero, (mesh.colors.HasElements()) ? mesh.colors[i] : Color.white);
+                vertexData[i + vertexOffset] = addVertex(mesh._vertices[i], (mesh._normals.HasElements()) ? mesh._normals[i] : Microsoft.Xna.Framework.Vector3.Zero, uv1, (mesh._uv2.HasElements()) ? mesh._uv2[i] : Microsoft.Xna.Framework.Vector2.Zero, (mesh.colors.HasElements()) ? mesh.colors[i] : Color.white);
 
             }
             if (Bounds.HasValue)
@@ -195,17 +258,20 @@ namespace PressPlay.FFWD.Components
         /// </summary>
         public override void Initialize(GraphicsDevice device)
         {
-            VertexBuffer = new VertexBuffer(device, typeof(T), vertexData.Length, BufferUsage.WriteOnly);
-            VertexBuffer.SetData<T>(vertexData);
-            vertexData = null;
+            if (VertexBuffer == null)
+            {
+                VertexBuffer = new VertexBuffer(device, typeof(T), vertexData.Length, BufferUsage.WriteOnly);
+                VertexBuffer.SetData<T>(vertexData);
+                vertexData = null;
 
 #if XBOX
             IndexBuffer = new IndexBuffer(device, IndexElementSize.ThirtyTwoBits, indexData.Length, BufferUsage.WriteOnly);
 #else
-            IndexBuffer = new IndexBuffer(device, IndexElementSize.SixteenBits, indexData.Length, BufferUsage.WriteOnly);
+                IndexBuffer = new IndexBuffer(device, IndexElementSize.SixteenBits, indexData.Length, BufferUsage.WriteOnly);
 #endif
-            IndexBuffer.SetData(indexData);
-            indexData = null;
+                IndexBuffer.SetData(indexData);
+                indexData = null;
+            }
         }
     }
 }
