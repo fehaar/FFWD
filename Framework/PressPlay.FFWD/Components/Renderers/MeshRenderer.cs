@@ -19,7 +19,7 @@ namespace PressPlay.FFWD.Components
             {
                 bounds = filter.meshToRender.bounds;
 
-                if (material != null)
+                if (false)
                 {
                     // Determine what vertex buffer to create
                     Mesh m = filter.meshToRender;
