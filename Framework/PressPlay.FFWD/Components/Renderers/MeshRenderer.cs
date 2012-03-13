@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using PressPlay.FFWD.Extensions;
 using System;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace PressPlay.FFWD.Components
 {
@@ -18,6 +20,10 @@ namespace PressPlay.FFWD.Components
 
             filter = (MeshFilter)GetComponent(typeof(MeshFilter));
             Material[] mats = materials;
+            if (mats.HasElements())
+	        {
+                mats = mats.Where(m => m != null).ToArray();
+	        }
             if (filter.meshToRender != null && mats.HasElements())
             {
                 bounds = filter.meshToRender.bounds;
