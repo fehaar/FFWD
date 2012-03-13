@@ -53,6 +53,8 @@ namespace PressPlay.FFWD
 
             TouchCollection tc = TouchPanel.GetState();
             _activeTouches = 0;
+            mouseDowns[0] = false;
+            mouseUps[0] = false;
             // Check old touches to see if they are gone
             for (int i = 0; i < _touches.Length; i++)
             {
@@ -68,6 +70,10 @@ namespace PressPlay.FFWD
                     if ((t.phase = ToPhase(tl.State)) == TouchPhase.Moved && t.deltaPosition == Vector2.zero)
                     {
                         t.phase = TouchPhase.Stationary;
+                    }
+                    if (t.phase == TouchPhase.Ended)
+                    {
+                        mouseUps[0] = true;
                     }
                     if (_activeTouches != i)
                     {
@@ -102,17 +108,11 @@ namespace PressPlay.FFWD
                     continue;
                 }
                 Touch t = new Touch() { fingerId = tl.Id, position = new Vector2(tl.Position.X, Camera.FullScreen.Height - tl.Position.Y), cleanPosition = tl.Position, phase = ToPhase(tl.State) };
+                if (t.phase == TouchPhase.Began)
+	            {
+                    mouseDowns[0] = true;
+                }
                 _touches[_activeTouches++] = t;
-            }
-            if (_activeTouches > 0)
-            {
-                mouseDowns[0] = (_touches[0].phase == TouchPhase.Began);
-                mouseUps[0] = (_touches[0].phase == TouchPhase.Ended);
-            }
-            else
-            {
-                mouseDowns[0] = false;
-                mouseUps[0] = false;
             }
 #else
             UpdateMouseStates();
@@ -288,7 +288,7 @@ namespace PressPlay.FFWD
         public static bool GetMouseButtonDown(int button)
         {
 #if WINDOWS_PHONE
-            return mouseDowns[0];
+            return mouseDowns[button];
 #else
             switch (button)
             {
@@ -306,8 +306,7 @@ namespace PressPlay.FFWD
         public static bool GetMouseButtonUp(int button)
         {
 #if WINDOWS_PHONE
-            if (button != 0) return false;
-            return !GetMouseButtonDown(button);
+            return mouseUps[button];
 #else
             switch (button)
             {
