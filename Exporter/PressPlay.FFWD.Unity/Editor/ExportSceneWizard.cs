@@ -65,9 +65,27 @@ public class ExportSceneWizard : ScriptableWizard
         }
     }
 
+    public class ExportProgress
+    {
+        public string Title;
+        public int ItemsToDo;
+        private int itemsDone;
+
+        public void Progress(string info)
+        {
+            itemsDone++;
+            EditorUtility.DisplayProgressBar(Title, info, (float)ItemsToDo / (float)itemsDone);
+        }
+
+        public void Info(string info)
+        {
+            EditorUtility.DisplayProgressBar(Title, info, (float)ItemsToDo / (float)itemsDone);
+        }
+    }
+
     public class ExportCommands
     {
-        public ExportCommands()
+        public ExportCommands(string progressTitle)
         {
             config = ExportConfig.Load();
             if (EditorPrefs.HasKey("FFWD XNA dir " + PlayerSettings.productName))
@@ -95,6 +113,8 @@ public class ExportSceneWizard : ScriptableWizard
             assets.MeshDir = Path.Combine(xnaBaseDir, config.xnaAssets.MeshDir);
             assets.AudioDir = Path.Combine(xnaBaseDir, config.xnaAssets.AudioDir);
             assets.XmlDir = Path.Combine(xnaBaseDir, config.exportDir);
+
+            progress = new ExportProgress() { Title = progressTitle };
         }
 
         public ExportConfig config;
@@ -103,6 +123,7 @@ public class ExportSceneWizard : ScriptableWizard
         private TypeResolver resolver;
         public AssetHelper assets;
         private List<string> allComponentsNotWritten = new List<string>();
+        private ExportProgress progress;        
 
         public void ExportResource(GameObject go)
         {
@@ -482,14 +503,14 @@ public class ExportSceneWizard : ScriptableWizard
     [MenuItem("FFWD/Export settings")]
     static void ExportRenderSettings()
     {
-        ExportCommands cmd = new ExportCommands();
+        ExportCommands cmd = new ExportCommands("Export render settings");
         cmd.ExportTags();        
     }
 
     [MenuItem("FFWD/Export all resources")]
     static void ExportAllResources()
     {
-        ExportCommands cmd = new ExportCommands();
+        ExportCommands cmd = new ExportCommands("Export all resources");
         UnityEngine.Object[] os = Resources.LoadAll("");
         foreach (var item in os)
         {
@@ -527,28 +548,28 @@ public class ExportSceneWizard : ScriptableWizard
     [MenuItem("FFWD/Export open scene")]
     static void ExportOpenScene()
     {
-        ExportCommands cmd = new ExportCommands();
+        ExportCommands cmd = new ExportCommands("Export open scene");
         cmd.ExportOpenScene();
     }
 
     [MenuItem("FFWD/Export all scenes")]
     static void ExportAllScenes()
     {
-        ExportCommands cmd = new ExportCommands();
+        ExportCommands cmd = new ExportCommands("Export all scenes");
         cmd.ExportAllScenes();
     }
 
     [MenuItem("FFWD/Export active scene group")]
     static void ExportActiveScenes()
     {
-        ExportCommands cmd = new ExportCommands();
+        ExportCommands cmd = new ExportCommands("Export active scene group");
         cmd.ExportActiveScenes();
     }
 
     [MenuItem("FFWD/Export all scripts")]
     static void ExportAllScripts()
     {
-        ExportCommands cmd = new ExportCommands();
+        ExportCommands cmd = new ExportCommands("Export all scripts");
         cmd.ExportAllScripts();
     }
 
@@ -564,21 +585,21 @@ public class ExportSceneWizard : ScriptableWizard
     [MenuItem("CONTEXT/Transform/FFWD export resource")]
     static void ExportTransform(MenuCommand command)
     {
-        ExportCommands cmd = new ExportCommands();
+        ExportCommands cmd = new ExportCommands("Export transform");
         cmd.ExportResource(((Transform)command.context).gameObject);
     }
 
     [MenuItem("CONTEXT/MonoBehaviour/FFWD export script")]
     static void ExportScript(MenuCommand command)
     {
-        ExportCommands cmd = new ExportCommands();
+        ExportCommands cmd = new ExportCommands("Export script");
         cmd.ExportScript(command.context as MonoBehaviour);
     }
 
     [MenuItem("CONTEXT/TextAsset/FFWD export resource")]
     static void ExportTextAsset(MenuCommand command)
     {
-        ExportCommands cmd = new ExportCommands();
+        ExportCommands cmd = new ExportCommands("Export text asset");
         TextAsset asset = command.context as TextAsset;
         cmd.ExportTextAsset(asset);
     }
@@ -586,7 +607,7 @@ public class ExportSceneWizard : ScriptableWizard
     [MenuItem("CONTEXT/TagManager/FFWD export tags")]
     static void ExportTags(MenuCommand command)
     {
-        ExportCommands cmd = new ExportCommands();
+        ExportCommands cmd = new ExportCommands("Export tags");
         cmd.ExportTags();
     }
 }

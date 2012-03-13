@@ -15,7 +15,7 @@ namespace PressPlay.FFWD
         }
 
         [ContentSerializer(Optional = true)]
-        protected string asset;
+        internal string asset;
         [ContentSerializer(Optional = true)]
         public string name { get; set; }
 
