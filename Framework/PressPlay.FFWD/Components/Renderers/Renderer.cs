@@ -134,9 +134,9 @@ namespace PressPlay.FFWD.Components
         {
         }
 
-        public bool InitializePrefabs()
+        public virtual bool ShouldPrefabsBeInitialized()
         {
-            throw new NotImplementedException();
+            return false;
         }
 
         /// <summary>

@@ -60,7 +60,7 @@ namespace PressPlay.FFWD.Components
 
         public void Initialize(AssetHelper assets)
         {
-            if (clipsId != null)
+            if (clipsId.HasElements())
             {
                 states = new List<AnimationState>(clipsId.Length);
                 stateIndexes = new Dictionary<string, int>();
@@ -87,7 +87,7 @@ namespace PressPlay.FFWD.Components
             }
         }
 
-        public bool InitializePrefabs()
+        public bool ShouldPrefabsBeInitialized()
         {
             return false;
         }
@@ -95,13 +95,16 @@ namespace PressPlay.FFWD.Components
         public override void Awake()
         {
             base.Awake();
-            for (int i = 0; i < states.Count; i++)
+            if (states.HasElements())
             {
-                states[i].InitializeSamplers(gameObject);
-            }
-            if (playAutomatically && clip != null)
-            {
-                Play(defaultClip);
+                for (int i = 0; i < states.Count; i++)
+                {
+                    states[i].InitializeSamplers(gameObject);
+                }
+                if (playAutomatically && clip != null)
+                {
+                    Play(defaultClip);
+                }
             }
         }
 
@@ -212,6 +215,11 @@ namespace PressPlay.FFWD.Components
 
 		public void Stop()
 		{
+            if (!states.HasElements())
+            {
+                return;
+            }
+
             for (int i = 0; i < states.Count; i++)
             {
                 states[i].enabled = false;
@@ -296,6 +304,11 @@ namespace PressPlay.FFWD.Components
 
 		public void Sample()
 		{
+            if (!states.HasElements())
+            {
+                return;
+            }
+
             for (int i = 0; i < states.Count; i++)
             {
                 states[i].Sample();
@@ -328,6 +341,11 @@ namespace PressPlay.FFWD.Components
 
         internal void UpdateAnimationStates(float deltaTime)
         {
+            if (!states.HasElements())
+            {
+                return;
+            }
+
             bool playQueued = false;
             bool hasQueued = false;
             for (int i = states.Count - 1; i >= 0; i--)

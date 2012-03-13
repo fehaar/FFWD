@@ -26,7 +26,7 @@ namespace PressPlay.FFWD.Components
             Lights.Add(this);
         }
 
-        public bool InitializePrefabs()
+        public bool ShouldPrefabsBeInitialized()
         {
             return false;
         }

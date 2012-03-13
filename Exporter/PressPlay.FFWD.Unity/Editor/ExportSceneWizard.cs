@@ -68,18 +68,44 @@ public class ExportSceneWizard : ScriptableWizard
     public class ExportProgress
     {
         public string Title;
-        public int ItemsToDo;
+        private int ItemsToDo;
         private int itemsDone;
 
-        public void Progress(string info)
+        public void SetItemsToDo(int items)
         {
-            itemsDone++;
-            EditorUtility.DisplayProgressBar(Title, info, (float)ItemsToDo / (float)itemsDone);
+            if (ItemsToDo == 0)
+            {
+                ItemsToDo = items;
+            }
         }
 
-        public void Info(string info)
+        public void Progress(string info, bool log)
         {
-            EditorUtility.DisplayProgressBar(Title, info, (float)ItemsToDo / (float)itemsDone);
+            itemsDone++;
+            if (itemsDone == ItemsToDo)
+            {
+                EditorUtility.ClearProgressBar();
+            }
+            else if (itemsDone < ItemsToDo)
+            {
+                EditorUtility.DisplayProgressBar(Title, info, (float)ItemsToDo / (float)itemsDone);
+            }
+            if (log)
+            {
+                Debug.Log(info);
+            }
+        }
+
+        public void Info(string info, bool log)
+        {
+            if (itemsDone < ItemsToDo)
+            {
+                EditorUtility.DisplayProgressBar(Title, info, (float)ItemsToDo / (float)itemsDone);
+            }
+            if (log)
+            {
+                Debug.Log(info);
+            }
         }
     }
 
@@ -234,11 +260,13 @@ public class ExportSceneWizard : ScriptableWizard
 
         public void ExportOpenScene()
         {
+            progress.SetItemsToDo(1);
+
             SceneWriter scene = new SceneWriter(resolver, assets);
             scene.ExportDir = Path.Combine(assets.XmlDir, "Scenes");
             ScriptTranslator.ScriptNamespace = config.scriptNamespace;
 
-            Debug.Log("----------------------- " + Path.GetFileName(EditorApplication.currentScene) + " -------------------------Start scene export");
+            progress.Progress("----------------------- " + Path.GetFileName(EditorApplication.currentScene) + " -------------------------Start scene export", true);
 
             if (ValidateOpenScene())
             {
@@ -289,9 +317,11 @@ public class ExportSceneWizard : ScriptableWizard
         {
             allComponentsNotWritten.Clear();
 
+            progress.SetItemsToDo(config.groups.Sum(g => g.scenes.Count));
+
             foreach (SceneGroup group in config.groups)
             {
-                Debug.Log("************************ START LEVEL EXPORT FOR GROUP " + group.name + " ****************************");
+                progress.Info("************************ START LEVEL EXPORT FOR GROUP " + group.name + " ****************************", true);
 
                 // Find all Unity scenes starting from the base path and record the path to the scene
                 Dictionary<string, string> scenePaths = new Dictionary<string, string>();
@@ -304,7 +334,7 @@ public class ExportSceneWizard : ScriptableWizard
                 {
                     if (!scenePaths.ContainsKey(name))
                     {
-                        Debug.Log("Could not find scene " + name);
+                        Debug.LogError("Could not find scene " + name);
                         continue;
                     }
                     if (EditorApplication.OpenScene(scenePaths[name]))
@@ -313,7 +343,7 @@ public class ExportSceneWizard : ScriptableWizard
                     }
                     else
                     {
-                        Debug.Log("Could not open scene " + scenePaths[name]);
+                        Debug.LogError("Could not open scene " + scenePaths[name]);
                     }
                 }
             }
@@ -343,7 +373,9 @@ public class ExportSceneWizard : ScriptableWizard
                 return;
             }
 
-            Debug.Log("************************ START LEVEL EXPORT FOR GROUP " + group.name + " ****************************");
+            progress.SetItemsToDo(group.scenes.Count);
+
+            progress.Info("************************ START LEVEL EXPORT FOR GROUP " + group.name + " ****************************", true);
 
             // Find all Unity scenes starting from the base path and record the path to the scene
             Dictionary<string, string> scenePaths = new Dictionary<string, string>();
@@ -356,7 +388,7 @@ public class ExportSceneWizard : ScriptableWizard
             {
                 if (!scenePaths.ContainsKey(name))
                 {
-                    Debug.Log("Could not find scene " + name);
+                    Debug.LogError("Could not find scene " + name);
                     continue;
                 }
                 if (EditorApplication.OpenScene(scenePaths[name]))
@@ -365,7 +397,7 @@ public class ExportSceneWizard : ScriptableWizard
                 }
                 else
                 {
-                    Debug.Log("Could not open scene " + scenePaths[name]);
+                    Debug.LogError("Could not open scene " + scenePaths[name]);
                 }
             }
 
@@ -411,6 +443,8 @@ public class ExportSceneWizard : ScriptableWizard
             FindAllXnaScripts();
             Debug.Log("Found " + xnaScriptFiles.Count + " XNA scripts");
 
+            progress.SetItemsToDo(unityScriptFiles.Count + xnaScriptFiles.Count);
+
             int converted = 0;
             foreach (var className in unityScriptFiles.Keys)
             {
@@ -423,6 +457,7 @@ public class ExportSceneWizard : ScriptableWizard
                 {
                     continue;
                 }
+                progress.Progress("Translate " + scriptFile, false);
                 TranslateScriptFile(scriptFile);
                 converted++;
             }
@@ -430,6 +465,7 @@ public class ExportSceneWizard : ScriptableWizard
             int purged = 0;
             foreach (var className in xnaScriptFiles.Keys)
             {
+                progress.Progress("Check " + className, false);
                 if (config.excludedScripts.Contains(className))
                 {
                     continue;
@@ -461,7 +497,7 @@ public class ExportSceneWizard : ScriptableWizard
             }
             catch (Exception ex)
             {
-                Debug.Log("Error when converting script " + Path.GetFileName(scriptFile) + ": " + ex.Message);
+                Debug.LogError("Error when converting script " + Path.GetFileName(scriptFile) + ": " + ex.Message);
             }
         }
     }

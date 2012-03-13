@@ -667,7 +667,7 @@ namespace PressPlay.FFWD
             if (cmp is IInitializable)
             {
                 IInitializable init = cmp as IInitializable;
-                if (!cmp.isPrefab || (cmp.isPrefab && init.InitializePrefabs()))
+                if (!cmp.isPrefab || (cmp.isPrefab && init.ShouldPrefabsBeInitialized()))
                 {
                     init.Initialize(assetHelper);
                 }
