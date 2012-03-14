@@ -677,7 +677,14 @@ namespace PressPlay.FFWD
                 int pathIndex = name.IndexOf('/');
                 if (pathIndex > -1)
                 {
-                    if (name.StartsWith(children[i].name + '/'))
+                    string sChildName = children[i].name;
+                    int iCloneIndex = children[i].name.IndexOf("(Clone)");
+                    if(iCloneIndex > -1)
+                    {
+                        sChildName = sChildName.Substring(0, iCloneIndex);
+                    }
+
+                    if (name.StartsWith(sChildName + '/'))
                     {
                         return children[i].transform.Find(name.Substring(pathIndex + 1));
                     }
