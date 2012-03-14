@@ -1,10 +1,11 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using PressPlay.FFWD.Interfaces;
 
 namespace PressPlay.FFWD.Components
 {
-    public abstract class Renderer : Component
+    public abstract class Renderer : Component, IInitializable
     {
         public Renderer()
             :base()
@@ -105,6 +106,7 @@ namespace PressPlay.FFWD.Components
         }
 
         internal float renderQueue = 0f;
+        internal RenderItem[] renderItems;
 
         #region IRenderable Members
         /// <summary>
@@ -113,7 +115,7 @@ namespace PressPlay.FFWD.Components
         /// <param name="device"></param>
         /// <param name="cam"></param>
         /// <returns>Returns an estimated number of draw calls that we make in the draw routine.</returns>
-        public abstract int Draw(GraphicsDevice device, Camera cam);
+        public abstract void Draw(GraphicsDevice device, Camera cam);
         #endregion
 
         public override void Awake()
@@ -126,6 +128,54 @@ namespace PressPlay.FFWD.Components
             {
                 renderQueue = material.finalRenderQueue;
             }
+        }
+
+        public virtual void Initialize(AssetHelper assets)
+        {
+        }
+
+        public virtual bool ShouldPrefabsBeInitialized()
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// Flag that the renderer has changed in some way so we need to reconsider it for culling.
+        /// </summary>
+        internal void ReconsiderForCulling()
+        {
+            if (renderItems == null)
+            {
+                return;
+            }
+            for (int i = 0; i < renderItems.Length; i++)
+            {
+                RenderQueue.ReconsiderForCulling(renderItems[i]);
+            }
+        }
+
+        internal void AddRenderItems(RenderQueue rq)
+        {
+            if (renderItems == null)
+            {
+                return;
+            }
+            for (int i = 0; i < renderItems.Length; i++)
+            {
+                rq.Add(renderItems[i]);
+            }
+        }
+
+        internal void RemoveRenderItems(RenderQueue rq)
+        {
+            if (renderItems == null)
+            {
+                return;
+            }
+            for (int i = 0; i < renderItems.Length; i++)
+            {
+                rq.Remove(renderItems[i]);
+            }            
         }
     }
 }

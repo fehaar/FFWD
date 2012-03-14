@@ -65,9 +65,53 @@ public class ExportSceneWizard : ScriptableWizard
         }
     }
 
+    public class ExportProgress
+    {
+        public string Title;
+        private int ItemsToDo;
+        private int itemsDone;
+
+        public void SetItemsToDo(int items)
+        {
+            if (ItemsToDo == 0)
+            {
+                ItemsToDo = items;
+            }
+        }
+
+        public void Progress(string info, bool log)
+        {
+            itemsDone++;
+            if (itemsDone == ItemsToDo)
+            {
+                EditorUtility.ClearProgressBar();
+            }
+            else if (itemsDone < ItemsToDo)
+            {
+                EditorUtility.DisplayProgressBar(Title, info, (float)ItemsToDo / (float)itemsDone);
+            }
+            if (log)
+            {
+                Debug.Log(info);
+            }
+        }
+
+        public void Info(string info, bool log)
+        {
+            if (itemsDone < ItemsToDo)
+            {
+                EditorUtility.DisplayProgressBar(Title, info, (float)ItemsToDo / (float)itemsDone);
+            }
+            if (log)
+            {
+                Debug.Log(info);
+            }
+        }
+    }
+
     public class ExportCommands
     {
-        public ExportCommands()
+        public ExportCommands(string progressTitle)
         {
             config = ExportConfig.Load();
             if (EditorPrefs.HasKey("FFWD XNA dir " + PlayerSettings.productName))
@@ -95,6 +139,8 @@ public class ExportSceneWizard : ScriptableWizard
             assets.MeshDir = Path.Combine(xnaBaseDir, config.xnaAssets.MeshDir);
             assets.AudioDir = Path.Combine(xnaBaseDir, config.xnaAssets.AudioDir);
             assets.XmlDir = Path.Combine(xnaBaseDir, config.exportDir);
+
+            progress = new ExportProgress() { Title = progressTitle };
         }
 
         public ExportConfig config;
@@ -103,6 +149,7 @@ public class ExportSceneWizard : ScriptableWizard
         private TypeResolver resolver;
         public AssetHelper assets;
         private List<string> allComponentsNotWritten = new List<string>();
+        private ExportProgress progress;        
 
         public void ExportResource(GameObject go)
         {
@@ -213,11 +260,13 @@ public class ExportSceneWizard : ScriptableWizard
 
         public void ExportOpenScene()
         {
+            progress.SetItemsToDo(1);
+
             SceneWriter scene = new SceneWriter(resolver, assets);
             scene.ExportDir = Path.Combine(assets.XmlDir, "Scenes");
             ScriptTranslator.ScriptNamespace = config.scriptNamespace;
 
-            Debug.Log("----------------------- " + Path.GetFileName(EditorApplication.currentScene) + " -------------------------Start scene export");
+            progress.Progress("----------------------- " + Path.GetFileName(EditorApplication.currentScene) + " -------------------------Start scene export", true);
 
             if (ValidateOpenScene())
             {
@@ -268,13 +317,15 @@ public class ExportSceneWizard : ScriptableWizard
         {
             allComponentsNotWritten.Clear();
 
+            progress.SetItemsToDo(config.groups.Sum(g => g.scenes.Count));
+
             foreach (SceneGroup group in config.groups)
             {
-                Debug.Log("************************ START LEVEL EXPORT FOR GROUP " + group.name + " ****************************");
+                progress.Info("************************ START LEVEL EXPORT FOR GROUP " + group.name + " ****************************", true);
 
                 // Find all Unity scenes starting from the base path and record the path to the scene
                 Dictionary<string, string> scenePaths = new Dictionary<string, string>();
-                foreach (string file in Directory.GetFiles(group.baseSceneDir, "*.unity", SearchOption.AllDirectories))
+                foreach (string file in Directory.GetFiles(Path.Combine(Application.dataPath, group.baseSceneDir), "*.unity", SearchOption.AllDirectories))
                 {
                     scenePaths[Path.GetFileNameWithoutExtension(file)] = file;
                 }
@@ -283,7 +334,7 @@ public class ExportSceneWizard : ScriptableWizard
                 {
                     if (!scenePaths.ContainsKey(name))
                     {
-                        Debug.Log("Could not find scene " + name);
+                        Debug.LogError("Could not find scene " + name);
                         continue;
                     }
                     if (EditorApplication.OpenScene(scenePaths[name]))
@@ -292,7 +343,7 @@ public class ExportSceneWizard : ScriptableWizard
                     }
                     else
                     {
-                        Debug.Log("Could not open scene " + scenePaths[name]);
+                        Debug.LogError("Could not open scene " + scenePaths[name]);
                     }
                 }
             }
@@ -322,11 +373,13 @@ public class ExportSceneWizard : ScriptableWizard
                 return;
             }
 
-            Debug.Log("************************ START LEVEL EXPORT FOR GROUP " + group.name + " ****************************");
+            progress.SetItemsToDo(group.scenes.Count);
+
+            progress.Info("************************ START LEVEL EXPORT FOR GROUP " + group.name + " ****************************", true);
 
             // Find all Unity scenes starting from the base path and record the path to the scene
             Dictionary<string, string> scenePaths = new Dictionary<string, string>();
-            foreach (string file in Directory.GetFiles(group.baseSceneDir, "*.unity", SearchOption.AllDirectories))
+            foreach (string file in Directory.GetFiles(Path.Combine(Application.dataPath, group.baseSceneDir), "*.unity", SearchOption.AllDirectories))
             {
                 scenePaths[Path.GetFileNameWithoutExtension(file)] = file;
             }
@@ -335,7 +388,7 @@ public class ExportSceneWizard : ScriptableWizard
             {
                 if (!scenePaths.ContainsKey(name))
                 {
-                    Debug.Log("Could not find scene " + name);
+                    Debug.LogError("Could not find scene " + name);
                     continue;
                 }
                 if (EditorApplication.OpenScene(scenePaths[name]))
@@ -344,7 +397,7 @@ public class ExportSceneWizard : ScriptableWizard
                 }
                 else
                 {
-                    Debug.Log("Could not open scene " + scenePaths[name]);
+                    Debug.LogError("Could not open scene " + scenePaths[name]);
                 }
             }
 
@@ -390,6 +443,8 @@ public class ExportSceneWizard : ScriptableWizard
             FindAllXnaScripts();
             Debug.Log("Found " + xnaScriptFiles.Count + " XNA scripts");
 
+            progress.SetItemsToDo(unityScriptFiles.Count + xnaScriptFiles.Count);
+
             int converted = 0;
             foreach (var className in unityScriptFiles.Keys)
             {
@@ -402,6 +457,7 @@ public class ExportSceneWizard : ScriptableWizard
                 {
                     continue;
                 }
+                progress.Progress("Translate " + scriptFile, false);
                 TranslateScriptFile(scriptFile);
                 converted++;
             }
@@ -409,6 +465,7 @@ public class ExportSceneWizard : ScriptableWizard
             int purged = 0;
             foreach (var className in xnaScriptFiles.Keys)
             {
+                progress.Progress("Check " + className, false);
                 if (config.excludedScripts.Contains(className))
                 {
                     continue;
@@ -440,7 +497,7 @@ public class ExportSceneWizard : ScriptableWizard
             }
             catch (Exception ex)
             {
-                Debug.Log("Error when converting script " + Path.GetFileName(scriptFile) + ": " + ex.Message);
+                Debug.LogError("Error when converting script " + Path.GetFileName(scriptFile) + ": " + ex.Message);
             }
         }
     }
@@ -482,14 +539,14 @@ public class ExportSceneWizard : ScriptableWizard
     [MenuItem("FFWD/Export settings")]
     static void ExportRenderSettings()
     {
-        ExportCommands cmd = new ExportCommands();
+        ExportCommands cmd = new ExportCommands("Export render settings");
         cmd.ExportTags();        
     }
 
     [MenuItem("FFWD/Export all resources")]
     static void ExportAllResources()
     {
-        ExportCommands cmd = new ExportCommands();
+        ExportCommands cmd = new ExportCommands("Export all resources");
         UnityEngine.Object[] os = Resources.LoadAll("");
         foreach (var item in os)
         {
@@ -527,28 +584,28 @@ public class ExportSceneWizard : ScriptableWizard
     [MenuItem("FFWD/Export open scene")]
     static void ExportOpenScene()
     {
-        ExportCommands cmd = new ExportCommands();
+        ExportCommands cmd = new ExportCommands("Export open scene");
         cmd.ExportOpenScene();
     }
 
     [MenuItem("FFWD/Export all scenes")]
     static void ExportAllScenes()
     {
-        ExportCommands cmd = new ExportCommands();
+        ExportCommands cmd = new ExportCommands("Export all scenes");
         cmd.ExportAllScenes();
     }
 
     [MenuItem("FFWD/Export active scene group")]
     static void ExportActiveScenes()
     {
-        ExportCommands cmd = new ExportCommands();
+        ExportCommands cmd = new ExportCommands("Export active scene group");
         cmd.ExportActiveScenes();
     }
 
     [MenuItem("FFWD/Export all scripts")]
     static void ExportAllScripts()
     {
-        ExportCommands cmd = new ExportCommands();
+        ExportCommands cmd = new ExportCommands("Export all scripts");
         cmd.ExportAllScripts();
     }
 
@@ -564,21 +621,21 @@ public class ExportSceneWizard : ScriptableWizard
     [MenuItem("CONTEXT/Transform/FFWD export resource")]
     static void ExportTransform(MenuCommand command)
     {
-        ExportCommands cmd = new ExportCommands();
+        ExportCommands cmd = new ExportCommands("Export transform");
         cmd.ExportResource(((Transform)command.context).gameObject);
     }
 
     [MenuItem("CONTEXT/MonoBehaviour/FFWD export script")]
     static void ExportScript(MenuCommand command)
     {
-        ExportCommands cmd = new ExportCommands();
+        ExportCommands cmd = new ExportCommands("Export script");
         cmd.ExportScript(command.context as MonoBehaviour);
     }
 
     [MenuItem("CONTEXT/TextAsset/FFWD export resource")]
     static void ExportTextAsset(MenuCommand command)
     {
-        ExportCommands cmd = new ExportCommands();
+        ExportCommands cmd = new ExportCommands("Export text asset");
         TextAsset asset = command.context as TextAsset;
         cmd.ExportTextAsset(asset);
     }
@@ -586,7 +643,7 @@ public class ExportSceneWizard : ScriptableWizard
     [MenuItem("CONTEXT/TagManager/FFWD export tags")]
     static void ExportTags(MenuCommand command)
     {
-        ExportCommands cmd = new ExportCommands();
+        ExportCommands cmd = new ExportCommands("Export tags");
         cmd.ExportTags();
     }
 }

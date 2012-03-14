@@ -90,6 +90,10 @@ namespace PressPlay.FFWD.Components
             cam.BasicEffect.World = Matrix.Identity;
             cam.BasicEffect.VertexColorEnabled = hasColors;
             cam.BasicEffect.LightingEnabled = (!hasColors) && Light.HasLights;
+            if (cam.BasicEffect.LightingEnabled)
+            {
+                Light.EnableLighting(cam.BasicEffect, 0.2f);
+            }
 
             currentMaterial.SetTextureState(cam.BasicEffect);
             currentMaterial.SetBlendState(device);

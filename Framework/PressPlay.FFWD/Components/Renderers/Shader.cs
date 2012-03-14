@@ -15,6 +15,8 @@ namespace PressPlay.FFWD.Components
         public string name;
         public int renderQueue;
 
+        private static Dictionary<string, Shader> shaders = new Dictionary<string, Shader>();
+
         /// <summary>
         /// Finds the appropriate shader for the given material. Typically by name. 
         /// 
@@ -24,21 +26,24 @@ namespace PressPlay.FFWD.Components
         /// <returns></returns>
         internal static Shader GetShader(Material mat)
         {
-            Shader s = null;
-            switch (mat.name)
+            if (!shaders.ContainsKey(mat.shaderName))
             {
-                default:
-                    s = new BasicEffectShader();
-                    break;
+                // TODO: Choose the correct type of Shader to use
+                Shader s;
+                switch (mat.shaderName)
+                {
+                    default:
+                        s = new BasicEffectShader();
+                        break;
+                }
+                shaders[mat.shaderName] = s;
             }
-            s.Configure(mat);
-            return s;
+            return shaders[mat.shaderName];
         }
 
         internal Effect effect { get; set; }
 
-        public abstract void Configure(Material mat);
-        internal abstract void ApplyPreRenderSettings(bool useVertexColor);
+        internal abstract void ApplyPreRenderSettings(Material mat, bool useVertexColor);
 
         public bool supportsTextures { get; protected set; }
         public bool supportsLights { get; protected set; }

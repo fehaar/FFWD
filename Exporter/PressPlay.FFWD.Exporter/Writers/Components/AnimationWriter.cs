@@ -18,9 +18,10 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
                 throw new Exception(GetType() + " cannot export components of type " + component.GetType());
             }
             scene.WriteElement("enabled", anim.enabled);
+            scene.WriteElement("asset", scene.SanitizeFileName(anim.name));
             if (anim.clip != null)
             {
-                scene.WriteElement("clip", scene.SanitizeFileName(anim.name + "-" + anim.clip.name));
+                scene.WriteElement("clip", scene.SanitizeFileName(anim.clip.name));
             }
             scene.WriteElement("playAutomatically", anim.playAutomatically);
             scene.WriteElement("wrapMode", anim.wrapMode);
@@ -32,8 +33,8 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
                 {
                     continue;
                 }
-                clipNames[i] = scene.SanitizeFileName(anim.name + "-" + clips[i].name);
-                scene.AddAnimationClip(clipNames[i], clips[i]);
+                clipNames[i] = scene.SanitizeFileName(clips[i].name);
+                scene.AddAnimationClip(scene.SanitizeFileName(anim.name), clips[i]);
             }
             scene.WriteElement("clips", clipNames);
         }

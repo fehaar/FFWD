@@ -13,6 +13,11 @@ namespace PressPlay.FFWD.Extensions
             return array != null && array.Length > 0;
         }
 
+        public static bool HasElements(this IList list)
+        {
+            return list != null && list.Count > 0;
+        }
+
         public static bool HasElements(this IDictionary dict)
         {
             return dict != null && dict.Count > 0;

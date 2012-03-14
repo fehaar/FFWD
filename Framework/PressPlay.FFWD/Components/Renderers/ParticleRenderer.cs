@@ -84,13 +84,13 @@ namespace PressPlay.FFWD.Components
             return visible;
         }
 
-        public override int Draw(GraphicsDevice device, Camera cam)
+        public override void Draw(GraphicsDevice device, Camera cam)
         {
 #if DEBUG
             Application.particleDrawTimer.Start();
             Application.particleDraws++;
 #endif
-            if (emitter.particles == null || emitter.particleCount == 0) return 0;
+            if (emitter.particles == null || emitter.particleCount == 0) return;
 
             camPosition = (Microsoft.Xna.Framework.Vector3)cam.transform.position;
             camUpVector = (Microsoft.Xna.Framework.Vector3)cam.transform.up;
@@ -119,7 +119,7 @@ namespace PressPlay.FFWD.Components
 
             if (particlesRendered == 0)
             {
-                return 0;
+                return;
             }
 
 #if DEBUG
@@ -146,8 +146,6 @@ namespace PressPlay.FFWD.Components
 #if DEBUG
             Application.particleDrawTimer.Stop();
 #endif
-
-            return 1;
         }
 
         private bool RenderParticle(Camera cam, int vertexIndex, int triangleIndex, ref Particle particle)

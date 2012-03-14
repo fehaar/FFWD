@@ -36,7 +36,7 @@ namespace PressPlay.FFWD
             base.Destroy();
         }
 
-        public override int Draw(Microsoft.Xna.Framework.Graphics.GraphicsDevice device, Camera cam)
+        public override void Draw(Microsoft.Xna.Framework.Graphics.GraphicsDevice device, Camera cam)
         {
             if (ApplicationSettings.ShowDebugLines)
             {
@@ -91,7 +91,6 @@ namespace PressPlay.FFWD
             {
                 Physics.DrawDebug();
             }
-            return 0;
         }
     }
 #endif

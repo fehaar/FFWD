@@ -1,0 +1,1026 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:f="PressPlay.FFWD" xmlns:c="PressPlay.FFWD.Components">
+  <Asset Type="f:Scene">
+    <hasBeenProcessed>false</hasBeenProcessed>
+    <go>
+      <id>5624</id>
+      <name>Main Camera</name>
+      <layer>0</layer>
+      <tag>MainCamera</tag>
+      <cs>
+        <c Type="f:Transform">
+          <id>5626</id>
+          <p>0 1 -10</p>
+        </c>
+        <c Type="c:Camera">
+          <id>5628</id>
+          <fieldOfView>60</fieldOfView>
+          <nearClipPlane>0.3</nearClipPlane>
+          <farClipPlane>1000</farClipPlane>
+          <orthographicSize>100</orthographicSize>
+          <orthographic>false</orthographic>
+          <depth>-1</depth>
+          <aspect>2.58799</aspect>
+          <cullingMask>-1</cullingMask>
+          <backgroundColor>05314D79</backgroundColor>
+          <rect>0 0 1 1</rect>
+          <clearFlags>Skybox</clearFlags>
+        </c>
+      </cs>
+    </go>
+    <go>
+      <id>5732</id>
+      <name>Key</name>
+      <layer>0</layer>
+      <tag>Untagged</tag>
+      <cs>
+        <c Type="f:Transform">
+          <id>5734</id>
+          <p>0 1 -10</p>
+        </c>
+        <c Type="c:Light">
+          <id>5736</id>
+          <enabled>true</enabled>
+          <type>Directional</type>
+          <color>FFFFF4CF</color>
+          <intensity>0.5</intensity>
+          <range>10</range>
+          <spotAngle>30</spotAngle>
+          <cullingMask>-1</cullingMask>
+        </c>
+      </cs>
+    </go>
+    <go>
+      <id>5774</id>
+      <name>dude</name>
+      <layer>0</layer>
+      <tag>Untagged</tag>
+      <cs>
+        <c Type="f:Transform">
+          <id>5776</id>
+          <go>
+            <id>5648</id>
+            <name>him</name>
+            <layer>0</layer>
+            <tag>Untagged</tag>
+            <cs>
+              <c Type="f:Transform">
+                <id>5650</id>
+              </c>
+            </cs>
+          </go>
+          <go>
+            <id>5674</id>
+            <name>Root</name>
+            <layer>0</layer>
+            <tag>Untagged</tag>
+            <cs>
+              <c Type="f:Transform">
+                <id>5676</id>
+                <go>
+                  <id>5652</id>
+                  <name>Pelvis</name>
+                  <layer>0</layer>
+                  <tag>Untagged</tag>
+                  <cs>
+                    <c Type="f:Transform">
+                      <id>5654</id>
+                      <go>
+                        <id>5784</id>
+                        <name>Spine</name>
+                        <layer>0</layer>
+                        <tag>Untagged</tag>
+                        <cs>
+                          <c Type="f:Transform">
+                            <id>5786</id>
+                            <go>
+                              <id>5666</id>
+                              <name>L_Thigh1</name>
+                              <layer>0</layer>
+                              <tag>Untagged</tag>
+                              <cs>
+                                <c Type="f:Transform">
+                                  <id>5668</id>
+                                  <go>
+                                    <id>5548</id>
+                                    <name>L_Knee2</name>
+                                    <layer>0</layer>
+                                    <tag>Untagged</tag>
+                                    <cs>
+                                      <c Type="f:Transform">
+                                        <id>5550</id>
+                                        <go>
+                                          <id>5616</id>
+                                          <name>L_Ankle1</name>
+                                          <layer>0</layer>
+                                          <tag>Untagged</tag>
+                                          <cs>
+                                            <c Type="f:Transform">
+                                              <id>5618</id>
+                                              <go>
+                                                <id>5788</id>
+                                                <name>L_Ball</name>
+                                                <layer>0</layer>
+                                                <tag>Untagged</tag>
+                                                <cs>
+                                                  <c Type="f:Transform">
+                                                    <id>5790</id>
+                                                    <p>-0.52502 0.62738 0</p>
+                                                    <r>0 0 -0.7912 0.61156</r>
+                                                  </c>
+                                                </cs>
+                                              </go>
+                                              <p>-1.5428 0 0</p>
+                                              <r>-0.03524 0.01329 -0.06681 0.99705</r>
+                                            </c>
+                                          </cs>
+                                        </go>
+                                        <p>-1.82572 0 0</p>
+                                        <r>0.07834 0.02152 0.20712 0.97494</r>
+                                      </c>
+                                    </cs>
+                                  </go>
+                                  <p>0.37693 -0.03552 0.34951</p>
+                                  <r>-0.2666 0.94615 0.15325 0.1012</r>
+                                </c>
+                              </cs>
+                            </go>
+                            <go>
+                              <id>5806</id>
+                              <name>R_Thigh</name>
+                              <layer>0</layer>
+                              <tag>Untagged</tag>
+                              <cs>
+                                <c Type="f:Transform">
+                                  <id>5808</id>
+                                  <go>
+                                    <id>5780</id>
+                                    <name>R_Knee</name>
+                                    <layer>0</layer>
+                                    <tag>Untagged</tag>
+                                    <cs>
+                                      <c Type="f:Transform">
+                                        <id>5782</id>
+                                        <go>
+                                          <id>5750</id>
+                                          <name>R_Ankle</name>
+                                          <layer>0</layer>
+                                          <tag>Untagged</tag>
+                                          <cs>
+                                            <c Type="f:Transform">
+                                              <id>5752</id>
+                                              <go>
+                                                <id>5552</id>
+                                                <name>R_Ball</name>
+                                                <layer>0</layer>
+                                                <tag>Untagged</tag>
+                                                <cs>
+                                                  <c Type="f:Transform">
+                                                    <id>5554</id>
+                                                    <p>-0.52502 0.62739 0</p>
+                                                    <r>0 0 -0.7912 0.61156</r>
+                                                  </c>
+                                                </cs>
+                                              </go>
+                                              <p>-1.5428 0 0</p>
+                                              <r>0.03298 -0.01811 -0.21681 0.97549</r>
+                                            </c>
+                                          </cs>
+                                        </go>
+                                        <p>-1.82572 0 0</p>
+                                        <r>-0.02249 0.0382 0.26972 0.96192</r>
+                                      </c>
+                                    </cs>
+                                  </go>
+                                  <p>0.37693 -0.03552 -0.34951</p>
+                                  <r>0.01068 0.99672 -0.07086 0.03762</r>
+                                </c>
+                              </cs>
+                            </go>
+                            <go>
+                              <id>5724</id>
+                              <name>Spine1</name>
+                              <layer>0</layer>
+                              <tag>Untagged</tag>
+                              <cs>
+                                <c Type="f:Transform">
+                                  <id>5726</id>
+                                  <go>
+                                    <id>5708</id>
+                                    <name>Spine2</name>
+                                    <layer>0</layer>
+                                    <tag>Untagged</tag>
+                                    <cs>
+                                      <c Type="f:Transform">
+                                        <id>5710</id>
+                                        <go>
+                                          <id>5580</id>
+                                          <name>Spine3</name>
+                                          <layer>0</layer>
+                                          <tag>Untagged</tag>
+                                          <cs>
+                                            <c Type="f:Transform">
+                                              <id>5582</id>
+                                              <go>
+                                                <id>5758</id>
+                                                <name>Neck</name>
+                                                <layer>0</layer>
+                                                <tag>Untagged</tag>
+                                                <cs>
+                                                  <c Type="f:Transform">
+                                                    <id>5760</id>
+                                                    <go>
+                                                      <id>5670</id>
+                                                      <name>Head</name>
+                                                      <layer>0</layer>
+                                                      <tag>Untagged</tag>
+                                                      <cs>
+                                                        <c Type="f:Transform">
+                                                          <id>5672</id>
+                                                          <go>
+                                                            <id>5640</id>
+                                                            <name>L_eye_joint1</name>
+                                                            <layer>0</layer>
+                                                            <tag>Untagged</tag>
+                                                            <cs>
+                                                              <c Type="f:Transform">
+                                                                <id>5642</id>
+                                                                <p>-0.42207 0.14061 0.13948</p>
+                                                                <r>0.03908 0.70708 -0.0067 0.70603</r>
+                                                              </c>
+                                                            </cs>
+                                                          </go>
+                                                          <go>
+                                                            <id>5766</id>
+                                                            <name>L_eyeBall_joint2</name>
+                                                            <layer>0</layer>
+                                                            <tag>Untagged</tag>
+                                                            <cs>
+                                                              <c Type="f:Transform">
+                                                                <id>5768</id>
+                                                                <p>-0.44826 0.32479 0.12746</p>
+                                                                <r>0.00942 0 -0.00005 0.99996</r>
+                                                              </c>
+                                                            </cs>
+                                                          </go>
+                                                          <go>
+                                                            <id>5600</id>
+                                                            <name>R_eye_joint</name>
+                                                            <layer>0</layer>
+                                                            <tag>Untagged</tag>
+                                                            <cs>
+                                                              <c Type="f:Transform">
+                                                                <id>5602</id>
+                                                                <p>-0.42963 0.13332 -0.10661</p>
+                                                                <r>0.03908 0.70708 -0.0067 0.70603</r>
+                                                              </c>
+                                                            </cs>
+                                                          </go>
+                                                          <go>
+                                                            <id>5604</id>
+                                                            <name>R_eyeBall_joint</name>
+                                                            <layer>0</layer>
+                                                            <tag>Untagged</tag>
+                                                            <cs>
+                                                              <c Type="f:Transform">
+                                                                <id>5606</id>
+                                                                <p>-0.4577 0.31071 -0.12077</p>
+                                                                <r>0.00255 -0.00057 -0.00263 0.99999</r>
+                                                              </c>
+                                                            </cs>
+                                                          </go>
+                                                          <p>-0.39539 0 0</p>
+                                                          <r>0.01094 0.00995 0.16434 0.98629</r>
+                                                        </c>
+                                                      </cs>
+                                                    </go>
+                                                    <go>
+                                                      <id>5728</id>
+                                                      <name>L_Clavicle</name>
+                                                      <layer>0</layer>
+                                                      <tag>Untagged</tag>
+                                                      <cs>
+                                                        <c Type="f:Transform">
+                                                          <id>5730</id>
+                                                          <go>
+                                                            <id>5584</id>
+                                                            <name>L_UpperArm</name>
+                                                            <layer>0</layer>
+                                                            <tag>Untagged</tag>
+                                                            <cs>
+                                                              <c Type="f:Transform">
+                                                                <id>5586</id>
+                                                                <go>
+                                                                  <id>5696</id>
+                                                                  <name>L_Forearm</name>
+                                                                  <layer>0</layer>
+                                                                  <tag>Untagged</tag>
+                                                                  <cs>
+                                                                    <c Type="f:Transform">
+                                                                      <id>5698</id>
+                                                                      <go>
+                                                                        <id>5556</id>
+                                                                        <name>L_Hand</name>
+                                                                        <layer>0</layer>
+                                                                        <tag>Untagged</tag>
+                                                                        <cs>
+                                                                          <c Type="f:Transform">
+                                                                            <id>5558</id>
+                                                                            <go>
+                                                                              <id>5720</id>
+                                                                              <name>L_Index1</name>
+                                                                              <layer>0</layer>
+                                                                              <tag>Untagged</tag>
+                                                                              <cs>
+                                                                                <c Type="f:Transform">
+                                                                                  <id>5722</id>
+                                                                                  <go>
+                                                                                    <id>5660</id>
+                                                                                    <name>L_Index2</name>
+                                                                                    <layer>0</layer>
+                                                                                    <tag>Untagged</tag>
+                                                                                    <cs>
+                                                                                      <c Type="f:Transform">
+                                                                                        <id>5662</id>
+                                                                                        <go>
+                                                                                          <id>5644</id>
+                                                                                          <name>L_Index3</name>
+                                                                                          <layer>0</layer>
+                                                                                          <tag>Untagged</tag>
+                                                                                          <cs>
+                                                                                            <c Type="f:Transform">
+                                                                                              <id>5646</id>
+                                                                                              <p>-0.10628 0 0</p>
+                                                                                            </c>
+                                                                                          </cs>
+                                                                                        </go>
+                                                                                        <p>-0.14737 0 0</p>
+                                                                                        <r>0 0 -0.13219 0.99122</r>
+                                                                                      </c>
+                                                                                    </cs>
+                                                                                  </go>
+                                                                                  <p>-0.43487 0.00163 -0.15613</p>
+                                                                                  <r>0.10409 -0.01802 -0.03254 0.99387</r>
+                                                                                </c>
+                                                                              </cs>
+                                                                            </go>
+                                                                            <go>
+                                                                              <id>5704</id>
+                                                                              <name>L_Middle1</name>
+                                                                              <layer>0</layer>
+                                                                              <tag>Untagged</tag>
+                                                                              <cs>
+                                                                                <c Type="f:Transform">
+                                                                                  <id>5706</id>
+                                                                                  <go>
+                                                                                    <id>5746</id>
+                                                                                    <name>L_Middle2</name>
+                                                                                    <layer>0</layer>
+                                                                                    <tag>Untagged</tag>
+                                                                                    <cs>
+                                                                                      <c Type="f:Transform">
+                                                                                        <id>5748</id>
+                                                                                        <go>
+                                                                                          <id>5684</id>
+                                                                                          <name>L_Middle3</name>
+                                                                                          <layer>0</layer>
+                                                                                          <tag>Untagged</tag>
+                                                                                          <cs>
+                                                                                            <c Type="f:Transform">
+                                                                                              <id>5686</id>
+                                                                                              <p>-0.15291 0 0</p>
+                                                                                              <r>0 0 -0.03321 0.99945</r>
+                                                                                            </c>
+                                                                                          </cs>
+                                                                                        </go>
+                                                                                        <p>-0.15291 0 0</p>
+                                                                                        <r>0 0 -0.14048 0.99008</r>
+                                                                                      </c>
+                                                                                    </cs>
+                                                                                  </go>
+                                                                                  <p>-0.436 -0.00003 -0.03669</p>
+                                                                                  <r>0.01586 -0.01167 -0.12375 0.99212</r>
+                                                                                </c>
+                                                                              </cs>
+                                                                            </go>
+                                                                            <go>
+                                                                              <id>5770</id>
+                                                                              <name>L_Pinky1</name>
+                                                                              <layer>0</layer>
+                                                                              <tag>Untagged</tag>
+                                                                              <cs>
+                                                                                <c Type="f:Transform">
+                                                                                  <id>5772</id>
+                                                                                  <go>
+                                                                                    <id>5572</id>
+                                                                                    <name>L_Pinky2</name>
+                                                                                    <layer>0</layer>
+                                                                                    <tag>Untagged</tag>
+                                                                                    <cs>
+                                                                                      <c Type="f:Transform">
+                                                                                        <id>5574</id>
+                                                                                        <go>
+                                                                                          <id>5688</id>
+                                                                                          <name>L_Pinky3</name>
+                                                                                          <layer>0</layer>
+                                                                                          <tag>Untagged</tag>
+                                                                                          <cs>
+                                                                                            <c Type="f:Transform">
+                                                                                              <id>5690</id>
+                                                                                              <p>-0.0859 0 0</p>
+                                                                                              <r>0 0 -0.03377 0.99943</r>
+                                                                                            </c>
+                                                                                          </cs>
+                                                                                        </go>
+                                                                                        <p>-0.11318 0 0</p>
+                                                                                      </c>
+                                                                                    </cs>
+                                                                                  </go>
+                                                                                  <p>-0.39727 0.02235 0.17428</p>
+                                                                                  <r>-0.17446 0.04181 -0.1903 0.96519</r>
+                                                                                </c>
+                                                                              </cs>
+                                                                            </go>
+                                                                            <go>
+                                                                              <id>5576</id>
+                                                                              <name>L_Ring1</name>
+                                                                              <layer>0</layer>
+                                                                              <tag>Untagged</tag>
+                                                                              <cs>
+                                                                                <c Type="f:Transform">
+                                                                                  <id>5578</id>
+                                                                                  <go>
+                                                                                    <id>5716</id>
+                                                                                    <name>L_Ring2</name>
+                                                                                    <layer>0</layer>
+                                                                                    <tag>Untagged</tag>
+                                                                                    <cs>
+                                                                                      <c Type="f:Transform">
+                                                                                        <id>5718</id>
+                                                                                        <go>
+                                                                                          <id>5742</id>
+                                                                                          <name>L_Ring3</name>
+                                                                                          <layer>0</layer>
+                                                                                          <tag>Untagged</tag>
+                                                                                          <cs>
+                                                                                            <c Type="f:Transform">
+                                                                                              <id>5744</id>
+                                                                                              <p>-0.13883 0 0</p>
+                                                                                              <r>0 0 -0.07864 0.9969</r>
+                                                                                            </c>
+                                                                                          </cs>
+                                                                                        </go>
+                                                                                        <p>-0.14033 0 0</p>
+                                                                                        <r>0 0 -0.22126 0.97522</r>
+                                                                                      </c>
+                                                                                    </cs>
+                                                                                  </go>
+                                                                                  <p>-0.4295 -0.00947 0.08065</p>
+                                                                                  <r>-0.07538 0.02405 -0.16623 0.98291</r>
+                                                                                </c>
+                                                                              </cs>
+                                                                            </go>
+                                                                            <go>
+                                                                              <id>5560</id>
+                                                                              <name>L_Thumb1</name>
+                                                                              <layer>0</layer>
+                                                                              <tag>Untagged</tag>
+                                                                              <cs>
+                                                                                <c Type="f:Transform">
+                                                                                  <id>5562</id>
+                                                                                  <go>
+                                                                                    <id>5700</id>
+                                                                                    <name>L_Thumb2</name>
+                                                                                    <layer>0</layer>
+                                                                                    <tag>Untagged</tag>
+                                                                                    <cs>
+                                                                                      <c Type="f:Transform">
+                                                                                        <id>5702</id>
+                                                                                        <go>
+                                                                                          <id>5608</id>
+                                                                                          <name>L_Thumb3</name>
+                                                                                          <layer>0</layer>
+                                                                                          <tag>Untagged</tag>
+                                                                                          <cs>
+                                                                                            <c Type="f:Transform">
+                                                                                              <id>5610</id>
+                                                                                              <p>-0.13825 0 0</p>
+                                                                                              <r>0 0 -0.07816 0.99694</r>
+                                                                                            </c>
+                                                                                          </cs>
+                                                                                        </go>
+                                                                                        <p>-0.11404 0 0</p>
+                                                                                        <r>0 0 -0.15517 0.98789</r>
+                                                                                      </c>
+                                                                                    </cs>
+                                                                                  </go>
+                                                                                  <p>-0.16251 0.06266 -0.16788</p>
+                                                                                  <r>0.79541 -0.27695 0.14232 0.51997</r>
+                                                                                </c>
+                                                                              </cs>
+                                                                            </go>
+                                                                            <p>-1.08256 0 0</p>
+                                                                            <r>-0.65677 0.00168 -0.0347 0.75329</r>
+                                                                          </c>
+                                                                        </cs>
+                                                                      </go>
+                                                                      <p>-1.31422 0 0</p>
+                                                                      <r>0.30053 -0.10937 0.15257 0.93512</r>
+                                                                    </c>
+                                                                  </cs>
+                                                                </go>
+                                                                <p>-0.67103 0.08448 0.00321</p>
+                                                                <r>-0.10913 -0.49411 -0.26652 0.82032</r>
+                                                              </c>
+                                                            </cs>
+                                                          </go>
+                                                          <p>0.0308 -0.07706 0.12233</p>
+                                                          <r>-0.63096 -0.13287 0.74795 -0.1575</r>
+                                                        </c>
+                                                      </cs>
+                                                    </go>
+                                                    <go>
+                                                      <id>5820</id>
+                                                      <name>R_Clavicle</name>
+                                                      <layer>0</layer>
+                                                      <tag>Untagged</tag>
+                                                      <cs>
+                                                        <c Type="f:Transform">
+                                                          <id>5822</id>
+                                                          <go>
+                                                            <id>5656</id>
+                                                            <name>R_UpperArm</name>
+                                                            <layer>0</layer>
+                                                            <tag>Untagged</tag>
+                                                            <cs>
+                                                              <c Type="f:Transform">
+                                                                <id>5658</id>
+                                                                <go>
+                                                                  <id>5636</id>
+                                                                  <name>R_Forearm</name>
+                                                                  <layer>0</layer>
+                                                                  <tag>Untagged</tag>
+                                                                  <cs>
+                                                                    <c Type="f:Transform">
+                                                                      <id>5638</id>
+                                                                      <go>
+                                                                        <id>5810</id>
+                                                                        <name>R_Hand</name>
+                                                                        <layer>0</layer>
+                                                                        <tag>Untagged</tag>
+                                                                        <cs>
+                                                                          <c Type="f:Transform">
+                                                                            <id>5812</id>
+                                                                            <go>
+                                                                              <id>5738</id>
+                                                                              <name>R_Index1</name>
+                                                                              <layer>0</layer>
+                                                                              <tag>Untagged</tag>
+                                                                              <cs>
+                                                                                <c Type="f:Transform">
+                                                                                  <id>5740</id>
+                                                                                  <go>
+                                                                                    <id>5692</id>
+                                                                                    <name>R_Index2</name>
+                                                                                    <layer>0</layer>
+                                                                                    <tag>Untagged</tag>
+                                                                                    <cs>
+                                                                                      <c Type="f:Transform">
+                                                                                        <id>5694</id>
+                                                                                        <go>
+                                                                                          <id>5792</id>
+                                                                                          <name>R_Index3</name>
+                                                                                          <layer>0</layer>
+                                                                                          <tag>Untagged</tag>
+                                                                                          <cs>
+                                                                                            <c Type="f:Transform">
+                                                                                              <id>5794</id>
+                                                                                              <p>-0.10628 0 0</p>
+                                                                                              <r>0 0 -0.11503 0.99336</r>
+                                                                                            </c>
+                                                                                          </cs>
+                                                                                        </go>
+                                                                                        <p>-0.14737 0 0</p>
+                                                                                        <r>0 0 -0.159 0.98728</r>
+                                                                                      </c>
+                                                                                    </cs>
+                                                                                  </go>
+                                                                                  <p>-0.43487 0.00163 0.15613</p>
+                                                                                  <r>-0.10311 0.02 -0.00105 0.99447</r>
+                                                                                </c>
+                                                                              </cs>
+                                                                            </go>
+                                                                            <go>
+                                                                              <id>5754</id>
+                                                                              <name>R_Middle1</name>
+                                                                              <layer>0</layer>
+                                                                              <tag>Untagged</tag>
+                                                                              <cs>
+                                                                                <c Type="f:Transform">
+                                                                                  <id>5756</id>
+                                                                                  <go>
+                                                                                    <id>5712</id>
+                                                                                    <name>R_Middle2</name>
+                                                                                    <layer>0</layer>
+                                                                                    <tag>Untagged</tag>
+                                                                                    <cs>
+                                                                                      <c Type="f:Transform">
+                                                                                        <id>5714</id>
+                                                                                        <go>
+                                                                                          <id>5802</id>
+                                                                                          <name>R_Middle3</name>
+                                                                                          <layer>0</layer>
+                                                                                          <tag>Untagged</tag>
+                                                                                          <cs>
+                                                                                            <c Type="f:Transform">
+                                                                                              <id>5804</id>
+                                                                                              <p>-0.15291 0 0</p>
+                                                                                              <r>0 0 -0.03141 0.99951</r>
+                                                                                            </c>
+                                                                                          </cs>
+                                                                                        </go>
+                                                                                        <p>-0.15291 0 0</p>
+                                                                                        <r>0 0 -0.16132 0.9869</r>
+                                                                                      </c>
+                                                                                    </cs>
+                                                                                  </go>
+                                                                                  <p>-0.436 -0.00003 0.03669</p>
+                                                                                  <r>-0.00971 0.00997 -0.00962 0.99986</r>
+                                                                                </c>
+                                                                              </cs>
+                                                                            </go>
+                                                                            <go>
+                                                                              <id>5564</id>
+                                                                              <name>R_Pinky1</name>
+                                                                              <layer>0</layer>
+                                                                              <tag>Untagged</tag>
+                                                                              <cs>
+                                                                                <c Type="f:Transform">
+                                                                                  <id>5566</id>
+                                                                                  <go>
+                                                                                    <id>5592</id>
+                                                                                    <name>R_Pinky2</name>
+                                                                                    <layer>0</layer>
+                                                                                    <tag>Untagged</tag>
+                                                                                    <cs>
+                                                                                      <c Type="f:Transform">
+                                                                                        <id>5594</id>
+                                                                                        <go>
+                                                                                          <id>5762</id>
+                                                                                          <name>R_Pinky3</name>
+                                                                                          <layer>0</layer>
+                                                                                          <tag>Untagged</tag>
+                                                                                          <cs>
+                                                                                            <c Type="f:Transform">
+                                                                                              <id>5764</id>
+                                                                                              <p>-0.0859 0 0</p>
+                                                                                              <r>0 0 -0.05024 0.99874</r>
+                                                                                            </c>
+                                                                                          </cs>
+                                                                                        </go>
+                                                                                        <p>-0.11318 0 0</p>
+                                                                                        <r>0 0 -0.18968 0.98185</r>
+                                                                                      </c>
+                                                                                    </cs>
+                                                                                  </go>
+                                                                                  <p>-0.39727 0.02235 -0.17428</p>
+                                                                                  <r>0.19735 -0.08594 -0.19269 0.95736</r>
+                                                                                </c>
+                                                                              </cs>
+                                                                            </go>
+                                                                            <go>
+                                                                              <id>5568</id>
+                                                                              <name>R_Ring1</name>
+                                                                              <layer>0</layer>
+                                                                              <tag>Untagged</tag>
+                                                                              <cs>
+                                                                                <c Type="f:Transform">
+                                                                                  <id>5570</id>
+                                                                                  <go>
+                                                                                    <id>5612</id>
+                                                                                    <name>R_Ring2</name>
+                                                                                    <layer>0</layer>
+                                                                                    <tag>Untagged</tag>
+                                                                                    <cs>
+                                                                                      <c Type="f:Transform">
+                                                                                        <id>5614</id>
+                                                                                        <go>
+                                                                                          <id>5596</id>
+                                                                                          <name>R_Ring3</name>
+                                                                                          <layer>0</layer>
+                                                                                          <tag>Untagged</tag>
+                                                                                          <cs>
+                                                                                            <c Type="f:Transform">
+                                                                                              <id>5598</id>
+                                                                                              <p>-0.13883 0 0</p>
+                                                                                              <r>0 0 -0.11359 0.99353</r>
+                                                                                            </c>
+                                                                                          </cs>
+                                                                                        </go>
+                                                                                        <p>-0.14033 0 0</p>
+                                                                                        <r>0 0 -0.23589 0.97178</r>
+                                                                                      </c>
+                                                                                    </cs>
+                                                                                  </go>
+                                                                                  <p>-0.4295 -0.00947 -0.08065</p>
+                                                                                  <r>0.07964 -0.06561 -0.10369 0.98924</r>
+                                                                                </c>
+                                                                              </cs>
+                                                                            </go>
+                                                                            <go>
+                                                                              <id>5620</id>
+                                                                              <name>R_Thumb1</name>
+                                                                              <layer>0</layer>
+                                                                              <tag>Untagged</tag>
+                                                                              <cs>
+                                                                                <c Type="f:Transform">
+                                                                                  <id>5622</id>
+                                                                                  <go>
+                                                                                    <id>5588</id>
+                                                                                    <name>R_Thumb2</name>
+                                                                                    <layer>0</layer>
+                                                                                    <tag>Untagged</tag>
+                                                                                    <cs>
+                                                                                      <c Type="f:Transform">
+                                                                                        <id>5590</id>
+                                                                                        <go>
+                                                                                          <id>5680</id>
+                                                                                          <name>R_Thumb3</name>
+                                                                                          <layer>0</layer>
+                                                                                          <tag>Untagged</tag>
+                                                                                          <cs>
+                                                                                            <c Type="f:Transform">
+                                                                                              <id>5682</id>
+                                                                                              <p>-0.13825 0 0</p>
+                                                                                              <r>0 0 -0.01758 0.99985</r>
+                                                                                            </c>
+                                                                                          </cs>
+                                                                                        </go>
+                                                                                        <p>-0.11404 0 0</p>
+                                                                                        <r>0 0 -0.27616 0.96111</r>
+                                                                                      </c>
+                                                                                    </cs>
+                                                                                  </go>
+                                                                                  <p>-0.16251 0.06266 0.16788</p>
+                                                                                  <r>0.75999 -0.39613 -0.19107 -0.47853</r>
+                                                                                </c>
+                                                                              </cs>
+                                                                            </go>
+                                                                            <p>-1.08256 0 0</p>
+                                                                            <r>0.58421 0.00304 0.1553 0.7966</r>
+                                                                          </c>
+                                                                        </cs>
+                                                                      </go>
+                                                                      <p>-1.31422 0 0</p>
+                                                                      <r>-0.33713 0.11036 0.43881 0.8256</r>
+                                                                    </c>
+                                                                  </cs>
+                                                                </go>
+                                                                <p>-0.68865 -0.10588 0.01888</p>
+                                                                <r>0.14233 0.47986 0.23043 0.83449</r>
+                                                              </c>
+                                                            </cs>
+                                                          </go>
+                                                          <p>0.0308 -0.07706 -0.12233</p>
+                                                          <r>0.63096 0.13286 0.74795 -0.1575</r>
+                                                        </c>
+                                                      </cs>
+                                                    </go>
+                                                    <p>-0.55363 -0.00029 0</p>
+                                                    <r>-0.06029 -0.00207 -0.24842 0.96677</r>
+                                                  </c>
+                                                </cs>
+                                              </go>
+                                              <p>-0.4544 -0.00044 0</p>
+                                              <r>0.02471 -0.01383 -0.02808 0.9992</r>
+                                            </c>
+                                          </cs>
+                                        </go>
+                                        <p>-0.45441 -0.00036 0</p>
+                                        <r>0.02351 -0.0157 -0.04696 0.9985</r>
+                                      </c>
+                                    </cs>
+                                  </go>
+                                  <p>-0.45433 -0.00036 0</p>
+                                  <r>0.02563 0.00611 0.0508 0.99836</r>
+                                </c>
+                              </cs>
+                            </go>
+                            <p>-0.3786 -0.00036 0</p>
+                            <r>0 0 0.04744 0.99887</r>
+                          </c>
+                        </cs>
+                      </go>
+                      <p>0.07772 0.11332 0.0657</p>
+                      <r>0.46325 0.55358 -0.46245 0.51487</r>
+                    </c>
+                  </cs>
+                </go>
+                <p>-0.00376 3.7461 0.22305</p>
+                <r>0.5 -0.5 -0.5 -0.5</r>
+              </c>
+              <c Type="c:SkinnedMeshRenderer">
+                <id>5678</id>
+                <sharedMaterials>
+                  <material>
+                    <id>386</id>
+                    <name>head</name>
+                    <shader>Diffuse</shader>
+                    <renderQueue>2000</renderQueue>
+                    <color>FFFFFFFF</color>
+                    <mainTexture>
+                      <id>424</id>
+                      <name>Assets/head</name>
+                    </mainTexture>
+                    <mainTextureOffset>0 0</mainTextureOffset>
+                    <mainTextureScale>1 1</mainTextureScale>
+                    <wrapRepeat>true</wrapRepeat>
+                  </material>
+                  <material>
+                    <id>454</id>
+                    <name>jacket</name>
+                    <shader>Diffuse</shader>
+                    <renderQueue>2000</renderQueue>
+                    <color>FFFFFFFF</color>
+                    <mainTexture>
+                      <id>392</id>
+                      <name>Assets/jacket</name>
+                    </mainTexture>
+                    <mainTextureOffset>0 0</mainTextureOffset>
+                    <mainTextureScale>1 1</mainTextureScale>
+                    <wrapRepeat>true</wrapRepeat>
+                  </material>
+                  <material>
+                    <id>362</id>
+                    <name>pants</name>
+                    <shader>Diffuse</shader>
+                    <renderQueue>2000</renderQueue>
+                    <color>FFFFFFFF</color>
+                    <mainTexture>
+                      <id>452</id>
+                      <name>Assets/pants</name>
+                    </mainTexture>
+                    <mainTextureOffset>0 0</mainTextureOffset>
+                    <mainTextureScale>1 1</mainTextureScale>
+                    <wrapRepeat>true</wrapRepeat>
+                  </material>
+                  <material>
+                    <id>446</id>
+                    <name>upBodyC</name>
+                    <shader>Diffuse</shader>
+                    <renderQueue>2000</renderQueue>
+                    <color>FFFFFFFF</color>
+                    <mainTexture>
+                      <id>364</id>
+                      <name>Assets/upBodyC</name>
+                    </mainTexture>
+                    <mainTextureOffset>0 0</mainTextureOffset>
+                    <mainTextureScale>1 1</mainTextureScale>
+                    <wrapRepeat>true</wrapRepeat>
+                  </material>
+                  <material>
+                    <id>446</id>
+                    <name>upBodyC</name>
+                    <shader>Diffuse</shader>
+                    <renderQueue>2000</renderQueue>
+                    <color>FFFFFFFF</color>
+                    <mainTexture>
+                      <id>364</id>
+                      <name>Assets/upBodyC</name>
+                    </mainTexture>
+                    <mainTextureOffset>0 0</mainTextureOffset>
+                    <mainTextureScale>1 1</mainTextureScale>
+                    <wrapRepeat>true</wrapRepeat>
+                  </material>
+                </sharedMaterials>
+                <bones>
+                  <Item>Root</Item>
+                  <Item>Pelvis</Item>
+                  <Item>Spine</Item>
+                  <Item>Spine1</Item>
+                  <Item>L_Thigh1</Item>
+                  <Item>R_Thigh</Item>
+                  <Item>Spine2</Item>
+                  <Item>L_Knee2</Item>
+                  <Item>R_Knee</Item>
+                  <Item>Spine3</Item>
+                  <Item>L_Ankle1</Item>
+                  <Item>R_Ankle</Item>
+                  <Item>Neck</Item>
+                  <Item>L_Ball</Item>
+                  <Item>R_Ball</Item>
+                  <Item>Head</Item>
+                  <Item>L_Clavicle</Item>
+                  <Item>R_Clavicle</Item>
+                  <Item>L_eye_joint1</Item>
+                  <Item>R_eye_joint</Item>
+                  <Item>L_eyeBall_joint2</Item>
+                  <Item>R_eyeBall_joint</Item>
+                  <Item>L_UpperArm</Item>
+                  <Item>R_UpperArm</Item>
+                  <Item>L_Forearm</Item>
+                  <Item>R_Forearm</Item>
+                  <Item>L_Hand</Item>
+                  <Item>R_Hand</Item>
+                  <Item>L_Thumb1</Item>
+                  <Item>L_Index1</Item>
+                  <Item>L_Middle1</Item>
+                  <Item>L_Ring1</Item>
+                  <Item>L_Pinky1</Item>
+                  <Item>R_Thumb1</Item>
+                  <Item>R_Index1</Item>
+                  <Item>R_Middle1</Item>
+                  <Item>R_Ring1</Item>
+                  <Item>R_Pinky1</Item>
+                  <Item>L_Thumb2</Item>
+                  <Item>L_Index2</Item>
+                  <Item>L_Middle2</Item>
+                  <Item>L_Ring2</Item>
+                  <Item>L_Pinky2</Item>
+                  <Item>R_Thumb2</Item>
+                  <Item>R_Index2</Item>
+                  <Item>R_Middle2</Item>
+                  <Item>R_Ring2</Item>
+                  <Item>R_Pinky2</Item>
+                  <Item>L_Thumb3</Item>
+                  <Item>L_Index3</Item>
+                  <Item>L_Middle3</Item>
+                  <Item>L_Ring3</Item>
+                  <Item>L_Pinky3</Item>
+                  <Item>R_Thumb3</Item>
+                  <Item>R_Index3</Item>
+                  <Item>R_Middle3</Item>
+                  <Item>R_Ring3</Item>
+                  <Item>R_Pinky3</Item>
+                </bones>
+                <sharedMesh>
+                  <id>436</id>
+                  <name>him</name>
+                  <asset>dude.fbx</asset>
+                </sharedMesh>
+              </c>
+            </cs>
+          </go>
+          <p>0 -2.35088 -2.38851</p>
+        </c>
+        <c Type="c:Animation">
+          <id>5778</id>
+          <enabled>true</enabled>
+          <asset>dude</asset>
+          <clip>Take 001</clip>
+          <playAutomatically>true</playAutomatically>
+          <wrapMode>Default</wrapMode>
+          <clips>
+            <Item>Take 001</Item>
+          </clips>
+        </c>
+      </cs>
+    </go>
+    <go>
+      <id>5796</id>
+      <name>Back</name>
+      <layer>0</layer>
+      <tag>Untagged</tag>
+      <cs>
+        <c Type="f:Transform">
+          <id>5798</id>
+          <p>0 1 10</p>
+          <r>-1 0 0 0</r>
+        </c>
+        <c Type="c:Light">
+          <id>5800</id>
+          <enabled>true</enabled>
+          <type>Directional</type>
+          <color>FF525C63</color>
+          <intensity>0.5</intensity>
+          <range>10</range>
+          <spotAngle>30</spotAngle>
+          <cullingMask>-1</cullingMask>
+        </c>
+      </cs>
+    </go>
+    <go>
+      <id>5814</id>
+      <name>Fill</name>
+      <layer>0</layer>
+      <tag>Untagged</tag>
+      <cs>
+        <c Type="f:Transform">
+          <id>5816</id>
+          <p>-9.7227 1 0</p>
+          <r>0 0.70711 0 0.70711</r>
+        </c>
+        <c Type="c:Light">
+          <id>5818</id>
+          <enabled>true</enabled>
+          <type>Directional</type>
+          <color>FFF4C2CF</color>
+          <intensity>0.5</intensity>
+          <range>10</range>
+          <spotAngle>30</spotAngle>
+          <cullingMask>-1</cullingMask>
+        </c>
+      </cs>
+    </go>
+  </Asset>
+</XnaContent>

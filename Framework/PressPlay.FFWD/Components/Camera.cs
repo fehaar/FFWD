@@ -77,6 +77,10 @@ namespace PressPlay.FFWD.Components
         public int depth { get; set; }
         public float aspect { get; set; }
         public int cullingMask { get; set; }
+        private readonly List<Renderer> oldRenderQueue = new List<Renderer>(50);
+        internal static readonly RenderQueue RenderQueue = new RenderQueue(ApplicationSettings.DefaultCapacities.RenderQueues);
+        internal readonly RenderQueue CulledRenderQueue = new RenderQueue(ApplicationSettings.DefaultCapacities.RenderCullingQueue);
+        private bool doFullCullingScan;
 
         public float pixelWidth 
         { 
@@ -97,8 +101,6 @@ namespace PressPlay.FFWD.Components
         public BoundingFrustum frustum { get; private set; }
 
         public static bool wireframeRender = false;
-
-        private static int estimatedDrawCalls = 0;
 
         private static DynamicBatchRenderer dynamicBatchRenderer;
 
@@ -178,6 +180,8 @@ namespace PressPlay.FFWD.Components
 
             frustum = new BoundingFrustum(view * projectionMatrix);
             RecalculateView();
+
+            // This code will be replaced with the new render queue
             for (int i = nonAssignedRenderers.Count - 1; i >= 0; i--)
             {
                 if (nonAssignedRenderers[i] == null || nonAssignedRenderers[i].gameObject == null || addRenderer(nonAssignedRenderers[i]))
@@ -187,11 +191,13 @@ namespace PressPlay.FFWD.Components
             }
             for (int i = 0; i < _allCameras.Count; i++)
             {
-                for (int j = 0; j < _allCameras[i].renderQueue.Count; j++)
+                for (int j = 0; j < _allCameras[i].oldRenderQueue.Count; j++)
                 {
-                    addRenderer(_allCameras[i].renderQueue[j]);
+                    addRenderer(_allCameras[i].oldRenderQueue[j]);
                 }
             }
+            // This code will be replaced with the new render queue END
+
             _allCameras.Add(this);
             _allCameras.Sort(this);
 
@@ -218,6 +224,7 @@ namespace PressPlay.FFWD.Components
         public static void RemoveCamera(Camera cam)
         {
             _allCameras.Remove(cam);
+            cam.CulledRenderQueue.Clear();
             if (cam == main)
             {
                 main = null;
@@ -320,6 +327,11 @@ namespace PressPlay.FFWD.Components
             {
                 return;
             }
+            if (renderer is MeshRenderer)
+            {
+                renderer.AddRenderItems(RenderQueue);
+                return;
+            }
 
             for (int i = 0; i < _allCameras.Count; i++)
             {
@@ -331,24 +343,22 @@ namespace PressPlay.FFWD.Components
             }
         }
 
-        private readonly List<Renderer> renderQueue = new List<Renderer>(50);
-
         private bool addRenderer(Renderer renderer)
         {
-            if (renderQueue.Contains(renderer))
+            if (oldRenderQueue.Contains(renderer))
             {
                 return true;
             }
             if ((cullingMask & (1 << renderer.gameObject.layer)) > 0)
             {
-                int index = renderQueue.BinarySearch(renderer, this);
+                int index = oldRenderQueue.BinarySearch(renderer, this);
                 if (index < 0)
                 {
-                    renderQueue.Insert(~index, renderer);
+                    oldRenderQueue.Insert(~index, renderer);
                 }
                 else
                 {
-                    renderQueue.Insert(index, renderer);
+                    oldRenderQueue.Insert(index, renderer);
                 }
                 return true;
             }
@@ -361,11 +371,13 @@ namespace PressPlay.FFWD.Components
             {
                 _allCameras[i].removeRenderer(renderer);
             }
+            renderer.RemoveRenderItems(RenderQueue);
         }
 
         private void removeRenderer(Renderer renderer)
         {
-            renderQueue.Remove(renderer);
+            oldRenderQueue.Remove(renderer);
+            renderer.RemoveRenderItems(CulledRenderQueue);
         }
 
         internal static void ChangeRenderQueue(Renderer renderer)
@@ -374,7 +386,7 @@ namespace PressPlay.FFWD.Components
             {
                 Camera cam = _allCameras[i];
                 // If the camera has the renderer readd it to the queue
-                if (cam.renderQueue.Contains(renderer))
+                if (cam.oldRenderQueue.Contains(renderer))
                 {
                     cam.removeRenderer(renderer);
                     cam.addRenderer(renderer);
@@ -386,6 +398,60 @@ namespace PressPlay.FFWD.Components
 #if DEBUG
         internal static bool logRenderCalls = false;
 #endif
+
+        internal static void Culling()
+        {
+            int camCount = _allCameras.Count;
+
+            // Go through the moved renderers and update culling
+            RenderItem movedItem = RenderQueue.GetMovedItem();
+            while (movedItem != null)
+            {
+                for (int i = 0; i < camCount; i++)
+                {
+                    if (!_allCameras[i].doFullCullingScan)
+                    {
+                        Bounds b = new Bounds(movedItem.Transform.position, movedItem.Bounds.Value.size);
+                        _allCameras[i].CheckCulling(movedItem, new BoundingBox(b.min, b.max));
+                    }
+                }
+                movedItem = RenderQueue.GetMovedItem();
+            }
+
+            for (int i = 0; i < camCount; i++)
+            {
+                Camera cam = _allCameras[i];
+                if (cam.doFullCullingScan)
+                {
+                    cam.doFullCullingScan = false;
+                    cam.CulledRenderQueue.Clear();
+
+                    // Initialize the culling queue for this camera
+                    // TODO: Here we should use something like an octtree to make full scanning faster
+                    int rqCount = RenderQueue.Count;
+                    for (int j = 0; j < rqCount; j++)
+                    {
+                        RenderItem item = RenderQueue[j];
+                        Bounds b = new Bounds(item.Transform.position, item.Bounds.Value.size);
+                        _allCameras[i].CheckCulling(item, new BoundingBox(b.min, b.max));
+                    }
+                }
+            }
+        }
+
+        private void CheckCulling(RenderItem item, BoundingBox box)
+        {
+            // Check the layer
+            if ((cullingMask & (1 << item.Transform.gameObject.layer)) > 0)
+            {
+                // Check frustum culling
+                ContainmentType contain = frustum.Contains(box);
+                if (contain != ContainmentType.Disjoint)
+                {
+                    CulledRenderQueue.Add(item);
+                }
+            }            
+        }
 
         internal static void DoRender(GraphicsDevice device)
         {
@@ -405,7 +471,6 @@ namespace PressPlay.FFWD.Components
                 dynamicBatchRenderer = new DynamicBatchRenderer(device);
             }
 
-            estimatedDrawCalls = 0;
             if (device == null)
             {
                 return;
@@ -420,8 +485,7 @@ namespace PressPlay.FFWD.Components
             }
             else
             {
-                device.RasterizerState = RasterizerState.CullNone;
-                //device.RasterizerState = RasterizerState.CullCounterClockwise;
+                device.RasterizerState = RasterizerState.CullCounterClockwise;
             }
 
             // Render all cameras that use a render target
@@ -462,7 +526,7 @@ namespace PressPlay.FFWD.Components
             GUI.EndRendering();
 
 #if DEBUG
-            Debug.Display("Draw calls, Direct, RT", System.String.Format("{0}, {1}, {2}", estimatedDrawCalls, directRender, renderTargets));
+            Debug.Display("Draw stats", System.String.Format("Draw {0}, Batch draw {1}, Tris {2}, Verts {3}, RTs {4}", RenderStats.DrawCalls, RenderStats.BatchedDrawCalls, RenderStats.TrianglesDrawn, RenderStats.VerticesDrawn, renderTargets));
             logRenderCalls = false;
 #endif
         }
@@ -494,19 +558,34 @@ namespace PressPlay.FFWD.Components
                 }
             }
 #endif
-            BasicEffect.View = view;
-            BasicEffect.Projection = projectionMatrix;
+            RenderStats.Clear();
 
-            if (Light.HasLights)
+            if (CulledRenderQueue.Count > 0)
             {
-                Light.EnableLighting(BasicEffect);
+                int rqCount = CulledRenderQueue.Count;
+                for (int i = 0; i < rqCount; i++)
+                {
+                    CulledRenderQueue[i].Render(device, this);
+                }
             }
 
             int q = 0;
-            int count = renderQueue.Count;
+            int count = oldRenderQueue.Count;
+
+            if (count > 0)
+            {
+                BasicEffect.View = view;
+                BasicEffect.Projection = projectionMatrix;
+
+                if (Light.HasLights)
+                {
+                    Light.EnableLighting(BasicEffect, 0);
+                }
+            }
+
             for (int i = 0; i < count; i++)
             {
-                Renderer r = renderQueue[i];
+                Renderer r = oldRenderQueue[i];
 
                 if (r.gameObject == null)
                 {
@@ -531,18 +610,18 @@ namespace PressPlay.FFWD.Components
                 {
                     if (q > 0)
                     {
-                        estimatedDrawCalls += dynamicBatchRenderer.DoDraw(device, this);
+                        dynamicBatchRenderer.DoDraw(device, this);
                     }
                     q = r.material.renderQueue;
                 }
 
                 if (r.gameObject.active && r.enabled)
                 {
-                    estimatedDrawCalls += r.Draw(device, this);
+                    r.Draw(device, this);
                 }
             }
 
-            estimatedDrawCalls += dynamicBatchRenderer.DoDraw(device, this);
+            dynamicBatchRenderer.DoDraw(device, this);
         }
 
         internal void RecalculateView()
@@ -553,6 +632,7 @@ namespace PressPlay.FFWD.Components
                 transform.up);
             view = m * inverter;
             frustum.Matrix = view * projectionMatrix;
+            doFullCullingScan = true;
         }
 
         private void Clear(GraphicsDevice device)
@@ -640,19 +720,19 @@ namespace PressPlay.FFWD.Components
 
         internal bool DoFrustumCulling(ref BoundingBox bbox)
         {
-          if (bbox.Min == Microsoft.Xna.Framework.Vector3.Zero &&
-              bbox.Max == Microsoft.Xna.Framework.Vector3.Zero)
-          {
-            return false;
-          }
+            if (bbox.Min == Microsoft.Xna.Framework.Vector3.Zero &&
+                bbox.Max == Microsoft.Xna.Framework.Vector3.Zero)
+            {
+                return false;
+            }
 
-          ContainmentType contain;
-          frustum.Contains(ref bbox, out contain);
-          if (contain == ContainmentType.Disjoint)
-          {
-            return true;
-          }
-          return false;
+            ContainmentType contain;
+            frustum.Contains(ref bbox, out contain);
+            if (contain == ContainmentType.Disjoint)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

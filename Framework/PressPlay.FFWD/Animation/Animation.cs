@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Content;
 using PressPlay.FFWD.Interfaces;
+using PressPlay.FFWD.Extensions;
 using PressPlay.FFWD;
 using Microsoft.Xna.Framework;
 using System.IO;
@@ -12,6 +13,8 @@ namespace PressPlay.FFWD.Components
 {
     public class Animation : Behaviour, IInitializable, IEnumerable<AnimationState>
 	{
+        [ContentSerializer]
+        private string asset;
         [ContentSerializer(ElementName = "clip", Optional=true)]
         private string clipId = string.Empty;
         public bool playAutomatically;
@@ -57,30 +60,34 @@ namespace PressPlay.FFWD.Components
 
         public void Initialize(AssetHelper assets)
         {
-            if (clipsId != null)
+            if (clipsId.HasElements())
             {
                 states = new List<AnimationState>(clipsId.Length);
                 stateIndexes = new Dictionary<string, int>();
+                AnimationClip[] data = assets.LoadAsset<AnimationClip[]>(Path.Combine("Animations", asset));
                 for (int i = 0; i < clipsId.Length; i++)
                 {
                     if (clipsId[i] == null)
                     {
                         continue;
                     }
-                    AnimationClip data = assets.LoadAsset<AnimationClip>(Path.Combine("Animations", clipsId[i]));
-                    if (data != null)
+                    if (data.HasElements())
                     {
-                        AddClip(data, data.name);
-                        if (clipsId[i] == clipId)
+                        AnimationClip clip = data.FirstOrDefault(c => c.name == clipsId[i]);
+                        if (clip != null)
                         {
-                            defaultClip = data.name;
+                            AddClip(clip, clip.name);
+                            if (clip.name == clipId)
+                            {
+                                defaultClip = clip.name;
+                            }
                         }
                     }
                 }
             }
         }
 
-        public bool InitializePrefabs()
+        public bool ShouldPrefabsBeInitialized()
         {
             return false;
         }
@@ -88,13 +95,16 @@ namespace PressPlay.FFWD.Components
         public override void Awake()
         {
             base.Awake();
-            for (int i = 0; i < states.Count; i++)
+            if (states.HasElements())
             {
-                states[i].InitializeSamplers(gameObject);
-            }
-            if (playAutomatically && clip != null)
-            {
-                Play(defaultClip);
+                for (int i = 0; i < states.Count; i++)
+                {
+                    states[i].InitializeSamplers(gameObject);
+                }
+                if (playAutomatically && clip != null)
+                {
+                    Play(defaultClip);
+                }
             }
         }
 
@@ -205,6 +215,11 @@ namespace PressPlay.FFWD.Components
 
 		public void Stop()
 		{
+            if (!states.HasElements())
+            {
+                return;
+            }
+
             for (int i = 0; i < states.Count; i++)
             {
                 states[i].enabled = false;
@@ -289,6 +304,11 @@ namespace PressPlay.FFWD.Components
 
 		public void Sample()
 		{
+            if (!states.HasElements())
+            {
+                return;
+            }
+
             for (int i = 0; i < states.Count; i++)
             {
                 states[i].Sample();
@@ -321,6 +341,11 @@ namespace PressPlay.FFWD.Components
 
         internal void UpdateAnimationStates(float deltaTime)
         {
+            if (!states.HasElements())
+            {
+                return;
+            }
+
             bool playQueued = false;
             bool hasQueued = false;
             for (int i = states.Count - 1; i >= 0; i--)

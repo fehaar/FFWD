@@ -790,6 +790,11 @@ namespace PressPlay.FFWD
                 {
                     Physics.MoveCollider(coll);
                 }
+                Renderer r = t.renderer;
+                if (r != null)
+                {
+                    r.ReconsiderForCulling();
+                }
                 t.changes = TransformChanges.None;
             }
         }
