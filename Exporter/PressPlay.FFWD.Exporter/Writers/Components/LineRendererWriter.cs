@@ -23,7 +23,7 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
 
             writer.WriteElement("useWorldSpace", pr.useWorldSpace);
 
-            Component c = pr.gameObject.GetComponent("XNALineRendererExport");
+            Component c = pr.gameObject.GetComponent("FFWD_LineRendererExport");
             if (c != null)
             {
                 writeValue<object>(writer, c, "startWidth");
