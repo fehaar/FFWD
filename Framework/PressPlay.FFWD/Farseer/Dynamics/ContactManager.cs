@@ -189,6 +189,10 @@ namespace FarseerPhysics.Dynamics
             {
                 EndContact(contact);
             }
+            else
+            {
+                PressPlay.FFWD.Debug.Log("Destroying contact that is not touching: " + contact.FixtureA.Body.UserData + " <=> " + contact.FixtureB.Body.UserData);
+            }
 
             // Remove from the world.
             ContactList.Remove(contact);

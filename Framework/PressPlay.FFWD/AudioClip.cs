@@ -90,6 +90,7 @@ namespace PressPlay.FFWD
             set
             {
                 _loop = value;
+                // TODO: If a clip has been played, we cannot set the loop property on it.
                 if (Instance != null && !Instance.IsDisposed)
                 {
                     Instance.IsLooped = value;

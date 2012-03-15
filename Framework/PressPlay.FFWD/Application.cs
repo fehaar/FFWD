@@ -420,11 +420,10 @@ namespace PressPlay.FFWD
 
         private void DoSceneLoad()
         {
-            //Debug.Log("DoSceneLoad: " + sceneToLoad);
-
             _loadingProgess = 0;
 #if DEBUG
             Debug.Log("******************************** Do Scene Load " + sceneToLoad + " ***********************************");
+            Debug.Display("Loading", sceneToLoad);
 #endif
 
             if (!isLoadingAdditive && !String.IsNullOrEmpty(loadedLevelName))
@@ -486,6 +485,9 @@ namespace PressPlay.FFWD
                     return;
                 }
                 Asset a = sceneAssets.Dequeue();
+#if DEBUG
+                Debug.Display("Loading", "Assets " + a);
+#endif
                 a.LoadAsset(assetHelper);
                 numberOfAssetsLoaded++;
             }
@@ -516,10 +518,16 @@ namespace PressPlay.FFWD
             isLoadingAdditive = false;
             isLoadingLevel = false;
 
+#if DEBUG
+            Debug.Log("******************************** Scene Initialize begin ***********************************");
+#endif
             if (scene != null)
             {
                 scene.Initialize(true);
             }
+#if DEBUG
+            Debug.Log("******************************** Scene Initialize end ***********************************");
+#endif
         }
 
         internal static void LoadNewAssets(bool loadResources)

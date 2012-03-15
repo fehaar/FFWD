@@ -50,6 +50,7 @@ namespace PressPlay.FFWD
             public static int ComponentLists = 1500;
             public static int RenderQueues = 100;
             public static int RenderCullingQueue = 20;
+            public static int ColliderContacts = 50;
             #endregion
         }
 
