@@ -9,226 +9,183 @@ namespace PressPlay.FFWD
 {
     internal class GameObjectContactProcessor : IContactProcessor
     {
-        private struct Stay
+        private struct ColliderContact
         {
-            public bool collision {
-                get { return collisionAToB != null; }
-            }
-
-            public Stay(Collider colliderToTriggerA, Collider colliderToTriggerB, GameObject gameObjectA, GameObject gameObjectB)
+            public ColliderContact(Contact contact)
             {
-                this.colliderToTriggerA = colliderToTriggerA;
-                this.colliderToTriggerB = colliderToTriggerB;
-                this.gameObjectA = gameObjectA;
-                this.gameObjectB = gameObjectB;
-                collisionAToB = null;
-                collisionBToA = null;
+                this.colliderA = contact.FixtureA.Body.UserData;
+                this.colliderB = contact.FixtureB.Body.UserData;
+                involvesATrigger = colliderA.isTrigger || colliderB.isTrigger;
+
+                // Creates collisions
+                Microsoft.Xna.Framework.Vector2 normal;
+                FarseerPhysics.Common.FixedArray2<Microsoft.Xna.Framework.Vector2> points;
+                contact.GetWorldManifold(out normal, out points);
+                collisionBToA = new Collision()
+                {
+                    collider = colliderB,
+                    relativeVelocity = ((colliderA.rigidbody != null) ? colliderA.rigidbody.velocity : Vector3.zero) - ((colliderB.rigidbody != null) ? colliderB.rigidbody.velocity : Vector3.zero),
+                    contacts = new ContactPoint[contact.Manifold.PointCount]
+                };
+                collisionAToB = new Collision()
+                {
+                    collider = colliderA,
+                    relativeVelocity = ((colliderB.rigidbody != null) ? colliderB.rigidbody.velocity : Vector3.zero) - ((colliderA.rigidbody != null) ? colliderB.rigidbody.velocity : Vector3.zero),
+                    contacts = new ContactPoint[contact.Manifold.PointCount]
+                };
+                for (int j = 0; j < collisionBToA.contacts.Length; j++)
+                {
+                    collisionBToA.contacts[j].thisCollider = colliderB;
+                    collisionBToA.contacts[j].otherCollider = colliderA;
+                    collisionBToA.contacts[j].point = VectorConverter.Convert(points[j], colliderB.to2dMode);
+                    collisionBToA.contacts[j].normal = VectorConverter.Convert(-normal, colliderB.to2dMode);
+
+                    collisionAToB.contacts[j].thisCollider = colliderA;
+                    collisionAToB.contacts[j].otherCollider = colliderB;
+                    collisionAToB.contacts[j].point = VectorConverter.Convert(points[j], colliderA.to2dMode);
+                    collisionAToB.contacts[j].normal = VectorConverter.Convert(normal, colliderA.to2dMode);
+                }
             }
 
-            public Stay(Collision collisionAToB, Collision collisionBToA, GameObject gameObjectA, GameObject gameObjectB)
-            {
-                this.collisionAToB = collisionAToB;
-                this.collisionBToA = collisionBToA;
-                colliderToTriggerA = collisionAToB.collider;
-                colliderToTriggerB = collisionBToA.collider;
-                this.gameObjectA = gameObjectA;
-                this.gameObjectB = gameObjectB;
-            }
-
-            public Collider colliderToTriggerA;
-            public Collider colliderToTriggerB;
+            public Collider colliderA;
+            public Collider colliderB;
             public Collision collisionAToB;
             public Collision collisionBToA;
-            public GameObject gameObjectA;
-            public GameObject gameObjectB;
+            private bool involvesATrigger;
+
+            public void Enter()
+            {
+                if (involvesATrigger)
+                {
+                    colliderA.gameObject.OnTriggerEnter(colliderB);
+                    colliderB.gameObject.OnTriggerEnter(colliderA);
+                }
+                else
+                {
+                    colliderA.gameObject.OnCollisionEnter(collisionBToA);
+                    colliderB.gameObject.OnCollisionEnter(collisionAToB);
+                }
+            }
+
+            public void Stay()
+            {
+                if (involvesATrigger)
+                {
+                    colliderA.gameObject.OnTriggerStay(colliderB);
+                    colliderB.gameObject.OnTriggerStay(colliderA);
+                }
+                else
+                {
+                    colliderA.gameObject.OnCollisionStay(collisionBToA);
+                    colliderB.gameObject.OnCollisionStay(collisionAToB);
+                }
+            }
+
+            public void Exit()
+            {
+                if (involvesATrigger)
+                {
+                    colliderA.gameObject.OnTriggerExit(colliderB);
+                    colliderB.gameObject.OnTriggerExit(colliderA);
+                }
+                else
+                {
+                    colliderA.gameObject.OnCollisionExit(collisionBToA);
+                    colliderB.gameObject.OnCollisionExit(collisionAToB);
+                }
+            }
         }
 
         #region IContactListener Members
-        private readonly List<Contact> beginContacts = new List<Contact>(50);
-        private readonly List<Contact> endContacts = new List<Contact>(50);
-        private readonly List<Stay> staying = new List<Stay>(50);
+        private readonly Queue<ColliderContact> beginContacts = new Queue<ColliderContact>(ApplicationSettings.DefaultCapacities.ColliderContacts);
+        private readonly Queue<ColliderContact> endContacts = new Queue<ColliderContact>(ApplicationSettings.DefaultCapacities.ColliderContacts);
+        private readonly List<ColliderContact> staying = new List<ColliderContact>(ApplicationSettings.DefaultCapacities.ColliderContacts);
         private BitArray staysToRemove = new BitArray(64);
         public bool BeginContact(Contact contact)
         {
-            beginContacts.Add(contact);
+            // If this is a collision between static objects, just disable it.
+            if (contact.FixtureA.Body.BodyType == BodyType.Static && contact.FixtureB.Body.BodyType == BodyType.Static)
+            {
+                return false;
+            }
+            if (!contact.FixtureA.IsSensor && !contact.FixtureA.IsSensor)
+            {
+                Rigidbody rigidbodyA = contact.FixtureA.Body.UserData.rigidbody;
+                Rigidbody rigidbodyB = contact.FixtureB.Body.UserData.rigidbody;
+
+                // If we have real colliders clashing, one of them must have a rigid body
+                // I don't dare disabling it though...
+                if ((rigidbodyA == null) && (rigidbodyB == null))
+                {
+                    return true;
+                }
+                // If both are rigid bodies - none of them must be kinematic
+                if ((rigidbodyA != null) && (rigidbodyB != null) && rigidbodyA.isKinematic && rigidbodyB.isKinematic)
+                {
+                    return true;
+                }
+            }
+            beginContacts.Enqueue(new ColliderContact(contact));
             return true;
         }
         public void EndContact(Contact contact)
         {
-            endContacts.Add(contact);
+            endContacts.Enqueue(new ColliderContact(contact));
         }
         #endregion
 
         #region IContactProcessor Members
         public void Update()
         {
-            for (int i = 0; i < endContacts.Count; ++i)
+            while (endContacts.Count > 0)
             {
-                Contact contact = endContacts[i];
-                Fixture fixtureA = contact.FixtureA;
-                Fixture fixtureB = contact.FixtureB;
-                if (fixtureA == null || fixtureB == null)
+                ColliderContact contact = endContacts.Dequeue();
+#if DEBUG
+                if (DebugSettings.LogCollisions)
                 {
-                    continue;
+                    Debug.Log(string.Format("Collision End: {0} <-> {1}", contact.colliderA, contact.colliderB));
                 }
-                if (fixtureA.Body.BodyType == BodyType.Static && fixtureB.Body.BodyType == BodyType.Static)
-                {
-                    continue;
-                }
-                Component compA = fixtureA.Body.UserData;
-                Component compB = fixtureB.Body.UserData;
-                if (compA == null || compB == null)
-                {
-                    continue;
-                }
-                if (fixtureA.IsSensor || fixtureB.IsSensor)
-                {
-                    //Debug.Log("OnTriggerExit on " + compA + " <-> " + compB);
-                    RemoveStay(compA.collider, compB.collider);
-                    compA.gameObject.OnTriggerExit(compB.collider);
-                    compB.gameObject.OnTriggerExit(compA.collider);
-                }
-                else
-                {
-                    if (compA.rigidbody == null && compB.rigidbody == null)
-                    {
-                        continue;
-                    }
-                    if (compA.rigidbody != null && compB.rigidbody != null && compA.rigidbody.isKinematic && compB.rigidbody.isKinematic)
-                    {
-                        continue;
-                    }
-                    RemoveStay(compA.collider, compB.collider);
-                    Microsoft.Xna.Framework.Vector2 normal;
-                    FarseerPhysics.Common.FixedArray2<Microsoft.Xna.Framework.Vector2> points;
-                    contact.GetWorldManifold(out normal, out points);
-                    Collision coll = new Collision()
-                    {
-                        collider = compB.collider,
-                        relativeVelocity = ((compA.rigidbody != null) ? compA.rigidbody.velocity : Vector3.zero) - ((compB.rigidbody != null) ? compB.rigidbody.velocity : Vector3.zero),
-                        contacts = new ContactPoint[2]
-                    };
-                    for (int j = 0; j < 2; j++)
-                    {
-                        coll.contacts[j].thisCollider = compA.collider;
-                        coll.contacts[j].otherCollider = compB.collider;
-                        coll.contacts[j].point = VectorConverter.Convert(points[j], compA.collider.to2dMode);
-                        coll.contacts[j].normal = VectorConverter.Convert(normal, compA.collider.to2dMode);
-                    }
-                    compA.gameObject.OnCollisionExit(coll);
-                    coll.SetColliders(compB.collider, compA.collider);
-                    compB.gameObject.OnCollisionExit(coll);
-                }
+#endif
+                RemoveStay(contact.colliderA, contact.colliderB);
+                contact.Exit();
             }
 
             for (int i = staying.Count - 1; i >= 0; i--)
             {
-                if (staysToRemove[i] || staying[i].colliderToTriggerA.gameObject == null || staying[i].colliderToTriggerB.gameObject == null || !staying[i].colliderToTriggerA.gameObject.active || !staying[i].colliderToTriggerB.gameObject.active)
+                ColliderContact contact = staying[i];
+                if (staysToRemove[i] || contact.colliderA.gameObject == null || contact.colliderB.gameObject == null || !contact.colliderA.gameObject.active || !contact.colliderB.gameObject.active)
                 {
                     staysToRemove[i] = false;
                     staying.RemoveAt(i);
                     continue;
                 }
-                else if (!staying[i].collision)
-                {
-                    staying[i].gameObjectA.OnTriggerStay(staying[i].colliderToTriggerA);
-                    staying[i].gameObjectB.OnTriggerStay(staying[i].colliderToTriggerB);
-                }
                 else
                 {
-                    staying[i].gameObjectA.OnCollisionStay(staying[i].collisionBToA);
-                    staying[i].gameObjectB.OnCollisionStay(staying[i].collisionAToB);
+                    contact.Stay();
                 }
             }
 
-            for (int i = 0; i < beginContacts.Count; ++i)
+            while (beginContacts.Count > 0)
             {
-                Contact contact = beginContacts[i];
-
-                Fixture fixtureA = contact.FixtureA;
-                Fixture fixtureB = contact.FixtureB;
-
-                if (fixtureA == null || fixtureB == null)
-                {
-                    continue;
-                }
+                ColliderContact contact = beginContacts.Dequeue();
 
 #if DEBUG
                 if (DebugSettings.LogCollisions)
                 {
-                    Debug.Log(string.Format("Collision Begin: {0} <-> {1}", fixtureA.Body, fixtureB.Body));
+                    Debug.Log(string.Format("Collision Begin: {0} <-> {1}", contact.colliderA, contact.colliderB));
                 }
 #endif
 
-                if (fixtureA.Body.BodyType == BodyType.Static && fixtureB.Body.BodyType == BodyType.Static)
-                {
-                    continue;
-                }
-                Component compA = fixtureA.Body.UserData;
-                Component compB = fixtureB.Body.UserData;
-                if (compA == null || compB == null)
-                {
-                    continue;
-                }
-                if (fixtureA.IsSensor || fixtureB.IsSensor)
-                {
-                    staying.Add(new Stay(compB.collider, compA.collider, compA.gameObject, compB.gameObject ));
-                    compA.gameObject.OnTriggerEnter(compB.collider);
-                    compB.gameObject.OnTriggerEnter(compA.collider);
-                }
-                else
-                {
-                    if (compA.rigidbody == null && compB.rigidbody == null)
-                    {
-                        continue;
-                    }
-                    if (compA.rigidbody != null && compB.rigidbody != null && compA.rigidbody.isKinematic && compB.rigidbody.isKinematic)
-                    {
-                        continue;
-                    }
-                    Microsoft.Xna.Framework.Vector2 normal;
-                    FarseerPhysics.Common.FixedArray2<Microsoft.Xna.Framework.Vector2> points;
-                    contact.GetWorldManifold(out normal, out points);
-                    Collision collisionBToA = new Collision()
-                    {
-                        collider = compB.collider,
-                        relativeVelocity = ((compA.rigidbody != null) ? compA.rigidbody.velocity : Vector3.zero) - ((compB.rigidbody != null) ? compB.rigidbody.velocity : Vector3.zero),
-                        contacts = new ContactPoint[contact.Manifold.PointCount]
-                    };
-                    Collision collisionAToB = new Collision()
-                    {
-                        collider = compA.collider,
-                        relativeVelocity = ((compB.rigidbody != null) ? compB.rigidbody.velocity : Vector3.zero) - ((compA.rigidbody != null) ? compA.rigidbody.velocity : Vector3.zero),
-                        contacts = new ContactPoint[contact.Manifold.PointCount]
-                    };
-                    for (int j = 0; j < collisionBToA.contacts.Length; j++)
-                    {
-                        collisionBToA.contacts[j].thisCollider = compB.collider;
-                        collisionBToA.contacts[j].otherCollider = compA.collider;
-                        collisionBToA.contacts[j].point = VectorConverter.Convert(points[j], compB.collider.to2dMode);
-                        collisionBToA.contacts[j].normal = VectorConverter.Convert(-normal, compB.collider.to2dMode);
-
-                        collisionAToB.contacts[j].thisCollider = compA.collider;
-                        collisionAToB.contacts[j].otherCollider = compB.collider;
-                        collisionAToB.contacts[j].point = VectorConverter.Convert(points[j], compA.collider.to2dMode);
-                        collisionAToB.contacts[j].normal = VectorConverter.Convert(normal, compA.collider.to2dMode);
-                    }
-                    Stay s = new Stay(collisionAToB, collisionBToA, compA.gameObject, compB.gameObject);
-                    staying.Add(s);
-                    s.gameObjectA.OnCollisionEnter(s.collisionBToA);
-                    s.gameObjectB.OnCollisionEnter(s.collisionAToB);
-                }
+                staying.Add(contact);
+                contact.Enter();
             }
-
-            beginContacts.Clear();
-            endContacts.Clear();
         }
 
         internal void RemoveStay(Collider compA, Collider compB)
         {
             for (int i = staying.Count - 1; i >= 0; i--)
             {
-                if ((staying[i].colliderToTriggerA == compA && staying[i].colliderToTriggerB == compB) || (staying[i].colliderToTriggerA == compB && staying[i].colliderToTriggerB == compA))
+                if ((staying[i].colliderA == compA && staying[i].colliderB == compB) || (staying[i].colliderA == compB && staying[i].colliderB == compA))
                 {
                     staysToRemove[i] = true;
                 }
@@ -239,7 +196,7 @@ namespace PressPlay.FFWD
         {
             for (int i = staying.Count - 1; i >= 0; i--)
             {
-                if (staying[i].colliderToTriggerA == collider || staying[i].colliderToTriggerB == collider)
+                if (staying[i].colliderA == collider || staying[i].colliderB == collider)
                 {
                     staysToRemove[i] = true;
                 }

@@ -2,6 +2,7 @@
 
 namespace PressPlay.FFWD
 {
+    // TODO: We should probably pool these to conserve memory.
     public class Collision
     {
         public Vector3 relativeVelocity { get; internal set; }
