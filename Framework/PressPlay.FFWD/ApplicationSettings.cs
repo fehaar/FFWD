@@ -48,6 +48,7 @@ namespace PressPlay.FFWD
             public static int AnimationComponents = 30;
             public static int TransformChanges = 500;
             public static int ComponentLists = 1500;
+            public static int ColliderContacts = 50;
             #endregion
         }
 
