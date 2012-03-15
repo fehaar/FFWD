@@ -83,6 +83,7 @@ namespace PressPlay.FFWD
                 }
                 if (fixtureA.IsSensor || fixtureB.IsSensor)
                 {
+                    //Debug.Log("OnTriggerExit on " + compA + " <-> " + compB);
                     RemoveStay(compA.collider, compB.collider);
                     compA.gameObject.OnTriggerExit(compB.collider);
                     compB.gameObject.OnTriggerExit(compA.collider);
