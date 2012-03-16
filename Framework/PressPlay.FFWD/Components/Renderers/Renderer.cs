@@ -105,6 +105,7 @@ namespace PressPlay.FFWD.Components
         }
 
         internal float renderQueue = 0f;
+        internal bool useLightMap = false;
 
         #region IRenderable Members
         /// <summary>
@@ -125,14 +126,6 @@ namespace PressPlay.FFWD.Components
             else
             {
                 renderQueue = material.finalRenderQueue;
-            }
-        }
-
-        internal bool useLightMap
-        {
-            get
-            {
-                return (lightmapIndex > -1) && !(material.shaderName.Contains("Cutout"));
             }
         }
     }

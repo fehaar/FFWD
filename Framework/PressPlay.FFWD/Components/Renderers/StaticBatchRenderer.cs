@@ -231,7 +231,7 @@ namespace PressPlay.FFWD.Components
             return false;
         }
 
-        internal bool PrepareQuadTree(bool sceneHasLightmaps)
+        internal bool PrepareQuadTree()
         {
             // initialize quad tree
             float tileSize = ApplicationSettings.DefaultValues.StaticBatchTileSize;
@@ -254,6 +254,8 @@ namespace PressPlay.FFWD.Components
                 {
                     quadTreeTiles[uTile].boundingBox.Min = vMin;
                     quadTreeTiles[uTile].boundingBox.Max = vMin + vInc;
+                    quadTreeTiles[uTile].lightmapIndex = lightmapIndex;
+                    quadTreeTiles[uTile].useLightMap = useLightMap;
 
                     vMin.x += tileSize;
 
@@ -277,17 +279,6 @@ namespace PressPlay.FFWD.Components
                 uTileV = Math.Max(0, Math.Min(uTileV, tilesV - 1));
 
                 UInt32 uTileIdx = uTileV * tilesU + uTileU;
-
-                if (sceneHasLightmaps)
-                {
-                    quadTreeTiles[uTileIdx].lightmapIndex = meshInfo.renderer.lightmapIndex;
-                }
-                else
-                {
-                    quadTreeTiles[uTileIdx].lightmapIndex = -1;
-                }
-                lightmapIndex = quadTreeTiles[uTileIdx].lightmapIndex;
-                quadTreeTiles[uTileIdx].useLightMap = meshInfo.renderer.useLightMap && sceneHasLightmaps;
 
                 int vertexOffset = quadTreeTiles[uTileIdx].vertexIndex;
                 if (!quadTreeTiles[uTileIdx].InitializeArray(meshInfo.mesh._vertices.Length))
@@ -364,11 +355,11 @@ namespace PressPlay.FFWD.Components
                 {
                     if (quadTreeTiles[i].visible)
                     {
-                        Debug.LogFormat("Static batch: Tile {0} on {1} on {2}.", i, gameObject, cam.gameObject);
+                        Debug.LogFormat("Static batch: Tile {0} on {1} on {2}. Effect {3}", i, gameObject, cam.gameObject, effect.GetType().Name);
                     }
                     else
                     {
-                        Debug.LogFormat("VP Cull Static batch: Tile {0} on {1} on {2}.", i, gameObject, cam.gameObject);
+                        Debug.LogFormat("VP Cull Static batch: Tile {0} on {1} on {2}. Effect {3}", i, gameObject, cam.gameObject, effect.GetType().Name);
                     }
                 }                
 #endif

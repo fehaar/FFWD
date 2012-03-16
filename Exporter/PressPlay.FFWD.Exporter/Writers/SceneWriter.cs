@@ -698,52 +698,7 @@ namespace PressPlay.FFWD.Exporter.Writers
                 }
                 if (obj is Material)
                 {
-                    Material mat = obj as Material;
-                    if (name != null)
-                    {
-                        writer.WriteStartElement(name);
-                    }
-                    writer.WriteElementString("id", mat.GetInstanceID().ToString());
-                    writer.WriteElementString("name", mat.name);
-                    writer.WriteElementString("shader", mat.shader.name);
-                    writer.WriteElementString("renderQueue", mat.renderQueue.ToString());
-
-                    if (mat.HasProperty("_Color"))
-                    {
-                        writer.WriteElementString("color", ToString(mat.color));
-                    }
-                    else if (mat.HasProperty("_TintColor"))
-                    {
-                        writer.WriteElementString("color", ToString(mat.GetColor("_TintColor")));
-                    }
-                    else if ((obj as Material).name == "Default-Particle")
-                    {
-                        writer.WriteElementString("color", "FFFFFFFF");
-                    }
-                    
-                    if (mat.mainTexture != null)
-                    {
-                        WriteElement("mainTexture", mat.mainTexture, typeof(Texture2D));
-                        writer.WriteElementString("mainTextureOffset", ToString(mat.mainTextureOffset));
-                        writer.WriteElementString("mainTextureScale", ToString(mat.mainTextureScale));
-                        if (mat.mainTexture.wrapMode == TextureWrapMode.Repeat)
-                        {
-                            writer.WriteElementString("wrapRepeat", ToString(true));
-                        }
-                        try
-                        {
-                            assetHelper.ExportTexture(mat.mainTexture as Texture2D);
-                        }
-                        catch (UnityException ex)
-                        {
-                            Debug.Log("Error when exporting texture in Material " + mat.name + ", " + ex.Message, mat);
-                            throw;
-                        }
-                    }
-                    if (name != null)
-                    {
-                        writer.WriteEndElement();
-                    }
+                    WriteMaterial(name, obj as Material);
                     return;
                 }
                 if (obj is AudioClip)
@@ -873,6 +828,59 @@ namespace PressPlay.FFWD.Exporter.Writers
             {
                 Debug.LogError("Exception when writing " + name + " with value " + obj + ": " + ex.Message + " (" + ex.GetType() + ")", obj as UnityEngine.Object);
                 throw;
+            }
+        }
+
+        private void WriteMaterial(string name, Material mat)
+        {
+            if (name != null)
+            {
+                writer.WriteStartElement(name);
+            }
+            writer.WriteElementString("id", mat.GetInstanceID().ToString());
+            writer.WriteElementString("name", mat.name);
+            writer.WriteElementString("shader", mat.shader.name);
+            writer.WriteElementString("renderQueue", mat.renderQueue.ToString());
+            
+            if (mat.HasProperty("_Color"))
+            {
+                writer.WriteElementString("color", ToString(mat.color));
+            }
+            else if (mat.HasProperty("_TintColor"))
+            {
+                writer.WriteElementString("color", ToString(mat.GetColor("_TintColor")));
+            }
+            else if (mat.name == "Default-Particle")
+            {
+                writer.WriteElementString("color", "FFFFFFFF");
+            }
+            if (mat.HasProperty("_Cutoff"))
+            {
+                writer.WriteElementString("cutOff", ToString(mat.GetFloat("_Cutoff")));
+            }
+
+            if (mat.mainTexture != null)
+            {
+                WriteElement("mainTexture", mat.mainTexture, typeof(Texture2D));
+                writer.WriteElementString("mainTextureOffset", ToString(mat.mainTextureOffset));
+                writer.WriteElementString("mainTextureScale", ToString(mat.mainTextureScale));
+                if (mat.mainTexture.wrapMode == TextureWrapMode.Repeat)
+                {
+                    writer.WriteElementString("wrapRepeat", ToString(true));
+                }
+                try
+                {
+                    assetHelper.ExportTexture(mat.mainTexture as Texture2D);
+                }
+                catch (UnityException ex)
+                {
+                    Debug.Log("Error when exporting texture in Material " + mat.name + ", " + ex.Message, mat);
+                    throw;
+                }
+            }
+            if (name != null)
+            {
+                writer.WriteEndElement();
             }
         }
 

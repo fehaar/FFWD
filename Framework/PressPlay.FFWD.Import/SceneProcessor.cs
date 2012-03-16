@@ -65,7 +65,7 @@ namespace PressPlay.FFWD.Import
                 {
                     continue;
                 }
-                string key = GetMaterialKey(r.sharedMaterials, r.useLightMap);
+                string key = GetMaterialKey(r.sharedMaterials);
                 if (!staticRenderers.ContainsKey(key))
                 {
                     GameObject sbGo = new GameObject("Static - " + key);
@@ -79,6 +79,8 @@ namespace PressPlay.FFWD.Import
                         sbr.SetNewId(null);
                     }
                     staticRenderers[key] = sbr;
+                    staticRenderers[key].useLightMap = (scene.lightmapSettings != null);
+                    staticRenderers[key].lightmapIndex = r.lightmapIndex;
                     staticRenderers[key].sharedMaterials = (Material[])r.sharedMaterials.Clone();
                 }
 
@@ -106,7 +108,7 @@ namespace PressPlay.FFWD.Import
 
             foreach (KeyValuePair<string, StaticBatchRenderer> sbr in staticRenderers)
             {
-                sbr.Value.PrepareQuadTree(scene.lightmapSettings != null);
+                sbr.Value.PrepareQuadTree();
             }
 
             scene.gameObjects.AddRange(staticRenderers.Values.Select(sbr => sbr.gameObject));
@@ -129,7 +131,7 @@ namespace PressPlay.FFWD.Import
             }            
         }
 
-        private string GetMaterialKey(Material[] material, bool lightmapped)
+        private string GetMaterialKey(Material[] material)
         {
             if (material.Length == 1)
             {
@@ -139,10 +141,6 @@ namespace PressPlay.FFWD.Import
             for (int i = 1; i < material.Length; i++)
             {
                 sb.AppendFormat("-{0}", material[i].GetInstanceID());
-            }
-            if (lightmapped)
-            {
-                sb.Append("-Lightmapped");
             }
             return sb.ToString();
         }
