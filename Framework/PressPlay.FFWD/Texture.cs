@@ -58,7 +58,7 @@ namespace PressPlay.FFWD
         public void SetPixel(int x, int y, Color color)
         {
             byte[] buffer = new byte[4] { color.R, color.G, color.B, color.A };
-            tex.SetData<byte>(buffer, (y - 1) * tex.Width + (x - 1), 4);
+            tex.SetData<byte>(buffer, y * tex.Width + x, 4);
         }
 
         public void Apply()
