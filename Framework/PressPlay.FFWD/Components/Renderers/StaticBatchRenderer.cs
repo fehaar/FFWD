@@ -28,7 +28,7 @@ namespace PressPlay.FFWD.Components
 
         public int lightmapIndex;
 
-        public bool useLightMap { get { return lightmapIndex > -1; } }
+        public bool useLightMap;
 
         public int vertexIndex;
 
@@ -234,7 +234,7 @@ namespace PressPlay.FFWD.Components
         internal bool PrepareQuadTree(bool sceneHasLightmaps)
         {
             // initialize quad tree
-            float tileSize = 50.0f;
+            float tileSize = ApplicationSettings.DefaultValues.StaticBatchTileSize;
             float fTilesU = (boundingBox.Max.X - boundingBox.Min.X) / tileSize;
             float fTilesV = (boundingBox.Max.Z - boundingBox.Min.Z) / tileSize;
 
@@ -287,6 +287,7 @@ namespace PressPlay.FFWD.Components
                     quadTreeTiles[uTileIdx].lightmapIndex = -1;
                 }
                 lightmapIndex = quadTreeTiles[uTileIdx].lightmapIndex;
+                quadTreeTiles[uTileIdx].useLightMap = meshInfo.renderer.useLightMap && sceneHasLightmaps;
 
                 int vertexOffset = quadTreeTiles[uTileIdx].vertexIndex;
                 if (!quadTreeTiles[uTileIdx].InitializeArray(meshInfo.mesh._vertices.Length))
