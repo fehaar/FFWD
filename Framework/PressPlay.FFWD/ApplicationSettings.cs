@@ -56,7 +56,8 @@ namespace PressPlay.FFWD
 
         public static class DefaultValues
         {
-            public static float minimumNearClipPlane = 0.1f;
+            public static float MinimumNearClipPlane = 0.1f;
+            public static float StaticBatchTileSize = 100.0f;
         }
 
     }

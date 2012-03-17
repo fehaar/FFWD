@@ -106,6 +106,7 @@ namespace PressPlay.FFWD.Components
         }
 
         internal float renderQueue = 0f;
+        internal bool useLightMap = false;
         internal RenderItem[] renderItems;
 
         #region IRenderable Members
