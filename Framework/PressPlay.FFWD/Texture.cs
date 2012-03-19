@@ -55,10 +55,19 @@ namespace PressPlay.FFWD
             }
         }
 
-        public void SetPixel(int x, int y, Color color)
+        public void SetPixels(Color[] colors)
         {
-            byte[] buffer = new byte[4] { color.R, color.G, color.B, color.A };
-            tex.SetData<byte>(buffer, (y - 1) * tex.Width + (x - 1), 4);
+            byte[] buffer = new byte[ colors.Length << 2 ];
+
+            for(int i = 0; i < colors.Length; ++i)
+            {
+                buffer[(i << 2)    ] = colors[i].R;
+                buffer[(i << 2) + 1] = colors[i].G;
+                buffer[(i << 2) + 2] = colors[i].B;
+                buffer[(i << 2) + 3] = colors[i].A;
+            }
+
+            tex.SetData<byte>(buffer);
         }
 
         public void Apply()
