@@ -110,7 +110,7 @@ namespace PressPlay.FFWD.Components
             }
 
             Mesh mesh = filter.meshToRender;
-            BoundingSphere sphere = new BoundingSphere(transform.TransformPoint(filter.boundingSphere.Center), filter.boundingSphere.Radius * Math.Max(transform.lossyScale.x, Math.Max(transform.lossyScale.y, transform.lossyScale.z)));
+            BoundingSphere sphere = new BoundingSphere(transform.TransformPoint(filter.boundingSphere.Center), filter.boundingSphere.Radius * Math.Abs( Math.Max(transform.lossyScale.x, Math.Max(transform.lossyScale.y, transform.lossyScale.z))));
             bool cull = cam.DoFrustumCulling(ref sphere);
             if (cull)
             {
