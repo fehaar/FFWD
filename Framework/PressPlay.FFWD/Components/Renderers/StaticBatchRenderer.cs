@@ -136,6 +136,8 @@ namespace PressPlay.FFWD.Components
     public class StaticBatchRenderer : Renderer
     {
         internal List<SMeshInfo> tmpMeshes;
+        [ContentSerializer]
+        private int vertexCount;
         private static DualTextureEffect dtEffect;
         private static AlphaTestEffect aEffect;
         
@@ -157,6 +159,7 @@ namespace PressPlay.FFWD.Components
 
             UInt32 uTile = 0;
             bool hasLightMaps = false;
+            //Debug.LogFormat("{0} verts {1} - sz {2},{3}", this, vertexCount, tilesU, tilesV);
             for (UInt32 v = 0; v < tilesV; ++v)
             {
                 for (UInt32 u = 0; u < tilesU; ++u)
@@ -214,6 +217,7 @@ namespace PressPlay.FFWD.Components
                 meshInfo.bbox = new BoundingBox(Microsoft.Xna.Framework.Vector3.Transform(m.bounds.min, renderer.transform.world),
                                                   Microsoft.Xna.Framework.Vector3.Transform(m.bounds.max, renderer.transform.world));
                 tmpMeshes.Add(meshInfo);
+                vertexCount += m._vertices.Length;
                 if (tmpMeshes.Count == 0)
                 {
                     boundingBox = meshInfo.bbox;
@@ -229,13 +233,19 @@ namespace PressPlay.FFWD.Components
 
         internal bool PrepareQuadTree()
         {
-            // initialize quad tree
             float tileSize = ApplicationSettings.DefaultValues.StaticBatchTileSize;
-            float fTilesU = (boundingBox.Max.X - boundingBox.Min.X) / tileSize;
-            float fTilesV = (boundingBox.Max.Z - boundingBox.Min.Z) / tileSize;
-
-            tilesU = Math.Max((UInt32)Mathf.CeilToInt(fTilesU), 1);
-            tilesV = Math.Max((UInt32)Mathf.CeilToInt(fTilesV), 1);
+            // If we have a small static batch, do not cut it up.
+            if (vertexCount <= ApplicationSettings.DefaultValues.StaticBatchVertexLimit)
+            {
+                tilesU = tilesV = 1;
+            }
+            else
+            {
+                float fTilesU = (boundingBox.Max.X - boundingBox.Min.X) / tileSize;
+                float fTilesV = (boundingBox.Max.Z - boundingBox.Min.Z) / tileSize;
+                tilesU = Math.Max((UInt32)Mathf.CeilToInt(fTilesU), 1);
+                tilesV = Math.Max((UInt32)Mathf.CeilToInt(fTilesV), 1);
+            }
 
             quadTreeTiles = new SQuadTreeTile[tilesU * tilesV];
 

@@ -105,7 +105,6 @@ namespace PressPlay.FFWD.Import
                     mf.mesh = null;
                 }
             }
-
             foreach (KeyValuePair<string, StaticBatchRenderer> sbr in staticRenderers)
             {
                 sbr.Value.PrepareQuadTree();
