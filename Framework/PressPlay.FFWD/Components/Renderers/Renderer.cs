@@ -127,5 +127,13 @@ namespace PressPlay.FFWD.Components
                 renderQueue = material.finalRenderQueue;
             }
         }
+
+        internal bool useLightMap
+        {
+            get
+            {
+                return (lightmapIndex > -1) && !(material.shaderName.Contains("Cutout"));
+            }
+        }
     }
 }

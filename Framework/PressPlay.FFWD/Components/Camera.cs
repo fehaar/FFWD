@@ -259,7 +259,7 @@ namespace PressPlay.FFWD.Components
                     }
                     else
                     {
-                        Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(fieldOfView), FullScreen.AspectRatio, Mathf.Max(ApplicationSettings.DefaultValues.minimumNearClipPlane, nearClipPlane), farClipPlane, out _projectionMatrix);
+                        Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(fieldOfView), FullScreen.AspectRatio, Mathf.Max(ApplicationSettings.DefaultValues.MinimumNearClipPlane, nearClipPlane), farClipPlane, out _projectionMatrix);
                     }
                 }
                 return _projectionMatrix;
@@ -501,6 +501,7 @@ namespace PressPlay.FFWD.Components
             {
                 Light.EnableLighting(BasicEffect);
             }
+            frustum.Matrix = view * projectionMatrix;
 
             int q = 0;
             int count = renderQueue.Count;
@@ -552,7 +553,6 @@ namespace PressPlay.FFWD.Components
                 transform.position + transform.forward,
                 transform.up);
             view = m * inverter;
-            frustum.Matrix = view * projectionMatrix;
         }
 
         private void Clear(GraphicsDevice device)
@@ -640,19 +640,19 @@ namespace PressPlay.FFWD.Components
 
         internal bool DoFrustumCulling(ref BoundingBox bbox)
         {
-          if (bbox.Min == Microsoft.Xna.Framework.Vector3.Zero &&
-              bbox.Max == Microsoft.Xna.Framework.Vector3.Zero)
-          {
-            return false;
-          }
+            if (bbox.Min == Microsoft.Xna.Framework.Vector3.Zero &&
+                bbox.Max == Microsoft.Xna.Framework.Vector3.Zero)
+            {
+                return false;
+            }
 
-          ContainmentType contain;
-          frustum.Contains(ref bbox, out contain);
-          if (contain == ContainmentType.Disjoint)
-          {
-            return true;
-          }
-          return false;
+            ContainmentType contain;
+            frustum.Contains(ref bbox, out contain);
+            if (contain == ContainmentType.Disjoint)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

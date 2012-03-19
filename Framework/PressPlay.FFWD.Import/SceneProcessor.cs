@@ -65,7 +65,7 @@ namespace PressPlay.FFWD.Import
                 {
                     continue;
                 }
-                string key = GetMaterialKey(r.sharedMaterials);
+                string key = GetMaterialKey(r.sharedMaterials, r.useLightMap);
                 if (!staticRenderers.ContainsKey(key))
                 {
                     GameObject sbGo = new GameObject("Static - " + key);
@@ -129,7 +129,7 @@ namespace PressPlay.FFWD.Import
             }            
         }
 
-        private string GetMaterialKey(Material[] material)
+        private string GetMaterialKey(Material[] material, bool lightmapped)
         {
             if (material.Length == 1)
             {
@@ -139,6 +139,10 @@ namespace PressPlay.FFWD.Import
             for (int i = 1; i < material.Length; i++)
             {
                 sb.AppendFormat("-{0}", material[i].GetInstanceID());
+            }
+            if (lightmapped)
+            {
+                sb.Append("-Lightmapped");
             }
             return sb.ToString();
         }
