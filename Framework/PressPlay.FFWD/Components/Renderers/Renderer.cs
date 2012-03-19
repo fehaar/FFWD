@@ -19,6 +19,8 @@ namespace PressPlay.FFWD.Components
         public int lightmapIndex = -1;
         [ContentSerializer(Optional = true)]
         public Vector4 lightmapTilingOffset = Vector4.zero;
+        [ContentSerializer(Optional = true)]
+        public bool useLightMap = false;
 
         [ContentSerializer(ElementName = "sharedMaterials", CollectionItemName = "material")]
         protected Material[] _sharedMaterials;
@@ -105,7 +107,6 @@ namespace PressPlay.FFWD.Components
         }
 
         internal float renderQueue = 0f;
-        internal bool useLightMap = false;
 
         #region IRenderable Members
         /// <summary>

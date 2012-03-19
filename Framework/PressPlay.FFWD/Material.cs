@@ -115,7 +115,8 @@ namespace PressPlay.FFWD
 
         internal bool IsTransparent()
         {
-          return (renderQueue == 3000 || (shaderName ?? "").StartsWith("Trans"));
+            string sh = (shaderName ?? "");
+            return (renderQueue == 3000 || sh.StartsWith("Trans")) && !sh.Contains("Cutout");
         }
 
         internal float finalRenderQueue = float.MinValue;
