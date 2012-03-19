@@ -16,6 +16,8 @@ namespace PressPlay.FFWD
         [ContentSerializer(Optional = true)]
         public Color color = Color.white;
         [ContentSerializer(Optional = true)]
+        public float cutOff = 0.5f;
+        [ContentSerializer(Optional = true)]
         public Texture2D mainTexture;
         [ContentSerializer(Optional = true)]
         public Vector2 mainTextureOffset = Vector2.zero;

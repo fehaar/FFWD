@@ -368,7 +368,7 @@ namespace PressPlay.FFWD.Components
 	            {
                     effect = dtEffect;
 	            }
-                if (mat.name.Contains("Swamp_Bonsai_Tree01"))
+                if (mat.shaderName.Contains("Cutout"))
                 {
                     effect = aEffect;
                 }
@@ -404,7 +404,7 @@ namespace PressPlay.FFWD.Components
                     (effect as AlphaTestEffect).DiffuseColor = mat.color;
                     (effect as AlphaTestEffect).Alpha = 1;
                     (effect as AlphaTestEffect).Texture = mat.mainTexture;
-                    (effect as AlphaTestEffect).ReferenceAlpha = 128;
+                    (effect as AlphaTestEffect).ReferenceAlpha = (int)(mat.cutOff * 255);
                 }
                 mat.SetBlendState(device);
 
