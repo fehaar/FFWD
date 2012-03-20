@@ -20,9 +20,8 @@ namespace PressPlay.FFWD
 
         internal Texture(int _width, int _height)
         {
-            tex = new Microsoft.Xna.Framework.Graphics.Texture2D(Application.Instance.GraphicsDevice, _width, _height, false, Microsoft.Xna.Framework.Graphics.SurfaceFormat.Color);       
-            // NOTE: There must be some genius math function that can do this better?!
-            IsPowerOfTwoSize = ((tex.Width == 1) || (tex.Width == 2) || (tex.Width == 4) || (tex.Width == 8) || (tex.Width == 16) || (tex.Width == 32) || (tex.Width == 64) || (tex.Width == 128) || (tex.Width == 256) || (tex.Width == 512) || (tex.Width == 1024) || (tex.Width == 2048) || (tex.Width == 4096)) && ((tex.Height == 1) || (tex.Height == 2) || (tex.Height == 4) || (tex.Height == 8) || (tex.Height == 16) || (tex.Height == 32) || (tex.Height == 64) || (tex.Height == 128) || (tex.Height == 256) || (tex.Height == 512) || (tex.Height == 1024) || (tex.Height == 2048) || (tex.Height == 4096));
+            tex = new Microsoft.Xna.Framework.Graphics.Texture2D(Application.Instance.GraphicsDevice, _width, _height, false, Microsoft.Xna.Framework.Graphics.SurfaceFormat.Color);
+            CheckPowerOfTwoSize();
         }
 
         public int Width
@@ -82,6 +81,7 @@ namespace PressPlay.FFWD
             if (tex == null)
             {
                 tex = assetHelper.LoadAsset<Microsoft.Xna.Framework.Graphics.Texture2D>(name);
+                CheckPowerOfTwoSize();
             }
         }
 
@@ -95,5 +95,11 @@ namespace PressPlay.FFWD
         }
 
         internal bool IsPowerOfTwoSize { get; private set; }
+
+        protected void CheckPowerOfTwoSize()
+        {
+            // NOTE: There must be some genius math function that can do this better?! 
+            IsPowerOfTwoSize = ((tex.Width == 1) || (tex.Width == 2) || (tex.Width == 4) || (tex.Width == 8) || (tex.Width == 16) || (tex.Width == 32) || (tex.Width == 64) || (tex.Width == 128) || (tex.Width == 256) || (tex.Width == 512) || (tex.Width == 1024) || (tex.Width == 2048) || (tex.Width == 4096)) && ((tex.Height == 1) || (tex.Height == 2) || (tex.Height == 4) || (tex.Height == 8) || (tex.Height == 16) || (tex.Height == 32) || (tex.Height == 64) || (tex.Height == 128) || (tex.Height == 256) || (tex.Height == 512) || (tex.Height == 1024) || (tex.Height == 2048) || (tex.Height == 4096));
+        }
     }
 }
