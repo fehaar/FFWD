@@ -12,7 +12,8 @@ namespace PressPlay.FFWD.Components
     public class Rigidbody : Component
     {
         private float _mass = 1.0f;
-        public float mass { 
+        public float mass
+        { 
             get
             {
                 return _mass;
@@ -25,15 +26,10 @@ namespace PressPlay.FFWD.Components
         }
 
         private float _drag;
-        public float drag {
+        public float drag
+        {
             get 
             {
-                if (body != null)
-                {
-                    _drag = body.LinearDamping; 
-                    
-                }
-
                 return _drag; 
             }
             set 
