@@ -79,6 +79,8 @@ namespace PressPlay.FFWD.Import
                         sbr.SetNewId(null);
                     }
                     staticRenderers[key] = sbr;
+                    staticRenderers[key].useLightMap = (scene.lightmapSettings != null);
+                    staticRenderers[key].lightmapIndex = r.lightmapIndex;
                     staticRenderers[key].sharedMaterials = (Material[])r.sharedMaterials.Clone();
                 }
 
@@ -108,10 +110,9 @@ namespace PressPlay.FFWD.Import
                     mf.mesh = null;
                 }
             }
-
             foreach (KeyValuePair<string, StaticBatchRenderer> sbr in staticRenderers)
             {
-                sbr.Value.PrepareQuadTree(scene.lightmapSettings != null);
+                sbr.Value.PrepareQuadTree();
             }
 
             scene.gameObjects.AddRange(staticRenderers.Values.Select(sbr => sbr.gameObject));

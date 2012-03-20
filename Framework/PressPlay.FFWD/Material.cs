@@ -16,6 +16,8 @@ namespace PressPlay.FFWD
         [ContentSerializer(Optional = true)]
         public Color color = Color.white;
         [ContentSerializer(Optional = true)]
+        public float cutOff = 0.5f;
+        [ContentSerializer(Optional = true)]
         public Texture2D mainTexture;
         [ContentSerializer(Optional = true)]
         public Vector2 mainTextureOffset = Vector2.zero;
@@ -134,7 +136,14 @@ namespace PressPlay.FFWD
 
         internal bool IsTransparent()
         {
-          return (renderQueue == 3000 || (shaderName ?? "").StartsWith("Trans"));
+            string sh = (shaderName ?? "");
+            // HACK: This is a very bad way of making sure the right things are transparent. The need for this will go away with the new rendering system.
+            // It is needed because a single Renderer can draw multiple materials but not in the right order.
+            if (sh.Contains("Cutout"))
+	        {
+                return !name.Contains("Bonsai");
+	        }
+            return (renderQueue == 3000 || sh.StartsWith("Trans"));
         }
 
         internal float finalRenderQueue = float.MinValue;

@@ -112,14 +112,15 @@ namespace PressPlay.FFWD.Components
                     {
                         remove = false;
                     }
-                    if (f.FieldType.HasElementType && f.FieldType.GetElementType().IsSubclassOf(typeof(UnityObject)))
+                    if (f.FieldType.HasElementType && (f.FieldType.GetElementType().IsSubclassOf(typeof(UnityObject)) || f.FieldType.GetElementType().IsValueType))
                     {
                         remove = false;
                     }
+                    // TODO: There could be something here with Dictionaries
                     if (f.FieldType.IsGenericType)
                     {
                         Type[] gs = f.FieldType.GetGenericArguments();
-                        if (gs.Length == 1 && typeof(UnityObject).IsAssignableFrom(gs[0]))
+                        if (gs.Length == 1 && (typeof(UnityObject).IsAssignableFrom(gs[0]) || gs[0].IsValueType))
                         {
                             remove = false;
                         }

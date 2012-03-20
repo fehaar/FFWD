@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using PressPlay.FFWD;
 using Microsoft.Xna.Framework.Content;
+using System;
 
 namespace PressPlay.FFWD.Components
 {
@@ -47,14 +48,13 @@ namespace PressPlay.FFWD.Components
             }
 
             // Check the frustum of the camera
-            // When we kill this code we can kill the BoundingSphere in mesh and filter
-            BoundingSphere sphere = new BoundingSphere(transform.position, sharedMesh.bounds.boundingSphere.Radius * transform.lossyScale.sqrMagnitude);
+            BoundingSphere sphere = new BoundingSphere(transform.TransformPoint(sharedMesh.bounds.boundingSphere.Center), sharedMesh.bounds.boundingSphere.Radius * Math.Abs(Math.Max(transform.lossyScale.x, Math.Max(transform.lossyScale.y, transform.lossyScale.z))));
             if (cam.DoFrustumCulling(ref sphere))
             {
 #if DEBUG
                 if (Camera.logRenderCalls)
                 {
-                    Debug.LogFormat("VP cull {0} with radius {1} pos {2} cam {3} at {4}", gameObject, sharedMesh.bounds.boundingSphere.Radius, transform.position, cam.gameObject, cam.transform.position);
+                    Debug.LogFormat("VP cull skinned {0} with radius {1} pos {2} cam {3} at {4}", gameObject, sphere.Radius, sphere.Center, cam.gameObject, cam.transform.position);
                 }
 #endif
                 return;
