@@ -118,7 +118,13 @@ namespace PressPlay.FFWD
         internal bool IsTransparent()
         {
             string sh = (shaderName ?? "");
-            return (renderQueue == 3000 || sh.StartsWith("Trans")) && !sh.Contains("Cutout");
+            // HACK: This is a very bad way of making sure the right things are transparent. The need for this will go away with the new rendering system.
+            // It is needed because a single Renderer can draw multiple materials but not in the right order.
+            if (sh.Contains("Cutout"))
+	        {
+                return !name.Contains("Bonsai");
+	        }
+            return (renderQueue == 3000 || sh.StartsWith("Trans"));
         }
 
         internal float finalRenderQueue = float.MinValue;

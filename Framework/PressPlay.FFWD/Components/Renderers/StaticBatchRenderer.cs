@@ -157,6 +157,8 @@ namespace PressPlay.FFWD.Components
         {
             base.Awake();
 
+            renderQueue /= 10;
+
             UInt32 uTile = 0;
             bool hasLightMaps = false;
             //Debug.LogFormat("{0} verts {1} - sz {2},{3}", this, vertexCount, tilesU, tilesV);
@@ -358,11 +360,7 @@ namespace PressPlay.FFWD.Components
 #if DEBUG
                 if (Camera.logRenderCalls)
                 {
-                    if (quadTreeTiles[i].visible)
-                    {
-                        Debug.LogFormat("Static batch: Tile {0} on {1} on {2}", i, gameObject, cam.gameObject);
-                    }
-                    else
+                    if (!quadTreeTiles[i].visible)
                     {
                         Debug.LogFormat("VP Cull Static batch: Tile {0} on {1} on {2}", i, gameObject, cam.gameObject);
                     }
@@ -385,7 +383,7 @@ namespace PressPlay.FFWD.Components
 #if DEBUG
                 if (Camera.logRenderCalls)
                 {
-                    Debug.LogFormat("Drawing with {0} and material {1} and shader {2}", effect.GetType().Name, mat, mat.shaderName);
+                    Debug.LogFormat("Static batch RQ({6}): Tile {0} go {1} cam {2}. Using {3} and material {4} and shader {5}", i, gameObject, cam.gameObject, effect.GetType().Name, mat, mat.shaderName, mat.finalRenderQueue);
                 }
 #endif
 
