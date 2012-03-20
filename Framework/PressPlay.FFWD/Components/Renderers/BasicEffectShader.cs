@@ -34,6 +34,7 @@ namespace PressPlay.FFWD.Components
             {
                 Effect.TextureEnabled = false;
             }
+
             Effect.DiffuseColor = mat.color;
             Effect.Alpha = mat.color.a;
             Effect.VertexColorEnabled = useVertexColor;

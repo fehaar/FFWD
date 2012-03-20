@@ -754,6 +754,12 @@ namespace PressPlay.FFWD
             {
                 UnityObject obj = markedForDestruction.Dequeue();
                 objects.Remove(obj.GetInstanceID());
+
+                if (obj is GameObject)
+                {
+                    (obj as GameObject).DoDestroy();
+                }
+
                 Component cmp = (obj as Component);
                 if (cmp != null)
                 {

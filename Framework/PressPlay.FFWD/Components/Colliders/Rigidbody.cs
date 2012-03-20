@@ -155,6 +155,11 @@ namespace PressPlay.FFWD.Components
             }
         }
 
+        public void AddForce(float x, float y, float z)
+        {
+            AddForce(new Vector3(x, y, z), ForceMode.Force);
+        }
+
         public void AddForce(Vector3 elasticityForce)
         {
             AddForce(elasticityForce, ForceMode.Force);

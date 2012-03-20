@@ -663,13 +663,12 @@ namespace PressPlay.FFWD
             return Application.FindByName(name);
         }
 
-        protected override void Destroy()
+        internal void DoDestroy()
         {
             for (int i = components.Count - 1; i >= 0; i--)
             {
                 Destroy(components[i]);
             }
-            base.Destroy();
         }
 
         public void SendMessageUpwards(string methodName)
