@@ -26,6 +26,11 @@ namespace PressPlay.FFWD.Components
         protected virtual void CreateRenderItems()
         {
             base.CreateRenderItems();
+            if (ApplicationSettings.UseFallbackRendering)
+            {
+                return;
+            }
+
             Material[] mats = materials;
             if (mats.HasElements())
             {
@@ -39,14 +44,9 @@ namespace PressPlay.FFWD.Components
                 renderItems = new RenderItem[mats.Length];
                 for (int i = 0; i < mats.Length; i++)
                 {
-                    // TODO: The thought is that this can actually be done at compile time so the initialization will occur at runtime
-                    renderItems = new RenderItem[mats.Length];
-                    for (int i = 0; i < mats.Length; i++)
-                    {
-                        RenderItem item = RenderItem.Create(mats[i], filter.meshToRender, i, transform);
-                        item.Initialize(Camera.Device);
-                        renderItems[i] = item;
-                    }
+                    RenderItem item = RenderItem.Create(mats[i], filter.meshToRender, i, transform);
+                    item.Initialize(Camera.Device);
+                    renderItems[i] = item;
                 }
             }
             createRenderItems = false;
@@ -60,7 +60,7 @@ namespace PressPlay.FFWD.Components
             }
 
             Mesh mesh = filter.meshToRender;
-            BoundingSphere sphere = new BoundingSphere(transform.TransformPoint(filter.boundingSphere.Center), filter.boundingSphere.Radius * Math.Max(transform.lossyScale.x, Math.Max(transform.lossyScale.y, transform.lossyScale.z)));
+            BoundingSphere sphere = new BoundingSphere(transform.TransformPoint(filter.boundingSphere.Center), filter.boundingSphere.Radius * Math.Abs(Math.Max(transform.lossyScale.x, Math.Max(transform.lossyScale.y, transform.lossyScale.z))));
             bool cull = cam.DoFrustumCulling(ref sphere);
             if (cull)
             {

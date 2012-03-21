@@ -25,7 +25,7 @@ namespace PressPlay.FFWD.Components
 
         private int referenceCount = 0;
 
-        protected const int MAX_INDEX_SIZE = Int16.MaxValue;
+        protected const int MAX_INDEX_BUFFER_SIZE = Int16.MaxValue;
         internal short[] indexData;
 
         public abstract bool AddMesh(Mesh mesh, Matrix matrix, int subMeshIndex);

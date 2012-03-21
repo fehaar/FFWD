@@ -485,7 +485,7 @@ namespace PressPlay.FFWD.Components
             }
             else
             {
-                device.RasterizerState = RasterizerState.CullCounterClockwise;
+                device.RasterizerState = RasterizerState.CullNone;
             }
 
             // Render all cameras that use a render target
