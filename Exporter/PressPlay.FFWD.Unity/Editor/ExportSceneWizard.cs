@@ -579,6 +579,7 @@ public class ExportSceneWizard : ScriptableWizard
             }
         }
         Resources.UnloadUnusedAssets();
+        EditorUtility.ClearProgressBar();
     }
 
     [MenuItem("FFWD/Export open scene")]
@@ -586,6 +587,7 @@ public class ExportSceneWizard : ScriptableWizard
     {
         ExportCommands cmd = new ExportCommands("Export open scene");
         cmd.ExportOpenScene();
+        EditorUtility.ClearProgressBar();
     }
 
     [MenuItem("FFWD/Export all scenes")]
@@ -593,6 +595,7 @@ public class ExportSceneWizard : ScriptableWizard
     {
         ExportCommands cmd = new ExportCommands("Export all scenes");
         cmd.ExportAllScenes();
+        EditorUtility.ClearProgressBar();
     }
 
     [MenuItem("FFWD/Export active scene group")]
@@ -600,6 +603,7 @@ public class ExportSceneWizard : ScriptableWizard
     {
         ExportCommands cmd = new ExportCommands("Export active scene group");
         cmd.ExportActiveScenes();
+        EditorUtility.ClearProgressBar();
     }
 
     [MenuItem("FFWD/Export all scripts")]
@@ -607,6 +611,7 @@ public class ExportSceneWizard : ScriptableWizard
     {
         ExportCommands cmd = new ExportCommands("Export all scripts");
         cmd.ExportAllScripts();
+        EditorUtility.ClearProgressBar();
     }
 
     [MenuItem("FFWD/Full export")]
@@ -616,6 +621,7 @@ public class ExportSceneWizard : ScriptableWizard
         ExportAllScripts();
         ExportAllResources();
         ExportTags(null);
+        EditorUtility.ClearProgressBar();
     }
 
     [MenuItem("CONTEXT/Transform/FFWD export resource")]

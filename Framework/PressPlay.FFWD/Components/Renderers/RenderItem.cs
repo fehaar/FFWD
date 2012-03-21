@@ -25,13 +25,8 @@ namespace PressPlay.FFWD.Components
 
         private int referenceCount = 0;
 
-#if XBOX
-        protected const int MAX_INDEX_BUFFER_SIZE = Int32.MaxValue;
-        internal int[] indexData;
-#else
         protected const int MAX_INDEX_SIZE = Int16.MaxValue;
         internal short[] indexData;
-#endif
 
         public abstract bool AddMesh(Mesh mesh, Matrix matrix, int subMeshIndex);
         public abstract void Initialize(GraphicsDevice device);
@@ -258,7 +253,7 @@ namespace PressPlay.FFWD.Components
         /// </summary>
         public override void Initialize(GraphicsDevice device)
         {
-            if (VertexBuffer == null)
+            if (VertexBuffer == null && vertexData.HasElements())
             {
                 VertexBuffer = new VertexBuffer(device, typeof(T), vertexData.Length, BufferUsage.WriteOnly);
                 VertexBuffer.SetData<T>(vertexData);
