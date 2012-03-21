@@ -139,7 +139,6 @@ namespace PressPlay.FFWD.Components
         [ContentSerializer]
         private int vertexCount;
         private static DualTextureEffect dtEffect;
-        private static AlphaTestEffect aEffect;
         
         [ContentSerializer]
         internal BoundingBox boundingBox;
@@ -161,7 +160,6 @@ namespace PressPlay.FFWD.Components
 
             UInt32 uTile = 0;
             bool hasLightMaps = false;
-            //Debug.LogFormat("{0} verts {1} - sz {2},{3}", this, vertexCount, tilesU, tilesV);
             for (UInt32 v = 0; v < tilesV; ++v)
             {
                 for (UInt32 u = 0; u < tilesU; ++u)
@@ -185,11 +183,6 @@ namespace PressPlay.FFWD.Components
                 {
                     dtEffect = new DualTextureEffect(Application.Instance.GraphicsDevice);
                     dtEffect.VertexColorEnabled = false;
-                }
-                if (aEffect == null)
-                {
-                    aEffect = new AlphaTestEffect(Application.Instance.GraphicsDevice);
-                    aEffect.AlphaFunction = CompareFunction.GreaterEqual;
                 }
             }
         }
@@ -376,10 +369,6 @@ namespace PressPlay.FFWD.Components
 	            {
                     effect = dtEffect;
 	            }
-                //if (mat.shaderName.Contains("Cutout"))
-                //{
-                //    effect = aEffect;
-                //}
 #if DEBUG
                 if (Camera.logRenderCalls)
                 {
@@ -406,13 +395,6 @@ namespace PressPlay.FFWD.Components
                 if (effect is BasicEffect)
                 {
                     mat.SetTextureState(effect as BasicEffect);
-                }
-                if (effect is AlphaTestEffect)
-                {
-                    (effect as AlphaTestEffect).DiffuseColor = mat.color;
-                    (effect as AlphaTestEffect).Alpha = 1;
-                    (effect as AlphaTestEffect).Texture = mat.mainTexture;
-                    (effect as AlphaTestEffect).ReferenceAlpha = (int)(mat.cutOff * 255);
                 }
                 mat.SetBlendState(device);
 

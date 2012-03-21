@@ -124,7 +124,7 @@ namespace PressPlay.FFWD.Components
         {
             if (_sharedMaterials.HasElements())
             {
-                renderQueue = _sharedMaterials.Max(m => m.finalRenderQueue);
+                renderQueue = _sharedMaterials.Min(m => (m == null) ? 0 : m.finalRenderQueue);
             }
             else
             {
