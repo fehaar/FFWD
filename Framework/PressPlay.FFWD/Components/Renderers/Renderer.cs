@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using PressPlay.FFWD.Extensions;
 
 namespace PressPlay.FFWD.Components
 {
@@ -120,13 +122,13 @@ namespace PressPlay.FFWD.Components
 
         public override void Awake()
         {
-            if (material == null)
+            if (_sharedMaterials.HasElements())
             {
-                renderQueue = 0;
+                renderQueue = _sharedMaterials.Max(m => m.finalRenderQueue);
             }
             else
             {
-                renderQueue = material.finalRenderQueue;
+                renderQueue = 0;
             }
         }
     }

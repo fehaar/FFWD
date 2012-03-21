@@ -487,12 +487,6 @@ namespace PressPlay.FFWD.Exporter.Writers
             WriteElement("id", mesh.GetInstanceID());
             writer.WriteElementString("name", assetName);
             writer.WriteEndElement();
-
-            if (assetName.Contains("StandarPlane"))
-            {
-                Debug.Log(assetName + ": " + mesh.GetInstanceID() + ". uv2 " + mesh.uv2.HasElements());
-            }
-
             if (!assetsToWrite.ContainsKey(assetName))
             {
                 assetsToWrite[assetName] = mesh;

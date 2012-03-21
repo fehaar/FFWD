@@ -376,10 +376,10 @@ namespace PressPlay.FFWD.Components
 	            {
                     effect = dtEffect;
 	            }
-                if (mat.shaderName.Contains("Cutout"))
-                {
-                    effect = aEffect;
-                }
+                //if (mat.shaderName.Contains("Cutout"))
+                //{
+                //    effect = aEffect;
+                //}
 #if DEBUG
                 if (Camera.logRenderCalls)
                 {
@@ -398,8 +398,8 @@ namespace PressPlay.FFWD.Components
 
                 if (effect is DualTextureEffect)
                 {
-                    (effect as DualTextureEffect).DiffuseColor = mat.color;
-                    (effect as DualTextureEffect).Alpha = (mat.shaderName.Contains("Cutout")) ? 1 : mat.color.a;
+                    (effect as DualTextureEffect).DiffuseColor = new Microsoft.Xna.Framework.Vector3(mat.color.r / 2, mat.color.g / 2, mat.color.b / 2);
+                    (effect as DualTextureEffect).Alpha = mat.color.a;
                     (effect as DualTextureEffect).Texture = mat.mainTexture;
                     (effect as DualTextureEffect).Texture2 = LightmapSettings.lightmaps[lightmapIndex].lightmapFar;
                 }
