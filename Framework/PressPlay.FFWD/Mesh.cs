@@ -248,6 +248,10 @@ namespace PressPlay.FFWD
             {
                 return triangles;
             }
+            if (subMeshCount <= subMeshIndex)
+            {
+                subMeshIndex = subMeshCount - 1;
+            }
             return triangleSets[subMeshIndex];
         }
 

@@ -130,7 +130,10 @@ namespace PressPlay.FFWD
         }
         public void EndContact(Contact contact)
         {
-            endContacts.Enqueue(new ColliderContact(contact));
+            if (contact.FixtureA.Body.UserData != null && contact.FixtureB.Body.UserData != null)
+            {
+                endContacts.Enqueue(new ColliderContact(contact));
+            }
         }
         #endregion
 

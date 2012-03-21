@@ -117,6 +117,10 @@ public class ExportSceneWizard : ScriptableWizard
             if (EditorPrefs.HasKey("FFWD XNA dir " + PlayerSettings.productName))
             {
                 xnaBaseDir = EditorPrefs.GetString("FFWD XNA dir " + PlayerSettings.productName);
+                if (String.IsNullOrEmpty(xnaBaseDir))
+                {
+                    xnaBaseDir = "..\\XNA";
+                }
             }
             if (EditorPrefs.HasKey("FFWD active group"))
             {

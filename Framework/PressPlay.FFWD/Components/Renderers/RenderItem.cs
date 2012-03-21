@@ -185,7 +185,7 @@ namespace PressPlay.FFWD.Components
             int vertexOffset = 0;
             if (vertexData == null)
             {
-                if (mesh.vertices.Length > RenderItem.MAX_INDEX_SIZE)
+                if (mesh.vertices.Length > RenderItem.MAX_INDEX_BUFFER_SIZE)
                 {
                     return false;
                 }
@@ -194,7 +194,7 @@ namespace PressPlay.FFWD.Components
             else
             {
                 vertexOffset = vertexData.Length;
-                if (mesh.vertices.Length + vertexOffset > RenderItem.MAX_INDEX_SIZE)
+                if (mesh.vertices.Length + vertexOffset > RenderItem.MAX_INDEX_BUFFER_SIZE)
                 {
                     return false;
                 }
@@ -223,25 +223,15 @@ namespace PressPlay.FFWD.Components
                 Bounds = mesh.bounds;
             }
 
-#if XBOX
-            int[] 
-#else
-            short[]
-#endif
-            tris = mesh.GetTriangles(subMeshIndex);
+            short[] tris = mesh.GetTriangles(subMeshIndex);
             if (indexData == null)
             {
                 indexData = tris.ToArray();
             }
             else
             {
-#if XBOX
-                int[] oldIndexData = indexData;
-                indexData = new short[oldIndexData.Length + tris.Length];
-#else
                 short[] oldIndexData = indexData;
                 indexData = new short[oldIndexData.Length + tris.Length];
-#endif
                 oldIndexData.CopyTo(indexData, 0);
                 tris.CopyTo(indexData, oldIndexData.Length);
             }
@@ -259,11 +249,7 @@ namespace PressPlay.FFWD.Components
                 VertexBuffer.SetData<T>(vertexData);
                 vertexData = null;
 
-#if XBOX
-            IndexBuffer = new IndexBuffer(device, IndexElementSize.ThirtyTwoBits, indexData.Length, BufferUsage.WriteOnly);
-#else
                 IndexBuffer = new IndexBuffer(device, IndexElementSize.SixteenBits, indexData.Length, BufferUsage.WriteOnly);
-#endif
                 IndexBuffer.SetData(indexData);
                 indexData = null;
             }

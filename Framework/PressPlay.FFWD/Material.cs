@@ -124,7 +124,7 @@ namespace PressPlay.FFWD
                 device.DepthStencilState = DepthStencilState.Default;
             }
 
-            if (wrapRepeat)
+            if (wrapRepeat && (mainTexture != null) && (mainTexture.IsPowerOfTwoSize))
             {
                 device.SamplerStates[0] = SamplerState.LinearWrap;
             }

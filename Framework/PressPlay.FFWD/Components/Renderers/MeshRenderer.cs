@@ -39,9 +39,14 @@ namespace PressPlay.FFWD.Components
                 renderItems = new RenderItem[mats.Length];
                 for (int i = 0; i < mats.Length; i++)
                 {
-                    RenderItem item = RenderItem.Create(mats[i], filter.meshToRender, i, transform);
-                    item.Initialize(Camera.Device);
-                    renderItems[i] = item;
+                    // TODO: The thought is that this can actually be done at compile time so the initialization will occur at runtime
+                    renderItems = new RenderItem[mats.Length];
+                    for (int i = 0; i < mats.Length; i++)
+                    {
+                        RenderItem item = RenderItem.Create(mats[i], filter.meshToRender, i, transform);
+                        item.Initialize(Camera.Device);
+                        renderItems[i] = item;
+                    }
                 }
             }
             createRenderItems = false;

@@ -219,7 +219,7 @@ namespace PressPlay.FFWD
             {
                 if (loadIsComplete)
                 {
-                    OnSceneLoadComplete();
+                    SceneLoadComplete();
                     return;
                 }
                 else
@@ -469,7 +469,7 @@ namespace PressPlay.FFWD
             if (scene == null)
             {
                 Debug.Log("Scene is NULL. Completing load!");
-                OnSceneLoadComplete();
+                SceneLoadComplete();
             }
         }
 
@@ -506,7 +506,7 @@ namespace PressPlay.FFWD
             }
         }
 
-        private void OnSceneLoadComplete()
+        private void SceneLoadComplete()
         {
 #if DEBUG
             Debug.Log("******************************** Scene Load Complete ***********************************");
@@ -524,6 +524,7 @@ namespace PressPlay.FFWD
             if (scene != null)
             {
                 scene.Initialize(true);
+                scene = null;
             }
 #if DEBUG
             Debug.Log("******************************** Scene Initialize end ***********************************");
@@ -753,6 +754,12 @@ namespace PressPlay.FFWD
             {
                 UnityObject obj = markedForDestruction.Dequeue();
                 objects.Remove(obj.GetInstanceID());
+
+                if (obj is GameObject)
+                {
+                    (obj as GameObject).DoDestroy();
+                }
+
                 Component cmp = (obj as Component);
                 if (cmp != null)
                 {

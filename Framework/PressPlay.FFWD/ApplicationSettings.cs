@@ -26,6 +26,7 @@ namespace PressPlay.FFWD
 #else
         public static int AssetLoadInterval = 50; // In Milliseconds
 #endif
+        public static bool UseFallbackRendering = false;
 
         /// <summary>
         /// This can be disabled to avoid moving static colliders, which is pretty expensive.

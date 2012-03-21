@@ -327,7 +327,7 @@ namespace PressPlay.FFWD.Components
             {
                 return;
             }
-            if (renderer is MeshRenderer)
+            if (renderer is MeshRenderer && !ApplicationSettings.UseFallbackRendering)
             {
                 renderer.AddRenderItems(RenderQueue);
                 return;
