@@ -68,6 +68,7 @@ public class ExportSceneWizard : ScriptableWizard
     public class ExportProgress
     {
         public string Title;
+        public bool ShouldCancel = false;
         private int ItemsToDo;
         private int itemsDone;
 
@@ -88,7 +89,8 @@ public class ExportSceneWizard : ScriptableWizard
             }
             else if (itemsDone < ItemsToDo)
             {
-                EditorUtility.DisplayProgressBar(Title, info, (float)ItemsToDo / (float)itemsDone);
+                float progress = (float)ItemsToDo / (float)itemsDone;                
+                ShouldCancel |= EditorUtility.DisplayCancelableProgressBar(Title, String.Format("{0} / {1} = {2} : {3}", ItemsToDo, itemsDone, progress, info), progress);
             }
             if (log)
             {
@@ -100,7 +102,7 @@ public class ExportSceneWizard : ScriptableWizard
         {
             if (itemsDone < ItemsToDo)
             {
-                EditorUtility.DisplayProgressBar(Title, info, (float)ItemsToDo / (float)itemsDone);
+                ShouldCancel |= EditorUtility.DisplayCancelableProgressBar(Title, info, (float)ItemsToDo / (float)itemsDone);
             }
             if (log)
             {
