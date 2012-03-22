@@ -495,6 +495,30 @@ namespace PressPlay.FFWD
 #endif
         }
 
+        public static string[] GetJoystickNames()
+        {
+            List<string> names = new List<string>(4);
+
+            if (GamePad.GetState(PlayerIndex.One).IsConnected)
+            {
+                names.Add(GamePad.GetCapabilities(PlayerIndex.One).GamePadType.ToString());
+            }
+            if (GamePad.GetState(PlayerIndex.Two).IsConnected)
+            {
+                names.Add(GamePad.GetCapabilities(PlayerIndex.Two).GamePadType.ToString());
+            }
+            if (GamePad.GetState(PlayerIndex.Three).IsConnected)
+            {
+                names.Add(GamePad.GetCapabilities(PlayerIndex.Three).GamePadType.ToString());
+            }
+            if (GamePad.GetState(PlayerIndex.Four).IsConnected)
+            {
+                names.Add(GamePad.GetCapabilities(PlayerIndex.Four).GamePadType.ToString());
+            }
+
+            return names.ToArray();
+        }
+
         private static string _inputString = ""; // TODO
         public static string inputString
         {
