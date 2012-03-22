@@ -60,6 +60,7 @@ namespace PressPlay.FFWD.Components
                     if (material.shader.supportsVertexColor && mesh.colors.HasElements())
                     {
                         item = new RenderItem<VertexPositionColorTexture>(material, AddVertexPositionColorTexture);
+                        item.UseVertexColor = true;
                     }
                     else
                     {
@@ -78,7 +79,11 @@ namespace PressPlay.FFWD.Components
 
         private void AddTransform(Transform t)
         {
-            Transforms.Add(t.GetInstanceID());
+            int id = t.GetInstanceID();
+            if (!Transforms.Contains(id))
+            {
+                Transforms.Add(t.GetInstanceID());
+            }
         }
 
         internal void RemoveReference(Transform t)
@@ -125,6 +130,11 @@ namespace PressPlay.FFWD.Components
                 }
                 else
                 {
+                    if (!t.renderer.enabled || !t.gameObject.active)
+                    {
+                        continue;
+                    }
+
 #if DEBUG
                     if (Camera.logRenderCalls)
                     {
