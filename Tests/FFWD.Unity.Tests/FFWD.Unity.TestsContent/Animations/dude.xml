@@ -2,7 +2,7 @@
 <XnaContent xmlns:f="PressPlay.FFWD" xmlns:c="PressPlay.FFWD.Components">
   <Asset Type="f:AnimationClip[]">
     <Item>
-      <id>438</id>
+      <id>442</id>
       <length>1.20833</length>
       <name>Take 001</name>
       <wrapMode>Loop</wrapMode>
