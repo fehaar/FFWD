@@ -6,6 +6,10 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
 using PressPlay.FFWD;
 using PressPlay.FFWD.Components;
+#if XBOX
+// Might be useful for PC and WP7 too.
+using Microsoft.Xna.Framework.GamerServices;
+#endif
 #if WINDOWS_PHONE
 using Microsoft.Xna.Framework.Input.Touch;
 #endif
@@ -29,11 +33,27 @@ namespace PressPlay.FFWD
         private static bool[] mouseUps = new bool[3];
         private static bool isInDraw = false;
 
+#if XBOX
+        private static GameDefaults _gameDefaults;
+        private static bool _moveWithRightThumbStick = false;
+#endif
+
         internal static void Initialize()
         {
             _touches = new Touch[ApplicationSettings.DefaultCapacities.Touches];
 #if WINDOWS_PHONE
             TouchPanel.EnabledGestures = GestureType.None;
+#endif
+#if XBOX
+            SignedInGamer.SignedIn += new EventHandler<SignedInEventArgs>((obj, eventArgs) =>
+                {
+                    SignedInGamer gamer = eventArgs.Gamer;
+                    _gameDefaults = gamer.GameDefaults;
+                    if (_gameDefaults.MoveWithRightThumbStick)
+                    {
+                        _moveWithRightThumbStick = true;
+                    }
+                });
 #endif
         }
 
@@ -43,7 +63,7 @@ namespace PressPlay.FFWD
             _currentMouseState = Mouse.GetState();
             _lastKeyboardState = _currentKeyboardState;
             _currentKeyboardState = Keyboard.GetState();
-
+            
 #if WINDOWS_PHONE
             gestureCount = 0;
             while (TouchPanel.IsGestureAvailable)
@@ -249,9 +269,107 @@ namespace PressPlay.FFWD
 
         public static float GetAxis(string axisName)
         {
+#if XBOX
+            return GetPadAxis(axisName);
+#elif WINDOWS
+            float padAxisValue = 0;
+            if (_currentGamePadState.IsConnected)
+            {
+                padAxisValue = GetPadAxis(axisName);
+            }
+
+            // Discard deadzone
+            if (padAxisValue > .005f || padAxisValue < -.005f)
+            {
+                return padAxisValue;
+            } else
+            {
+                // If pad is disconnected or inactive, maybe player is using keys
+                if (axisName.Equals("Horizontal"))
+                {
+                    return _currentKeyboardState.IsKeyDown(Keys.A)
+                        ? -1
+                        : _currentKeyboardState.IsKeyDown(Keys.D) ? 1 : 0;
+                } else if (axisName.Equals("Vertical"))
+                {
+                    return _currentKeyboardState.IsKeyDown(Keys.S)
+                        ? -1
+                        : _currentKeyboardState.IsKeyDown(Keys.W) ? 1 : 0;
+                } else if (axisName.Equals("Horizontal2"))
+                {
+                    return _currentKeyboardState.IsKeyDown(Keys.Left)
+                        ? -1
+                        : _currentKeyboardState.IsKeyDown(Keys.Right) ? 1 : 0;
+                } else if (axisName.Equals("Vertical2"))
+                {
+                    return _currentKeyboardState.IsKeyDown(Keys.Down)
+                        ? -1
+                        : _currentKeyboardState.IsKeyDown(Keys.Up) ? 1 : 0;
+                }
+            }
+#endif
             return 0.0f;
         }
 
+        private static float GetPadAxis(string axisName)
+        {
+#if XBOX
+            if (axisName.Equals("Horizontal"))
+            {
+                if (!_moveWithRightThumbStick)
+                {
+                    return _currentGamePadState.ThumbSticks.Left.X;
+                } else
+                {
+                    return _currentGamePadState.ThumbSticks.Right.X;
+                }
+            } else if (axisName.Equals("Vertical"))
+            {
+                if (!_moveWithRightThumbStick)
+                {
+                    return _currentGamePadState.ThumbSticks.Left.Y;
+                } else
+                {
+                    return _currentGamePadState.ThumbSticks.Right.Y;
+                }
+            } else if (axisName.Equals("Horizontal2"))
+            {
+                if (!_moveWithRightThumbStick)
+                {
+                    return _currentGamePadState.ThumbSticks.Right.X;
+                } else
+                {
+                    return _currentGamePadState.ThumbSticks.Left.X;
+                }
+            } else if (axisName.Equals("Vertical2"))
+            {
+                if (!_moveWithRightThumbStick)
+                {
+                    return _currentGamePadState.ThumbSticks.Right.Y;
+                } else
+                {
+                    return _currentGamePadState.ThumbSticks.Left.Y;
+                }
+            }
+#elif WINDOWS
+            if (axisName.Equals("Horizontal"))
+            {
+                return _currentGamePadState.ThumbSticks.Left.X;
+            } else if (axisName.Equals("Vertical"))
+            {
+                return _currentGamePadState.ThumbSticks.Left.Y;
+            } else if (axisName.Equals("Horizontal2"))
+            {
+                return _currentGamePadState.ThumbSticks.Right.X;
+            } else if (axisName.Equals("Vertical2"))
+            {
+                return _currentGamePadState.ThumbSticks.Right.Y;
+            }
+#endif
+
+            return 0.0f;
+        }
+        
         public static bool GetButton(string buttonName)
         {
             return false;
@@ -338,6 +456,19 @@ namespace PressPlay.FFWD
             }
         }
 
+        public static bool GetKey(Keys key)
+        {
+#if WINDOWS_PHONE
+            if (key == Keys.Back)
+            {
+                return _currentGamePadState.Buttons.Back == ButtonState.Pressed;
+            }
+            return false;
+#else
+            return _currentKeyboardState.IsKeyDown(key);
+#endif
+        }
+
         public static bool GetKeyUp(Keys key)
         {
 #if WINDOWS_PHONE
@@ -362,6 +493,30 @@ namespace PressPlay.FFWD
 #else
             return _currentKeyboardState.IsKeyDown(key) && _lastKeyboardState.IsKeyUp(key);
 #endif
+        }
+
+        public static string[] GetJoystickNames()
+        {
+            List<string> names = new List<string>(4);
+
+            if (GamePad.GetState(PlayerIndex.One).IsConnected)
+            {
+                names.Add(GamePad.GetCapabilities(PlayerIndex.One).GamePadType.ToString());
+            }
+            if (GamePad.GetState(PlayerIndex.Two).IsConnected)
+            {
+                names.Add(GamePad.GetCapabilities(PlayerIndex.Two).GamePadType.ToString());
+            }
+            if (GamePad.GetState(PlayerIndex.Three).IsConnected)
+            {
+                names.Add(GamePad.GetCapabilities(PlayerIndex.Three).GamePadType.ToString());
+            }
+            if (GamePad.GetState(PlayerIndex.Four).IsConnected)
+            {
+                names.Add(GamePad.GetCapabilities(PlayerIndex.Four).GamePadType.ToString());
+            }
+
+            return names.ToArray();
         }
 
         private static string _inputString = ""; // TODO
