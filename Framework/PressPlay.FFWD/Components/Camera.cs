@@ -401,6 +401,7 @@ namespace PressPlay.FFWD.Components
 
 #if DEBUG
         internal static bool logRenderCalls = false;
+        internal static bool logCulling = false;
 #endif
 
         internal static void Culling()
@@ -456,6 +457,10 @@ namespace PressPlay.FFWD.Components
             }
             if (Input.GetMouseButtonUp(1))
             {
+                if (Input.GetKey(Microsoft.Xna.Framework.Input.Keys.LeftShift) || Input.GetKey(Microsoft.Xna.Framework.Input.Keys.RightShift))
+                {
+                    logCulling = true;
+                }
                 logRenderCalls = true;
                 Debug.Log("----------- Render log begin ---------------", Time.realtimeSinceStartup);
             }
@@ -522,6 +527,7 @@ namespace PressPlay.FFWD.Components
 #if DEBUG
             Debug.Display("Draw stats", System.String.Format("Draw {0}, Batch draw {1}, Tris {2}, Verts {3}, RTs {4}", RenderStats.DrawCalls, RenderStats.BatchedDrawCalls, RenderStats.TrianglesDrawn, RenderStats.VerticesDrawn, renderTargets));
             logRenderCalls = false;
+            logCulling = false;
 #endif
         }
 

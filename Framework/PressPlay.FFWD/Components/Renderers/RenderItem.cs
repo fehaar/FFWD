@@ -97,6 +97,12 @@ namespace PressPlay.FFWD.Components
             int id = cam.GetInstanceID();  
             if (!CameraCullingInfo.ContainsKey(id))
 	        {
+#if DEBUG
+                if (Camera.logCulling)
+                {
+                    Debug.LogFormat("Cull: {0} not shown on {1}", name, cam);
+                }
+#endif
                 return;
 	        }
             BitArray cullingInfo = CameraCullingInfo[id];
@@ -104,6 +110,12 @@ namespace PressPlay.FFWD.Components
             {
                 if (!cullingInfo[i])
                 {
+#if DEBUG
+                    if (Camera.logCulling)
+                    {
+                        Debug.LogFormat("Cull: {0} out of view on {1}", name, cam);
+                    }
+#endif
                     continue;
                 }
                 Transform t = Application.Find<Transform>(Transforms[i]);
@@ -113,6 +125,12 @@ namespace PressPlay.FFWD.Components
                 }
                 else
                 {
+#if DEBUG
+                    if (Camera.logRenderCalls)
+                    {
+                        Debug.LogFormat("Render: {0} on {1}", name, cam);
+                    }
+#endif
                     Effect e = Material.shader.effect;
                     if (!devicePrepared)
                     {

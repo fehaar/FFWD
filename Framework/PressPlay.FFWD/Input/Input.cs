@@ -364,6 +364,15 @@ namespace PressPlay.FFWD
 #endif
         }
 
+        public static bool GetKey(Keys key)
+        {
+#if WINDOWS_PHONE
+            return false;
+#else
+            return _currentKeyboardState.IsKeyDown(key);
+#endif
+        }
+
         private static string _inputString = ""; // TODO
         public static string inputString
         {
