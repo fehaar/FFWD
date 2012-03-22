@@ -415,8 +415,10 @@ namespace PressPlay.FFWD.Components
                 {
                     if (!_allCameras[i].doFullCullingScan)
                     {
-                        Bounds b = new Bounds(movedItem.Transform.position, movedItem.Bounds.Value.size);
-                        _allCameras[i].CheckCulling(movedItem, new BoundingBox(b.min, b.max));
+                        if (movedItem.UpdateCullingInfo(_allCameras[i]))
+                        {
+                            _allCameras[i].CulledRenderQueue.Add(movedItem);
+                        }
                     }
                 }
                 movedItem = RenderQueue.GetMovedItem();
@@ -436,28 +438,13 @@ namespace PressPlay.FFWD.Components
                     for (int j = 0; j < rqCount; j++)
                     {
                         RenderItem item = RenderQueue[j];
-                        if (item.Bounds.HasValue)
+                        if (item.UpdateCullingInfo(cam))
                         {
-                            Bounds b = new Bounds(item.Transform.position, item.Bounds.Value.size);
-                            _allCameras[i].CheckCulling(item, new BoundingBox(b.min, b.max));
+                            cam.CulledRenderQueue.Add(item);
                         }
                     }
                 }
             }
-        }
-
-        private void CheckCulling(RenderItem item, BoundingBox box)
-        {
-            // Check the layer
-            if ((cullingMask & (1 << item.Transform.gameObject.layer)) > 0)
-            {
-                // Check frustum culling
-                ContainmentType contain = frustum.Contains(box);
-                if (contain != ContainmentType.Disjoint)
-                {
-                    CulledRenderQueue.Add(item);
-                }
-            }            
         }
 
         internal static void DoRender(GraphicsDevice device)

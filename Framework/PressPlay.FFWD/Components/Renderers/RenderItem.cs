@@ -5,28 +5,29 @@ using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using PressPlay.FFWD.Extensions;
 using Microsoft.Xna.Framework;
+using System.Collections;
 
 namespace PressPlay.FFWD.Components
 {
     internal abstract class RenderItem
     {
-        private string name;
-
+        public int Id { get; private set; }
         public Material Material;
-        public Transform Transform;
-        public Bounds? Bounds;
-        protected int batches = -1;
         public int Priority;
         public bool Enabled;
+
+        protected int batches = -1;
         protected bool UseVertexColor = false;
+        protected Bounds? Bounds;
+        protected VertexBuffer VertexBuffer;
+        protected IndexBuffer IndexBuffer;
+        protected short[] indexData;
 
-        public VertexBuffer VertexBuffer;
-        public IndexBuffer IndexBuffer;
-
-        private int referenceCount = 0;
+        private string name;
+        private List<int> Transforms = new List<int>(1);
+        private Dictionary<int, BitArray> CameraCullingInfo = new Dictionary<int, BitArray>(1);
 
         protected const int MAX_INDEX_BUFFER_SIZE = Int16.MaxValue;
-        internal short[] indexData;
 
         public abstract bool AddMesh(Mesh mesh, Matrix matrix, int subMeshIndex);
         public abstract void Initialize(GraphicsDevice device);
@@ -50,9 +51,13 @@ namespace PressPlay.FFWD.Components
             {
                 missPool++;
                 // TODO: The selection needs to be configurable from outside
-                if (material.shaderName.StartsWith("Unlit") || !mesh._normals.HasElements())
+                if (material.shader.supportsLights && mesh._normals.HasElements())
                 {
-                    if (mesh.colors.HasElements())
+                    item = new RenderItem<VertexPositionNormalTexture>(material, AddVertexPositionNormalTexture);
+                }
+                else
+                {
+                    if (material.shader.supportsVertexColor && mesh.colors.HasElements())
                     {
                         item = new RenderItem<VertexPositionColorTexture>(material, AddVertexPositionColorTexture);
                     }
@@ -61,71 +66,94 @@ namespace PressPlay.FFWD.Components
                         item = new RenderItem<VertexPositionTexture>(material, AddVertexPositionTexture);
                     }
                 }
-                else
-                {
-                    item = new RenderItem<VertexPositionNormalTexture>(material, AddVertexPositionNormalTexture);
-                }
-
-                item.Transform = t;
                 item.Priority = material.shader.renderQueue;
                 item.AddMesh(mesh, t.world, subMeshIndex);
                 item.name = String.Format("{0} - {1} on {2} rendering {3}", item.Priority, item.Material.name, t.ToString(), mesh.name);
                 RenderItemPool[id] = item;
             }
 
-            item.AddReference();
+            item.AddTransform(t);
             return item;
         }
 
-        private void AddReference()
+        private void AddTransform(Transform t)
         {
-            referenceCount++;
+            Transforms.Add(t.GetInstanceID());
         }
 
-        internal void RemoveReference()
+        internal void RemoveReference(Transform t)
         {
-            referenceCount--;
+            Transforms.Remove(t.GetInstanceID());
         }
 
         private bool Alive()
         {
-            return referenceCount > 0;
+            return Transforms.Count > 0;
         }
 
         public void Render(GraphicsDevice device, Camera cam)
         {
-            if (!Transform.renderer.enabled)
-            {
+            bool devicePrepared = false;
+            int id = cam.GetInstanceID();  
+            if (!CameraCullingInfo.ContainsKey(id))
+	        {
                 return;
-            }
-
-            device.SetVertexBuffer(VertexBuffer);
-            device.Indices = IndexBuffer;
-
-            Effect e = Material.shader.effect;
-            Material.shader.ApplyPreRenderSettings(Material, UseVertexColor);
-            Material.SetBlendState(device);
-
-            IEffectMatrices ems = e as IEffectMatrices;
-            if (ems != null)
+	        }
+            BitArray cullingInfo = CameraCullingInfo[id];
+            for (int i = Transforms.Count - 1; i >= 0; i--)
             {
-                ems.World = Transform.world;
-                ems.View = cam.view;
-                ems.Projection = cam.projectionMatrix;
+                if (!cullingInfo[i])
+                {
+                    continue;
+                }
+                Transform t = Application.Find<Transform>(Transforms[i]);
+                if (t == null)
+                {
+                    Transforms.RemoveAt(i);
+                }
+                else
+                {
+                    Effect e = Material.shader.effect;
+                    if (!devicePrepared)
+                    {
+                        devicePrepared = true;
+                        device.SetVertexBuffer(VertexBuffer);
+                        device.Indices = IndexBuffer;
+
+                        Material.shader.ApplyPreRenderSettings(Material, UseVertexColor);
+                        Material.SetBlendState(device);
+
+                        IEffectMatrices ems = e as IEffectMatrices;
+                        if (ems != null)
+                        {
+                            ems.World = t.world;
+                            ems.View = cam.view;
+                            ems.Projection = cam.projectionMatrix;
+                        }
+                    }
+                    else
+	                {
+                        IEffectMatrices ems = e as IEffectMatrices;
+                        if (ems != null)
+                        {
+                            ems.World = t.world;
+                        }
+	                }
+                    foreach (EffectPass pass in e.CurrentTechnique.Passes)
+                    {
+                        pass.Apply();
+                        device.DrawIndexedPrimitives(
+                            PrimitiveType.TriangleList,
+                            0,
+                            0,
+                            VertexBuffer.VertexCount,
+                            0,
+                            IndexBuffer.IndexCount / 3
+                        );
+                    }
+                    RenderStats.AddDrawCall(batches, VertexBuffer.VertexCount, IndexBuffer.IndexCount / 3);
+                }
             }
-            foreach (EffectPass pass in e.CurrentTechnique.Passes)
-            {
-                pass.Apply();
-                device.DrawIndexedPrimitives(
-                    PrimitiveType.TriangleList,
-                    0,
-                    0,
-                    VertexBuffer.VertexCount,
-                    0,
-                    IndexBuffer.IndexCount / 3
-                );
-            }
-            RenderStats.AddDrawCall(batches, VertexBuffer.VertexCount, IndexBuffer.IndexCount / 3);
         }
 
         private static VertexPositionNormalTexture AddVertexPositionNormalTexture(Microsoft.Xna.Framework.Vector3 position, Microsoft.Xna.Framework.Vector3 normal, Microsoft.Xna.Framework.Vector2 tex0, Microsoft.Xna.Framework.Vector2 tex1, Microsoft.Xna.Framework.Color c)
@@ -151,6 +179,42 @@ namespace PressPlay.FFWD.Components
         public override string ToString()
         {
             return name;
+        }
+
+        internal bool UpdateCullingInfo(Camera cam)
+        {
+            BitArray array = new BitArray(Transforms.Count);
+            bool shouldBeRenderedOnCamera = false;
+            for (int i = 0; i < Transforms.Count; i++)
+            {
+                Transform t = Application.Find<Transform>(Transforms[i]);
+                // Check the layer
+                if (t != null && (cam.cullingMask & (1 << t.gameObject.layer)) > 0)
+                {
+                    // Check frustum culling
+                    // TODO: Here we should use something like an octtree to make full scanning faster
+                    Bounds b = new Bounds(t.position, Bounds.Value.size);
+                    ContainmentType contain = cam.frustum.Contains(new BoundingBox(b.min, b.max));
+                    if (contain != ContainmentType.Disjoint)
+                    {
+                        array[i] = true;
+                        shouldBeRenderedOnCamera = true;
+                    }
+                }            
+            }
+            int id = cam.GetInstanceID();
+            if (shouldBeRenderedOnCamera)
+            {
+                CameraCullingInfo[id] = array;
+            }
+            else
+            {
+                if (CameraCullingInfo.ContainsKey(id))
+                {
+                    CameraCullingInfo.Remove(id);
+                }
+            }
+            return shouldBeRenderedOnCamera;
         }
     }
 

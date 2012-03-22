@@ -11,14 +11,15 @@ namespace PressPlay.FFWD.Components
     {
         private static BasicEffect Effect;
 
-        public BasicEffectShader()
+        public BasicEffectShader(string shaderName)
+            : base(shaderName)
         {
             if (Effect == null)
             {
                 Effect = new BasicEffect(Camera.Device);
             }
             effect = Effect;
-            supportsLights = true;
+            supportsLights = (!shaderName.Contains("Unlit"));
             supportsTextures = true;
             supportsVertexColor = true;
         }
@@ -38,10 +39,17 @@ namespace PressPlay.FFWD.Components
             Effect.DiffuseColor = mat.color;
             Effect.Alpha = mat.color.a;
             Effect.VertexColorEnabled = useVertexColor;
-            Effect.LightingEnabled = Light.HasLights;
-            if (Light.HasLights)
+            if (supportsLights)
             {
-                Light.EnableLighting(Effect, 0);
+                Effect.LightingEnabled = Light.HasLights;
+                if (supportsLights && Light.HasLights)
+                {
+                    Light.EnableLighting(Effect, 0);
+                }
+            }
+            else
+            {
+                Effect.LightingEnabled = false;
             }
         }
     }

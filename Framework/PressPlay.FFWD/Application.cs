@@ -587,6 +587,16 @@ namespace PressPlay.FFWD
             return null;
         }
 
+        internal static T Find<T>(int id) where T : class
+        {
+            if (objects.ContainsKey(id))
+            {
+                return objects[id] as T;
+            }
+            return null;
+        }
+        
+
         internal static T[] FindObjectsOfType<T>() where T : UnityObject
         {
             List<T> list = new List<T>();

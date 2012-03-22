@@ -145,7 +145,7 @@ namespace PressPlay.FFWD.Components
             {
                 for (int i = 0; i < renderItems.Length; i++)
                 {
-                    renderItems[i].RemoveReference();
+                    renderItems[i].RemoveReference(transform);
                 }
                 renderItems = null;
             }
@@ -187,7 +187,7 @@ namespace PressPlay.FFWD.Components
 
         internal void RemoveRenderItems(RenderQueue rq)
         {
-            if (renderItems.HasElements())
+            if (renderItems.HasElements() && rq.Count > 0)
             {
                 for (int i = 0; i < renderItems.Length; i++)
                 {
