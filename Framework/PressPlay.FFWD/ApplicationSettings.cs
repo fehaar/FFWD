@@ -26,6 +26,7 @@ namespace PressPlay.FFWD
 #else
         public static int AssetLoadInterval = 50; // In Milliseconds
 #endif
+        public static bool UseFallbackRendering = false;
 
         /// <summary>
         /// This can be disabled to avoid moving static colliders, which is pretty expensive.
@@ -50,12 +51,14 @@ namespace PressPlay.FFWD
             public static int ComponentLists = 1500;
             public static int RenderQueues = 100;
             public static int RenderCullingQueue = 20;
+            public static int ColliderContacts = 50;
             #endregion
         }
 
         public static class DefaultValues
         {
-            public static float minimumNearClipPlane = 0.1f;
+            public static float MinimumNearClipPlane = 0.1f;
+            public static float StaticBatchTileSize = 100.0f;
         }
 
     }

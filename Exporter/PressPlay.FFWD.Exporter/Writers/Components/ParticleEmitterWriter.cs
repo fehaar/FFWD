@@ -33,7 +33,13 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
             writer.WriteElement("useWorldSpace", pr.useWorldSpace);
             writer.WriteElement("enabled", pr.enabled);
 
-            Component c = pr.GetComponent("XNAEllipsoidParticleEmitter");
+            Component c = pr.GetComponent("FFWD_EllipsoidParticleEmitterExport");
+            if (c == null)
+            {
+                // Added for backwards compatibility
+                c = pr.GetComponent("XNAEllipsoidParticleEmitter");
+            }
+
             if (c != null)
             {
                 writeValue<Vector3>(writer, c, "ellipsoid");

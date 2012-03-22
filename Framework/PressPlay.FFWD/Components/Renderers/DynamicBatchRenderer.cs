@@ -193,7 +193,17 @@ namespace PressPlay.FFWD.Components
                 {
                     VertexPositionColorTexture vert = new VertexPositionColorTexture();
                     vert.Position = positionData[v];
-                    vert.TextureCoordinate = (mesh._uv != null) ? mesh._uv[v] : Microsoft.Xna.Framework.Vector2.Zero;
+                    if (mesh._uv != null)
+                    {
+                        vert.TextureCoordinate = new Vector2(
+            mesh._uv[v].X * currentMaterial.mainTextureScale.x + currentMaterial.mainTextureOffset.x,
+            1 - ((1 - mesh._uv[v].Y) * currentMaterial.mainTextureScale.y + currentMaterial.mainTextureOffset.y));
+                    }
+                    else
+                    {
+                        vert.TextureCoordinate = Microsoft.Xna.Framework.Vector2.Zero;
+
+                    }
                     vert.Color = mesh.colors[v];
                     vertexColorData[currentVertexIndex + v] = vert;
                 }
@@ -201,7 +211,17 @@ namespace PressPlay.FFWD.Components
                 {
                     VertexPositionNormalTexture vert = new VertexPositionNormalTexture();
                     vert.Position = positionData[v];
-                    vert.TextureCoordinate = (mesh._uv != null) ? mesh._uv[v] : Microsoft.Xna.Framework.Vector2.Zero;
+                    if (mesh._uv != null)
+                    {
+                        vert.TextureCoordinate = new Vector2(
+            mesh._uv[v].X * currentMaterial.mainTextureScale.x + currentMaterial.mainTextureOffset.x,
+            1 - ((1 - mesh._uv[v].Y) * currentMaterial.mainTextureScale.y + currentMaterial.mainTextureOffset.y));
+                    }
+                    else
+                    {
+                        vert.TextureCoordinate = Microsoft.Xna.Framework.Vector2.Zero;
+
+                    }
                     vert.Normal = (mesh._normals != null) ? mesh._normals[v] : Microsoft.Xna.Framework.Vector3.Zero;
                     vertexData[currentVertexIndex + v] = vert;
                 }

@@ -46,8 +46,10 @@
   <ItemGroup>
      <Compile Include="Assets\FFWD\ContentSerializerIgnoreAttribute.cs" />
      <Compile Include="Assets\FFWD\FFWD_DontExportAttribute.cs" />
+     <Compile Include="Assets\FFWD\FFWD_EllipsoidParticleEmitterExport.cs" />
      <Compile Include="Assets\FFWD\FFWD_ExportAsResourceAttribute.cs" />
      <Compile Include="Assets\FFWD\FFWD_ExportOptionsAttribute.cs" />
+     <Compile Include="Assets\FFWD\FFWD_LineRendererExport.cs" />
      <Compile Include="Assets\FFWD\FFWD_PolygonCollider.cs" />
      <Compile Include="Assets\Scripts\DisableTimer.cs" />
      <Compile Include="Assets\Scripts\GameObjects\AGameObjectCanBeConvertedToBool.cs" />

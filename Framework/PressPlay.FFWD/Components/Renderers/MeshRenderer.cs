@@ -28,13 +28,16 @@ namespace PressPlay.FFWD.Components
             {
                 bounds = filter.meshToRender.bounds;
 
-                // TODO: The thought is that this can actually be done at compile time so the initialization will occur at runtime
-                renderItems = new RenderItem[mats.Length];
-                for (int i = 0; i < mats.Length; i++)
+                if (!ApplicationSettings.UseFallbackRendering)
                 {
-                    RenderItem item = RenderItem.Create(mats[i], filter.meshToRender, i, transform);
-                    item.Initialize(Camera.Device);
-                    renderItems[i] = item;
+                    // TODO: The thought is that this can actually be done at compile time so the initialization will occur at runtime
+                    renderItems = new RenderItem[mats.Length];
+                    for (int i = 0; i < mats.Length; i++)
+                    {
+                        RenderItem item = RenderItem.Create(mats[i], filter.meshToRender, i, transform);
+                        item.Initialize(Camera.Device);
+                        renderItems[i] = item;
+                    }
                 }
             }
         }
@@ -46,13 +49,15 @@ namespace PressPlay.FFWD.Components
                 return;
             }
 
-            BoundingSphere sphere = new BoundingSphere((Microsoft.Xna.Framework.Vector3)transform.position + filter.boundingSphere.Center, filter.boundingSphere.Radius * transform.lossyScale.sqrMagnitude);
-            if (cam.DoFrustumCulling(ref sphere))
+            Mesh mesh = filter.meshToRender;
+            BoundingSphere sphere = new BoundingSphere(transform.TransformPoint(filter.boundingSphere.Center), filter.boundingSphere.Radius * Math.Max(transform.lossyScale.x, Math.Max(transform.lossyScale.y, transform.lossyScale.z)));
+            bool cull = cam.DoFrustumCulling(ref sphere);
+            if (cull)
             {
 #if DEBUG
                 if (Camera.logRenderCalls)
                 {
-                    Debug.LogFormat("VP cull {0} with radius {1} pos {2} cam {3} at {4}", gameObject, filter.boundingSphere.Radius, transform.position, cam.gameObject, cam.transform.position);
+                    Debug.LogFormat("VP cull mesh {0} with center {1} radius {2} cam {3} at {4}", gameObject, sphere.Center, sphere.Radius, cam.gameObject, cam.transform.position);
                 }
 #endif
                 return;

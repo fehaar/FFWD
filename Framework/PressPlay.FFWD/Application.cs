@@ -219,7 +219,7 @@ namespace PressPlay.FFWD
             {
                 if (loadIsComplete)
                 {
-                    OnSceneLoadComplete();
+                    SceneLoadComplete();
                     return;
                 }
                 else
@@ -420,11 +420,10 @@ namespace PressPlay.FFWD
 
         private void DoSceneLoad()
         {
-            //Debug.Log("DoSceneLoad: " + sceneToLoad);
-
             _loadingProgess = 0;
 #if DEBUG
             Debug.Log("******************************** Do Scene Load " + sceneToLoad + " ***********************************");
+            Debug.Display("Loading", sceneToLoad);
 #endif
 
             if (!isLoadingAdditive && !String.IsNullOrEmpty(loadedLevelName))
@@ -470,7 +469,7 @@ namespace PressPlay.FFWD
             if (scene == null)
             {
                 Debug.Log("Scene is NULL. Completing load!");
-                OnSceneLoadComplete();
+                SceneLoadComplete();
             }
         }
 
@@ -486,6 +485,9 @@ namespace PressPlay.FFWD
                     return;
                 }
                 Asset a = sceneAssets.Dequeue();
+#if DEBUG
+                Debug.Display("Loading", "Assets " + a);
+#endif
                 a.LoadAsset(assetHelper);
                 numberOfAssetsLoaded++;
             }
@@ -504,7 +506,7 @@ namespace PressPlay.FFWD
             }
         }
 
-        private void OnSceneLoadComplete()
+        private void SceneLoadComplete()
         {
 #if DEBUG
             Debug.Log("******************************** Scene Load Complete ***********************************");
@@ -516,10 +518,17 @@ namespace PressPlay.FFWD
             isLoadingAdditive = false;
             isLoadingLevel = false;
 
+#if DEBUG
+            Debug.Log("******************************** Scene Initialize begin ***********************************");
+#endif
             if (scene != null)
             {
                 scene.Initialize(true);
+                scene = null;
             }
+#if DEBUG
+            Debug.Log("******************************** Scene Initialize end ***********************************");
+#endif
         }
 
         internal static void LoadNewAssets(bool loadResources)
@@ -745,6 +754,12 @@ namespace PressPlay.FFWD
             {
                 UnityObject obj = markedForDestruction.Dequeue();
                 objects.Remove(obj.GetInstanceID());
+
+                if (obj is GameObject)
+                {
+                    (obj as GameObject).DoDestroy();
+                }
+
                 Component cmp = (obj as Component);
                 if (cmp != null)
                 {

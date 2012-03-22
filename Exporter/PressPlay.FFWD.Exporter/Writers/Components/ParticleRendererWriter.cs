@@ -27,7 +27,12 @@ namespace PressPlay.FFWD.Exporter.Writers.Components
             writer.WriteElement("maxParticleSize", pr.maxParticleSize);
             writer.WriteElement("uvAnimation", new Vector3(pr.uvAnimationXTile, pr.uvAnimationYTile, pr.uvAnimationCycles));
 
-            Component c = pr.gameObject.GetComponent("XNAEllipsoidParticleEmitter");
+            Component c = pr.GetComponent("FFWD_EllipsoidParticleEmitterExport");
+            if (c == null)
+            {
+                // Added for backwards compatibility
+                c = pr.GetComponent("XNAEllipsoidParticleEmitter");
+            }
             if (c != null)
             {
                 writeValue<object>(writer, c, "stretchParticles");

@@ -266,7 +266,7 @@ namespace PressPlay.FFWD.Components
                     }
                     else
                     {
-                        Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(fieldOfView), FullScreen.AspectRatio, Mathf.Max(ApplicationSettings.DefaultValues.minimumNearClipPlane, nearClipPlane), farClipPlane, out _projectionMatrix);
+                        Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(fieldOfView), FullScreen.AspectRatio, Mathf.Max(ApplicationSettings.DefaultValues.MinimumNearClipPlane, nearClipPlane), farClipPlane, out _projectionMatrix);
                     }
                 }
                 return _projectionMatrix;
@@ -327,7 +327,7 @@ namespace PressPlay.FFWD.Components
             {
                 return;
             }
-            if (renderer is MeshRenderer)
+            if (renderer is MeshRenderer && !ApplicationSettings.UseFallbackRendering)
             {
                 renderer.AddRenderItems(RenderQueue);
                 return;
@@ -568,6 +568,7 @@ namespace PressPlay.FFWD.Components
                     CulledRenderQueue[i].Render(device, this);
                 }
             }
+            frustum.Matrix = view * projectionMatrix;
 
             int q = 0;
             int count = oldRenderQueue.Count;
@@ -631,7 +632,6 @@ namespace PressPlay.FFWD.Components
                 transform.position + transform.forward,
                 transform.up);
             view = m * inverter;
-            frustum.Matrix = view * projectionMatrix;
             doFullCullingScan = true;
         }
 
