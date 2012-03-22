@@ -436,8 +436,11 @@ namespace PressPlay.FFWD.Components
                     for (int j = 0; j < rqCount; j++)
                     {
                         RenderItem item = RenderQueue[j];
-                        Bounds b = new Bounds(item.Transform.position, item.Bounds.Value.size);
-                        _allCameras[i].CheckCulling(item, new BoundingBox(b.min, b.max));
+                        if (item.Bounds.HasValue)
+                        {
+                            Bounds b = new Bounds(item.Transform.position, item.Bounds.Value.size);
+                            _allCameras[i].CheckCulling(item, new BoundingBox(b.min, b.max));
+                        }
                     }
                 }
             }
