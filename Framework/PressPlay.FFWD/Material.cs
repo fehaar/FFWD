@@ -16,6 +16,8 @@ namespace PressPlay.FFWD
         [ContentSerializer(Optional = true)]
         public Color color = Color.white;
         [ContentSerializer(Optional = true)]
+        public float cutOff = 0.5f;
+        [ContentSerializer(Optional = true)]
         public Texture2D mainTexture;
         [ContentSerializer(Optional = true)]
         public Vector2 mainTextureOffset = Vector2.zero;
@@ -81,14 +83,14 @@ namespace PressPlay.FFWD
         protected override void DoLoadAsset(AssetHelper assetHelper)
         {
             shader = Shader.GetShader(this);
-
+            string sh = shaderName ?? "";
             // NOTE: We have hardcoded shader values here that should be configurable in some other way
             blendState = BlendState.Opaque;
             if (shaderName == "iPhone/Particles/Additive Culled" || shaderName == "Particles/Additive")
             {
                 blendState = BlendState.Additive;
             }
-            else if (renderQueue == 3000 || (shaderName ?? "").StartsWith("Trans") || shaderName == "Particles/VertexLit Blended" || shaderName == "Particles/Alpha Blended")
+            else if (renderQueue == 3000 || sh.StartsWith("Trans") || shaderName == "Particles/VertexLit Blended" || shaderName == "Particles/Alpha Blended")
             {
                 blendState = BlendState.AlphaBlend;
             }
@@ -134,7 +136,8 @@ namespace PressPlay.FFWD
 
         internal bool IsTransparent()
         {
-          return (renderQueue == 3000 || (shaderName ?? "").StartsWith("Trans"));
+            string sh = (shaderName ?? "");
+            return (renderQueue == 3000 || sh.StartsWith("Trans"));
         }
 
         internal float finalRenderQueue = float.MinValue;

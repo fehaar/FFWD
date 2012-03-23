@@ -138,8 +138,9 @@ namespace PressPlay.FFWD.Components
     public class StaticBatchRenderer : Renderer
     {
         internal List<SMeshInfo> tmpMeshes;
-        private Effect effect;
-        private Microsoft.Xna.Framework.Graphics.Texture2D grey;
+        [ContentSerializer]
+        private int vertexCount;
+        private static DualTextureEffect dtEffect;
         
         [ContentSerializer]
         internal BoundingBox boundingBox;
@@ -156,6 +157,8 @@ namespace PressPlay.FFWD.Components
         public override void Awake()
         {
             base.Awake();
+
+            renderQueue /= 10;
 
             UInt32 uTile = 0;
             bool hasLightMaps = false;
@@ -178,20 +181,11 @@ namespace PressPlay.FFWD.Components
             }
             if (Application.Instance != null)
             {
-                if (hasLightMaps)
+                if (dtEffect == null)
                 {
-                    DualTextureEffect dtEffect = new DualTextureEffect(Application.Instance.GraphicsDevice);
+                    dtEffect = new DualTextureEffect(Application.Instance.GraphicsDevice);
                     dtEffect.VertexColorEnabled = false;
-                    effect = dtEffect;
                 }
-                else
-                {
-                    BasicEffect bEffect = new BasicEffect(Application.Instance.GraphicsDevice);
-                    bEffect.VertexColorEnabled = false;
-                    effect = bEffect;
-                }
-                grey = new Microsoft.Xna.Framework.Graphics.Texture2D(Application.Instance.GraphicsDevice, 1, 1);
-                grey.SetData(new Microsoft.Xna.Framework.Color[] { new Microsoft.Xna.Framework.Color(128, 128, 128, 255) });
             }
         }
 
@@ -220,6 +214,7 @@ namespace PressPlay.FFWD.Components
                 meshInfo.bbox = new BoundingBox(Microsoft.Xna.Framework.Vector3.Transform(m.bounds.min, renderer.transform.world),
                                                   Microsoft.Xna.Framework.Vector3.Transform(m.bounds.max, renderer.transform.world));
                 tmpMeshes.Add(meshInfo);
+                vertexCount += m._vertices.Length;
                 if (tmpMeshes.Count == 0)
                 {
                     boundingBox = meshInfo.bbox;
@@ -235,13 +230,19 @@ namespace PressPlay.FFWD.Components
 
         internal bool PrepareQuadTree()
         {
-            // initialize quad tree
             float tileSize = ApplicationSettings.DefaultValues.StaticBatchTileSize;
-            float fTilesU = (boundingBox.Max.X - boundingBox.Min.X) / tileSize;
-            float fTilesV = (boundingBox.Max.Z - boundingBox.Min.Z) / tileSize;
-
-            tilesU = Math.Max((UInt32)Mathf.CeilToInt(fTilesU), 1);
-            tilesV = Math.Max((UInt32)Mathf.CeilToInt(fTilesV), 1);
+            // If we have a small static batch, do not cut it up.
+            if (vertexCount <= ApplicationSettings.DefaultValues.StaticBatchVertexLimit)
+            {
+                tilesU = tilesV = 1;
+            }
+            else
+            {
+                float fTilesU = (boundingBox.Max.X - boundingBox.Min.X) / tileSize;
+                float fTilesV = (boundingBox.Max.Z - boundingBox.Min.Z) / tileSize;
+                tilesU = Math.Max((UInt32)Mathf.CeilToInt(fTilesU), 1);
+                tilesV = Math.Max((UInt32)Mathf.CeilToInt(fTilesV), 1);
+            }
 
             quadTreeTiles = new SQuadTreeTile[tilesU * tilesV];
 
@@ -349,45 +350,53 @@ namespace PressPlay.FFWD.Components
             for (UInt32 i = 0; i < tiles; ++i)
             {
                 quadTreeTiles[i].visible = !cam.DoFrustumCulling(ref quadTreeTiles[i].boundingBox);
-
 #if DEBUG
                 if (Camera.logRenderCalls)
                 {
-                    if (quadTreeTiles[i].visible)
+                    if (!quadTreeTiles[i].visible)
                     {
-                        Debug.LogFormat("Static batch: Tile {0} on {1} on {2}. Effect {3}", i, gameObject, cam.gameObject, effect.GetType().Name);
-                    }
-                    else
-                    {
-                        Debug.LogFormat("VP Cull Static batch: Tile {0} on {1} on {2}. Effect {3}", i, gameObject, cam.gameObject, effect.GetType().Name);
+                        Debug.LogFormat("VP Cull Static batch: Tile {0} on {1} on {2}", i, gameObject, cam.gameObject);
                     }
                 }                
 #endif
             }
 
-            (effect as IEffectMatrices).World = Matrix.Identity;
-            (effect as IEffectMatrices).View = cam.view;
-            (effect as IEffectMatrices).Projection = cam.projectionMatrix;
-
-            if (effect is IEffectLights)
+            for (int i = 0; i < _sharedMaterials.Length; i++)
             {
-                (effect as IEffectLights).LightingEnabled = Light.HasLights;
-            }
+                Material mat = _sharedMaterials[i];
+                Effect effect = cam.BasicEffect;
+                if (useLightMap)
+	            {
+                    effect = dtEffect;
+	            }
+#if DEBUG
+                if (Camera.logRenderCalls)
+                {
+                    Debug.LogFormat("Static batch RQ({6}): Tile {0} go {1} cam {2}. Using {3} and material {4} and shader {5}", i, gameObject, cam.gameObject, effect.GetType().Name, mat, mat.shaderName, mat.finalRenderQueue);
+                }
+#endif
 
-            for (int i = 0; i < sharedMaterials.Length; i++)
-            {
+                (effect as IEffectMatrices).World = Matrix.Identity;
+                (effect as IEffectMatrices).View = cam.view;
+                (effect as IEffectMatrices).Projection = cam.projectionMatrix;
+
+                if (effect is IEffectLights)
+                {
+                    (effect as IEffectLights).LightingEnabled = Light.HasLights;
+                }
+
                 if (effect is DualTextureEffect)
                 {
-                    (effect as DualTextureEffect).DiffuseColor = sharedMaterials[i].color;
-                    (effect as DualTextureEffect).Alpha = sharedMaterials[i].color.a;
-                    (effect as DualTextureEffect).Texture = sharedMaterials[i].mainTexture; // grey;
-                    (effect as DualTextureEffect).Texture2 = LightmapSettings.lightmaps[lightmapIndex].lightmapFar; // grey;
+                    (effect as DualTextureEffect).DiffuseColor = new Microsoft.Xna.Framework.Vector3(mat.color.r / 2, mat.color.g / 2, mat.color.b / 2);
+                    (effect as DualTextureEffect).Alpha = mat.color.a;
+                    (effect as DualTextureEffect).Texture = mat.mainTexture;
+                    (effect as DualTextureEffect).Texture2 = LightmapSettings.lightmaps[lightmapIndex].lightmapFar;
                 }
-                else
+                if (effect is BasicEffect)
                 {
-                    sharedMaterials[i].SetTextureState(effect as BasicEffect);
+                    mat.SetTextureState(effect as BasicEffect);
                 }
-                sharedMaterials[i].SetBlendState(device);
+                mat.SetBlendState(device);
 
                 foreach (EffectPass pass in effect.CurrentTechnique.Passes)
                 {
