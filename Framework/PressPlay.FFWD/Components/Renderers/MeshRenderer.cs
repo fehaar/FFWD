@@ -23,7 +23,7 @@ namespace PressPlay.FFWD.Components
             CreateRenderItems();
         }
 
-        protected virtual void CreateRenderItems()
+        protected override void CreateRenderItems()
         {
             base.CreateRenderItems();
             if (ApplicationSettings.UseFallbackRendering)
@@ -49,6 +49,7 @@ namespace PressPlay.FFWD.Components
                     renderItems[i] = item;
                 }
             }
+            Debug.LogFormat("Created {0} render items on {1}", (renderItems.HasElements()) ? renderItems.Count(r => r != null).ToString() : "no", this);
             createRenderItems = false;
         }
 

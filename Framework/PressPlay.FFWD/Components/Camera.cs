@@ -460,9 +460,13 @@ namespace PressPlay.FFWD.Components
                 if (Input.GetKey(Microsoft.Xna.Framework.Input.Keys.LeftShift) || Input.GetKey(Microsoft.Xna.Framework.Input.Keys.RightShift))
                 {
                     logCulling = true;
+                    Debug.Log("----------- Render log with culling begin ---------------", Time.realtimeSinceStartup);
+                }
+                else
+                {
+                    Debug.Log("----------- Render log begin ---------------", Time.realtimeSinceStartup);
                 }
                 logRenderCalls = true;
-                Debug.Log("----------- Render log begin ---------------", Time.realtimeSinceStartup);
             }
 #endif
             if (dynamicBatchRenderer == null)

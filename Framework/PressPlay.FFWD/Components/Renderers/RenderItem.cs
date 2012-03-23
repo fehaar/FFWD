@@ -11,19 +11,24 @@ namespace PressPlay.FFWD.Components
 {
     internal abstract class RenderItem
     {
+        private static int nextId = 1;
+
+        protected RenderItem()
+        {
+            Id = nextId++;
+        }
+
         public int Id { get; private set; }
         public Material Material;
         public int Priority;
-        public bool Enabled;
 
         protected int batches = -1;
         protected bool UseVertexColor = false;
-        protected Bounds? Bounds;
+        protected BoundingSphere Bounds;
         protected VertexBuffer VertexBuffer;
         protected IndexBuffer IndexBuffer;
         protected short[] indexData;
 
-        private string name;
         private List<int> Transforms = new List<int>(1);
         private Dictionary<int, BitArray> CameraCullingInfo = new Dictionary<int, BitArray>(1);
 
@@ -67,9 +72,8 @@ namespace PressPlay.FFWD.Components
                         item = new RenderItem<VertexPositionTexture>(material, AddVertexPositionTexture);
                     }
                 }
-                item.Priority = material.shader.renderQueue;
+                item.Priority = material.renderQueue;
                 item.AddMesh(mesh, t.world, subMeshIndex);
-                item.name = String.Format("{0} - {1} on {2} rendering {3}", item.Priority, item.Material.name, t.ToString(), mesh.name);
                 RenderItemPool[id] = item;
             }
 
@@ -105,7 +109,7 @@ namespace PressPlay.FFWD.Components
 #if DEBUG
                 if (Camera.logCulling)
                 {
-                    Debug.LogFormat("Cull: {0} not shown on {1}", name, cam);
+                    Debug.LogFormat("Cull: {0} not shown on {1}", ToString(), cam);
                 }
 #endif
                 return;
@@ -118,7 +122,7 @@ namespace PressPlay.FFWD.Components
 #if DEBUG
                     if (Camera.logCulling)
                     {
-                        Debug.LogFormat("Cull: {0} out of view on {1}", name, cam);
+                        Debug.LogFormat("Cull: {0} out of view on {1}", this, cam);
                     }
 #endif
                     continue;
@@ -138,7 +142,7 @@ namespace PressPlay.FFWD.Components
 #if DEBUG
                     if (Camera.logRenderCalls)
                     {
-                        Debug.LogFormat("Render: {0} on {1}", name, cam);
+                        Debug.LogFormat("Render: {0} for {1} on {2}", this, t.gameObject, cam.gameObject);
                     }
 #endif
                     Effect e = Material.shader.effect;
@@ -206,7 +210,7 @@ namespace PressPlay.FFWD.Components
 
         public override string ToString()
         {
-            return name;
+            return String.Format("#{0} ({1}) {2}", Id, Priority, Material.name);
         }
 
         internal bool UpdateCullingInfo(Camera cam)
@@ -221,8 +225,9 @@ namespace PressPlay.FFWD.Components
                 {
                     // Check frustum culling
                     // TODO: Here we should use something like an octtree to make full scanning faster
-                    Bounds b = new Bounds(t.position, Bounds.Value.size);
-                    ContainmentType contain = cam.frustum.Contains(new BoundingBox(b.min, b.max));
+                    BoundingSphere sphere = new BoundingSphere(t.TransformPoint(Bounds.Center), Bounds.Radius * Math.Max(Math.Abs(t.lossyScale.x), Math.Max(Math.Abs(t.lossyScale.y), Math.Abs(t.lossyScale.z))));
+                    ContainmentType contain;
+                    cam.frustum.Contains(ref sphere, out contain);
                     if (contain != ContainmentType.Disjoint)
                     {
                         array[i] = true;
@@ -255,6 +260,7 @@ namespace PressPlay.FFWD.Components
         private AddVertex addVertex;
 
         public RenderItem(Material mat, AddVertex addV)
+            : base()
         {
             Material = mat;
             addVertex = addV;
@@ -306,13 +312,13 @@ namespace PressPlay.FFWD.Components
                 vertexData[i + vertexOffset] = addVertex(mesh._vertices[i], (mesh._normals.HasElements()) ? mesh._normals[i] : Microsoft.Xna.Framework.Vector3.Zero, uv1, (mesh._uv2.HasElements()) ? mesh._uv2[i] : Microsoft.Xna.Framework.Vector2.Zero, (mesh.colors.HasElements()) ? mesh.colors[i] : Color.white);
 
             }
-            if (Bounds.HasValue)
+            if (Bounds.Radius == 0)
 	        {
-                Bounds.Value.Encapsulate(mesh.bounds);
+                Bounds = mesh.bounds.boundingSphere;
 	        }
             else
 	        {
-                Bounds = mesh.bounds;
+                Bounds = BoundingSphere.CreateMerged(Bounds, mesh.bounds.boundingSphere);
             }
 
             short[] tris = mesh.GetTriangles(subMeshIndex);
