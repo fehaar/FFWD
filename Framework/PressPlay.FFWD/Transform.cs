@@ -656,6 +656,16 @@ namespace PressPlay.FFWD
             _localRotation *= (Quaternion)Microsoft.Xna.Framework.Quaternion.CreateFromAxisAngle(vector3, Mathf.Deg2Rad * fAngle);
         }
 
+        public void RotateAround(Vector3 point, Vector3 vector3, float fAngle)
+        {
+            Vector3 offset = position - point;
+            Vector3 unitaryAxis = vector3.normalized;
+
+            var rotationMatrix = Microsoft.Xna.Framework.Matrix.CreateFromAxisAngle(unitaryAxis, Mathf.Deg2Rad * fAngle);
+            position = point + new Vector3(Microsoft.Xna.Framework.Vector3.Transform(offset, rotationMatrix));
+            _localRotation *= new Quaternion(Microsoft.Xna.Framework.Quaternion.CreateFromRotationMatrix(rotationMatrix));
+        }
+
         public void DetachChildren()
         {
             while (childCount > 0)
