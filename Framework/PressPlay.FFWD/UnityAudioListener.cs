@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace PressPlay.FFWD
+namespace PressPlay.FFWD.Components
 {
     public class UnityAudioListener : Behaviour
     {

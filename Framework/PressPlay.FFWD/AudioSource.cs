@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Audio;
 using PressPlay.FFWD.Interfaces;
+using Microsoft.Xna.Framework.Content;
 
-namespace PressPlay.FFWD
+namespace PressPlay.FFWD.Components
 {
 
     public enum AudioVelocityUpdateMode
@@ -16,37 +17,10 @@ namespace PressPlay.FFWD
     }
 
     public class AudioSource : Behaviour, IUpdateable
-    {   
-        
-        private AudioClip _clip;
-        public AudioClip clip
-        {
-            get
-            {
-                return _clip;
-            }
-            set
-            {
-                _clip = value;
-                SetSoundEffect(_clip);
-            }
-        }
-
-        private float _minVolume = 0;
-        public float minVolume
-        {
-            get { return _minVolume; }
-            set { _minVolume = Mathf.Clamp01(value); }
-        }
-
-        private float _maxVolume = 1;
-        public float maxVolume
-        {
-            get { return _maxVolume; }
-            set { _maxVolume = Mathf.Clamp01(value); }
-        }
-
+    {
+        [ContentSerializer(ElementName="volume")]
         private float _volume = 1;
+        [ContentSerializerIgnore]
         public float volume
         {
             get
@@ -61,10 +35,26 @@ namespace PressPlay.FFWD
                 }
 
                 _volume = Mathf.Clamp01(value);
-                _volume = Mathf.Max(_volume, minVolume);
-                _volume = Mathf.Min(_volume, maxVolume);
 
                 clip.Volume = _volume;
+            }
+        }
+
+        public float pitch = 0;
+
+        [ContentSerializer(ElementName = "clip")]
+        private AudioClip _clip;
+        [ContentSerializerIgnore]
+        public AudioClip clip
+        {
+            get
+            {
+                return _clip;
+            }
+            set
+            {
+                _clip = value;
+                SetSoundEffect(_clip);
             }
         }
 
@@ -76,8 +66,9 @@ namespace PressPlay.FFWD
             }
         }
 
-        public float pitch = 0;
+        [ContentSerializer(ElementName = "loop")]
         private bool _loop = false;
+        [ContentSerializerIgnore]
         public bool loop
         {
             get
@@ -94,9 +85,10 @@ namespace PressPlay.FFWD
             }
         }
 
-        public bool ignoreListenerVolume = false;
         public bool playOnAwake = false;
+        [ContentSerializerIgnore]
         public float time = 0;
+        [ContentSerializerIgnore]
         public AudioVelocityUpdateMode velocityUpdateMode = AudioVelocityUpdateMode.Auto;
 
         private void SetSoundEffect(AudioClip sfx)
@@ -136,6 +128,18 @@ namespace PressPlay.FFWD
         public void PlayOneShot(AudioClip clip)
         {
             throw new NotImplementedException();
+        }
+
+        public override void Awake()
+        {
+            base.Awake();
+            if (playOnAwake)
+            {
+                clip.Loop = loop;
+                clip.Volume = volume;
+                // TODO: Create pitch support
+                Play();
+            }
         }
 
         public void Stop()

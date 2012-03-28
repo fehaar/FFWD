@@ -11,8 +11,6 @@ namespace PressPlay.FFWD
     {
         [ContentSerializer(Optional = true)]
         public string clip;
-
-        [ContentSerializerIgnore]
         private SoundEffect sound;
 
         private bool startNextFrame = false;
@@ -28,7 +26,6 @@ namespace PressPlay.FFWD
 
         public AudioClip()
         {
-
         }
 
         internal AudioClip(SoundEffect sound)
@@ -45,7 +42,7 @@ namespace PressPlay.FFWD
         {
             if (sound == null)
             {
-                sound = assetHelper.Load<SoundEffect>("Sounds/" + clip);
+                sound = assetHelper.Load<SoundEffect>(clip);
                 name = clip;
                 if (sound != null)
                 {

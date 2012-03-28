@@ -456,6 +456,15 @@ namespace PressPlay.FFWD
             }
         }
 
+        public static Touch GetTouch(int index)
+        {
+            if (touchCount > index)
+            {
+                return _touches[index];
+            }
+            throw new InvalidOperationException("There is no touch at the given index");
+        }
+
         public static bool GetKey(Keys key)
         {
 #if WINDOWS_PHONE
