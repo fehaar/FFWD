@@ -613,22 +613,22 @@ namespace PressPlay.FFWD
 
         public Vector3 TransformDirection(Vector3 position)
         {            
-            return Microsoft.Xna.Framework.Vector3.TransformNormal(position, world);
+            return localRotation * position;
         }
 
         public Vector3 TransformDirection(float x, float y, float z)
         {
-            return Microsoft.Xna.Framework.Vector3.TransformNormal(new Microsoft.Xna.Framework.Vector3(x, y, z), world);
+            return localRotation * new Vector3(x, y, z);
         }
 
         public Vector3 InverseTransformDirection(Vector3 position)
         {
-            return Microsoft.Xna.Framework.Vector3.TransformNormal(position, Microsoft.Xna.Framework.Matrix.Invert(world));
+            return Quaternion.Inverse(localRotation) * position;
         }
 
         public Vector3 InverseTransformDirection(float x, float y, float z)
         {
-            return Microsoft.Xna.Framework.Vector3.TransformNormal(new Microsoft.Xna.Framework.Vector3(x, y, z), Microsoft.Xna.Framework.Matrix.Invert(world));
+            return Quaternion.Inverse(localRotation) * new Vector3(x, y, z);
         }
 
         public Vector3 TransformPoint(Vector3 position)
