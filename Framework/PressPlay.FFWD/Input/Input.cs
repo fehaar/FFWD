@@ -350,6 +350,15 @@ namespace PressPlay.FFWD
                 {
                     return _currentGamePadState.ThumbSticks.Left.Y;
                 }
+            } else if (axisName.Equals("LeftTrigger"))
+            {
+                return _currentGamePadState.Triggers.Left;
+            } else if (axisName.Equals("RightTrigger"))
+            {
+                return _currentGamePadState.Triggers.Right;
+            } else if (axisName.Equals("TriggerCombined"))
+            {
+                return _currentGamePadState.Triggers.Right - _currentGamePadState.Triggers.Left;
             }
 #elif WINDOWS
             if (axisName.Equals("Horizontal"))
@@ -364,6 +373,15 @@ namespace PressPlay.FFWD
             } else if (axisName.Equals("Vertical2"))
             {
                 return _currentGamePadState.ThumbSticks.Right.Y;
+            } else if (axisName.Equals("LeftTrigger"))
+            {
+                return _currentGamePadState.Triggers.Left;
+            } else if (axisName.Equals("RightTrigger"))
+            {
+                return _currentGamePadState.Triggers.Right;
+            } else if (axisName.Equals("TriggerCombined"))
+            {
+                return _currentGamePadState.Triggers.Right - _currentGamePadState.Triggers.Left;
             }
 #endif
 
