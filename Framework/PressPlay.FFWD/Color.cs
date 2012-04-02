@@ -169,7 +169,7 @@ namespace PressPlay.FFWD
         {
             get
             {
-                return new Color(1, 235 / 255, 4 / 255, 1);
+                return new Color(1, 235f / 255f, 4f / 255f, 1);
             }
         }
 
