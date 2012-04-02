@@ -316,9 +316,42 @@ namespace PressPlay.FFWD
             get { return _vertices.Length; }
         }
 
+        /// <summary>
+        /// Recalculates the normals.
+        /// Implementation adapted from http://devmaster.net/forums/topic/1065-calculating-normals-of-a-mesh/
+        /// </summary>
         public void RecalculateNormals()
         {
-            throw new NotImplementedException();
+            Vector3[] newNormals = new Vector3[_vertices.Length];
+            
+            // _triangles is a list of vertex indices,
+            // with each triplet referencing the three vertices of the corresponding triangle
+            for (int i = 0; i < _triangles.Length; i = i + 3)
+            {
+                Vector3[] v = new Vector3[]
+                {
+                    _vertices[_triangles[i]],
+                    _vertices[_triangles[i + 1]],
+                    _vertices[_triangles[i + 2]]
+                };
+
+                Vector3 normal = Vector3.Cross(v[1] - v[0], v[2] - v[0]);
+
+                for (int j = 0; j < 3; ++j)
+                {
+                    Vector3 a = v[(j+1) % 3] - v[j];
+                    Vector3 b = v[(j+2) % 3] - v[j];
+                    float weight = (float)Math.Acos(Vector3.Dot(a, b) / (a.magnitude * b.magnitude));
+                    newNormals[_triangles[i + j]] += weight * normal;
+                }
+            }
+
+            foreach (Vector3 normal in newNormals)
+            {
+                normal.Normalize();
+            }
+
+            normals = newNormals;
         }
 
         internal IndexBuffer GetIndexBuffer()
