@@ -372,17 +372,134 @@ namespace PressPlay.FFWD
         
         public static bool GetButton(string buttonName)
         {
+#if WINDOWS_PHONE
+            if (buttonName.Equals("Back"))
+            {
+                return ButtonState.Pressed == _currentGamePadState.Buttons.Back;
+            }
+#elif XBOX
+            return GetPadButton(buttonName, _currentGamePadState);
+#elif WINDOWS
+            return GetButton(buttonName, _currentKeyboardState, _currentMouseState, _currentGamePadState);
+#else
             return false;
+#endif
         }
 
         public static bool GetButtonUp(string buttonName)
         {
+#if WINDOWS_PHONE
+            if (buttonName.Equals("Back"))
+            {
+                return ButtonState.Released == _currentGamePadState.Buttons.Back && ButtonState.Pressed == _lastGamepadState.Buttons.Back;
+            }
+#elif XBOX
+            return false == GetPadButton(buttonName, _currentGamePadState) && true == GetPadButton (buttonName, _lastGamepadState);
+#elif WINDOWS
+            return false == GetButton(buttonName, _currentKeyboardState, _currentMouseState, _currentGamePadState)
+                && true == GetButton(buttonName, _lastKeyboardState, _lastMouseState, _lastGamepadState);
+#else
             return false;
+#endif
         }
 
         public static bool GetButtonDown(string buttonName)
         {
+#if WINDOWS_PHONE
+            if (buttonName.Equals("Back"))
+            {
+                return ButtonState.Pressed == _currentGamePadState.Buttons.Back && ButtonState.Released == _lastGamepadState.Buttons.Back;
+            }
+#elif XBOX
+            return true == GetPadButton(buttonName, _currentGamePadState) && false == GetPadButton (buttonName, _lastGamepadState);
+#elif WINDOWS
+            return true == GetButton(buttonName, _currentKeyboardState, _currentMouseState, _currentGamePadState)
+                && false == GetButton(buttonName, _lastKeyboardState, _lastMouseState, _lastGamepadState);
+#else
             return false;
+#endif
+        }
+
+        private static bool GetButton(string buttonName, KeyboardState keyboardState, MouseState mouseState, GamePadState padState)
+        {
+            bool padButtonValue = false;
+            if (padState.IsConnected)
+            {
+                padButtonValue = GetPadButton(buttonName, padState);
+            }
+
+            if (true == padButtonValue)
+            {
+                return padButtonValue;
+            } else
+            {
+                switch (buttonName)
+                {
+                        // Keyboard & mouse
+                    case "Fire1": return keyboardState.IsKeyDown(Keys.LeftControl) || ButtonState.Pressed == mouseState.LeftButton;
+                    case "Fire2": return keyboardState.IsKeyDown(Keys.LeftAlt) || ButtonState.Pressed == mouseState.RightButton;
+                    case "Fire3": return keyboardState.IsKeyDown(Keys.LeftShift) || ButtonState.Pressed == mouseState.MiddleButton;
+                    case "Jump": return keyboardState.IsKeyDown(Keys.Space);
+
+                        // Mouse
+                    case "MouseLeft": return ButtonState.Pressed == mouseState.LeftButton;
+                    case "MouseRight": return ButtonState.Pressed == mouseState.RightButton;
+                    case "MouseMiddle": return ButtonState.Pressed == mouseState.MiddleButton;
+
+                        // default
+                    default: return false;
+                }
+            }
+        }
+
+        private static bool GetPadButton(string buttonName, GamePadState padState)
+        {
+            switch (buttonName)
+            {
+                    // Face buttons
+                case "Fire1":
+                case "A": return ButtonState.Pressed == padState.Buttons.A;
+
+                case "Fire2":
+                case "B": return ButtonState.Pressed == padState.Buttons.B;
+
+                case "Fire3":
+                case "X": return ButtonState.Pressed == padState.Buttons.X;
+
+                case "Jump":
+                case "Y": return ButtonState.Pressed == padState.Buttons.Y;
+
+                    // Start/Back
+                case "Start":
+                case "Pause": return ButtonState.Pressed == padState.Buttons.Start;
+
+                case "Back": return ButtonState.Pressed == padState.Buttons.Back;
+
+                    // DPad values
+                case "Left": return ButtonState.Pressed == padState.DPad.Left;
+                case "Right": return ButtonState.Pressed == padState.DPad.Right;
+                case "Up": return ButtonState.Pressed == padState.DPad.Up;
+                case "Down": return ButtonState.Pressed == padState.DPad.Down;
+
+                    // Triggers and shoulder buttons
+                case "RB":
+                case "RightButton": return ButtonState.Pressed == padState.Buttons.RightShoulder;
+
+                case "LB":
+                case "LeftButton": return ButtonState.Pressed == padState.Buttons.LeftShoulder;
+
+                case "RT":
+                case "RightTrigger": return padState.Triggers.Right > 0;
+
+                case "LT":
+                case "LeftTrigger": return padState.Triggers.Left > 0;
+
+                    // ThumbSticks
+                case "RightThumb": return ButtonState.Pressed == padState.Buttons.RightStick;
+                case "LeftThumb": return ButtonState.Pressed == padState.Buttons.LeftStick;
+                    // default
+                default: return false;
+            }
         }
 
         public static bool GetMouseButton(int button)
