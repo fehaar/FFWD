@@ -135,10 +135,10 @@ namespace PressPlay.FFWD
             }
 
             Microsoft.Xna.Framework.Color[] color = new Microsoft.Xna.Framework.Color[1];
-            tex.GetData<Microsoft.Xna.Framework.Color> (color, modX * tex.Width + modY, 1);
+            tex.GetData<Microsoft.Xna.Framework.Color>(0, new Microsoft.Xna.Framework.Rectangle(modX, modY, 1, 1), color, 0, 1);
 
-            Color result = color[0];
-            return result;
+            // Implicit conversion to FFWD.Color
+            return color[0];
         }
 
         public Color[] GetPixels(int miplevel = 0)
