@@ -66,8 +66,25 @@ namespace PressPlay.FFWD
 
         public void SetPixel(int x, int y, Color color)
         {
-            byte[] buffer = new byte[4] { color.R, color.G, color.B, color.A };
-            tex.SetData<byte>(buffer, (y - 1) * tex.Width + (x - 1), 4);
+            ////byte[] buffer = new byte[4] { color.R, color.G, color.B, color.A };
+            ////tex.SetData<byte>(buffer, (y - 1) * tex.Width + (x - 1), 4);
+
+            // Unity takes Wrap mode into account and so should we. By default, wrap.
+            int modX = x > 0 && x < tex.Width ? x : x % tex.Width;
+            // % means remainder, not modulus, so we can get negative values.
+            if (modX < 0)
+            {
+                modX += tex.Width;
+            }
+
+            int modY = y > 0 && y < tex.Height ? y : y % tex.Height;
+            if (modY < 0)
+            {
+                modY += tex.Height;
+            }
+
+            Microsoft.Xna.Framework.Color[] xnaColor = new Microsoft.Xna.Framework.Color[] { color };
+            tex.SetData<Microsoft.Xna.Framework.Color>(0, new Microsoft.Xna.Framework.Rectangle(modX, tex.Height - modY - 1, 1, 1), xnaColor, 0, 1);
         }
 
         public void SetPixels(Color[] colors, int miplevel = 0)
