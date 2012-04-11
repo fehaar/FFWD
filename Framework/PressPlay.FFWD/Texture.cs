@@ -7,7 +7,7 @@ namespace PressPlay.FFWD
 {
     public class Texture : Asset
     {
-        private Microsoft.Xna.Framework.Graphics.Texture2D tex;
+        protected Microsoft.Xna.Framework.Graphics.Texture2D tex;
 
         public Texture()
         {
@@ -54,12 +54,6 @@ namespace PressPlay.FFWD
             {
                 return (tex == null) ? 0 : tex.Height;
             }
-        }
-
-        public void SetPixel(int x, int y, Color color)
-        {
-            byte[] buffer = new byte[4] { color.R, color.G, color.B, color.A };
-            tex.SetData<byte>(buffer, (y - 1) * tex.Width + (x - 1), 4);
         }
 
         public void Apply()

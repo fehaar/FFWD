@@ -27,6 +27,14 @@ namespace PressPlay.FFWD.Components
             }
         }
 
+        internal bool isDynamicMesh
+        {
+            get
+            {
+                return _mesh != null;
+            }
+        }
+
         internal Mesh meshToRender
         {
             get

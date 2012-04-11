@@ -48,10 +48,10 @@ namespace FFWD.Unity.Tests
             // TODO: Add your initialization logic here
             Components.Add(new Application(this));
 
-//            PressPlay.FFWD.Components.Camera.wireframeRender = true;
+            ApplicationSettings.LogSettings.LogCulling = false;
 
-            levelQueue.Enqueue("SkinnedAnimation");
             levelQueue.Enqueue("BasicRendering");
+            levelQueue.Enqueue("SkinnedAnimation");
             levelQueue.Enqueue("Lightmap");
 
             base.Initialize();

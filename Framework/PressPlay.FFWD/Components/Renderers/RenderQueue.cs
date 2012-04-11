@@ -13,7 +13,7 @@ namespace PressPlay.FFWD.Components
         }
 
         private List<RenderItem> list;
-        private static Queue<RenderItem> reconsiderForCulling = new Queue<RenderItem>(ApplicationSettings.DefaultCapacities.RenderCullingQueue);
+        private static Queue<Renderer> updatedRenderers = new Queue<Renderer>(ApplicationSettings.DefaultCapacities.RenderCullingQueue);
 
         public void Add(RenderItem item)
         {
@@ -66,18 +66,18 @@ namespace PressPlay.FFWD.Components
             return idx;
         }
 
-        internal static void ReconsiderForCulling(RenderItem r)
+        internal static void ReconsiderForCulling(Renderer r)
         {
-            reconsiderForCulling.Enqueue(r);
+            updatedRenderers.Enqueue(r);
         }
 
-        internal static RenderItem GetMovedItem()
+        internal static Renderer GetUpdatedRenderer()
         {
-            if (reconsiderForCulling.Count == 0)
+            if (updatedRenderers.Count == 0)
             {
                 return null;
             }
-            return reconsiderForCulling.Dequeue();
+            return updatedRenderers.Dequeue();
         }
 
         internal void Clear()

@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using PressPlay.FFWD.Interfaces;
+using PressPlay.FFWD.Extensions;
 
 namespace PressPlay.FFWD.Components
 {
@@ -20,6 +22,8 @@ namespace PressPlay.FFWD.Components
         public int lightmapIndex = -1;
         [ContentSerializer(Optional = true)]
         public Vector4 lightmapTilingOffset = Vector4.zero;
+        [ContentSerializer(Optional = true)]
+        public bool useLightMap = false;
 
         [ContentSerializer(ElementName = "sharedMaterials", CollectionItemName = "material")]
         protected Material[] _sharedMaterials;
@@ -33,6 +37,7 @@ namespace PressPlay.FFWD.Components
             set
             {
                 _sharedMaterials = value;
+                createRenderItems = true;
             }
         }
 
@@ -59,6 +64,7 @@ namespace PressPlay.FFWD.Components
                     renderQueue = value.finalRenderQueue;
                     Camera.ChangeRenderQueue(this);
                 }
+                createRenderItems = true;
             }
         }
 
@@ -82,6 +88,7 @@ namespace PressPlay.FFWD.Components
                 _material = value;
                 renderQueue = material.finalRenderQueue;
                 Camera.ChangeRenderQueue(this);
+                createRenderItems = true;
             }
         }
 
@@ -96,6 +103,7 @@ namespace PressPlay.FFWD.Components
             set
             {
                 _materials = value;
+                createRenderItems = true;
             }
         }
 
@@ -106,8 +114,8 @@ namespace PressPlay.FFWD.Components
         }
 
         internal float renderQueue = 0f;
-        internal bool useLightMap = false;
         internal RenderItem[] renderItems;
+        protected bool createRenderItems = true;
 
         #region IRenderable Members
         /// <summary>
@@ -121,13 +129,25 @@ namespace PressPlay.FFWD.Components
 
         public override void Awake()
         {
-            if (material == null)
+            if (_sharedMaterials.HasElements())
             {
-                renderQueue = 0;
+                renderQueue = _sharedMaterials.Min(m => (m == null) ? 0 : m.finalRenderQueue);
             }
             else
             {
-                renderQueue = material.finalRenderQueue;
+                renderQueue = 0;
+            }
+        }
+
+        protected virtual void CreateRenderItems()
+        {
+            if (renderItems.HasElements())
+            {
+                for (int i = 0; i < renderItems.Length; i++)
+                {
+                    renderItems[i].RemoveReference(transform);
+                }
+                renderItems = null;
             }
         }
 
@@ -145,38 +165,43 @@ namespace PressPlay.FFWD.Components
         /// </summary>
         internal void ReconsiderForCulling()
         {
-            if (renderItems == null)
+            RenderQueue.ReconsiderForCulling(this);
+        }
+
+        internal void UpdateCullingInfo(Camera cam)
+        {
+            if (renderItems.HasElements())
             {
-                return;
-            }
-            for (int i = 0; i < renderItems.Length; i++)
-            {
-                RenderQueue.ReconsiderForCulling(renderItems[i]);
+                for (int i = 0; i < renderItems.Length; i++)
+                {
+                    if (renderItems[i].UpdateCullingInfo(cam, transform))
+                    {
+                        cam.CulledRenderQueue.Add(renderItems[i]);
+                    }
+                }
             }
         }
 
         internal void AddRenderItems(RenderQueue rq)
         {
-            if (renderItems == null)
+            if (renderItems.HasElements())
             {
-                return;
-            }
-            for (int i = 0; i < renderItems.Length; i++)
-            {
-                rq.Add(renderItems[i]);
+                for (int i = 0; i < renderItems.Length; i++)
+                {
+                    rq.Add(renderItems[i]);
+                }
             }
         }
 
         internal void RemoveRenderItems(RenderQueue rq)
         {
-            if (renderItems == null)
+            if (renderItems.HasElements() && rq.Count > 0)
             {
-                return;
+                for (int i = 0; i < renderItems.Length; i++)
+                {
+                    rq.Remove(renderItems[i]);
+                }
             }
-            for (int i = 0; i < renderItems.Length; i++)
-            {
-                rq.Remove(renderItems[i]);
-            }            
         }
     }
 }

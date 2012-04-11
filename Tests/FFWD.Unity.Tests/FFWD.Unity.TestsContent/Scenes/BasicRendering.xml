@@ -3,24 +3,24 @@
   <Asset Type="f:Scene">
     <hasBeenProcessed>false</hasBeenProcessed>
     <go>
-      <id>5374</id>
+      <id>4850</id>
       <name>Main Camera</name>
       <layer>0</layer>
       <tag>MainCamera</tag>
       <cs>
         <c Type="f:Transform">
-          <id>5376</id>
+          <id>4852</id>
           <p>0 1 -10</p>
         </c>
         <c Type="c:Camera">
-          <id>5378</id>
+          <id>4854</id>
           <fieldOfView>60</fieldOfView>
           <nearClipPlane>0.3</nearClipPlane>
           <farClipPlane>1000</farClipPlane>
           <orthographicSize>100</orthographicSize>
           <orthographic>false</orthographic>
           <depth>-1</depth>
-          <aspect>2.58799</aspect>
+          <aspect>2.32584</aspect>
           <cullingMask>-257</cullingMask>
           <backgroundColor>05314D79</backgroundColor>
           <rect>0 0 1 1</rect>
@@ -29,18 +29,18 @@
       </cs>
     </go>
     <go>
-      <id>5386</id>
+      <id>4862</id>
       <name>Plane</name>
       <layer>0</layer>
       <tag>Untagged</tag>
       <cs>
         <c Type="f:Transform">
-          <id>5388</id>
+          <id>4864</id>
           <p>0 -1.5 0</p>
           <s>5 1 1</s>
         </c>
         <c Type="c:MeshFilter">
-          <id>5392</id>
+          <id>4868</id>
           <mesh>
             <id>146</id>
             <name>Plane</name>
@@ -48,16 +48,16 @@
           </mesh>
         </c>
         <c Type="c:MeshRenderer">
-          <id>5390</id>
+          <id>4866</id>
           <sharedMaterials>
             <material>
-              <id>416</id>
+              <id>422</id>
               <name>Item red</name>
               <shader>Diffuse</shader>
               <renderQueue>2000</renderQueue>
               <color>FFFF0000</color>
               <mainTexture>
-                <id>458</id>
+                <id>466</id>
                 <name>Assets/DSC_5866</name>
               </mainTexture>
               <mainTextureOffset>0 0</mainTextureOffset>
@@ -69,18 +69,58 @@
       </cs>
     </go>
     <go>
-      <id>5396</id>
+      <id>4872</id>
+      <name>Transparent plane front</name>
+      <layer>0</layer>
+      <tag>Untagged</tag>
+      <cs>
+        <c Type="f:Transform">
+          <id>4874</id>
+          <p>1.5 -1.5 -1</p>
+          <r>-0.71337 0 0 0.70079</r>
+        </c>
+        <c Type="c:MeshFilter">
+          <id>4878</id>
+          <mesh>
+            <id>146</id>
+            <name>Plane</name>
+            <asset>Plane</asset>
+          </mesh>
+        </c>
+        <c Type="c:MeshRenderer">
+          <id>4876</id>
+          <sharedMaterials>
+            <material>
+              <id>462</id>
+              <name>Transparent green</name>
+              <shader>Transparent/Diffuse</shader>
+              <renderQueue>3000</renderQueue>
+              <color>8000FF13</color>
+              <mainTexture>
+                <id>364</id>
+                <name>Assets/Leafs</name>
+              </mainTexture>
+              <mainTextureOffset>0 0</mainTextureOffset>
+              <mainTextureScale>1 1</mainTextureScale>
+              <wrapRepeat>true</wrapRepeat>
+            </material>
+          </sharedMaterials>
+        </c>
+      </cs>
+    </go>
+    <go>
+      <id>4882</id>
       <name>Directional light</name>
       <layer>0</layer>
       <tag>Untagged</tag>
       <cs>
         <c Type="f:Transform">
-          <id>5398</id>
+          <id>4884</id>
           <p>-6.5032 2.0592 0</p>
           <r>0.4118 -0.20371 0.09499 0.88312</r>
         </c>
         <c Type="c:Light">
-          <id>5400</id>
+          <id>4886</id>
           <enabled>true</enabled>
           <type>Directional</type>
           <color>FFFFFFFF</color>
@@ -92,17 +132,17 @@
       </cs>
     </go>
     <go>
-      <id>5402</id>
+      <id>4888</id>
       <name>DisablingCube</name>
       <layer>0</layer>
       <tag>Untagged</tag>
       <cs>
         <c Type="f:Transform">
-          <id>5404</id>
+          <id>4890</id>
           <p>3 -1 -3</p>
         </c>
         <c Type="c:MeshFilter">
-          <id>5408</id>
+          <id>4894</id>
           <mesh>
             <id>138</id>
             <name>Cube</name>
@@ -110,22 +150,22 @@
           </mesh>
         </c>
         <c Type="c:BoxCollider">
-          <id>5410</id>
+          <id>4896</id>
           <isTrigger>false</isTrigger>
           <center>0 0 0</center>
           <size>1 1 1</size>
         </c>
         <c Type="c:MeshRenderer">
-          <id>5406</id>
+          <id>4892</id>
           <sharedMaterials>
             <material>
-              <id>372</id>
+              <id>376</id>
               <name>Item blue</name>
               <shader>Diffuse</shader>
               <renderQueue>2000</renderQueue>
               <color>FF4C00FF</color>
               <mainTexture>
-                <id>458</id>
+                <id>466</id>
                 <name>Assets/DSC_5866</name>
               </mainTexture>
               <mainTextureOffset>0 0</mainTextureOffset>
@@ -135,23 +175,68 @@
           </sharedMaterials>
         </c>
         <c Type="DisableTimer">
-          <id>5412</id>
+          <id>4898</id>
           <interval>1</interval>
         </c>
       </cs>
     </go>
     <go>
-      <id>5414</id>
+      <id>4900</id>
+      <name>Transparent plane moving</name>
+      <layer>0</layer>
+      <tag>Untagged</tag>
+      <cs>
+        <c Type="f:Transform">
+          <id>4902</id>
+          <p>-3 -1.5 2</p>
+          <r>-0.71337 0 0 0.70079</r>
+        </c>
+        <c Type="c:MeshFilter">
+          <id>4906</id>
+          <mesh>
+            <id>146</id>
+            <name>Plane</name>
+            <asset>Plane</asset>
+          </mesh>
+        </c>
+        <c Type="c:MeshRenderer">
+          <id>4904</id>
+          <sharedMaterials>
+            <material>
+              <id>462</id>
+              <name>Transparent green</name>
+              <shader>Transparent/Diffuse</shader>
+              <renderQueue>3000</renderQueue>
+              <color>8000FF13</color>
+              <mainTexture>
+                <id>364</id>
+                <name>Assets/Leafs</name>
+              </mainTexture>
+              <mainTextureOffset>0 0</mainTextureOffset>
+              <mainTextureScale>1 1</mainTextureScale>
+              <wrapRepeat>true</wrapRepeat>
+            </material>
+          </sharedMaterials>
+        </c>
+        <c Type="MoveTimer">
+          <id>4910</id>
+          <interval>2.5</interval>
+          <moveTarget>0 0 -5</moveTarget>
+        </c>
+      </cs>
+    </go>
+    <go>
+      <id>4912</id>
       <name>OnCameraEdgeCube</name>
       <layer>0</layer>
       <tag>Untagged</tag>
       <cs>
         <c Type="f:Transform">
-          <id>5416</id>
+          <id>4914</id>
           <p>7.19052 -1 -3</p>
         </c>
         <c Type="c:MeshFilter">
-          <id>5420</id>
+          <id>4918</id>
           <mesh>
             <id>138</id>
             <name>Cube</name>
@@ -159,22 +244,22 @@
           </mesh>
         </c>
         <c Type="c:BoxCollider">
-          <id>5422</id>
+          <id>4920</id>
           <isTrigger>false</isTrigger>
           <center>0 0 0</center>
           <size>1 1 1</size>
         </c>
         <c Type="c:MeshRenderer">
-          <id>5418</id>
+          <id>4916</id>
           <sharedMaterials>
             <material>
-              <id>372</id>
+              <id>376</id>
               <name>Item blue</name>
               <shader>Diffuse</shader>
               <renderQueue>2000</renderQueue>
               <color>FF4C00FF</color>
               <mainTexture>
-                <id>458</id>
+                <id>466</id>
                 <name>Assets/DSC_5866</name>
               </mainTexture>
               <mainTextureOffset>0 0</mainTextureOffset>
@@ -186,17 +271,17 @@
       </cs>
     </go>
     <go>
-      <id>5424</id>
+      <id>4922</id>
       <name>Cube</name>
       <layer>0</layer>
       <tag>Untagged</tag>
       <cs>
         <c Type="f:Transform">
-          <id>5426</id>
+          <id>4924</id>
           <p>-3 -1 3</p>
         </c>
         <c Type="c:MeshFilter">
-          <id>5430</id>
+          <id>4928</id>
           <mesh>
             <id>138</id>
             <name>Cube</name>
@@ -204,22 +289,22 @@
           </mesh>
         </c>
         <c Type="c:BoxCollider">
-          <id>5432</id>
+          <id>4930</id>
           <isTrigger>false</isTrigger>
           <center>0 0 0</center>
           <size>1 1 1</size>
         </c>
         <c Type="c:MeshRenderer">
-          <id>5428</id>
+          <id>4926</id>
           <sharedMaterials>
             <material>
-              <id>372</id>
+              <id>376</id>
               <name>Item blue</name>
               <shader>Diffuse</shader>
               <renderQueue>2000</renderQueue>
               <color>FF4C00FF</color>
               <mainTexture>
-                <id>458</id>
+                <id>466</id>
                 <name>Assets/DSC_5866</name>
               </mainTexture>
               <mainTextureOffset>0 0</mainTextureOffset>
@@ -231,17 +316,17 @@
       </cs>
     </go>
     <go>
-      <id>5434</id>
+      <id>4932</id>
       <name>MovingCube</name>
       <layer>0</layer>
       <tag>Untagged</tag>
       <cs>
         <c Type="f:Transform">
-          <id>5436</id>
-          <p>-7.8332 -1 -3</p>
+          <id>4934</id>
+          <p>-12.21653 -1 -3</p>
         </c>
         <c Type="c:MeshFilter">
-          <id>5440</id>
+          <id>4938</id>
           <mesh>
             <id>138</id>
             <name>Cube</name>
@@ -249,22 +334,22 @@
           </mesh>
         </c>
         <c Type="c:BoxCollider">
-          <id>5442</id>
+          <id>4940</id>
           <isTrigger>false</isTrigger>
           <center>0 0 0</center>
           <size>1 1 1</size>
         </c>
         <c Type="c:MeshRenderer">
-          <id>5438</id>
+          <id>4936</id>
           <sharedMaterials>
             <material>
-              <id>372</id>
+              <id>376</id>
               <name>Item blue</name>
               <shader>Diffuse</shader>
               <renderQueue>2000</renderQueue>
               <color>FF4C00FF</color>
               <mainTexture>
-                <id>458</id>
+                <id>466</id>
                 <name>Assets/DSC_5866</name>
               </mainTexture>
               <mainTextureOffset>0 0</mainTextureOffset>
@@ -274,29 +359,29 @@
           </sharedMaterials>
         </c>
         <c Type="MoveTimer">
-          <id>5444</id>
-          <interval>5</interval>
+          <id>4942</id>
+          <interval>1</interval>
           <moveTarget>0 -1 -3</moveTarget>
         </c>
         <c Type="LayerChangeTimer">
-          <id>5446</id>
+          <id>4944</id>
           <interval>0</interval>
           <layerToChangeTo>0</layerToChangeTo>
         </c>
       </cs>
     </go>
     <go>
-      <id>5448</id>
+      <id>4946</id>
       <name>LayerCube</name>
       <layer>8</layer>
       <tag>Untagged</tag>
       <cs>
         <c Type="f:Transform">
-          <id>5450</id>
+          <id>4948</id>
           <p>0 -1 0</p>
         </c>
         <c Type="c:MeshFilter">
-          <id>5454</id>
+          <id>4952</id>
           <mesh>
             <id>138</id>
             <name>Cube</name>
@@ -304,22 +389,22 @@
           </mesh>
         </c>
         <c Type="c:BoxCollider">
-          <id>5456</id>
+          <id>4954</id>
           <isTrigger>false</isTrigger>
           <center>0 0 0</center>
           <size>1 1 1</size>
         </c>
         <c Type="c:MeshRenderer">
-          <id>5452</id>
+          <id>4950</id>
           <sharedMaterials>
             <material>
-              <id>372</id>
+              <id>376</id>
               <name>Item blue</name>
               <shader>Diffuse</shader>
               <renderQueue>2000</renderQueue>
               <color>FF4C00FF</color>
               <mainTexture>
-                <id>458</id>
+                <id>466</id>
                 <name>Assets/DSC_5866</name>
               </mainTexture>
               <mainTextureOffset>0 0</mainTextureOffset>
@@ -329,7 +414,7 @@
           </sharedMaterials>
         </c>
         <c Type="LayerChangeTimer">
-          <id>5458</id>
+          <id>4956</id>
           <interval>2</interval>
           <layerToChangeTo>0</layerToChangeTo>
         </c>

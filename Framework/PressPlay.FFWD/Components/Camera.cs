@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using PressPlay.FFWD.Extensions;
 
 namespace PressPlay.FFWD.Components
 {
@@ -215,7 +216,7 @@ namespace PressPlay.FFWD.Components
             }
             if (rect != Rect.unit)
             {
-                target = new RenderTarget2D(Device, Mathf.RoundToInt(Device.PresentationParameters.BackBufferWidth * rect.width), Mathf.RoundToInt(Device.PresentationParameters.BackBufferHeight * rect.height), false, /*Device.DisplayMode.Format*/SurfaceFormat.Bgra5551, Device.PresentationParameters.DepthStencilFormat, Device.PresentationParameters.MultiSampleCount, RenderTargetUsage.DiscardContents);
+                target = new RenderTarget2D(Device, Mathf.RoundToInt(Device.PresentationParameters.BackBufferWidth * rect.width), Mathf.RoundToInt(Device.PresentationParameters.BackBufferHeight * rect.height), false, SurfaceFormat.Bgra5551, Device.PresentationParameters.DepthStencilFormat, Device.PresentationParameters.MultiSampleCount, RenderTargetUsage.DiscardContents);
             }
             _projectionMatrix = Matrix.Identity;
             targetChanged = false;
@@ -330,7 +331,10 @@ namespace PressPlay.FFWD.Components
             if (renderer is MeshRenderer && !ApplicationSettings.UseFallbackRendering)
             {
                 renderer.AddRenderItems(RenderQueue);
-                return;
+                if (renderer.renderItems.HasElements())
+                {
+                    return;
+                }
             }
 
             for (int i = 0; i < _allCameras.Count; i++)
@@ -404,18 +408,18 @@ namespace PressPlay.FFWD.Components
             int camCount = _allCameras.Count;
 
             // Go through the moved renderers and update culling
-            RenderItem movedItem = RenderQueue.GetMovedItem();
-            while (movedItem != null)
+            Renderer updated = RenderQueue.GetUpdatedRenderer();
+            while (updated != null)
             {
                 for (int i = 0; i < camCount; i++)
                 {
                     if (!_allCameras[i].doFullCullingScan)
                     {
-                        Bounds b = new Bounds(movedItem.Transform.position, movedItem.Bounds.Value.size);
-                        _allCameras[i].CheckCulling(movedItem, new BoundingBox(b.min, b.max));
+                        // TODO: We should have a method of updating only the cull info of the moved item and not the entrire camera queue
+                        updated.UpdateCullingInfo(_allCameras[i]);
                     }
                 }
-                movedItem = RenderQueue.GetMovedItem();
+                updated = RenderQueue.GetUpdatedRenderer();
             }
 
             for (int i = 0; i < camCount; i++)
@@ -432,25 +436,13 @@ namespace PressPlay.FFWD.Components
                     for (int j = 0; j < rqCount; j++)
                     {
                         RenderItem item = RenderQueue[j];
-                        Bounds b = new Bounds(item.Transform.position, item.Bounds.Value.size);
-                        _allCameras[i].CheckCulling(item, new BoundingBox(b.min, b.max));
+                        if (item.UpdateCullingInfo(cam))
+                        {
+                            cam.CulledRenderQueue.Add(item);
+                        }
                     }
                 }
             }
-        }
-
-        private void CheckCulling(RenderItem item, BoundingBox box)
-        {
-            // Check the layer
-            if ((cullingMask & (1 << item.Transform.gameObject.layer)) > 0)
-            {
-                // Check frustum culling
-                ContainmentType contain = frustum.Contains(box);
-                if (contain != ContainmentType.Disjoint)
-                {
-                    CulledRenderQueue.Add(item);
-                }
-            }            
         }
 
         internal static void DoRender(GraphicsDevice device)
@@ -462,8 +454,8 @@ namespace PressPlay.FFWD.Components
             }
             if (Input.GetMouseButtonUp(1))
             {
-                logRenderCalls = true;
                 Debug.Log("----------- Render log begin ---------------", Time.realtimeSinceStartup);
+                logRenderCalls = true;
             }
 #endif
             if (dynamicBatchRenderer == null)
@@ -485,7 +477,7 @@ namespace PressPlay.FFWD.Components
             }
             else
             {
-                device.RasterizerState = RasterizerState.CullCounterClockwise;
+                device.RasterizerState = RasterizerState.CullNone;
             }
 
             // Render all cameras that use a render target

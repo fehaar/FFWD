@@ -272,7 +272,7 @@ namespace PressPlay.FFWD.Exporter.Writers
         private void WriteAsset(Mesh mesh)
         {
             WriteElement("id", mesh.GetInstanceID());
-            WriteElement("name", mesh.name);
+            WriteElement("name", mesh.name.Replace("Instance", "").TrimEnd());
             if (mesh.vertices.HasElements())
             {
                 WriteElement("vertices", mesh.vertices);
@@ -499,9 +499,10 @@ namespace PressPlay.FFWD.Exporter.Writers
         internal void WriteMesh(Mesh mesh, string name)
         {
             string assetName = GetAssetName(mesh);
+            string meshName = mesh.name.Replace("Instance", "").TrimEnd();
             writer.WriteStartElement(name);
             WriteElement("id", mesh.GetInstanceID());
-            writer.WriteElementString("name", mesh.name);
+            writer.WriteElementString("name", meshName);
             writer.WriteElementString("asset", assetName);
             writer.WriteEndElement();
 
@@ -509,22 +510,26 @@ namespace PressPlay.FFWD.Exporter.Writers
             {
                 assetsToWrite.Add(assetName, new List<AssetToWrite>());
             }
-            assetsToWrite[assetName].Add(new AssetToWrite() { name = mesh.name, asset = mesh });
+            assetsToWrite[assetName].Add(new AssetToWrite() { name = meshName, asset = mesh });
         }
 
         private string GetAssetName(Mesh mesh)
         {
+            string name;
             string asset = AssetDatabase.GetAssetPath(mesh.GetInstanceID());
             if (String.IsNullOrEmpty(asset))
             {
-                return mesh.name;
+                name = mesh.name;
             }
-            asset = asset.Replace("Assets/", "");
-            if (asset.Contains("Instance"))
+            else
             {
-                asset = asset.Replace("Instance", "").TrimEnd();
+                name = asset.Replace("Assets/", "");
             }
-            return asset;
+            if (name.Contains("Instance"))
+            {
+                name = name.Replace("Instance", "").TrimEnd();
+            }
+            return name;
         }
 
         private Vector2[] TransformUV(Vector2[] uv)

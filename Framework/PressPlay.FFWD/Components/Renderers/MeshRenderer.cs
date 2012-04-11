@@ -1,13 +1,14 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using PressPlay.FFWD.Interfaces;
 using PressPlay.FFWD.Extensions;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
 
 namespace PressPlay.FFWD.Components
 {
-    public class MeshRenderer : Renderer
+    public class MeshRenderer : Renderer, PressPlay.FFWD.Interfaces.IUpdateable
     {
         private MeshFilter filter;
 
@@ -19,38 +20,48 @@ namespace PressPlay.FFWD.Components
             }
 
             filter = (MeshFilter)GetComponent(typeof(MeshFilter));
+            CreateRenderItems();
+        }
+
+        protected override void CreateRenderItems()
+        {
+            base.CreateRenderItems();
+            if (ApplicationSettings.UseFallbackRendering)
+            {
+                return;
+            }
+
             Material[] mats = materials;
             if (mats.HasElements())
-	        {
+            {
                 mats = mats.Where(m => m != null).ToArray();
-	        }
-            if (filter.meshToRender != null && mats.HasElements())
+            }
+            if (filter.meshToRender != null && !filter.isDynamicMesh && mats.HasElements())
             {
                 bounds = filter.meshToRender.bounds;
 
-                if (!ApplicationSettings.UseFallbackRendering)
+                // TODO: The thought is that this can actually be done at compile time so the initialization will occur at runtime
+                renderItems = new RenderItem[mats.Length];
+                for (int i = 0; i < mats.Length; i++)
                 {
-                    // TODO: The thought is that this can actually be done at compile time so the initialization will occur at runtime
-                    renderItems = new RenderItem[mats.Length];
-                    for (int i = 0; i < mats.Length; i++)
-                    {
-                        RenderItem item = RenderItem.Create(mats[i], filter.meshToRender, i, transform);
-                        item.Initialize(Camera.Device);
-                        renderItems[i] = item;
-                    }
+                    RenderItem item = RenderItem.Create(mats[i], filter.meshToRender, i, transform);
+                    item.Initialize(Camera.Device);
+                    renderItems[i] = item;
                 }
             }
+            Debug.LogFormat("Created {0} render items on {1}", (renderItems.HasElements()) ? renderItems.Count(r => r != null).ToString() : "no", this);
+            createRenderItems = false;
         }
 
         public override void Draw(GraphicsDevice device, Camera cam)
         {
-            if (filter == null)
-            {                
+            if (filter == null || renderItems != null)
+            {
                 return;
             }
 
             Mesh mesh = filter.meshToRender;
-            BoundingSphere sphere = new BoundingSphere(transform.TransformPoint(filter.boundingSphere.Center), filter.boundingSphere.Radius * Math.Max(transform.lossyScale.x, Math.Max(transform.lossyScale.y, transform.lossyScale.z)));
+            BoundingSphere sphere = new BoundingSphere(transform.TransformPoint(filter.boundingSphere.Center), filter.boundingSphere.Radius * Math.Abs(Math.Max(transform.lossyScale.x, Math.Max(transform.lossyScale.y, transform.lossyScale.z))));
             bool cull = cam.DoFrustumCulling(ref sphere);
             if (cull)
             {
@@ -67,6 +78,19 @@ namespace PressPlay.FFWD.Components
             {
                 cam.BatchRender(filter.meshToRender, sharedMaterials, transform);
             }
+        }
+
+        public void Update()
+        {
+            if (filter != null && createRenderItems)
+            {
+                CreateRenderItems();
+                ReconsiderForCulling();
+            }
+        }
+
+        public void LateUpdate()
+        {
         }
     }
 }
