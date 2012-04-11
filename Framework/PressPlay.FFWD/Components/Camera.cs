@@ -401,7 +401,6 @@ namespace PressPlay.FFWD.Components
 
 #if DEBUG
         internal static bool logRenderCalls = false;
-        internal static bool logCulling = false;
 #endif
 
         internal static void Culling()
@@ -416,6 +415,7 @@ namespace PressPlay.FFWD.Components
                 {
                     if (!_allCameras[i].doFullCullingScan)
                     {
+                        // TODO: We should have a method of updating only the cull info of the moved item and not the entrire camera queue
                         if (movedItem.UpdateCullingInfo(_allCameras[i]))
                         {
                             _allCameras[i].CulledRenderQueue.Add(movedItem);
@@ -457,15 +457,7 @@ namespace PressPlay.FFWD.Components
             }
             if (Input.GetMouseButtonUp(1))
             {
-                if (Input.GetKey(Microsoft.Xna.Framework.Input.Keys.LeftShift) || Input.GetKey(Microsoft.Xna.Framework.Input.Keys.RightShift))
-                {
-                    logCulling = true;
-                    Debug.Log("----------- Render log with culling begin ---------------", Time.realtimeSinceStartup);
-                }
-                else
-                {
-                    Debug.Log("----------- Render log begin ---------------", Time.realtimeSinceStartup);
-                }
+                Debug.Log("----------- Render log begin ---------------", Time.realtimeSinceStartup);
                 logRenderCalls = true;
             }
 #endif
@@ -531,7 +523,6 @@ namespace PressPlay.FFWD.Components
 #if DEBUG
             Debug.Display("Draw stats", System.String.Format("Draw {0}, Batch draw {1}, Tris {2}, Verts {3}, RTs {4}", RenderStats.DrawCalls, RenderStats.BatchedDrawCalls, RenderStats.TrianglesDrawn, RenderStats.VerticesDrawn, renderTargets));
             logRenderCalls = false;
-            logCulling = false;
 #endif
         }
 

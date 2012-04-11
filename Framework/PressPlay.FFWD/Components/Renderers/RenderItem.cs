@@ -30,7 +30,7 @@ namespace PressPlay.FFWD.Components
         protected short[] indexData;
 
         private List<int> Transforms = new List<int>(1);
-        private Dictionary<int, BitArray> CameraCullingInfo = new Dictionary<int, BitArray>(1);
+        private Dictionary<int, PooledPriorityQueue> CameraCullingInfo = new Dictionary<int, PooledPriorityQueue>(1);
 
         protected const int MAX_INDEX_BUFFER_SIZE = Int16.MaxValue;
 
@@ -41,6 +41,8 @@ namespace PressPlay.FFWD.Components
 
         private static int hitPool = 0;
         private static int missPool = 0;
+
+        private Func<Camera, Transform, float> GetTransformPriority;
 
         internal static RenderItem Create(Material material, Mesh mesh, int subMeshIndex, Transform t)
         {
@@ -74,9 +76,16 @@ namespace PressPlay.FFWD.Components
                 }
                 item.Priority = material.renderQueue;
                 item.AddMesh(mesh, t.world, subMeshIndex);
+                if (material.IsTransparent())
+                {
+                    item.GetTransformPriority = GetTransparentPriority;
+                }
+                else
+	            {
+                    item.GetTransformPriority = GetOpaquePriority;
+	            }
                 RenderItemPool[id] = item;
             }
-
             item.AddTransform(t);
             return item;
         }
@@ -106,85 +115,65 @@ namespace PressPlay.FFWD.Components
             int id = cam.GetInstanceID();  
             if (!CameraCullingInfo.ContainsKey(id))
 	        {
-#if DEBUG
-                if (Camera.logCulling)
-                {
-                    Debug.LogFormat("Cull: {0} not shown on {1}", ToString(), cam);
-                }
-#endif
                 return;
 	        }
-            BitArray cullingInfo = CameraCullingInfo[id];
-            for (int i = Transforms.Count - 1; i >= 0; i--)
+            PooledPriorityQueue cullingInfo = CameraCullingInfo[id];
+            for (int i = 0; i < cullingInfo.Count; i++)
             {
-                if (!cullingInfo[i])
-                {
-#if DEBUG
-                    if (Camera.logCulling)
-                    {
-                        Debug.LogFormat("Cull: {0} out of view on {1}", this, cam);
-                    }
-#endif
-                    continue;
-                }
-                Transform t = Application.Find<Transform>(Transforms[i]);
+                Transform t = Application.Find<Transform>(cullingInfo[i]);
                 if (t == null)
                 {
-                    Transforms.RemoveAt(i);
+                    continue;
+                }
+                if (!t.renderer.enabled || !t.gameObject.active)
+                {
+                    continue;
+                }
+#if DEBUG
+                if (Camera.logRenderCalls)
+                {
+                    Debug.LogFormat("Render: {0} for {1} on {2}", this, t.gameObject, cam.gameObject);
+                }
+#endif
+                Effect e = Material.shader.effect;
+                if (!devicePrepared)
+                {
+                    devicePrepared = true;
+                    device.SetVertexBuffer(VertexBuffer);
+                    device.Indices = IndexBuffer;
+
+                    Material.shader.ApplyPreRenderSettings(Material, UseVertexColor);
+                    Material.SetBlendState(device);
+
+                    IEffectMatrices ems = e as IEffectMatrices;
+                    if (ems != null)
+                    {
+                        ems.World = t.world;
+                        ems.View = cam.view;
+                        ems.Projection = cam.projectionMatrix;
+                    }
                 }
                 else
+	            {
+                    IEffectMatrices ems = e as IEffectMatrices;
+                    if (ems != null)
+                    {
+                        ems.World = t.world;
+                    }
+	            }
+                foreach (EffectPass pass in e.CurrentTechnique.Passes)
                 {
-                    if (!t.renderer.enabled || !t.gameObject.active)
-                    {
-                        continue;
-                    }
-
-#if DEBUG
-                    if (Camera.logRenderCalls)
-                    {
-                        Debug.LogFormat("Render: {0} for {1} on {2}", this, t.gameObject, cam.gameObject);
-                    }
-#endif
-                    Effect e = Material.shader.effect;
-                    if (!devicePrepared)
-                    {
-                        devicePrepared = true;
-                        device.SetVertexBuffer(VertexBuffer);
-                        device.Indices = IndexBuffer;
-
-                        Material.shader.ApplyPreRenderSettings(Material, UseVertexColor);
-                        Material.SetBlendState(device);
-
-                        IEffectMatrices ems = e as IEffectMatrices;
-                        if (ems != null)
-                        {
-                            ems.World = t.world;
-                            ems.View = cam.view;
-                            ems.Projection = cam.projectionMatrix;
-                        }
-                    }
-                    else
-	                {
-                        IEffectMatrices ems = e as IEffectMatrices;
-                        if (ems != null)
-                        {
-                            ems.World = t.world;
-                        }
-	                }
-                    foreach (EffectPass pass in e.CurrentTechnique.Passes)
-                    {
-                        pass.Apply();
-                        device.DrawIndexedPrimitives(
-                            PrimitiveType.TriangleList,
-                            0,
-                            0,
-                            VertexBuffer.VertexCount,
-                            0,
-                            IndexBuffer.IndexCount / 3
-                        );
-                    }
-                    RenderStats.AddDrawCall(batches, VertexBuffer.VertexCount, IndexBuffer.IndexCount / 3);
+                    pass.Apply();
+                    device.DrawIndexedPrimitives(
+                        PrimitiveType.TriangleList,
+                        0,
+                        0,
+                        VertexBuffer.VertexCount,
+                        0,
+                        IndexBuffer.IndexCount / 3
+                    );
                 }
+                RenderStats.AddDrawCall(batches, VertexBuffer.VertexCount, IndexBuffer.IndexCount / 3);
             }
         }
 
@@ -215,12 +204,28 @@ namespace PressPlay.FFWD.Components
 
         internal bool UpdateCullingInfo(Camera cam)
         {
-            BitArray array = new BitArray(Transforms.Count);
+            PooledPriorityQueue cullingInfo;
+            int id = cam.GetInstanceID();
+            if (CameraCullingInfo.ContainsKey(id))
+            {
+                cullingInfo = CameraCullingInfo[id];
+                cullingInfo.Clear();
+            }
+            else
+            {
+                cullingInfo = new PooledPriorityQueue(Transforms.Count);
+            }
+#if DEBUG
+            if (ApplicationSettings.LogSettings.LogCulling)
+            {
+                Debug.LogFormat("Update culling for {0}", cam.gameObject);
+            }
+#endif
             bool shouldBeRenderedOnCamera = false;
             for (int i = 0; i < Transforms.Count; i++)
             {
                 Transform t = Application.Find<Transform>(Transforms[i]);
-                // Check the layer
+                // Check the layer and cull accordingly
                 if (t != null && (cam.cullingMask & (1 << t.gameObject.layer)) > 0)
                 {
                     // Check frustum culling
@@ -230,15 +235,21 @@ namespace PressPlay.FFWD.Components
                     cam.frustum.Contains(ref sphere, out contain);
                     if (contain != ContainmentType.Disjoint)
                     {
-                        array[i] = true;
+                        float priority = GetTransformPriority(cam, t);
+#if DEBUG
+                        if (ApplicationSettings.LogSettings.LogCulling)
+                        {
+                            Debug.LogFormat("Put {0} in renderqueue with priority {1}", t.gameObject, priority);
+                        }
+#endif
+                        cullingInfo.Add(t.GetInstanceID(), priority);
                         shouldBeRenderedOnCamera = true;
                     }
-                }            
+                }
             }
-            int id = cam.GetInstanceID();
             if (shouldBeRenderedOnCamera)
             {
-                CameraCullingInfo[id] = array;
+                CameraCullingInfo[id] = cullingInfo;
             }
             else
             {
@@ -248,6 +259,16 @@ namespace PressPlay.FFWD.Components
                 }
             }
             return shouldBeRenderedOnCamera;
+        }
+
+        private static float GetTransparentPriority(Camera cam, Transform t)
+        {
+            return -Vector3.DistanceSquared(t.position, cam.transform.position);
+        }
+
+        private static float GetOpaquePriority(Camera cam, Transform t)
+        {
+            return 0;
         }
     }
 

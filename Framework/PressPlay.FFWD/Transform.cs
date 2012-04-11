@@ -382,7 +382,7 @@ namespace PressPlay.FFWD
 
         private bool WillChangesBeRecorded()
         {
-            return (camera != null) || (collider != null);
+            return (camera != null) || (collider != null) || (renderer != null);
         }
 
         internal void SetPositionFromPhysics(Vector3 pos, float ang, Vector3 up)

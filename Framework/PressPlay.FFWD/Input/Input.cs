@@ -495,15 +495,6 @@ namespace PressPlay.FFWD
 #endif
         }
 
-        public static bool GetKey(Keys key)
-        {
-#if WINDOWS_PHONE
-            return false;
-#else
-            return _currentKeyboardState.IsKeyDown(key);
-#endif
-        }
-
         public static string[] GetJoystickNames()
         {
             List<string> names = new List<string>(4);

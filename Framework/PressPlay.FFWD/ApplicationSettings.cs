@@ -52,6 +52,7 @@ namespace PressPlay.FFWD
             public static int RenderQueues = 100;
             public static int RenderCullingQueue = 20;
             public static int ColliderContacts = 50;
+            public static int PriorityQueuePoolSize = 100; 
             #endregion
         }
 
@@ -65,5 +66,9 @@ namespace PressPlay.FFWD
             public static float StaticBatchTileSize = 200.0f;
         }
 
+        public static class LogSettings
+        {
+            public static bool LogCulling = false;
+        }
     }
 }

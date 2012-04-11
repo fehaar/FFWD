@@ -258,6 +258,7 @@
     <Compile Include="Physics\RaycastHit.cs" />
     <Compile Include="Physics\VectorConverter.cs" />
     <Compile Include="Plane.cs" />
+    <Compile Include="PooledPriorityQueue.cs" />
     <Compile Include="Profiler.cs" />
     <Compile Include="Quaternion.cs" />
     <Compile Include="Random.cs" />

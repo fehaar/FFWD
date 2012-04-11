@@ -195,6 +195,7 @@
     <Compile Include="LifecycleTracer.cs" />
     <Compile Include="Matrix4x4.cs" />
     <Compile Include="Physics\VectorConverter.cs" />
+    <Compile Include="PooledPriorityQueue.cs" />
     <Compile Include="SceneLoader.cs" />
     <Compile Include="UnityAudioListener.cs" />
     <Compile Include="DebugCamera.cs" />
