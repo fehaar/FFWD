@@ -613,22 +613,22 @@ namespace PressPlay.FFWD
 
         public Vector3 TransformDirection(Vector3 position)
         {            
-            return Microsoft.Xna.Framework.Vector3.TransformNormal(position, world);
+            return localRotation * position;
         }
 
         public Vector3 TransformDirection(float x, float y, float z)
         {
-            return Microsoft.Xna.Framework.Vector3.TransformNormal(new Microsoft.Xna.Framework.Vector3(x, y, z), world);
+            return localRotation * new Vector3(x, y, z);
         }
 
         public Vector3 InverseTransformDirection(Vector3 position)
         {
-            return Microsoft.Xna.Framework.Vector3.TransformNormal(position, Microsoft.Xna.Framework.Matrix.Invert(world));
+            return Quaternion.Inverse(localRotation) * position;
         }
 
         public Vector3 InverseTransformDirection(float x, float y, float z)
         {
-            return Microsoft.Xna.Framework.Vector3.TransformNormal(new Microsoft.Xna.Framework.Vector3(x, y, z), Microsoft.Xna.Framework.Matrix.Invert(world));
+            return Quaternion.Inverse(localRotation) * new Vector3(x, y, z);
         }
 
         public Vector3 TransformPoint(Vector3 position)
@@ -653,7 +653,18 @@ namespace PressPlay.FFWD
 
         public void RotateAround(Vector3 vector3, float fAngle)
         {
-            _localRotation *= (Quaternion)Microsoft.Xna.Framework.Quaternion.CreateFromAxisAngle(vector3, Mathf.Deg2Rad * fAngle);
+            var quaternion = Microsoft.Xna.Framework.Quaternion.CreateFromAxisAngle(InverseTransformDirection(vector3.normalized), fAngle);
+            quaternion.Normalize();
+            localRotation *= (Quaternion)quaternion;
+        }
+
+        public void RotateAround(Vector3 point, Vector3 axis, float fAngle)
+        {
+            Vector3 offset = position - point;
+            
+            var worldRotation = Microsoft.Xna.Framework.Quaternion.CreateFromAxisAngle(axis.normalized, Mathf.Deg2Rad * fAngle);
+            position = point + (Vector3)Microsoft.Xna.Framework.Vector3.Transform(offset, worldRotation);
+            RotateAround(axis, Mathf.Deg2Rad * fAngle);
         }
 
         public void DetachChildren()
