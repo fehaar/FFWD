@@ -204,16 +204,12 @@ namespace PressPlay.FFWD.Components
 
         internal bool UpdateCullingInfo(Camera cam)
         {
-            PooledPriorityQueue cullingInfo;
+            PooledPriorityQueue cullingInfo = null;
             int id = cam.GetInstanceID();
             if (CameraCullingInfo.ContainsKey(id))
             {
                 cullingInfo = CameraCullingInfo[id];
                 cullingInfo.Clear();
-            }
-            else
-            {
-                cullingInfo = new PooledPriorityQueue(Transforms.Count);
             }
 #if DEBUG
             if (ApplicationSettings.LogSettings.LogCulling)
@@ -221,7 +217,6 @@ namespace PressPlay.FFWD.Components
                 Debug.LogFormat("Update culling for {0}", cam.gameObject);
             }
 #endif
-            bool shouldBeRenderedOnCamera = false;
             for (int i = 0; i < Transforms.Count; i++)
             {
                 Transform t = Application.Find<Transform>(Transforms[i]);
@@ -242,23 +237,61 @@ namespace PressPlay.FFWD.Components
                             Debug.LogFormat("Put {0} in renderqueue with priority {1}", t.gameObject, priority);
                         }
 #endif
+                        if (cullingInfo == null)
+                        {
+                            cullingInfo = new PooledPriorityQueue(Transforms.Count);
+                            CameraCullingInfo[id] = cullingInfo;
+                        }
                         cullingInfo.Add(t.GetInstanceID(), priority);
-                        shouldBeRenderedOnCamera = true;
                     }
                 }
             }
-            if (shouldBeRenderedOnCamera)
+            return cullingInfo.Count > 0;
+        }
+
+        internal bool UpdateCullingInfo(Camera cam, Transform t)
+        {
+            PooledPriorityQueue cullingInfo = null;
+            int id = cam.GetInstanceID();
+            int transformId = t.GetInstanceID();
+            if (CameraCullingInfo.ContainsKey(id))
             {
-                CameraCullingInfo[id] = cullingInfo;
+                cullingInfo = CameraCullingInfo[id];
+                cullingInfo.Remove(transformId);
             }
-            else
+#if DEBUG
+            if (ApplicationSettings.LogSettings.LogCulling)
             {
-                if (CameraCullingInfo.ContainsKey(id))
+                Debug.LogFormat("Update culling for {0} on {1}", t, cam.gameObject);
+            }
+#endif
+            // Check the layer and cull accordingly
+            if (t != null && (cam.cullingMask & (1 << t.gameObject.layer)) > 0)
+            {
+                // Check frustum culling
+                // TODO: Here we should use something like an octtree to make full scanning faster
+                BoundingSphere sphere = new BoundingSphere(t.TransformPoint(Bounds.Center), Bounds.Radius * Math.Max(Math.Abs(t.lossyScale.x), Math.Max(Math.Abs(t.lossyScale.y), Math.Abs(t.lossyScale.z))));
+                ContainmentType contain;
+                cam.frustum.Contains(ref sphere, out contain);
+                if (contain != ContainmentType.Disjoint)
                 {
-                    CameraCullingInfo.Remove(id);
+                    float priority = GetTransformPriority(cam, t);
+#if DEBUG
+                    if (ApplicationSettings.LogSettings.LogCulling)
+                    {
+                        Debug.LogFormat("Put {0} in renderqueue with priority {1}", t.gameObject, priority);
+                    }
+#endif
+                    if (cullingInfo == null)
+                    {
+                        cullingInfo = new PooledPriorityQueue(Transforms.Count);
+                        CameraCullingInfo[id] = cullingInfo;
+                    }
+                    cullingInfo.Add(t.GetInstanceID(), priority);
+                    return true;
                 }
             }
-            return shouldBeRenderedOnCamera;
+            return false;
         }
 
         private static float GetTransparentPriority(Camera cam, Transform t)

@@ -408,21 +408,18 @@ namespace PressPlay.FFWD.Components
             int camCount = _allCameras.Count;
 
             // Go through the moved renderers and update culling
-            RenderItem movedItem = RenderQueue.GetMovedItem();
-            while (movedItem != null)
+            Renderer updated = RenderQueue.GetUpdatedRenderer();
+            while (updated != null)
             {
                 for (int i = 0; i < camCount; i++)
                 {
                     if (!_allCameras[i].doFullCullingScan)
                     {
                         // TODO: We should have a method of updating only the cull info of the moved item and not the entrire camera queue
-                        if (movedItem.UpdateCullingInfo(_allCameras[i]))
-                        {
-                            _allCameras[i].CulledRenderQueue.Add(movedItem);
-                        }
+                        updated.UpdateCullingInfo(_allCameras[i]);
                     }
                 }
-                movedItem = RenderQueue.GetMovedItem();
+                updated = RenderQueue.GetUpdatedRenderer();
             }
 
             for (int i = 0; i < camCount; i++)

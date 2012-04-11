@@ -165,11 +165,19 @@ namespace PressPlay.FFWD.Components
         /// </summary>
         internal void ReconsiderForCulling()
         {
+            RenderQueue.ReconsiderForCulling(this);
+        }
+
+        internal void UpdateCullingInfo(Camera cam)
+        {
             if (renderItems.HasElements())
             {
                 for (int i = 0; i < renderItems.Length; i++)
                 {
-                    RenderQueue.ReconsiderForCulling(renderItems[i]);
+                    if (renderItems[i].UpdateCullingInfo(cam, transform))
+                    {
+                        cam.CulledRenderQueue.Add(renderItems[i]);
+                    }
                 }
             }
         }

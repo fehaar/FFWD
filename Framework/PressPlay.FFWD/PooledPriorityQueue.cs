@@ -89,5 +89,17 @@ namespace PressPlay.FFWD
         {
             return x.priority.CompareTo(y.priority);
         }
+
+        internal void Remove(int transformId)
+        {
+            for (int i = internalList.Count - 1; i >= 0; i--)
+            {
+                if (internalList[i].id == transformId)
+                {
+                    internalList.RemoveAt(i);
+                    break;
+                }
+            }
+        }
     }
 }
