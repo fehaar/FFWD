@@ -13,7 +13,6 @@ using PressPlay.FFWD.Interfaces;
 using System.Text;
 using System.Reflection;
 
-
 namespace PressPlay.FFWD
 {
     public enum RuntimePlatform
@@ -243,25 +242,24 @@ namespace PressPlay.FFWD
 #endif
             StartComponents();
             ChangeComponentActivity();
-            if (Time.timeScale > 0)
+
+            int count = fixedUpdateComponents.Count;
+            for (int i = 0; i < count; i++)
             {
-                int count = fixedUpdateComponents.Count;
-                for (int i = 0; i < count; i++)
+                IFixedUpdateable cmp = fixedUpdateComponents[i];
+                if (cmp.gameObject == null || !cmp.gameObject.active)
                 {
-                    IFixedUpdateable cmp = fixedUpdateComponents[i];
-                    if (cmp.gameObject == null || !cmp.gameObject.active)
-                    {
-                        continue;
-                    }
-#if DEBUG && COMPONENT_PROFILE
-                componentProfiler.StartFixedUpdateCall(fixedUpdateComponents[i] as Component);
-#endif
-                    cmp.FixedUpdate();
-#if DEBUG && COMPONENT_PROFILE
-                componentProfiler.EndFixedUpdateCall();
-#endif
+                    continue;
                 }
+#if DEBUG && COMPONENT_PROFILE
+            componentProfiler.StartFixedUpdateCall(fixedUpdateComponents[i] as Component);
+#endif
+                cmp.FixedUpdate();
+#if DEBUG && COMPONENT_PROFILE
+            componentProfiler.EndFixedUpdateCall();
+#endif
             }
+
             ChangeComponentActivity();
 
             Transform.ApplyPositionChanges();
@@ -393,6 +391,13 @@ namespace PressPlay.FFWD
                 Debug.DrawStrings(spriteBatch);
                 spriteBatch.End();
             }
+#if WINDOWS_PHONE
+            if (ApplicationSettings.ShowPeakMemory)
+            {
+                Debug.Display("Peak memory", String.Format("{0:0.00}Mb", (float)Microsoft.Phone.Info.DeviceStatus.ApplicationPeakMemoryUsage / 1048576f));
+            }
+#endif
+
             updateTime.Reset();
             lateUpdateTime.Reset();
             fixedUpdateTime.Reset();
