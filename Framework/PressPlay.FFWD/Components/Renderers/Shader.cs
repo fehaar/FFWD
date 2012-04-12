@@ -17,6 +17,11 @@ namespace PressPlay.FFWD.Components
 
         private static Dictionary<string, Shader> shaders = new Dictionary<string, Shader>();
 
+        internal Shader(string shaderName)
+        {
+            this.name = shaderName;
+        }
+
         /// <summary>
         /// Finds the appropriate shader for the given material. Typically by name. 
         /// 
@@ -33,7 +38,7 @@ namespace PressPlay.FFWD.Components
                 switch (mat.shaderName)
                 {
                     default:
-                        s = new BasicEffectShader();
+                        s = new BasicEffectShader(mat.shaderName);
                         break;
                 }
                 shaders[mat.shaderName] = s;

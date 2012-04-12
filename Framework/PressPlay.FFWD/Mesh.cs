@@ -163,7 +163,6 @@ namespace PressPlay.FFWD
             set
             {
                 _triangles = value;
-                iBuffer = null;
             }
         }
         [ContentSerializer(Optional = true)]
@@ -177,8 +176,6 @@ namespace PressPlay.FFWD
 
         [ContentSerializer(ElementName="bounds", Optional=true)]
         public Bounds bounds;
-
-        private IndexBuffer iBuffer;
 
         protected override void DoLoadAsset(AssetHelper assetHelper)
         {
@@ -352,19 +349,6 @@ namespace PressPlay.FFWD
             }
 
             normals = newNormals;
-        }
-
-        internal IndexBuffer GetIndexBuffer()
-        {
-            if (iBuffer == null)
-	        {
-                if (Camera.Device != null && triangles != null)
-                {
-                    iBuffer = new IndexBuffer(Camera.Device, IndexElementSize.SixteenBits, triangles.Length, BufferUsage.WriteOnly);
-                    iBuffer.SetData(triangles);
-                }
-	        }
-            return iBuffer;
         }
     }
 }

@@ -7,7 +7,7 @@ namespace PressPlay.FFWD
 {
     public class Texture : Asset
     {
-        private Microsoft.Xna.Framework.Graphics.Texture2D tex;
+        protected Microsoft.Xna.Framework.Graphics.Texture2D tex;
 
         public Texture()
         {

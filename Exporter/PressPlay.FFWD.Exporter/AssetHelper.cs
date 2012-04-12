@@ -78,10 +78,10 @@ namespace PressPlay.FFWD.Exporter
                             for (int i = 0; i < texPixels.Length; i++)
                             {
                                 Color color = texPixels[i];
-                                color.r = (8.0f * color.a) * color.r;
-                                color.g = (8.0f * color.a) * color.g;
-                                color.b = (8.0f * color.a) * color.b;
-                                color.a = 0.5f;
+                                color.r = ((8.0f * color.a) * color.r);
+                                color.g = ((8.0f * color.a) * color.g);
+                                color.b = ((8.0f * color.a) * color.b);
+                                color.a = 1f;
                                 texPixels[i] = color;
                             }
                         }

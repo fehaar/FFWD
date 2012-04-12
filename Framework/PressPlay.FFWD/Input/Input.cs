@@ -395,12 +395,11 @@ namespace PressPlay.FFWD
             {
                 return ButtonState.Pressed == _currentGamePadState.Buttons.Back;
             }
+            return false;
 #elif XBOX
             return GetPadButton(buttonName, _currentGamePadState);
 #elif WINDOWS
             return GetButton(buttonName, _currentKeyboardState, _currentMouseState, _currentGamePadState);
-#else
-            return false;
 #endif
         }
 
@@ -411,13 +410,12 @@ namespace PressPlay.FFWD
             {
                 return ButtonState.Released == _currentGamePadState.Buttons.Back && ButtonState.Pressed == _lastGamepadState.Buttons.Back;
             }
+            return false;
 #elif XBOX
             return false == GetPadButton(buttonName, _currentGamePadState) && true == GetPadButton (buttonName, _lastGamepadState);
 #elif WINDOWS
             return false == GetButton(buttonName, _currentKeyboardState, _currentMouseState, _currentGamePadState)
                 && true == GetButton(buttonName, _lastKeyboardState, _lastMouseState, _lastGamepadState);
-#else
-            return false;
 #endif
         }
 
@@ -428,13 +426,12 @@ namespace PressPlay.FFWD
             {
                 return ButtonState.Pressed == _currentGamePadState.Buttons.Back && ButtonState.Released == _lastGamepadState.Buttons.Back;
             }
+            return false;
 #elif XBOX
             return true == GetPadButton(buttonName, _currentGamePadState) && false == GetPadButton (buttonName, _lastGamepadState);
 #elif WINDOWS
             return true == GetButton(buttonName, _currentKeyboardState, _currentMouseState, _currentGamePadState)
                 && false == GetButton(buttonName, _lastKeyboardState, _lastMouseState, _lastGamepadState);
-#else
-            return false;
 #endif
         }
 

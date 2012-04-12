@@ -48,7 +48,7 @@ namespace PressPlay.FFWD.Components
             }
 
             // Check the frustum of the camera
-            BoundingSphere sphere = new BoundingSphere(transform.TransformPoint(sharedMesh.bounds.boundingSphere.Center), sharedMesh.bounds.boundingSphere.Radius * Math.Max(transform.lossyScale.x, Math.Max(transform.lossyScale.y, transform.lossyScale.z)));
+            BoundingSphere sphere = new BoundingSphere(transform.TransformPoint(sharedMesh.bounds.boundingSphere.Center), sharedMesh.bounds.boundingSphere.Radius * Math.Abs(Math.Max(transform.lossyScale.x, Math.Max(transform.lossyScale.y, transform.lossyScale.z))));
             if (cam.DoFrustumCulling(ref sphere))
             {
 #if DEBUG
