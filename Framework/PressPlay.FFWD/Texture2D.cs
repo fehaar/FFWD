@@ -64,7 +64,12 @@ namespace PressPlay.FFWD
             tex.SetData<byte>(0, new Microsoft.Xna.Framework.Rectangle(modX, modY, 1, 1), buffer, 0, buffer.Length);
         }
 
-        public void SetPixels(Color[] colors, int miplevel = 0)
+        public void SetPixels(Color[] colors)
+        {
+            SetPixels(colors, 0);
+        }
+
+        public void SetPixels(Color[] colors, int miplevel)
         {
             byte[] buffer = new byte[colors.Length << 2];
 
@@ -79,7 +84,12 @@ namespace PressPlay.FFWD
             tex.SetData<byte>(miplevel, null, buffer, 0, buffer.Length);
         }
 
-        public void SetPixels(int x, int y, int blockWidth, int blockHeight, Color[] colors, int miplevel = 0)
+        public void SetPixels(int x, int y, int blockWidth, int blockHeight, Color[] colors)
+        {
+            SetPixels(x, y, blockWidth, blockHeight, colors, 0);
+        }
+        
+        public void SetPixels(int x, int y, int blockWidth, int blockHeight, Color[] colors, int miplevel)
         {
             byte[] buffer = new byte[colors.Length << 2];
 
@@ -124,7 +134,12 @@ namespace PressPlay.FFWD
             return color;
         }
 
-        public Color[] GetPixels(int miplevel = 0)
+        public Color[] GetPixels()
+        {
+            return GetPixels(0);
+        }
+
+        public Color[] GetPixels(int miplevel)
         {
             int mipSize = GetMipmapSize(miplevel);
 
@@ -144,7 +159,12 @@ namespace PressPlay.FFWD
             return colors;
         }
 
-        public Color[] GetPixels(int x, int y, int blockWidth, int blockHeight, int miplevel = 0)
+        public Color[] GetPixels(int x, int y, int blockWidth, int blockHeight)
+        {
+            return GetPixels(x, y, blockWidth, blockHeight, 0);
+        }
+
+        public Color[] GetPixels(int x, int y, int blockWidth, int blockHeight, int miplevel)
         {
             byte[] buffer = new byte[(blockWidth * blockHeight) << 2];
 
@@ -163,7 +183,12 @@ namespace PressPlay.FFWD
             return colors;
         }
 
-        protected int GetMipmapSize(int miplevel = 0)
+        protected int GetMipmapSize()
+        {
+            return GetMipmapSize(0);
+        }
+
+        protected int GetMipmapSize(int miplevel)
         {
             if (miplevel < 0 || miplevel >= mipmapCount)
             {
@@ -174,7 +199,12 @@ namespace PressPlay.FFWD
             return (int)(tex.Width * tex.Height / Math.Pow(4, miplevel));
         }
 
-        protected int GetMipmapWidth(int miplevel = 0)
+        protected int GetMipmapWidth()
+        {
+            return GetMipmapWidth(0);
+        }
+
+        protected int GetMipmapWidth(int miplevel)
         {
             if (miplevel < 0 || miplevel >= mipmapCount)
             {
@@ -185,7 +215,12 @@ namespace PressPlay.FFWD
             return (int)(tex.Width / Math.Pow(2, miplevel));
         }
 
-        protected int GetMipmapHeight(int miplevel = 0)
+        protected int GetMipmapHeight()
+        {
+            return GetMipmapHeight(0);
+        }
+
+        protected int GetMipmapHeight(int miplevel)
         {
             if (miplevel < 0 || miplevel >= mipmapCount)
             {
