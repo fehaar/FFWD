@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 using System.Collections.Generic;
-#if !XBOX
+#if !XBOX || !WINDOWS_PHONE
 using FluentAssertions;
 #endif
 
@@ -18,7 +18,7 @@ public class CloningAGameObject : MonoBehaviour {
 	void Update () {
 		if (!tested.HasValue) {
 			tested = true;
-#if !XBOX
+#if !XBOX || !WINDOWS_PHONE
 			GameObject go = new GameObject();
 			CloningHelper help = go.AddComponent<CloningHelper>();
 			help.val = 100;
