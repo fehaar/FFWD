@@ -17,7 +17,7 @@ namespace PressPlay.FFWD.Components
         public bool isTrigger;
         [ContentSerializer(Optional = true)]
         public string material;
-        internal Physics.To2dMode to2dMode = Physics.To2dMode.DropY;
+        internal Physics.To2dMode to2dMode = ApplicationSettings.Physics_Default2DMode;
         #endregion
 
         [ContentSerializerIgnore]

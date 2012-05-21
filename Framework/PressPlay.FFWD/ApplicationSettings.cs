@@ -43,6 +43,7 @@ namespace PressPlay.FFWD
         /// If you do it a lot, consider flipping this and making the colliders kinematic.
         /// </summary>
         public static bool Physics_MoveStaticColliders = true;
+        public static Physics.To2dMode Physics_Default2DMode = Physics.To2dMode.DropY;
 
         public static class DefaultCapacities
         {

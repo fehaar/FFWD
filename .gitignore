@@ -31,3 +31,4 @@ obj/
 /Tests/Unity.Tests/Temp
 /Demos/*/Temp
 /Demos/*/Library
+*.ncrunchsolution
