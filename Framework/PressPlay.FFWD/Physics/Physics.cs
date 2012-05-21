@@ -59,7 +59,7 @@ namespace PressPlay.FFWD
 
         private static readonly List<Body> rigidBodies = new List<Body>(50);
 
-        internal enum To2dMode { DropX, DropY, DropZ };
+        public enum To2dMode { DropX, DropY, DropZ };
 
         #region FFWD specific methods
         public static void Initialize()
