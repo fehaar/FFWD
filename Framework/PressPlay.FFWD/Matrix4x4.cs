@@ -232,22 +232,103 @@ namespace PressPlay.FFWD
 
         public Vector4 GetColumn(int i)
         {
-            throw new NotImplementedException();
+            switch (i)
+            {
+                case 0:
+                    return Vector4(m00,m01,m02,m03);
+                case 1:
+                    return Vector4(m10,m11,m12,m13);
+                case 2:
+                    return Vector4(m20,m21,m22,m23);
+                case 3:
+                    return Vector4(m30,m31,m32,m33);
+                default:
+                    throw new IndexOutOfRangeException("i must be from 0 to 3 inclusive.");
+            }
+
         }
 
         public Vector4 GetRow(int i)
         {
-            throw new NotImplementedException();
+            switch (i)
+            {
+                case 0:
+                    return Vector4(m00,m10,m20,m30);
+                case 1:
+                    return Vector4(m01,m11,m21,m31);
+                case 2:
+                    return Vector4(m02,m12,m22,m32);
+                case 3:
+                    return Vector4(m03,m13,m23,m33);
+                default:
+                    throw new IndexOutOfRangeException("i must be from 0 to 3 inclusive.");
+            }
         }
 
         public void SetColumn(int i, Vector4 v)
         {
-            throw new NotImplementedException();
+            switch (i)
+            {
+                case 0:
+                    m00 = v.x;
+                    m01 = v.y;
+                    m02 = v.z;
+                    m03 = v.w;
+                    break;
+                case 1:
+                    m10 = v.x;
+                    m11 = v.y;
+                    m12 = v.z;
+                    m13 = v.w;
+                    break;
+                case 2:
+                    m20 = v.x;
+                    m21 = v.y;
+                    m22 = v.z;
+                    m23 = v.w;
+                    break:
+                case 3:
+                    m30 = v.x;
+                    m31 = v.y;
+                    m32 = v.z;
+                    m33 = v.w;
+                    break:
+                default:
+                    throw new IndexOutOfRangeException("i must be from 0 to 3 inclusive.");
+            }
         }
 
         public void SetRow(int i, Vector4 v)
         {
-            throw new NotImplementedException();
+            switch (i)
+            {
+                case 0:
+                    m00 = v.x;
+                    m10 = v.y;
+                    m20 = v.z;
+                    m30 = v.w;
+                    break;
+                case 1:
+                    m01 = v.x;
+                    m11 = v.y;
+                    m21 = v.z;
+                    m31 = v.w;
+                    break;
+                case 2:
+                    m02 = v.x;
+                    m12 = v.y;
+                    m22 = v.z;
+                    m32 = v.w;
+                    break:
+                case 3:
+                    m03 = v.x;
+                    m13 = v.y;
+                    m23 = v.z;
+                    m33 = v.w;
+                    break:
+                default:
+                    throw new IndexOutOfRangeException("i must be from 0 to 3 inclusive.");
+            }
         }
 
         public Vector3 MultiplyPoint(Vector3 v)
