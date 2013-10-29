@@ -100,6 +100,22 @@ namespace PressPlay.FFWD
             }
         }
 
+        public bool isIdentity(Matrix4x4 m)
+        {
+
+            if (m.m00 == 1) && (m.m01 == 0) && (m.m02 == 0) && (m.m03 == 0)
+                && (m.m10 == 0) && (m.m11 == 1) && (m.m12 == 0) && (m.m13 == 0)
+                && (m.m20 == 0) && (m.m21 == 0) && (m.m22 == 1) && (m.m23 == 0)
+                && (m.m30 == 0) && (m.m31 == 0) && (m.m32 == 0) && (m.m33 == 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public float this[int index]
         {
             get
@@ -232,22 +248,103 @@ namespace PressPlay.FFWD
 
         public Vector4 GetColumn(int i)
         {
-            throw new NotImplementedException();
+            switch (i)
+            {
+                case 0:
+                    return Vector4(m00,m01,m02,m03);
+                case 1:
+                    return Vector4(m10,m11,m12,m13);
+                case 2:
+                    return Vector4(m20,m21,m22,m23);
+                case 3:
+                    return Vector4(m30,m31,m32,m33);
+                default:
+                    throw new IndexOutOfRangeException("i must be from 0 to 3 inclusive.");
+            }
+
         }
 
         public Vector4 GetRow(int i)
         {
-            throw new NotImplementedException();
+            switch (i)
+            {
+                case 0:
+                    return Vector4(m00,m10,m20,m30);
+                case 1:
+                    return Vector4(m01,m11,m21,m31);
+                case 2:
+                    return Vector4(m02,m12,m22,m32);
+                case 3:
+                    return Vector4(m03,m13,m23,m33);
+                default:
+                    throw new IndexOutOfRangeException("i must be from 0 to 3 inclusive.");
+            }
         }
 
         public void SetColumn(int i, Vector4 v)
         {
-            throw new NotImplementedException();
+            switch (i)
+            {
+                case 0:
+                    m00 = v.x;
+                    m01 = v.y;
+                    m02 = v.z;
+                    m03 = v.w;
+                    break;
+                case 1:
+                    m10 = v.x;
+                    m11 = v.y;
+                    m12 = v.z;
+                    m13 = v.w;
+                    break;
+                case 2:
+                    m20 = v.x;
+                    m21 = v.y;
+                    m22 = v.z;
+                    m23 = v.w;
+                    break:
+                case 3:
+                    m30 = v.x;
+                    m31 = v.y;
+                    m32 = v.z;
+                    m33 = v.w;
+                    break:
+                default:
+                    throw new IndexOutOfRangeException("i must be from 0 to 3 inclusive.");
+            }
         }
 
         public void SetRow(int i, Vector4 v)
         {
-            throw new NotImplementedException();
+            switch (i)
+            {
+                case 0:
+                    m00 = v.x;
+                    m10 = v.y;
+                    m20 = v.z;
+                    m30 = v.w;
+                    break;
+                case 1:
+                    m01 = v.x;
+                    m11 = v.y;
+                    m21 = v.z;
+                    m31 = v.w;
+                    break;
+                case 2:
+                    m02 = v.x;
+                    m12 = v.y;
+                    m22 = v.z;
+                    m32 = v.w;
+                    break:
+                case 3:
+                    m03 = v.x;
+                    m13 = v.y;
+                    m23 = v.z;
+                    m33 = v.w;
+                    break:
+                default:
+                    throw new IndexOutOfRangeException("i must be from 0 to 3 inclusive.");
+            }
         }
 
         public Vector3 MultiplyPoint(Vector3 v)
@@ -502,12 +599,53 @@ namespace PressPlay.FFWD
 
         public static Matrix4x4 operator /(Matrix4x4 matrix1, Matrix4x4 matrix2)
         {
-            throw new NotImplementedException();
+             Matrix4x4 inverse = Matrix4x4.Invert(matrix2), result;
+
+            result.m00 = matrix1.m00 * inverse.m00 + matrix1.m01 * inverse.m10 + matrix1.m02 * inverse.m20 + matrix1.m03 * inverse.m30;
+            result.m01 = matrix1.m00 * inverse.m01 + matrix1.m01 * inverse.m11 + matrix1.m02 * inverse.m21 + matrix1.m03 * inverse.m31;
+            result.m02 = matrix1.m00 * inverse.m02 + matrix1.m01 * inverse.m12 + matrix1.m02 * inverse.m22 + matrix1.m03 * inverse.m32;
+            result.m03 = matrix1.m00 * inverse.m03 + matrix1.m01 * inverse.m13 + matrix1.m02 * inverse.m23 + matrix1.m03 * inverse.m33;
+
+            result.m10 = matrix1.m10 * inverse.m00 + matrix1.m11 * inverse.m10 + matrix1.m12 * inverse.m20 + matrix1.m13 * inverse.m30;
+            result.m11 = matrix1.m10 * inverse.m01 + matrix1.m11 * inverse.m11 + matrix1.m12 * inverse.m21 + matrix1.m13 * inverse.m31;
+            result.m12 = matrix1.m10 * inverse.m02 + matrix1.m11 * inverse.m12 + matrix1.m12 * inverse.m22 + matrix1.m13 * inverse.m32;
+            result.m13 = matrix1.m10 * inverse.m03 + matrix1.m11 * inverse.m13 + matrix1.m12 * inverse.m23 + matrix1.m13 * inverse.m33;
+
+            result.m20 = matrix1.m20 * inverse.m00 + matrix1.m21 * inverse.m10 + matrix1.m22 * inverse.m20 + matrix1.m23 * inverse.m30;
+            result.m21 = matrix1.m20 * inverse.m01 + matrix1.m21 * inverse.m11 + matrix1.m22 * inverse.m21 + matrix1.m23 * inverse.m31;
+            result.m22 = matrix1.m20 * inverse.m02 + matrix1.m21 * inverse.m12 + matrix1.m22 * inverse.m22 + matrix1.m23 * inverse.m32;
+            result.m23 = matrix1.m20 * inverse.m03 + matrix1.m21 * inverse.m13 + matrix1.m22 * inverse.m23 + matrix1.m23 * inverse.m33;
+
+            result.m30 = matrix1.m30 * inverse.m00 + matrix1.m31 * inverse.m10 + matrix1.m32 * inverse.m20 + matrix1.m33 * inverse.m30;
+            result.m31 = matrix1.m30 * inverse.m01 + matrix1.m31 * inverse.m11 + matrix1.m32 * inverse.m21 + matrix1.m33 * inverse.m31;
+            result.m32 = matrix1.m30 * inverse.m02 + matrix1.m31 * inverse.m12 + matrix1.m32 * inverse.m22 + matrix1.m33 * inverse.m32;
+            result.m33 = matrix1.m30 * inverse.m03 + matrix1.m31 * inverse.m13 + matrix1.m32 * inverse.m23 + matrix1.m33 * inverse.m33;
+
+            return result;
         }
 
         public static Matrix4x4 operator /(Matrix4x4 matrix1, float divider)
         {
-            throw new NotImplementedException();
+            float inverseDivider = 1.0f / divider;
+
+            matrix1.m00 = matrix1.m00 * inverseDivider;
+            matrix1.m01 = matrix1.m01 * inverseDivider;
+            matrix1.m02 = matrix1.m02 * inverseDivider;
+            matrix1.m03 = matrix1.m03 * inverseDivider;
+            matrix1.m10 = matrix1.m10 * inverseDivider;
+            matrix1.m11 = matrix1.m11 * inverseDivider;
+            matrix1.m12 = matrix1.m12 * inverseDivider;
+            matrix1.m13 = matrix1.m13 * inverseDivider;
+            matrix1.m20 = matrix1.m20 * inverseDivider;
+            matrix1.m21 = matrix1.m21 * inverseDivider;
+            matrix1.m22 = matrix1.m22 * inverseDivider;
+            matrix1.m23 = matrix1.m23 * inverseDivider;
+            matrix1.m30 = matrix1.m30 * inverseDivider;
+            matrix1.m31 = matrix1.m31 * inverseDivider;
+            matrix1.m32 = matrix1.m32 * inverseDivider;
+            matrix1.m33 = matrix1.m33 * inverseDivider;
+
+            return matrix1;
         }
 
         public static Matrix4x4 operator +(Matrix4x4 matrix1, Matrix4x4 matrix2)
