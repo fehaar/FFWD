@@ -61,6 +61,11 @@ namespace PressPlay.FFWD
             Apply(false, false);
         }
 
+        public void Apply(bool updateMipmaps)
+        {
+            Apply(updateMipmaps, false);
+        }
+
         public void Apply(bool updateMipmaps, bool makeNoLongerReadable)
         {
             // TODO: Implement this
